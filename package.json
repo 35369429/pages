@@ -1,0 +1,75 @@
+{
+    "name": "pages",
+    "version": "1.0",
+    "cname": "MINA Pages",
+    "image": {
+        "color":"/static/icons/app-color.svg",
+        "dark":"/static/icons/app-dark.svg",
+        "light":"/static/icons/app-light.svg"
+    },
+    "icontype": "img",
+    "intro": "生成打赏、商品、活动等各种小程序界面，帮助自媒体人实现收款和流量变现。",
+    "detail": "@readme.md",
+    "document": "@document.md",
+    "author": "北京云道天成科技有限公司",
+    "homepage": "https://www.minapages.com",
+    "menu":[{
+        "slug":"mina/pages/group",
+        "group":"MINA Pages"
+    },{
+        "slug":"mina/pages/article/index",
+        "name":"图文",
+        "icon":{
+            "default":"/static/icons/article.svg"
+        },
+        "icontype": "img",
+        "linktype":"i",
+        "link":"{article,index,[name:first]}",
+        "permission": "boss,admin,manager,user",
+        "order":9999
+    },{
+        "slug":"mina/pages/category/index",
+        "name":"分类",
+        "icon":{
+            "default":"/static/icons/category.svg"
+        },
+        "icontype": "img",
+        "linktype":"i",
+        "link":"{category,index,[name:first]}",
+        "permission": "boss,admin,manager,user",
+        "order":9999
+    },{
+        "slug":"mina/pages/setting/index",
+        "name":"设置",
+        "icon":{
+            "default":"/static/icons/setting.svg"
+        },
+        "icontype": "img",
+        "linktype":"i",
+        "link":"{setting,index,[name:first]}",
+        "permission": "boss,admin,manager,user",
+        "order":9999
+    }],
+    "dependencies": [],
+    "injections": [],
+    "api": [],
+    "register_api": [],
+    "setup": {
+        "install": {
+            "controller": "setup",
+            "action": "install"
+        },
+        "upgrade": {
+            "controller": "setup",
+            "action": "upgrade"
+        },
+        "uninstall": {
+            "controller": "setup",
+            "action": "upgrade"
+        },
+        "repair": {
+            "controller": "setup",
+            "action": "repair"
+        }
+    }
+}
