@@ -13,15 +13,17 @@ class SetupController extends \Tuanduimao\Loader\Controller {
 
 
 	function install() {
-
-		$hello = App::M('Hello');
 	
 		try {
-			$hello->dropTable();
+			App::M('Article')->dropTable();
+			App::M('Category')->dropTable();
+			App::M('Tag')->dropTable();
 		}catch( Excp $e) {}
 
 		try  {
-			$hello->__schema();
+			App::M('Article')->__schema();
+			App::M('Category')->__schema();
+			App::M('Tag')->__schema();
 		}catch ( Excp $e ) {
 			echo $e->toJSON();
 			return;
@@ -37,9 +39,10 @@ class SetupController extends \Tuanduimao\Loader\Controller {
 
 	function repair() {
 
-		$hello = App::M('Hello');
 		try  {
-			$hello->__schema();
+			App::M('Article')->__schema();
+			App::M('Category')->__schema();
+			App::M('Tag')->__schema();
 		}catch ( Excp $e ) {
 			echo $e->toJSON();
 			return;
@@ -51,9 +54,10 @@ class SetupController extends \Tuanduimao\Loader\Controller {
 	// 卸载
 	function uninstall() {
 
-		$hello = App::M('Hello');
 		try {
-			$hello->__clear();
+			App::M('Article')->__clear();
+			App::M('Category')->__clear();
+			App::M('Tag')->__clear();
 		}catch( Excp $e) {}
 
 		echo json_encode('ok');		

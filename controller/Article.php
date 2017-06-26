@@ -44,9 +44,9 @@ class ArticleController extends \Tuanduimao\Loader\Controller {
 
 	function test() {
 
-		$article = App::M("Article");
-		$article->__schema();
-
+		App::M("Article")->__schema();
+		App::M('Category')->__schema();
+		App::M('Tag')->__schema();
 
 	}
 

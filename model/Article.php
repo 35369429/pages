@@ -50,17 +50,17 @@ class ArticleModel extends Model {
 				 ->putColumn( 'history', $this->type('longText',  []) )  // 发布状态的正文备份
 				 ->putColumn( 'stick', $this->type('integer', ['index'=>1, 'default'=>0]) )  // 置顶状态
 				 // 文章状态 published/draft
-				 ->putColumn( 'status', $this->type('string', ['length'=>40, 'default'=>'published']) )  
+				 ->putColumn( 'status', $this->type('string', ['length'=>40,'index'=>1, 'default'=>'published']) )  
 				 // 文章编辑状态 'published'/draft
-				 ->putColumn( 'editor_status', $this->type('string', ['length'=>40, 'default'=>'published']) )
+				 ->putColumn( 'editor_status', $this->type('string', ['length'=>40,  'index'=>1 , 'default'=>'published']) )
 		;
 
 
 		// 关联表 article_category
 		$article_category = Utils::getTab('article_category', "mina_pages_");
 		if ( $article_category->tableExists() === false) {
-			$article_category->putColumn( 'article_id', $this->type('bigInteger', ['length'=>20]) )  // 文章 ID 
-				             ->putColumn( 'category_id', $this->type('bigInteger', ['length'=>20]) )
+			$article_category->putColumn( 'article_id', $this->type('bigInteger', ['index'=>1 , 'length'=>20 ]) )  // 文章 ID 
+				             ->putColumn( 'category_id', $this->type('bigInteger', ['index'=>1 , 'length'=>20]) )
 				             ->putColumn( 'unique_id', $this->type('bigInteger', ['length'=>20, 'unique'=>1]) );
 
 		}
@@ -68,14 +68,16 @@ class ArticleModel extends Model {
 		// 关联表 article_tag
 		$article_tag = Utils::getTab('article_tag', "mina_pages_");
 		if ( $article_tag->tableExists() === false) {
-			$article_tag->putColumn( 'article_id', $this->type('bigInteger', ['length'=>20]) )  // 文章 ID 
-				        ->putColumn( 'tag_id', $this->type('bigInteger', ['length'=>20]) )
+			$article_tag->putColumn( 'article_id', $this->type('bigInteger', ['index'=>1 , 'length'=>20]) )  // 文章 ID 
+				        ->putColumn( 'tag_id', $this->type('bigInteger', ['index'=>1 , 'length'=>20]) )
 				        ->putColumn( 'unique_id', $this->type('bigInteger', ['length'=>20, 'unique'=>1]) );
 		}
 	}
 
 
 	function __clear() {
+		Utils::getTab('article_category', "mina_pages_")->dropTable();
+		Utils::getTab('article_tag', "mina_pages_")->dropTable();
 		$this->dropTable();
 	}
 

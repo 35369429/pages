@@ -47,9 +47,7 @@ class DefaultsController extends \Tuanduimao\Loader\Controller {
 	}
 
 	function faker() {
-		$hello = App::M('Hello');
-		$hello->fakerdata();
-		echo json_encode($hello->select("",["COUNT(*)"]));
+		echo "noting";
 	}
 
 }
