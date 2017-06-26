@@ -37,6 +37,35 @@ class TagModel extends Model {
 	}
 
 
+
+	/**
+	 * 插入标签，并返回标签 ID 列表
+	 * @param  [type] $tagnames [description]
+	 * @return [type]           [description]
+	 */
+	function put ( $tagnames ) {
+
+		$resp = $this->query()->whereIn( "name", $tagnames )->select("name", "tag_id")->get();
+		
+		$havenames = [];$tagids = [];
+		foreach ($resp as $rs) { array_push($havenames, $rs['name']); array_push($tagids, $rs['tag_id']);}
+
+		$diffnames = array_diff( $tagnames, $havenames);
+
+		foreach ($diffnames as $idx=>$tag ) {
+			$rs = $this->create(["name"=>$tag]);
+			array_push($tagids, $rs['tag_id']);
+		}
+
+		return  $tagids;
+
+	}
+
+	function create( $data ) {
+		$data['tag_id'] = $this->nextid();
+		return parent::create( $data );
+	}
+
 	function __clear() {
 		$this->dropTable();
 	}

@@ -35,13 +35,18 @@ class CategoryModel extends Model {
 				 ->putColumn( 'page', $this->type('string',     ['length'=>128, 'index'=>1]) )  // 正文(默认)页面
 				 ->putColumn( 'name', $this->type('string',  ['length'=>128]) )  // 类型名称
 				 ->putColumn( 'fullname', $this->type('string',  ['length'=>256]) )  // 类型全名
-				 ->putColumn( 'parent_id', $this->type('bigInteger', ['length'=>20, "index"=>1]) ) // 父类 ID 
-				 ->putColumn( 'priority', $this->type('integer', ['index'=>1, 'default'=>0]) ) // 优先级排序
-				 ->putColumn( 'hidden', $this->type('boolean', ['index'=>1]) ) // 是否隐藏
+				 ->putColumn( 'parent_id', $this->type('bigInteger', ["default"=>"0", "index"=>1]) ) // 父类 ID 
+				 ->putColumn( 'priority', $this->type('integer', ['index'=>1, 'default'=>"0"]) ) // 优先级排序
+				 ->putColumn( 'hidden', $this->type('boolean', ['index'=>1, 'default'=>"0"]) ) // 是否隐藏
 				 ->putColumn( 'param', $this->type('string',     ['length'=>128, 'index'=>1]) )  //自定义参数
 				 ->putColumn( 'status', $this->type('string', ['length'=>10,'index'=>1, 'default'=>'on']) )  // 类型状态 on/off
 				
 		;
+	}
+
+	function create( $data ) {
+		$data['category_id'] = $this->nextid();
+		return parent::create( $data );
 	}
 
 
