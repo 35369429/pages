@@ -1,4 +1,6 @@
 <?php
+namespace Mina\Pages\Model; 
+define('__NS__', 'Mina\Pages\Model'); // 兼容旧版 App::M 方法调用
 
 use \Tuanduimao\Mem as Mem;
 use \Tuanduimao\Excp as Excp;
@@ -11,14 +13,14 @@ use \Tuanduimao\Utils as Utils;
 /**
  * 文章数据模型
  */
-class CategoryModel extends Model {
+class Category extends Model {
 
 	/**
 	 * 初始化
 	 * @param array $param [description]
 	 */
 	function __construct( $param=[] ) {
-		parent::__construct();
+		parent::__construct(['prefix'=>'mina_pages_']);
 		$this->table('category');
 	}
 

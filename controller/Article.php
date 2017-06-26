@@ -13,7 +13,8 @@ class ArticleController extends \Tuanduimao\Loader\Controller {
 	}
 
 	function index() {
-	
+		
+
 		App::render($data,'web','index');
 		
 		return [
@@ -38,6 +39,17 @@ class ArticleController extends \Tuanduimao\Loader\Controller {
 	                 "文章列表" =>'',
 	        ]
 		];
+	}
+
+	function test() {
+		try {
+			$c = App::M("Category");
+		}catch( Excp $e  ){
+			Utils::out( $e->toArray() );
+		}
+
+		Utils::out( $c->select() );
+
 	}
 
 	private function _cover() {
