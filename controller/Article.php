@@ -12,9 +12,7 @@ class ArticleController extends \Tuanduimao\Loader\Controller {
 	}
 
 	function index() {
-		$hello = App::M('Hello');
-		$data = $hello->select("LIMIT 20");
-
+	
 		App::render($data,'web','index');
 		
 		return [
