@@ -40,7 +40,7 @@ class ArticleController extends \Tuanduimao\Loader\Controller {
 		];
 	}
 
-	function _cover() {
+	private function _cover() {
 
 		$image_url = 'http://cdn.lieyunwang.com/wp-content/uploads/2017/05/99ae777898e96b4.jpg?imageMogr2/strip/interlace/0/quality/85/format/jpg';
 
@@ -55,7 +55,7 @@ class ArticleController extends \Tuanduimao\Loader\Controller {
 	}
 
 
-	function _paincontent() {
+	private  function _paincontent() {
 		return '
 		<p class="zhengwen" style="width: 100%">
 			<h2 style="text-align: center;color:#C00000;">中国疼痛康复快讯</h2>
@@ -147,7 +147,7 @@ class ArticleController extends \Tuanduimao\Loader\Controller {
 	}
 
 
-	function _randcate() {
+	private  function _randcate() {
 		$len = rand(0,7);
 		$data = [];
 		for( $i=0; $i<$len; $i++ ){
@@ -208,22 +208,11 @@ class ArticleController extends \Tuanduimao\Loader\Controller {
 				]
 			);
 		}
-
-
 		foreach( $articles as $article ) {
 			$a->create($article);
 		}
 
-
 	}
 
-
-	function test() {
-
-		App::M("Article")->__schema();
-		App::M('Category')->__schema();
-		App::M('Tag')->__schema();
-
-	}
 
 }
