@@ -41,10 +41,13 @@ class ArticleController extends \Tuanduimao\Loader\Controller {
 		];
 	}
 
-	function faker() {
-		$hello = App::M('Hello');
-		$hello->fakerdata();
-		echo json_encode($hello->select("",["COUNT(*)"]));
+
+	function test() {
+
+		$article = App::M("Article");
+		$article->__schema();
+
+
 	}
 
 }

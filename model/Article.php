@@ -57,7 +57,7 @@ class ArticleModel extends Model {
 
 
 		// 关联表 article_category
-		$article_category = Utils::getTab('mina_pages_article_category');
+		$article_category = Utils::getTab('article_category', "mina_pages_");
 		if ( $article_category->tableExists() === false) {
 			$article_category->putColumn( 'article_id', $this->type('bigInteger', ['length'=>20]) )  // 文章 ID 
 				             ->putColumn( 'category_id', $this->type('bigInteger', ['length'=>20]) )
@@ -66,7 +66,7 @@ class ArticleModel extends Model {
 		}
 
 		// 关联表 article_tag
-		$article_tag = Utils::getTab('mina_pages_article_tag');
+		$article_tag = Utils::getTab('article_tag', "mina_pages_");
 		if ( $article_tag->tableExists() === false) {
 			$article_tag->putColumn( 'article_id', $this->type('bigInteger', ['length'=>20]) )  // 文章 ID 
 				        ->putColumn( 'tag_id', $this->type('bigInteger', ['length'=>20]) )
