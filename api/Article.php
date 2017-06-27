@@ -60,7 +60,7 @@ class Article extends Api {
 	 * 	  4. 按来源查询  origin | orOrign
 	 * 	  5. 按标题关键词查询  title | orTitle
 	 * 	  6. 按项目查询   project | orProject 
-	 * 	  7. 按参数标记查询  praram | orParam
+	 * 	  7. 按参数标记查询  param | orParam
 	 * 	  8. 按创建时间查询  publish_time | orPublish_time | endPublish_time | orEndPublish_time
 	 * 	  9. 按更新时间查询  update_time  | orUpdate_time  |  endUpdate_time | orEndUpdate_time
 	 * 	  
@@ -138,7 +138,7 @@ class Article extends Api {
 		$this->qb( $qb, 't.name', 'tag', $query, ["and", "or", "in"] );
 		$this->qb( $qb, 'article.origin', 'origin', $query );
 		$this->qb( $qb, 'article.project', 'project', $query);
-		$this->qb( $qb, 'article.praram', 'praram', $query);
+		$this->qb( $qb, 'article.param', 'param', $query, ['and', 'or'], 'like');
 		$this->qb( $qb, 'article.title', 'title', $query, ['and', 'or'], 'like' );
 		$this->qb( $qb, 'article.publish_time', 'publish_time', $query, ['and', 'or'], '>=' );
 		$this->qb( $qb, 'article.publish_time', 'endPublish_time', $query, ['and', 'or'], '<=' );
