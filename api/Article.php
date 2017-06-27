@@ -120,7 +120,7 @@ class Article extends Api {
 
 		// 分页参数
 		$query['page'] = !empty($query['page']) ? intval($query['page']) : 1;
-		$query['prepage'] = !empty($query['prepage']) ? intval($query['prepage']) : 50;
+		$query['perpage'] = !empty($query['perpage']) ? intval($query['perpage']) : 50;
 
 
 
@@ -160,7 +160,7 @@ class Article extends Api {
 		
 		// 查询数据
 		$qb->select( $select )->distinct();
-		$result = $qb ->paginate($query['prepage'],['article.article_id'], 'page', $query['page'] );
+		$result = $qb ->paginate($query['perpage'],['article.article_id'], 'page', $query['page'] );
 		$resultData = $result->toArray();
 		
 
