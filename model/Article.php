@@ -99,7 +99,7 @@ class Article extends Model {
 
 		if ( isset($data['tag']) ) {
 
-			$tag = App::M("Tag");
+			$tag = new Tag;
 			$tagnames = is_array($data['tag']) ? $data['tag'] : [$data['tag']];
 			$tagids = $tag->put( $tagnames );
 
@@ -121,14 +121,82 @@ class Article extends Model {
 	}
 
 
-	function getCategories( $article_id ) {
+	/**
+	 * 读取文章分类信息
+	 * @param  int $article_id 文章ID
+	 * @param  string | array ...$field 读取字段
+	 * @return array 分类数组
+	 */
+	function getCategories( $article_id, $field="*") {
 
-		$resp = App::M('Category')->query()
-		             ->rightJoin('article_category', 'article_category.category_id', '=', 'category.category_id')
-		             ->where( "article_category.article_id", '=', $article_id )
-		             ->select('Category.*')
-		             ->limit( 50 );
-		Utils::out( $resp );
+		$c = new Category;
+
+		if ( !is_array($field) ) {
+			$args = $field;
+		} else {
+			$args = func_get_args();
+			array_shift($args);
+		}
+
+
+		$resp = $rows = $c->query()
+		     ->rightJoin('article_category', 'article_category.category_id', '=', 'category.category_id')
+		     ->where( "article_category.article_id", '=', $article_id )
+		     ->where("status", '=', "on")
+		     ->select($args)
+		     ->limit( 50 )
+		     ->get()->toArray();
+
+
+		if ( empty($resp) ) return [];
+
+		if  (count(end($rows)) == 1) {  // 如果仅取一个数值，则降维
+			$resp = [];
+			foreach ($rows as $idx=>$rs ) {
+				array_push( $resp, end($rs) );
+			}
+		}
+
+		return $resp;
+
+	}
+
+	/**
+	 * 读取文章分类信息
+	 * @param  int $article_id 文章ID
+	 * @param  string | array ...$field 读取字段
+	 * @return array 分类数组
+	 */
+	function getTags( $article_id, $field="*") {
+
+		$t = new Tag;
+
+		if ( !is_array($field) ) {
+			$args = $field;
+		} else {
+			$args = func_get_args();
+			array_shift($args);
+		}
+
+
+		$resp = $rows = $t->query()
+		     ->rightJoin('article_tag', 'article_tag.tag_id', '=', 'tag.tag_id')
+		     ->where( "article_tag.article_id", '=', $article_id )
+		     ->select($args)
+		     ->limit( 50 )
+		     ->get()->toArray();
+
+
+		if ( empty($resp) ) return [];
+
+		if  (count(end($rows)) == 1) {  // 如果仅取一个数值，则降维
+			$resp = [];
+			foreach ($rows as $idx=>$rs ) {
+				array_push( $resp, end($rs) );
+			}
+		}
+
+		return $resp;
 
 	}
 
