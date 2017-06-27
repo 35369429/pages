@@ -131,7 +131,7 @@ class Article extends Model {
 
 		$c = new Category;
 
-		if ( !is_array($field) ) {
+		if ( is_array($field) ) {
 			$args = $field;
 		} else {
 			$args = func_get_args();
@@ -171,7 +171,7 @@ class Article extends Model {
 
 		$t = new Tag;
 
-		if ( !is_array($field) ) {
+		if ( is_array($field) ) {
 			$args = $field;
 		} else {
 			$args = func_get_args();
