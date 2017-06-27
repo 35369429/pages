@@ -54,6 +54,7 @@ class Article extends Model {
 				 ->putColumn( 'draft', $this->type('longText',  []) )  // 待发布正文(草稿)
 				 ->putColumn( 'ap_draft', $this->type('longText',  []) )  // 小程序待发布正文(草稿)
 				 ->putColumn( 'history', $this->type('longText',  []) )  // 发布状态的正文备份
+				 ->putColumn( 'param', $this->type('string', ['length'=>128,'index'=>1]) )  // 自定义查询条件
 				 ->putColumn( 'stick', $this->type('integer', ['index'=>1, 'default'=>"0"]) )  // 置顶状态
 				 // 文章状态 published/draft
 				 ->putColumn( 'status', $this->type('string', ['length'=>40,'index'=>1, 'default'=>'published']) )  
@@ -111,18 +112,135 @@ class Article extends Model {
 				]);
 			}
 		}
-
-
-		// $rs['category'] = $data['category'];
-		// $rs['tag'] => $data['tag'];
-
+		
 		return $rs;
 		
 	}
 
 
 	/**
-	 * 读取文章分类信息
+	 * 对一组文章数据降维
+	 * @param  [type] $data [description]
+	 * @return [type]       [description]
+	 */
+	function pad( $data, $field='article_id' ) {
+
+		if (!is_array(current($data))) {
+			throw new Excp("输入参数错误 (data不是二维数组)", 400, ['data'=>$data, 'field'=>$field]);
+		}
+
+		if (!isset(current($data)[$field])) {
+			throw new Excp("输入参数错误 ($field 不存在)", 400, ['data'=>$data, 'field'=>$field]);
+		}
+
+
+		$resp = []; $map = [];
+		foreach ($data as $idx => $rs ) {
+			$map[$rs[$field]] = $idx;
+			array_push($resp, $rs[$field]);
+		}
+
+		return ["data"=>$resp, 'map'=>$map];
+	}
+
+
+	/**
+	 * 读取一组文章分类
+	 * @param  array  $article_ids 文章ID列表
+	 * @param  string $field      [description]
+	 * @return [type]             [description]
+	 */
+	function getCategoriesGroup( $article_ids, $field="*") {
+
+		$c = new Category;
+
+		if ( is_array($field) ) {
+			$args = $field;
+		} else {
+			$args = func_get_args();
+			array_shift($args);
+		}
+
+		$args = array_merge(['article_category.article_id as aid'], $args);
+		$rows = $c->query()
+		     ->rightJoin('article_category', 'article_category.category_id', '=', 'category.category_id')
+		     ->whereIn( "article_category.article_id", $article_ids )
+		     ->where("status", '=', "on")
+		     ->select($args)
+		     ->limit( 50 )
+		     ->get()->toArray();
+
+		  
+
+		if ( empty($rows) ) return [];
+
+		$resp = [];
+		foreach ($rows as $idx=>$rs ) {
+
+			$aid = $rs['aid']; unset( $rs['aid']);
+			if ( !is_array($resp[$aid]) ) $resp[$aid] = [];
+
+			if ( count($rs) == 1) { //如果仅取一个数值，则降维
+				array_push($resp[$aid], end($rs));
+			} else {
+				array_push($resp[$aid], $rs);
+			}
+		}
+
+		return $resp;
+	}
+
+
+	/**
+	 * 读取一组文章标签信息
+	 * @param  array  $article_ids 文章ID列表
+	 * @param  string | array ...$field 读取字段
+	 * @return array 标签数组
+	 */
+	function getTagsGroup( $article_ids, $field="*") {
+
+		$t = new Tag;
+
+		if ( is_array($field) ) {
+			$args = $field;
+		} else {
+			$args = func_get_args();
+			array_shift($args);
+		}
+
+		$args = array_merge(['article_tag.article_id as aid'], $args);
+		$rows = $t->query()
+		     ->rightJoin('article_tag', 'article_tag.tag_id', '=', 'tag.tag_id')
+		     ->whereIn( "article_tag.article_id",  $article_ids )
+		     ->select($args)
+		     ->limit( 50 )
+		     ->get()->toArray();
+
+
+		if ( empty($rows) ) return [];
+
+		$resp = [];
+		foreach ($rows as $idx=>$rs ) {
+
+			$aid = $rs['aid']; unset( $rs['aid']);
+			if ( !is_array($resp[$aid]) ) $resp[$aid] = [];
+
+			if ( count($rs) == 1) { //如果仅取一个数值，则降维
+				array_push($resp[$aid], end($rs));
+			} else {
+				array_push($resp[$aid], $rs);
+			}
+		}
+
+		return $resp;
+
+	}
+
+
+
+
+	/**
+	 * 读取一篇文章分类信息
 	 * @param  int $article_id 文章ID
 	 * @param  string | array ...$field 读取字段
 	 * @return array 分类数组
@@ -158,11 +276,10 @@ class Article extends Model {
 		}
 
 		return $resp;
-
 	}
 
 	/**
-	 * 读取文章分类信息
+	 * 读取一篇文章标签信息
 	 * @param  int $article_id 文章ID
 	 * @param  string | array ...$field 读取字段
 	 * @return array 分类数组
