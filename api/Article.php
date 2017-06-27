@@ -24,6 +24,7 @@ class Article extends Api {
 		     ->allowQuery('get',  ['article_id', 'select'])
 		     ->allowMethod('search', ["PHP",'GET'])
 		     ->allowQuery('search',  [
+		     	"select",
 		     	'category', 'orCategory', 'inCategory',
 		     	'categoryId','orcategoryId','incategoryId',
 		     	'tag','orTag', 'inTag',
