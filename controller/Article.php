@@ -54,7 +54,7 @@ class ArticleController extends \Tuanduimao\Loader\Controller {
 
 	private function _cover() {
 
-		$image_url = 'http://cdn.lieyunwang.com/wp-content/uploads/2017/05/99ae777898e96b4.jpg?imageMogr2/strip/interlace/0/quality/85/format/jpg';
+		$image_url = 'https://wss.xpmjs.com/static/photos/loginbg@2x.jpg';
 
 		$stor = new Storage([
 			"prefix"=>"/data/stor/public/deepblue",
@@ -223,7 +223,9 @@ class ArticleController extends \Tuanduimao\Loader\Controller {
 			);
 		}
 		foreach( $articles as $article ) {
+			echo "导入{$article['title']} ... ";
 			$a->create($article);
+			echo "DONE\n";
 		}
 
 	}
