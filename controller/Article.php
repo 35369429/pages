@@ -172,6 +172,8 @@ class ArticleController extends \Tuanduimao\Loader\Controller {
 
 	function paindata() {
 
+		Utils::cliOnly();
+		
 		$c = App::M('Category');
 		$c->runsql("truncate table `{{table}}`");
 		$cates = [
