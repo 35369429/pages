@@ -61,6 +61,7 @@ class Article extends Api {
 	 * 	  5. 按标题关键词查询  title | orTitle
 	 * 	  6. 按项目查询   project | orProject 
 	 * 	  7. 按参数标记查询  param | orParam
+	 * 	  7. 按文章状态查询  status | orStatus
 	 * 	  8. 按创建时间查询  publish_time | orPublish_time | endPublish_time | orEndPublish_time
 	 * 	  9. 按更新时间查询  update_time  | orUpdate_time  |  endUpdate_time | orEndUpdate_time
 	 * 	  
@@ -138,6 +139,7 @@ class Article extends Api {
 		$this->qb( $qb, 't.name', 'tag', $query, ["and", "or", "in"] );
 		$this->qb( $qb, 'article.origin', 'origin', $query );
 		$this->qb( $qb, 'article.project', 'project', $query);
+		$this->qb( $qb, 'article.status', 'status', $query );
 		$this->qb( $qb, 'article.param', 'param', $query, ['and', 'or'], 'like');
 		$this->qb( $qb, 'article.title', 'title', $query, ['and', 'or'], 'like' );
 		$this->qb( $qb, 'article.publish_time', 'publish_time', $query, ['and', 'or'], '>=' );
@@ -186,13 +188,13 @@ class Article extends Api {
 
 		$pad = [];
 		if ( $getCategory ) {
-			$pad = $art->pad($data, '_aid');
+			$pad = Utils::pad($data, '_aid');
 			$categories = $art->getCategoriesGroup($pad['data'], "category.category_id","name","fullname","project","page","parent_id","priority","hidden","param" );
 		}
 
 		if ( $getTag ) {
 			if ( empty($pad) ) {
-				$pad = $art->pad($data, '_aid');
+				$pad = Utils::pad($data, '_aid');
 			}
 			$tags = $art->getTagsGroup($pad['data'], 'tag.tag_id', 'name', 'param' );
 		}
@@ -218,47 +220,11 @@ class Article extends Api {
 	}
 
 
-	/**
-	 * 创建查询条件
-	 */
-	private function qb( & $qb, $field, $name, $query, $method=['and','or'], $operator='=') {
-
-
-		$Ucname = ucfirst(strtolower($name));
-
-		foreach ($method as $m ) {
-
-			if ( $m == 'and' && isset($query[$name]) ) {
-
-				$value = $query[$name];
-				if ( $operator == 'like' ) {
-					$value = "%{$value}%";
-				}
-				$qb->where($field,$operator, $value);
-
-			} else if ( $m == 'or' && isset($query["or$Ucname"]) ){
-
-				$value = $query["or$Ucname"];
-
-				if ( $operator == 'like' ) {
-					$value = "%{$value}%";
-				}
-				$qb->orWhere($field, $operator, $value);
-
-			} else if ( $m == 'in' && isset($query["in$Ucname"])) {
-				$str = $query["in$Ucname"];
-				$arr = explode(',', $str);
-				$qb->whereIn($field, $arr );
-			}
-		}
-	} 
-
-
 
 	/**
 	 * 读取文章详情信息
 	 * @param  array  $query Query 查询
-	 *                   int ["article_id"]  文章ID
+	 *                   int ["articleId"]  文章ID
 	 *                   
 	 *          string|array ["select"] 读取字段  
 	 *          			 示例:  ["*"] /["article_id", "title" ....] / "*" / "article_id,title"
@@ -273,11 +239,11 @@ class Article extends Api {
 	protected function get( $query=[] ) {
 
 		// 验证数值
-		if ( !preg_match("/^([0-9]+)/", $query['article_id']) ) {
-			throw new Excp(" article_id 参数错误", 400, ['query'=>$query]);
+		if ( !preg_match("/^([0-9]+)/", $query['articleId']) ) {
+			throw new Excp(" articleId 参数错误", 400, ['query'=>$query]);
 		}
 
-		$article_id = $query['article_id'];
+		$article_id = $query['articleId'];
 		$select = empty($query['select']) ? '*' : $query['select'];
 		$select = is_array($select) ? $select : explode(',', $select);
 

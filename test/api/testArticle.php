@@ -6,9 +6,9 @@ use \Tuanduimao\Excp;
 use \Tuanduimao\Utils;
 // use \Mina\Pages\Api\Article;
 
-echo "\nTuanduimao\Api 测试... \n\n\t";
+echo "\n\Mina\Pages\Api\Article 测试... \n\n\t";
 
-class testApi extends PHPUnit_Framework_TestCase {
+class testArticleapi extends PHPUnit_Framework_TestCase {
 
 
 	function testSearch() {
@@ -29,10 +29,13 @@ class testApi extends PHPUnit_Framework_TestCase {
 	function testGet() {
 		$api = new \Mina\Pages\Api\Article;
 		try {
-			$resp = $api->call('get',['article_id'=>31, "select"=>"title,tag,article_id,category"]);
+			$resp = $api->call('get',['articleId'=>31, "select"=>"title,tag,article_id,category"]);
 		}catch( Excp $e) {
 			Utils::out( $e->toArray());
+			return;
 		}
+
+		Utils::out( $resp);
 	}
 	
 }

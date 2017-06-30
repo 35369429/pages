@@ -119,32 +119,6 @@ class Article extends Model {
 
 
 	/**
-	 * 对一组文章数据降维
-	 * @param  [type] $data [description]
-	 * @return [type]       [description]
-	 */
-	function pad( $data, $field='article_id' ) {
-
-		if (!is_array(current($data))) {
-			throw new Excp("输入参数错误 (data不是二维数组)", 400, ['data'=>$data, 'field'=>$field]);
-		}
-
-		if (!isset(current($data)[$field])) {
-			throw new Excp("输入参数错误 ($field 不存在)", 400, ['data'=>$data, 'field'=>$field]);
-		}
-
-
-		$resp = []; $map = [];
-		foreach ($data as $idx => $rs ) {
-			$map[$rs[$field]] = $idx;
-			array_push($resp, $rs[$field]);
-		}
-
-		return ["data"=>$resp, 'map'=>$map];
-	}
-
-
-	/**
 	 * 读取一组文章分类
 	 * @param  array  $article_ids 文章ID列表
 	 * @param  string $field      [description]
