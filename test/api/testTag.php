@@ -6,19 +6,19 @@ use \Tuanduimao\Excp;
 use \Tuanduimao\Utils;
 // use \Mina\Pages\Api\Article;
 
-echo "\n\Mina\Pages\Api\Category 测试... \n\n\t";
+echo "\n\Mina\Pages\Api\Tag 测试... \n\n\t";
 
-class tesCategoryApi extends PHPUnit_Framework_TestCase {
+class tesTagApi extends PHPUnit_Framework_TestCase {
 
 
 	function testSearch() {
-		$api = new \Mina\Pages\Api\Category;
+		$api = new \Mina\Pages\Api\Tag;
 		try {
 			$resp = $api->call('search', [
-				"select" => 'name',
+				"inName" => "北京,学术,快讯,上海",
+				"select" => 'tag_id,name',
 				"page" => 1,
-				"prepage" => 100,
-				'status' =>  'on'
+				"prepage" => 100			
 			]);
 		} catch ( Excp $e ){
 			Utils::out( $e->toArray() );
@@ -29,10 +29,10 @@ class tesCategoryApi extends PHPUnit_Framework_TestCase {
 	}
 
 	function testGet() {
-		
-		$api = new \Mina\Pages\Api\Category;
+
+		$api = new \Mina\Pages\Api\Tag;
 		try {
-			$resp = $api->call('get',['category_id'=>3, "select"=>"category_id,name,fullname,parent_id,priority"]);
+			$resp = $api->call('get',['name'=>'北京', "select"=>"tag_id,name,name"]);
 		}catch( Excp $e) {
 			Utils::out( $e->toArray());
 			return;

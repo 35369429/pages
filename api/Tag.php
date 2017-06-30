@@ -9,9 +9,9 @@ use \Tuanduimao\Api;
 
 
 /**
- * 分类API接口
+ * 标签API接口
  */
-class Category extends Api {
+class Tag extends Api {
 
 	/**
 	 * 初始化
@@ -21,7 +21,7 @@ class Category extends Api {
 
 		parent::__construct();
 		$this->allowMethod('get', ["PHP",'GET'])
-		     ->allowQuery('get',  ['categoryId', 'select'])
+		     ->allowQuery('get',  ['tagId', 'select'])
 		     ->allowMethod('search', ["PHP",'GET'])
 		     ->allowQuery('search',  [
 		     	"select",
@@ -40,29 +40,23 @@ class Category extends Api {
 
 
 	/**
-	 * 查询分类列表
+	 * 查询标签列表
 	 *
-	 * 读取字段 select 默认 *
+	 * 读取字段 select 默认 name
 	 *
-	 *    示例:  ["*"] /["category_id", "title" ....] / "*" / "category_id,title"
-	 *    许可值: "*","category_id","project","page","name","fullname","parent_id",
-	 *           "priority","hidden","param","status"
+	 *    示例:  ["*"] /["tag_id", "name" ....] / "*" / "tag_id,name"
+	 *    许可值: "*","tag_id","name","param"
 	 * 
 	 * 
 	 * 查询条件
-	 * 	  1. 按分类名称查询  name | orName | inName
-	 * 	  2. 按分类全称查询  fullname | orFullname | inFullname
-	 * 	  3. 按分类ID查询  categoryId | orCategoryId | inCategoryId 
-	 * 	  4. 按父类ID查询  parentId | orParentId | inParentId  默认为 0
-	 * 	  5. 是否包含子类  children 默认为 true
-	 * 	  6. 按标签查询  hidden | orHidden
-	 * 	  7. 按状态查询  status | orStatus
+	 * 	  1. 按名称查询  name | orName | inName
+	 * 	  3. 按标签ID查询  tagId | orTagId | inTagId 
 	 * 	  8. 按参数标记查询  param | orParam
 	 * 	  
-	 * 排序方式 order 默认 priority  priority asc, category_id desc
+	 * 排序方式 order 默认 tag_id  updated_at asc, tag_id desc
 	 * 
-	 *    1. 按分类指定顺序  priority
-	 *    2. 按分类创建顺序  category_id  
+	 *    1. 按标签更新顺序  updated_at
+	 *    2. 按标签创建顺序  tag_id  
 	 *    
 	 *
 	 * 当前页码 page    默认 1 
@@ -74,28 +68,22 @@ class Category extends Api {
 	 */
 	protected function search( $query=[] ) {
 
-		$select = empty($query['select']) ? '*' : $query['select'];
+		$select = empty($query['select']) ? 'name' : $query['select'];
 		$select = is_array($select) ? $select : explode(',', $select);
 
 		// 验证 Select 参数
-		$allowFields = ["*","category_id","project","page","name","fullname","parent_id","priority","hidden","param","status"];
+		$allowFields = ["*","tag_id","name","param"];
 
 		foreach ($select as $idx => $field) {
 			if ( !in_array($field, $allowFields)){
 				throw new Excp(" select 参数错误 ($field 非法字段)", 400, ['query'=>$query]);
 			}
 		}
-		$select[] = 'category_id as _cid';
 
-
-		// 是否包含子类
-		$query['children'] = isset($query['children']) ? $query['children'] : true;
-		$query['parentId'] = isset($query['parentId']) ? $query['parentId'] : 0;
-
-
+	
 		// Order 默认参数
-		$query['order'] = !empty($query['order']) ? $query['order'] : 'priority';
-		$allowOrder = ["priority", "category_id"];
+		$query['order'] = !empty($query['order']) ? $query['order'] : 'tag_id';
+		$allowOrder = ["updated_at", "tag_id"];
 		$orderList = explode(',', $query['order']);
 
 
@@ -106,15 +94,12 @@ class Category extends Api {
 
 
 		// 查询数据表
-		$c = new \Mina\Pages\Model\Category;
-		$qb = $c->query();
+		$t = new \Mina\Pages\Model\Tag;
+		$qb = $t->query();
 
 		// 设定查询条件
 		$this->qb( $qb, 'name', 'name', $query, ["and", "or", "in"] );
-		$this->qb( $qb, 'fullname', 'fullname', $query, ["and", "or", "in"] );
-		$this->qb( $qb, 'parent_id', 'parentId', $query, ["and", "or", "in"] );
-		$this->qb( $qb, 'hidden', 'hidden', $query );
-		$this->qb( $qb, 'status', 'status', $query );
+		$this->qb( $qb, 'tag_id', 'tagId', $query, ["and", "or", "in"] );
 		$this->qb( $qb, 'param', 'param', $query, ['and', 'or'], 'like');
 
 		// 处理排序
@@ -132,7 +117,7 @@ class Category extends Api {
 		
 		// 查询数据
 		$qb->select( $select );
-		$result = $qb ->paginate($query['perpage'],['category_id'], 'page', $query['page'] );
+		$result = $qb ->paginate($query['perpage'],['tag_id'], 'page', $query['page'] );
 		$resultData = $result->toArray();
 		
 
@@ -155,19 +140,10 @@ class Category extends Api {
 		if ( empty($data) ) {
 			return $resp;
 		}
-	
 
-		foreach ($data as $idx=>$rs ) {
-
-			unset($resp['data'][$idx]['_cid']);
-
-			if ( $query['children'] ) {
-				$children = $this->search([
-					'parentId'=>$rs['_cid'],
-					'select' => $query['select']
-				]);
-
-				$resp['data'][$idx]['children'] = $children['data'];
+		if ( count(end($data)) == 1) {
+			foreach ($data as $idx=>$rs ) {
+				$resp['data'][$idx] = current($rs);
 			}
 		}
 		
@@ -178,30 +154,30 @@ class Category extends Api {
 
 
 	/**
-	 * 读取分类详情信息
+	 * 读取标签详情信息
 	 * @param  array  $query Query 查询
-	 *                   int ["categoryId"]  分类ID
+	 *                   int ["name"]  标签详情
 	 *                   
 	 *          string|array ["select"] 读取字段  
-	 *          			 示例:  ["*"] /["category_id", "title" ....] / "*" / "category_id,title"
-	 *          		     许可值: "*","category_id","project","page","name","fullname","parent_id","priority","hidden","param","status"
+	 *          			 示例:  ["*"] /["tag_id", "name" ....] / "*" / "tag_id,name"
+	 *          		     许可值: "*","tag_id","name","param"
 	 *                    
 	 * @return Array 文章数据
 	 * 
 	 */
 	protected function get( $query=[] ) {
 
-		// 验证数值ß
-		if ( !preg_match("/^([0-9]+)/", $query['categoryId']) ) {
-			throw new Excp(" categoryId 参数错误", 400, ['query'=>$query]);
+		// 验证数值
+		if ( empty($query['name']) ) {
+			throw new Excp(" name 参数错误", 400, ['query'=>$query]);
 		}
 
-		$category_id = $query['categoryId'];
+		$name = $query['name'];
 		$select = empty($query['select']) ? '*' : $query['select'];
 		$select = is_array($select) ? $select : explode(',', $select);
 
 		// 验证 Select 参数
-		$allowFields = ["*","category_id","project","page","name","fullname","parent_id","priority","hidden","param","status"];
+		$allowFields = ["*","tag_id","name","param"];
 
 		foreach ($select as $idx => $field) {
 			if ( !in_array($field, $allowFields)){
@@ -209,10 +185,10 @@ class Category extends Api {
 			}
 		}
 		
-		$cate = new \Mina\Pages\Model\Category;
-		$rs = $cate->getLine("WHERE category_id=:category_id LIMIT 1", $select, ["category_id"=>$category_id]);
+		$cate = new \Mina\Pages\Model\Tag;
+		$rs = $cate->getLine("WHERE name=:name LIMIT 1", $select, ["name"=>$name]);
 		if ( empty($rs) ) {
-			throw new Excp("分类不存在", 404,  ['query'=>$query]);
+			throw new Excp("标签不存在", 404,  ['query'=>$query]);
 		}
 
 		return $rs;
