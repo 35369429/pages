@@ -94,7 +94,7 @@ class Category extends Api {
 			if ( is_numeric($query['orSlug']) ) {
 				$query['orCategoryId'] = intval($query['orSlug']);
 			} else {
-				$query['name'] = trim($query['orSlug']);
+				$query['orName'] = trim($query['orSlug']);
 			}
 		}
 
@@ -105,6 +105,7 @@ class Category extends Api {
 				$query['inName'] = trim($query['inSlug']);
 			}
 		}
+
 
 
 		foreach ($select as $idx => $field) {

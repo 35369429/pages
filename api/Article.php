@@ -114,6 +114,33 @@ class Article extends Api {
 
 
 
+		if ( !empty($query['c']) ) {
+			if ( is_numeric($query['c']) ) {
+				$query['categoryId'] = intval($query['c']);
+			} else {
+				$query['category'] = trim($query['c']);
+			}
+		}
+
+		if ( !empty($query['orC']) ) {
+			if ( is_numeric($query['orC']) ) {
+				$query['orCategoryId'] = intval($query['orC']);
+			} else {
+				$query['orCategory'] = trim($query['orC']);
+			}
+		}
+
+		if ( !empty($query['inC']) ) {
+			if ( is_numeric($query['inC']) ) {
+				$query['inCategoryId'] = intval($query['inC']);
+			} else {
+				$query['inCategory'] = trim($query['inC']);
+			}
+		}
+
+		// Utils::out($query);
+
+
 		// Order 默认参数
 		$query['order'] = !empty($query['order']) ? $query['order'] : 'publish_time';
 		$allowOrder = ["publish_time", "update_time", "stick" ];
@@ -162,6 +189,8 @@ class Article extends Api {
 		
 		// 查询数据
 		$qb->select( $select )->distinct();
+		// echo "\n" . $qb->getSQL() . "\n";
+
 		$result = $qb ->paginate($query['perpage'],['article.article_id'], 'page', $query['page'] );
 		$resultData = $result->toArray();
 		
