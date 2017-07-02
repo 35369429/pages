@@ -106,6 +106,7 @@ class Category extends Api {
 			}
 		}
 
+
 		foreach ($select as $idx => $field) {
 			if ( !in_array($field, $allowFields)){
 				throw new Excp(" select 参数错误 ($field 非法字段)", 400, ['query'=>$query]);
@@ -137,6 +138,7 @@ class Category extends Api {
 
 		// 设定查询条件
 		$this->qb( $qb, 'name', 'name', $query, ["and", "or", "in"] );
+		$this->qb( $qb, 'category_id', 'categoryId', $query, ["and", "or", "in"] );
 		$this->qb( $qb, 'fullname', 'fullname', $query, ["and", "or", "in"] );
 		$this->qb( $qb, 'parent_id', 'parentId', $query, ["and", "or", "in"] );
 		$this->qb( $qb, 'hidden', 'hidden', $query );
