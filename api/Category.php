@@ -50,6 +50,7 @@ class Category extends Api {
 	 * 
 	 * 
 	 * 查询条件
+	 *    0. 按名称或者ID查询 slug | orSlug | inSlug
 	 * 	  1. 按分类名称查询  name | orName | inName
 	 * 	  2. 按分类全称查询  fullname | orFullname | inFullname
 	 * 	  3. 按分类ID查询  categoryId | orCategoryId | inCategoryId 
@@ -79,6 +80,31 @@ class Category extends Api {
 
 		// 验证 Select 参数
 		$allowFields = ["*","category_id","project","page","name","fullname","parent_id","priority","hidden","param","status"];
+
+
+		if ( !empty($query['slug']) ) {
+			if ( is_numeric($query['slug']) ) {
+				$query['categoryId'] = intval($query['slug']);
+			} else {
+				$query['name'] = trim($query['slug']);
+			}
+		}
+
+		if ( !empty($query['orSlug']) ) {
+			if ( is_numeric($query['orSlug']) ) {
+				$query['orCategoryId'] = intval($query['orSlug']);
+			} else {
+				$query['name'] = trim($query['orSlug']);
+			}
+		}
+
+		if ( !empty($query['inSlug']) ) {
+			if ( is_numeric($query['inSlug']) ) {
+				$query['inCategoryId'] = intval($query['inSlug']);
+			} else {
+				$query['inName'] = trim($query['inSlug']);
+			}
+		}
 
 		foreach ($select as $idx => $field) {
 			if ( !in_array($field, $allowFields)){
