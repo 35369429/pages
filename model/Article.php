@@ -49,11 +49,12 @@ class Article extends Model {
 				 ->putColumn( 'update_time', $this->type('timestampTz',  ["index"=>1]) )  // 更新时间
 				 ->putColumn( 'create_time', $this->type('timestampTz',  ["index"=>1]) )  // 创建时间
 				 ->putColumn( 'sync', $this->type('string',  ["json"=>true, 'length'=>600]) )  // 公众号同步状态
-				 ->putColumn( 'content', $this->type('longText',  []) )  // 已发布正文
-				 ->putColumn( 'ap_content', $this->type('longText',  []) )  // 小程序正文
+				 ->putColumn( 'content', $this->type('longText',  []) )  // 已发布正文 (WEB)
+				 ->putColumn( 'ap_content', $this->type('longText',  ["json"=>true]) )  // 已发布小程序正文
 				 ->putColumn( 'draft', $this->type('longText',  []) )  // 待发布正文(草稿)
-				 ->putColumn( 'ap_draft', $this->type('longText',  []) )  // 小程序待发布正文(草稿)
-				 ->putColumn( 'history', $this->type('longText',  []) )  // 发布状态的正文备份
+				 ->putColumn( 'ap_draft', $this->type('longText',  ["json"=>true]) )  // 小程序待发布正文(草稿)
+				 ->putColumn( 'delta', $this->type('longText',  ["json"=>true]) )  // 编辑状态文章 (Delta )
+				 ->putColumn( 'history', $this->type('longText',  ["json"=>true]) )  // 上一次发布数据备份(Delta )
 				 ->putColumn( 'param', $this->type('string', ['length'=>128,'index'=>1]) )  // 自定义查询条件
 				 ->putColumn( 'stick', $this->type('integer', ['index'=>1, 'default'=>"0"]) )  // 置顶状态
 				 // 文章状态 published/draft
