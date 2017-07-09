@@ -1,0 +1,526 @@
+<?php
+	use \Tuanduimao\Loader\App as App;
+?>
+<script type="text/javascript">
+	DEBUG_ON = true;
+</script>
+<!-- Page Content -->
+<div class="content "> 
+
+	<div class="block block-bordered webeditor " >
+		<div class="block-header remove-margin" >
+			<ul class="block-options" >
+				<li>
+					<a type="button"   href="#" data-toggle="block-option" data-action="fullscreen_toggle"></a>
+				</li>
+			</ul>
+
+			<h3 class="block-title" >
+				<a href="<?=App::R('article', 'index')?>" class="text-default">
+                    <i class="fa fa-arrow-circle-o-left"></i> 
+                    文章列表 
+                </a> / 编辑文章 
+				<!-- <i class="fa fa-lock push-5-l  lock_status text-muted" style="width:18px;"></i> -->
+				<!-- <span class="text-danger status push-10-l font-s13"></span> -->
+			</h3>
+			
+		</div> <!-- END block-header -->
+
+		<div class="block-content  remove-margin remove-padding row" >
+
+
+			<div class="col-xs-9 remove-padding webeditor-editor rb "> 
+				
+				<!-- BEGAIN Toolbar Container -->
+				<div  id="toolbar-container" class="webeditor-toolbar hidden">
+					<span class="ql-formats">
+						<button class="ql-undo"  data-toggle="tooltip"  data-placement="top"  title="撤销"></button>
+						<button class="ql-redo"  data-toggle="tooltip"  data-placement="top"  title="重做"></button>
+						<button class="ql-clean"  data-toggle="tooltip"  data-placement="top"  title="清除格式" ></button>
+					</span>
+					
+					<span class="ql-formats">
+						<select class="ql-header">
+							
+							<option value="" selected>标题</option>
+							<option value="1" >一级标题</option>
+							<option value="2">二级标题</option>
+							<option value="3">三级标题</option>
+							<option value="4">四级标题</option>
+							<option value="5">五级标题</option>
+							<option value="6">六级标题</option>
+						</select>
+					</span>
+
+					<span class="ql-formats">
+						<select class="ql-size">
+							<option value="" selected>字号</option>
+							<option value="12px">12px</option>
+							<option value="14px">14px</option>
+							<option value="15px">15px</option>
+							<option value="16px">16px</option>
+							<option value="18px">18px</option>
+							<option value="20px">20px</option>
+							<option value="custome-size">自定义</option>
+						</select>
+					</span>
+					
+			
+					<span class="ql-formats">
+						<button class="ql-link" data-toggle="tooltip"  data-placement="top"  title="超链接"  ></button>
+						<button class="ql-blockquote"  data-toggle="tooltip"  data-placement="top"  title="引用"></button>
+						<button class="ql-divider"  data-toggle="tooltip"  data-placement="top"  title="分割线"></button>
+						<button class="ql-code-block"  data-toggle="tooltip"  data-placement="top"  title="代码"></button>
+						<button class="ql-formula"  data-toggle="tooltip"  data-placement="top"  title="公式"></button>
+					</span>
+
+					<span class="pull-right ">
+						<button class="panel-toggle hidden"  
+							data-toggle="tooltip"  
+							data-placement="left"  
+							title="打开工具栏">
+							<i class="si si-briefcase" aria-hidden="true"></i>
+						</button>
+					</span>
+
+
+					<br/>
+					<span class="ql-formats">
+						<button class="ql-bold"  data-toggle="tooltip"  data-placement="bottom"  title="粗体"></button>
+						<button class="ql-italic"  data-toggle="tooltip"  data-placement="bottom"  title="斜体"></button>
+						<button class="ql-underline"  data-toggle="tooltip"  data-placement="bottom"  title="下划线"></button>
+						<button class="ql-strike"  data-toggle="tooltip"  data-placement="bottom"  title="删除线" ></button>
+						<select class="ql-color"  data-toggle="tooltip-select"  data-placement="top"  title="字体颜色"></select>
+						<select class="ql-background"  data-toggle="tooltip-select"  data-placement="top"  title="背景色"></select>
+					</span>
+
+					<span class="ql-formats">
+						<button class="ql-align" value=""  data-toggle="tooltip"  data-placement="bottom"  title="居左对齐"></button>
+						<button class="ql-align" value="center"  data-toggle="tooltip"  data-placement="bottom"  title="居中对齐"></button>
+						<button class="ql-align" value="right"  data-toggle="tooltip"  data-placement="bottom"  title="居右对齐"></button>
+						<button class="ql-align" value="justify"  data-toggle="tooltip"  data-placement="bottom"  title="两端对齐"></button>
+					</span>
+
+					
+					<span class="ql-formats">
+						<button class="ql-list" value="ordered"  data-toggle="tooltip"  data-placement="bottom"  title="有序列表" ></button>
+						<button class="ql-list" value="bullet"  data-toggle="tooltip"  data-placement="bottom"  title="无序列表" ></button>
+						<button class="ql-indent" value="-1"  data-toggle="tooltip"  data-placement="bottom"  title="向左缩进" ></button>
+						<button class="ql-indent" value="+1"  data-toggle="tooltip"  data-placement="bottom"  title="向右缩进"></button>
+					</span>
+
+
+				</div> <!-- END Toolbar Container -->
+				
+
+				<!-- BEGAIN Header Container -->
+				<div id="header-container" class="webeditor-header">
+					<form name="header-form" class="remove-padding remove-margin" >
+					<div class="row">
+						<div class="col-xs-12">
+							<input name="title" type="text" class="large" placeholder="这里输入标题">
+						</div>
+					</div>
+					<div class="row push-15-t">
+						<div class="col-xs-3">
+							<input name="author" type="text"  class="light" placeholder="输入作者">
+						</div>
+						<div class="col-xs-3">
+							<input name="origin" type="text"   class="light"   placeholder="输入来源名称">
+						</div>
+
+						<div class="col-xs-6">
+							<input name="origin_url" type="text"   class="light"  placeholder="输入来源网址">
+						</div>
+					</div>
+					<hr/>
+					</form>
+				</div> <!-- END Header Container -->
+				
+				<div id="editor-container" class="webeditor-container"></div><!-- END editor Container -->
+				
+				<!-- BEGAIN Cover Container -->
+				<div id="cover-container" class="webeditor-cover" style="">
+
+					<form class="form-horizontal" name="cover-form" >
+						<div class="form-group">
+							<label>封面 <span class="text-muted font-s12">( 建议尺寸 900像素 * 500像素) </span> </label>
+							<div class="row">
+								<div class="col-xs-6 remove-padding preview border" >
+									
+								</div>
+								<div class="col-xs-6 remove-padding">
+									<input type="hidden" name="cover" >
+									<div>
+										<button class="btn btn-minw push-15-l btn-default cover-selector" type="button"> 选择封面图片 </button>
+									</div>
+									<div>
+										<button data-toggle="clean"
+											type="button" 
+											class="btn btn-minw push-15-l push-15-t btn-default"> 
+											清除图片 </button>
+									</div>
+								</div>
+							</div>
+						</div><!-- END 封面 -->
+
+						<div class="form-group">
+							<label class="push-30-t ">摘要  <span class="text-muted font-s12">( 选填，如果不填写会默认抓取正文前54个字) </span></label>
+							<div class="row">
+								<div class="col-xs-12 remove-padding">
+									<textarea 
+										name="summary"
+										data-toggle="counter"
+										data-max="120"
+										data-selector=".summary-counter"
+										class="form-control" rows="4" placeholder=""></textarea>
+									<div class="help-block text-right">
+										<span class="summary-counter">0</span>/120
+									</div>
+								</div>
+							</div>
+						</div> <!-- END 摘要 -->
+
+					</form>
+				</div> <!-- END Cover Container -->
+			</div> <!-- END editor -->
+
+
+			
+			<!-- BEGAIN compose 组件 -->
+			<div class="col-xs-3 block remove-margin remove-padding webeditor-panel hidden" style=""  >
+				
+				<ul class="nav nav-tabs nav-tabs-alt " data-toggle="tabs">
+					<li class="active">
+						<a href="#tabs-components" onclick="return false;"><i class="fa fa-cube"></i> 组件</a>
+					</li>
+					<li>
+						<a href="#tabs-options" onclick="return false;"><i class="fa fa-cogs"></i> 选项</a>
+					</li>
+
+					<a href="#" class="pull-right" data-toggle="close"  onclick="return false;" > 
+						<i class="si si-close"></i>
+					</a>
+				</ul>
+				
+				<div class="block-content tab-content remove-margin " 
+					 data-offset="100"
+					 data-height="screen-height" 
+					 data-toggle="slimscroll"
+						>
+					<div class="tab-pane active" id="tabs-components">
+						<ul class="list-group" >
+							<li class="list-group-item image"><i class="fa fa-image"></i> 图片 </li>
+							<li class="list-group-item video"><i class="fa fa-camera-retro"></i> 视频 </li>
+						</ul>
+					</div> <!-- END compose 组件 -->
+					
+
+					<div class="tab-pane" id="tabs-options">
+						
+						<form class="form-horizontal" name="panel-form" >
+
+							<div class="block  remove-margin">
+								<h3 class="block-title">发布选项</h3>
+								<div class="block-content">
+									<div class="form-group">
+										<div class="form-material">
+											
+											<select name="category" 
+												class="js-select2 form-control"  style="width: 100%;"
+												data-placeholder="请选择..." 
+												multiple >
+												<option></option><!-- Required for data-placeholder attribute to work with Select2 plugin -->
+												<option value="1">HTML</option>
+												<option value="2">CSS</option>
+												<option value="3">Javascript</option>
+												<option value="4">PHP</option>
+												<option value="5">MySQL</option>
+												<option value="6">Ruby</option>
+												<option value="7">AngularJS</option>
+											</select>
+
+											<label for="example2-select2"  class="font-s14 font-w300">分类</label>
+											
+										</div>
+									</div> <!-- END form-group 分类 -->
+
+									<div class="form-group">
+										<div class="form-material">
+											
+											<input
+												name="tag"
+												class="js-tags-input form-control" type="text" 
+												value="HTML,CSS,JavaScript" >
+											<label for="material-text" class="font-s14 font-w300">标签</label>
+										</div>
+									</div><!-- END form-group 标签 -->
+
+									<div class="form-group">
+										<div class="form-material">
+											<div name="publish_date" class="js-datepicker"></div>
+											<label for="material-text"  class="font-s14 font-w300">发布日期</label>
+										</div>
+									</div><!-- END form-group 发布日期 -->
+
+									<div class="form-group">
+										<div class="form-material">
+											<label for="material-text" class="font-s14 font-w300">发布时刻</label>
+											<input
+												name="publish_time"
+												class="form-control js-masked-time" type="text" 
+												placeholder="@ 20时20分" >
+										</div>
+									</div><!-- END form-group 发布时刻 -->
+
+								</div> <!-- END block-content -->
+							</div> <!-- END block 发布选项 -->
+
+							<div class="block remove-margin">
+								<h3 class="block-title"> SEO 选项</h3>
+								<div class="block-content">
+
+									<div class="form-group">
+										<div class="form-material">
+											<input
+												name="seo_title"
+												class="form-control" type="text" 
+												placeholder="在百度搜索列表中显示的标题" >
+											<label  class="font-s14 font-w300">标题</label>
+										</div>
+									</div><!-- END form-group 标题 -->
+								
+									<div class="form-group">
+										<div class="form-material">
+											<input
+												name="seo_keywords"
+												class="js-tags-input form-control" type="text" 
+												value="HTML,CSS,JavaScript" >
+											<label for="material-text" class="font-s14 font-w300">关键词</label>
+										</div>
+									</div><!-- END form-group 关键词 -->
+
+									<div class="form-group">
+										<div class="form-material">
+											
+											<textarea 
+												name="seo_summary"
+												data-toggle="counter"
+												data-max="120"
+												data-selector=".seo-summary-counter"
+												class="form-control" rows="3" placeholder="在百度搜索列表中显示的摘要"></textarea>
+											<label for="material-text" class="font-s14 font-w300">摘要</label>
+											<div class="help-block text-right">
+												<span class="seo-summary-counter">0</span>/120
+											</div>
+										</div>
+									</div><!-- END form-group 摘要 -->
+
+								</div> <!-- END block-content -->
+							</div> <!-- END block SEO 选项 -->
+
+
+						</form> <!-- END form -->
+					</div> <!-- END option 表单 -->
+
+				</div>  <!-- END toolpanel-content -->
+			</div> <!-- END toolpanel -->
+		</div> <!-- END block-content -->
+		
+
+		<!-- 功能操作面板-->
+		<div class="block block-quickpanel">
+			<div class="block-quickpanel-content " >
+				<div class="row">
+					<div class="col-xs-5">
+						<span style="line-height: 32px;">
+							<span class="webeditor-counter"></span> 
+						</span>
+					</div>
+					<div class="col-xs-7 text-right" >
+						<button id="ID_14671172870094912_1" 
+							type="button" 
+							data-form="#general-form"
+							data-action="#"
+							class="btn btn-primary font-w300 push-20-r tryit se-action">
+							<span class="tryit saveit"><i class="fa fa-save"></i> 保存</span>
+							<span class="pull-left tryit-status hidden" > <i class="fa fa-refresh fa-spin"></i> 正在校验</span>
+						</button>
+
+						<button  id="ID_14671172870094912_1" 
+							type="button"
+							data-form="#general-form"
+							data-action="#"
+							class="btn btn-primary font-w300  push-20-r previt">
+							<i class="fa fa-eye push-5-r"></i> 
+							预览
+						</button>
+					</div>
+				</div>
+			</div>
+			<div class="bg-primary text-white text-center bottom-line"></div>   
+		</div> <!-- END 功能操作面板-->
+
+	</div> <!-- END block -->
+
+</div> <!-- END Page Content -->
+
+
+<script type="text/javascript">
+$(function() {
+
+	App.initHelpers(['datepicker','select2', 'masked-inputs','tags-inputs', 'slimscroll']);
+
+	$('.webeditor-container').webeditor({
+		modules: {
+			counter: {
+				selector: '.webeditor-counter',
+				unit: ' 个字',
+				word:false
+			}
+			// counter: function( length ) {
+			//  console.log( 'callback', length);
+			// }
+		},
+		components: {
+			"image":{
+				"template":'' +
+					'<div class="hello" style="width:{{width}}px;" >' +
+						'<image src="{{url}}"  style="width:{{width}}px;height:{{height}}px;" />' + 
+						'<span class="title">{{name}}</span>' + 
+					'</div>'
+			},
+			"video":{
+				"template":'' + '{{code}}'
+			}
+		}
+	});
+
+	$editor = $('.webeditor-container').webeditor('get');
+	$editor.on('text-change',  function(delta, oldDelta, source) {
+		// console.log('text change:', delta, '>', oldDelta, ' :', source );
+	});
+
+	$editor.on ('status-change', function( event, status ) {
+		debug.info( '\t on status-change', status );
+	});
+
+
+	$('.saveit').click(function(event) {
+		$editor.save('php/save.php', {name:'测试主题'}, function( resp, status, xhr) {
+			debug.log( status, resp );
+		});
+	});
+
+	$('.previt').click(function(event) {
+		var cover = $editor.coverData();
+		var panel = $editor.panelData();
+		var header = $editor.headerData();
+		debug.log( cover , panel, header );
+	});
+
+	
+
+	// 取消导航浮动
+	$('#header-navbar').css('position', 'static');
+	$('main').css('padding-top', '0px');
+
+	// 图片管理面板
+	var imagePanel = new imageWebeditorPanel({
+		api: {
+			latest: '<?=App::URI("mina", "uploader", "imagelatest")?>', // 最近上传接口
+			upload: '<?=App::URI("mina", "uploader", "imageupload")?>',  // 图片上传接口
+			crop:   '<?=App::URI("mina", "uploader", "imagecrop")?>',	// 图片裁切接口
+			resize: '<?=App::URI("mina", "uploader", "imageresize")?>' // 压缩图片接口
+		},
+
+		confirm: function( selected ) {  // 选中图片
+			for( var i in selected ) {
+				var img = selected[i];
+				// $editor.quill().insertEmbed(10, 'image', img['origin']);
+
+				// 插入图片
+				// $editor.insertComponent('image', {
+				//  name:img['title'],
+				//  url:img['origin'],
+				//  width:img['width'],
+				//  height:img['height']
+				// });
+
+				$editor.insertImage({
+					src:img['origin'], 
+					width:img['width'] + 'px',
+					height:img['height'] +  'px'
+				});
+			}
+		},
+		cancel: function( selected ) {  // 取消选择
+			console.log( selected );
+		},
+
+		multiple:3,  // 最多可选图片数量 ( 默认9个 )
+		show:false   // 是否打开界面
+	});
+
+
+	var coverPanel = new imageWebeditorPanel({
+		api: {
+			latest: '<?=App::URI("mina", "uploader", "imagelatest")?>', // 最近上传接口
+			upload: '<?=App::URI("mina", "uploader", "imageupload")?>',  // 图片上传接口
+			crop:   '<?=App::URI("mina", "uploader", "imagecrop")?>',	// 图片裁切接口
+			resize: '<?=App::URI("mina", "uploader", "imageresize")?>' // 压缩图片接口
+		},
+
+		confirm: function( selected ) {  // 选中图片
+			$editor.coverAdd( selected[0]['url'] , selected[0]['origin']);
+		},
+		cancel: function( selected ) {  // 取消选择
+			console.log( selected );
+		},
+
+		multiple:1,  // 最多可选图片数量 ( 默认9个 )
+		show:false   // 是否打开界面
+	});
+
+
+	var videoPanel = new videoWebeditorPanel({
+		api: {
+			latest: 'php/video.php?api=latest', // 最近上传接口
+			upload: 'php/video.php?api=upload',  // 视频上传接口
+		},
+
+		confirm: function( selected ) {  // 选中视频
+			var video = selected[0];
+			$editor.insertComponent('video', {
+				code:video['code'],
+				video:video['video'],
+				width:video['width'],
+				height:video['height']
+			});
+		},
+
+		cancel: function( selected ) {  // 取消选择
+			console.log( selected );
+		},
+
+		multiple:1,  // 最多可选视频数量 ( 默认1个 )
+		show:false   // 是否打开界面
+	});
+
+
+
+	$('.image', '#tabs-components').click( function(){
+		imagePanel.show();
+	});
+
+	$('.video', '#tabs-components').click( function(){
+		videoPanel.show();
+	});
+
+	$('.cover-selector', '.webeditor-cover').click(function(event) {
+		coverPanel.show();
+	});
+
+});
+</script>
+
