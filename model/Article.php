@@ -36,7 +36,7 @@ class Article extends Model {
 	 */
 	function __schema() {
 			
-			$this->putColumn( 'article_id', $this->type('bigInteger', ['length'=>20]) )  // 文章 ID  ( 同 _id )
+			$this->putColumn( 'article_id', $this->type('bigInteger', ['length'=>20, 'index'=>1]) )  // 文章 ID  ( 同 _id )
 				 ->putColumn( 'cover', $this->type('string',  ['length'=>256]) )  // 文章封面
 				 ->putColumn( 'title', $this->type('string',  ['length'=>128, 'index'=>1]) )  // 标题
 				 ->putColumn( 'origin', $this->type('string',  ['length'=>128, 'index'=>1]) )  // 来源
