@@ -486,9 +486,10 @@ $(function() {
 
 
 	var videoPanel = new videoWebeditorPanel({
+		
 		api: {
-			latest: 'php/video.php?api=latest', // 最近上传接口
-			upload: 'php/video.php?api=upload',  // 视频上传接口
+			latest: '<?=App::URI("mina", "uploader", "videolatest")?>', // 最近上传接口
+			upload: '<?=App::URI("mina", "uploader", "videolatest")?>',  // 视频上传接口
 		},
 
 		confirm: function( selected ) {  // 选中视频
