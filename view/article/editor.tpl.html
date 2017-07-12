@@ -435,20 +435,11 @@ $(function() {
 		},
 
 		confirm: function( selected ) {  // 选中图片
+			
+			if ( selected.length === 0 ) return ;
+
 			for( var i in selected ) {
 				var img = selected[i];
-				// $editor.quill().insertEmbed(10, 'image', img['origin']);
-
-				// 插入图片
-				// $editor.insertComponent('image', {
-				//  name:img['title'],
-				//  url:img['origin'],
-				//  width:img['width'],
-				//  height:img['height']
-				// });
-				// 
-				console.log( selected );
-
 				$editor.insertImage({
 					src:img['url'], 
 					width:img['width'] + 'px',
@@ -474,6 +465,7 @@ $(function() {
 		},
 
 		confirm: function( selected ) {  // 选中图片
+			if ( selected.length === 0 ) return ;
 			$editor.coverAdd( selected[0]['url'] , selected[0]['origin']);
 		},
 		cancel: function( selected ) {  // 取消选择
@@ -493,6 +485,9 @@ $(function() {
 		},
 
 		confirm: function( selected ) {  // 选中视频
+			
+			if ( selected.length === 0 ) return ;
+
 			var video = selected[0];
 			$editor.insertComponent('video', {
 				code:video['code'],
