@@ -49,30 +49,21 @@ class ArticleController extends \Tuanduimao\Loader\Controller {
 	 * @return 
 	 */
 	function save()  {
-		Utils::out( App::input() );
+		$article = new \Mina\Pages\Model\Article;
+		$rs = $article->save( json_decode(App::input(),true) );
+		Utils::out( $rs );
 	}
+
 
 	// 文章编辑器
 	function editor() {
 
-		 $category = new \Mina\Pages\Model\Category;
-
-		// 读取分类信息
-		// $category = $cateApi->call('search');
-
-		// echo "<pre>";
-		// $category->each(function( $data, $depth ) {
-		// 	echo "{$data['name']}  depth={$depth} \n";
-		// });
-
-		// echo "</pre>";
-
 		$data = [
-			'category' => $category
+			'category' => new \Mina\Pages\Model\Category
 		];
-
 		App::render($data, 'article', 'editor' );
 		
+
 		return [
 
 			'js' => [
@@ -228,6 +219,50 @@ class ArticleController extends \Tuanduimao\Loader\Controller {
 
 		return array_unique($data);
 	}
+
+
+	function testdata() {
+
+		Utils::cliOnly();
+		
+		$c = App::M('Category');
+		$c->runsql("truncate table `{{table}}`");
+		$cates = [
+			["name"=>"网上门诊", "project"=>"deepblue",'param'=>"isnav=true"],
+			["name"=>"中心介绍", "project"=>"deepblue",'param'=>"isnav=true", "parent_id"=>1],
+			["name"=>"继续教育", "project"=>"deepblue",'param'=>"isnav=true", "parent_id"=>2],
+			["name"=>"医生沙龙", "project"=>"deepblue",'param'=>"isnav=true", "parent_id"=>1],
+			["name"=>"疑难病痛", "project"=>"deepblue",'param'=>"isnav=true", "parent_id"=>2],
+			["name"=>"诊疗新技术", "project"=>"deepblue",'param'=>"isnav=true"],
+			["name"=>"学术交流", "project"=>"deepblue",'param'=>"isnav=true"],
+			["name"=>"信息园地", "project"=>"deepblue"],
+			["name"=>"新闻公告", "project"=>"deepblue"],
+			["name"=>"专家介绍", "project"=>"deepblue"]
+		];
+		foreach( $cates as $cate ) {
+			$c->create($cate);
+		}
+
+
+		$t = App::M('Tag');
+		$t->runsql("truncate table `{{table}}`");
+		$tags = [
+			["name"=>"会议"],
+			["name"=>"技术"],
+			["name"=>"快讯"],
+			["name"=>"行业"],
+			["name"=>"学术"]
+		];
+		foreach( $tags as $tag ) {
+			$t->create($tag);
+		}
+
+
+		$a = App::M("Article");
+		$a->runsql("truncate table `{{table}}`");
+
+	}
+
 
 
 	function paindata() {
