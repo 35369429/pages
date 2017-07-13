@@ -49,9 +49,13 @@ class ArticleController extends \Tuanduimao\Loader\Controller {
 	 * @return 
 	 */
 	function save()  {
+		sleep(1);
+		// throw new Excp("Error Test", 500, ['hello'=>'world']);
+
 		$article = new \Mina\Pages\Model\Article;
 		$rs = $article->save( json_decode(App::input(),true) );
 		Utils::out( $rs );
+
 	}
 
 

@@ -10,8 +10,10 @@ use \Tuanduimao\Conf as Conf;
 use \Tuanduimao\Model as Model;
 use \Tuanduimao\Utils as Utils;
 
-define('ARTICLE_PUBLISHED', 'published');
-define('ARTICLE_UNPUBLISHED', 'unpublished');
+define('ARTICLE_PUBLISHED', 'published');  // 文章状态 已发布
+define('ARTICLE_UNPUBLISHED', 'unpublished');  // 文章状态 未发布
+define('DRAFT_APPLIED', 'applied'); // 已合并到文章中 DRAFT
+define('DRAFT_UNAPPLIED', 'unapplied'); // 未合并到文章中 DRAFT
 
 
 /**
@@ -65,10 +67,11 @@ class Article extends Model {
 			'delta'=> ['longText',  ["json"=>true]],  // 编辑状态文章 (Delta )
 			'param'=> ['string', ['length'=>128,'index'=>1]],  // 自定义查询条件
 			'stick'=> ['integer', ['index'=>1, 'default'=>"0"]],  // 置顶状态
-			'status'=> ['string', ['length'=>40,'index'=>1, 'default'=>'unpublished']],  // 文章状态 unpublished/published
+			'status'=> ['string', ['length'=>40,'index'=>1, 'default'=>ARTICLE_UNPUBLISHED]],  // 文章状态 unpublished/published
 		];
 
 		$struct_draft_only = [
+			'draft_status'=> ['string', ['length'=>40,'index'=>1, 'default'=>DRAFT_UNAPPLIED]],  // 草稿状态 unapplied/applied
 			'history'=>  ['longText', ['json'=>true] ],    // 上一次修改记录 (用于保存)
 			'category'=> ['longText', ['json'=>true] ],    // 分类映射信息 ( 仅用于草稿信息 )
 			'tag'=>['longText', ['json'=>true] ]   // 标签映射信息 ( 仅用于草稿信息 )
@@ -118,11 +121,11 @@ class Article extends Model {
 			unset($data['deleted_at']);
 			unset($data['updated_at']);
 			unset($data['_id']);
+			$data['draft_status'] = DRAFT_APPLIED;
 		}
 
 		// 保存到草稿表
 		$article_id = $data['article_id'];
-		$data['status'] = ARTICLE_UNPUBLISHED;
 		$data['history'] = $this->article_draft->getLine("WHERE article_id=?", ['*'], [$article_id]);
 		if ( is_array($data['history']) && !is_null($data['history']['history'])) {
 			unset( $data['history']['history']);
@@ -141,7 +144,6 @@ class Article extends Model {
 		if ( $data['status'] == ARTICLE_PUBLISHED ) {
 			return $this->published( $article_id );
 		}
-
 		return $this->article_draft->getLine("WHERE article_id=?", ['*'], [$article_id]);
 	}
 
@@ -190,7 +192,7 @@ class Article extends Model {
 		$rs['category'] = $this->getCategories($article_id, 'category_id');
 		$rs['tag'] = $this->getTags($article_id, 'name');
 		$rs['history'] = [];
-		$rs['status'] = ARTICLE_PUBLISHED;  // 标记草稿与文章同步
+		$rs['draft_status'] = DRAFT_APPLIED;  // 标记草稿与文章同步
 
 		return $this->article_draft->updateBy( 'article_id', $rs );
 	}
@@ -208,14 +210,14 @@ class Article extends Model {
 		$draft = $this->article_draft->getLine("WHERE article_id=?", ['*'], [$article_id]);
 
 		if ( !empty($draft) ) {
-			$draft['status'] = ARTICLE_PUBLISHED;
+			$draft['draft_status'] = DRAFT_APPLIED;
 			$draft = $this->article_draft->updateBy('article_id', $draft);
-		} else {
+		} else {  // 更新文章状态
 			$draft = $this->getLine("WHERE article_id=?", ['*'], [$article_id]);
 		}
 
 
-		$draft['status'] = ARTICLE_PUBLISHED;
+		$draft['status'] = ARTICLE_PUBLISHED; // 文章ID 更新为已发布
 		return $this->updateBy('article_id', $draft );
 	}
 

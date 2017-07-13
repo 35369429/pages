@@ -337,7 +337,9 @@
 
 								</div> <!-- END block-content -->
 							</div> <!-- END block SEO 选项 -->
-
+							
+							<!-- 当前文章 ID  -->
+							<input type="hidden" name="article_id" value="" >  
 
 						</form> <!-- END form -->
 					</div> <!-- END option 表单 -->
@@ -351,30 +353,50 @@
 		<div class="block block-quickpanel">
 			<div class="block-quickpanel-content " >
 				<div class="row">
-					<div class="col-xs-5">
+					<div class="col-xs-2">
 						<span style="line-height: 32px;">
 							<span class="webeditor-counter"></span> 
+							<span class="webeditor-status text-danger"></span>
 						</span>
 					</div>
-					<div class="col-xs-7 text-right" >
-						<button id="ID_14671172870094912_1" 
+					<div class="col-xs-8 text-center" >
+
+						<button 
 							type="button" 
 							data-form="#general-form"
 							data-action="#"
-							class="btn btn-primary font-w300 push-20-r tryit se-action">
-							<span class="tryit saveit"><i class="fa fa-save"></i> 保存</span>
-							<span class="pull-left tryit-status hidden" > <i class="fa fa-refresh fa-spin"></i> 正在校验</span>
+							class="btn btn-primary font-w300 push-20-r btn-minw se-btn save ">
+							<i class="fa fa-save push-5-r"></i> 保存
 						</button>
 
-						<button  id="ID_14671172870094912_1" 
+						<button 
 							type="button"
 							data-form="#general-form"
 							data-action="#"
-							class="btn btn-primary font-w300  push-20-r previt">
-							<i class="fa fa-eye push-5-r"></i> 
-							预览
+							class="btn btn-primary font-w300  push-20-r btn-minw se-btn preview">
+							<i class="fa fa-eye push-5-r"></i> 预览
+						</button>
+
+						<button 
+							type="button"
+							data-form="#general-form"
+							data-action="#"
+							class="btn btn-primary font-w300  push-20-r btn-minw se-btn publish">
+							<i class="fa fa fa-paper-plane push-5-r"></i> 发布
+						</button>
+
+
+						<button 
+							type="button"
+							data-form="#general-form"
+							data-action="#"
+							class="btn btn-primary font-w300  push-20-r btn-minw se-btn link">
+							<i class="fa fa-external-link-square push-5-r"></i> 访问
 						</button>
 					</div>
+
+					<div class="col-xs-2"></div>
+
 				</div>
 			</div>
 			<div class="bg-primary text-white text-center bottom-line"></div>   
@@ -420,25 +442,61 @@ $(function() {
 		// console.log('text change:', delta, '>', oldDelta, ' :', source );
 	});
 
+
+
+	// 数据提交，交互状态设定
+	var savetimeout = null;
 	$editor.on ('status-change', function( event, status ) {
 		debug.info( '\t on status-change', status );
+
+		if ( status == 'saving') {
+			clearTimeout(savetimeout);
+			$('.webeditor-counter').hide();
+			$('.webeditor-status')
+				.removeClass('text-success')
+				.removeClass('text-danger')
+				.addClass('text-muted')
+				.html('<i class="fa fa-refresh fa-spin"></i> 正在保存, 请稍后...');
+
+			$('.se-btn').addClass('disabled').attr('disabled', 'disabled');
+		
+		} else if ( status == 'saved' || status == 'error' ) {
+			$('.se-btn').removeClass('disabled').removeAttr('disabled');
+			savetimeout = setTimeout(function(){
+				$('.webeditor-status').html('');
+				$('.webeditor-counter').show();
+			}, 2000);
+		}
 	});
 
 
-	$('.saveit').click(function(event) {
+
+	// 存盘
+	$('.save').click(function(event) {
 		$editor.save('<?=App::NR("article", "save")?>', {name:'测试主题'}, function( resp, status, xhr) {
 			debug.log( status, resp );
+			if ( status == 'error') {
+				$('.webeditor-status')
+					.removeClass('text-success')
+					.removeClass('text-muted')
+					.addClass('text-danger')
+					.html('<i class="fa fa-times"></i>  保存失败 ('+ resp['message'] + ')');
+				return;
+			}
+
+
+			$('input[name="article_id"]').val( resp['article_id'] );
+			$('.webeditor-status')
+					.removeClass('text-danger')
+					.removeClass('text-muted')
+					.addClass('text-success')
+					.html('<i class="fa fa-check"></i>  保存成功');
 		});
 	});
 
-	$('.previt').click(function(event) {
-		var cover = $editor.coverData();
-		var panel = $editor.panelData();
-		var header = $editor.headerData();
-		debug.log( cover , panel, header );
-	});
 
-	
+
+
 
 	// 取消导航浮动
 	$('#header-navbar').css('position', 'static');
