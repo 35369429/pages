@@ -376,7 +376,7 @@ $(function() {
 			counter: {
 				selector: '.webeditor-counter',
 				unit: ' 个字',
-				word:false
+				word:true
 			}
 			// counter: function( length ) {
 			//  console.log( 'callback', length);
@@ -407,7 +407,7 @@ $(function() {
 
 
 	$('.saveit').click(function(event) {
-		$editor.save('php/save.php', {name:'测试主题'}, function( resp, status, xhr) {
+		$editor.save('<?=App::NR("article", "save")?>', {name:'测试主题'}, function( resp, status, xhr) {
 			debug.log( status, resp );
 		});
 	});
@@ -437,14 +437,27 @@ $(function() {
 		confirm: function( selected ) {  // 选中图片
 			
 			if ( selected.length === 0 ) return ;
+			var ew = $editor.width();
 
 			for( var i in selected ) {
 				var img = selected[i];
-				$editor.insertImage({
-					src:img['url'], 
-					width:img['width'] + 'px',
-					height:img['height'] +  'px'
-				});
+
+				if ( ew < img['width'] ) {
+
+					$editor.insertImage({
+						src:img['url'],
+						"data-width":img['width'],
+						"data-height":img['height']
+					});
+
+				} else {
+
+					$editor.insertImage({
+						src:img['url'], 
+						width:img['width'] + 'px',
+						height:img['height'] +  'px'
+					});
+				}
 			}
 		},
 		cancel: function( selected ) {  // 取消选择

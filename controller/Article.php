@@ -44,6 +44,14 @@ class ArticleController extends \Tuanduimao\Loader\Controller {
 	}
 
 
+	/**
+	 * 保存文章
+	 * @return 
+	 */
+	function save()  {
+		Utils::out( App::input() );
+	}
+
 	// 文章编辑器
 	function editor() {
 
