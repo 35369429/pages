@@ -50,14 +50,29 @@ class ArticleController extends \Tuanduimao\Loader\Controller {
 	 */
 	function save()  {
 		sleep(1);
-		// throw new Excp("Error Test", 500, ['hello'=>'world']);
-
 		$article = new \Mina\Pages\Model\Article;
 		$rs = $article->save( json_decode(App::input(),true) );
 		Utils::out( $rs );
-
 	}
 
+
+	/**
+	 * 取消发布
+	 * @return [type] [description]
+	 */
+	function cancelPublish() {
+		sleep(1);
+		
+		$data = json_decode(App::input(),true);
+		if ( empty($data['article_id']) ) {
+			throw new Excp("未知文章( {$data['article_id']})" , 400, ['data'=>$data]);
+		}
+
+		$article = new \Mina\Pages\Model\Article;
+		$rs = $article->unpublished( $data['article_id'] );
+		Utils::out( $rs );
+
+	}
 
 	// 文章编辑器
 	function editor() {

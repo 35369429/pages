@@ -117,8 +117,13 @@
 				<div id="header-container" class="webeditor-header">
 					<form name="header-form" class="remove-padding remove-margin" >
 					<div class="row">
-						<div class="col-xs-12">
+						<div class="col-xs-10">
 							<input name="title" type="text" class="large" placeholder="这里输入标题">
+						</div>
+						<div class="col-xs-2 text-right">
+							<span class="label label-success on-published hidden">已发布</span>
+							<span class="label label-warning  on-unapplied hidden">已发布 ( 未更新 )</span>
+							<span class="label label-danger  on-unpublished ">草稿</span>
 						</div>
 					</div>
 					<div class="row push-15-t">
@@ -296,7 +301,7 @@
 							</div> <!-- END block 发布选项 -->
 
 							<div class="block remove-margin">
-								<h3 class="block-title"> SEO 选项</h3>
+								<h3 class="block-title"> 搜索引擎优化</h3>
 								<div class="block-content">
 
 									<div class="form-group">
@@ -315,7 +320,7 @@
 												name="seo_keywords"
 												class="js-tags-input form-control" type="text" 
 												value="" >
-											<label for="material-text" class="font-s14 font-w300">关键词</label>
+											<label for="material-text" class="font-s14 font-w300">优化关键词</label>
 										</div>
 									</div><!-- END form-group 关键词 -->
 
@@ -381,18 +386,35 @@
 							type="button"
 							data-form="#general-form"
 							data-action="#"
-							class="btn btn-primary font-w300  push-20-r btn-minw se-btn publish">
+							class="btn btn-primary font-w300  push-20-r btn-minw se-btn on-unpublished publish ">
 							<i class="fa fa fa-paper-plane push-5-r"></i> 发布
 						</button>
-
 
 						<button 
 							type="button"
 							data-form="#general-form"
 							data-action="#"
-							class="btn btn-primary font-w300  push-20-r btn-minw se-btn link">
+							class="btn btn-primary font-w300  push-20-r btn-minw se-btn on-published on-unapplied link">
 							<i class="fa fa-external-link-square push-5-r"></i> 访问
 						</button>
+						
+						<button 
+							type="button"
+							data-form="#general-form"
+							data-action="#"
+							class="btn btn-primary font-w300  push-20-r btn-minw se-btn on-published on-unapplied  publish hidden">
+							<i class="fa fa-paper-plane push-5-r"></i> 发布更新
+						</button>
+						
+						<button 
+							type="button"
+							data-form="#general-form"
+							data-action="#"
+							class="btn btn-danger font-w300  push-20-r btn-minw se-btn on-published on-unapplied publish-cancel hidden">
+							<i class="fa fa-paper-plane-o push-5-r"></i> 取消发布
+						</button>
+
+						
 					</div>
 
 					<div class="col-xs-2"></div>
@@ -408,6 +430,33 @@
 
 
 <script type="text/javascript">
+
+// 根据文章状态，呈现功能面板
+function setStatus(  status, draft_status ) {
+
+	if ( status == 'unpublished' ) {
+		
+		$('.on-published').addClass('hidden').hide();
+		$('.on-unapplied').addClass('hidden').hide();
+		$('.on-unpublished').removeClass('hidden').show();
+
+	} else {
+
+		if ( draft_status == 'unapplied' ) {  // 有更新未发布
+			
+			$('.on-published').addClass('hidden').hide();
+			$('.on-unpublished').addClass('hidden').hide();	
+			$('.on-unapplied').removeClass('hidden').show();
+			return;	
+		}
+
+		$('.on-unpublished').addClass('hidden').hide();
+		$('.on-unapplied').addClass('hidden').hide();
+		$('.on-published').removeClass('hidden').show();
+	}
+}
+
+
 $(function() {
 
 	App.initHelpers(['datepicker','select2', 'masked-inputs','tags-inputs', 'slimscroll']);
@@ -444,6 +493,7 @@ $(function() {
 
 
 
+
 	// 数据提交，交互状态设定
 	var savetimeout = null;
 	$editor.on ('status-change', function( event, status ) {
@@ -456,7 +506,7 @@ $(function() {
 				.removeClass('text-success')
 				.removeClass('text-danger')
 				.addClass('text-muted')
-				.html('<i class="fa fa-refresh fa-spin"></i> 正在保存, 请稍后...');
+				.html('<i class="fa fa-refresh fa-spin"></i> 处理中, 请稍后...');
 
 			$('.se-btn').addClass('disabled').attr('disabled', 'disabled');
 		
@@ -471,9 +521,9 @@ $(function() {
 
 
 
-	// 存盘
+	// 存盘按钮功能
 	$('.save').click(function(event) {
-		$editor.save('<?=App::NR("article", "save")?>', {name:'测试主题'}, function( resp, status, xhr) {
+		$editor.save('<?=App::NR("article", "save")?>', {}, function( resp, status, xhr) {
 			debug.log( status, resp );
 			if ( status == 'error') {
 				$('.webeditor-status')
@@ -491,11 +541,63 @@ $(function() {
 					.removeClass('text-muted')
 					.addClass('text-success')
 					.html('<i class="fa fa-check"></i>  保存成功');
+
+			setStatus( resp['status'], resp['draft_status'] );
 		});
 	});
 
 
+	// 发布/发布更新按钮功能
+	$('.publish').mouseover(function(event) {
+		$editor.panelOpen('options');  // 打开组件配置面板
+	});
+	$('.publish').click(function(event) {
 
+		$editor.save('<?=App::NR("article", "save")?>', {status:'published'}, function( resp, status, xhr) {
+
+			if ( status == 'error') {
+				$('.webeditor-status')
+					.removeClass('text-success')
+					.removeClass('text-muted')
+					.addClass('text-danger')
+					.html('<i class="fa fa-times"></i>  发布失败 ('+ resp['message'] + ')');
+				return;
+			}
+
+			$('input[name="article_id"]').val( resp['article_id'] );
+			$('.webeditor-status')
+					.removeClass('text-danger')
+					.removeClass('text-muted')
+					.addClass('text-success')
+					.html('<i class="fa fa-check"></i>  发布成功');
+			setStatus( resp['status'], resp['draft_status'] );
+		});
+	});
+
+
+	// 取消发布按钮功能
+	$('.publish-cancel').click(function(event) {
+
+		$editor.save('<?=App::NR("article", "cancelPublish")?>', {status:'unpublished'}, function( resp, status, xhr) {
+
+			if ( status == 'error') {
+				$('.webeditor-status')
+					.removeClass('text-success')
+					.removeClass('text-muted')
+					.addClass('text-danger')
+					.html('<i class="fa fa-times"></i>  取消发布失败 ('+ resp['message'] + ')');
+				return;
+			}
+
+			$('input[name="article_id"]').val( resp['article_id'] );
+			$('.webeditor-status')
+					.removeClass('text-danger')
+					.removeClass('text-muted')
+					.addClass('text-success')
+					.html('<i class="fa fa-check"></i>  取消发布成功');
+			setStatus( resp['status'], resp['draft_status'] );
+		});
+	});
 
 
 	// 取消导航浮动

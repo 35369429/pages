@@ -122,6 +122,9 @@ class Article extends Model {
 			unset($data['updated_at']);
 			unset($data['_id']);
 			$data['draft_status'] = DRAFT_APPLIED;
+
+		} else { 
+			$data['draft_status'] = DRAFT_UNAPPLIED;
 		}
 
 		// 保存到草稿表
