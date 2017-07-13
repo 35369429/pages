@@ -232,6 +232,11 @@ class Article extends Model {
 	 */
 	function unpublished( $article_id ) {
 
+		$this->article_draft->updateBy('article_id',[
+			'article_id' => $article_id,
+			'status' => ARTICLE_UNPUBLISHED
+		]);
+		
 		return $this->updateBy('article_id',[
 			'article_id' => $article_id,
 			'status' => ARTICLE_UNPUBLISHED
