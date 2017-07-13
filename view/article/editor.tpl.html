@@ -232,7 +232,7 @@
 												multiple >
 												<option></option><!-- Required -->
 												<?php $category->each(function( $cate, $depth ) use ( $category ){  ?>
-												<option value="<?=$cate['category_id']?> "> 
+												<option value="<?=$cate['category_id']?>"> 
 													
 													<?php 
 													$parents = $category->parents( $cate['parent_id'] );
@@ -247,7 +247,7 @@
 												<?php }); ?>
 											</select>
 
-											<label for="example2-select2"  class="font-s14 font-w300">分类</label>
+											<label for="category"  class="font-s14 font-w300">分类</label>
 											
 										</div>
 									</div> <!-- END form-group 分类 -->
