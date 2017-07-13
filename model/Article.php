@@ -114,25 +114,34 @@ class Article extends Model {
 	 */
 	function save( $data ) {
 
+		if ( is_string($data['tag']) ) {
+			$data['tag'] = explode(',', $data['tag']);
+		}
+
+		if ( is_string($data['category'])) {
+			$data['category'] = explode(',', $data['category']);
+		}
+
+
 		// 添加文章
-		if ( empty($data['article_id']) ) { 
+		if ( empty($data['article_id']) ) {
 			$data = $this->create( $data );
 			unset($data['created_at']);
 			unset($data['deleted_at']);
 			unset($data['updated_at']);
 			unset($data['_id']);
 			$data['draft_status'] = DRAFT_APPLIED;
+			$data['category'] = $this->getCategories($data['article_id'], 'category.category_id' );
+			$data['tag'] = $this->getTags($data['article_id'], 'tag.name' );
 
 		} else { 
 			$data['draft_status'] = DRAFT_UNAPPLIED;
+
 		}
 
 		// 保存到草稿表
 		$article_id = $data['article_id'];
-		$data['history'] = $this->article_draft->getLine("WHERE article_id=?", ['*'], [$article_id]);
-		if ( is_array($data['history']) && !is_null($data['history']['history'])) {
-			unset( $data['history']['history']);
-		}
+		
 
 		if ( !empty($data['delta']) ) {
 			// 生成文章正文
@@ -141,12 +150,24 @@ class Article extends Model {
 			$data['ap_content'] = 'compile wxapp content from delta' . json_encode($data['delta']);
 		}
 
-		$this->article_draft->createOrUpdate( $data ); 
+		$data['history'] = $this->article_draft->getLine("WHERE article_id=?", ['*'], [$article_id]);
+		if ( is_array($data['history']) && !is_null($data['history']['history'])) {
+			unset( $data['history']['history']);
+		}
+
+		if ( empty($data['history'])) {
+			$this->article_draft->create( $data ); 
+		} else {
+			$this->article_draft->updateBy( 'article_id', $data ); 
+		}
+
 		
 		// 发布文章
 		if ( $data['status'] == ARTICLE_PUBLISHED ) {
 			return $this->published( $article_id );
 		}
+
+
 		return $this->article_draft->getLine("WHERE article_id=?", ['*'], [$article_id]);
 	}
 
@@ -236,7 +257,7 @@ class Article extends Model {
 			'article_id' => $article_id,
 			'status' => ARTICLE_UNPUBLISHED
 		]);
-		
+
 		return $this->updateBy('article_id',[
 			'article_id' => $article_id,
 			'status' => ARTICLE_UNPUBLISHED
@@ -260,7 +281,7 @@ class Article extends Model {
 			$article_id = $rs['article_id'];
 
 			// 清除旧分类
-			$this->article_category->runsql("update {{table}} set deleted_at=? where article_id=", false, [
+			$this->article_category->runsql("update {{table}} set deleted_at=? where article_id=? ", false, [
 				date('Y-m-d H:i:s'), 
 				$article_id
 			]);  
@@ -280,13 +301,17 @@ class Article extends Model {
 		if ( !empty($data['tag']) ) {
 
 			$article_id = $rs['article_id'];
-			
-			// 清除旧分类
-			$this->article_category->runsql("update {{table}} set deleted_at=? where article_id=", false, [
-				date('Y-m-d H:i:s'), 
-				$article_id
-			]);  
 
+			$time = date('Y-m-d H:i:s');
+			// 清空旧 Tag
+			$this->article_tag->runsql(
+				"update {{table}} set deleted_at=? where article_id=? ", fasle, 
+				[$time, $article_id]
+			);  
+			
+			if ( is_string($data['tag']) ) {
+				$data['tag'] = explode(',' , $data['tag']);
+			}
 
 			$tag = new Tag;
 			$tagnames = is_array($data['tag']) ? $data['tag'] : [$data['tag']];
@@ -318,7 +343,9 @@ class Article extends Model {
 		// $draft = $data;
 		$rs = parent::create( $data );  // 创建文章记录
 
-		if ( isset($data['category']) ) {
+		if ( empty($data['category']) ) {
+
+
 			$category = is_array($data['category']) ? $data['category'] : [$data['category']];
 
 			foreach ($category as $cid ) {
@@ -328,16 +355,17 @@ class Article extends Model {
 					"unique_id"=>'DB::RAW(CONCAT(`article_id`, `category_id`))'
 				]);
 			}
-
-			// $draft['category'] = $category;
 		}
 
-		if ( isset($data['tag']) ) {
+		if ( !empty($data['tag']) ) {
+
+			if ( is_string($data['tag']) ) {
+				$data['tag'] = explode(',' , $data['tag']);
+			}
 
 			$tag = new Tag;
 			$tagnames = is_array($data['tag']) ? $data['tag'] : [$data['tag']];
 			$tagids = $tag->put( $tagnames );
-
 			foreach ($tagids as $tid ) {
 				$this->article_tag->createOrUpdate([
 					"article_id" => $data['article_id'],

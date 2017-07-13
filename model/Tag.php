@@ -55,6 +55,11 @@ class Tag extends Model {
 		$diffnames = array_diff( $tagnames, $havenames);
 
 		foreach ($diffnames as $idx=>$tag ) {
+
+			if( empty(trim($tag)) ) {
+				continue;
+			}
+
 			$rs = $this->create(["name"=>$tag]);
 			array_push($tagids, $rs['tag_id']);
 		}
