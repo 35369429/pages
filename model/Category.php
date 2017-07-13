@@ -52,6 +52,37 @@ class Category extends Model {
 	}
 
 
+	function each( $fn, $parent_id=0, $depth=0 ) {
+		
+		$depth ++;
+		if ( !is_callable($fn) ) {
+			$fn = function( $data, $depth ) {};
+		}
+
+		$resp = $this->select("where parent_id=? and status='on' ", ['*'], [$parent_id]);
+		if ( empty($resp['data']) ) {
+			return;
+		}
+
+		foreach ($resp['data'] as $rs ) {
+			$fn( $rs, $depth );
+			$this->each( $fn, $rs['category_id'], $depth);
+		}
+	}
+
+	function parents(  $parent_id  ) {
+
+		$parents = [];
+		$rs = $this->getLine("where category_id=?  and status='on' LIMIT 1", ['*'], [$parent_id]);
+		if ( !empty($rs)  ) {
+			array_push( $parents , $rs );
+			$parents = array_merge($this->parents($rs['parent_id']), $parents);
+		}
+
+		return $parents;
+	}
+
+
 	function __clear() {
 		$this->dropTable();
 	}

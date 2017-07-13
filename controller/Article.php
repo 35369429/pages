@@ -55,6 +55,22 @@ class ArticleController extends \Tuanduimao\Loader\Controller {
 	// 文章编辑器
 	function editor() {
 
+		 $category = new \Mina\Pages\Model\Category;
+
+		// 读取分类信息
+		// $category = $cateApi->call('search');
+
+		// echo "<pre>";
+		// $category->each(function( $data, $depth ) {
+		// 	echo "{$data['name']}  depth={$depth} \n";
+		// });
+
+		// echo "</pre>";
+
+		$data = [
+			'category' => $category
+		];
+
 		App::render($data, 'article', 'editor' );
 		
 		return [

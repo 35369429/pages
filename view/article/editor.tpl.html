@@ -230,14 +230,21 @@
 												class="js-select2 form-control"  style="width: 100%;"
 												data-placeholder="请选择..." 
 												multiple >
-												<option></option><!-- Required for data-placeholder attribute to work with Select2 plugin -->
-												<option value="1">HTML</option>
-												<option value="2">CSS</option>
-												<option value="3">Javascript</option>
-												<option value="4">PHP</option>
-												<option value="5">MySQL</option>
-												<option value="6">Ruby</option>
-												<option value="7">AngularJS</option>
+												<option></option><!-- Required -->
+												<?php $category->each(function( $cate, $depth ) use ( $category ){  ?>
+												<option value="<?=$cate['category_id']?> "> 
+													
+													<?php 
+													$parents = $category->parents( $cate['parent_id'] );
+													foreach( $parents as $pa ) : ?>
+
+													<?=$pa['name']?>  > 
+
+													<?php endforeach; ?>
+		
+													<?=$cate['name']?> 
+												</option>
+												<?php }); ?>
 											</select>
 
 											<label for="example2-select2"  class="font-s14 font-w300">分类</label>
@@ -251,10 +258,22 @@
 											<input
 												name="tag"
 												class="js-tags-input form-control" type="text" 
-												value="HTML,CSS,JavaScript" >
+												value="" >
 											<label for="material-text" class="font-s14 font-w300">标签</label>
 										</div>
 									</div><!-- END form-group 标签 -->
+
+
+									<div class="form-group">
+										<div class="form-material">
+											<input
+												name="param"
+												class="form-control" type="text" 
+												placeholder="例如: news=hot" >
+											<label  class="font-s14 font-w300">特别参数 (可用于检索查询)</label>
+										</div>
+									</div><!-- END form-group 参数 -->
+
 
 									<div class="form-group">
 										<div class="form-material">
@@ -295,7 +314,7 @@
 											<input
 												name="seo_keywords"
 												class="js-tags-input form-control" type="text" 
-												value="HTML,CSS,JavaScript" >
+												value="" >
 											<label for="material-text" class="font-s14 font-w300">关键词</label>
 										</div>
 									</div><!-- END form-group 关键词 -->
