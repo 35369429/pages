@@ -15,6 +15,9 @@ define('ARTICLE_UNPUBLISHED', 'unpublished');  // 文章状态 未发布
 define('DRAFT_APPLIED', 'applied'); // 已合并到文章中 DRAFT
 define('DRAFT_UNAPPLIED', 'unapplied'); // 未合并到文章中 DRAFT
 
+// 默认页面地址
+define('DEFAULT_PAGE_SLUG', 'deepblue/article/detail');  
+
 
 /**
  * 文章数据模型
@@ -37,6 +40,7 @@ class Article extends Model {
 		$this->article_category = Utils::getTab('article_category', "mina_pages_");  // 分类关联表
 		$this->article_tag = Utils::getTab('article_tag', "mina_pages_");    // 标签关联表
 		$this->article_draft = Utils::getTab('article_draft', "mina_pages_");  // 文章草稿箱
+		$this->page = Utils::getTab('page', 'core_');  // 页面表
 
 	}
 
@@ -118,6 +122,7 @@ class Article extends Model {
 			$data['tag'] = explode(',', $data['tag']);
 		}
 
+
 		if ( is_string($data['category'])) {
 			$data['category'] = explode(',', $data['category']);
 		}
@@ -125,6 +130,9 @@ class Article extends Model {
 
 		// 添加文章
 		if ( empty($data['article_id']) ) {
+		
+		// if ( true ) {  // 4 debug
+
 			$data = $this->create( $data );
 			unset($data['created_at']);
 			unset($data['deleted_at']);
@@ -136,12 +144,10 @@ class Article extends Model {
 
 		} else { 
 			$data['draft_status'] = DRAFT_UNAPPLIED;
-
 		}
 
 		// 保存到草稿表
 		$article_id = $data['article_id'];
-		
 
 		if ( !empty($data['delta']) ) {
 			// 生成文章正文
@@ -155,6 +161,7 @@ class Article extends Model {
 			unset( $data['history']['history']);
 		}
 
+
 		if ( empty($data['history'])) {
 			$this->article_draft->create( $data ); 
 		} else {
@@ -167,8 +174,13 @@ class Article extends Model {
 			return $this->published( $article_id );
 		}
 
+		$draft =  $this->article_draft->getLine("WHERE article_id=?", ['*'], [$article_id]);
+		$category = $draft['category'];
 
-		return $this->article_draft->getLine("WHERE article_id=?", ['*'], [$article_id]);
+		// 生成预览链接
+		$draft['previewLinks'] = $this->previewLinks( $article_id,  $category );
+		
+		return $draft;
 	}
 
 
@@ -269,9 +281,75 @@ class Article extends Model {
 	 * @param  string $article_id 
 	 * @return 
 	 */
-	function links( $article_id ) {
+	function links( $category ) {
 
 	}
+
+
+	/**
+	 * 生成文章预览链接
+	 */
+	function previewLinks( $article_id,  $category = null ) {
+
+		$pages = [DEFAULT_PAGE_SLUG];
+		if( $category === null ) {
+			$rs =  $this->article_draft->getLine("WHERE article_id=?", ['category'], [$article_id]);
+			if ( empty($rs) ) {
+				throw new Excp('草稿不存在', 400, ['article_id'=>$article_id]);
+			}
+			$category = $rs['category'];
+		}
+
+		// 根据类目信息，获取页面，并排重
+		if ( !empty($category) ) {
+			$cate = new Category();
+			$data = $cate->query()->whereIn('category_id', $category)->select('page')->get()->toArray();
+			if ( !empty($data) ) {
+				$data_pad = Utils::pad( $data, 'page');
+				$pages= $data_pad['data'];
+				$pages = array_unique($pages);
+				foreach ($pages as $idx =>$page ) {
+					if ( empty($page) ) {
+						$pages[$idx] = DEFAULT_PAGE_SLUG;
+					}
+				}
+			}
+		}
+
+
+
+		// 读取页面详细信息
+		$pages = $this->page->query()
+						->whereIn('slug', $pages)
+						->select('cname', 'name', 'slug', 'align', 'adapt', 'entries')
+						->get()
+						->toArray();
+
+		// 获取适配链接
+		foreach ($pages as $idx=>$pg ) {
+			
+			foreach( $pg['adapt'] as $type ) { // 处理适配页面
+				$pages[$idx]['links'][$type] = App::NR('article' , 'preview', ['p'=>$pg['slug'], 'id'=>$article_id]);
+			}
+
+			foreach( $pg['align'] as $type => $pg_align ) {  // 处理联合页面
+				if ( $type != 'wxapp') {
+					$pages[$idx]['links'][$type] =  App::NR('article' , 'preview', ['p'=>$pg_align, 'id'=>$article_id]);
+				} else {
+					$pages[$idx]['links'][$type] = '/' . $pg_align . '?id=' . $article_id; 
+				}
+			}
+
+			$pages[$idx]['article_id'] = $article_id;
+
+			// unset($pages[$idx]['entries'] );
+			unset($pages[$idx]['align'] );
+			unset($pages[$idx]['adapt'] );
+		}
+
+		return $pages;
+	}
+
 
 
 
@@ -352,8 +430,7 @@ class Article extends Model {
 		// $draft = $data;
 		$rs = parent::create( $data );  // 创建文章记录
 
-		if ( empty($data['category']) ) {
-
+		if ( !empty($data['category']) ) {
 
 			$category = is_array($data['category']) ? $data['category'] : [$data['category']];
 
@@ -383,11 +460,7 @@ class Article extends Model {
 				]);
 			}
 
-			// $draft['tag'] = $tag;
 		}
-
-		// 创建草稿记录
-		// $this->draft 
 		
 		return $rs;
 		

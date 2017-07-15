@@ -5,6 +5,7 @@ use \Tuanduimao\Tuan as Tuan;
 use \Tuanduimao\Excp as Excp;
 use \Tuanduimao\Conf as Conf;
 use \Mina\Storage\Local as Storage;
+use \Endroid\QrCode\QrCode as Qrcode;
 
 
 class ArticleController extends \Tuanduimao\Loader\Controller {
@@ -44,12 +45,86 @@ class ArticleController extends \Tuanduimao\Loader\Controller {
 	}
 
 
+	function test() {
+		$_SERVER['url'] = APP::NR('article', 'preview', ['page'=>'100helo']);
+		Utils::out ( $_SERVER );
+	}
+
+
+	function previewlinks(){
+
+		$article_id  = intval($_GET['id']);
+		if ( empty($article_id) ) {
+			echo "<span class='text-danger'>文章尚未保存</span>";
+			return;
+		}
+
+		$article = new \Mina\Pages\Model\Article;
+		$data['pages'] = $article->previewLinks( $article_id);
+		App::render($data,'article','preview.popover');
+	}
+
+
+	/**
+	 * 生成二维码
+	 * @return [type] [description]
+	 */
+	function qr() {
+
+		$code =  !empty($_REQUEST['link']) ? urldecode($_REQUEST['link']) : 'tuanduimao.com';
+		$option = $_REQUEST;
+		if ( isset( $option['background']) ) {
+			$c = explode(',', $option['background']);
+			if ( count($c) == 4) {
+				$option['background'] = ['r' => $c[0], 'g' => $c[1], 'b' => $c[2], 'a' => $c[3]];
+			}
+		}
+
+		if ( isset( $option['foreground']) ) {
+			$c = explode(',', $option['foreground']);
+			if ( count($c) == 4) {
+				$option['foreground'] = ['r' => $c[0], 'g' => $c[1], 'b' => $c[2], 'a' => $c[3]];
+			}
+		}
+		$option['size'] = !empty($option['size']) ? $option['size'] : 300;
+		$option['padding'] = !empty($option['padding']) ? $option['padding'] : 10;
+		$option['background'] = is_array($option['background']) ? $option['background'] : ['r' => 255, 'g' => 255, 'b' => 255, 'a' => 0];
+		$option['foreground'] = is_array($option['color']) ? $option['color'] : ['r' => 0, 'g' => 0, 'b' => 0, 'a' => 0];
+		$option['fontsize'] = !empty($option['fontsize']) ? $option['fontsize'] : 14;
+		$option['label'] = isset($option['label']) ? $option['label'] : '扫描二维码';
+		$option['font'] = !empty($option['font']) ? $option['font'] : 'LantingQianHei.ttf';
+
+		$qr = new QrCode();
+		$qr ->setText($code)
+		    ->setSize($option['size'])
+		    ->setPadding( $option['padding'] )
+		    ->setErrorCorrection('high')
+		    ->setForegroundColor($option['foreground'])
+		    ->setBackgroundColor($option['background'])
+		    ->setLabelFontPath(Utils::seroot() . DS . 'lib' . DS . 'fonts' . DS . $option['font'] )
+		    ->setLabel($option['label'])
+		    ->setLabelFontSize( $option['fontsize']  )
+		    ->setImageType( QrCode::IMAGE_TYPE_PNG);
+
+
+		header('Content-Type: image/png');
+		$qr->render();
+
+	}
+
+	function apqr(){
+
+
+	}
+
+
+
 	/**
 	 * 保存文章
 	 * @return 
 	 */
 	function save()  {
-		sleep(1);
+		// sleep(1);
 		$article = new \Mina\Pages\Model\Article;
 		$rs = $article->save( json_decode(App::input(),true) );
 		Utils::out( $rs );
@@ -248,8 +323,8 @@ class ArticleController extends \Tuanduimao\Loader\Controller {
 		$c->runsql("truncate table `{{table}}`");
 		$cates = [
 			["name"=>"网上门诊", "project"=>"deepblue",'param'=>"isnav=true"],
-			["name"=>"中心介绍", "project"=>"deepblue",'param'=>"isnav=true", "parent_id"=>1],
-			["name"=>"继续教育", "project"=>"deepblue",'param'=>"isnav=true", "parent_id"=>2],
+			["name"=>"中心介绍", "project"=>"deepblue",'param'=>"isnav=true", "parent_id"=>1, 'page'=>'deepblue/article/detail_video'],
+			["name"=>"继续教育", "project"=>"deepblue",'param'=>"isnav=true", "parent_id"=>2, 'page'=>'deepblue/article/detail_audio'],
 			["name"=>"医生沙龙", "project"=>"deepblue",'param'=>"isnav=true", "parent_id"=>1],
 			["name"=>"疑难病痛", "project"=>"deepblue",'param'=>"isnav=true", "parent_id"=>2],
 			["name"=>"诊疗新技术", "project"=>"deepblue",'param'=>"isnav=true"],

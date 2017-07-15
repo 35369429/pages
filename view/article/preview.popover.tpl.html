@@ -1,0 +1,43 @@
+<?php 
+use \Tuanduimao\Loader\App as App;
+?>
+
+<?php foreach($pages as $pg ): ?>
+<div class="row"  style=" padding-left:30px; padding-bottom:5px; padding-right:20px;">
+	<div class="col-xs-6 text-left">
+		<h4 class="font-w300"><?=$pg['cname']?> <span class="text-success copy-status font-s14"> </span> </h4>
+		
+	</div>
+	<div class="col-xs-6">
+		<a href="<?=App::NR('Article', 'preview', ['article_id'=>$pg['article_id']])?>" 
+		   target="_blank"
+		   class=" btn btn-primary font-w300  btn-sm  btn-minw push-5-r"
+		>	
+		电脑访问
+		</a>
+
+		<button
+			data-clipboard-text="<?=App::NR('Article', 'preview', ['article_id'=>$pg['article_id']])?>"
+			class=" btn btn-primary font-w300  btn-sm  btn-minw copy-preview-url" >	
+		复制地址
+		</button>
+
+	</div>
+</div>
+
+<div class="row" style=" padding-right:30px;padding-left: 20px;">
+	<div class="col-xs-4">
+		<img src="<?=App::NR('article', 'qr', ['link'=>$pg['links']['mobile'], 'size'=>150, 'fontsize'=>12, 'label'=>'手机浏览器'])?>"  >
+	</div>
+	<div class="col-xs-4">
+		<img src="<?=App::NR('article', 'qr', ['link'=>$pg['links']['wechat'], 'size'=>150, 'fontsize'=>12, 'label'=>'微信扫一扫'])?>" >
+	</div>
+	<div class="col-xs-4">
+		<img src="<?=App::NR('article', 'qr', ['link'=>$pg['links']['wechat'], 'size'=>150, 'fontsize'=>12, 'label'=>'微信小程序'])?>" 
+		>
+	</div>
+</div>
+
+
+
+<?php endforeach; ?>

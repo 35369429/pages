@@ -370,7 +370,7 @@
 							type="button" 
 							data-form="#general-form"
 							data-action="#"
-							class="btn btn-primary font-w300 push-20-r btn-minw fn-btn save ">
+							class="btn btn-primary font-w300 push-20-r btn-minw se-btn save ">
 							<i class="fa fa-save push-5-r"></i> 保存
 						</button>
 
@@ -378,8 +378,7 @@
 							type="button"
 							data-form="#general-form"
 							data-action="#"
-							data-placement="top" data-original-title=" "
-							class="btn btn-primary font-w300  push-20-r btn-minw fn-btn popover-btn preview ">
+							class="btn btn-primary font-w300  push-20-r btn-minw se-btn preview">
 							<i class="fa fa-eye push-5-r"></i> 预览
 						</button>
 
@@ -387,7 +386,7 @@
 							type="button"
 							data-form="#general-form"
 							data-action="#"
-							class="btn btn-primary font-w300  push-20-r btn-minw fn-btn on-unpublished publish ">
+							class="btn btn-primary font-w300  push-20-r btn-minw se-btn on-unpublished publish ">
 							<i class="fa fa fa-paper-plane push-5-r"></i> 发布
 						</button>
 
@@ -395,7 +394,7 @@
 							type="button"
 							data-form="#general-form"
 							data-action="#"
-							class="btn btn-primary font-w300  push-20-r btn-minw fn-btn on-published on-unapplied link">
+							class="btn btn-primary font-w300  push-20-r btn-minw se-btn on-published on-unapplied link hidden">
 							<i class="fa fa-external-link-square push-5-r"></i> 访问
 						</button>
 						
@@ -403,7 +402,7 @@
 							type="button"
 							data-form="#general-form"
 							data-action="#"
-							class="btn btn-primary font-w300  push-20-r btn-minw fn-btn on-published on-unapplied  publish hidden">
+							class="btn btn-primary font-w300  push-20-r btn-minw se-btn on-published on-unapplied  publish hidden">
 							<i class="fa fa-paper-plane push-5-r"></i> 发布更新
 						</button>
 						
@@ -411,7 +410,7 @@
 							type="button"
 							data-form="#general-form"
 							data-action="#"
-							class="btn btn-danger font-w300  push-20-r btn-minw fn-btn on-published on-unapplied publish-cancel hidden">
+							class="btn btn-danger font-w300  push-20-r btn-minw se-btn on-published on-unapplied publish-cancel hidden">
 							<i class="fa fa-paper-plane-o push-5-r"></i> 取消发布
 						</button>
 
@@ -428,22 +427,6 @@
 	</div> <!-- END block -->
 
 </div> <!-- END Page Content -->
-
-<!-- 预览弹出 Popover 界面 -->
-<div class="preview-html">
-	<div class="popover" role="tooltip" style="width:600px; max-width:600px; min-height: 500px;" ><div class="arrow"></div>
-		<div class="row remove-margin">
-			<h3 class="popover-title pull-left font-w300"></h3> 
-			<a href="javascript:$('.fn-btn.preview').popover('hide');" 
-				data-id="{{id}}"
-			><i class="si si-close pull-right push-10-t push-10-r"></i></a>
-		</div>
-
-		<div class="row popover-form links text-center" style="padding:15px;" >
-			<i class="fa-refresh fa-spin fa "></i> 加载中...
-		</div>
-	</div>
-</div><!-- END 预览弹出 Popover 界面 -->
 
 
 <script type="text/javascript">
@@ -510,11 +493,6 @@ $(function() {
 
 
 
-/**
- * ======================================================================================
- *  BEGIN 编辑器功能按钮功能设定 (事件绑定)
- * ======================================================================================
- */
 
 	// 数据提交，交互状态设定
 	var savetimeout = null;
@@ -522,9 +500,6 @@ $(function() {
 		debug.info( '\t on status-change', status );
 
 		if ( status == 'saving') {
-
-			$('.popover-btn').popover('hide');
-
 			clearTimeout(savetimeout);
 			$('.webeditor-counter').hide();
 			$('.webeditor-status')
@@ -533,10 +508,10 @@ $(function() {
 				.addClass('text-muted')
 				.html('<i class="fa fa-refresh fa-spin"></i> 处理中, 请稍后...');
 
-			$('.fn-btn').addClass('disabled').attr('disabled', 'disabled');
+			$('.se-btn').addClass('disabled').attr('disabled', 'disabled');
 		
 		} else if ( status == 'saved' || status == 'error' ) {
-			$('.fn-btn').removeClass('disabled').removeAttr('disabled');
+			$('.se-btn').removeClass('disabled').removeAttr('disabled');
 			savetimeout = setTimeout(function(){
 				$('.webeditor-status').html('');
 				$('.webeditor-counter').show();
@@ -547,7 +522,7 @@ $(function() {
 
 
 	// 存盘按钮功能
-	$('.fn-btn.save').click(function(event) {
+	$('.save').click(function(event) {
 		$editor.save('<?=App::NR("article", "save")?>', {}, function( resp, status, xhr) {
 			debug.log( status, resp );
 			if ( status == 'error') {
@@ -573,10 +548,10 @@ $(function() {
 
 
 	// 发布/发布更新按钮功能
-	$('.fn-btn.publish').mouseover(function(event) {
+	$('.publish').mouseover(function(event) {
 		$editor.panelOpen('options');  // 打开组件配置面板
 	});
-	$('.fn-btn.publish').click(function(event) {
+	$('.publish').click(function(event) {
 
 		$editor.save('<?=App::NR("article", "save")?>', {status:'published'}, function( resp, status, xhr) {
 
@@ -601,7 +576,7 @@ $(function() {
 
 
 	// 取消发布按钮功能
-	$('.fn-btn.publish-cancel').click(function(event) {
+	$('.publish-cancel').click(function(event) {
 
 		$editor.save('<?=App::NR("article", "cancelPublish")?>', {status:'unpublished'}, function( resp, status, xhr) {
 
@@ -624,47 +599,6 @@ $(function() {
 		});
 	});
 
-
-	// 预览功能按钮
-	$('.fn-btn.preview').popover({
-		container:$('body'),
-		title:' ',
-		trigger:'manual',
-		template:$('.preview-html').html()
-	});
-
-	$('.fn-btn.preview').click(function(event) {
-
-		var that = this;
-		$(this).popover('show');
-
-		var url = '<?=App::NR("article", "previewlinks", ["id"=>""])?>' + $('input[name="article_id"]').val();
-		console.log( url );
-
-		$('body > .popover .links').load(url, function(){
-			// 复制地址
-			var copy = $('body > .popover .copy-preview-url');
-			if ( copy.data('init') !== 1 ) {
-				var client = new ZeroClipboard($('body > .popover .copy-preview-url'));	
-				copy.data('init', 1);
-				client.on( "ready", function( readyEvent ) {
-					client.on( "aftercopy", function( event ) {
-						$('.copy-status').hide().html('复制成功').fadeIn(200);
-					});
-				});
-			}
-
-		});
-
-		
-	});
-
-
-/**
- * ======================================================================================
- *   END 编辑器功能按钮功能设定 (事件绑定)
- * ======================================================================================
- */
 
 	// 取消导航浮动
 	$('#header-navbar').css('position', 'static');
