@@ -192,7 +192,6 @@ class Article extends Model {
 	}
 
 
-
 	/**
 	 * 保存为草稿
 	 * @param  string  $article_id 文章ID
@@ -262,6 +261,16 @@ class Article extends Model {
 			'article_id' => $article_id,
 			'status' => ARTICLE_UNPUBLISHED
 		]);
+	}
+
+
+	/**
+	 * 生成文章链接、生成二维码
+	 * @param  string $article_id 
+	 * @return 
+	 */
+	function links( $article_id ) {
+
 	}
 
 
