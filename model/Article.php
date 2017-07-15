@@ -127,6 +127,19 @@ class Article extends Model {
 			$data['category'] = explode(',', $data['category']);
 		}
 
+		if ( isset($data['publish_date']) ) {
+
+			if ( empty($data['publish_time']) ) {
+				$data['publish_time'] = date('H:i:s');
+			}
+
+			$data['publish_time'] = str_replace('@', '', $data['publish_time']);
+			$data['publish_time'] = str_replace('时', ':', $data['publish_time']);
+			$data['publish_time'] = str_replace('分', ':', $data['publish_time']);
+			$data['publish_time'] = $data['publish_date'] . ' ' . $data['publish_time'];
+
+		}
+
 
 		// 添加文章
 		if ( empty($data['article_id']) ) {
