@@ -71,6 +71,8 @@ class Article extends Model {
 			'delta'=> ['longText',  ["json"=>true]],  // 编辑状态文章 (Delta )
 			'param'=> ['string', ['length'=>128,'index'=>1]],  // 自定义查询条件
 			'stick'=> ['integer', ['index'=>1, 'default'=>"0"]],  // 置顶状态
+			'preview' => ['longText', ['json'=>true]], // 预览链接
+			'links' => ['longText', ['json'=>true]], // 访问链接
 			'status'=> ['string', ['length'=>40,'index'=>1, 'default'=>ARTICLE_UNPUBLISHED]],  // 文章状态 unpublished/published
 		];
 
@@ -174,26 +176,42 @@ class Article extends Model {
 			unset( $data['history']['history']);
 		}
 
+		// 生成预览链接
+		$data['preview'] = $this->previewLinks( $article_id, $data['category']);
 
 		if ( empty($data['history'])) {
-			$this->article_draft->create( $data ); 
+			$draft = $this->article_draft->create( $data ); 
 		} else {
-			$this->article_draft->updateBy( 'article_id', $data ); 
+			$draft = $this->article_draft->updateBy( 'article_id', $data ); 
 		}
 
 		
 		// 发布文章
 		if ( $data['status'] == ARTICLE_PUBLISHED ) {
 			return $this->published( $article_id );
-		}
-
-		$draft =  $this->article_draft->getLine("WHERE article_id=?", ['*'], [$article_id]);
-		$category = $draft['category'];
-
-		// 生成预览链接
-		$draft['previewLinks'] = $this->previewLinks( $article_id,  $category );
+		}		
 		
 		return $draft;
+	}
+
+	/**
+	 * 文章是否发布
+	 * @param  [type]  $article_id [description]
+	 * @return boolean             [description]
+	 */
+	function isPublished( $article_id ) {
+
+		$data = $this->query()
+		  			 ->where("article_id", '=', $article_id)
+					 ->where('status', '=', 'published')
+					 ->limit(1)
+					 ->select('article_id')
+					 ->get()->toArray();
+		if ( empty($data) ) {
+			return false;
+		}
+
+		return true;
 	}
 
 
@@ -240,6 +258,7 @@ class Article extends Model {
 		$rs['category'] = $this->getCategories($article_id, 'category_id');
 		$rs['tag'] = $this->getTags($article_id, 'name');
 		$rs['history'] = [];
+		$rs['preview'] = $this->previewLinks( $article_id, $rs['category']);  // 生成预览链接
 		$rs['draft_status'] = DRAFT_APPLIED;  // 标记草稿与文章同步
 
 		return $this->article_draft->updateBy( 'article_id', $rs );
@@ -259,15 +278,19 @@ class Article extends Model {
 
 		if ( !empty($draft) ) {
 			$draft['draft_status'] = DRAFT_APPLIED;
+			$draft['links'] = $this->links( $article_id ); // 生成链接地址
 			$draft = $this->article_draft->updateBy('article_id', $draft);
-		} else {  // 更新文章状态
+		
+		} else {  // 更新文章状态 （ 这个逻辑应该优化 )
 			$draft = $this->getLine("WHERE article_id=?", ['*'], [$article_id]);
+			$draft['links'] = $this->links( $article_id ); // 生成链接地址
 		}
-
 
 		$draft['status'] = ARTICLE_PUBLISHED; // 文章ID 更新为已发布
 		return $this->updateBy('article_id', $draft );
 	}
+
+
 
 
 	/**
@@ -294,9 +317,124 @@ class Article extends Model {
 	 * @param  string $article_id 
 	 * @return 
 	 */
-	function links( $category ) {
+	function links( $article_id,  $category = null ) {
 
+		$pages = [DEFAULT_PAGE_SLUG];
+		if( $category === null ) {
+			$category =  $this->getCategories( $article_id, 'category.category_id' );
+		}
+
+		// 根据类目信息，获取页面，并排重
+		if ( !empty($category) ) {
+			$cate = new Category();
+			$data = $cate->query()->whereIn('category_id', $category)->select('page')->get()->toArray();
+			if ( !empty($data) ) {
+				$data_pad = Utils::pad( $data, 'page');
+				$pages= $data_pad['data'];
+				$pages = array_unique($pages);
+				foreach ($pages as $idx =>$page ) {
+					if ( empty($page) ) {
+						$pages[$idx] = DEFAULT_PAGE_SLUG;
+					}
+				}
+			}
+		}
+
+		// 读取页面详细信息
+		$pages = $this->page->query()
+						->whereIn('slug', $pages)
+						->select('cname', 'name', 'slug', 'align', 'adapt')
+						->get()
+						->toArray();
+
+
+		// 获取适配链接
+		
+		$page_slugs = [];
+		foreach ($pages as $idx=>$pg ) {
+			
+			foreach( $pg['adapt'] as $type ) { // 处理适配页面
+				$pages[$idx]['links'][$type] = $pg['slug'];
+				$page_slugs[] =  $pg['slug'];
+			}
+
+			foreach( $pg['align'] as $type => $pg_align ) {  // 处理联合页面
+				if ( $type != 'wxapp') {
+					$pages[$idx]['links'][$type] = $pg_align;
+					$page_slugs[] =  $pg_align;
+				} else {
+					$pages[$idx]['links'][$type] = '/' . $pg_align . '?id=' . $article_id; 
+				}
+			}
+
+			$pages[$idx]['article_id'] = $article_id;
+
+			unset($pages[$idx]['align'] );
+			unset($pages[$idx]['adapt'] );
+		}
+
+		$entry_maps = $this->getEntries( $article_id, $page_slugs );
+
+		foreach ($pages as $idx=>$pg ) {
+
+			$desktop = $pages[$idx]['links']['desktop'];
+			if( is_string($desktop) ) {
+				$pages[$idx]['links']['desktop'] = $entry_maps[$desktop]['latest'];
+			}
+
+			$mobile = $pages[$idx]['links']['mobile'];
+			if( is_string($mobile) ) {
+				$pages[$idx]['links']['mobile'] = $entry_maps[$mobile]['latest'];
+			}
+
+			$wechat = $pages[$idx]['links']['wechat'];
+			if( is_string($wechat) ) {
+				$pages[$idx]['links']['wechat'] = $entry_maps[$wechat]['latest'];
+			}
+		}
+
+		return $pages;
+
+		// return $pages;
 	}
+
+
+
+	/**
+	 * 根据页面信息，计算入口数值
+	 * @param  [type] $pages [description]
+	 * @return [type]        [description]
+	 */
+	function getEntries(  $article_id,  $slugs ) {
+		$slugs = array_unique( $slugs );
+		$pages = $this->page->query()
+						->whereIn('slug', $slugs)
+						->select('slug','entries')
+						->get()
+						->toArray();
+
+		if ( !is_array($pages) ) {
+			throw new Excp('未查询到页面信息', 400, ['article_id'=>$article_id, 'pages'=>$pages]);
+		}
+		
+		$resp = [];
+		foreach ($pages as $rs ) {
+			$slug = $rs['slug'];
+			$resp[$slug] = ['entries'=>[], 'latest'=>''];
+			$entries = $rs['entries'];
+			foreach ($entries as $idx=>$entry ) {
+				if ( $entry['method'] != 'GET') continue;
+
+				$entry['router'] = str_replace('{id:\\d+}', $article_id,  $entry['router']);
+				$entry['router'] = str_replace('{article_id:\\d+}', $article_id,  $entry['router']);
+				$resp[$slug]['entries'][$idx] = $entry['router'];
+				$resp[$slug]['latest'] = $entry['router'];
+			}
+		}
+
+		return $resp;
+	}
+
 
 
 	/**
@@ -329,12 +467,10 @@ class Article extends Model {
 			}
 		}
 
-
-
 		// 读取页面详细信息
 		$pages = $this->page->query()
 						->whereIn('slug', $pages)
-						->select('cname', 'name', 'slug', 'align', 'adapt', 'entries')
+						->select('cname', 'name', 'slug', 'align', 'adapt')
 						->get()
 						->toArray();
 
@@ -349,21 +485,17 @@ class Article extends Model {
 				if ( $type != 'wxapp') {
 					$pages[$idx]['links'][$type] =  App::NR('article' , 'preview', ['p'=>$pg_align, 'id'=>$article_id]);
 				} else {
-					$pages[$idx]['links'][$type] = '/' . $pg_align . '?id=' . $article_id; 
+					$pages[$idx]['links'][$type] = '/' . $pg_align . '?id=' . $article_id . '&preview=1'; 
 				}
 			}
 
 			$pages[$idx]['article_id'] = $article_id;
-
-			// unset($pages[$idx]['entries'] );
 			unset($pages[$idx]['align'] );
 			unset($pages[$idx]['adapt'] );
 		}
 
 		return $pages;
 	}
-
-
 
 
 
