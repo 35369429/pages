@@ -10,9 +10,9 @@ use \Tuanduimao\Utils as Utils;
 			<div  class="col-lg-8 col-md-8 col-sm-8">
 				<div class="input-group input-group-lg">
 					<div class="input-group-addon font-w300"> 全文检索 </div> 
-					<input class="js-icon-search form-control sercontent" type="text" placeholder="输入关键词" value="<?=!empty($keyword)?$keyword:""?>">
+					<input class="js-icon-search form-control keyword" type="text" placeholder="输入关键词" value="<?=$query['title']?>">
 					<span class="input-group-btn">
-						<button class="btn btn-primary font-w300 dimsearch" type="button"><i class=" si si-magnifier"></i> 搜索 </button>
+						<button class="btn btn-primary font-w300 search" type="button"><i class=" si si-magnifier"></i> 搜索 </button>
 					</span>
 				</div>
 			</div>
@@ -68,17 +68,25 @@ use \Tuanduimao\Utils as Utils;
 							<div class="btn-group pull-right push-20-l" role="group">  
 								<button class="btn btn-default btn-xs dropdown-toggle" 
 										type="button" data-toggle="dropdown" > 
-									<i class="glyphicon glyphicon-list-alt"></i> 最新创建 <span class="caret"></span> 
+									<i class="glyphicon glyphicon-list-alt"></i> 
+
+									<?php if ( $query['order'] == 'create_time desc' ) :?>
+										最新创建
+									<?php elseif ( $query['order'] == 'update_time desc' ) :?>
+										最近更新
+									<?php endif;?>
+
+									<span class="caret"></span> 
 								</button>
 								<ul class="dropdown-menu dropdown-menu-right" style="min-width: 87px;">
 									<li class="dropdown-header"> 排序方式</li>
-									<li class="read">
-										<a tabindex="-1" href="#">
+									<li>
+										<a href="javascript:search('order','update_time desc')">
 										   最近更新
 										</a>
 									</li>
-									<li class="read">
-										<a tabindex="-1" href="#">
+									<li>
+										<a href="javascript:search('order','create_time desc')">
 										   最新创建
 										</a>
 									</li>
@@ -89,23 +97,33 @@ use \Tuanduimao\Utils as Utils;
 							<div class="btn-group pull-right push-20-l" role="group">  
 								<button class="btn btn-default btn-xs dropdown-toggle" 
 										type="button" data-toggle="dropdown" >
-									<i class="glyphicon glyphicon-list-alt"></i> 全部状态 <span class="caret"></span> 
+									<i class="glyphicon glyphicon-list-alt"></i> 
+
+									<?php if ( $query['status'] == 'unpublished' ) :?>
+										草稿
+									<?php elseif ( $query['status'] == 'published' ) :?>
+										已发布
+									<?php else  :?> 
+										全部状态
+									<?php endif;?>
+
+									<span class="caret"></span> 
 								</button>
 
 								<ul class="dropdown-menu dropdown-menu-right"  style="min-width: 87px;">
 									<li class="dropdown-header"> 文章状态</li>
-									<li class="read">
-										<a tabindex="-1" href="#">
+									<li>
+										<a href="javascript:search('status','')">
 										   全部状态
 										</a>
 									</li>
-									<li class="read">
-										<a tabindex="-1" href="#">
+									<li >
+										<a href="javascript:search('status','unpublished')">
 										   草稿
 										</a>
 									</li>
-									<li class="manage">
-										<a tabindex="-1" href="#">
+									<li>
+										<a href="javascript:search('status','published')">
 										   已发布
 										</a>
 									</li>
@@ -117,26 +135,35 @@ use \Tuanduimao\Utils as Utils;
 							<div class="btn-group pull-right" role="group">  
 								<button class="btn btn-default btn-xs dropdown-toggle" 
 										type="button" data-toggle="dropdown" >
-									<i class="glyphicon glyphicon-list-alt"></i> 所有分类 <span class="caret"></span> 
+									<i class="glyphicon glyphicon-list-alt"></i> <span class="currCate">所有分类</span> <span class="caret"></span> 
 								</button>
 
 								<ul class="dropdown-menu dropdown-menu-right" style="min-width: 87px;">
 									<li class="dropdown-header"> 文章分类</li>
-									<li class="read">
-										<a tabindex="-1" href="#">
-										   网上门诊
+									<li >
+										<a href="javascript:search('categoryId','')">
+										   所有分类
 										</a>
 									</li>
-									<li class="read">
-										<a tabindex="-1" href="#">
-										   名医科技
+
+									<?php 
+										$category->each(function( $cate, $depth ) use ( $category,$query ) {  ?>
+									<li >
+										<a href="javascript:search('categoryId','<?=$cate['category_id']?>')">
+										   <?=$cate['name']?>
 										</a>
 									</li>
-									<li class="manage">
-										<a tabindex="-1" href="#">
-										   医生沙龙
-										</a>
-									</li>
+
+									<?php if ($cate['category_id'] == $query['categoryId'])  :?>
+									<script type="text/javascript">
+									$(function(){
+										$('.currCate').html('<?=$cate['name']?>');
+									})
+									</script>
+									<?php endif;  ?>
+
+
+									<?php }); ?>
 								</ul>
 							</div> <!-- END 文章状态过滤 -->
 
@@ -153,7 +180,15 @@ use \Tuanduimao\Utils as Utils;
 								<th class="font-w300" style="width:30%;">标题</th>
 								<th class="font-w300" style="width:15%;">分类</th>
 								<th class="font-w300" style="width:5%;">作者</th>
-								<th class="font-w300" style="width:10%;">创建时间</th>
+								<th class="font-w300" style="width:10%;">
+
+								<?php if ( $query['order'] == 'create_time desc' ) :?>
+									创建时间
+								<?php elseif ( $query['order'] == 'update_time desc' ) :?>
+									更新时间
+								<?php endif;?>
+
+								</th>
 								<th class="font-w300" style="width:5%;">状态</th>
 							</tr>
 						</thead>
@@ -181,11 +216,20 @@ use \Tuanduimao\Utils as Utils;
 							?>
 							<tr data-toggle="block-group" 
 								onclick="window.location='<?=App::R('article', 'editor', ['id'=>$rs['article_id']])?>'" >
-								<td class="text-center"><?=$rs['article_id']?></td>
+								<td 
+								style="min-height: 65px;height: 65px;"
+								class="text-center"><?=$rs['article_id']?></td>
 								<td> <?=$rs['title']?></td>
 								<td> <?=$category?></td>
 								<td> <?=$rs['author']?> </td>
-								<td> <?=$rs['create_time']?> </td>
+								<td> 
+								<?php if ( $query['order'] == 'create_time desc' ) :?>
+									<?=$rs['create_time']?> 
+								<?php elseif ( $query['order'] == 'update_time desc' ) :?>
+									<?=$rs['update_time']?> 
+								<?php endif;?>
+
+								</td>
 								<td> <span class="<?=$s['class']?>"><?=$s['name']?></span></td>
 							</tr>
 							<?php endforeach;?>
@@ -196,17 +240,25 @@ use \Tuanduimao\Utils as Utils;
 
 								<ul class="pagination">
 									<?php if ($articles['prev'] !== false): ?>
-									<li><a href="#"><i class="fa fa-angle-double-left"></i></a></li>
+									<li>
+										<a href="javascript:search('page', '<?=$articles['prev']?>' )">
+											<i class="fa fa-angle-double-left"></i>
+										</a>
+									</li>
 									<?php endif;?>
 
-									<?php for( $i=1; $i<$articles['last']; $i++) :?>
+									<?php for( $i=1; $i<=$articles['last']; $i++) :?>
 									<li class="<?=($i==$articles['curr'])? 'active': ''?>" >
-										<a href="#"><?=$i?></a>
+										<a href="javascript:search('page', '<?=$i?>' )"><?=$i?></a>
 									</li>
 									<?php endfor; ?>
 
 									<?php if ($articles['next'] !== false): ?>
-									<li><a href="#"><i class="fa fa-angle-double-right"></i></a></li>
+									<li>
+										<a href="javascript:search('page', '<?=$articles['next']?>' )">
+											<i class="fa fa-angle-double-right"></i>
+										</a>
+									</li>
 									<?php endif;?>
 
 								</ul>
@@ -223,9 +275,37 @@ use \Tuanduimao\Utils as Utils;
 </div> <!-- END Pagecontent -->
 
 <script type="text/javascript">
+var $_GET = <?=json_encode($query)?>;
+var $_HOME ='<?=App::R("article", "index")?>';
+delete $_GET['select'];
+
+function search( key, value ) {
+
+	if ( key !== undefined ) {
+		$_GET[key] = value;
+
+		if ( value == undefined  || value == '') {
+			delete $_GET[key];
+		}
+
+		if ( key != 'page' ) {
+			$_GET['page'] = 1;
+		}
+	}
+
+	var url =  $_HOME + '?' + $.param($_GET);
+	window.location = url;
+
+}
 
 $(function() {
 	App.initHelpers(['datepicker','select2', 'masked-inputs','tags-inputs', 'slimscroll', 'ajax-confirm']);
+	$('.search').click(function(){
+
+		var keyword = $('.keyword').val();
+		search('title', keyword);
+
+	});
 });
 
 </script>

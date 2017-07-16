@@ -19,19 +19,17 @@ class ArticleController extends \Tuanduimao\Loader\Controller {
 		
 
 		$art = new \Mina\Pages\Api\Article;
-		$query = $_GET;
+		$query = $_REQUEST;
 		$query['select'] = ['article_id', 'title', 'author', 'category', 'publish_time', 'update_time', 'create_time', 'status'];
 
-		$query['perpage'] = isset($_GET['perpage']) ?  $_GET['perpage'] : 10;
-		$query['order'] =  isset($_GET['order']) ?  $_GET['order'] : 'create_time desc';
+		$query['perpage'] = isset($_REQUEST['perpage']) ?  $_REQUEST['perpage'] : 10;
+		$query['order'] =  isset($_REQUEST['order']) ?  $_REQUEST['order'] : 'create_time desc';
 
 		$resp  = $art->call('search', $query);
-
-
-		// Utils::out('<pre>', $resp, '</pre>');
-
+		
 		$data = [
 			'articles' => $resp,
+			'query' => $query,
 			'category' => new \Mina\Pages\Model\Category
 		];
 
