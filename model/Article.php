@@ -318,8 +318,9 @@ class Article extends Model {
 	 * @return 
 	 */
 	function links( $article_id,  $category = null ) {
-
+		$home = Utils::getHome( $_SERVER['HTTP_TUANDUIMAO_LOCATION']);
 		$pages = [DEFAULT_PAGE_SLUG];
+
 		if( $category === null ) {
 			$category =  $this->getCategories( $article_id, 'category.category_id' );
 		}
@@ -378,17 +379,17 @@ class Article extends Model {
 
 			$desktop = $pages[$idx]['links']['desktop'];
 			if( is_string($desktop) ) {
-				$pages[$idx]['links']['desktop'] = $entry_maps[$desktop]['latest'];
+				$pages[$idx]['links']['desktop'] = $home.$entry_maps[$desktop]['latest'];
 			}
 
 			$mobile = $pages[$idx]['links']['mobile'];
 			if( is_string($mobile) ) {
-				$pages[$idx]['links']['mobile'] = $entry_maps[$mobile]['latest'];
+				$pages[$idx]['links']['mobile'] = $home.$entry_maps[$mobile]['latest'];
 			}
 
 			$wechat = $pages[$idx]['links']['wechat'];
 			if( is_string($wechat) ) {
-				$pages[$idx]['links']['wechat'] = $entry_maps[$wechat]['latest'];
+				$pages[$idx]['links']['wechat'] = $home.$entry_maps[$wechat]['latest'];
 			}
 		}
 
