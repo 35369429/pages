@@ -45,6 +45,32 @@ class ArticleController extends \Tuanduimao\Loader\Controller {
 	}
 
 
+	function test(){
+		print_r($_SERVER);
+	}
+
+	/**
+	 * 删除文章
+	 * @return [type] [description]
+	 */
+	function remove(){
+
+		$article_id = $_REQUEST['id'];
+		if ( empty($article_id) ) {
+			throw new Excp("未知文章( {$article_id})" , 400, ['article_id'=>$article_id]);
+		}
+
+		$article = new \Mina\Pages\Model\Article;
+		$resp = $article->rm($article_id, 'article_id');
+
+		if ( $resp === false ){
+			throw new Excp("删除失败 ( {$article_id})" , 400, ['resp'=>$resp]);
+		}
+
+		Utils::out(['code'=>0]);
+
+	}
+
 
 	/**
 	 * 预览链接
@@ -172,12 +198,21 @@ class ArticleController extends \Tuanduimao\Loader\Controller {
 	// 文章编辑器
 	function editor() {
 
+		$art = new \Mina\Pages\Model\Article;
+		$article = ['category'=>[], 'tag'=>[]];
+		if ( !empty( $_GET['id']) ) {
+			$article = $art->load( intval($_GET['id']) );
+		}
+
 		$data = [
+			'article' => $article,
 			'category' => new \Mina\Pages\Model\Category
 		];
+
+		Utils::out('<!--', $article, '-->');
+
 		App::render($data, 'article', 'editor' );
 		
-
 		return [
 
 			'js' => [

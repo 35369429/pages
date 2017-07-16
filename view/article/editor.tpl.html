@@ -118,24 +118,24 @@
 					<form name="header-form" class="remove-padding remove-margin" >
 					<div class="row">
 						<div class="col-xs-10">
-							<input name="title" type="text" class="large" placeholder="这里输入标题">
+							<input name="title" value="<?=$article['title']?>" type="text" class="large" placeholder="这里输入标题">
 						</div>
 						<div class="col-xs-2 text-right">
 							<span class="label label-success on-published hidden">已发布</span>
 							<span class="label label-warning  on-unapplied hidden">已发布 ( 未更新 )</span>
-							<span class="label label-danger  on-unpublished ">草稿</span>
+							<span class="label label-danger  on-unpublished hidden">草稿</span>
 						</div>
 					</div>
 					<div class="row push-15-t">
 						<div class="col-xs-3">
-							<input name="author" type="text"  class="light" placeholder="输入作者">
+							<input name="author" type="text"  value="<?=$article['author']?>"   class="light" placeholder="输入作者">
 						</div>
 						<div class="col-xs-3">
-							<input name="origin" type="text"   class="light"   placeholder="输入来源名称">
+							<input name="origin" type="text"  value="<?=$article['origin']?>"   class="light"   placeholder="输入来源名称">
 						</div>
 
 						<div class="col-xs-6">
-							<input name="origin_url" type="text"   class="light"  placeholder="输入来源网址">
+							<input name="origin_url" type="text" value="<?=$article['origin_url']?>"  class="light"  placeholder="输入来源网址">
 						</div>
 					</div>
 					<hr/>
@@ -152,10 +152,12 @@
 							<label>封面 <span class="text-muted font-s12">( 建议尺寸 900像素 * 500像素) </span> </label>
 							<div class="row">
 								<div class="col-xs-6 remove-padding preview border" >
-									
+									<?php if (!empty($article['cover'])) :?>
+									<img name="cover" src="<?=App::URL($article['cover'])?>" >
+									<?php endif; ?>
 								</div>
 								<div class="col-xs-6 remove-padding">
-									<input type="hidden" name="cover" >
+									<input type="hidden" name="cover" value="<?=$article['cover']?>" >
 									<div>
 										<button class="btn btn-minw push-15-l btn-default cover-selector" type="button"> 选择封面图片 </button>
 									</div>
@@ -178,9 +180,9 @@
 										data-toggle="counter"
 										data-max="120"
 										data-selector=".summary-counter"
-										class="form-control" rows="4" placeholder=""></textarea>
+										class="form-control" rows="4" placeholder=""><?=$article['summary']?></textarea>
 									<div class="help-block text-right">
-										<span class="summary-counter">0</span>/120
+										<span class="summary-counter"><?=mb_strlen($article['summary'])?></span>/120
 									</div>
 								</div>
 							</div>
@@ -236,8 +238,12 @@
 												data-placeholder="请选择..." 
 												multiple >
 												<option></option><!-- Required -->
-												<?php $category->each(function( $cate, $depth ) use ( $category ){  ?>
-												<option value="<?=$cate['category_id']?>"> 
+												<?php 
+												$category->each(function( $cate, $depth ) use ( $category, $article ){  ?>
+												<option 
+													<?=in_array( $cate['category_id'], $article['category']) ? 'selected' : ''?>
+
+													value="<?=$cate['category_id']?>"  > 
 													
 													<?php 
 													$parents = $category->parents( $cate['parent_id'] );
@@ -263,7 +269,7 @@
 											<input
 												name="tag"
 												class="js-tags-input form-control" type="text" 
-												value="" >
+												value="<?=implode(',',$article['tag'])?>" >
 											<label for="material-text" class="font-s14 font-w300">标签</label>
 										</div>
 									</div><!-- END form-group 标签 -->
@@ -274,6 +280,7 @@
 											<input
 												name="param"
 												class="form-control" type="text" 
+												value="<?=$article['param']?>"
 												placeholder="例如: isnav=true" >
 											<label  class="font-s14 font-w300">特别参数 (可用于检索查询)</label>
 										</div>
@@ -282,7 +289,7 @@
 
 									<div class="form-group">
 										<div class="form-material">
-											<div name="publish_date" class="js-datepicker"></div>
+											<div name="publish_date" class="js-datepicker" value="<?=$article['publish_date']?>"></div>
 											<label for="material-text"  class="font-s14 font-w300">发布日期</label>
 										</div>
 									</div><!-- END form-group 发布日期 -->
@@ -293,6 +300,7 @@
 											<input
 												name="publish_time"
 												class="form-control js-masked-time" type="text" 
+												value="<?=$article['publish_time']?>"
 												placeholder="@ 20时20分" >
 										</div>
 									</div><!-- END form-group 发布时刻 -->
@@ -309,6 +317,7 @@
 											<input
 												name="seo_title"
 												class="form-control" type="text" 
+												value="<?=$article['seo_title']?>"
 												placeholder="在百度搜索列表中显示的标题" >
 											<label  class="font-s14 font-w300">标题</label>
 										</div>
@@ -319,7 +328,7 @@
 											<input
 												name="seo_keywords"
 												class="js-tags-input form-control" type="text" 
-												value="" >
+												value="<?=$article['seo_keywords']?>" >
 											<label for="material-text" class="font-s14 font-w300">优化关键词</label>
 										</div>
 									</div><!-- END form-group 关键词 -->
@@ -332,10 +341,10 @@
 												data-toggle="counter"
 												data-max="120"
 												data-selector=".seo-summary-counter"
-												class="form-control" rows="3" placeholder="在百度搜索列表中显示的摘要"></textarea>
+												class="form-control" rows="3" placeholder="在百度搜索列表中显示的摘要"><?=$article['seo_summary']?></textarea>
 											<label for="material-text" class="font-s14 font-w300">摘要</label>
 											<div class="help-block text-right">
-												<span class="seo-summary-counter">0</span>/120
+												<span class="seo-summary-counter"><?=mb_strlen($article['seo_summary'])?></span>/120
 											</div>
 										</div>
 									</div><!-- END form-group 摘要 -->
@@ -344,7 +353,7 @@
 							</div> <!-- END block SEO 选项 -->
 							
 							<!-- 当前文章 ID  -->
-							<input type="hidden" name="article_id" value="" >  
+							<input type="hidden" name="article_id" value="<?=$article['article_id']?>" >  
 
 						</form> <!-- END form -->
 					</div> <!-- END option 表单 -->
@@ -364,13 +373,13 @@
 							<span class="webeditor-status text-danger"></span>
 						</span>
 					</div>
-					<div class="col-xs-8 text-center" >
+					<div class="col-xs-10 text-left" >
 
 						<button 
 							type="button" 
 							data-form="#general-form"
 							data-action="#"
-							class="btn btn-primary font-w300 push-20-r btn-minw fn-btn save ">
+							class="btn btn-primary font-w300 push-10-r btn-minw fn-btn save ">
 							<i class="fa fa-save push-5-r"></i> 保存
 						</button>
 
@@ -379,7 +388,7 @@
 							data-form="#general-form"
 							data-action="#"
 							data-placement="top" data-original-title=" "
-							class="btn btn-primary font-w300  push-20-r btn-minw fn-btn popover-btn preview ">
+							class="btn btn-primary font-w300  push-10-r btn-minw fn-btn popover-btn preview ">
 							<i class="fa fa-eye push-5-r"></i> 预览
 						</button>
 
@@ -387,8 +396,8 @@
 							type="button"
 							data-form="#general-form"
 							data-action="#"
-							class="btn btn-primary font-w300  push-20-r btn-minw fn-btn on-unpublished publish ">
-							<i class="fa fa fa-paper-plane push-5-r"></i> 发布
+							class="btn btn-primary font-w300  push-10-r btn-minw fn-btn on-unpublished publish hidden">
+							<i class="fa fa fa-paper-plane push-5-r hidden"></i> 发布
 						</button>
 
 						<button 
@@ -396,7 +405,7 @@
 							data-form="#general-form"
 							data-action="#"
 							data-placement="top" data-original-title=" "
-							class="btn btn-primary font-w300  push-20-r btn-minw fn-btn on-published on-unapplied popover-btn link">
+							class="btn btn-primary font-w300  push-10-r btn-minw fn-btn on-published on-unapplied popover-btn link hidden ">
 							<i class="fa fa-external-link-square push-5-r"></i> 访问
 						</button>
 						
@@ -412,14 +421,25 @@
 							type="button"
 							data-form="#general-form"
 							data-action="#"
-							class="btn btn-danger font-w300  push-20-r btn-minw fn-btn on-published on-unapplied publish-cancel hidden">
+							class="btn btn-danger font-w300  push-10-r btn-minw fn-btn on-published on-unapplied publish-cancel hidden">
 							<i class="fa fa-paper-plane-o push-5-r"></i> 取消发布
 						</button>
 
-						
+						<button 
+							type="button"
+							confirm-title="删除文章"
+                            confirm-content="您确定删除本篇吗?"
+                            confirm-dismiss = "取消"
+                            confirm-submit= "确定"
+                            data-param-id="103" 
+                            confirm-action="<?=App::NR('article','remove')?>"
+
+							class="btn btn-danger font-w300 ajax-confirm fn-btn on-saved remove hidden">
+							<i class="fa fa-minus-circle"></i> 删除
+						</button>
+
 					</div>
 
-					<div class="col-xs-2"></div>
 
 				</div>
 			</div>
@@ -468,6 +488,11 @@
 // 根据文章状态，呈现功能面板
 function setStatus(  status, draft_status ) {
 
+	if ( $('input[name="article_id"]').val() != "" ) {
+		$('.on-saved').removeClass('hidden').show();
+		$('.on-saved').attr('data-param-id', $('input[name="article_id"]').val());
+	}
+
 	if ( status == 'unpublished' ) {
 		
 		$('.on-published').addClass('hidden').hide();
@@ -491,10 +516,16 @@ function setStatus(  status, draft_status ) {
 }
 
 
+
 $(function() {
 
-	App.initHelpers(['datepicker','select2', 'masked-inputs','tags-inputs', 'slimscroll']);
+	// 取消导航浮动
+	$('#header-navbar').css('position', 'static');
+	$('main').css('padding-top', '0px');
 
+	App.initHelpers(['datepicker','select2', 'masked-inputs','tags-inputs', 'slimscroll', 'ajax-confirm']);
+
+	// 创建编辑器对象
 	$('.webeditor-container').webeditor({
 		modules: {
 			counter: {
@@ -502,9 +533,6 @@ $(function() {
 				unit: ' 个字',
 				word:true
 			}
-			// counter: function( length ) {
-			//  console.log( 'callback', length);
-			// }
 		},
 		components: {
 			"image":{
@@ -517,15 +545,20 @@ $(function() {
 			"video":{
 				"template":'' + '{{code}}'
 			}
-		}
+		},
+		delta: <?=json_encode($article['delta'])?>
 	});
 
+	// 编辑器实例
 	$editor = $('.webeditor-container').webeditor('get');
-	$editor.on('text-change',  function(delta, oldDelta, source) {
-		// console.log('text change:', delta, '>', oldDelta, ' :', source );
-	});
 
-
+	// 设定当前状态按钮
+	<?php if ( empty($article['article_id']) ) : ?>
+	setStatus('unpublished');
+	<?php else : ?>
+	setStatus('<?=$article["status"]?>', '<?=$article["draft_status"]?>');
+	<?php endif; ?>
+	
 
 /**
  * ======================================================================================
@@ -534,12 +567,12 @@ $(function() {
  */
 
 	// 数据提交，交互状态设定
-	var savetimeout = null;
+	var savetimeout = null; savelock = false;
 	$editor.on ('status-change', function( event, status ) {
 		debug.info( '\t on status-change', status );
 
 		if ( status == 'saving') {
-
+			savelock = true;
 			$('.popover-btn').popover('hide');
 
 			clearTimeout(savetimeout);
@@ -554,6 +587,7 @@ $(function() {
 		
 		} else if ( status == 'saved' || status == 'error' ) {
 			$('.fn-btn').removeClass('disabled').removeAttr('disabled');
+			savelock = false;
 			savetimeout = setTimeout(function(){
 				$('.webeditor-status').html('');
 				$('.webeditor-counter').show();
@@ -564,7 +598,9 @@ $(function() {
 
 
 	// 存盘按钮功能
-	$('.fn-btn.save').click(function(event) {
+	var savefn = function(event) {
+		if ( savelock ){ return  false; }
+
 		$editor.save('<?=App::NR("article", "save")?>', {}, function( resp, status, xhr) {
 			debug.log( status, resp );
 			if ( status == 'error') {
@@ -575,8 +611,6 @@ $(function() {
 					.html('<i class="fa fa-times"></i>  保存失败 ('+ resp['message'] + ')');
 				return;
 			}
-
-
 			$('input[name="article_id"]').val( resp['article_id'] );
 			$('.webeditor-status')
 					.removeClass('text-danger')
@@ -586,7 +620,15 @@ $(function() {
 
 			setStatus( resp['status'], resp['draft_status'] );
 		});
-	});
+
+		return  false;
+	}
+
+	$('.fn-btn.save').click(savefn);  // 保存按钮
+	$(document).bind('keydown', 'meta+s', savefn );  // CMD + s
+	$(document).bind('keydown', 'ctrl+s', savefn );  // Ctrl + s
+	$editor.$keyboard.addBinding({ key: 's', metaKey: true }, savefn );
+	$editor.$keyboard.addBinding({ key: 's', ctrlKey: true }, savefn );
 
 
 	// 发布/发布更新按钮功能
@@ -594,7 +636,7 @@ $(function() {
 		$editor.panelOpen('options');  // 打开组件配置面板
 	});
 	$('.fn-btn.publish').click(function(event) {
-
+		if ( savelock ){ return  false; }
 		$editor.save('<?=App::NR("article", "save")?>', {status:'published'}, function( resp, status, xhr) {
 
 			if ( status == 'error') {
@@ -619,6 +661,8 @@ $(function() {
 
 	// 取消发布按钮功能
 	$('.fn-btn.publish-cancel').click(function(event) {
+
+		if ( savelock ){ return  false; }
 
 		$editor.save('<?=App::NR("article", "cancelPublish")?>', {status:'unpublished'}, function( resp, status, xhr) {
 
@@ -713,15 +757,32 @@ $(function() {
 		});
 	});
 
+
+	// 删除功能按钮
+	$('.fn-btn.remove').on('success', function(event,data){
+		window.location = '<?=App::R("article", "index")?>';
+	});
+
+	$('.fn-btn.remove').on('error', function(event,data){
+		$('.webeditor-status')
+				.removeClass('text-success')
+				.removeClass('text-muted')
+				.addClass('text-danger')
+				.html('<i class="fa fa-times"></i>  删除失败 ('+ data['message'] + ')');
+	});
+
 /**
  * ======================================================================================
  *   END 编辑器功能按钮功能设定 (事件绑定)
  * ======================================================================================
  */
 
-	// 取消导航浮动
-	$('#header-navbar').css('position', 'static');
-	$('main').css('padding-top', '0px');
+
+/**
+ * ======================================================================================
+ *   BEGIN 编辑器组件按钮功能设定 (定义 & 事件绑定)
+ * ======================================================================================
+ */
 
 	// 图片管理面板
 	var imagePanel = new imageWebeditorPanel({
@@ -829,6 +890,12 @@ $(function() {
 	$('.cover-selector', '.webeditor-cover').click(function(event) {
 		coverPanel.show();
 	});
+
+/**
+ * ======================================================================================
+ *   END 编辑器组件按钮功能设定 (定义 & 事件绑定)
+ * ======================================================================================
+ */
 
 });
 </script>

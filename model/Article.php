@@ -56,6 +56,7 @@ class Article extends Model {
 			'article_id'=> ['bigInteger', ['length'=>20, 'unique'=>1]],  // 文章 ID  ( 同 _id )
 			'cover'=> ['string',  ['length'=>256]],  // 文章封面
 			'title'=>['string',  ['length'=>128, 'index'=>1]],  // 标题
+			'author'=> ['string',  ['length'=>128, 'index'=>1]],  // 作者
 			'origin'=> ['string',  ['length'=>128, 'index'=>1]],  // 来源
 			'origin_url'=>['string',  ['length'=>256]],  // 来源网址
 			'summary'=> ['string',  ['length'=>600]],  // 摘要
@@ -214,6 +215,19 @@ class Article extends Model {
 		return true;
 	}
 
+	/**
+	 * 删除
+	 * @param  [type] $article_id [description]
+	 * @return [type]             [description]
+	 */
+	function rm( $article_id ){
+		$resp = $this->remove( $article_id, 'article_id');
+		if ( $resp === true ){
+			$ret = $this->article_draft->remove( $article_id, 'article_id');
+		}
+
+		return ( $resp && $ret);
+	}
 
 	
 	/**
@@ -227,12 +241,35 @@ class Article extends Model {
 		if ( $draft === true ) {
 			$rs = $this->article_draft->getLine("WHERE article_id=?", ['*'], [$article_id]);
 			if ( !empty($rs) ) {
+				$this->format( $rs );
 				return $rs;
 			}
 		}
 
-		return $this->saveAsDraft();
+		// 如果没有草稿，则提取草稿
+		return $this->saveAsDraft( $article_id );
 	}
+
+
+	function format( & $article ) {
+
+		if ( isset($article['publish_time']) ) {
+			$time = strtotime($article['publish_time']);
+			$article['publish_time'] = null;
+			if ( $time > 0 ) {
+				$article['publish_time'] = date('@ H时i分', $time);
+				$article['publish_date'] = date('m/d/2017', $time);
+				// $article['time'] = $time;
+			}
+		}
+
+		// if ( !isset($article['delta']) || empty($article['delta']) ) {
+		// 	$article['delta'] = 'null';
+		// }
+
+		return $article;
+	}
+
 
 
 	/**
@@ -261,7 +298,9 @@ class Article extends Model {
 		$rs['preview'] = $this->previewLinks( $article_id, $rs['category']);  // 生成预览链接
 		$rs['draft_status'] = DRAFT_APPLIED;  // 标记草稿与文章同步
 
-		return $this->article_draft->updateBy( 'article_id', $rs );
+		$data =  $this->article_draft->updateBy( 'article_id', $rs );
+		$this->format( $data );
+		return $data;
 	}
 
 
