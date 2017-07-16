@@ -13,7 +13,7 @@ class CategoryController extends \Tuanduimao\Loader\Controller {
 
 	function index() {	
 
-		$data['message'] = '请在 系统 > 数据管理 中修改类型数据';
+		$data['message'] = '请在 系统 > 数据管理 中修改文章分类数据';
 		
 		App::render($data,'web','index');
 		
