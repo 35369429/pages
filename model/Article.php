@@ -74,6 +74,8 @@ class Article extends Model {
 			'stick'=> ['integer', ['index'=>1, 'default'=>"0"]],  // 置顶状态
 			'preview' => ['longText', ['json'=>true]], // 预览链接
 			'links' => ['longText', ['json'=>true]], // 访问链接
+			'user' => ['string', ['length'=>128,'index'=>1]], // 最后编辑用户ID
+			'policies' => ['string', ['json'=>true]], // 文章权限预留字段
 			'status'=> ['string', ['length'=>40,'index'=>1, 'default'=>ARTICLE_UNPUBLISHED]],  // 文章状态 unpublished/published
 		];
 
@@ -542,6 +544,10 @@ class Article extends Model {
 	 */
 	function updateBy( $uni_key, $data ) {
 
+		if ( !isset($data['user']) ) {
+			$data['user'] = App::$user['userid'];
+		}
+				
 		$rs = parent::updateBy( $uni_key, $data );
 
 		if ( !empty($data['category']) ) {
@@ -608,6 +614,12 @@ class Article extends Model {
 	function create( $data ) {
 
 		$data['article_id'] = $this->nextid();
+
+		if ( !isset($data['user']) ) {
+			$data['user'] = App::$user['userid'];
+		}
+
+
 		// $draft = $data;
 		$rs = parent::create( $data );  // 创建文章记录
 

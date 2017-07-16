@@ -128,7 +128,9 @@
 					</div>
 					<div class="row push-15-t">
 						<div class="col-xs-3">
-							<input name="author" type="text"  value="<?=$article['author']?>"   class="light" placeholder="输入作者">
+							<input name="author" type="text"  
+								value="<?=(empty($article['author']) && empty($article['article_id'])) ? App::$user['name']: $article['author']?>"   
+								class="light" placeholder="输入作者">
 						</div>
 						<div class="col-xs-3">
 							<input name="origin" type="text"  value="<?=$article['origin']?>"   class="light"   placeholder="输入来源名称">
@@ -138,7 +140,7 @@
 							<input name="origin_url" type="text" value="<?=$article['origin_url']?>"  class="light"  placeholder="输入来源网址">
 						</div>
 					</div>
-					<hr/>
+					<hr class="push-10-t" />
 					</form>
 				</div> <!-- END Header Container -->
 				
@@ -289,7 +291,11 @@
 
 									<div class="form-group">
 										<div class="form-material">
-											<div name="publish_date" class="js-datepicker" value="<?=$article['publish_date']?>"></div>
+											<div 
+												name="publish_date" 
+												class="js-datepicker" 
+												value="<?=empty($article['publish_date'])?date('m/d/Y'):$article['publish_date']?>">
+											</div>
 											<label for="material-text"  class="font-s14 font-w300">发布日期</label>
 										</div>
 									</div><!-- END form-group 发布日期 -->
@@ -428,7 +434,7 @@
 						<button 
 							type="button"
 							confirm-title="删除文章"
-                            confirm-content="您确定删除本篇吗?"
+                            confirm-content="您确定删除本篇文章吗?"
                             confirm-dismiss = "取消"
                             confirm-submit= "确定"
                             data-param-id="103" 

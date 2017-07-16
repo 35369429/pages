@@ -46,7 +46,7 @@ class ArticleController extends \Tuanduimao\Loader\Controller {
 
 
 	function test(){
-		print_r($_SERVER);
+		Utils::out( App::$user );
 	}
 
 	/**
