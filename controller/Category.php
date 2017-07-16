@@ -11,7 +11,9 @@ class CategoryController extends \Tuanduimao\Loader\Controller {
 	function __construct() {
 	}
 
-	function index() {
+	function index() {	
+
+		$data['message'] = '请在 系统 > 数据管理 中修改类型数据';
 		
 		App::render($data,'web','index');
 		

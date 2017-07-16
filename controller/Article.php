@@ -18,6 +18,23 @@ class ArticleController extends \Tuanduimao\Loader\Controller {
 	function index() {
 		
 
+		$art = new \Mina\Pages\Api\Article;
+		$query = $_GET;
+		$query['select'] = ['article_id', 'title', 'author', 'category', 'publish_time', 'update_time', 'create_time', 'status'];
+
+		$query['perpage'] = isset($_GET['perpage']) ?  $_GET['perpage'] : 10;
+		$query['order'] =  isset($_GET['order']) ?  $_GET['order'] : 'create_time desc';
+
+		$resp  = $art->call('search', $query);
+
+
+		// Utils::out('<pre>', $resp, '</pre>');
+
+		$data = [
+			'articles' => $resp,
+			'category' => new \Mina\Pages\Model\Category
+		];
+
 		App::render($data,'article','search.index');
 		
 		return [
@@ -215,8 +232,6 @@ class ArticleController extends \Tuanduimao\Loader\Controller {
 			'category' => new \Mina\Pages\Model\Category
 		];
 
-		Utils::out('<!--', $article, '-->');
-
 		App::render($data, 'article', 'editor' );
 		
 		return [
@@ -266,6 +281,16 @@ class ArticleController extends \Tuanduimao\Loader\Controller {
 		return array_unique($data);
 	}
 
+	private  function _randtag( $max=11 ) {
+		$tags =['会议', '技术', '快讯', '机器学习', '大数据', '行业', '学术', '网文', 'AI', '人工智能', '无人机','机器人'];
+		$len = rand(0,$max);
+		$data = [];
+		for( $i=0; $i<$len; $i++ ){
+			array_push( $data, $tags[rand(0,$max)]);
+		}
+		return array_unique($data);
+	}
+
 
 	function testdata() {
 
@@ -303,14 +328,30 @@ class ArticleController extends \Tuanduimao\Loader\Controller {
 			$t->create($tag);
 		}
 
+		$status = ['published', 'unpublished'];
+
 
 		$a = App::M("Article");
 		$a->runsql("truncate table `{{table}}`");
+		$a->article_draft->runsql("truncate table `{{table}}`");
+
+		$faker = Utils::faker();
+
+		for( $i=0; $i<100; $i++ ) {
+			$rs = [
+				"title" => $faker->company,
+				"category" => $this->_randcate(),
+				'author' =>$faker->name,
+				'publish_time' => date('Y-m-d H:i:s'),
+				'status' => $status[rand(0,1)],
+				'tag' => $this->_randtag()
+			];
+
+			Utils::out($rs );
+
+			$a->save( $rs );
+		}
 
 	}
-
-
-
-
 
 }

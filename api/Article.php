@@ -65,11 +65,12 @@ class Article extends Api {
 	 * 	  8. 按创建时间查询  publish_time | orPublish_time | endPublish_time | orEndPublish_time
 	 * 	  9. 按更新时间查询  update_time  | orUpdate_time  |  endUpdate_time | orEndUpdate_time
 	 * 	  
-	 * 排序方式 order 默认 publish_time  update_time asc, publish_time desc
+	 * 排序方式 order 默认 create_time  update_time asc, publish_time desc
 	 * 
 	 *    1. 按文章发布时间  publish_time
 	 *    2. 按文章更新时间  update_time  
-	 *    3. 按置顶顺序 stick
+	 *    3. 按文章创建时间  create_time
+	 *    4. 按置顶顺序 stick
 	 *    
 	 *
 	 * 当前页码 page    默认 1 
@@ -142,8 +143,8 @@ class Article extends Api {
 
 
 		// Order 默认参数
-		$query['order'] = !empty($query['order']) ? $query['order'] : 'publish_time';
-		$allowOrder = ["publish_time", "update_time", "stick" ];
+		$query['order'] = !empty($query['order']) ? $query['order'] : 'create_time';
+		$allowOrder = ["publish_time", "update_time", "stick" , "create_time"];
 		$orderList = explode(',', $query['order']);
 
 		// 分页参数
@@ -155,10 +156,10 @@ class Article extends Api {
 		// 查询数据表
 		$art = new \Mina\Pages\Model\Article;
 		$qb = $art->query()
-				  ->rightJoin("article_category as ac", 'ac.article_id', '=', 'article.article_id')
-				  ->rightJoin('category as c', "c.category_id", '=', 'ac.category_id')
-				  ->rightJoin("article_tag as at", 'at.article_id', '=', 'article.article_id')
-				  ->rightJoin("tag as t", 't.tag_id', '=', 'at.tag_id');
+				  ->leftJoin("article_category as ac", 'ac.article_id', '=', 'article.article_id')
+				  ->leftJoin('category as c', "c.category_id", '=', 'ac.category_id')
+				  ->leftJoin("article_tag as at", 'at.article_id', '=', 'article.article_id')
+				  ->leftJoin("tag as t", 't.tag_id', '=', 'at.tag_id');
 
 		// 设定查询条件
 		$this->qb( $qb, 'c.name', 'category', $query, ["and", "or", "in"] );

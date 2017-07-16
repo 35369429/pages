@@ -24,9 +24,9 @@ define('DEFAULT_PAGE_SLUG', 'deepblue/article/detail');
  */
 class Article extends Model {
 
-	protected $article_category;
-	protected $article_tag;
-	protected $article_draft;
+	public $article_category;
+	public $article_tag;
+	public $article_draft;
 
 
 	/**
@@ -151,6 +151,10 @@ class Article extends Model {
 		
 		// if ( true ) {  // 4 debug
 
+			if ( empty($data['create_time']) ) {
+				$data['create_time'] = date('Y-m-d H:i:s');
+			}
+
 			$data = $this->create( $data );
 			unset($data['created_at']);
 			unset($data['deleted_at']);
@@ -162,6 +166,10 @@ class Article extends Model {
 
 		} else { 
 			$data['draft_status'] = DRAFT_UNAPPLIED;
+		}
+
+		if ( empty($data['update_time']) ) {
+			$data['update_time'] = date('Y-m-d H:i:s');
 		}
 
 		// 保存到草稿表
@@ -547,7 +555,12 @@ class Article extends Model {
 		if ( !isset($data['user']) ) {
 			$data['user'] = App::$user['userid'];
 		}
-				
+
+		if ( empty($data['update_time']) ) {
+			$data['update_time'] = date('Y-m-d H:i:s');
+		}
+		
+
 		$rs = parent::updateBy( $uni_key, $data );
 
 		if ( !empty($data['category']) ) {
