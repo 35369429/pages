@@ -18,7 +18,7 @@ class ArticleController extends \Tuanduimao\Loader\Controller {
 	function index() {
 		
 
-		App::render($data,'web','index');
+		App::render($data,'article','search.index');
 		
 		return [
 			'js' => [
@@ -159,10 +159,16 @@ class ArticleController extends \Tuanduimao\Loader\Controller {
 
 	}
 
+
+	/**
+	 * 生成小程序码
+	 * @return [type] [description]
+	 */
 	function apqr(){
-
-
 	}
+
+
+
 
 
 
