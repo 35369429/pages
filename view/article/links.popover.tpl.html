@@ -11,7 +11,6 @@ use \Tuanduimao\Loader\App as App;
 				data-id="<?=$idx?>";
 				class="text-success copy-status font-s14"> </span> 
 		</h4>
-		
 	</div>
 	<div class="col-xs-6">
 		<a href="<?=$pg['links']['desktop']?>" 
@@ -22,9 +21,9 @@ use \Tuanduimao\Loader\App as App;
 		</a>
 
 		<button
-			data-clipboard-text="<?=$pg['links']['desktop']?>"
 			data-id="<?=$idx?>";
-			class=" btn btn-primary font-w300  btn-sm  btn-minw copy-preview-url" >	
+			data-clipboard-text="<?=$pg['links']['desktop']?>"
+			class=" btn btn-primary font-w300  btn-sm  btn-minw copy-link-url" >	
 		复制地址
 		</button>
 
@@ -39,7 +38,7 @@ use \Tuanduimao\Loader\App as App;
 		<img src="<?=App::NR('article', 'qr', ['link'=>$pg['links']['wechat'], 'size'=>150, 'fontsize'=>12, 'label'=>'微信扫一扫'])?>" >
 	</div>
 	<div class="col-xs-4">
-		<img src="<?=App::NR('article', 'qr', ['link'=>$pg['links']['wechat'], 'size'=>150, 'fontsize'=>12, 'label'=>'微信小程序'])?>" 
+		<img src="<?=App::NR('article', 'qr', ['link'=>$pg['links']['wxapp'], 'size'=>150, 'fontsize'=>12, 'label'=>'微信小程序'])?>" 
 		>
 	</div>
 </div>

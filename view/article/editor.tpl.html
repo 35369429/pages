@@ -395,7 +395,8 @@
 							type="button"
 							data-form="#general-form"
 							data-action="#"
-							class="btn btn-primary font-w300  push-20-r btn-minw fn-btn on-published on-unapplied link">
+							data-placement="top" data-original-title=" "
+							class="btn btn-primary font-w300  push-20-r btn-minw fn-btn on-published on-unapplied popover-btn link">
 							<i class="fa fa-external-link-square push-5-r"></i> 访问
 						</button>
 						
@@ -429,7 +430,7 @@
 
 </div> <!-- END Page Content -->
 
-<!-- 预览弹出 Popover 界面 -->
+<!-- 预览按钮弹出的 Popover 界面 -->
 <div class="preview-html">
 	<div class="popover" role="tooltip" style="width:600px; max-width:600px; min-height: 400px;" ><div class="arrow"></div>
 		<div class="row remove-margin">
@@ -439,11 +440,27 @@
 			><i class="si si-close pull-right push-10-t push-10-r"></i></a>
 		</div>
 
-		<div class="row popover-form links text-center" style="padding:15px;" >
+		<div class="row popover-form preview links text-center" style="padding:15px;" >
 			<i class="fa-refresh fa-spin fa "></i> 加载中...
 		</div>
 	</div>
-</div><!-- END 预览弹出 Popover 界面 -->
+</div><!-- END 预览按钮弹出的 Popover 界面 -->
+
+<!-- 访问按钮弹出的 Popover 界面 -->
+<div class="link-html">
+	<div class="popover" role="tooltip" style="width:600px; max-width:600px; min-height: 400px;" ><div class="arrow"></div>
+		<div class="row remove-margin">
+			<h3 class="popover-title pull-left font-w300"></h3> 
+			<a href="javascript:$('.fn-btn.link').popover('hide');" 
+				data-id="{{id}}"
+			><i class="si si-close pull-right push-10-t push-10-r"></i></a>
+		</div>
+
+		<div class="row popover-form link links text-center" style="padding:15px;" >
+			<i class="fa-refresh fa-spin fa "></i> 加载中...
+		</div>
+	</div>
+</div><!-- END 访问按钮弹出的 Popover 界面 -->
 
 
 <script type="text/javascript">
@@ -634,32 +651,67 @@ $(function() {
 	});
 
 	$('.fn-btn.preview').click(function(event) {
+		$('.popover-btn.link').popover('hide');
 
 		var that = this;
 		var url = '<?=App::NR("article", "previewlinks", ["id"=>""])?>' + $('input[name="article_id"]').val();
 		$(this).popover('show');
 
-		$('body > .popover .links').load(url, function(){
-
-			console.log( $(this).height() );
-
+		$('body > .popover .preview.links').load(url, function(){
 			// 复制地址
 			var copy = $('body > .popover .copy-preview-url');
-			if ( copy.data('init') !== 1 ) {
-				var client = new ZeroClipboard($('body > .popover .copy-preview-url'));	
-				copy.data('init', 1);
-				client.on( "ready", function( readyEvent ) {
-					client.on( "aftercopy", function( event ) {
-						$('.copy-status').hide().html('复制成功').fadeIn(200);
+			copy.each(function( idx , elm ){
+				if ( $(elm).data('init') !== 1 ) {
+					var client = new ZeroClipboard($(elm));	
+					$(elm).data('init', 1);
+					client.on( "ready", function( readyEvent ) {
+						client.on( "aftercopy", function( event ) {
+							var id = $(elm).attr('data-id');
+							var selector = '.copy-status[data-id='+id+']';
+							$(selector).hide().html('复制成功').fadeIn(200);
+						});
 					});
-				});
-			}
-
+				}
+			});
 		});
 
-		
 	});
 
+
+	// 访问功能按钮
+	$('.fn-btn.link').popover({
+		container:$('body'),
+		title:' ',
+		trigger:'manual',
+		template:$('.link-html').html()
+	});
+
+	$('.fn-btn.link').click(function(event) {
+		$('.popover-btn.preview').popover('hide');
+
+		var that = this;
+		var url = '<?=App::NR("article", "links", ["id"=>""])?>' + $('input[name="article_id"]').val();
+		$(this).popover('show');
+
+		$('body > .popover .link.links').load(url, function(){
+			// 复制地址
+			var copy = $('body > .popover .copy-link-url');
+			copy.each(function( idx , elm ){
+				if ( $(elm).data('init') !== 1 ) {
+					var client = new ZeroClipboard($(elm));	
+					$(elm).data('init', 1);
+					client.on( "ready", function( readyEvent ) {
+						client.on( "aftercopy", function( event ) {
+							var id = $(elm).attr('data-id');
+							var selector = '.copy-status[data-id='+id+']';
+							// console.log(selector);
+							$(selector).hide().html('复制成功').fadeIn(200);
+						});
+					});
+				}
+			});
+		});
+	});
 
 /**
  * ======================================================================================

@@ -348,8 +348,6 @@ class Article extends Model {
 						->toArray();
 
 
-		// 获取适配链接
-		
 		$page_slugs = [];
 		foreach ($pages as $idx=>$pg ) {
 			
@@ -373,8 +371,9 @@ class Article extends Model {
 			unset($pages[$idx]['adapt'] );
 		}
 
-		$entry_maps = $this->getEntries( $article_id, $page_slugs );
 
+		// 获取适配链接
+		$entry_maps = $this->getEntries( $article_id, $page_slugs );
 		foreach ($pages as $idx=>$pg ) {
 
 			$desktop = $pages[$idx]['links']['desktop'];
@@ -394,10 +393,7 @@ class Article extends Model {
 		}
 
 		return $pages;
-
-		// return $pages;
 	}
-
 
 
 	/**
