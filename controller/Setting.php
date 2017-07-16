@@ -13,7 +13,9 @@ class SettingController extends \Tuanduimao\Loader\Controller {
 
 	function index() {
 
-		$data['message'] = '请在 系统 > 微信 > 公众平台 中完成公众号绑定';
+		$data['message'] = '
+		请在 系统 > 微信 > 公众平台 中完成公众号绑定
+		<a href="'. App::URI('baas-admin', 'conf', 'index').'"> 立即设置</a>';
 		
 		App::render($data,'web','index');
 		

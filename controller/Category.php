@@ -13,7 +13,9 @@ class CategoryController extends \Tuanduimao\Loader\Controller {
 
 	function index() {	
 
-		$data['message'] = '请在 系统 > 数据管理 中修改文章分类数据';
+		$data['message'] = '
+		请在 系统 > 数据管理 中修改文章分类信息 
+		<a href="'. App::URI('baas-admin', 'data', 'index',['table'=>'mina_pages_category']).'"> 立即修改</a>';
 		
 		App::render($data,'web','index');
 		
