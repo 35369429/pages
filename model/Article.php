@@ -9,6 +9,7 @@ use \Tuanduimao\Err as Err;
 use \Tuanduimao\Conf as Conf;
 use \Tuanduimao\Model as Model;
 use \Tuanduimao\Utils as Utils;
+use \Mina\Delta\Render as Render;
 
 define('ARTICLE_PUBLISHED', 'published');  // 文章状态 已发布
 define('ARTICLE_UNPUBLISHED', 'unpublished');  // 文章状态 未发布
@@ -36,11 +37,14 @@ class Article extends Model {
 	function __construct( $param=[] ) {
 
 		parent::__construct(['prefix'=>'mina_pages_']);
+
 		$this->table('article');
+		$this->delta_render = new Render();
 		$this->article_category = Utils::getTab('article_category', "mina_pages_");  // 分类关联表
 		$this->article_tag = Utils::getTab('article_tag', "mina_pages_");    // 标签关联表
 		$this->article_draft = Utils::getTab('article_draft', "mina_pages_");  // 文章草稿箱
 		$this->page = Utils::getTab('page', 'core_');  // 页面表
+
 
 	}
 
@@ -176,10 +180,13 @@ class Article extends Model {
 		$article_id = $data['article_id'];
 
 		if ( !empty($data['delta']) ) {
+			
+			$this->delta_render->load($data['delta']);
 			// 生成文章正文
-			$data['content'] = 'compile web content from delta' . json_encode($data['delta']);
+			$data['content'] = $this->delta_render->html();
+
 			// 生成小程序正文
-			$data['ap_content'] = 'compile wxapp content from delta' . json_encode($data['delta']);
+			$data['ap_content'] = $this->delta_render->wxapp();
 		}
 
 		$data['history'] = $this->article_draft->getLine("WHERE article_id=?", ['*'], [$article_id]);
