@@ -269,7 +269,7 @@ class ArticleController extends \Tuanduimao\Loader\Controller {
 	}
 
 
-	private  function _randcate( $max=9 ) {
+	private  function _randcate( $max=10 ) {
 		$len = rand(0,$max);
 		$data = [];
 		for( $i=0; $i<$len; $i++ ){
@@ -293,15 +293,14 @@ class ArticleController extends \Tuanduimao\Loader\Controller {
 	function testdata() {
 
 		Utils::cliOnly();
-		
 		$c = App::M('Category');
 		$c->runsql("truncate table `{{table}}`");
 		$cates = [
 			["name"=>"网上门诊", "project"=>"deepblue",'param'=>"isnav=true"],
-			["name"=>"中心介绍", "project"=>"deepblue",'param'=>"isnav=true", "parent_id"=>1, 'page'=>'deepblue/article/detail_video'],
-			["name"=>"继续教育", "project"=>"deepblue",'param'=>"isnav=true", "parent_id"=>2, 'page'=>'deepblue/article/detail_audio'],
-			["name"=>"医生沙龙", "project"=>"deepblue",'param'=>"isnav=true", "parent_id"=>1],
-			["name"=>"疑难病痛", "project"=>"deepblue",'param'=>"isnav=true", "parent_id"=>2],
+			["name"=>"中心介绍", "project"=>"deepblue",'param'=>"isnav=true"],
+			["name"=>"继续教育", "project"=>"deepblue",'param'=>"isnav=true"],
+			["name"=>"医生沙龙", "project"=>"deepblue",'param'=>"isnav=true"],
+			["name"=>"疑难病痛", "project"=>"deepblue",'param'=>"isnav=true"],
 			["name"=>"诊疗新技术", "project"=>"deepblue",'param'=>"isnav=true"],
 			["name"=>"学术交流", "project"=>"deepblue",'param'=>"isnav=true"],
 			["name"=>"信息园地", "project"=>"deepblue"],
@@ -311,7 +310,6 @@ class ArticleController extends \Tuanduimao\Loader\Controller {
 		foreach( $cates as $cate ) {
 			$c->create($cate);
 		}
-
 
 		$t = App::M('Tag');
 		$t->runsql("truncate table `{{table}}`");
@@ -327,8 +325,6 @@ class ArticleController extends \Tuanduimao\Loader\Controller {
 		}
 
 		$status = ['published', 'unpublished'];
-
-
 		$a = App::M("Article");
 		$a->runsql("truncate table `{{table}}`");
 		$a->article_draft->runsql("truncate table `{{table}}`");
@@ -346,7 +342,6 @@ class ArticleController extends \Tuanduimao\Loader\Controller {
 			];
 
 			Utils::out($rs );
-
 			$a->save( $rs );
 		}
 
