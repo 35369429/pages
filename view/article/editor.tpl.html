@@ -844,7 +844,7 @@ $(function() {
 
 		confirm: function( selected ) {  // 选中图片
 			if ( selected.length === 0 ) return ;
-			$editor.coverAdd( selected[0]['url'] , selected[0]['origin']);
+			$editor.coverAdd( selected[0]['url'] , selected[0]['url']);
 		},
 		cancel: function( selected ) {  // 取消选择
 			console.log( selected );

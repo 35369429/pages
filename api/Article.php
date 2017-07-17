@@ -241,7 +241,7 @@ class Article extends Api {
 			if ( $getCategory) {
 				$rs['tag'] = $tags[$aid];
 			}
-			
+	
 			$resp['data'][$idx] = $rs;
 		}
 
