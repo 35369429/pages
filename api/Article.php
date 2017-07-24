@@ -332,13 +332,12 @@ class Article extends Api {
 
 		$wxconf =[
 			'appid'=>"wx77e0de6921bacc92",
-			'secret'=>"b0cd3ea48a1aa3df5e9f88d70889a040",
-			'url'=>$query['url']
+			'secret'=>"b0cd3ea48a1aa3df5e9f88d70889a040"		
 		]; 
 
 		$wechat = new Wechat($wxconf);
 		// 自动获取地址 
-		return $wechat->getSignature( null, $wxconf['appid'], $wxconf['secret']);	
+		return $wechat->getSignature( $query['url'], $wxconf['appid'], $wxconf['secret']);	
 		
 	}
 }
