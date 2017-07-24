@@ -331,7 +331,7 @@ class Article extends Api {
 		$wxconf =[
 			'appid'=>$query['appid'],
 			'secret'=>$query['secret'],
-			'url'=>$query['url']
+			'url'=>$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']
 		]; 
 		$wechat = new Wechat($wxconf);
 		$data = $wechat->getSignature($wxconf['url'],$wxconf['appid'],$wxconf['secret']);
