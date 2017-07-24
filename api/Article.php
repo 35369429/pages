@@ -328,13 +328,15 @@ class Article extends Api {
 	 * 签名
 	 */
 	protected  function signdata($query=[]){
+		
 		$wxconf =[
 			'appid'=>$query['appid'],
 			'secret'=>$query['secret']
-			// 'url'=>$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']
 		]; 
+
 		$wechat = new Wechat($wxconf);
-		$data = $wechat->getSignature($wxconf['url'],$wxconf['appid'],$wxconf['secret']);
-		return $data;	
+		// 自动获取地址 
+		return $wechat->getSignature( null, $wxconf['appid'], $wxconf['secret']);	
+		
 	}
 }
