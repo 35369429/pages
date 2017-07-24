@@ -1,7 +1,7 @@
 {
     "org": "mina",
     "name": "pages",
-    "version": "2.0",
+    "version": "1.0.2",
     "cname": "MINA Pages",
     "image": {
         "color":"/static/icons/app-color.svg",
