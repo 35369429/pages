@@ -330,8 +330,8 @@ class Article extends Api {
 	protected  function signdata($query=[]){
 		$wxconf =[
 			'appid'=>$query['appid'],
-			'secret'=>$query['secret'],
-			'url'=>$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']
+			'secret'=>$query['secret']
+			// 'url'=>$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']
 		]; 
 		$wechat = new Wechat($wxconf);
 		$data = $wechat->getSignature($wxconf['url'],$wxconf['appid'],$wxconf['secret']);
