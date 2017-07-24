@@ -6,6 +6,8 @@ use \Tuanduimao\Excp as Excp;
 use \Tuanduimao\Conf as Conf;
 use \Mina\Storage\Local as Storage;
 use \Endroid\QrCode\QrCode as Qrcode;
+use \Tuanduimao\Wechat as Wechat;
+
 
 
 class ArticleController extends \Tuanduimao\Loader\Controller {
@@ -16,8 +18,11 @@ class ArticleController extends \Tuanduimao\Loader\Controller {
 
 	// 图文列表页
 	function index() {
-		
 
+
+
+
+		
 		$art = new \Mina\Pages\Api\Article;
 		$query = $_REQUEST;
 		$query['select'] = ['article_id', 'title', 'author', 'category', 'publish_time', 'update_time', 'create_time', 'status'];

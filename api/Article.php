@@ -2,10 +2,14 @@
 
 namespace Mina\Pages\Api;
 
+
+
+
 use \Tuanduimao\Loader\App;
 use \Tuanduimao\Excp;
 use \Tuanduimao\Utils;
 use \Tuanduimao\Api;
+use \Tuanduimao\Wechat as Wechat;
 
 
 /**
@@ -320,4 +324,17 @@ class Article extends Api {
 	}
 
 
+	/**
+	 * 签名
+	 */
+	protected  function signdata($query=[]){
+		$wxconf =[
+			'appid'=>$query['appid'],
+			'secret'=>$query['secret'],
+			'url'=>$query['url']
+		]; 
+		$wechat = new Wechat($wxconf);
+		$data = $wechat->getSignature($wxconf['url'],$wxconf['appid'],$wxconf['secret']);
+		return $data;	
+	}
 }
