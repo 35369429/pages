@@ -449,6 +449,10 @@ class Article extends Model {
 			}
 		}
 
+		echo "<!--";
+		print_r( $pages );
+		echo "--!>";
+		
 		return $pages;
 	}
 
