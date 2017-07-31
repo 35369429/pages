@@ -58,7 +58,11 @@ class Article extends Model {
 			
 		$struct = [
 			'article_id'=> ['bigInteger', ['length'=>20, 'unique'=>1]],  // 文章 ID  ( 同 _id )
-			'cover'=> ['string',  ['length'=>256]],  // 文章封面
+			'cover'=> ['string',  ['length'=>256]],   // 文章封面
+			'thumbs' =>['text',  ["json"=>true]],     // 主题图片(三张)
+			'images'=> ['text',  ['json'=>true]],  // 图集文章
+			'videos'=> ['text',  ['json'=>true]],  // 视频文章
+			'audios'=> ['text',  ['json'=>true]],  // 音频文章
 			'title'=>['string',  ['length'=>128, 'index'=>1]],  // 标题
 			'author'=> ['string',  ['length'=>128, 'index'=>1]],  // 作者
 			'origin'=> ['string',  ['length'=>128, 'index'=>1]],  // 来源

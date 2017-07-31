@@ -118,7 +118,7 @@
 				
 
 				<!-- BEGAIN Header Container -->
-				<div id="header-container" class="webeditor-header">
+				<div id="header-container"   class="webeditor-header">
 					<form name="header-form" class="remove-padding remove-margin" >
 					<div class="row">
 						<div class="col-xs-10">
@@ -129,19 +129,23 @@
 							<span class="label label-warning  on-unapplied hidden">已发布 ( 未更新 )</span>
 							<span class="label label-danger  on-unpublished hidden">草稿</span>
 						</div>
+						
 					</div>
 					<div class="row push-15-t">
-						<div class="col-xs-3">
+						<div class="col-xs-2">
 							<input name="author" type="text"  
 								value="<?=(empty($article['author']) && empty($article['article_id'])) ? App::$user['name']: $article['author']?>"   
 								class="light" placeholder="输入作者">
 						</div>
-						<div class="col-xs-3">
+						<div class="col-xs-2">
 							<input name="origin" type="text"  value="<?=$article['origin']?>"   class="light"   placeholder="输入来源名称">
 						</div>
 
 						<div class="col-xs-6">
 							<input name="origin_url" type="text" value="<?=$article['origin_url']?>"  class="light"  placeholder="输入来源网址">
+						</div>
+						<div class="col-xs-2 text-right" style="border: none;">
+							<a href="#cover-container"> 设置封面 </a>
 						</div>
 					</div>
 					<hr class="push-10-t" />
@@ -155,7 +159,10 @@
 
 					<form class="form-horizontal" name="cover-form" >
 						<div class="form-group">
-							<label>封面 <span class="text-muted font-s12">( 建议尺寸 900像素 * 500像素) </span> </label>
+							<label>
+								封面 <span class="text-muted font-s12">( 建议尺寸 900像素 * 500像素) </span> 
+							</label>
+							<a href="#" onclick="$('input[name=title]').focus();" class="pull-right">返回文章标题</a>
 							<div class="row">
 								<div class="col-xs-6 remove-padding preview border" >
 									<?php if (!empty($article['cover'])) :?>
@@ -177,6 +184,7 @@
 							</div>
 						</div><!-- END 封面 -->
 
+
 						<div class="form-group">
 							<label class="push-30-t ">摘要  <span class="text-muted font-s12">( 选填，如果不填写会默认抓取正文前54个字) </span></label>
 							<div class="row">
@@ -193,6 +201,34 @@
 								</div>
 							</div>
 						</div> <!-- END 摘要 -->
+
+
+						<div class="form-group">
+							<label>主题图 <span class="text-muted font-s12">( 一般用于文章列表的图片呈现，建议图片比例 4:3 ) </span> </label>
+							<div class="row">
+								<?php for($i=0; $i<3; $i++) : ?>
+								<div class="col-xs-4" style="padding-left:0px;padding-right:30px;"  >
+									
+									<div class="push-15">
+										<input type="hidden" id="thumbs-<?=$i?>"  name="thumbs[]" value="<?=$article['thumbs'][$i]?>" >
+										<button class="btn btn-sm push-10-r btn-default thumbs-<?=$i?>-selector" type="button"> 
+											选择图片 
+										</button>
+									
+										<button data-toggle="thumbs-clean-<?=$i?>"
+											type="button" 
+											class="btn  btn-sm  btn-default"> 
+											清除图片 </button>
+									</div>
+
+									<?php if ( !empty($article['thumbs']) && !empty($article['thumbs'][$i]) ) :?>
+									<img name="thumbs-<?=$i?>" src="<?=$article['thumbs'][$i]?>" style="width:100%;" >
+									<?php endif; ?>
+
+								</div>
+								<?php endfor; ?>
+							</div>
+						</div><!-- END 主题图片 -->
 
 					</form>
 				</div> <!-- END Cover Container -->
@@ -886,6 +922,55 @@ $(function() {
 		multiple:1,  // 最多可选视频数量 ( 默认1个 )
 		show:false   // 是否打开界面
 	});
+
+
+	// Thumbs 主题图片面板
+	<?php for($i=0; $i<3; $i++) : ?>
+	var thumbsPanel_<?=$i?> = new imageWebeditorPanel({
+		api: {
+			latest: '<?=App::URI("mina", "uploader", "imagelatest")?>', // 最近上传接口
+			upload: '<?=App::URI("mina", "uploader", "imageupload")?>',  // 图片上传接口
+			crop:   '<?=App::URI("mina", "uploader", "imagecrop")?>',	// 图片裁切接口
+			resize: '<?=App::URI("mina", "uploader", "imageresize")?>' // 压缩图片接口
+		},
+
+		confirm: function( selected ) {  // 选中图片
+			if ( selected.length === 0 ) return ;
+			var $img = $('img[name="thumbs-<?=$i?>"]', '.webeditor-cover');
+			var $input = $('input[id="thumbs-<?=$i?>"]', '.webeditor-cover');
+			var $parent = $('.thumbs-<?=$i?>-selector', '.webeditor-cover').parent().parent();
+
+			$input.val( selected[0]['url'] );
+
+			if ( $img.length == 0 ) {
+				$parent.append('<img name="thumbs-<?=$i?>" src="'+ selected[0]['url'] +'" style="width:100%" >');
+				return;
+			}
+			$img.attr('src', selected[0]['url']);
+
+		},
+		cancel: function( selected ) {  // 取消选择
+			console.log( selected );
+		},
+
+		multiple:1,  // 最多可选图片数量 ( 默认9个 )
+		show:false   // 是否打开界面
+	});
+
+	$('.thumbs-<?=$i?>-selector' , '.webeditor-cover').click(function(event) {
+		thumbsPanel_<?=$i?>.show();
+	});
+
+	$('button[data-toggle="thumbs-clean-<?=$i?>"]','.webeditor-cover').click(function(event) {
+		var $img = $('img[name="thumbs-<?=$i?>"]', '.webeditor-cover');
+		var $input = $('input[id="thumbs-<?=$i?>"]', '.webeditor-cover');
+		$input.val('');
+		$img.remove();
+	});
+
+	<?php endfor; ?>
+
+
 
 
 

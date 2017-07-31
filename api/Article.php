@@ -91,7 +91,7 @@ class Article extends Api {
 
 		// 验证 Select 参数
 		$getTag = false; $getCategory = false;
-		$allowFields = ["*","article_id","cover","title","author","origin","origin_url","summary","seo_title","seo_keywords","seo_summary","publish_time","update_time","create_time","sync","content","ap_content","draft","ap_draft","history","stick","status","category", "tag"];
+		$allowFields = ["*","article_id","cover","title","author","origin","origin_url","summary","seo_title","seo_keywords","seo_summary","publish_time","update_time","create_time","sync","content","ap_content","draft","ap_draft","history","stick","status","category", "tag", "images", "thumbs", "videos", "audios"];
 
 		foreach ($select as $idx => $field) {
 			if ( !in_array($field, $allowFields)){
