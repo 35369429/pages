@@ -6,6 +6,8 @@ use \Tuanduimao\Excp as Excp;
 use \Tuanduimao\Conf as Conf;
 use \Mina\Storage\Local as Storage;
 use \Endroid\QrCode\QrCode as Qrcode;
+use Endroid\QrCode\LabelAlignment;
+use \Endroid\QrCode\ErrorCorrectionLevel;
 
 
 
@@ -155,22 +157,43 @@ class ArticleController extends \Tuanduimao\Loader\Controller {
 		$option['fontsize'] = !empty($option['fontsize']) ? $option['fontsize'] : 14;
 		$option['label'] = isset($option['label']) ? $option['label'] : '扫描二维码';
 		$option['font'] = !empty($option['font']) ? $option['font'] : 'LantingQianHei.ttf';
-
+		$logo = !empty($option['logo']) ? $option['logo'] : '';
+		$logosize = !empty($option['logosize']) ? $option['logosize'] : 50;
+		
+	
 		$qr = new QrCode();
-		$qr ->setText($code)
+		$qr ->setWriterByName('png')
+		    ->setEncoding('UTF-8')
+		    ->setText($code)
 		    ->setSize($option['size'])
-		    ->setPadding( $option['padding'] )
-		    ->setErrorCorrection('high')
+		    ->setMargin( $option['padding'] )
+		    ->setErrorCorrectionLevel(ErrorCorrectionLevel::HIGH)
 		    ->setForegroundColor($option['foreground'])
 		    ->setBackgroundColor($option['background'])
-		    ->setLabelFontPath(Utils::seroot() . DS . 'lib' . DS . 'fonts' . DS . $option['font'] )
-		    ->setLabel($option['label'])
-		    ->setLabelFontSize( $option['fontsize']  )
-		    ->setImageType( QrCode::IMAGE_TYPE_PNG);
+		    ->setLabel(
+		    	$option['label'], $option['fontsize'],  
+		    	Utils::seroot() . DS . 'lib' . DS . 'fonts' . DS . $option['font'], 
+		    	LabelAlignment::CENTER )
+		    ->setValidateResult(false);
+
+		if ( !empty($logo) ) {
+
+			$logoBlob = null;
+			if( substr($logo, 0, 4) == 'http' || is_readable($logo) ) {
+				$logoBlob = file_get_contents($logo);
+			} 
+
+			if ( !empty($logoBlob) ) {
+				$logopath = sys_get_temp_dir() . "/" . time() . ".logo";
+				file_put_contents($logopath, $logoBlob);
+				$qr->setLogoPath( $logopath);
+				$qr->setLogoWidth( $logosize );
+			}
+		}
 
 
 		header('Content-Type: image/png');
-		$qr->render();
+		echo $qr->writeString();
 
 	}
 
@@ -181,10 +204,6 @@ class ArticleController extends \Tuanduimao\Loader\Controller {
 	 */
 	function apqr(){
 	}
-
-
-
-
 
 
 	/**
