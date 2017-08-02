@@ -18,10 +18,53 @@ use \Tuanduimao\Utils as Utils;
 			</div>
 
 			<div class="col-lg-4 col-md-4  col-sm-4">
+				
 				<a 
 					href="<?=App::R('article','editor')?>" 
-					class="btn btn-primary btn-lg font-w300 pull-right" 
+					class="btn btn-primary btn-lg font-w300 pull-right push-15-l" 
 					><i class="fa fa-plus"></i> 创建文章</a>
+
+				<button 
+					confirm-title="请选择同步公众号"
+					confirm-content="<ul  class='list-group' >
+						<?php for( $i=0; $i<3; $i++) : ?>
+						<li class='list-group-item'>
+							<label class='css-input css-checkbox css-checkbox-primary'>
+                                <input name='wxmp' type='checkbox' value='wxapp<?=$i?>'  checked><span class='push-10-l'></span> 
+                                微信公众号一 ( 绑定分类团队猫 )
+                            </label>
+						</li>
+						<?php endfor; ?>
+					</ul>"
+					confirm-submit="立即同步"
+					confirm-action="<?=App::NR('Article', 'sync');?>"
+					event-before="
+						function( btn, modal ) {
+							var names = [];
+							$('input[name=wxmp]',modal ).each( function( idx, mp ) {
+								if ( $(mp).prop('checked') === true ){
+									names.push( $(mp).val() );
+								}
+							});
+							
+							$(btn).attr('data-param-ids', names);
+						}
+					"
+					event-success="
+						function(btn, modal) {
+							console.log('success');
+						}
+					"
+
+					event-error="
+						function( data, btn, modal) {
+							console.log('fail');
+						}
+					"
+
+					class="btn btn-primary btn-lg font-w300 pull-right ajax-confirm" >
+					<i class="fa fa-wechat"></i> 同步文章</button>
+
 			</div>
 		</div>
 	</div> <!-- END Search Section -->
@@ -152,6 +195,7 @@ use \Tuanduimao\Utils as Utils;
 										$category->each(function( $cate, $depth ) use ( $category,$query ) {  ?>
 									<li >
 										<a href="javascript:search('categoryId','<?=$cate['category_id']?>')">
+										   <?=empty($cate['wechat']) ? '' : '<i class="fa fa-wechat text-success"></i>'?>
 										   <?=$cate['name']?>
 										</a>
 									</li>
@@ -159,7 +203,7 @@ use \Tuanduimao\Utils as Utils;
 									<?php if ($cate['category_id'] == $query['categoryId'])  :?>
 									<script type="text/javascript">
 									$(function(){
-										$('.currCate').html('<?=$cate['name']?>');
+										$('.currCate').html('<?=empty($cate["wechat"]) ? "" : "<i class=\"fa fa-wechat text-muted\"></i> "?><?=$cate['name']?>');
 									})
 									</script>
 									<?php endif;  ?>

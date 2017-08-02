@@ -63,8 +63,15 @@ class ArticleController extends \Tuanduimao\Loader\Controller {
 
 
 	function test(){
+
+		Utils::cliOnly();
 		Utils::out( App::$user );
 	}
+
+
+
+
+
 
 	/**
 	 * 删除文章
@@ -215,6 +222,15 @@ class ArticleController extends \Tuanduimao\Loader\Controller {
 		$article = new \Mina\Pages\Model\Article;
 		$rs = $article->save( json_decode(App::input(),true) );
 		Utils::out( $rs );
+	}
+
+
+	/**
+	 * 同步文章
+	 * @return [type] [description]
+	 */
+	function sync() {
+		echo json_encode(['sync'=>'success']);
 	}
 
 

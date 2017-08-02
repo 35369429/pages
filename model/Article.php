@@ -186,8 +186,12 @@ class Article extends Model {
 		if ( !empty($data['delta']) ) {
 			
 			$this->delta_render->load($data['delta']);
+
 			// 生成文章正文
 			$data['content'] = $this->delta_render->html();
+
+			// 获取图片信息
+			$data['images'] = $this->delta_render->images();
 
 			// 生成小程序正文
 			$data['ap_content'] = $this->delta_render->wxapp();

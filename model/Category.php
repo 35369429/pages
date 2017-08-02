@@ -35,14 +35,14 @@ class Category extends Model {
 			$this->putColumn( 'category_id', $this->type('bigInteger', ['length'=>20]) )  // 类型ID ( 同 _id )
 				 ->putColumn( 'project', $this->type('string',  ['length'=>128, 'index'=>1]) )  // 所属项目
 				 ->putColumn( 'page', $this->type('string',     ['length'=>128, 'index'=>1]) )  // 正文(默认)页面
+				 ->putColumn( 'wechat', $this->type('string', ['index'=>1, "length"=>64]) )      // 绑定公众号
 				 ->putColumn( 'name', $this->type('string',  ['length'=>128]) )  // 类型名称
 				 ->putColumn( 'fullname', $this->type('string',  ['length'=>256]) )  // 类型全名
 				 ->putColumn( 'parent_id', $this->type('bigInteger', ["default"=>"0", "index"=>1]) ) // 父类 ID 
 				 ->putColumn( 'priority', $this->type('integer', ['index'=>1, 'default'=>"0"]) ) // 优先级排序
-				 ->putColumn( 'hidden', $this->type('boolean', ['index'=>1, 'default'=>"0"]) ) // 是否隐藏
-				 ->putColumn( 'param', $this->type('string',     ['length'=>128, 'index'=>1]) )  //自定义参数
+				 ->putColumn( 'hidden', $this->type('boolean', ['index'=>1, 'default'=>"0"]) )   // 是否隐藏
+				 ->putColumn( 'param', $this->type('string',     ['length'=>128, 'index'=>1]) )  // 自定义参数
 				 ->putColumn( 'status', $this->type('string', ['length'=>10,'index'=>1, 'default'=>'on']) )  // 类型状态 on/off
-				
 		;
 	}
 
