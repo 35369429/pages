@@ -18,23 +18,30 @@ use \Tuanduimao\Utils as Utils;
 			</div>
 
 			<div class="col-lg-4 col-md-4  col-sm-4">
-				
 				<a 
 					href="<?=App::R('article','editor')?>" 
 					class="btn btn-primary btn-lg font-w300 pull-right push-15-l" 
 					><i class="fa fa-plus"></i> 创建文章</a>
+				
 
+				<!-- 微信公众号同步 -->
+				<?php if ( !empty($wechats) ) : ?>
 				<button 
-					confirm-title="请选择同步公众号"
+					confirm-title="<i class='fa fa-wechat'></i> 请选择需要同步的公众号"
 					confirm-content="<ul  class='list-group' >
-						<?php for( $i=0; $i<3; $i++) : ?>
+						<?php foreach($wechats as $we) : ?>
 						<li class='list-group-item'>
 							<label class='css-input css-checkbox css-checkbox-primary'>
-                                <input name='wxmp' type='checkbox' value='wxapp<?=$i?>'  checked><span class='push-10-l'></span> 
-                                微信公众号一 ( 绑定分类团队猫 )
+                               <input name='wxmp' type='checkbox' value='<?=$we['appid']?>' checked ><span class='push-10-r'></span> 
+                               <span class='push-10-r'> <i class='fa fa-wechat'></i>   <?=$we['name']?>   </span>
+                               <span class='push-10-r'> 分类: <?=$we['category']?>  </span>
+                               <span class='push-10-r'> 类型: <?=$we['typename']?> </span>
+                               <span> AppID: <?=$we['appid']?>  </span>
+                               
                             </label>
+                            <span name='wxmp' class='hidden push-10-r pull-right'><i class='fa fa-refresh fa-spin'></i></span>
 						</li>
-						<?php endfor; ?>
+						<?php endforeach; ?>
 					</ul>"
 					confirm-submit="立即同步"
 					confirm-action="<?=App::NR('Article', 'sync');?>"
@@ -46,8 +53,13 @@ use \Tuanduimao\Utils as Utils;
 									names.push( $(mp).val() );
 								}
 							});
-							
+
 							$(btn).attr('data-param-ids', names);
+							
+							$('button', modal)
+								.addClass('disabled')
+								.attr('disabled', 'disabled');
+							$('span[name=wxmp]', modal).removeClass('hidden').show();
 						}
 					"
 					event-success="
@@ -62,8 +74,20 @@ use \Tuanduimao\Utils as Utils;
 						}
 					"
 
+					event-done="
+						function( data, btn, modal) {
+							$('span[name=wxmp]',modal ).addClass('hidden').hide();
+
+							$('button', modal)
+								.removeClass('disabled')
+								.removeAttr('disabled');
+						}
+					"
+
 					class="btn btn-primary btn-lg font-w300 pull-right ajax-confirm" >
 					<i class="fa fa-wechat"></i> 同步文章</button>
+
+				<?php endif;?><!-- END 微信公众号同步 -->
 
 			</div>
 		</div>

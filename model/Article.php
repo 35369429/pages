@@ -9,7 +9,9 @@ use \Tuanduimao\Err as Err;
 use \Tuanduimao\Conf as Conf;
 use \Tuanduimao\Model as Model;
 use \Tuanduimao\Utils as Utils;
+use \Tuanduimao\Wechat as Wechat;
 use \Mina\Delta\Render as Render;
+
 
 define('ARTICLE_PUBLISHED', 'published');  // 文章状态 已发布
 define('ARTICLE_UNPUBLISHED', 'unpublished');  // 文章状态 未发布
@@ -44,7 +46,6 @@ class Article extends Model {
 		$this->article_tag = Utils::getTab('article_tag', "mina_pages_");    // 标签关联表
 		$this->article_draft = Utils::getTab('article_draft', "mina_pages_");  // 文章草稿箱
 		$this->page = Utils::getTab('page', 'core_');  // 页面表
-
 
 	}
 
@@ -84,11 +85,11 @@ class Article extends Model {
 			'links' => ['longText', ['json'=>true]], // 访问链接
 			'user' => ['string', ['length'=>128,'index'=>1]], // 最后编辑用户ID
 			'policies' => ['string', ['json'=>true]], // 文章权限预留字段
-			'status'=> ['string', ['length'=>40,'index'=>1, 'default'=>ARTICLE_UNPUBLISHED]],  // 文章状态 unpublished/published
+			'status'=> ['string', ['length'=>40,'index'=>1, 'default'=>ARTICLE_UNPUBLISHED]],  // 文章状态 unpublished/published/pending
 		];
 
 		$struct_draft_only = [
-			'draft_status'=> ['string', ['length'=>40,'index'=>1, 'default'=>DRAFT_UNAPPLIED]],  // 草稿状态 unapplied/applied
+			'draft_status'=> ['string', ['length'=>40,'index'=>1, 'default'=>DRAFT_UNAPPLIED]],  // 草稿状态 unapplied/applied/pendding 
 			'history'=>  ['longText', ['json'=>true] ],    // 上一次修改记录 (用于保存)
 			'category'=> ['longText', ['json'=>true] ],    // 分类映射信息 ( 仅用于草稿信息 )
 			'tag'=>['longText', ['json'=>true] ]   // 标签映射信息 ( 仅用于草稿信息 )
@@ -123,6 +124,53 @@ class Article extends Model {
 				           ->putColumn( 'unique_id', $this->type('string', ['length'=>40, 'unique'=>1]) );
 		// }
 	}
+
+
+	/**
+	 * 从公众号(订阅号/服务号)下载文章
+	 */
+	function downloadFromWechat( string $appid, $offset = null ) {
+
+		$perpage = 20;
+		$cate = new Category();
+		$settings = $cate->wechat();
+		$c = $settings[$appid];
+
+		if ( empty($c) ){
+			throw new Excp('配置信息错误', 400, ['appid'=>$appid]);	
+		}
+
+		$wechat = new Wechat([
+			"appid" => $c['appid'],
+			'secret' => $c['secret']
+		]);
+
+		
+		$count = $wechat->countMedia();
+		$offset = ($offset == null) ? intval($c['offset']) : intval( $offset );
+		$total = intval($count['news_count']) - $offset;
+		$page = ceil($total / $perpage );
+
+		for( $i=0; $i<$page; $i++ ) {
+			$from = $perpage * $i + $offset;
+			$resp = $wechat->searchMedia($from, $perpage, 'news');
+			foreach ($resp['item'] as $item ) {
+				foreach ($item['content']['news_item'] as $idx=>$media ) {
+					$this->importWechatMedia( $item['media_id'], $media, $idx );
+				}
+			}
+		}
+
+		// 更新 offset
+		$cate->updateBy('category_id', ['category_id'=>$c['category_id'], 'wechat_offset'=>intval($count['news_count'])]);
+
+	}
+
+
+	function importWechatMedia( string $media_id, array $media, $index = 0 ) {
+		Utils::out( $media_id, " ", $index , " "  ,  $media['title'],  "\n");
+	}
+
 
 
 
@@ -860,6 +908,7 @@ class Article extends Model {
 		return $resp;
 
 	}
+
 
 	function __clear() {
 		Utils::getTab('article_category', "mina_pages_")->dropTable();

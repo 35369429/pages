@@ -36,6 +36,7 @@ class Category extends Model {
 				 ->putColumn( 'project', $this->type('string',  ['length'=>128, 'index'=>1]) )  // 所属项目
 				 ->putColumn( 'page', $this->type('string',     ['length'=>128, 'index'=>1]) )  // 正文(默认)页面
 				 ->putColumn( 'wechat', $this->type('string', ['index'=>1, "length"=>64]) )      // 绑定公众号
+				 ->putColumn( 'wechat_offset', $this->type('integer', ['default'=>"0"]) )      // 同步文章的 Offset
 				 ->putColumn( 'name', $this->type('string',  ['length'=>128]) )  // 类型名称
 				 ->putColumn( 'fullname', $this->type('string',  ['length'=>256]) )  // 类型全名
 				 ->putColumn( 'parent_id', $this->type('bigInteger', ["default"=>"0", "index"=>1]) ) // 父类 ID 
@@ -52,6 +53,13 @@ class Category extends Model {
 	}
 
 
+	/**
+	 * 遍历分类
+	 * @param  [type]  $fn        [description]
+	 * @param  integer $parent_id [description]
+	 * @param  integer $depth     [description]
+	 * @return [type]             [description]
+	 */
 	function each( $fn, $parent_id=0, $depth=0 ) {
 		
 		$depth ++;
@@ -70,6 +78,62 @@ class Category extends Model {
 		}
 	}
 
+
+	/**
+	 * 读取/绑定公众号的分类信息
+	 * @return [type] [description]
+	 */
+	function wechat() {
+
+		$conf = Utils::getConf();
+		$groups = $conf['_groups'];
+		$tmap = ["2"=>'订阅号', "1"=>"服务号"];
+		$appids = []; $wemap = []; $needcreate = [];
+		foreach ($groups as $name => $we ) {
+			// type = 1 订阅号  type = 2 服务号
+			if( ($we['type'] == 1 || $we['type'] == 2 ) && !empty($we['appid'])) {
+				$we['name'] = $name;
+				$we['typename'] = $tmap[$we['type']];
+				array_push( $appids, $we['appid']);
+				$needcreate[$we['appid']] = $wemap[$we['appid']] = $we;
+			}
+		}
+
+		$cates = $this->query()->whereIn('wechat', $appids)
+						 ->select('category_id', 'name', 'wechat', 'wechat_offset as offset' )
+						 ->get()->toArray();
+
+
+		foreach ($cates as $c ) {
+			$wemap[$c['wechat']]['category_id'] = $c['category_id'];
+			$wemap[$c['wechat']]['category'] = $c['name'];
+			$wemap[$c['wechat']]['offset'] = empty($c['offset']) ? 0 : intval($c['offset']);
+			unset($needcreate[$c['wechat']]);
+		}
+
+		foreach ( $needcreate as $appid => $we ) {
+			$c = $this->create([
+				'hidden' => 1,
+				'wechat' => $appid,
+				'name' => $we['name']
+			]);
+
+			$wemap[$c['wechat']]['category_id'] = $c['category_id'];
+			$wemap[$c['wechat']]['category'] = $c['name'];
+			$wemap[$c['wechat']]['offset'] = $c['wechat_offset'];
+		}
+
+		return $wemap;
+	}
+
+
+
+
+	/**
+	 * 读取所有分类
+	 * @param  [type] $parent_id [description]
+	 * @return [type]            [description]
+	 */
 	function parents(  $parent_id  ) {
 
 		$parents = [];
