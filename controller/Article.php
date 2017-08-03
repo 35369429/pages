@@ -68,9 +68,9 @@ class ArticleController extends \Tuanduimao\Loader\Controller {
 
 		Utils::cliOnly();
 		$art = new  \Mina\Pages\Model\Article;
-		// $art->downloadFromWechat('wxf427d2cb6ac66d2c');
+		$art->downloadFromWechat('wxf427d2cb6ac66d2c');
 		$art->downloadFromWechat('wx77e0de6921bacc92');
-		
+
 	}
 
 
@@ -235,9 +235,19 @@ class ArticleController extends \Tuanduimao\Loader\Controller {
 	 * @return [type] [description]
 	 */
 	function sync() {
-		sleep(2);
+
+		$ids = explode(',', $_POST['ids']);
+
+		$art = new  \Mina\Pages\Model\Article;
+		foreach ($ids as $appid) {
+			$art->downloadFromWechat($appid);
+		}
+		
+		// $art->downloadFromWechat('wx77e0de6921bacc92');
+		// sleep(2);
 		echo json_encode(['sync'=>'success']);
 	}
+	
 
 
 	/**

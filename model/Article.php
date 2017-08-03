@@ -15,6 +15,7 @@ use \Mina\Delta\Render as Render;
 
 define('ARTICLE_PUBLISHED', 'published');  // 文章状态 已发布
 define('ARTICLE_UNPUBLISHED', 'unpublished');  // 文章状态 未发布
+define('ARTICLE_PENDING', 'unpublished');  // 文章状态 未完成抓取
 define('DRAFT_APPLIED', 'applied'); // 已合并到文章中 DRAFT
 define('DRAFT_UNAPPLIED', 'unapplied'); // 未合并到文章中 DRAFT
 
@@ -59,6 +60,7 @@ class Article extends Model {
 			
 		$struct = [
 			'article_id'=> ['bigInteger', ['length'=>20, 'unique'=>1]],  // 文章 ID  ( 同 _id )
+			'outer_id'=> ['string', ['length'=>128, 'unique'=>1]],  // 外部ID用于数据同步下载 ( 同 _id )
 			'cover'=> ['string',  ['length'=>256]],   // 文章封面
 			'thumbs' =>['text',  ["json"=>true]],     // 主题图片(三张)
 			'images'=> ['text',  ['json'=>true]],  // 图集文章
@@ -128,6 +130,7 @@ class Article extends Model {
 
 	/**
 	 * 从公众号(订阅号/服务号)下载文章
+	 * $this
 	 */
 	function downloadFromWechat( string $appid, $offset = null ) {
 
@@ -156,20 +159,58 @@ class Article extends Model {
 			$resp = $wechat->searchMedia($from, $perpage, 'news');
 			foreach ($resp['item'] as $item ) {
 				foreach ($item['content']['news_item'] as $idx=>$media ) {
-					$this->importWechatMedia( $item['media_id'], $media, $idx );
+					$this->importWechatMedia($c, $item['media_id'], $media, $idx );
 				}
 			}
 		}
 
 		// 更新 offset
 		$cate->updateBy('category_id', ['category_id'=>$c['category_id'], 'wechat_offset'=>intval($count['news_count'])]);
-
+		return $this;
 	}
 
 
-	function importWechatMedia( string $media_id, array $media, $index = 0 ) {
-		Utils::out( $media_id, " ", $index , " "  ,  $media['title'],  "\n");
+	/**
+	 * 导入媒体文章
+	 * @param  string  $media_id 公众平台 media_id
+	 * @param  array   $media    公众平台图文消息数据结构
+	 * @param  integer $index    item index ( 一篇图文，包含多个index )
+	 * @return $this
+	 */
+	function importWechatMedia( array $c, string $media_id, array $media, $index = 0 ) {
+
+		$outer_id = $media_id . $index;
+		$rows = $this->query()->where("outer_id", '=', $outer_id)->limit(1)->select('article_id')->get()->toArray();
+		$rs = current($rows);
+		if ( isset($rs['article_id'] )) {
+			$data['article_id'] = $rs['article_id'];
+		}
+
+		$content = $media['content'];
+		$this->delta_render->loadByHTML($content);
+		$data['delta'] = $this->delta_render->delta();
+		$data['images'] = $this->delta_render->images();
+		$data['title'] = $media['title'];
+		$data['author'] = $media['author'];
+		$data['status'] = 'pending';
+		$data['category'] = $c['category_id'];
+		$data['outer_id'] = $media_id . $index;
+		$data['sync'] = [
+			$c['appid'] => [
+				"media_id" => $media_id,
+				"index" => $index,
+				"thumb_media_id" => $media['thumb_media_id'],
+				"update_at" => time()
+			]
+		];
+
+		$this->save( $data );
+
+		// Utils::out( $data );
 	}
+
+
+
 
 
 
@@ -228,6 +269,8 @@ class Article extends Model {
 			$data['update_time'] = date('Y-m-d H:i:s');
 		}
 
+
+
 		// 保存到草稿表
 		$article_id = $data['article_id'];
 
@@ -252,6 +295,7 @@ class Article extends Model {
 
 		// 生成预览链接
 		$data['preview'] = $this->previewLinks( $article_id, $data['category']);
+
 
 		if ( empty($data['history'])) {
 			$draft = $this->article_draft->create( $data ); 
@@ -560,9 +604,16 @@ class Article extends Model {
 			$category = $rs['category'];
 		}
 
+
+
 		// 根据类目信息，获取页面，并排重
 		if ( !empty($category) ) {
 			$cate = new Category();
+
+			if ( !is_array($category) ) {
+				$category = [$category];
+			}
+
 			$data = $cate->query()->whereIn('category_id', $category)->select('page')->get()->toArray();
 			if ( !empty($data) ) {
 				$data_pad = Utils::pad( $data, 'page');
@@ -576,13 +627,13 @@ class Article extends Model {
 			}
 		}
 
+
 		// 读取页面详细信息
 		$pages = $this->page->query()
 						->whereIn('slug', $pages)
 						->select('cname', 'name', 'slug', 'align', 'adapt')
 						->get()
 						->toArray();
-
 		// 获取适配链接
 		foreach ($pages as $idx=>$pg ) {
 			
