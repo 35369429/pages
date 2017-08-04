@@ -176,6 +176,22 @@ class Article extends Model {
 
 
 	/**
+	 * 上传文章到公众号
+	 * 
+	 * @param  string $appid      [description]
+	 * @param  [type] $article_id [description]
+	 * @param  [type] $create     [description]
+	 * @return [type]             [description]
+	 */
+	function uploadToWechat( string $appid, $article_id, $create=null ) {
+
+		return $this;
+	}
+	
+
+
+
+	/**
 	 * 导入媒体文章
 	 * @param  string  $media_id 公众平台 media_id
 	 * @param  array   $media    公众平台图文消息数据结构

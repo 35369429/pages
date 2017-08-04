@@ -218,7 +218,7 @@
 										<button data-toggle="thumbs-clean-<?=$i?>"
 											type="button" 
 											class="btn  btn-sm  btn-default"> 
-											清除图片 </button>
+											清除 </button>
 									</div>
 
 									<?php if ( !empty($article['thumbs']) && !empty($article['thumbs'][$i]) ) :?>
@@ -421,11 +421,15 @@
 					</div>
 					<div class="col-xs-10 text-left" >
 
+						<textarea class="hidden content-html"><?=$article["content"]?></textarea>
+
+						
+
 						<button 
 							type="button" 
 							data-form="#general-form"
 							data-action="#"
-							class="btn btn-primary font-w300 push-10-r btn-minw fn-btn  
+							class="btn btn-primary font-w300 push-10-r  fn-btn  
 								on-published on-unapplied  on-unpublished hidden
 								save ">
 							<i class="fa fa-save push-5-r"></i> 保存
@@ -436,7 +440,7 @@
 							data-form="#general-form"
 							data-action="#"
 							data-placement="top" data-original-title=" "
-							class="btn btn-primary font-w300  push-10-r btn-minw fn-btn popover-btn preview ">
+							class="btn btn-primary font-w300  push-10-r fn-btn popover-btn preview ">
 							<i class="fa fa-eye push-5-r"></i> 预览
 						</button>
 
@@ -444,7 +448,7 @@
 							type="button"
 							data-form="#general-form"
 							data-action="#"
-							class="btn btn-primary font-w300  push-10-r btn-minw fn-btn on-unpublished publish hidden">
+							class="btn btn-primary font-w300  push-10-r fn-btn on-unpublished publish hidden">
 							<i class="fa fa fa-paper-plane push-5-r hidden"></i> 发布
 						</button>
 
@@ -453,7 +457,7 @@
 							data-form="#general-form"
 							data-action="#"
 							data-placement="top" data-original-title=" "
-							class="btn btn-primary font-w300  push-10-r btn-minw fn-btn on-published on-unapplied popover-btn link hidden ">
+							class="btn btn-primary font-w300  push-10-r  fn-btn on-published on-unapplied popover-btn link hidden ">
 							<i class="fa fa-external-link-square push-5-r"></i> 访问
 						</button>
 						
@@ -461,7 +465,7 @@
 							type="button"
 							data-form="#general-form"
 							data-action="#"
-							class="btn btn-primary font-w300  push-20-r btn-minw fn-btn on-published on-unapplied  publish hidden">
+							class="btn btn-primary font-w300  push-20-r  fn-btn on-published on-unapplied  publish hidden">
 							<i class="fa fa-paper-plane push-5-r"></i> 发布更新
 						</button>
 						
@@ -469,7 +473,7 @@
 							type="button"
 							data-form="#general-form"
 							data-action="#"
-							class="btn btn-danger font-w300  push-10-r btn-minw fn-btn on-published on-unapplied publish-cancel hidden">
+							class="btn btn-danger font-w300  push-10-r  fn-btn on-published on-unapplied publish-cancel hidden">
 							<i class="fa fa-paper-plane-o push-5-r"></i> 取消发布
 						</button>
 
@@ -490,7 +494,6 @@
 								}
 							"
 
-
 							event-done="
 								function( data, btn, modal) {
 									$('button', modal)
@@ -506,39 +509,129 @@
 
 							event-error="
 								function( data, btn, modal) {
+
+									$('.webeditor-counter').hide();
 									$('.webeditor-status')
 										.removeClass('text-success')
 										.removeClass('text-muted')
 										.addClass('text-danger')
 										.html('<i class=\'fa fa-times\'></i>  删除失败 ('+ data['message'] + ')');
+
+									
+									savetimeout = setTimeout(function(){
+										$('.webeditor-status').html('');
+										$('.webeditor-counter').show();
+									}, 2000);
+
 									return true;
 								}
 							"
 
-							class="btn btn-danger font-w300 ajax-confirm fn-btn on-saved remove hidden">
+							class="btn btn-danger  push-10-r font-w300 ajax-confirm fn-btn on-saved remove hidden">
 							<i class="fa fa-minus-circle"></i> 删除
 						</button>
 
+						<button 
+							class="btn btn-success font-w300 push-10-l push-10-r fn-btn copytowechat fn-btn ">
+							<i class="fa fa-wechat push-5-r"></i> 复制 
+						</button>
+
+
+						<!-- 微信公众号同步 
+						<?php if ( !empty($wechats) ) : ?>
+						<button 
+							confirm-title="<i class='fa fa-wechat'></i> 请选择上传到哪些公众号 ..."
+							confirm-content="<ul  class='list-group' >
+								<?php foreach($wechats as $we) : ?>
+								<li class='list-group-item'>
+									<label class='css-input css-checkbox css-checkbox-success'>
+		                               <input name='wxmp' type='checkbox' value='<?=$we['appid']?>' checked ><span class='push-10-r'></span> 
+		                               <span class='push-10-r'> <i class='fa fa-wechat'></i>   <?=$we['name']?>   </span>
+		                               <span class='push-10-r'> 绑定分类: <?=$we['category']?>  </span>
+		                               <span> AppID: <?=$we['appid']?>  </span>
+		                            </label>
+		                            <span name='wxmp' class='hidden push-10-r pull-right'><i class='fa fa-refresh fa-spin'></i></span>
+								</li>
+								<?php endforeach; ?>
+
+								<div class='push-15-t push-15-l'>
+									<label class='css-input css-checkbox css-checkbox-danger '> 
+										<input name='sync-create' type='checkbox' value='1'  ><span class='push-10-r'></span>  
+										作为新图文素材上传  <span class='text-danger'> ( 将新建一个图文素材 )</span>
+									</label>
+								</div>
+
+							</ul>"
+							confirm-submit="立即上传"
+							confirm-action="<?=App::NR('Article', 'uptowechat');?>"
+							event-before="
+								function( btn, modal ) {
+									var names = [];
+									$('input[name=wxmp]',modal ).each( function( idx, mp ) {
+										if ( $(mp).prop('checked') === true ){
+											names.push( $(mp).val() );
+										}
+									});
+
+									$(btn).attr('data-param-mpids', names);
+									if ($('input[name=sync-create]', modal).prop('checked') == true) {
+										$(btn).attr('data-param-create', 1);
+									} else {
+										$(btn).removeAttr('data-param-create');
+									}
+									
+									$('button', modal)
+										.addClass('disabled')
+										.attr('disabled', 'disabled');
+									$('span[name=wxmp]', modal).removeClass('hidden').show();
+								}
+							"
+							event-success="
+								function(btn, modal) {
+									$('.webeditor-counter').hide();
+									$('.webeditor-status')
+										.removeClass('text-danger')
+										.removeClass('text-muted')
+										.addClass('text-success')
+										.html('<i class=\'fa fa-check\'></i>  上传成功');
+
+		
+									savetimeout = setTimeout(function(){
+										$('.webeditor-status').html('');
+										$('.webeditor-counter').show();
+									}, 2000);
+								}
+							"
+
+							event-error="
+								function( data, btn, modal) {
+									console.log('fail', data);
+									var message = data['message'] || '上传失败';
+									App.notify( message, 'fa fa-times','danger'); 
+								}
+							"
+
+							event-done="
+								function( data, btn, modal) {
+									$('span[name=wxmp]',modal ).addClass('hidden').hide();
+
+									$('button', modal)
+										.removeClass('disabled')
+										.removeAttr('disabled');
+								}
+							"
+							class="btn btn-success font-w300 ajax-confirm  pull-right fn-btn  
+								on-saved on-published on-unapplied  on-unpublished hidden 
+								uptowechat ">
+
+							<i class="fa fa-wechat"></i> 上传
+						</button>
+						<?php endif;?>  END 微信公众号同步 -->
+						
+						
+
+
 					</div>
-
-					<!--
-
-					// 删除功能按钮
-	$('.fn-btn.remove').on('success', function(event,data){
-		window.location = '<?=App::R("article", "index")?>';
-	});
-
-	$('.fn-btn.remove').on('error', function(event,data){
-		$('.webeditor-status')
-				.removeClass('text-success')
-				.removeClass('text-muted')
-				.addClass('text-danger')
-				.html('<i class="fa fa-times"></i>  删除失败 ('+ data['message'] + ')');
-	});
-	 -->
-
-
-
 				</div>
 			</div>
 			<div class="bg-primary text-white text-center bottom-line"></div>   
@@ -589,8 +682,12 @@ function setStatus(  status, draft_status ) {
 	if ( $('input[name="article_id"]').val() != "" ) {
 		$('.on-saved').removeClass('hidden').show();
 		$('.on-saved').attr('data-param-id', $('input[name="article_id"]').val());
+	} else {
+		$('.on-saved').addClass('hidden').hide();
+		$('.on-saved').removeAttr('data-param-id');
 	}
 
+	
 	if ( status == 'unpublished' ) {
 		
 		$('.on-published').addClass('hidden').hide();
@@ -621,6 +718,8 @@ function setStatus(  status, draft_status ) {
 		$('.on-unapplied').addClass('hidden').hide();
 		$('.on-published').removeClass('hidden').show();
 	}
+
+	
 }
 
 
@@ -704,6 +803,9 @@ $(function() {
 	});
 
 
+	var updateClipboard = function ( data ) {
+		$('.content-html').val(data['content']);
+	}
 
 	// 存盘按钮功能
 	var savefn = function(event) {
@@ -727,6 +829,7 @@ $(function() {
 					.html('<i class="fa fa-check"></i>  保存成功');
 
 			setStatus( resp['status'], resp['draft_status'] );
+			updateClipboard(resp);
 		});
 
 		return  false;
@@ -763,6 +866,7 @@ $(function() {
 					.addClass('text-success')
 					.html('<i class="fa fa-check"></i>  发布成功');
 			setStatus( resp['status'], resp['draft_status'] );
+			updateClipboard(resp);
 		});
 	});
 
@@ -790,6 +894,7 @@ $(function() {
 					.addClass('text-success')
 					.html('<i class="fa fa-check"></i>  取消发布成功');
 			setStatus( resp['status'], resp['draft_status'] );
+			updateClipboard(resp);
 		});
 	});
 
@@ -866,18 +971,30 @@ $(function() {
 	});
 
 
-	// 删除功能按钮
-	$('.fn-btn.remove').on('success', function(event,data){
-		window.location = '<?=App::R("article", "index")?>';
+	// 复制到微信按钮
+	var copytowechatClient = new ZeroClipboard($('.fn-btn.copytowechat'));
+	copytowechatClient.on( "ready", function( readyEvent ) {
+		copytowechatClient.on('copy', function(event) {
+			var clipboard = event.clipboardData;
+				clipboard.clearData();
+				clipboard.setData("text/html", $('.content-html').val() );
+
+				$('.webeditor-counter').hide();
+				$('.webeditor-status')
+					.removeClass('text-danger')
+					.removeClass('text-muted')
+					.addClass('text-success')
+					.html('<i class=\'fa fa-check\'></i>  复制成功');
+
+		
+				savetimeout = setTimeout(function(){
+					$('.webeditor-status').html('');
+					$('.webeditor-counter').show();
+				}, 2000);
+		});
 	});
 
-	$('.fn-btn.remove').on('error', function(event,data){
-		$('.webeditor-status')
-				.removeClass('text-success')
-				.removeClass('text-muted')
-				.addClass('text-danger')
-				.html('<i class="fa fa-times"></i>  删除失败 ('+ data['message'] + ')');
-	});
+	
 
 /**
  * ======================================================================================
@@ -1029,11 +1146,7 @@ $(function() {
 		$input.val('');
 		$img.remove();
 	});
-
 	<?php endfor; ?>
-
-
-
 
 
 	$('.image', '#tabs-components').click( function(){

@@ -234,16 +234,43 @@ class ArticleController extends \Tuanduimao\Loader\Controller {
 	 * 同步文章
 	 * @return [type] [description]
 	 */
-	function sync() {
+	function downfromwechat() {
 
 		$ids = explode(',', $_POST['ids']);
+
+		if ( count($ids) == 0 || $_POST['ids'] == "" ) {
+			throw new Excp('请选择至少一个公众号', 404, ['article_id'=>$article_id, 'mpids'=>$mpids, 'create'=>$create]);
+		}
+
+
 		$offset = isset($_POST['offset']) ? intval($_POST['offset']) : null;
 		$art = new  \Mina\Pages\Model\Article;
 		foreach ($ids as $appid) {
 			$art->downloadFromWechat($appid, $offset);
 		}
-		
-		echo json_encode(['sync'=>'success']);
+
+		echo json_encode(['download'=>'success']);
+	}
+
+
+	function uptowechat() {
+		$article_id = intval($_POST['id']);
+		$mpids = explode(',', $_POST['mpids']);
+		$create = isset($_POST['create']) ? $_POST['create'] : null;
+
+		if ( empty($article_id) ) {
+			throw new Excp('未知文章信息 (ID=null)', 404, ['article_id'=>$article_id, 'mpids'=>$mpids, 'create'=>$create]);
+		}
+
+		if ( count($mpids) == 0 || $_POST['mpids'] == "" ) {
+			throw new Excp('请选择至少一个公众号', 404, ['article_id'=>$article_id, 'mpids'=>$mpids, 'create'=>$create]);
+		}
+
+		$art = new  \Mina\Pages\Model\Article;
+		foreach ($mpids as $appid) {
+			$art->uploadToWechat($appid, $article_id, $create);
+		}
+		echo json_encode(['upload'=>'success']);
 	}
 	
 
@@ -274,9 +301,14 @@ class ArticleController extends \Tuanduimao\Loader\Controller {
 			$article = $art->load( intval($_GET['id']) );
 		}
 
+
+		$cate = new \Mina\Pages\Model\Category;
+		$wechats = $cate->wechat();
+
 		$data = [
 			'article' => $article,
-			'category' => new \Mina\Pages\Model\Category
+			'wechats' => $wechats,
+			'category' => $cate
 		];
 
 		App::render($data, 'article', 'editor' );
