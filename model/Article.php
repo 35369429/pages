@@ -187,7 +187,7 @@ class Article extends Model {
 
 		return $this;
 	}
-	
+
 
 
 
@@ -213,6 +213,7 @@ class Article extends Model {
 		$data['images'] = $this->delta_render->images();
 		$data['title'] = $media['title'];
 		$data['author'] = $media['author'];
+		$data['origin_url'] = $media['content_source_url'];
 		$data['status'] = 'pending';
 		$data['category'] = $c['category_id'];
 		$data['outer_id'] = $media_id . $index;
@@ -220,6 +221,7 @@ class Article extends Model {
 			$c['appid'] => [
 				"media_id" => $media_id,
 				"index" => $index,
+				"url" => $media['url'],
 				"thumb_media_id" => $media['thumb_media_id'],
 				"update_at" => time()
 			]
