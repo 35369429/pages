@@ -126,10 +126,10 @@
 						</div>
 						<div class="col-xs-2 text-right">
 							<span class="label label-success on-published hidden">已发布</span>
-							<span class="label label-warning  on-unapplied hidden">已发布 ( 未更新 )</span>
+							<span class="label label-warning on-unapplied hidden">已发布 ( 待更新 )</span>
 							<span class="label label-danger  on-unpublished hidden">草稿</span>
+							<span class="label label-warning on-pending hidden">同步中</span>
 						</div>
-						
 					</div>
 					<div class="row push-15-t">
 						<div class="col-xs-2">
@@ -206,8 +206,8 @@
 						<div class="form-group">
 							<label>主题图 <span class="text-muted font-s12">( 一般用于文章列表的图片呈现，建议图片比例 4:3 ) </span> </label>
 							<div class="row">
-								<?php for($i=0; $i<3; $i++) : ?>
-								<div class="col-xs-4" style="padding-left:0px;padding-right:30px;"  >
+								<?php for($i=0; $i<4; $i++) : ?>
+								<div class="col-xs-3" style="padding-left:0px;padding-right:15px;"  >
 									
 									<div class="push-15">
 										<input type="hidden" id="thumbs-<?=$i?>"  name="thumbs[]" value="<?=$article['thumbs'][$i]?>" >
@@ -425,7 +425,9 @@
 							type="button" 
 							data-form="#general-form"
 							data-action="#"
-							class="btn btn-primary font-w300 push-10-r btn-minw fn-btn save ">
+							class="btn btn-primary font-w300 push-10-r btn-minw fn-btn  
+								on-published on-unapplied  on-unpublished hidden
+								save ">
 							<i class="fa fa-save push-5-r"></i> 保存
 						</button>
 
@@ -543,7 +545,15 @@ function setStatus(  status, draft_status ) {
 		
 		$('.on-published').addClass('hidden').hide();
 		$('.on-unapplied').addClass('hidden').hide();
+		$('.on-pending').addClass('hidden').hide();
 		$('.on-unpublished').removeClass('hidden').show();
+
+	} else if ( status == 'pending') {
+
+		$('.on-published').addClass('hidden').hide();
+		$('.on-unapplied').addClass('hidden').hide();
+		$('.on-unpublished').addClass('hidden').hide();
+		$('.on-pending').removeClass('hidden').show();
 
 	} else {
 
@@ -551,10 +561,12 @@ function setStatus(  status, draft_status ) {
 			
 			$('.on-published').addClass('hidden').hide();
 			$('.on-unpublished').addClass('hidden').hide();	
+			$('.on-pending').addClass('hidden').hide();
 			$('.on-unapplied').removeClass('hidden').show();
 			return;	
 		}
 
+		$('.on-pending').addClass('hidden').hide();
 		$('.on-unpublished').addClass('hidden').hide();
 		$('.on-unapplied').addClass('hidden').hide();
 		$('.on-published').removeClass('hidden').show();
@@ -925,7 +937,7 @@ $(function() {
 
 
 	// Thumbs 主题图片面板
-	<?php for($i=0; $i<3; $i++) : ?>
+	<?php for($i=0; $i<4; $i++) : ?>
 	var thumbsPanel_<?=$i?> = new imageWebeditorPanel({
 		api: {
 			latest: '<?=App::URI("mina", "uploader", "imagelatest")?>', // 最近上传接口

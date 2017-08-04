@@ -15,9 +15,14 @@ use \Mina\Delta\Render as Render;
 
 define('ARTICLE_PUBLISHED', 'published');  // 文章状态 已发布
 define('ARTICLE_UNPUBLISHED', 'unpublished');  // 文章状态 未发布
-define('ARTICLE_PENDING', 'unpublished');  // 文章状态 未完成抓取
+define('ARTICLE_PENDING', 'pending');  // 文章状态 未完成抓取
 define('DRAFT_APPLIED', 'applied'); // 已合并到文章中 DRAFT
 define('DRAFT_UNAPPLIED', 'unapplied'); // 未合并到文章中 DRAFT
+
+define('STATUS_PUBLISHED', 'PUBLISHED');   // 已发布
+define('STATUS_UNPUBLISHED', 'UNPUBLISHED');   // 未发布
+define('STATUS_UNAPPLIED', 'UNAPPLIED');   // 有修改（尚未更新)
+define('STATUS_PENDING', 'PENDING');   // 同步中（数据尚未准备好）
 
 // 默认页面地址
 define('DEFAULT_PAGE_SLUG', 'deepblue/article/detail');  
@@ -208,10 +213,6 @@ class Article extends Model {
 
 		// Utils::out( $data );
 	}
-
-
-
-
 
 
 
@@ -465,6 +466,54 @@ class Article extends Model {
 			'article_id' => $article_id,
 			'status' => ARTICLE_UNPUBLISHED
 		]);
+	}
+
+
+
+	/**
+	 * 读取文章状态名称
+	 * @param  [type] $status       [description]
+	 * @param  [type] $draft_status [description]
+	 * @return [type]               [description]
+	 */
+	function cstatus( $status, $draft_status = null, $map = [] ) {
+		if ( empty($map) ) {
+			$map = [
+				STATUS_UNPUBLISHED => '草稿',
+				STATUS_PENDING => '同步中',
+				STATUS_UNAPPLIED => '待更新',
+				STATUS_PUBLISHED => '已发布'
+			];
+		}
+
+		$status = $this->status($status, $draft_status);
+		return $map[$status];
+	}
+
+
+	/**
+	 * 读取文章状态码
+	 * 
+	 * @param  string $status       文章状态 unpublished 未发布/ published 已发布/ pending 数据尚未准备好
+	 * @param  string $draft_status 草稿状态 unapplied 尚未更新/ applied 修改已更新/ pending 数据尚未准备好
+	 * @return string 状态描述码 PUBLISHED 已发布 / UNPUBLISHED 未发布 / UNAPPLIED 有修改未更新  / PENDING 数据尚未准备好
+	 */
+	function status( $status, $draft_status = null ) {
+
+		if ( $status == ARTICLE_UNPUBLISHED ) {  // 文章尚未发布
+			return STATUS_UNPUBLISHED;
+		
+		} else if ( $status == ARTICLE_PENDING ) {
+			return STATUS_PENDING;
+		
+		} else {
+
+			if ( $draft_status == DRAFT_UNAPPLIED ) {
+				return STATUS_UNAPPLIED;
+			}
+
+			return STATUS_PUBLISHED;
+		}
 	}
 
 

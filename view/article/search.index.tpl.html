@@ -168,10 +168,14 @@ use \Tuanduimao\Utils as Utils;
 										type="button" data-toggle="dropdown" >
 									<i class="glyphicon glyphicon-list-alt"></i> 
 
-									<?php if ( $query['status'] == 'unpublished' ) :?>
+									<?php if ( $query['status'] == 'UNPUBLISHED' ) :?>
 										草稿
-									<?php elseif ( $query['status'] == 'published' ) :?>
+									<?php elseif ( $query['status'] == 'PUBLISHED' ) :?>
 										已发布
+									<?php elseif ( $query['status'] == 'UNAPPLIED' ) :?>
+										待更新
+									<?php elseif ( $query['status'] == 'PENDING' ) :?>
+										同步中
 									<?php else  :?> 
 										全部状态
 									<?php endif;?>
@@ -187,13 +191,23 @@ use \Tuanduimao\Utils as Utils;
 										</a>
 									</li>
 									<li >
-										<a href="javascript:search('status','unpublished')">
+										<a href="javascript:search('status','UNPUBLISHED')">
 										   草稿
 										</a>
 									</li>
 									<li>
-										<a href="javascript:search('status','published')">
+										<a href="javascript:search('status','PUBLISHED')">
 										   已发布
+										</a>
+									</li>
+									<li>
+										<a href="javascript:search('status','UNAPPLIED')">
+										   待更新
+										</a>
+									</li>
+									<li>
+										<a href="javascript:search('status','PENDING')">
+										   同步中
 										</a>
 									</li>
 								</ul>
@@ -266,9 +280,11 @@ use \Tuanduimao\Utils as Utils;
 
 						<tbody>
 							<?php
-							$status = [
-								'published'=>['name'=>'已发布', 'class'=>'text-success'],
-								'unpublished'=>['name'=>'草稿', 'class'=>'text-danger'],
+							$status_map = [
+								'PUBLISHED'=>['name'=>'已发布', 'class'=>'text-success'],
+								'UNPUBLISHED'=>['name'=>'草稿', 'class'=>'text-danger'],
+								'UNAPPLIED'=>['name'=>'待更新', 'class'=>'text-warning'],
+								'PENDING'=>['name'=>'同步中', 'class'=>'text-warning']
 							];
 							foreach ($articles['data'] as $rs) :
 								$category = '';
@@ -283,14 +299,16 @@ use \Tuanduimao\Utils as Utils;
 										$category = $category. ' ...';
 									}
 								}
-								$s = $status[$rs['status']];
+								$s = $article->cstatus($rs['status'], $rs['draft_status'], $status_map);
 							?>
 							<tr data-toggle="block-group" 
 								onclick="window.location='<?=App::R('article', 'editor', ['id'=>$rs['article_id']])?>'" >
 								<td 
 								style="min-height: 65px;height: 65px;"
 								class="text-center"><?=$rs['article_id']?></td>
-								<td> <?=$rs['title']?></td>
+								<td> 
+									<?=($s['name']=='已发布') ? $rs['title'] : $rs['draft_title']?>
+								</td>
 								<td> <?=$category?></td>
 								<td> <?=$rs['author']?> </td>
 								<td> 

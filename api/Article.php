@@ -94,11 +94,25 @@ class Article extends Api {
 		$allowFields = ["*","article_id","cover","title","author","origin","origin_url","summary","seo_title","seo_keywords","seo_summary","publish_time","update_time","create_time","sync","content","ap_content","draft","ap_draft","history","stick","status","category", "tag", "images", "thumbs", "videos", "audios"];
 
 		foreach ($select as $idx => $field) {
-			if ( !in_array($field, $allowFields)){
-				throw new Excp(" select 参数错误 ($field 非法字段)", 400, ['query'=>$query]);
+
+			$vfield = $field; $tab = 'article'; $as = '';
+			if ( strpos( $vfield, ' as ') !== false ) {
+				$arr = explode(' as ', $vfield);
+				if ( isset($arr[1]) ) {
+					$as = " as {$arr[1]}";	
+				}
+				
+				$arr = explode('.', $arr[0]);
+				if ( isset($arr[1]) ) {
+					$field = $arr[1];
+					$tab = $arr[0];
+				}
 			}
 
-			$select[$idx] = 'article.' . $field;
+			if ( !in_array($field, $allowFields)){
+				throw new Excp(" select 参数错误 ($field 非法字段)", 400, ['query'=>$query, 'arr'=>$arr]);
+			}
+			$select[$idx] = "{$tab}." . $field . $as ;
 
 			if ( $field == '*') {
 				$getTag = true; $getCategory = true;
@@ -163,6 +177,7 @@ class Article extends Api {
 				  ->leftJoin("article_category as ac", 'ac.article_id', '=', 'article.article_id')
 				  ->leftJoin('category as c', "c.category_id", '=', 'ac.category_id')
 				  ->leftJoin("article_tag as at", 'at.article_id', '=', 'article.article_id')
+				  ->leftJoin("article_draft as draft", 'draft.article_id', '=', 'article.article_id')
 				  ->leftJoin("tag as t", 't.tag_id', '=', 'at.tag_id');
 
 		// 设定查询条件

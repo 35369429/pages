@@ -22,7 +22,7 @@ class ArticleController extends \Tuanduimao\Loader\Controller {
 
 		$art = new \Mina\Pages\Api\Article;
 		$query = $_REQUEST;
-		$query['select'] = ['article_id', 'title', 'author', 'category', 'publish_time', 'update_time', 'create_time', 'status'];
+		$query['select'] = ['article_id', 'draft.title as draft_title', 'title', 'author', 'category', 'publish_time', 'update_time', 'create_time', 'status', 'draft.status as draft_status'];
 		$query['perpage'] = isset($_REQUEST['perpage']) ?  $_REQUEST['perpage'] : 10;
 		$query['order'] =  isset($_REQUEST['order']) ?  $_REQUEST['order'] : 'create_time desc';
 		$resp  = $art->call('search', $query);
@@ -34,6 +34,7 @@ class ArticleController extends \Tuanduimao\Loader\Controller {
 			'articles' => $resp,
 			'query' => $query,
 			'category' => $cate,
+			'article' => new \Mina\Pages\Model\Article,
 			'wechats' => $wechats
 		];
 
@@ -64,6 +65,8 @@ class ArticleController extends \Tuanduimao\Loader\Controller {
 	}
 
 
+
+
 	function test(){
 
 		Utils::cliOnly();
@@ -72,9 +75,6 @@ class ArticleController extends \Tuanduimao\Loader\Controller {
 		$art->downloadFromWechat('wx77e0de6921bacc92');
 
 	}
-
-
-
 
 
 
