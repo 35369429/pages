@@ -482,11 +482,61 @@
                             data-param-id="103" 
                             confirm-action="<?=App::NR('article','remove')?>"
 
+                            event-before="
+								function( btn, modal ) {
+									$('button', modal)
+										.addClass('disabled')
+										.attr('disabled', 'disabled');
+								}
+							"
+
+
+							event-done="
+								function( data, btn, modal) {
+									$('button', modal)
+										.removeClass('disabled')
+										.removeAttr('disabled');
+								}
+							"
+                            event-success="
+								function(btn, modal) {
+									window.location = '<?=App::R('article', 'index')?>';
+								}
+							"
+
+							event-error="
+								function( data, btn, modal) {
+									$('.webeditor-status')
+										.removeClass('text-success')
+										.removeClass('text-muted')
+										.addClass('text-danger')
+										.html('<i class=\'fa fa-times\'></i>  删除失败 ('+ data['message'] + ')');
+									return true;
+								}
+							"
+
 							class="btn btn-danger font-w300 ajax-confirm fn-btn on-saved remove hidden">
 							<i class="fa fa-minus-circle"></i> 删除
 						</button>
 
 					</div>
+
+					<!--
+
+					// 删除功能按钮
+	$('.fn-btn.remove').on('success', function(event,data){
+		window.location = '<?=App::R("article", "index")?>';
+	});
+
+	$('.fn-btn.remove').on('error', function(event,data){
+		$('.webeditor-status')
+				.removeClass('text-success')
+				.removeClass('text-muted')
+				.addClass('text-danger')
+				.html('<i class="fa fa-times"></i>  删除失败 ('+ data['message'] + ')');
+	});
+	 -->
+
 
 
 				</div>

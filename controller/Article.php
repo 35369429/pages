@@ -237,14 +237,12 @@ class ArticleController extends \Tuanduimao\Loader\Controller {
 	function sync() {
 
 		$ids = explode(',', $_POST['ids']);
-
+		$offset = isset($_POST['offset']) ? intval($_POST['offset']) : null;
 		$art = new  \Mina\Pages\Model\Article;
 		foreach ($ids as $appid) {
-			$art->downloadFromWechat($appid);
+			$art->downloadFromWechat($appid, $offset);
 		}
 		
-		// $art->downloadFromWechat('wx77e0de6921bacc92');
-		// sleep(2);
 		echo json_encode(['sync'=>'success']);
 	}
 	

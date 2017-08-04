@@ -27,23 +27,31 @@ use \Tuanduimao\Utils as Utils;
 				<!-- 微信公众号同步 -->
 				<?php if ( !empty($wechats) ) : ?>
 				<button 
-					confirm-title="<i class='fa fa-wechat'></i> 请选择需要同步的公众号"
+					confirm-title="<i class='fa fa-wechat'></i> 请选择从哪些公众号下载 ..."
 					confirm-content="<ul  class='list-group' >
 						<?php foreach($wechats as $we) : ?>
 						<li class='list-group-item'>
 							<label class='css-input css-checkbox css-checkbox-primary'>
                                <input name='wxmp' type='checkbox' value='<?=$we['appid']?>' checked ><span class='push-10-r'></span> 
                                <span class='push-10-r'> <i class='fa fa-wechat'></i>   <?=$we['name']?>   </span>
-                               <span class='push-10-r'> 分类: <?=$we['category']?>  </span>
-                               <span class='push-10-r'> 类型: <?=$we['typename']?> </span>
+                               <span class='push-10-r'> 下载到分类: <?=$we['category']?>  </span>
+                               <!-- <span class='push-10-r'> 类型: <?=$we['typename']?> </span> -->
                                <span> AppID: <?=$we['appid']?>  </span>
                                
                             </label>
                             <span name='wxmp' class='hidden push-10-r pull-right'><i class='fa fa-refresh fa-spin'></i></span>
 						</li>
 						<?php endforeach; ?>
+
+						<div class='push-15-t push-15-l'>
+							<label class='css-input css-checkbox css-checkbox-danger '> 
+								<input name='sync-start' type='checkbox' value='1'  ><span class='push-10-r'></span>  
+								重新下载所有文章  <span class='text-danger'> ( 将覆盖已修改或已发布的文章 )</span>
+							</label>
+						</div>
+
 					</ul>"
-					confirm-submit="立即同步"
+					confirm-submit="立即下载"
 					confirm-action="<?=App::NR('Article', 'sync');?>"
 					event-before="
 						function( btn, modal ) {
@@ -55,6 +63,11 @@ use \Tuanduimao\Utils as Utils;
 							});
 
 							$(btn).attr('data-param-ids', names);
+							if ($('input[name=sync-start]', modal).prop('checked') == true) {
+								$(btn).attr('data-param-offset', 0);
+							} else {
+								$(btn).removeAttr('data-param-offset');
+							}
 							
 							$('button', modal)
 								.addClass('disabled')
@@ -70,7 +83,9 @@ use \Tuanduimao\Utils as Utils;
 
 					event-error="
 						function( data, btn, modal) {
-							console.log('fail');
+							console.log('fail', data);
+							var message = data['message'] || '下载失败';
+							App.notify( message, 'fa fa-times','danger'); 
 						}
 					"
 
@@ -85,7 +100,7 @@ use \Tuanduimao\Utils as Utils;
 					"
 
 					class="btn btn-primary btn-lg font-w300 pull-right ajax-confirm" >
-					<i class="fa fa-wechat"></i> 同步文章</button>
+					<i class="fa fa-wechat"></i> 下载文章</button>
 
 				<?php endif;?><!-- END 微信公众号同步 -->
 

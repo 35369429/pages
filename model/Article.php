@@ -155,7 +155,7 @@ class Article extends Model {
 
 		
 		$count = $wechat->countMedia();
-		$offset = ($offset == null) ? intval($c['offset']) : intval( $offset );
+		$offset = ($offset === null) ? intval($c['offset']) : intval( $offset );
 		$total = intval($count['news_count']) - $offset;
 		$page = ceil($total / $perpage );
 
@@ -210,8 +210,6 @@ class Article extends Model {
 		];
 
 		$this->save( $data );
-
-		// Utils::out( $data );
 	}
 
 
@@ -339,9 +337,20 @@ class Article extends Model {
 	 * @return [type]             [description]
 	 */
 	function rm( $article_id ){
-		$resp = $this->remove( $article_id, 'article_id');
-		if ( $resp === true ){
-			$ret = $this->article_draft->remove( $article_id, 'article_id');
+
+		$time = date('Y-m-d H:i:s');
+		$resp = $this->updateBy( 'article_id', [
+			"deleted_at"=>$time, 
+			"article_id"=>$article_id,
+			"outer_id" => NULL
+		]);
+
+		if ( $resp['deleted_at'] === $time ){
+			$ret = $this->article_draft->updateBy( 'article_id', [
+				"deleted_at"=>$time, 
+				"article_id"=>$article_id,
+				"outer_id" =>NULL
+			]);
 		}
 
 		return ( $resp && $ret);
