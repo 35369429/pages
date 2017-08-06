@@ -77,6 +77,20 @@ class ArticleController extends \Tuanduimao\Loader\Controller {
 	}
 
 
+	function testschedule() {
+
+		Utils::cliOnly();
+		file_put_contents("/tmp/testschedule", time() . "\n", FILE_APPEND );
+		Utils::out(['code'=>0, 'message'=>'testschedule success']);
+	}
+
+
+	function testrun(){
+		Utils::cliOnly();
+		file_put_contents("/tmp/testrun", time() . "\n", FILE_APPEND );
+		Utils::out(['code'=>0, 'message'=>'testrun success']);
+	}
+
 
 	/**
 	 * 删除文章
