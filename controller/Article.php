@@ -70,9 +70,11 @@ class ArticleController extends \Tuanduimao\Loader\Controller {
 	function test(){
 
 		Utils::cliOnly();
+		set_time_limit(0);
 		$art = new  \Mina\Pages\Model\Article;
-		$art->downloadFromWechat('wxf427d2cb6ac66d2c');
-		$art->downloadFromWechat('wx77e0de6921bacc92');
+		$art->downloadFromWechat('wx77e0de6921bacc92', 15);
+
+		// $art->downloadFromWechat('wx77e0de6921bacc92');
 
 	}
 

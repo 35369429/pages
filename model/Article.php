@@ -10,7 +10,9 @@ use \Tuanduimao\Conf as Conf;
 use \Tuanduimao\Model as Model;
 use \Tuanduimao\Utils as Utils;
 use \Tuanduimao\Wechat as Wechat;
+use \Tuanduimao\Media as Media;
 use \Mina\Delta\Render as Render;
+
 
 
 define('ARTICLE_PUBLISHED', 'published');  // 文章状态 已发布
@@ -52,6 +54,24 @@ class Article extends Model {
 		$this->article_tag = Utils::getTab('article_tag', "mina_pages_");    // 标签关联表
 		$this->article_draft = Utils::getTab('article_draft', "mina_pages_");  // 文章草稿箱
 		$this->page = Utils::getTab('page', 'core_');  // 页面表
+
+
+		// $root = Conf::G("storage/local/bucket/public/root");
+		// $options = [
+		// 	"prefix" => $root . '/media',
+		// 	"url" => "/static-file/media",
+		// 	"origin" => "/static-file/media",
+		// 	"cache" => [
+		// 		"engine" => 'redis',
+		// 		"prefix" => '_mediaStorage:',
+		// 		"host" => Conf::G("mem/redis/host"),
+		// 		"port" => Conf::G("mem/redis/port"),
+		// 		"raw" =>3600,  // 数据缓存 1小时
+		// 		"info" => 3600   // 信息缓存 1小时
+		// 	]
+		// ];
+		// $this->stor = new Local( $options );
+		$this->media = new Media;
 
 	}
 
@@ -207,14 +227,41 @@ class Article extends Model {
 			$data['article_id'] = $rs['article_id'];
 		}
 
-		$content = $media['content'];
-		$this->delta_render->loadByHTML($content);
-		$data['delta'] = $this->delta_render->delta();
-		$data['images'] = $this->delta_render->images();
+		$this->delta_render->loadByHTML($media['content']);
+		$delta = $this->delta_render->delta();
+		$images =  $this->delta_render->images();
+		$new_images = []; $new_images_map =[];
+
+		// 抓取图片
+		foreach ($images as $idx=>$img ) {
+			$src = $img['src'];
+			$rs= $this->media->uploadImage($src);
+			$new_images_map[$src] = $new_images[$idx] = [
+				'src' => $rs['url'],
+				"ratio" => $img['data-ratio'],
+				"s" => $img['data-s'],
+				"type"=> $img['data-type'],
+				"url" => $rs['url'], 
+				"origin"=> $rs['origin'],
+				"path" => $rs['path'], 
+				"media_id" => $rs['media_id']
+			];
+		}
+
+		// 替换图片
+		foreach ( $delta['ops'] as $idx => $dt  ) {
+			if ( is_array($dt['insert']) && isset($dt['insert']['cimage']) ) {
+				$src = $dt['insert']['cimage']['src'];
+				$delta['ops'][$idx]['insert']['cimage'] = $new_images_map[$src];
+			}
+		}
+
+		$data['delta'] = $delta;
+		$data['images'] = $newImags;
 		$data['title'] = $media['title'];
 		$data['author'] = $media['author'];
 		$data['origin_url'] = $media['content_source_url'];
-		$data['status'] = 'pending';
+		$data['status'] = 'unpublished';
 		$data['category'] = $c['category_id'];
 		$data['outer_id'] = $media_id . $index;
 		$data['sync'] = [
@@ -1035,6 +1082,7 @@ class Article extends Model {
 		return $resp;
 
 	}
+
 
 
 	function __clear() {
