@@ -209,7 +209,7 @@ class Article extends Api {
 		
 		// 查询数据
 		$qb->select( $select )->distinct();
-		echo "\n" . $qb->getSQL() . "\n";
+		// echo "\n" . $qb->getSQL() . "\n";
 
 		$result = $qb ->paginate($query['perpage'],['article.article_id'], 'page', $query['page'] );
 		$resultData = $result->toArray();
