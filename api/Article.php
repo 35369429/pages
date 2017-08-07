@@ -211,7 +211,7 @@ class Article extends Api {
 		$qb->select( $select )->distinct();
 		// echo "\n" . $qb->getSQL() . "\n";
 
-		$result = $qb ->paginate($query['perpage'],['article.article_id'], 'page', $query['page'] );
+		$result = $qb ->paginate($query['perpage'],['_aid'], 'page', $query['page'] );
 		$resultData = $result->toArray();
 		
 
