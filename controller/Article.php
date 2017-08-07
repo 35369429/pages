@@ -263,6 +263,7 @@ class ArticleController extends \Tuanduimao\Loader\Controller {
 	function realdownfromwechat() {
 
 		Utils::cliOnly();
+		set_time_limit(0);
 		$ids = explode(',', $_POST['ids']);
 		if ( count($ids) == 0 || $_POST['ids'] == "" ) {
 			throw new Excp('请选择至少一个公众号', 404, ['article_id'=>$article_id, 'mpids'=>$mpids, 'create'=>$create]);
@@ -278,9 +279,10 @@ class ArticleController extends \Tuanduimao\Loader\Controller {
 		echo json_encode(['download'=>'success']);
 	}
 
-
+	// 抓取文章中的图片
 	function realdownloadimages(){
 		Utils::cliOnly();
+		set_time_limit(0);
 		$article_id = $_POST['article_id'];
 		$status = $_POST['status'];
 
