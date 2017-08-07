@@ -204,14 +204,14 @@ class Article extends Api {
 				throw new Excp(" order 参数错误 ({$orderArr[0]} 非法字段)", 400, ['query'=>$query]);
 			}
 
-			$qb->orderBy($orderArr[0],$orderArr[1]);
+			$qb->orderBy('article.'.$orderArr[0],$orderArr[1]);
 		}
 		
 		// 查询数据
 		$qb->select( $select )->distinct();
 		echo "\n" . $qb->getSQL() . "\n";
 
-		// $result = $qb ->paginate($query['perpage'],['article.article_id'], 'page', $query['page'] );
+		$result = $qb ->paginate($query['perpage'],['article.article_id'], 'page', $query['page'] );
 		$resultData = $result->toArray();
 		
 
