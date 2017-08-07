@@ -12,6 +12,7 @@ use \Tuanduimao\Utils as Utils;
 use \Tuanduimao\Wechat as Wechat;
 use \Tuanduimao\Media as Media;
 use \Mina\Delta\Render as Render;
+use \Tuanduimao\Task as Task;
 
 
 
@@ -227,41 +228,17 @@ class Article extends Model {
 			$data['article_id'] = $rs['article_id'];
 		}
 
+
 		$this->delta_render->loadByHTML($media['content']);
 		$delta = $this->delta_render->delta();
 		$images =  $this->delta_render->images();
-		$new_images = []; $new_images_map =[];
-
-		// 抓取图片
-		foreach ($images as $idx=>$img ) {
-			$src = $img['src'];
-			$rs= $this->media->uploadImage($src);
-			$new_images_map[$src] = $new_images[$idx] = [
-				'src' => $rs['url'],
-				"ratio" => $img['data-ratio'],
-				"s" => $img['data-s'],
-				"type"=> $img['data-type'],
-				"url" => $rs['url'], 
-				"origin"=> $rs['origin'],
-				"path" => $rs['path'], 
-				"media_id" => $rs['media_id']
-			];
-		}
-
-		// 替换图片
-		foreach ( $delta['ops'] as $idx => $dt  ) {
-			if ( is_array($dt['insert']) && isset($dt['insert']['cimage']) ) {
-				$src = $dt['insert']['cimage']['src'];
-				$delta['ops'][$idx]['insert']['cimage'] = $new_images_map[$src];
-			}
-		}
-
 		$data['delta'] = $delta;
-		$data['images'] = $newImags;
+		$data['images'] = $images;
 		$data['title'] = $media['title'];
 		$data['author'] = $media['author'];
+		$data['cover'] = $media['thumb_url'];
 		$data['origin_url'] = $media['content_source_url'];
-		$data['status'] = 'unpublished';
+		$data['status'] = 'pending';
 		$data['category'] = $c['category_id'];
 		$data['outer_id'] = $media_id . $index;
 		$data['sync'] = [
@@ -274,8 +251,83 @@ class Article extends Model {
 			]
 		];
 
-		$this->save( $data );
+		$rs = $this->save( $data );
+
+		$t = new \Tuanduimao\Task;
+		$task_id = $t->run('下载文章图片: ' . $rs['title'], [
+			"app_name" => "mina/pages",
+			"c" => 'article',
+			'a' => 'realdownloadimages',
+			'data'=> [
+				"article_id" => $rs['article_id'],
+				"status" => ARTICLE_UNPUBLISHED,
+				"task_id" => $task_id
+			]
+		], function( $status, $task, $job_id, $queue_time, $resp ) use( $rs ) {
+			$t = new \Tuanduimao\Task;
+			$t->rm($rs['title'], 'mina/pages');
+		});
+	
 	}
+
+
+
+	function downloadImages( $article_id, $status=null ) {
+
+
+		$rs = $this->load($article_id);
+
+		if ( empty($rs) ) {
+			throw new Excp("文章不存在( {$article_id})", 404, ['article_id'=>$article_id, $status=>$status] );
+		}
+
+		$delta = $rs['delta'];
+		$images = $rs['images'];
+		$new_images = []; $new_images_map =[];
+
+		// 抓取图片
+		foreach ($images as $idx=>$img ) {
+			$src = $img['src'];
+			$nimg = $this->media->uploadImage($src, null, false);
+			$new_images_map[$src] = $new_images[$idx] = [
+				'src' => $nimg['url'],
+				"ratio" => $img['data-ratio'],
+				"s" => $img['data-s'],
+				"type"=> $img['data-type'],
+				"url" => $nimg['url'], 
+				"origin"=> $nimg['origin'],
+				"path" => $nimg['path'], 
+				"media_id" => $nimg['media_id']
+			];
+		}
+
+		// 替换图片
+		foreach ( $delta['ops'] as $idx => $dt  ) {
+			if ( is_array($dt['insert']) && isset($dt['insert']['cimage']) ) {
+				$src = $dt['insert']['cimage']['src'];
+				$delta['ops'][$idx]['insert']['cimage'] = $new_images_map[$src];
+			}
+		}
+
+		$updateData = [
+			"article_id" => $article_id,
+			"delta" =>$delta,
+			"images" => $new_images
+		];
+
+		if ( !empty($status) ) {
+			$updateData['status'] = $status;
+		}
+
+		// 替换 Cover 图片
+		if ( !empty($rs['cover']) ) {
+			$rs = $this->media->uploadImage($rs['cover'], null, false);
+			$updateData['cover'] = $rs['url'];
+		}
+
+		return $this->save( $updateData );
+	}
+
 
 
 
@@ -371,7 +423,12 @@ class Article extends Model {
 		// 发布文章
 		if ( $data['status'] == ARTICLE_PUBLISHED ) {
 			return $this->published( $article_id );
-		}		
+		}
+
+		// 转为草稿
+		if ( $data['status'] == ARTICLE_UNPUBLISHED ) {
+			return $this->unpublished( $article_id );	
+		}
 		
 		return $draft;
 	}

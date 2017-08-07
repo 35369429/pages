@@ -4,6 +4,7 @@ use \Tuanduimao\Utils as Utils;
 use \Tuanduimao\Tuan as Tuan;
 use \Tuanduimao\Excp as Excp;
 use \Tuanduimao\Conf as Conf;
+use \Tuanduimao\Task as Task;
 use \Mina\Storage\Local as Storage;
 use \Endroid\QrCode\QrCode as Qrcode;
 use Endroid\QrCode\LabelAlignment;
@@ -30,10 +31,19 @@ class ArticleController extends \Tuanduimao\Loader\Controller {
 		$cate = new \Mina\Pages\Model\Category;
 		$wechats = $cate->wechat();
 
+		$art = new \Mina\Pages\Model\Article;
+		$rs = $art->getline( "WHERE status=?",["count(*) as cnt"], ['pending']);
+		$pending = 0;
+		if ( !empty($rs) ){
+			$pending = $rs['cnt'];
+		}
+
+
 		$data = [
 			'articles' => $resp,
 			'query' => $query,
 			'category' => $cate,
+			'pending' => $pending,
 			'article' => new \Mina\Pages\Model\Article,
 			'wechats' => $wechats
 		];
@@ -250,10 +260,10 @@ class ArticleController extends \Tuanduimao\Loader\Controller {
 	 * 同步文章
 	 * @return [type] [description]
 	 */
-	function downfromwechat() {
+	function realdownfromwechat() {
 
+		Utils::cliOnly();
 		$ids = explode(',', $_POST['ids']);
-
 		if ( count($ids) == 0 || $_POST['ids'] == "" ) {
 			throw new Excp('请选择至少一个公众号', 404, ['article_id'=>$article_id, 'mpids'=>$mpids, 'create'=>$create]);
 		}
@@ -266,6 +276,64 @@ class ArticleController extends \Tuanduimao\Loader\Controller {
 		}
 
 		echo json_encode(['download'=>'success']);
+	}
+
+
+	function realdownloadimages(){
+		Utils::cliOnly();
+		$article_id = $_POST['article_id'];
+		$status = $_POST['status'];
+
+		if (empty($article_id)) {
+			throw new Excp('未知文章数据', 404, ['article_id'=>$article_id, 'status'=>$status]);
+		}
+		$art = new \Mina\Pages\Model\Article;
+		$rs = $art->downloadImages($article_id, $status );
+		echo json_encode([$article_id, $status, $rs]);
+	}
+
+
+	function downfromwechat() {
+
+		$ids = explode(',', $_POST['ids']);
+		if ( count($ids) == 0 || $_POST['ids'] == "" ) {
+			throw new Excp('请选择至少一个公众号', 404, ['article_id'=>$article_id, 'mpids'=>$mpids, 'create'=>$create]);
+		}
+
+		$offset = isset($_POST['offset']) ? intval($_POST['offset']) : null;
+		$t = new Task;
+		if ( $t->isRunning('从微信下载文章', 'mina/pages') ) {
+			throw new Excp('下载中，任务尚未完成', 400, ['ids'=>$_POST['ids'], "offset"=>$offset] );	
+		}
+
+		$task_id = $t->run('从微信下载文章', [
+			"app_name" => "mina/pages",
+			"c" => 'article',
+			'a' => 'realdownfromwechat',
+			'data'=> [
+				"ids" => $_POST['ids'],
+				"offset" => $offset
+			]
+		]);
+
+		echo json_encode(['message'=>"下载任务创建成功", 'task_id'=>$task_id]);
+
+	}
+
+
+	function downstatus() {
+		$art = new \Mina\Pages\Model\Article;
+		$t = new Task;
+		if ( $t->isRunning('从微信下载文章', 'mina/pages') ) {
+			$count  = 1;
+		} else {
+			$rs = $art->getline( "WHERE status=?",["count(*) as cnt"], ['pending']);
+			$count = 0;
+			if ( !empty($rs) ){
+				$count = $rs['cnt'];
+			}
+		}
+		echo json_encode(['count' =>$count ]);
 	}
 
 

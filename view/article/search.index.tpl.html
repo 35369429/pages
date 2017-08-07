@@ -99,7 +99,7 @@ use \Tuanduimao\Utils as Utils;
 						}
 					"
 
-					class="btn btn-success btn-lg font-w300 pull-right ajax-confirm" >
+					class="btn btn-success btn-lg font-w300 pull-right downfromwechat ajax-confirm" >
 					<i class="fa fa-wechat"></i> 下载文章</button>
 
 				<?php endif;?><!-- END 微信公众号同步 -->
@@ -407,14 +407,40 @@ function search( key, value ) {
 
 }
 
+
+function checkdownfromwechat() {
+	$.get('<?=App::NR("article", "downstatus")?>', function( data ){
+		var cnt = data['count'];
+		if ( cnt > 0 ) {
+			$('.downfromwechat')
+				.addClass('disabled')
+				.attr('disabled', 'disabled')
+				.html('<i class="fa fa-wechat fa-spin"></i> 下载中 ...');
+		} else {
+			$('.downfromwechat')
+				.removeClass('disabled')
+				.removeAttr('disabled', 'disabled')
+				.html('<i class="fa fa-wechat"></i> 下载文章');
+		}
+
+	}, 'json');
+}
+
 $(function() {
 	App.initHelpers(['datepicker','select2', 'masked-inputs','tags-inputs', 'slimscroll', 'ajax-confirm']);
 	$('.search').click(function(){
-
 		var keyword = $('.keyword').val();
 		search('title', keyword);
 
 	});
+
+	//  每30秒检查一次状态
+	checkdownfromwechat();
+	setTimeout(function(){
+		checkdownfromwechat()
+	}, 30000);
+
+
 });
 
 </script>
