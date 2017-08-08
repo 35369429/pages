@@ -158,7 +158,7 @@ class Article extends Model {
 	 * 从公众号(订阅号/服务号)下载文章
 	 * $this
 	 */
-	function downloadFromWechat( string $appid, $offset = null ) {
+	function downloadFromWechat(  $appid, $offset = null ) {
 
 		$perpage = 20;
 		$cate = new Category();
@@ -204,7 +204,7 @@ class Article extends Model {
 	 * @param  [type] $create     [description]
 	 * @return [type]             [description]
 	 */
-	function uploadToWechat( string $appid, $article_id, $create=null ) {
+	function uploadToWechat(  $appid, $article_id, $create=null ) {
 
 		return $this;
 	}
@@ -219,7 +219,7 @@ class Article extends Model {
 	 * @param  integer $index    item index ( 一篇图文，包含多个index )
 	 * @return $this
 	 */
-	function importWechatMedia( array $c, string $media_id, array $media, $index = 0 ) {
+	function importWechatMedia(  $c,  $media_id,  $media, $index = 0 ) {
 
 		$outer_id = $media_id . $index;
 		$rows = $this->query()->where("outer_id", '=', $outer_id)->limit(1)->select('article_id')->get()->toArray();
@@ -265,7 +265,7 @@ class Article extends Model {
 			]
 		], function( $status, $task, $job_id, $queue_time, $resp ) use( $rs ) {
 			$t = new \Tuanduimao\Task;
-			$t->rm($rs['title'], 'mina/pages');
+			$t->progress($task['task_id'], 100, '下载图片完成' . count($rs['images']) );
 		});
 	
 	}
@@ -288,24 +288,36 @@ class Article extends Model {
 		// 抓取图片
 		foreach ($images as $idx=>$img ) {
 			$src = $img['src'];
-			$nimg = $this->media->uploadImage($src, null, false);
-			$new_images_map[$src] = $new_images[$idx] = [
-				'src' => $nimg['url'],
-				"ratio" => $img['data-ratio'],
-				"s" => $img['data-s'],
-				"type"=> $img['data-type'],
-				"url" => $nimg['url'], 
-				"origin"=> $nimg['origin'],
-				"path" => $nimg['path'], 
-				"media_id" => $nimg['media_id']
-			];
+			$ext = $this->media->getExt( $src );
+			
+			if ( !in_array($ext, ['png', 'jpg', 'gif', 'peg']) ) {
+				$ext = 'png';
+			}
+
+			try {
+				$nimg = $this->media->uploadImage($src, $ext, false);
+				$new_images_map[$src] = $new_images[$idx] = [
+					'src' => $nimg['url'],
+					"ratio" => $img['data-ratio'],
+					"s" => $img['data-s'],
+					"type"=> $img['data-type'],
+					"url" => $nimg['url'], 
+					"origin"=> $nimg['origin'],
+					"path" => $nimg['path'], 
+					"media_id" => $nimg['media_id']
+				];
+			} catch( Excp $e ){}
+
+			
 		}
 
 		// 替换图片
 		foreach ( $delta['ops'] as $idx => $dt  ) {
 			if ( is_array($dt['insert']) && isset($dt['insert']['cimage']) ) {
 				$src = $dt['insert']['cimage']['src'];
-				$delta['ops'][$idx]['insert']['cimage'] = $new_images_map[$src];
+				if ( !empty($new_images_map[$src]) ) {
+					$delta['ops'][$idx]['insert']['cimage'] = $new_images_map[$src];
+				}
 			}
 		}
 
