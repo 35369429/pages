@@ -239,6 +239,7 @@ class Article extends Model {
 		$data['title'] = $media['title'];
 		$data['author'] = $media['author'];
 		$data['cover'] = $media['thumb_url'];
+		$data['summary'] = $media['digest'];
 		$data['origin_url'] = $media['content_source_url'];
 		$data['status'] = 'pending';
 		$data['category'] = $c['category_id'];
