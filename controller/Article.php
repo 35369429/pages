@@ -329,7 +329,7 @@ class ArticleController extends \Tuanduimao\Loader\Controller {
 		if ( $t->isRunning('从微信下载文章', 'mina/pages') ) {
 			$count  = 1;
 		} else {
-			$rs = $art->getline( "WHERE status=?",["count(*) as cnt"], ['pending']);
+			$rs = $art->getline( "WHERE status=? or status=?",["count(*) as cnt"], ['pending', 'waiting']);
 			$count = 0;
 			if ( !empty($rs) ){
 				$count = $rs['cnt'];

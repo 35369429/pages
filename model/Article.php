@@ -14,6 +14,8 @@ use \Tuanduimao\Media as Media;
 use \Mina\Delta\Render as Render;
 use \Tuanduimao\Task as Task;
 
+use \Exception as Exception;
+
 
 
 define('ARTICLE_PUBLISHED', 'published');  // 文章状态 已发布
@@ -252,6 +254,8 @@ class Article extends Model {
 		];
 
 		$rs = $this->save( $data );
+		$imgcnt = count($rs['images']);
+		$article_id = count($rs['article_id']);
 
 		$t = new \Tuanduimao\Task;
 		$task_id = $t->run('下载文章图片: ' . $rs['title'], [
@@ -263,9 +267,22 @@ class Article extends Model {
 				"status" => ARTICLE_UNPUBLISHED,
 				"task_id" => $task_id
 			]
-		], function( $status, $task, $job_id, $queue_time, $resp ) use( $rs ) {
+		], function( $status, $task, $job_id, $queue_time, $resp ) use( $imgcnt, $article_id ) {
+			try {
+				$art = new Article;
+				$art->save([
+					'article_id'=>$article_id,
+					'status' => 'unpublished'
+				]);
+			} catch(Excp $e){
+			} catch(Exception $e){}
+
 			$t = new \Tuanduimao\Task;
-			$t->progress($task['task_id'], 100, '下载图片完成' . count($rs['images']) );
+			if ( $status == 'failure') {
+				$t->progress($task['task_id'], 100, '下载图片失败图片数量 （' . $imgcnt . ')' );
+			} else {
+				$t->progress($task['task_id'], 100, '下载图片完成图片数量 （' . $article_id . ')' );
+			}
 		});
 	
 	}
@@ -273,7 +290,6 @@ class Article extends Model {
 
 
 	function downloadImages( $article_id, $status=null ) {
-
 
 		$rs = $this->load($article_id);
 
