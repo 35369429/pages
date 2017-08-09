@@ -241,7 +241,7 @@ class Article extends Model {
 		$data['cover'] = $media['thumb_url'];
 		$data['summary'] = $media['digest'];
 		$data['origin_url'] = $media['content_source_url'];
-		$data['status'] = 'pending';
+		$data['status'] = ARTICLE_PENDING;
 		$data['category'] = $c['category_id'];
 		$data['outer_id'] = $media_id . $index;
 		$data['sync'] = [
@@ -256,8 +256,7 @@ class Article extends Model {
 
 		$rs = $this->save( $data );
 		$imgcnt = count($rs['images']);
-		$article_id = count($rs['article_id']);
-
+		$article_id = $rs['article_id'];
 		$t = new \Tuanduimao\Task;
 		$task_id = $t->run('下载文章图片: ' . $rs['title'], [
 			"app_name" => "mina/pages",
@@ -280,14 +279,12 @@ class Article extends Model {
 
 			$t = new \Tuanduimao\Task;
 			if ( $status == 'failure') {
-				$t->progress($task['task_id'], 100, '下载图片失败图片数量 （' . $imgcnt . ')' );
+				$t->progress($task['task_id'], 100,  "下载图片失败 文章 {$article_id} 图片（{$imgcnt}）");
 			} else {
-				$t->progress($task['task_id'], 100, '下载图片完成图片数量 （' . $article_id . ')' );
+				$t->progress($task['task_id'], 100,  "下载图片成功 文章 {$article_id} 图片（{$imgcnt}）" );
 			}
 		});
-	
 	}
-
 
 
 	function downloadImages( $article_id, $status=null ) {
@@ -457,6 +454,11 @@ class Article extends Model {
 		// 转为草稿
 		if ( $data['status'] == ARTICLE_UNPUBLISHED ) {
 			return $this->unpublished( $article_id );	
+		}
+
+		// 转为PENDING
+		if ( $data['status'] == ARTICLE_PENDING ) {
+			return $this->pending( $article_id );	
 		}
 		
 		return $draft;
@@ -628,6 +630,24 @@ class Article extends Model {
 		]);
 	}
 
+
+	/**
+	 * 正在PENDING
+	 * @param  [type] $article_id [description]
+	 * @return [type]             [description]
+	 */
+	function pending( $article_id ) {
+		$this->article_draft->updateBy('article_id',[
+			'article_id' => $article_id,
+			'status' => ARTICLE_PENDING
+		]);
+
+		return $this->updateBy('article_id',[
+			'article_id' => $article_id,
+			'status' => ARTICLE_PENDING
+		]);
+	}
+	
 
 
 	/**
