@@ -319,7 +319,6 @@ class ArticleController extends \Tuanduimao\Loader\Controller {
 		]);
 
 		echo json_encode(['message'=>"下载任务创建成功", 'task_id'=>$task_id]);
-
 	}
 
 
