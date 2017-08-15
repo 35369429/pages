@@ -52,17 +52,6 @@
         "link":"{category,index,[name:first]}",
         "permission": "boss,admin,manager,user",
         "order":9999
-    },{
-        "slug":"mina/pages/setting/index",
-        "name":"设置",
-        "icon":{
-            "default":"/static/icons/setting.svg"
-        },
-        "icontype": "img",
-        "linktype":"i",
-        "link":"{setting,index,[name:first]}",
-        "permission": "boss,admin,manager,user",
-        "order":9999
     }],
     "dependencies": [],
     "injections": [],
