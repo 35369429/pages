@@ -1060,6 +1060,17 @@ $(function() {
 	});
 
 
+	// 文件管理面板
+	var filePanel = new fileWebeditorPanel({
+		api: {
+			latest: '<?=App::URI("mina", "uploader", "filelatest", ["type"=>"file"])?>', // 最近上传文件
+			upload: '<?=App::URI("mina", "uploader", "fileupload")?>',  // 文件上传接口
+			save: '<?=App::URI("mina", "uploader", "filesave")?>',  // 文件信息保存接口
+		}
+	});
+
+
+
 	// Thumbs 主题图片事件
 	<?php for($i=0; $i<4; $i++) : 
 	$topic = 'topic' . ($i+1);
@@ -1107,7 +1118,6 @@ $(function() {
 			confirm: function( selected ) {  // 选中图片
 			
 				if ( selected.length === 0 ) return ;
-				var ew = $editor.width();
 
 				for( var i in selected ) {
 					var img = selected[i];
@@ -1122,7 +1132,24 @@ $(function() {
 	$('.video', '#tabs-components').click( function(){
 		videoPanel.show();
 	});
-	
+
+
+	// 插入文件组件
+	$('.file', '#tabs-components').click( function(){
+		filePanel.show({
+			confirm: function( selected ) {  // 选中文件
+
+				if ( selected.length === 0 ) return ;
+
+				for( var i in selected ) {
+					var file = selected[i];
+					$editor.insertCFile( file );
+				}
+			},
+			multiple:3
+		});
+	});
+
 
 	// 插入封面
 	$('.cover-selector', '.webeditor-cover').click(function(event) {
