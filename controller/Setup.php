@@ -29,6 +29,25 @@ class SetupController extends \Tuanduimao\Loader\Controller {
 			return;
 		}
 
+
+		// 注册配置
+		try {
+
+			$option = new \Tuanduimao\Option('mina/pages');
+			$option->register("图文主题图片比例配置", "article/image/ratio", [
+				"cover"=>["width"=>900,"height"=>500, "ratio"=>1.8], 
+				"topic1"=>["width"=>null,"height"=>null, "ratio"=>1/1],
+				"topic2"=>["width"=>null,"height"=>null, "ratio"=>16/9],
+				"topic3"=>["width"=>null,"height"=>null, "ratio"=>4/9],
+				"topic4"=>["width"=>null,"height"=>null, "ratio"=>2/3]
+			]);
+
+
+		} catch ( Excp $e ) {
+			echo $e->toJSON();
+			return;
+		}
+
 		echo json_encode('ok');
 	}
 
@@ -47,6 +66,20 @@ class SetupController extends \Tuanduimao\Loader\Controller {
 			echo $e->toJSON();
 			return;
 		}
+
+
+		try {
+			$option = new \Tuanduimao\Option('mina/pages');
+			$option->register("图文主题图片比例配置", "article/image/ratio", [
+				"cover"=>["width"=>900,"height"=>500, "ratio"=>1.8], 
+				"topic1"=>["width"=>null,"height"=>null, "ratio"=>"1:1"],
+				"topic2"=>["width"=>null,"height"=>null, "ratio"=>"16:9"],
+				"topic3"=>["width"=>null,"height"=>null, "ratio"=>"4:3"],
+				"topic4"=>["width"=>null,"height"=>null, "ratio"=>"2:3"]
+			]);
+			
+		} catch ( Excp $e ) {}
+		
 
 		echo json_encode('ok');		
 	}

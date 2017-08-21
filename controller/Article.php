@@ -380,6 +380,9 @@ class ArticleController extends \Tuanduimao\Loader\Controller {
 	// 文章编辑器
 	function editor() {
 
+		$opt = new \Tuanduimao\Option('mina/pages');
+		$options = $opt->getAll();
+
 		$art = new \Mina\Pages\Model\Article;
 		$article = ['category'=>[], 'tag'=>[]];
 		if ( !empty( $_GET['id']) ) {
@@ -393,7 +396,8 @@ class ArticleController extends \Tuanduimao\Loader\Controller {
 		$data = [
 			'article' => $article,
 			'wechats' => $wechats,
-			'category' => $cate
+			'category' => $cate,
+			'options' => $options['map']
 		];
 
 		App::render($data, 'article', 'editor' );

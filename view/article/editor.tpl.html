@@ -160,7 +160,9 @@
 					<form class="form-horizontal" name="cover-form" >
 						<div class="form-group">
 							<label>
-								封面 <span class="text-muted font-s12">( 建议尺寸 900像素 * 500像素) </span> 
+								封面 <span class="text-muted font-s12">( 
+								建议尺寸 
+								<?=$options['article/image/ratio']['cover']['width']?> X <?=$options['article/image/ratio']['cover']['height']?>) </span> 
 							</label>
 							<a href="#" onclick="$('input[name=title]').focus();" class="pull-right">返回文章标题</a>
 							<div class="row">
@@ -204,11 +206,18 @@
 
 
 						<div class="form-group">
-							<label>主题图 <span class="text-muted font-s12">( 一般用于文章列表的图片呈现，建议图片比例 4:3 ) </span> </label>
+							<label>主题图组 <span class="text-muted font-s12">( 一般用于文章列表的图片呈现 ) </span> </label>
 							<div class="row">
-								<?php for($i=0; $i<4; $i++) : ?>
+								<?php 
+								$cn = ['图一', '图二', '图三', '图四'];
+								for($i=0; $i<4; $i++) :  
+									$topic = "topic" . ($i+1);
+									$name = $cn[$i];
+								?>
 								<div class="col-xs-3" style="padding-left:0px;padding-right:15px;"  >
-									
+									<div class="push-10 push-10-t font-s12 text-muted"> 
+										<?=$name?> (建议尺寸 <?=$options['article/image/ratio'][$topic]['ratio']?>)
+									</div>
 									<div class="push-15">
 										<input type="hidden" id="thumbs-<?=$i?>"  name="thumbs[]" value="<?=$article['thumbs'][$i]?>" >
 										<button class="btn btn-sm push-10-r btn-default thumbs-<?=$i?>-selector" type="button"> 
@@ -1012,58 +1021,6 @@ $(function() {
 			resize: '<?=App::URI("mina", "uploader", "imageresize")?>' // 压缩图片接口
 		},
 
-		confirm: function( selected ) {  // 选中图片
-			
-			if ( selected.length === 0 ) return ;
-			var ew = $editor.width();
-
-			for( var i in selected ) {
-				var img = selected[i];
-				
-				$editor.insertCImage( img );
-
-				// $editor.insertComponent('image', img );
-
-
-				// if ( ew < img['width'] ) {
-
-				// 	$editor.insertImage({
-				// 		src:img['url'],
-				// 		"data-width":img['width'],
-				// 		"data-height":img['height']
-				// 	});
-
-				// } else {
-
-				// 	$editor.insertImage({
-				// 		src:img['url'], 
-				// 		width:img['width'] + 'px',
-				// 		height:img['height'] +  'px'
-				// 	});
-				// }
-			}
-		},
-		cancel: function( selected ) {  // 取消选择
-			console.log( selected );
-		},
-
-		multiple:3,  // 最多可选图片数量 ( 默认9个 )
-		show:false   // 是否打开界面
-	});
-
-
-	var coverPanel = new imageWebeditorPanel({
-		api: {
-			latest: '<?=App::URI("mina", "uploader", "imagelatest")?>', // 最近上传接口
-			upload: '<?=App::URI("mina", "uploader", "imageupload")?>',  // 图片上传接口
-			crop:   '<?=App::URI("mina", "uploader", "imagecrop")?>',	// 图片裁切接口
-			resize: '<?=App::URI("mina", "uploader", "imageresize")?>' // 压缩图片接口
-		},
-
-		confirm: function( selected ) {  // 选中图片
-			if ( selected.length === 0 ) return ;
-			$editor.coverAdd( selected[0]['url'] , selected[0]['url']);
-		},
 		cancel: function( selected ) {  // 取消选择
 			console.log( selected );
 		},
@@ -1073,6 +1030,7 @@ $(function() {
 	});
 
 
+	// 视频管理面板
 	var videoPanel = new videoWebeditorPanel({
 		
 		api: {
@@ -1102,41 +1060,36 @@ $(function() {
 	});
 
 
-	// Thumbs 主题图片面板
-	<?php for($i=0; $i<4; $i++) : ?>
-	var thumbsPanel_<?=$i?> = new imageWebeditorPanel({
-		api: {
-			latest: '<?=App::URI("mina", "uploader", "imagelatest")?>', // 最近上传接口
-			upload: '<?=App::URI("mina", "uploader", "imageupload")?>',  // 图片上传接口
-			crop:   '<?=App::URI("mina", "uploader", "imagecrop")?>',	// 图片裁切接口
-			resize: '<?=App::URI("mina", "uploader", "imageresize")?>' // 压缩图片接口
-		},
+	// Thumbs 主题图片事件
+	<?php for($i=0; $i<4; $i++) : 
+	$topic = 'topic' . ($i+1);
+	$ratio = explode(':', $options['article/image/ratio'][$topic]['ratio'] );
 
-		confirm: function( selected ) {  // 选中图片
-			if ( selected.length === 0 ) return ;
-			var $img = $('img[name="thumbs-<?=$i?>"]', '.webeditor-cover');
-			var $input = $('input[id="thumbs-<?=$i?>"]', '.webeditor-cover');
-			var $parent = $('.thumbs-<?=$i?>-selector', '.webeditor-cover').parent().parent();
-
-			$input.val( selected[0]['url'] );
-
-			if ( $img.length == 0 ) {
-				$parent.append('<img name="thumbs-<?=$i?>" src="'+ selected[0]['url'] +'" style="width:100%" >');
-				return;
-			}
-			$img.attr('src', selected[0]['url']);
-
-		},
-		cancel: function( selected ) {  // 取消选择
-			console.log( selected );
-		},
-
-		multiple:1,  // 最多可选图片数量 ( 默认9个 )
-		show:false   // 是否打开界面
-	});
+	if ( count($ratio) == 2 ) {
+		$ratio = $ratio[0]/$ratio[1];
+	} else {
+		$ratio = 'null';
+	}
+	?>
 
 	$('.thumbs-<?=$i?>-selector' , '.webeditor-cover').click(function(event) {
-		thumbsPanel_<?=$i?>.show();
+		imagePanel.show({
+			confirm:function( selected ) {  // 选中图片
+				if ( selected.length === 0 ) return ;
+				var $img = $('img[name="thumbs-<?=$i?>"]', '.webeditor-cover');
+				var $input = $('input[id="thumbs-<?=$i?>"]', '.webeditor-cover');
+				var $parent = $('.thumbs-<?=$i?>-selector', '.webeditor-cover').parent().parent();
+
+				$input.val( selected[0]['url'] );
+				if ( $img.length == 0 ) {
+					$parent.append('<img name="thumbs-<?=$i?>" src="'+ selected[0]['url'] +'" style="width:100%" >');
+					return;
+				}
+				$img.attr('src', selected[0]['url']);
+			},
+			ratio:<?=$ratio?>,
+			multiple:1
+		});
 	});
 
 	$('button[data-toggle="thumbs-clean-<?=$i?>"]','.webeditor-cover').click(function(event) {
@@ -1148,16 +1101,38 @@ $(function() {
 	<?php endfor; ?>
 
 
+	// 插入图片组件
 	$('.image', '#tabs-components').click( function(){
-		imagePanel.show();
+		imagePanel.show({
+			confirm: function( selected ) {  // 选中图片
+			
+				if ( selected.length === 0 ) return ;
+				var ew = $editor.width();
+
+				for( var i in selected ) {
+					var img = selected[i];
+					$editor.insertCImage( img );
+				}
+			},
+			multiple:3
+		});
 	});
 
+	// 插入视频组件
 	$('.video', '#tabs-components').click( function(){
 		videoPanel.show();
 	});
+	
 
+	// 插入封面
 	$('.cover-selector', '.webeditor-cover').click(function(event) {
-		coverPanel.show();
+		imagePanel.show({
+			confirm: function( selected ) {  // 选中图片
+				if ( selected.length === 0 ) return ;
+				$editor.coverAdd( selected[0]['url'] , selected[0]['url']);
+			},
+			multiple:1
+		});
 	});
 
 /**
