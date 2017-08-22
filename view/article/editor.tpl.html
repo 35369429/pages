@@ -1015,6 +1015,7 @@ $(function() {
 	// 图片管理面板
 	var imagePanel = new imageWebeditorPanel({
 		api: {
+			save: '<?=App::URI("mina", "uploader", "imagesave")?>',
 			latest: '<?=App::URI("mina", "uploader", "imagelatest")?>', // 最近上传接口
 			upload: '<?=App::URI("mina", "uploader", "imageupload")?>',  // 图片上传接口
 			crop:   '<?=App::URI("mina", "uploader", "imagecrop")?>',	// 图片裁切接口
@@ -1035,20 +1036,15 @@ $(function() {
 		
 		api: {
 			latest: '<?=App::URI("mina", "uploader", "videolatest")?>', // 最近上传接口
-			upload: '<?=App::URI("mina", "uploader", "videolatest")?>',  // 视频上传接口
+			upload: '<?=App::URI("mina", "uploader", "videoupload")?>',  // 视频上传接口
+			save: '<?=App::URI("mina", "uploader", "videosave")?>'
 		},
 
 		confirm: function( selected ) {  // 选中视频
 			
 			if ( selected.length === 0 ) return ;
-
 			var video = selected[0];
-			$editor.insertComponent('video', {
-				code:video['code'],
-				video:video['video'],
-				width:video['width'],
-				height:video['height']
-			});
+			$editor.insertCVideo( video );
 		},
 
 		cancel: function( selected ) {  // 取消选择

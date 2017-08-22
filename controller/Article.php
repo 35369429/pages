@@ -79,6 +79,13 @@ class ArticleController extends \Tuanduimao\Loader\Controller {
 
 	function test(){
 
+		// 需要安 ffmpeg
+		// apt-get install ffmpeg
+		$ffmpeg = FFMpeg\FFMpeg::create();
+
+
+		return;
+
 		Utils::cliOnly();
 		set_time_limit(0);
 		$art = new  \Mina\Pages\Model\Article;
@@ -412,6 +419,7 @@ class ArticleController extends \Tuanduimao\Loader\Controller {
 		 			"js/plugins/jquery-validation/jquery.validate.min.js",
 		    		"js/plugins/jquery-ui/jquery-ui.min.js",
 
+		    		"js/plugins/video-js/video.min.js",
 		    		"js/plugins/jquery-webeditor/webeditor.full.min.js",
 		    		"js/plugins/jquery-webeditor/panel.full.min.js"
 				],
@@ -421,7 +429,8 @@ class ArticleController extends \Tuanduimao\Loader\Controller {
 	 			"js/plugins/select2/select2-bootstrap.min.css",
 	 			"js/plugins/jquery-tags-input/jquery.tagsinput.min.css",
 
-	 			"js/plugins/jquery-webeditor/webeditor.full.min.css?important",
+	 			"js/plugins/video-js/video-js.min.css",
+	 			"js/plugins/jquery-webeditor/webeditor.full.min.css",
 	 			"js/plugins/jquery-webeditor/panel.full.min.css?important"
 	 		],
 
@@ -435,7 +444,6 @@ class ArticleController extends \Tuanduimao\Loader\Controller {
 	 			'slug'=>'mina/pages/article/index'
 	 		]
 		];
-
 	}
 
 
