@@ -5,21 +5,21 @@
 	DEBUG_ON = true;
 </script>
 <!-- Page Content -->
-<div class="content "> 
+<div class="content">
 
 	<div class="block block-bordered webeditor " >
 		<div class="block-header remove-margin" >
 			<ul class="block-options" >
-				<li>
+				<!-- <li>
 					<a type="button"   href="#" data-toggle="block-option" data-action="fullscreen_toggle"></a>
-				</li>
+				</li> -->
 			</ul>
 
 			<h3 class="block-title" >
-				<a href="<?=App::R('tushuo', 'index')?>" class="text-default">
-                    <i class="fa fa-arrow-circle-o-left"></i> 
-                    图说列表 
-                </a> / 编辑图说
+				<a href="#" class="text-default">
+					<i class="fa fa-arrow-circle-o-left"></i> 
+					图说列表 
+				</a> / 编辑图说
 				<!-- <i class="fa fa-lock push-5-l  lock_status text-muted" style="width:18px;"></i> -->
 				<!-- <span class="text-danger status push-10-l font-s13"></span> -->
 			</h3>
@@ -27,27 +27,62 @@
 		</div> <!-- END block-header -->
 
 		<div class="block-content remove-margin remove-padding row" >
-			<div class="col-xs-6 remove-margin remove-padding" style="min-height:1400px;border-right: 1px solid #e9e9e9;" >
-				
-				<div style="border-bottom: 1px solid #e9e9e9;padding:7px 15px 7px 15px;text-align: right;">
-					<a href="#" class="text-muted push-10-r font-s16"> <i class="glyphicon glyphicon-th-large"></i> </a>
-					<a href="#" class="text-muted pull-left push-10-r font-s16"> <i class="glyphicon glyphicon-edit"></i> </a>
+			
+			<div class="col-xs-6 remove-margin remove-padding" style="border-right: 1px solid #e9e9e9;" >
+				<div style="border-bottom: 1px solid #e9e9e9;padding:7px 15px 7px 15px;">
+
+					<!-- <a href="javascript:void(0);" class="fn-move text-muted push-10-l push-10-r font-s16"> 
+						<i class="glyphicon glyphicon-move"></i> 
+					</a> -->
 					
+					<a href="javascript:void(0);" class="fn-add-image text-muted push-10-l push-10-r font-s16"> 
+						<i class="glyphicon glyphicon-picture"></i> 
+					</a>
+
+					<a href="javascript:void(0);" class="fn-add-text text-muted push-10-r font-s16">
+						<i class="glyphicon glyphicon-font"></i> 
+					</a>
+					<a href="javascript:void(0);" class="fn-add-qrcode text-muted push-10-r font-s16"> 
+						<i class="glyphicon glyphicon-qrcode"></i> 
+					</a>
+
+					
+					<!-- 工具栏切换 -->
+					<a href="javascript:void(0);" class="option-panel-toggle text-muted push-10-l pull-right font-s16"> <i class="glyphicon glyphicon-briefcase"></i> </a>
+
+					<!-- zoom  -->
+					<a href="javascript:void(0);" class="zoom-in text-muted push-10-r  pull-right font-s16"> <i class="glyphicon glyphicon-zoom-out"></i> </a>
+					<span class="text-muted pull-right push-10-r  zoom-status">100%</span>
+					<a href="javascript:void(0);" class="zoom-out text-muted push-10-r pull-right font-s16"> <i class="glyphicon glyphicon-zoom-in"></i> </a>
+
+				</div>
+				<div class="canvas"></div> <!-- END canvas -->
+			</div> <!-- end col-xs-6 编辑 -->
+	
+
+			<!-- 图说预览 -->
+			<div class="col-xs-6 remove-margin remove-padding" style="" >
+
+				<div style="border-bottom: 1px solid #e9e9e9;padding:7px 15px 7px 15px;text-align: right;">
+					
+					<a href="#" class="text-muted pull-left push-10-r font-s16"> <i class="glyphicon glyphicon-cloud-upload"></i></a>
+					<a href="#" class="text-muted pull-left push-10-r font-s16"> <i class="glyphicon glyphicon-edit"></i> </a>
+
+					<a href="#" class="text-muted push-10-r font-s16"> <i class="glyphicon glyphicon-eye-open"></i> </a>
+					<a href="#" class="text-muted push-10-r font-s16"> <i class="glyphicon glyphicon-th-large"></i> </a>
 					<a href="#" class="text-muted push-10-r font-s16"> <i class="glyphicon glyphicon-download-alt"></i> </a>
-					<!-- <a href="#" class="text-muted push-10-r font-s16"> <i class="glyphicon glyphicon-print"></i> </a> -->
+					<a href="#" class="text-muted push-10-r font-s16"> <i class="glyphicon glyphicon-print"></i> </a>
 				</div>
 
-			</div>
-			<div class="col-xs-6 remove-margin remove-padding" >
-				<div style="border-bottom: 1px solid #e9e9e9;padding:7px 15px 7px 15px;">
-					<!-- <a href="#" class="text-muted push-10-r font-s16"> <i class="glyphicon glyphicon-picture"></i> </a> -->
-					<a href="#" class="text-muted push-10-r font-s16"> <i class="glyphicon glyphicon-qrcode"></i> </a>
-				</div>
-			</div>
+				<div class="imgeditor-helper" data-toggle="slimscroll"></div>
+
+			</div> <!-- col-xs-6 预览  -->
+
+
 		</div> <!-- END block-content -->
 
-			<!-- 功能操作面板-->
-		<div class="block block-quickpanel">
+		<!-- 功能操作面板-->
+		<div class="block block-quickpanel hidden" >
 			<div class="block-quickpanel-content " >
 				<div class="row">
 					<div class="col-xs-12">
@@ -58,19 +93,13 @@
 							<i class="fa fa-save push-5-r"></i> 保存
 						</button>
 
-						<button 
-							type="button"
-							class="btn btn-default font-w300  btn-minw   pull-right fn-btn">
-							<i class="fa fa-font"></i> 上传字体
-						</button>
 		
 						<button 
 							type="button"
-							class="btn btn-default font-w300 push-20-r  pull-right  btn-minw  fn-btn">
+							class="btn btn-default font-w300 push-20-r  pull-right  btn-minw  fn-btn hidden">
 							<i class="fa fa-gears push-5-r"></i> 页面设置
 						</button>
 
-						
 					</div>
 				</div>
 			</div>
@@ -78,6 +107,499 @@
 
 	</div> <!-- END block -->
 </div><!-- end content -->
+
+
+
+<!-- imageeditor 管理面板 -->
+<div class="imgeditor-panels  js-silent hidden">
+
+	<div class="warpper page"><form class="form-horizontal" >
+
+		<div class="form-group">
+			<div class="col-xs-12">
+				<div class="input-group">
+					<span class="input-group-addon">图说主题</span>
+					<input class="form-control" name="title" type="text" placeholder="" >
+				</div>
+			</div>
+		</div>
+	
+		<div class="form-group">
+			<div class="col-xs-8">
+				<div class="input-group">
+					<span class="input-group-addon">背景图片</span>
+					<input class="form-control" name="bgimage" type="text" placeholder="可输入完整图片地址" >
+					<span class="input-group-btn">
+						<button class="btn btn-default fn-upload" type="button">上传</button>
+					</span>
+				</div>
+			</div>
+
+			<div class="col-xs-4">
+				<div class="js-colorpicker input-group" data-colorpicker-mode="rgba">
+					<span class="input-group-addon">背景颜色 <i></i></span>
+					<input class="form-control" name="bgcolor"  type="text" value="rgba(255,255,255,0)">
+				</div>
+			</div>
+		</div>
+		
+		<div class="form-group" style="margin-top: 20px;">
+			<div class="col-xs-12">
+				<button class="btn btn-minw btn-primary push-10-r fn-save" type="button">保存</button>
+				<button class="btn btn-minw btn-primary push-10-r fn-update" type="button">更新</button>
+				<button class="btn btn-minw btn-danger" type="button">删除</button>
+			</div>
+		</div>
+
+	</form></div> <!-- END page option  -->
+
+
+	<div class="warpper qrcode" ><form class="form-horizontal" >
+
+		<div class="form-group">
+			<div class="col-xs-3">
+				<div class="input-group">
+					<span class="input-group-addon">类型</span>
+					<select 
+						name="type"
+						class="js-select2 form-control" style="width:100%;" data-placeholder="">
+						<option></option><!-- Required for data-placeholder attribute to work with Select2 plugin -->
+						<option value="url">网址</option>
+						<option value="wxapp" >小程序码</option>
+						<option value="wechat" >带参二维码</option>
+						<option value="text">文本</option>
+					</select>
+				</div>
+			</div>
+
+			<div class="col-xs-3">
+				<div class="input-group">
+					<span class="input-group-addon">微信</span>
+					<select 
+						name="config"
+						data-preload-url="php/fields.php"
+						class="js-select2 form-control" style="width:100%;" data-placeholder="请选择..">
+						<option></option><!-- Required for data-placeholder attribute to work with Select2 plugin -->
+					</select>
+				</div>
+			</div>
+
+			<div class="col-xs-3">
+				<div class="input-group">
+					<span class="input-group-addon">AppID</span>
+					<input name="appid" class="form-control" type="text" placeholder="" >
+				</div>
+			</div>
+
+			<div class="col-xs-3">
+				<div class="input-group">
+					<span class="input-group-addon">Secret</span>
+					<input name="secret"  class="form-control" type="text" placeholder="" >
+				</div>
+			</div>
+		</div>
+	
+		<div class="form-group">
+			<div class="col-xs-12">
+				<div class="input-group">
+					<span class="input-group-addon">地址</span>
+					<input name="text" class="form-control" type="text" placeholder="可填写网址、小程序页面或文本内容" >
+				</div>
+			</div>
+		</div>
+
+		<div class="form-group">
+			<div class="col-xs-9">
+				<div class="input-group">
+					<span class="input-group-addon">参数</span>
+					<input name="params"  class="form-control" type="text" placeholder="可填写小程序或带参二维码的请求参数" >
+				</div>
+			</div>
+
+			<div class="col-xs-3">
+					<select class="js-select2 form-control" 
+
+						event-select="
+							function(event) {
+								var $form = $(this).parents('form');
+								var $params = $('input[name=params]', $form);
+								var value = null, params = [];
+								try { value = event.params.data.id } catch(e){};
+								try { params = $params.val().split('&') } catch(e){};
+								params.push(value);
+								
+								// 排重操作
+								var paramsHash = {},newParams =[];
+								for( var i =0; i<params.length; i++ ){
+									paramsHash[params[i]] = true;
+								}
+								for( var v in paramsHash ) {
+									if ( v != '') {
+										newParams.push( v );
+									}
+								}
+
+								$params.val( newParams.join('&') );
+							}
+						"
+	
+						style="width: 100%;" data-placeholder="动态参数">
+						<option></option><!-- Required for data-placeholder attribute to work with Select2 plugin -->
+						<option value="id={{id}}">本图 ID</option>
+						<option value="url={{url}}">本图地址</option>
+					</select>
+			</div>
+
+		</div>
+
+		<div class="form-group">
+			<div class="col-xs-9">
+				<div class="input-group">
+					<span  class="input-group-addon">logo</span>
+					<input name="logo"   class="form-control" type="text" placeholder="请输入完整 Logo 地址">
+					<span  class="input-group-btn">
+						<button class="btn btn-default fn-upload" type="button">上传</button>
+					</span>
+				</div>
+			</div>
+
+			<div class="col-xs-3">
+				<input name="logowidth"  class="form-control" type="text" placeholder="Logo 尺寸" >
+			</div>
+		</div>
+
+		<div class="form-group">
+
+			<div class="col-xs-3">
+				<div class="input-group">
+					<span  class="input-group-addon">宽度</span>
+					<input name="width" class="form-control" type="text" placeholder="" >
+				</div>
+			</div>
+
+			<div class="col-xs-3">
+				<div class="input-group">
+					<span  class="input-group-addon">高度</span>
+					<input name="height" class="form-control disabled" disabled type="text" placeholder="" >
+				</div>
+			</div>
+		
+			<div class="col-xs-3">
+				<div class="js-colorpicker input-group" data-colorpicker-mode="rgba">
+					<span class="input-group-addon">颜色 <i></i> </span>
+					<input  name="color"  class="form-control" type="text" value="rgba(0,0,0,1)">
+				</div>
+			</div>
+
+			<div class="col-xs-3">
+				<div class="js-colorpicker input-group" data-colorpicker-mode="rgba">
+					<span   class="input-group-addon">背景 <i></i></span>
+					<input  name="background" class="form-control" type="text" value="rgba(255,255,255,0)">
+				</div>
+			</div>
+		</div>
+
+
+		<div class="form-group">
+			<div class="col-xs-6">
+				<div class="input-group">
+					<span class="input-group-addon">绑定动态数据</span>
+					<select
+						name="orign"
+						class="js-select2 form-control"
+						data-preload-url="php/fields.php"
+						data-ajax-url="php/fields.php"
+						data-cache="false"
+					 	class="js-select2 form-control" style="width: 100%;" data-placeholder="请选择...">
+						<option></option><!-- Required for data-placeholder attribute to work with Select2 plugin -->
+					</select>
+				</div>
+			</div>
+
+			<div class="col-xs-3">
+				<div class="input-group">
+					<span class="input-group-addon">位置 X</span>
+					<input name="x" class="form-control" type="text" placeholder="" >
+				</div>
+			</div>
+
+			<div class="col-xs-3">
+				<div class="input-group">
+					<span class="input-group-addon">位置 Y</span>
+					<input name="y" class="form-control" type="text" placeholder="" >
+				</div>
+			</div>
+
+		</div>
+
+		<div class="form-group">
+			<div class="col-xs-12">
+				<button class="btn btn-minw btn-primary push-10-r fn-save" type="button">保存</button>
+				<button class="btn btn-minw btn-primary push-10-r fn-update" type="button">更新</button>
+				<button class="btn btn-minw btn-danger  fn-remove" type="button">删除</button>
+			</div>
+		</div>
+
+	</form></div> <!-- END QRCode option  -->
+
+	<div class="warpper text "><form class="form-horizontal" >
+
+		<div class="form-group">
+			<div class="col-xs-12">
+				<div class="input-group">
+					<span class="input-group-addon">文字</span>
+					<input name="text" class="form-control" type="text" placeholder="" >
+				</div>
+			</div>
+
+		</div>
+
+		<div class="form-group">
+
+			<div class="col-xs-3" style="table-layout: fixed;">
+				<div class="input-group">
+					<span class="input-group-addon">字体</span>
+					<select
+					name="font"
+					class="js-select2 form-control" 
+					data-preload-url="php/fonts.php"
+					data-ajax-url="php/fonts.php"
+					data-default-text="黑体"
+					data-default-id="1"
+					data-cache="false"
+					style="width:100%;"  data-placeholder="选择字体">
+						<option></option> <!-- Required for data-placeholder attribute to work with Select2 plugin -->
+					</select>
+				</div>
+			</div>
+
+			<div class="col-xs-3">
+				<div class="input-group">
+					<span class="input-group-addon">大小</span>
+					<input name="size" class="form-control" type="text" placeholder="" >
+				</div>
+			</div>
+
+
+			<div class="col-xs-3">
+				<div class="js-colorpicker input-group" data-colorpicker-mode="rgba">
+					<span class="input-group-addon">颜色 <i></i> </span>
+					<input name="color" class="form-control" type="text" value="rgba(92,210,125,1)">
+				</div>
+			</div>
+
+			<div class="col-xs-3">
+				<div class="js-colorpicker input-group" data-colorpicker-mode="rgba">
+					<span class="input-group-addon">背景 <i></i></span>
+					<input name="background"  class="form-control" type="text" value="rgba(92,210,125,0)">
+				</div>
+			</div>
+
+		</div>
+
+		<div class="form-group">
+			<div class="col-xs-3" style="padding-left: 8px; padding-right: 8px;">
+				<div class="input-group">
+					<span class="input-group-addon">排版</span>
+					<select name="type" class="js-select2 form-control" style="width:100%;" data-placeholder="">
+						<option></option><!-- Required for data-placeholder attribute to work with Select2 plugin -->
+						<option value="horizontal">横排</option>
+						<option value="vertical">竖排</option>
+					</select>
+				</div>
+			</div>
+			<div class="col-xs-3">
+				<div class="input-group">
+					<span class="input-group-addon">方向</span>
+					<select name="dir" class="js-select2 form-control" style="width:100%;" data-placeholder="">
+						<option></option><!-- Required for data-placeholder attribute to work with Select2 plugin -->
+						<option value="ltr">左向右</option>
+						<option value="rtl">右向左</option>
+					</select>
+				</div>
+			</div>
+			<div class="col-xs-3">
+				<div class="input-group">
+					<span class="input-group-addon">水平</span>
+					<select name="align" class="js-select2 form-control" style="width:100%;"  data-placeholder="">
+						<option></option><!-- Required for data-placeholder attribute to work with Select2 plugin -->
+						<option value="left">居左</option>
+						<option value="center">居中</option>
+						<option value="right">居右</option>
+					</select>
+				</div>
+			</div>
+
+			<div class="col-xs-3">
+				<div class="input-group">
+					<span class="input-group-addon">垂直</span>
+					<select name="valign" class="js-select2 form-control"  style="width:100%;" data-placeholder="">
+						<option></option><!-- Required for data-placeholder attribute to work with Select2 plugin -->
+						<option value="top">居上</option>
+						<option value="middle">居中</option>
+						<option value="bottom">居下</option>
+					</select>
+				</div>
+			</div>
+		</div>
+
+		<div class="form-group">
+			<div class="col-xs-3">
+				<div class="input-group">
+					<span class="input-group-addon">宽度</span>
+					<input name="width" class="form-control" type="text" placeholder="" >
+				</div>
+			</div>
+
+			<div class="col-xs-3">
+				<div class="input-group">
+					<span class="input-group-addon">高度</span>
+					<input name="height" class="form-control" type="text" placeholder="" >
+				</div>
+			</div>
+
+			<div class="col-xs-3">
+				<div class="input-group">
+					<span class="input-group-addon">间距</span>
+					<input name="space" class="form-control" type="text" placeholder="" >
+				</div>
+			</div>
+
+			<div class="col-xs-3">
+				<div class="input-group">
+					<span class="input-group-addon">行高</span>
+					<input name="line" class="form-control" type="text" placeholder="" >
+				</div>
+			</div>
+			
+		</div>
+
+		<div class="form-group">
+			<div class="col-xs-6">
+				<div class="input-group">
+					<span class="input-group-addon">绑定动态数据</span>
+					<select 
+						name="orign"
+						class="js-select2 form-control" 
+						
+						data-ajax-url="php/fields.php"
+						data-cache="false"
+						class="js-select2 form-control" style="width: 100%;" data-placeholder="请选择...">
+						<option></option><!-- Required for data-placeholder attribute to work with Select2 plugin -->
+
+					</select>
+				</div>
+			</div>
+
+			<div class="col-xs-3">
+				<div class="input-group">
+					<span class="input-group-addon">位置 X</span>
+					<input name="x" class="form-control" type="text" placeholder="" >
+				</div>
+			</div>
+
+			<div class="col-xs-3">
+				<div class="input-group">
+					<span class="input-group-addon">位置 Y</span>
+					<input name="y" class="form-control" type="text" placeholder="" >
+				</div>
+			</div>
+
+		</div>
+
+		<div class="form-group">
+			<div class="col-xs-12">
+				<button class="btn btn-minw btn-primary push-10-r fn-save" type="button">保存</button>
+				<button class="fn-update btn btn-minw btn-primary push-10-r" type="button">更新</button>
+				<button class="fn-remove btn btn-minw btn-danger" type="button">删除</button>
+				<button class="fn-upload btn btn-default font-w300  btn-minw   pull-right fn-btn" type="button"> 
+					<i class="fa fa-font"></i> 上传字体
+				</button>
+			</div>
+		</div>
+
+	</form></div> <!-- END text option  -->
+
+
+	<div class="warpper image"><form class="form-horizontal" >
+
+		<div class="form-group">
+			<div class="col-xs-12">
+				<div class="input-group">
+					<span class="input-group-addon">图片</span>
+					<input class="form-control" name="src" type="text" placeholder="" >
+					<span class="input-group-btn">
+						<button class="btn btn-default fn-upload" type="button">上传</button>
+					</span>
+				</div>
+			</div>
+		</div>
+
+		<div class="form-group">
+			<div class="col-xs-3">
+				<div class="input-group">
+					<span class="input-group-addon">宽度</span>
+					<input class="form-control" name="width" type="text" placeholder="" >
+				</div>
+			</div>
+			<div class="col-xs-3">
+				<div class="input-group">
+					<span class="input-group-addon">高度</span>
+					<input class="form-control" name="height" type="text" placeholder="" >
+				</div>
+			</div>
+
+			<div class="col-xs-6">
+				<div class="input-group">
+					<span class="input-group-addon">透明度</span>
+					<input class="form-control" name="alpha"  type="text" placeholder="" >
+				</div>
+			</div>
+		</div>
+
+		<div class="form-group">
+		
+			<div class="col-xs-6">
+				<div class="input-group">
+					<span class="input-group-addon">绑定动态数据</span>
+					<select 
+						class="js-select2 form-control" name="orign" 
+						data-preload-url="php/fields.php"
+						data-ajax-url="php/fields.php"
+						data-default-text="李四"
+						data-default-id="2"
+						data-cache="false"
+						style="width: 100%;" data-placeholder="请选择...">
+						<option></option><!-- Required for data-placeholder attribute to work with Select2 plugin -->
+					</select>
+				</div>
+			</div>
+
+			<div class="col-xs-3">
+				<div class="input-group">
+					<span class="input-group-addon">位置 X</span>
+					<input class="form-control" name="x" type="text" placeholder="" >
+				</div>
+			</div>
+
+			<div class="col-xs-3">
+				<div class="input-group">
+					<span class="input-group-addon">位置 Y</span>
+					<input class="form-control" name="y" type="text" placeholder="" >
+				</div>
+			</div>
+		</div>
+
+		<div class="form-group">
+			<div class="col-xs-12">
+				<button class="btn btn-minw btn-primary push-10-r fn-save" type="button">保存</button>
+				<button class="btn btn-minw btn-primary push-10-r fn-update" type="button">更新</button>
+				<button class="btn btn-minw btn-danger fn-remove" type="button">删除</button>
+			</div>
+		</div>
+
+	</form></div> <!-- END image option  -->
+</div> <!-- END imgeditor-panels -->
 
 
 <script type="text/javascript">
@@ -88,6 +610,200 @@ $(function() {
 	$('#header-navbar').css('position', 'static');
 	$('main').css('padding-top', '0px');
 
-	App.initHelpers(['datepicker','select2', 'masked-inputs','tags-inputs', 'slimscroll', 'ajax-confirm']);
+	// 设定画布
+	$('.canvas').imgeditor({
+		bgimage:'/s/mina/pages/static/defaults/p<?=rand(1,9)?>.jpg',
+		bgcolor:'rgba(255,255,255,1)',
+		action:'php/imgeditor.php',
+		api: {
+			text: 'php/text.php',
+			qrcode: 'php/qrcode.php'
+		},
+		panel: {
+			image: $('.imgeditor-panels .warpper.image'),
+			text: $('.imgeditor-panels .warpper.text'),
+			qrcode: $('.imgeditor-panels .warpper.qrcode'),
+			page:$('.imgeditor-panels .warpper.page')
+		},
+		helper: {
+			em: $('.imgeditor-helper'),
+			pages: {
+				welcome: "php/imghelper.php?page=welcome",
+				detail:  "php/imghelper.php?page=detail",
+				list: {
+					url:"php/imghelper.php?page=list",
+					query:{
+						type:'grid'
+					}
+				}
+			}
+		},
+		canvas:{
+			height:'screen',
+			offsetY:220
+		},
+		items:[
+			['image',  {src:'images/imgeditor/someurl'}, {x:100, y:200, w:200, h:60, ratio:2/3} ],
+			['text',  {text:'中国家具', color:'#FFFF00', size:16}, {x:100, y:200, w:200, h:60}],
+			['qrcode', {url:'http://www.baidu.com'}, {x:100, y:200, w:200, h:60}]
+		],
+		ready: function(){
+			App.initHelpers(['datepicker','select2', 'colorpicker', 'masked-inputs','tags-inputs','slimscroll']);
+		},
+		load: function( $imgeditor ){
+			$imgeditor.open('welcome');
+		}
+	});
+
+
+
+	// 编辑器实例
+	$imgeditor = $('.canvas').imgeditor('get');
+
+	/**
+	 * 工具条
+	 */
+	$('.zoom-in').click(function(event) {
+		var zoom = $imgeditor.zoom();
+		zoom = zoom - 0.05;
+		if ( zoom <= 0.05 ) {
+			return;
+		}
+		$imgeditor.zoom( zoom );
+	});
+
+	$('.zoom-out').click(function(event) {
+		var zoom = $imgeditor.zoom();
+		zoom = zoom + 0.05;
+		if ( zoom > 3 ) {
+			return;
+		}
+		$imgeditor.zoom( zoom );
+	});
+
+
+	$('.option-panel-toggle').click(function(event) {
+		$imgeditor.panelToggle();
+	});
+
+
+	$('.fn-move').click(function(event) {
+		$imgeditor.move();
+	});
+
+	// 添加图片API
+	$('.fn-add-image').click(function(event) {
+		$imgeditor.add('image', {
+			// width:100,
+			// height:100,
+			alpha:0.8,
+			orign:2,
+			src:"images/imgeditor/item-1.jpg"
+		}, {} );
+	});
+
+	$('.fn-add-text').click(function(event) {
+		$imgeditor.add('text', {
+			// width:200,
+			// height:100,
+			text:'北冥有鱼，其名为鲲。',
+		}, {} );
+	});
+
+	$('.fn-add-qrcode').click(function(event) {
+		$imgeditor.add('qrcode', {
+			width:300,
+			text:'https://www.minapages.com',
+		}, {} );
+	});
+
+
+
+	// ===== 各种事件 =============================================
+
+
+	// 缩放
+	$imgeditor.on('zoom', function( zoom ) {
+		$('.zoom-status').html( (zoom*100).toFixed(0) + '%' );
+	});
+
+
+	// 图片更新
+	$imgeditor.on('image.update', function(event, id, data ){
+		console.log('image.update', id, data);
+	});
+
+	// 文本更新
+	$imgeditor.on('text.update', function(event, id, data ){
+		console.log('text.update', id, data);
+	});
+
+	// 二维码更新
+	$imgeditor.on('qrcode.update', function(event, id, data ){
+		console.log('qrcode.update', id, data);
+	});
+	// PAGE更新
+	$imgeditor.on('page.update', function(event, id, data ){
+		console.log('page.update', id, data);
+	});
+
+
+	// 缩放
+	$imgeditor.on('zoom', function( zoom ) {
+		$('.zoom-status').html( (zoom*100).toFixed(0) + '%' );
+	});
+
+	// 保存
+	$imgeditor.on('save', function( event, id ) {
+		console.log('save', id , $imgeditor.getData() );
+		return function(data, status, xhr ) {
+			console.log('save ' + status, data );
+			$imgeditor.open("list");
+		};
+	});
+
+
+	// 更换图片
+	$imgeditor.on('image.upload.click', function(event, id ){
+		console.log('image.upload.click', id );
+		$imgeditor.update(id, {
+			src:'images/imgeditor/item-2.jpg',
+			width:300,
+			height:300
+		});
+	});
+
+	// 上传字体
+	$imgeditor.on('text.upload.click', function(event, id){
+		console.log('text.upload.click upload font', id );
+	});
+
+
+	// 上传logo
+	$imgeditor.on('qrcode.upload.click', function(event,id){
+		$imgeditor.update(id, {
+			logo: 'images/imgeditor/logo.png',
+			logowidth:80
+		});
+	});
+
+
+	// 更换背景图
+	$imgeditor.on('page.upload.click', function(event) {
+		if ( $imgeditor.background() == 'images/imgeditor/bg2.jpg') {
+			$imgeditor.updatePage(
+				{bgimage:'images/imgeditor/bg.jpg'}
+			);
+		} else {
+			$imgeditor.updatePage(
+				{bgimage:'images/imgeditor/bg2.jpg'}
+			);
+		}
+	});
+
+
+
+
+
 });
 </script>
