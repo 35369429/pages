@@ -363,7 +363,6 @@
 					name="font"
 					class="js-select2 form-control" 
 					data-preload-url='<?=App::URI("mina", "image", "fonts")?>'
-					data-ajax-url='<?=App::URI("mina", "image", "fonts")?>'
 					data-default-text="黑体"
 					data-default-id="1"
 					data-cache="false"
@@ -643,6 +642,7 @@ $(function() {
 			offsetY:220
 		},
 		ready: function(){
+			
 			App.initHelpers(['datepicker','select2', 'colorpicker', 'masked-inputs','tags-inputs','slimscroll']);
 		},
 		load: function( $imgeditor ){
