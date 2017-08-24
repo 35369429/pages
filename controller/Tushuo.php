@@ -49,6 +49,17 @@ class TushuoController extends \Tuanduimao\Loader\Controller {
 
 
 	function help() {
+
+		$data = [
+			"tushuo" => [
+				"bgimage" => "/s/mina/pages/static/defaults/p7.jpg",
+				"bgcolor" => "rgba(254,254,254,1)",
+				"items" => [
+					["text", ["text"=>"示例文字"], ["x"=>350, "y"=>530]]
+				]
+			]
+		];
+
 		App::render($data, 'tushuo', 'help' );
 	}
 
@@ -57,6 +68,11 @@ class TushuoController extends \Tuanduimao\Loader\Controller {
 	}
 
 	function columns(){
+		echo json_encode([
+			"items"=>[],
+			"total"=>0
+		]);
+		return;
 		echo json_encode([
 			"items"=>[
 				["text"=>"标题", "id"=>1],

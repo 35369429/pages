@@ -1,5 +1,13 @@
 图说帮助
 
 <script type="text/javascript">
-	$imgeditor.add('text', {text:'中华人民'}, {x:348,y:529});
+
+	// 示例图说
+	$imgeditor.background('<?=$tushuo["bgimage"]?>', '<?=$tushuo["bgcolor"]?>', function(){
+		<?php foreach( $tushuo['items'] as $it ) : ?>
+		var item = <?=json_encode($it)?>;
+		$imgeditor.add(item[0], item[1], item[2]);			
+		<?php endforeach; ?>
+	});
+
 </script>

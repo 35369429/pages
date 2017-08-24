@@ -612,8 +612,8 @@ $(function() {
 
 	// 设定画布
 	$('.canvas').imgeditor({
-		bgimage:'/s/mina/pages/static/defaults/p<?=rand(1,9)?>.jpg',
-		bgcolor:'rgba(255,255,255,1)',
+		// bgimage:'/s/mina/pages/static/defaults/p<?=rand(1,9)?>.jpg',
+		bgcolor:'rgba(254,254,254,1)',
 		action:'php/imgeditor.php',
 		api: {
 			text: '<?=App::URI("mina", "image", "text")?>',
@@ -649,6 +649,11 @@ $(function() {
 			$imgeditor.open('welcome');
 		}
 	});
+
+	// 设定图片选择面板
+	
+
+
 
 
 
