@@ -43,6 +43,35 @@ class TushuoController extends \Tuanduimao\Loader\Controller {
 	}
 
 
+	function album() {
+		echo "album";
+	}
+
+
+	function help() {
+		App::render($data, 'tushuo', 'help' );
+	}
+
+	function pic(){
+		echo "pic";
+	}
+
+	function columns(){
+		echo json_encode([
+			"items"=>[
+				["text"=>"标题", "id"=>1],
+				["text"=>"姓名", "id"=>2],
+				["text"=>"公司", "id"=>3],
+				["text"=>"地址", "id"=>4],
+				["text"=>"摘要", "id"=>5],
+				["text"=>"创建时间", "id"=>6],
+				["text"=>"更新时间", "id"=>7]
+			],
+			"total"=>20
+		]);
+	}
+
+
 	/**
 	 * 图说编辑器
 	 * @return 

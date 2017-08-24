@@ -177,7 +177,7 @@
 					<span class="input-group-addon">微信</span>
 					<select 
 						name="config"
-						data-preload-url="php/fields.php"
+						data-preload-url="<?=App::NR('tushuo', 'columns')?>"
 						class="js-select2 form-control" style="width:100%;" data-placeholder="请选择..">
 						<option></option><!-- Required for data-placeholder attribute to work with Select2 plugin -->
 					</select>
@@ -307,8 +307,8 @@
 					<select
 						name="orign"
 						class="js-select2 form-control"
-						data-preload-url="php/fields.php"
-						data-ajax-url="php/fields.php"
+						data-preload-url="<?=App::NR('tushuo', 'columns')?>"
+						data-ajax-url="<?=App::NR('tushuo', 'columns')?>"
 						data-cache="false"
 					 	class="js-select2 form-control" style="width: 100%;" data-placeholder="请选择...">
 						<option></option><!-- Required for data-placeholder attribute to work with Select2 plugin -->
@@ -362,8 +362,8 @@
 					<select
 					name="font"
 					class="js-select2 form-control" 
-					data-preload-url="php/fonts.php"
-					data-ajax-url="php/fonts.php"
+					data-preload-url='<?=App::URI("mina", "image", "fonts")?>'
+					data-ajax-url='<?=App::URI("mina", "image", "fonts")?>'
 					data-default-text="黑体"
 					data-default-id="1"
 					data-cache="false"
@@ -482,7 +482,7 @@
 						name="orign"
 						class="js-select2 form-control" 
 						
-						data-ajax-url="php/fields.php"
+						data-ajax-url="<?=App::NR('tushuo', 'columns')?>"
 						data-cache="false"
 						class="js-select2 form-control" style="width: 100%;" data-placeholder="请选择...">
 						<option></option><!-- Required for data-placeholder attribute to work with Select2 plugin -->
@@ -564,8 +564,8 @@
 					<span class="input-group-addon">绑定动态数据</span>
 					<select 
 						class="js-select2 form-control" name="orign" 
-						data-preload-url="php/fields.php"
-						data-ajax-url="php/fields.php"
+						data-preload-url="<?=App::NR('tushuo', 'columns')?>"
+						data-ajax-url="<?=App::NR('tushuo', 'columns')?>"
 						data-default-text="李四"
 						data-default-id="2"
 						data-cache="false"
@@ -616,8 +616,8 @@ $(function() {
 		bgcolor:'rgba(255,255,255,1)',
 		action:'php/imgeditor.php',
 		api: {
-			text: 'php/text.php',
-			qrcode: 'php/qrcode.php'
+			text: '<?=App::URI("mina", "image", "text")?>',
+			qrcode: '<?=App::URI("mina", "image", "qrcode")?>'
 		},
 		panel: {
 			image: $('.imgeditor-panels .warpper.image'),
@@ -628,10 +628,10 @@ $(function() {
 		helper: {
 			em: $('.imgeditor-helper'),
 			pages: {
-				welcome: "php/imghelper.php?page=welcome",
-				detail:  "php/imghelper.php?page=detail",
+				welcome: "<?=App::NR('tushuo', 'help')?>",
+				detail:  "<?=App::NR('tushuo', 'pic')?>",
 				list: {
-					url:"php/imghelper.php?page=list",
+					url:"<?=App::NR('tushuo', 'album')?>",
 					query:{
 						type:'grid'
 					}
@@ -642,11 +642,6 @@ $(function() {
 			height:'screen',
 			offsetY:220
 		},
-		items:[
-			['image',  {src:'images/imgeditor/someurl'}, {x:100, y:200, w:200, h:60, ratio:2/3} ],
-			['text',  {text:'中国家具', color:'#FFFF00', size:16}, {x:100, y:200, w:200, h:60}],
-			['qrcode', {url:'http://www.baidu.com'}, {x:100, y:200, w:200, h:60}]
-		],
 		ready: function(){
 			App.initHelpers(['datepicker','select2', 'colorpicker', 'masked-inputs','tags-inputs','slimscroll']);
 		},
