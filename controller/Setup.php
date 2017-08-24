@@ -93,6 +93,11 @@ class SetupController extends \Tuanduimao\Loader\Controller {
 			App::M('Tag')->__clear();
 		}catch( Excp $e) {}
 
+		try {
+			$option = new \Tuanduimao\Option('mina/pages');
+			$option->unregister();
+		} catch ( Excp $e ) {}
+
 		echo json_encode('ok');		
 	}
 }

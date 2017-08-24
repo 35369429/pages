@@ -651,6 +651,8 @@ $(function() {
 	});
 
 
+	// ===== 管理面板 =============================================
+	
 	// 图片管理面板
 	var imagePanel = new imageWebeditorPanel({
 
@@ -671,12 +673,28 @@ $(function() {
 	});
 
 
+	// 字体上传面板
+	var fontPanel = new fileWebeditorPanel({
+		api: {
+			latest: '<?=App::URI("mina", "uploader", "filelatest", ["mt"=>"application/x-font-ttf,application/x-font-ttc", "force"=>"local"])?>', // 最近上传文件
+			upload: '<?=App::URI("mina", "uploader", "fileupload", ["force"=>"local"])?>',  // 文件上传接口
+			save: '<?=App::URI("mina", "uploader", "filesave")?>',  // 文件信息保存接口
+		},
+		filters: {
+			mime_types: [
+				{ title : "fonts files", extensions : "ttf,ttc" }
+			],
+			max_file_size:"40mb"
+		}
+	});
+
+
+
 	// 编辑器实例
 	$imgeditor = $('.canvas').imgeditor('get');
 
-	/**
-	 * 工具条
-	 */
+	// ===== 工具条 =============================================
+	
 	$('.zoom-in').click(function(event) {
 		var zoom = $imgeditor.zoom();
 		zoom = zoom - 0.1;
@@ -804,6 +822,11 @@ $(function() {
 	// 上传字体
 	$imgeditor.on('text.upload.click', function(event, id){
 		console.log('text.upload.click upload font', id );
+		fontPanel.show({
+			confirm: function( selected ){
+				console.log( selected );
+			}
+		})
 	});
 
 
