@@ -130,7 +130,7 @@
 					<span class="input-group-addon">背景图片</span>
 					<input class="form-control" name="bgimage" type="text" placeholder="可输入完整图片地址" >
 					<span class="input-group-btn">
-						<button class="btn btn-default fn-upload" type="button">上传</button>
+						<button class="btn btn-default fn-upload" type="button">选择</button>
 					</span>
 				</div>
 			</div>
@@ -258,7 +258,7 @@
 					<span  class="input-group-addon">logo</span>
 					<input name="logo"   class="form-control" type="text" placeholder="请输入完整 Logo 地址">
 					<span  class="input-group-btn">
-						<button class="btn btn-default fn-upload" type="button">上传</button>
+						<button class="btn btn-default fn-upload" type="button">选择</button>
 					</span>
 				</div>
 			</div>
@@ -305,7 +305,7 @@
 				<div class="input-group">
 					<span class="input-group-addon">绑定动态数据</span>
 					<select
-						name="orign"
+						name="origin"
 						class="js-select2 form-control"
 						data-preload-url="<?=App::NR('tushuo', 'columns')?>"
 						data-ajax-url="<?=App::NR('tushuo', 'columns')?>"
@@ -479,7 +479,7 @@
 				<div class="input-group">
 					<span class="input-group-addon">绑定动态数据</span>
 					<select 
-						name="orign"
+						name="origin"
 						class="js-select2 form-control" 
 						
 						data-ajax-url="<?=App::NR('tushuo', 'columns')?>"
@@ -529,7 +529,7 @@
 					<span class="input-group-addon">图片</span>
 					<input class="form-control" name="src" type="text" placeholder="" >
 					<span class="input-group-btn">
-						<button class="btn btn-default fn-upload" type="button">上传</button>
+						<button class="btn btn-default fn-upload" type="button">选择</button>
 					</span>
 				</div>
 			</div>
@@ -563,7 +563,7 @@
 				<div class="input-group">
 					<span class="input-group-addon">绑定动态数据</span>
 					<select 
-						class="js-select2 form-control" name="orign" 
+						class="js-select2 form-control" name="origin" 
 						data-preload-url="<?=App::NR('tushuo', 'columns')?>"
 						data-ajax-url="<?=App::NR('tushuo', 'columns')?>"
 						data-default-text="李四"
@@ -650,11 +650,25 @@ $(function() {
 		}
 	});
 
-	// 设定图片选择面板
-	
 
+	// 图片管理面板
+	var imagePanel = new imageWebeditorPanel({
 
+		api: {
+			save: '<?=App::URI("mina", "uploader", "imagesave")?>',
+			latest: '<?=App::URI("mina", "uploader", "imagelatest")?>', // 最近上传接口
+			upload: '<?=App::URI("mina", "uploader", "imageupload")?>',  // 图片上传接口
+			crop:   '<?=App::URI("mina", "uploader", "imagecrop")?>',	// 图片裁切接口
+			resize: '<?=App::URI("mina", "uploader", "imageresize")?>' // 压缩图片接口
+		},
 
+		cancel: function( selected ) {  // 取消选择
+			console.log( selected );
+		},
+
+		multiple:1,  // 最多可选图片数量 ( 默认9个 )
+		show:false   // 是否打开界面
+	});
 
 
 	// 编辑器实例
@@ -665,8 +679,8 @@ $(function() {
 	 */
 	$('.zoom-in').click(function(event) {
 		var zoom = $imgeditor.zoom();
-		zoom = zoom - 0.05;
-		if ( zoom <= 0.05 ) {
+		zoom = zoom - 0.1;
+		if ( zoom <= 0.1 ) {
 			return;
 		}
 		$imgeditor.zoom( zoom );
@@ -674,7 +688,7 @@ $(function() {
 
 	$('.zoom-out').click(function(event) {
 		var zoom = $imgeditor.zoom();
-		zoom = zoom + 0.05;
+		zoom = zoom + 0.1;
 		if ( zoom > 3 ) {
 			return;
 		}
@@ -693,13 +707,20 @@ $(function() {
 
 	// 添加图片API
 	$('.fn-add-image').click(function(event) {
-		$imgeditor.add('image', {
-			// width:100,
-			// height:100,
-			alpha:0.8,
-			orign:2,
-			src:"images/imgeditor/item-1.jpg"
-		}, {} );
+
+		imagePanel.show({
+			confirm: function( selected ){
+				console.log( selected );
+				var img = selected[0];
+				$imgeditor.add('image',{
+					width:img['width'],
+					height:img['height'],
+					src:img['origin'],
+					origin:img['origin']
+				});
+			}
+		});
+
 	});
 
 	$('.fn-add-text').click(function(event) {
@@ -765,12 +786,19 @@ $(function() {
 
 	// 更换图片
 	$imgeditor.on('image.upload.click', function(event, id ){
-		console.log('image.upload.click', id );
-		$imgeditor.update(id, {
-			src:'images/imgeditor/item-2.jpg',
-			width:300,
-			height:300
+
+		imagePanel.show({
+			confirm: function( selected ){
+				var img = selected[0];
+				$imgeditor.update(id, {
+					width:img['width'],
+					height:img['height'],
+					src:img['origin'],
+					origin:img['origin']
+				});
+			}
 		});
+
 	});
 
 	// 上传字体
@@ -781,24 +809,33 @@ $(function() {
 
 	// 上传logo
 	$imgeditor.on('qrcode.upload.click', function(event,id){
-		$imgeditor.update(id, {
-			logo: 'images/imgeditor/logo.png',
-			logowidth:80
+		// $imgeditor.update(id, {
+		// 	logo: 'images/imgeditor/logo.png',
+		// 	logowidth:80
+		// });
+
+		imagePanel.show({
+			confirm: function( selected ){
+				var img = selected[0];
+				$imgeditor.update(id, {
+					logowidth:img['width'],
+					logo:img['origin']
+				});
+			}
 		});
 	});
 
 
 	// 更换背景图
 	$imgeditor.on('page.upload.click', function(event) {
-		if ( $imgeditor.background() == 'images/imgeditor/bg2.jpg') {
-			$imgeditor.updatePage(
-				{bgimage:'images/imgeditor/bg.jpg'}
-			);
-		} else {
-			$imgeditor.updatePage(
-				{bgimage:'images/imgeditor/bg2.jpg'}
-			);
-		}
+
+		imagePanel.show({
+			confirm: function( selected ){
+				var img = selected[0];
+				console.log(  img );
+				$imgeditor.updatePage({bgimage:img['origin']});
+			}
+		});
 	});
 
 
