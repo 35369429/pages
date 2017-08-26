@@ -205,7 +205,10 @@ class ArticleController extends \Tuanduimao\Loader\Controller {
 		$logo = !empty($option['logo']) ? $option['logo'] : '';
 		$logosize = !empty($option['logosize']) ? $option['logosize'] : 50;
 		
-	
+		if ( !defined('AROOT') ) {
+			define('AROOT', '/code');
+		}
+
 		$qr = new QrCode();
 		$qr ->setWriterByName('png')
 		    ->setEncoding('UTF-8')

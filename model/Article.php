@@ -30,7 +30,7 @@ define('STATUS_UNAPPLIED', 'UNAPPLIED');   // 有修改（尚未更新)
 define('STATUS_PENDING', 'PENDING');   // 同步中（数据尚未准备好）
 
 // 默认页面地址
-define('DEFAULT_PAGE_SLUG', 'deepblue/article/detail');  
+define('DEFAULT_PAGE_SLUG', '/article/detail');  
 
 
 /**
@@ -703,8 +703,15 @@ class Article extends Model {
 	 * @return 
 	 */
 	function links( $article_id,  $category = null ) {
-		$home = Utils::getHome( $_SERVER['HTTP_TUANDUIMAO_LOCATION']);
+		$default_home = Utils::getHome( $_SERVER['HTTP_TUANDUIMAO_LOCATION']);
+		$uri = parse_url( $default_home);
 		$pages = [DEFAULT_PAGE_SLUG];
+		$default_project = Utils::getTab('project')->getVar('name', "LIMIT 1");
+		if ( empty($default_project) ) {
+			$default_project = 'deepblue';
+		}
+		$pages = [$default_project . DEFAULT_PAGE_SLUG ];
+
 
 		if( $category === null ) {
 			$category =  $this->getCategories( $article_id, 'category.category_id' );
@@ -713,33 +720,49 @@ class Article extends Model {
 		// 根据类目信息，获取页面，并排重
 		if ( !empty($category) ) {
 			$cate = new Category();
-			$data = $cate->query()->whereIn('category_id', $category)->select('page')->get()->toArray();
-			if ( !empty($data) ) {
-				$data_pad = Utils::pad( $data, 'page');
-				$pages= $data_pad['data'];
-				$pages = array_unique($pages);
-				foreach ($pages as $idx =>$page ) {
-					if ( empty($page) ) {
-						$pages[$idx] = DEFAULT_PAGE_SLUG;
-					}
+			$cates = $cate->query()->whereIn('category_id', $category)->select('page', 'project')->get()->toArray();
+			
+			if ( !empty($cates) ) {
+
+				foreach ($cates as $rs ) {
+
+					$rs['project'] = !empty($rs['project']) ? $rs['project'] : $default_project;
+					$rs['page'] = !empty($rs['page']) ? $rs['page'] : DEFAULT_PAGE_SLUG;
+					array_push( $pages, $rs['project'] . $rs['page']);
+					
 				}
+
+				$pages = array_unique($pages);
+
 			}
+
 		}
+
 
 		// 读取页面详细信息
 		$pages = $this->page->query()
+						->leftJoin('project', 'project.name', '=', 'page.project')
 						->whereIn('slug', $pages)
-						->select('cname', 'name', 'slug', 'align', 'adapt')
+						->select(
+							'page.cname as cname', 'page.name as name', 'page.slug as slug', 'align', 'adapt',
+							'project.name as project', 'project.domain as domain'
+						)
 						->get()
 						->toArray();
-
-
-		$page_slugs = [];
+		
+		$page_slugs = []; $page_slugs_map = [];  $proto = 'http' . "://";
 		foreach ($pages as $idx=>$pg ) {
+
+			if ( empty($pg['domain']) ) {
+				$pg['domain'] = $uri['host'];
+			}
+
+			$pg['home'] = $proto . $pg['domain'];
 			
 			foreach( $pg['adapt'] as $type ) { // 处理适配页面
 				$pages[$idx]['links'][$type] = $pg['slug'];
 				$page_slugs[] =  $pg['slug'];
+				$page_slugs_map[$pg['slug']] = $pg;
 			}
 
 			foreach( $pg['align'] as $type => $pg_align ) {  // 处理联合页面
@@ -757,10 +780,15 @@ class Article extends Model {
 			unset($pages[$idx]['adapt'] );
 		}
 
+		
+
 
 		// 获取适配链接
 		$entry_maps = $this->getEntries( $article_id, $page_slugs );
 		foreach ($pages as $idx=>$pg ) {
+
+			$page = $page_slugs_map[$pg['slug']];
+			$home= $page['home'];
 
 			$desktop = $pages[$idx]['links']['desktop'];
 			if( is_string($desktop) ) {
