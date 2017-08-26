@@ -217,7 +217,7 @@ class ArticleController extends \Tuanduimao\Loader\Controller {
 		    ->setBackgroundColor($option['background'])
 		    ->setLabel(
 		    	$option['label'], $option['fontsize'],  
-		    	Utils::seroot() . DS . 'lib' . DS . 'fonts' . DS . $option['font'], 
+		    	Utils::getFontPath(1), 
 		    	LabelAlignment::CENTER )
 		    ->setValidateResult(false);
 

@@ -177,7 +177,7 @@
 					<span class="input-group-addon">微信</span>
 					<select 
 						name="config"
-						data-preload-url="<?=App::NR('tushuo', 'columns')?>"
+						data-preload-url='<?=App::URI("mina", "image", "wechat")?>'
 						class="js-select2 form-control" style="width:100%;" data-placeholder="请选择..">
 						<option></option><!-- Required for data-placeholder attribute to work with Select2 plugin -->
 					</select>
@@ -346,10 +346,12 @@
 
 		<div class="form-group">
 			<div class="col-xs-12">
-				<div class="input-group">
+				<textarea name="text"  class="form-control"  placeholder="请输入文本" ></textarea>
+
+			<!-- 	<div class="input-group">
 					<span class="input-group-addon">文字</span>
 					<input name="text" class="form-control" type="text" placeholder="" >
-				</div>
+				</div> -->
 			</div>
 
 		</div>
@@ -450,7 +452,7 @@
 					<input name="space" class="form-control" type="text" placeholder="" >
 				</div>
 			</div>
-			
+
 		</div>
 
 		<div class="form-group">
@@ -812,11 +814,7 @@ $(function() {
 
 	// 上传logo
 	$imgeditor.on('qrcode.upload.click', function(event,id){
-		// $imgeditor.update(id, {
-		// 	logo: 'images/imgeditor/logo.png',
-		// 	logowidth:80
-		// });
-
+	
 		imagePanel.show({
 			confirm: function( selected ){
 				var img = selected[0];
