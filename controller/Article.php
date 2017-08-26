@@ -204,10 +204,7 @@ class ArticleController extends \Tuanduimao\Loader\Controller {
 		$option['font'] = !empty($option['font']) ? $option['font'] : 'LantingQianHei.ttf';
 		$logo = !empty($option['logo']) ? $option['logo'] : '';
 		$logosize = !empty($option['logosize']) ? $option['logosize'] : 50;
-		
-		if ( !defined('AROOT') ) {
-			define('AROOT', '/code');
-		}
+
 
 		$qr = new QrCode();
 		$qr ->setWriterByName('png')
