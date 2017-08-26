@@ -750,7 +750,7 @@ class Article extends Model {
 						->get()
 						->toArray();
 		
-		$page_slugs = []; $page_slugs_map = [];  $proto = 'http' . "://";
+		$page_slugs = []; $page_slugs_map = [];  $proto = $uri['scheme'] . "://";
 		foreach ($pages as $idx=>$pg ) {
 
 			if ( empty($pg['domain']) ) {
