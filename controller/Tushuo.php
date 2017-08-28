@@ -43,11 +43,16 @@ class TushuoController extends \Tuanduimao\Loader\Controller {
 	}
 
 
+
 	function album() {
 		echo "album";
 	}
 
 
+	/**
+	 * 帮助页
+	 * @return
+	 */
 	function help() {
 
 		$data = [

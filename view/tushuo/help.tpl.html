@@ -1,17 +1,43 @@
-图说帮助
+<style type="text/css">
+	.step-minw {
+		min-width: 200px;
+		width:360px;
+	}
+</style>
+<div style="padding-top:58px;" class="text-center">
+	<div>
+		<button class="btn btn-lg btn-primary step-minw"> 第一步: 批量导入 / 编辑图说内容 </button>
+	</div>
+
+	<div class="push-15-t">
+		<i class="fa fa-angle-double-down font-s48 text-muted"></i> 
+	</div>
+
+	<div class="push-15-t">
+		<button class="btn btn-lg btn-default step-minw disabled" disabled> 第二步: 设计图说模板 / 绑定动态内容 </button>
+	</div>
+
+	<div class="push-15-t">
+		<i class="fa fa-angle-double-down font-s48 text-muted"></i> 
+	</div>
+
+	<div class="push-15-t">
+		<button class="btn btn-lg btn-default step-minw disabled" disabled> 第三步: 批量下载、打印或分享图集 </button>
+	</div>
+	
+	<div class="push-20-t text-left" style="padding: 20px; padding-left: 35px;">
+		<h5 class="font-w300"> 什么是图说 ？</h5>
+		<p style="padding:10px;padding-left: 0px;">
+			图说是一个图集制作工具，可以用来批量制作证书、贴纸、微信/微博分享的图片。<br/>
+			① 编辑（或批量导入）背景图片上呈现内容，可以是文字、图片或者二维码。 <br/>
+			② 设计图说模板，选择 (或上传) 背景图，添加并绑定文字域、图片域或二维码域。 <br />
+			③ 根据图说模板和图说内容，自动生成一组图片，可以批量下载、打印或分享。 
+		</p>
+	</div>
+
+</div>
+
 
 <script type="text/javascript">
-
-	var items = <?=json_encode($tushuo['items'])?>;
-
-	// 示例图说
-	$imgeditor.updatePage({
-		bgimage:'<?=$tushuo["bgimage"]?>', 
-		bgcolor:'<?=$tushuo["bgcolor"]?>'
-	}, function() {
-		for ( var idx in items ) {
-			var it = items[idx];
-			$imgeditor.add(it[0], it[1], it[2]);
-		}
-	});
+	$imgeditor.disabled();
 </script>
