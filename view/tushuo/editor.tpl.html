@@ -8,7 +8,7 @@
 <div class="content">
 
 	<div class="block block-bordered webeditor " >
-		<div class="block-header remove-margin" >
+		<div class="block-header remove-margin hidden" >
 			<ul class="block-options" >
 				<!-- <li>
 					<a type="button"   href="#" data-toggle="block-option" data-action="fullscreen_toggle"></a>
@@ -27,9 +27,6 @@
 		</div> <!-- END block-header -->
 
 		<div class="block-content remove-margin remove-padding row" >
-			
-			
-
 			
 			<!-- 图说预览 -->
 			<div class="col-xs-6 remove-margin remove-padding" style="" >
@@ -710,7 +707,7 @@ $(function() {
 		},
 		canvas:{
 			height:'screen',
-			offsetY:220
+			offsetY:160
 		},
 		ready: function(){
 			
@@ -935,7 +932,9 @@ $(function() {
 	$imgeditor.crumb = function ( list ) {
 		list = list || [];
 		var len = list.length;
-		var html = '<a href="javascript:$imgeditor.open(\'welcome\')"> 管理图说 </a>';
+		var html =  '<a href="#"> 图说列表 </a> ' + 
+					' <i class="fa fa-angle-right"></i> ' +
+					'<a href="javascript:$imgeditor.open(\'welcome\')"> 管理图说 </a>';
 
 		for ( var i =0; i<len; i ++ ) {
 			var link = list[i];
