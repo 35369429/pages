@@ -1,0 +1,139 @@
+<style type="text/css">
+.img-container {
+	border: 1px solid #e9e9e9;
+}
+</style>
+
+<div class="content content-narrow">
+	<div class="row items-push">
+	<?php 
+	$images = [0,1,2,3,4,5,6,7,8];
+	foreach ($images as $im ) : ?>
+		<div class="col-xs-4">
+			<div class="img-container">
+				<img class="img-responsive" src="https://wss.xpmjs.com/s/mina/pages/static/defaults/p1.jpg" alt="">
+				<div class="img-options">
+					<div class="img-options-content">
+						<a class="btn btn-xs btn-default" href="javascript:openImage(<?=$im?>);"><i class="fa fa-search-plus"></i> 查看</a>
+						<a class="btn btn-xs btn-default" href="javascript:$imgeditor.open('select')"><i class="fa fa-pencil"></i> 修改</a>
+					</div>
+				</div>
+			</div>
+		</div>
+	<?php endforeach; ?>
+	</div> <!-- END  row  items-push -->
+	
+	<div class="row text-right push-20-t push-20">
+		<nav class="push-15-r remove-padding " >
+			<ul class="pagination remove-padding remove-margin">
+				<li class="disabled">
+					<a href="javascript:void(0)"><i class="fa fa-angle-double-left"></i></a>
+				</li>
+				<li class="active">
+					<a href="javascript:void(0)">1</a>
+				</li>
+				<li>
+					<a href="javascript:void(0)">2</a>
+				</li>
+				<li>
+					<a href="javascript:void(0)">3</a>
+				</li>
+				<li>
+					<a href="javascript:void(0)">4</a>
+				</li>
+				<li>
+					<a href="javascript:void(0)">5</a>
+				</li>
+				<li>
+					<a href="javascript:void(0)"><i class="fa fa-angle-double-right"></i></a>
+				</li>
+			</ul>
+		</nav>
+	</div>
+
+</div><!-- END content  -->
+
+
+
+
+<script type="text/javascript">
+var pswpElement = document.querySelectorAll('.pswp')[0];
+
+// 图片清单
+var items = [
+    {
+        src: 'https://wss.xpmjs.com/s/mina/pages/static/defaults/p1.jpg',
+        w: 804,
+        h: 1280
+    },
+    {
+        src: 'https://wss.xpmjs.com/s/mina/pages/static/defaults/p2.jpg',
+        w: 804,
+        h: 1280
+    },
+    {
+        src: 'https://wss.xpmjs.com/s/mina/pages/static/defaults/p3.jpg',
+        w: 804,
+        h: 1280
+    },
+    {
+        src: 'https://wss.xpmjs.com/s/mina/pages/static/defaults/p4.jpg',
+        w: 804,
+        h: 1280
+    },
+    {
+        src: 'https://wss.xpmjs.com/s/mina/pages/static/defaults/p5.jpg',
+        w: 804,
+        h: 1280
+    },
+    {
+        src: 'https://wss.xpmjs.com/s/mina/pages/static/defaults/p6.jpg',
+        w: 804,
+        h: 1280
+    },
+    {
+        src: 'https://wss.xpmjs.com/s/mina/pages/static/defaults/p7.jpg',
+        w: 804,
+        h: 1280
+    },
+    {
+        src: 'https://wss.xpmjs.com/s/mina/pages/static/defaults/p8.jpg',
+        w: 804,
+        h: 1280
+    },
+    {
+        src: 'https://wss.xpmjs.com/s/mina/pages/static/defaults/p9.jpg',
+        w: 804,
+        h: 1280
+    }
+];
+
+
+// 内容分享
+var options = {
+	shareButtons: [
+		{id:"wechat", label:"<i class='fa fa-wechat'></i> 分享到微信", url:'/share.php?u={{url}}'},
+		{id:"weibo", label:"<i class='fa fa-weibo'></i> 分享到微博", url:'/share.php?u={{url}}'},
+		{id:"edit", label:"<i class='fa fa-pencil'></i> 修改", url:'/share.php?u={{url}}'},
+		{id:"download", label:"<i class='fa fa-download'></i> 下载", url:'javascript:void(0);'},
+		{id:"print", label:"<i class='fa fa-print'></i> 打印", url:'/share.php?u={{url}}'}
+	]
+};
+
+// 打开一张图片
+function openImage( index ) {
+	options['index'] = index;
+	var gallery = new PhotoSwipe( pswpElement, PhotoSwipeUI_Default, items, options );
+	gallery.init();
+	gallery.listen('shareLinkClick', function(e, target) {
+		console.log('my self Link shareLinkClick', $(target) );
+		$(target).removeAttr('href');
+		gallery.close();
+	});
+}
+
+$imgeditor.disabled();
+$imgeditor.mode('view');
+$imgeditor.crumb([{name:'浏览图片'}]);
+
+</script>

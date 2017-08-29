@@ -1,0 +1,47 @@
+<?php
+use \Tuanduimao\Loader\App;
+?>
+<div class="webtable-content">
+	<div id="tushuo-table" class="webtable"></div>
+    <div class="row webtable-footer">
+        <div class="col-xs-12">
+            <button class="btn btn-primary  push-15-t push-15-l"> 
+                <i class="fa fa-save"></i> 保存</button>
+            <button class="btn btn-primary  push-15-t push-10-l"> 
+                <i class="fa fa-search-plus"></i> 预览 </button>
+        </div>>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+	$('#tushuo-table').webtable({
+        offsetHeight:282,
+		readOnly:false,
+		submitOption:{
+           'url': '<?=App::NR('Tushuo', 'save')?>'
+       }
+	});
+
+	var $webtable = $('#tushuo-table').webtable('get');
+    $webtable.getData('<?=App::NR('Tushuo', 'getdata')?>', function( resp, status, xhr){
+        console.log('getdata success', resp ); 
+        console.log('getdata pagination', resp['pagination'] );  // 分页信息
+        console.log('getdata status', resp['status'] );  // 状态信息
+        return resp;
+    });
+
+
+    // $imgeditor.updatePage({
+    // 	bgimage: '/s/mina/pages/static/defaults/p1.jpg'
+    // }, function(){
+    // 	$imgeditor.add('text', {text:'示例文字', type:'vertical', dir:'rtl', width:68,height:168}, {x:710, y:155});
+    // 	$imgeditor.add('qrcode', {text:'示例文字', width:120}, {x:660, y:20} );
+    // 	$imgeditor.add('image', {src:'/s/mina/pages/static/icons/app-color.svg', width:32,height:32}, {x:745, y:280} );
+    // 	$imgeditor.enabled();
+    // });
+
+    $imgeditor.mode('modify');
+    $imgeditor.disabled();
+    $imgeditor.crumb([{name:'批量编辑', page:'table'}, {name:'修改图说'} ]);
+
+</script>

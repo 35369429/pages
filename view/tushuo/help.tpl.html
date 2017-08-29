@@ -6,7 +6,7 @@
 </style>
 <div style="padding-top:58px;" class="text-center">
 	<div>
-		<button class="btn btn-lg btn-primary step-minw"> 第一步: 批量导入 / 编辑图说内容 </button>
+		<button  class="btn btn-lg btn-primary step-minw opentable"> 第一步: 批量导入 / 编辑图说内容 </button>
 	</div>
 
 	<div class="push-15-t">
@@ -40,4 +40,13 @@
 
 <script type="text/javascript">
 	$imgeditor.disabled();
+	$imgeditor.updatePage({bgimage:'/s/mina/pages/static/defaults/p1.jpg'}, function(){
+		$imgeditor.zoom(0.76);
+	});
+	$('.opentable').click(function(event) {
+		$imgeditor.open('table');
+	});
+
+	$imgeditor.mode('modify');
+	$imgeditor.crumb([{name:'使用帮助'}]);
 </script>

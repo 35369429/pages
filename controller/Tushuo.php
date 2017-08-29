@@ -43,11 +43,38 @@ class TushuoController extends \Tuanduimao\Loader\Controller {
 	}
 
 
-
-	function album() {
-		echo "album";
+	/**
+	 * excel 
+	 * @return [type] [description]
+	 */
+	function table() {
+		App::render($data, 'tushuo', 'table' );
 	}
 
+	function getdata() {
+		$maxlen = 20; $columns = []; $data = [ ["示例文字", "/s/mina/pages/static/defaults/p7.jpg", "二维码链接"] ];
+		for( $i=0; $i<$maxlen; $i++ ) {
+			$name = chr( $i + 65 );
+			array_push($columns,["name"=>$name]);
+		}
+		array_push($columns,["name"=>chr(85), 'readOnly'=>true, "renderer"=>"{{unikey}}"]);
+
+		$resp = [
+			"data" => $data,
+			"columns" =>$columns,
+			"colHeaders" => ["A"],
+			"pagination" => [
+				"total" => 100,
+				"perpage" => 50,
+				"pages" => [1,2,3,4,5,6]
+			],
+			"status" => 'down'
+		];
+
+		echo json_encode($resp);
+	}
+
+	
 
 	/**
 	 * 帮助页
@@ -68,8 +95,21 @@ class TushuoController extends \Tuanduimao\Loader\Controller {
 		App::render($data, 'tushuo', 'help' );
 	}
 
-	function pic(){
-		echo "pic";
+	/**
+	 * 图集预览页
+	 * @return [type] [description]
+	 */
+	function album() {
+		App::render($data, 'tushuo', 'album' );
+	}
+	
+
+	/**
+	 * 选定某个图集
+	 * @return [type] [description]
+	 */
+	function select(){
+		App::render($data, 'tushuo', 'select' );
 	}
 
 	function columns(){
@@ -113,10 +153,16 @@ class TushuoController extends \Tuanduimao\Loader\Controller {
 
 		 			"js/plugins/jquery-validation/jquery.validate.min.js",
 		    		"js/plugins/jquery-ui/jquery-ui.min.js",
+
+		    		"js/plugins/photoswipe/photoswipe.min.js", 
+		    		"js/plugins/photoswipe/photoswipe-ui-default.min.js",
+
+		    		"js/plugins/jquery-webtable/webtable.full.min.js",
 		    		"js/plugins/jquery-webeditor/webeditor.full.min.js",
 		    		"js/plugins/jquery-imgeditor/imgeditor.full.min.js",
 		    		"js/plugins/jquery-webeditor/panel.full.min.js"
 				],
+
 			'css'=>[
 				"js/plugins/bootstrap-datepicker/bootstrap-datepicker3.min.css",
 	 			"js/plugins/select2/select2.min.css",
@@ -124,6 +170,10 @@ class TushuoController extends \Tuanduimao\Loader\Controller {
 	 			"js/plugins/jquery-tags-input/jquery.tagsinput.min.css",
 	 			"js/plugins/bootstrap-colorpicker/css/bootstrap-colorpicker.min.css",
 
+	 			"js/plugins/photoswipe/photoswipe.css",
+	 			"js/plugins/photoswipe/default-skin/default-skin.css",
+
+	 			"js/plugins/jquery-webtable/webtable.full.min.css?important",
 	 			"js/plugins/jquery-webeditor/webeditor.full.min.css?important",
 	 			"js/plugins/jquery-imgeditor/imgeditor.full.min.css?important",
 	 			"js/plugins/jquery-webeditor/panel.full.min.css?important"
