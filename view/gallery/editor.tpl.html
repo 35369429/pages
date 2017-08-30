@@ -757,8 +757,8 @@ $(function() {
 	
 	$('.zoom-in').click(function(event) {
 		var zoom = $imgeditor.zoom();
-		zoom = zoom - 0.1;
-		if ( zoom <= 0.1 ) {
+		zoom = zoom - 0.05;
+		if ( zoom <= 0.05 ) {
 			return;
 		}
 		$imgeditor.zoom( zoom );
@@ -766,7 +766,7 @@ $(function() {
 
 	$('.zoom-out').click(function(event) {
 		var zoom = $imgeditor.zoom();
-		zoom = zoom + 0.1;
+		zoom = zoom + 0.05;
 		if ( zoom > 3 ) {
 			return;
 		}

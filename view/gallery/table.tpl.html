@@ -53,19 +53,23 @@ use \Tuanduimao\Loader\App;
 	   submitOption:{
 		   'url': '<?=App::NR('gallery', 'save')?>'
 	   },
-       
+
 	   afterChange:function( changes, source){
 			if ( changes == null  ) return;
 			var last = changes.slice(-1)[0];
             var index = last[0] || 0;
             preview(index);
-	   }
+	   },
 
+       afterGetdata: function( resp, status, xhr ){
+            $hot.selectCell(0,0);
+       }
 
 	});
 
 	var $webtable = $('#gallery-table').webtable('get');
 	var $hot = $webtable.handsontable();
+        $hot.latest = -1;
    
 	$webtable.getData('<?=App::NR('gallery', 'getdata')?>', function( resp, status, xhr){
 		console.log('getdata success', resp ); 
@@ -80,15 +84,17 @@ use \Tuanduimao\Loader\App;
 		if ( $hot.latest == index ) {
 			return;
 		}
-        preview( index );
 
+        $hot.latest = index; 
+        preview( index );
 	});
 
 
     function preview( index ) {
 
         var data = $hot.getDataAtRow( index );
-            $hot.latest = index; 
+            
+            console.log( data );
 
         if ( data[0] != null  ) { 
             $imgeditor.clean()
