@@ -7,12 +7,12 @@
 <!-- Page Content -->
 <div class="content">
 
-	<div class="block block-bordered webeditor " >
+	<div class="block block-bordered imgeditor  hidden" >
 		
-		<div class="block-content remove-margin remove-padding row" >
+		<div class="block-content remove-margin remove-padding row" style="min-height:400px;" >
 			
 			<!-- 图集预览 -->
-			<div class="col-xs-6 remove-margin remove-padding" style="" >
+			<div class="col-xs-6  remove-margin remove-padding" style="" >
 
 				<div style="border-bottom: 1px solid #e9e9e9;padding:7px 15px 7px 15px;text-align: right;">
 					
@@ -37,6 +37,11 @@
 						<i class="glyphicon glyphicon-print"></i>
 					</a>
 
+					<!-- 画布切换 -->
+					<a href="javascript:void(0)" class="text-muted font-s16 font-w600 canvas-toggle">
+						<i class="fa fa-angle-double-right"></i>
+					</a>
+
 				</div>
 
 				<div class="imgeditor-helper" data-toggle="slimscroll"></div>
@@ -44,13 +49,15 @@
 			</div> <!-- col-xs-6 预览  -->
 
 			<!-- 图集编辑器 -->
-			<div class="col-xs-6 remove-margin remove-padding" style="border-left: 1px solid #e9e9e9;" >
+			<div class="col-xs-6  remove-margin remove-padding" style="border-left: 1px solid #e9e9e9;" >
 				<div style="border-bottom: 1px solid #e9e9e9;padding:7px 15px 7px 15px;" class="toolbar">
 
-					<!-- <a href="javascript:void(0);" class="fn-move text-muted push-10-l push-10-r font-s16"> 
-						<i class="glyphicon glyphicon-move"></i> 
-					</a> -->
 					
+					<!-- 画布切换 -->
+					<a href="javascript:void(0)" class="text-muted font-s16 font-w600  push-10-r  helper-toggle">
+						<i class="fa fa-angle-double-left"></i>
+					</a>
+
 					<a href="javascript:void(0);" class="fn-add-image text-muted push-10-l push-10-r font-s16"> 
 						<i class="glyphicon glyphicon-picture"></i> 
 					</a>
@@ -695,6 +702,8 @@ $(function() {
 		ready: function(){
 			
 			App.initHelpers(['datepicker','select2', 'colorpicker', 'masked-inputs','tags-inputs','slimscroll']);
+			
+
 		},
 		load: function( $imgeditor ){
 			$imgeditor.open('welcome');
@@ -945,7 +954,42 @@ $(function() {
 		}
 	}
 
+	// 设定当前视图模式
+	$imgeditor.display = function ( mode ) {
+		mode = mode || null;
 
+		if ( mode == 'helper' ) {  
+			$imgeditor.min();
+			$('.canvas-toggle').children('i')
+				.removeClass('fa-angle-double-right')
+				.addClass('fa-angle-double-left')
+				;
+
+		} else if ( mode == 'canvas') {
+			$imgeditor.max();
+
+			$('.helper-toggle').children('i')
+				.removeClass('fa-angle-double-left')
+				.addClass('fa-angle-double-right')
+				;
+
+		} else {
+			$imgeditor.normal();
+			$('.canvas-toggle').children('i')
+				.removeClass('fa-angle-double-left')
+				.addClass('fa-angle-double-right')
+				;
+
+			$('.helper-toggle').children('i')
+				.removeClass('fa-angle-double-right')
+				.addClass('fa-angle-double-left')
+				;
+		}
+
+		$('.imgeditor').removeClass('hidden');
+	}
+
+	// 预览视图切换
 	$('.images-preview').click(function(event) {
 		var icon = $(this).children('i');
 		if ( icon.hasClass('glyphicon-th-large') ) {  // 切换到图片视图
@@ -958,6 +1002,41 @@ $(function() {
 		}
 	});
 
+
+	// 画布视图切换
+	$('.canvas-toggle').click(function(event){
+		if ( $(this).children('i').hasClass('fa-angle-double-right') ) {
+			$imgeditor.min();	
+			$(this).children('i')
+				.removeClass('fa-angle-double-right')
+				.addClass('fa-angle-double-left')
+				;
+		} else {
+			$imgeditor.normal();	
+			$(this).children('i')
+				.removeClass('fa-angle-double-left')
+				.addClass('fa-angle-double-right')
+				;
+		}
+	});
+
+
+	$('.helper-toggle').click(function(event){
+
+		if ( $(this).children('i').hasClass('fa-angle-double-left') ) {
+			$imgeditor.max();	
+			$(this).children('i')
+				.removeClass('fa-angle-double-left')
+				.addClass('fa-angle-double-right')
+				;
+		} else {
+			$imgeditor.normal();	
+			$(this).children('i')
+				.removeClass('fa-angle-double-right')
+				.addClass('fa-angle-double-left')
+				;
+		}
+	});
 
 });
 </script>
