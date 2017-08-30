@@ -185,7 +185,7 @@ class GalleryController extends \Tuanduimao\Loader\Controller {
 			'crumb' => [
 	                "图集" => APP::R('gallery','index'),
 	                "图集列表" => APP::R('gallery','index'),
-	                "制作图集" => '',
+	                "制作动态图集" => '',
 	        ],
 
 	        'active'=> [
