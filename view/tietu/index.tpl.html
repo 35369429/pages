@@ -91,6 +91,35 @@ use \Tuanduimao\Utils as Utils;
 		</div>
 		<?php endforeach; ?>
 	</div><!-- END Gallery Section -->
+
+	
+	<?php $articles['last'] = 10 ; $articles['curr'] = 3;?>
+	<!-- Gallery Pages -->
+	<div class="text-right">
+		<ul class="pagination">
+			<?php if ($articles['prev'] !== false): ?>
+			<li>
+				<a href="javascript:search('page', '<?=$articles['prev']?>' )">
+					<i class="fa fa-angle-double-left"></i>
+				</a>
+			</li>
+			<?php endif;?>
+
+			<?php for( $i=1; $i<=$articles['last']; $i++) :?>
+			<li class="<?=($i==$articles['curr'])? 'active': ''?>" >
+				<a href="javascript:search('page', '<?=$i?>' )"><?=$i?></a>
+			</li>
+			<?php endfor; ?>
+
+			<?php if ($articles['next'] !== false): ?>
+			<li>
+				<a href="javascript:search('page', '<?=$articles['next']?>' )">
+					<i class="fa fa-angle-double-right"></i>
+				</a>
+			</li>
+			<?php endif;?>
+		</ul>
+	</div><!-- END Gallery Pages -->
 	
 </div> <!-- END Pagecontent -->
 
