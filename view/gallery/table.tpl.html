@@ -2,7 +2,7 @@
 use \Tuanduimao\Loader\App;
 ?>
 <div class="webtable-content">
-	<div id="tietu-table" class="webtable"></div>
+	<div id="gallery-table" class="webtable"></div>
 	<div class="row webtable-footer">
 		<div class="col-xs-5">
 			<button class="btn btn-primary  push-15-t push-15-l"> 
@@ -40,16 +40,16 @@ use \Tuanduimao\Loader\App;
 	</div>
 </div>
 <script type="text/javascript">
-	$('#tietu-table').webtable({
+	$('#gallery-table').webtable({
 		offsetHeight:222,
 		readOnly:false,
 		submitOption:{
-           'url': '<?=App::NR('tietu', 'save')?>'
+           'url': '<?=App::NR('gallery', 'save')?>'
        }
 	});
 
-	var $webtable = $('#tietu-table').webtable('get');
-    $webtable.getData('<?=App::NR('tietu', 'getdata')?>', function( resp, status, xhr){
+	var $webtable = $('#gallery-table').webtable('get');
+    $webtable.getData('<?=App::NR('gallery', 'getdata')?>', function( resp, status, xhr){
         console.log('getdata success', resp ); 
         console.log('getdata pagination', resp['pagination'] );  // 分页信息
         console.log('getdata status', resp['status'] );  // 状态信息

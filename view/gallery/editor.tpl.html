@@ -8,33 +8,16 @@
 <div class="content">
 
 	<div class="block block-bordered webeditor " >
-		<div class="block-header remove-margin hidden" >
-			<ul class="block-options" >
-				<!-- <li>
-					<a type="button"   href="#" data-toggle="block-option" data-action="fullscreen_toggle"></a>
-				</li> -->
-			</ul>
-
-			<h3 class="block-title" >
-				<a href="#" class="text-default">
-					<i class="fa fa-arrow-circle-o-left"></i> 
-					贴图列表 
-				</a> / 编辑贴图
-				<!-- <i class="fa fa-lock push-5-l  lock_status text-muted" style="width:18px;"></i> -->
-				<!-- <span class="text-danger status push-10-l font-s13"></span> -->
-			</h3>
-			
-		</div> <!-- END block-header -->
-
+		
 		<div class="block-content remove-margin remove-padding row" >
 			
-			<!-- 贴图预览 -->
+			<!-- 图集预览 -->
 			<div class="col-xs-6 remove-margin remove-padding" style="" >
 
 				<div style="border-bottom: 1px solid #e9e9e9;padding:7px 15px 7px 15px;text-align: right;">
 					
 					<!-- 面包屑导航 -->
-					<span class="tietu-crumb pull-left"></span>
+					<span class="gallery-crumb pull-left"></span>
 
 					<!-- <a href="#" class="text-muted pull-left push-10-r font-s16"> <i class="glyphicon glyphicon-edit"></i> </a> -->
 					<!-- <a href="#" class="text-muted push-10-r font-s16"> <i class="glyphicon glyphicon-eye-open"></i> </a> -->
@@ -60,7 +43,7 @@
 
 			</div> <!-- col-xs-6 预览  -->
 
-			<!-- 贴图编辑器 -->
+			<!-- 图集编辑器 -->
 			<div class="col-xs-6 remove-margin remove-padding" style="border-left: 1px solid #e9e9e9;" >
 				<div style="border-bottom: 1px solid #e9e9e9;padding:7px 15px 7px 15px;" class="toolbar">
 
@@ -135,7 +118,7 @@
 		<div class="form-group">
 			<div class="col-xs-12">
 				<div class="input-group">
-					<span class="input-group-addon">贴图主题</span>
+					<span class="input-group-addon">图集主题</span>
 					<input class="form-control" name="title" type="text" placeholder="" >
 				</div>
 			</div>
@@ -324,8 +307,8 @@
 					<select
 						name="origin"
 						class="js-select2 form-control"
-						data-preload-url="<?=App::NR('tietu', 'columns')?>"
-						data-ajax-url="<?=App::NR('tietu', 'columns')?>"
+						data-preload-url="<?=App::NR('gallery', 'columns')?>"
+						data-ajax-url="<?=App::NR('gallery', 'columns')?>"
 						data-cache="false"
 					 	class="js-select2 form-control" style="width: 100%;" data-placeholder="请选择...">
 						<option></option><!-- Required for data-placeholder attribute to work with Select2 plugin -->
@@ -480,7 +463,7 @@
 						name="origin"
 						class="js-select2 form-control" 
 						
-						data-ajax-url="<?=App::NR('tietu', 'columns')?>"
+						data-ajax-url="<?=App::NR('gallery', 'columns')?>"
 						data-cache="false"
 						class="js-select2 form-control" style="width: 100%;" data-placeholder="请选择...">
 						<option></option><!-- Required for data-placeholder attribute to work with Select2 plugin -->
@@ -562,8 +545,8 @@
 					<span class="input-group-addon">绑定动态数据</span>
 					<select 
 						class="js-select2 form-control" name="origin" 
-						data-preload-url="<?=App::NR('tietu', 'columns')?>"
-						data-ajax-url="<?=App::NR('tietu', 'columns')?>"
+						data-preload-url="<?=App::NR('gallery', 'columns')?>"
+						data-ajax-url="<?=App::NR('gallery', 'columns')?>"
 						data-default-text="李四"
 						data-default-id="2"
 						data-cache="false"
@@ -693,12 +676,12 @@ $(function() {
 		helper: {
 			em: $('.imgeditor-helper'),
 			pages: {
-				welcome: "<?=App::NR('tietu', 'help')?>",
-				table: "<?=App::NR('tietu', 'table')?>",
-				select:"<?=App::NR('tietu', 'select')?>",
-				detail:  "<?=App::NR('tietu', 'pic')?>",
+				welcome: "<?=App::NR('gallery', 'help')?>",
+				table: "<?=App::NR('gallery', 'table')?>",
+				select:"<?=App::NR('gallery', 'select')?>",
+				detail:  "<?=App::NR('gallery', 'pic')?>",
 				album: {
-					url:"<?=App::NR('tietu', 'album')?>",
+					url:"<?=App::NR('gallery', 'album')?>",
 					query:{
 						type:'grid'
 					}
@@ -932,9 +915,9 @@ $(function() {
 	$imgeditor.crumb = function ( list ) {
 		list = list || [];
 		var len = list.length;
-		var html =  '<a href="<?=APP::R('tietu','index')?>"> 贴图列表 </a> ' + 
+		var html =  '<a href="<?=APP::R('gallery','index')?>"> 图集列表 </a> ' + 
 					' <i class="fa fa-angle-right"></i> ' +
-					'<a href="javascript:$imgeditor.open(\'welcome\')"> 管理贴图 </a>';
+					'<a href="javascript:$imgeditor.open(\'welcome\')"> 制作图集 </a>';
 
 		for ( var i =0; i<len; i ++ ) {
 			var link = list[i];
@@ -947,7 +930,7 @@ $(function() {
 			}
 		}
 
-		$('.tietu-crumb').html(html);
+		$('.gallery-crumb').html(html);
 	}
 
 

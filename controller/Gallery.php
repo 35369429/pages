@@ -12,14 +12,14 @@ use \Endroid\QrCode\ErrorCorrectionLevel;
 
 
 
-class TietuController extends \Tuanduimao\Loader\Controller {
+class GalleryController extends \Tuanduimao\Loader\Controller {
 	
 	function __construct() {
 	}
 
 	function index(){
 
-		App::render($data, 'tietu', 'index' );
+		App::render($data, 'gallery', 'search' );
 
 		return [
 			'js' => [
@@ -39,8 +39,8 @@ class TietuController extends \Tuanduimao\Loader\Controller {
 	 			"js/plugins/select2/select2-bootstrap.min.css"
 	 		],
 			'crumb' => [
-	                "贴图" => APP::R('tietu','index'),
-	                "贴图列表" =>'',
+	                "图集" => APP::R('gallery','index'),
+	                "图集列表" =>'',
 	        ]
 		];
 	}
@@ -51,7 +51,7 @@ class TietuController extends \Tuanduimao\Loader\Controller {
 	 * @return [type] [description]
 	 */
 	function table() {
-		App::render($data, 'tietu', 'table' );
+		App::render($data, 'gallery', 'table' );
 	}
 
 	function getdata() {
@@ -86,7 +86,7 @@ class TietuController extends \Tuanduimao\Loader\Controller {
 	function help() {
 
 		$data = [
-			"tietu" => [
+			"gallery" => [
 				"bgimage" => "/s/mina/pages/static/defaults/p7.jpg",
 				"bgcolor" => "rgba(254,254,254,1)",
 				"items" => [
@@ -95,7 +95,7 @@ class TietuController extends \Tuanduimao\Loader\Controller {
 			]
 		];
 
-		App::render($data, 'tietu', 'help' );
+		App::render($data, 'gallery', 'help' );
 	}
 
 	/**
@@ -103,7 +103,7 @@ class TietuController extends \Tuanduimao\Loader\Controller {
 	 * @return [type] [description]
 	 */
 	function album() {
-		App::render($data, 'tietu', 'album' );
+		App::render($data, 'gallery', 'album' );
 	}
 	
 
@@ -112,7 +112,7 @@ class TietuController extends \Tuanduimao\Loader\Controller {
 	 * @return [type] [description]
 	 */
 	function select(){
-		App::render($data, 'tietu', 'select' );
+		App::render($data, 'gallery', 'select' );
 	}
 
 	function columns(){
@@ -137,12 +137,12 @@ class TietuController extends \Tuanduimao\Loader\Controller {
 
 
 	/**
-	 * 贴图编辑器
+	 * 图集编辑器
 	 * @return 
 	 */
 	function editor() {
 
-		App::render($data, 'tietu', 'editor' );
+		App::render($data, 'gallery', 'editor' );
 
 
 		return [
@@ -183,13 +183,13 @@ class TietuController extends \Tuanduimao\Loader\Controller {
 	 		],
 
 			'crumb' => [
-	                "贴图" => APP::R('tietu','index'),
-	                "贴图列表" => APP::R('tietu','index'),
-	                "编辑贴图" => '',
+	                "图集" => APP::R('gallery','index'),
+	                "图集列表" => APP::R('gallery','index'),
+	                "制作图集" => '',
 	        ],
 
 	        'active'=> [
-	 			'slug'=>'mina/pages/tietu/index'
+	 			'slug'=>'mina/pages/gallery/index'
 	 		]
 		];
 	}

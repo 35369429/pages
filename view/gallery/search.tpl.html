@@ -20,7 +20,7 @@ use \Tuanduimao\Utils as Utils;
 	}
 
 
-	.tietu-title {
+	.gallery-title {
 		font-weight: 500;
 		display: inline-block;
 		background:#666666;
@@ -31,16 +31,13 @@ use \Tuanduimao\Utils as Utils;
 		color: #ffffff;
 	}
 
-	.tietu-title span {
+	.gallery-title span {
 		display:inline-block;
 		overflow: hidden;
 		cursor: default;
 		line-height: 32px;
 	}
 	
-	.items-push div {
-		margin-bottom: 15px;
-	}
 
 </style>
 <div class="content">
@@ -59,10 +56,11 @@ use \Tuanduimao\Utils as Utils;
 			</div>
 
 			<div class="col-lg-4 col-md-4  col-sm-4">
+
 				<a 
-					href="<?=App::R('tietu','editor')?>" 
+					href="<?=App::R('gallery','editor')?>" 
 					class="btn btn-primary btn-lg font-w300 pull-right push-15-l" 
-					><i class="fa fa-plus"></i> 新建贴图 </a>
+					><i class="fa fa-plus"></i> 制作图集 </a>
 			</div>
 		</div>
 	</div> <!-- END Search Section -->
@@ -70,7 +68,7 @@ use \Tuanduimao\Utils as Utils;
 	<!-- Gallery Section -->
 	<div class="row items-push js-gallery">
 		<?php 
-		$images = [1,2,3,11,10,4,5,6,7,8,9];
+		$images = [1,2,3,11,10,4,5,6];
 		foreach ($images as $im) : ?>
 		<div class="col-xs-3 animated fadeIn">
 
@@ -83,8 +81,8 @@ use \Tuanduimao\Utils as Utils;
 
 			</a>
 
-			<span class="tietu-title">
-				<span class="col-xs-8">贴图主题</span>
+			<span class="gallery-title">
+				<span class="col-xs-8">图集主题</span>
 				<span class=" col-xs-4 font-s13 text-right">30 幅</span>
 			</span>
 			
@@ -125,7 +123,7 @@ use \Tuanduimao\Utils as Utils;
 
 <script type="text/javascript">
 var $_GET = <?=json_encode($query)?>;
-var $_HOME ='<?=App::R("tietu", "index")?>';
+var $_HOME ='<?=App::R("gallery", "index")?>';
 
 function search( key, value ) {
 
