@@ -1,0 +1,125 @@
+<?php 
+use \Tuanduimao\Loader\App as App; 
+use \Tuanduimao\Utils as Utils;
+?>
+<style type="text/css">
+	.img-thumb {
+		display: inline-block;
+		background:#ffffff;
+		width:100%;
+		padding:0px;
+		max-height: 400px;
+		height: 400px;
+		overflow: hidden;
+		border: 2px solid #EFEFEF;
+	}
+
+	.img-thumb:hover {
+		background:transparent;
+		border-color: #CCCCCC;
+	}
+
+	.tietu-title {
+		position: relative;
+		top:-38px;
+		font-weight: 500;
+		display: inline-block;
+		width: 100%;
+		height: 32px;
+		line-height: 32px;
+		font-size: 16px;
+		color: #ffffff;
+	}
+
+	.tietu-title span {
+		display:inline-block;
+		background:rgba(0,0,0,0.5);
+		padding-left: 1em;
+		padding-right: 1em;
+		overflow: hidden;
+		width: 100%;
+	}
+
+
+</style>
+<div class="content">
+
+	<!-- Search Section -->
+	<div class="block block-transparent">
+		<div class="row" >
+			<div  class="col-lg-8 col-md-8 col-sm-8">
+				<div class="input-group input-group-lg">
+					<div class="input-group-addon font-w300"> 全文检索 </div> 
+					<input class="js-icon-search form-control keyword" type="text" placeholder="输入关键词" value="<?=$query['title']?>">
+					<span class="input-group-btn">
+						<button class="btn btn-primary font-w300 search" type="button"><i class=" si si-magnifier"></i> 搜索 </button>
+					</span>
+				</div>
+			</div>
+
+			<div class="col-lg-4 col-md-4  col-sm-4">
+				<a 
+					href="<?=App::R('tietu','editor')?>" 
+					class="btn btn-primary btn-lg font-w300 pull-right push-15-l" 
+					><i class="fa fa-plus"></i> 新建贴图 </a>
+			</div>
+		</div>
+	</div> <!-- END Search Section -->
+	
+	<!-- Gallery Section -->
+	<div class="row items-push js-gallery">
+		<?php 
+		$images = [1,2,3,11,10,4,5,6,7,8,9];
+		foreach ($images as $im) : ?>
+		<div class="col-xs-3 animated fadeIn">
+			<a class="img-thumb" href="#">
+				<img 
+					width="100%"
+					src='https://wss.xpmjs.com/s/mina/pages/static/defaults/p<?=$im?>.jpg' 
+					alt=""  >
+			</a>
+			<span class="tietu-title">
+				<span>贴图主题</span>
+			</span>
+		</div>
+		<?php endforeach; ?>
+	</div><!-- END Gallery Section -->
+	
+</div> <!-- END Pagecontent -->
+
+<script type="text/javascript">
+var $_GET = <?=json_encode($query)?>;
+var $_HOME ='<?=App::R("tietu", "index")?>';
+
+function search( key, value ) {
+
+	if ( key !== undefined ) {
+		$_GET[key] = value;
+
+		if ( value == undefined  || value == '') {
+			delete $_GET[key];
+		}
+
+		if ( key != 'page' ) {
+			$_GET['page'] = 1;
+		}
+	}
+
+	var url =  $_HOME + '?' + $.param($_GET);
+	window.location = url;
+
+}
+
+
+
+$(function() {
+	App.initHelpers(['datepicker','select2', 'masked-inputs','tags-inputs', 'slimscroll', 'ajax-confirm']);
+	$('.search').click(function(){
+		var keyword = $('.keyword').val();
+		search('title', keyword);
+
+	});
+
+});
+
+</script>

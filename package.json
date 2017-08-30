@@ -30,15 +30,15 @@
         "permission": "boss,admin,manager,user",
         "order":9999
     },{
-        "slug":"mina/pages/tushuo/index",
-        "name":"图说",
+        "slug":"mina/pages/tietu/index",
+        "name":"贴图",
         "index": true,
         "icon":{
-            "default":"/static/icons/tushuo.svg"
+            "default":"/static/icons/tietu.svg"
         },
         "icontype": "img",
         "linktype":"i",
-        "link":"{tushuo,index}",
+        "link":"{tietu,index}",
         "permission": "boss,admin,manager,user",
         "order":9999
     },{
