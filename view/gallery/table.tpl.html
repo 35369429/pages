@@ -45,7 +45,7 @@ use \Tuanduimao\Loader\App;
 	$imgeditor.mode('modify');
 	$imgeditor.crumb([{name:'批量编辑'}]);
 
-	var image = { page:[], items:[] };
+	var image = { page:[], items:[] }; 
 
 	$('#gallery-table').webtable({
 	   offsetHeight:222,
@@ -55,22 +55,27 @@ use \Tuanduimao\Loader\App;
 	   },
 
 	   afterChange:function( changes, source){
+		   
+		   if ( source == 'imgeditor') return;
 		   if ( changes == null  ) return;
+
 		   var last = changes.slice(-1)[0];
-           var index = last[0] || 0;
-           preview(index);
+		   var index = last[0] || 0;
+		   preview(index);
 	   },
 
-       afterGetdata: function( resp, status, xhr ){
-            $hot.selectCell(0,0);
-       }
+	   afterGetdata: function( resp, status, xhr ){
+			$hot.selectCell(0,0);
+	   }
 
 	});
 
 	var $webtable = $('#gallery-table').webtable('get');
 	var $hot = $webtable.handsontable();
-        $hot.latest = -1;
+		$hot.latest = -1;
    
+
+    // 从服务器中读取数据
 	$webtable.getData('<?=App::NR('gallery', 'getdata')?>', function( resp, status, xhr){
 		console.log('getdata success', resp ); 
 		console.log('getdata pagination', resp['pagination'] );  // 分页信息
@@ -92,16 +97,51 @@ use \Tuanduimao\Loader\App;
 			return;
 		}
 
-        $hot.latest = index; 
-        preview( index );
+		$hot.latest = index; 
+		preview( index );
+	});
+
+
+
+	// 回写 Excel 表中的栏位
+	$imgeditor.on('update', function(id, type, option, pos, source  ){
+
+		if ( source != 'panel' ) return;
+
+		var col = option['origin'];
+		var row = $imgeditor.getIndex();
+		var text = option['text'];
+
+		$hot.setDataAtCell(parseInt(row), parseInt(col), text, 'imgeditor' );
+
+	});
+
+	$imgeditor.on('page.update', function(event,  data  ){
+
+		var col = data['origin'];
+		var row = $imgeditor.getIndex();
+		var text = data['bgimage'];
+		$hot.setDataAtCell(parseInt(row), parseInt(col), text, 'imgeditor' );
+
+	});
+
+	 
+
+
+	$imgeditor.on('add', function( id, type, option, pos, source ) {
+		
+		if ( source == 'init' ) return;
+		var idx = image['items'].length -1;
+		image['items'].push([type, option, pos]);
+
 	});
 
 
 	/**
 	 * 更新栏位选择器
-	 * @param  {[type]} columns    [description]
+	 * @param  {[type]} columns	[description]
 	 * @param  {[type]} colHeaders [description]
-	 * @return {[type]}            [description]
+	 * @return {[type]}			[description]
 	 */
 	function updateColumsSelector( columns , colHeaders ) {
 		colHeaders = colHeaders || [];
@@ -118,7 +158,7 @@ use \Tuanduimao\Loader\App;
 	/**
 	 * 更新图片信息
 	 * @param  {[type]} data [description]
-	 * @return {[type]}      [description]
+	 * @return {[type]}	  [description]
 	 */
 	function updateImage( data ) {
 		image = data;
@@ -126,53 +166,71 @@ use \Tuanduimao\Loader\App;
 
 
 
-    function preview( index ) {
+	/**
+	 * 图片预览
+	 * @param  {[type]} index [description]
+	 * @return {[type]}       [description]
+	 */
+	function preview( index ) {
 
-        var data = $hot.getDataAtRow( index );
-        var page = image['page'] || [];
-        var items = image['items'] || [];
+		var data = $hot.getDataAtRow( index );
+		var page = image['page'] || [];
+		var items = image['items'] || [];
 
-        // 忽略空行
-        if ( data.join('') == "" ) {
-        	return;
-        }
+		// 忽略空行
+		if ( data.join('') == "" ) {
+			return;
+		}
 
 
-        $imgeditor.setIndex( index );
-        $imgeditor.clean();
+		$imgeditor.setIndex( index );
+		$imgeditor.clean();
 
-        if ( typeof page['origin'] == 'number' && data[page['origin']] != null) {
-        	image['page']['bgimage'] = data[page['origin']];
-        }
+		if ( typeof page['origin'] == 'number' && data[page['origin']] != null) {
+			image['page']['bgimage'] = data[page['origin']];
+		}
 
-        $imgeditor.updatePage( page , function(){
-	        for( var idx in items ) {
-	        	var it = items[idx];
-	        		it[0] = it[0] || '';
-	        		it[1] = it[1] || [];
-	        		it[2] = it[2] || [];
+		$imgeditor.updatePage( page , function(){
+			for( var idx in items ) {
+				var it = items[idx];
+					it[0] = it[0] || '';
+					it[1] = it[1] || [];
+					it[2] = it[2] || [];
 
-	        	var origin = it[1]['origin'];
+				var origin = parseInt(it[1]['origin']);
 
-	        	if ( it[0] == 'image' ) {
-	        		if ( typeof origin == 'number' && data[origin] != null) {
-	        			it[1]['src'] = data[origin];
-			        }	
-	        	} else if ( it[0] == 'text' ) {
-	        		if ( typeof origin == 'number' && data[origin] != null) {
-	        			it[1]['text'] = data[origin];
-			        }
-	        	} else if ( it[0] == 'qrcode' ) {
-	        		if ( typeof origin == 'number' && data[origin] != null) {
-	        			it[1]['text'] = data[origin];
-			        }
-	        	}
 
-	        	$imgeditor.add(it[0], it[1], it[2] );
-	        	console.log( 'it=', it);
-	        }
-        })
-    }
+				if ( it[0] == 'image' ) {
+					if ( typeof origin == 'number' && data[origin] != null) {
+						it[1]['src'] = data[origin];
+					}	
+				} else if ( it[0] == 'text' ) {
+					if ( typeof origin == 'number' && data[origin] != null) {
+						it[1]['text'] = data[origin];
+					}
+				} else if ( it[0] == 'qrcode' ) {
+					if ( typeof origin == 'number' && data[origin] != null) {
+						it[1]['text'] = data[origin];
+					}
+				}
+				var id = $imgeditor.add(it[0], it[1], it[2], 'init' );
+				
+			}
+
+			image['items'] = [];
+			var newData = $imgeditor.getData();
+			var newItems = newData['items'] || [];
+			var newPage = newData['page'];
+
+			for( var id in newItems ) {
+				var it = newItems[id];
+				image['items'].push ( [it.name, it.option, it.pos]);
+			}
+
+			image['page'] = newPage;
+
+		})
+	}
    
 
 </script>
