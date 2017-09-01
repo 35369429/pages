@@ -45,6 +45,8 @@ use \Tuanduimao\Loader\App;
 	$imgeditor.mode('modify');
 	$imgeditor.crumb([{name:'批量编辑'}]);
 
+	var image = { page:[], items:[] };
+
 	$('#gallery-table').webtable({
 	   offsetHeight:222,
 	   readOnly:false,
@@ -53,10 +55,10 @@ use \Tuanduimao\Loader\App;
 	   },
 
 	   afterChange:function( changes, source){
-			if ( changes == null  ) return;
-			var last = changes.slice(-1)[0];
-            var index = last[0] || 0;
-            preview(index);
+		   if ( changes == null  ) return;
+		   var last = changes.slice(-1)[0];
+           var index = last[0] || 0;
+           preview(index);
 	   },
 
        afterGetdata: function( resp, status, xhr ){
@@ -73,8 +75,15 @@ use \Tuanduimao\Loader\App;
 		console.log('getdata success', resp ); 
 		console.log('getdata pagination', resp['pagination'] );  // 分页信息
 		console.log('getdata status', resp['status'] );  // 状态信息
+		console.log( resp );
+
+
+		updateColumsSelector( resp['columns'], resp['colHeaders'] );
+		updateImage( resp['image'] );
 		return resp;
 	});
+
+
 
 	// @see https://docs.handsontable.com/0.15.0-beta3/Hooks.html
 	$hot.addHook('afterSelectionEnd', function( index ){
@@ -88,31 +97,81 @@ use \Tuanduimao\Loader\App;
 	});
 
 
+	/**
+	 * 更新栏位选择器
+	 * @param  {[type]} columns    [description]
+	 * @param  {[type]} colHeaders [description]
+	 * @return {[type]}            [description]
+	 */
+	function updateColumsSelector( columns , colHeaders ) {
+		colHeaders = colHeaders || [];
+
+		$('select[name=origin]').Select2Option().clean();
+		$('select[name=origin]').Select2Option().add('', '');
+		for( var col in columns ) {
+			var name = colHeaders[col] || columns[col]['name'];
+			$('select[name=origin]').Select2Option().add(name, col);
+		}
+	}
+
+
+	/**
+	 * 更新图片信息
+	 * @param  {[type]} data [description]
+	 * @return {[type]}      [description]
+	 */
+	function updateImage( data ) {
+		image = data;
+	}
+
+
+
     function preview( index ) {
 
         var data = $hot.getDataAtRow( index );
-            
-            console.log( data );
+        var page = image['page'] || [];
+        var items = image['items'] || [];
 
-        if ( data[0] != null  ) { 
-            $imgeditor.clean()
-                .updatePage({
-                    bgimage: '/s/mina/pages/static/defaults/p1.jpg'
-                }, function(){
-                    if ( data[0] != null ){
-                        $imgeditor.add('text', {text:data[0], type:'vertical', dir:'rtl', width:68,height:168}, {x:710, y:155});
-                    }
-
-                    if ( data[1] != null ) {
-                        $imgeditor.add('image', {src:data[1], width:32,height:32}, {x:745, y:280} );
-                    }
-
-                    if ( data[2] != null ) {
-                        $imgeditor.add('qrcode', {text:data[2], width:120}, {x:660, y:20} );
-                    }
-
-                });
+        // 忽略空行
+        if ( data.join('') == "" ) {
+        	return;
         }
+
+
+        $imgeditor.setIndex( index );
+        $imgeditor.clean();
+
+        if ( typeof page['origin'] == 'number' && data[page['origin']] != null) {
+        	image['page']['bgimage'] = data[page['origin']];
+        }
+
+        $imgeditor.updatePage( page , function(){
+	        for( var idx in items ) {
+	        	var it = items[idx];
+	        		it[0] = it[0] || '';
+	        		it[1] = it[1] || [];
+	        		it[2] = it[2] || [];
+
+	        	var origin = it[1]['origin'];
+
+	        	if ( it[0] == 'image' ) {
+	        		if ( typeof origin == 'number' && data[origin] != null) {
+	        			it[1]['src'] = data[origin];
+			        }	
+	        	} else if ( it[0] == 'text' ) {
+	        		if ( typeof origin == 'number' && data[origin] != null) {
+	        			it[1]['text'] = data[origin];
+			        }
+	        	} else if ( it[0] == 'qrcode' ) {
+	        		if ( typeof origin == 'number' && data[origin] != null) {
+	        			it[1]['text'] = data[origin];
+			        }
+	        	}
+
+	        	$imgeditor.add(it[0], it[1], it[2] );
+	        	console.log( 'it=', it);
+	        }
+        })
     }
    
 

@@ -657,6 +657,8 @@
 	
 $(function() {
 
+	App.loading({message:'载入中...'}).show();
+
 	// 取消导航浮动
 	$('#header-navbar').css('position', 'static');
 	$('main').css('padding-top', '0px');
@@ -697,13 +699,13 @@ $(function() {
 			offsetY:160
 		},
 		ready: function(){
-			
+			console.log('loadi');
 			App.initHelpers(['datepicker','select2', 'colorpicker', 'masked-inputs','tags-inputs','slimscroll']);
-			
-
 		},
 		load: function( $imgeditor ){
-			$imgeditor.open('table');
+			$imgeditor.open('table', {}, function(){
+				App.loading().hide();
+			});
 		}
 	});
 

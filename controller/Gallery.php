@@ -65,11 +65,21 @@ class GalleryController extends \Tuanduimao\Loader\Controller {
 		$resp = [
 			"data" => $data,
 			"columns" =>$columns,
-			"colHeaders" => ["A"],
+			"colHeaders" => ["名称"],
 			"pagination" => [
 				"total" => 100,
 				"perpage" => 50,
 				"pages" => [1,2,3,4,5,6]
+			],
+			"image" => [
+				"page" => [
+					"bgimage" => "/s/mina/pages/static/defaults/p1.jpg",
+					"origin" =>1
+				],
+				"items" => [
+					[ "text", ["origin"=>0,"type"=>'vertical', "dir"=>'rtl', "width"=>68,"height"=>168], ["x"=>710, 'y'=>155] ],
+					[ "qrcode", ["origin"=>2, "width"=>120], ["x"=>660, "y"=>20]]
+				]
 			],
 			"status" => 'down'
 		];
