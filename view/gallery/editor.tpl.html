@@ -315,7 +315,6 @@
 						name="origin"
 						class="js-select2 form-control"
 						data-preload-url="<?=App::NR('gallery', 'columns')?>"
-						data-ajax-url="<?=App::NR('gallery', 'columns')?>"
 						data-cache="false"
 					 	class="js-select2 form-control" style="width: 100%;" data-placeholder="请选择...">
 						<option></option><!-- Required for data-placeholder attribute to work with Select2 plugin -->
@@ -469,8 +468,7 @@
 					<select 
 						name="origin"
 						class="js-select2 form-control" 
-						
-						data-ajax-url="<?=App::NR('gallery', 'columns')?>"
+						data-preload-url="<?=App::NR('gallery', 'columns')?>"
 						data-cache="false"
 						class="js-select2 form-control" style="width: 100%;" data-placeholder="请选择...">
 						<option></option><!-- Required for data-placeholder attribute to work with Select2 plugin -->
@@ -553,7 +551,6 @@
 					<select 
 						class="js-select2 form-control" name="origin" 
 						data-preload-url="<?=App::NR('gallery', 'columns')?>"
-						data-ajax-url="<?=App::NR('gallery', 'columns')?>"
 						data-default-text="李四"
 						data-default-id="2"
 						data-cache="false"
@@ -706,7 +703,7 @@ $(function() {
 
 		},
 		load: function( $imgeditor ){
-			$imgeditor.open('welcome');
+			$imgeditor.open('table');
 		}
 	});
 
