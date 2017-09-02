@@ -45,7 +45,7 @@ use \Tuanduimao\Loader\App;
 	$imgeditor.mode('modify');
 	$imgeditor.crumb([{name:'批量编辑'}]);
 
-	var image = { page:[], items:[] }; 
+	var image = { page:[], items:[], map:{} }; 
 
 	$('#gallery-table').webtable({
 	   offsetHeight:222,
@@ -56,10 +56,9 @@ use \Tuanduimao\Loader\App;
 
 	   afterChange:function( changes, source){
 
-	   	   console.log( changes,  source );
-	   	   
 		   if ( source == 'silent') return { changes:changes, source:'edit' };
 		   if ( changes == null  ) return;
+		   if ( source != 'edit' ) return;
 
 		   var last = changes.slice(-1)[0];
 		   var index = last[0] || 0;
@@ -114,22 +113,31 @@ use \Tuanduimao\Loader\App;
 
 
 
-	// 回写 Excel 表中的栏位
+	
 	$imgeditor.on('update', function(id, type, option, pos, source  ){
 		
 		if ( source != 'api' && source != 'init' ) {
 			$webtable.needSubmit(true);
 		}
 
+		var idx = image.map[id];
+		if  ( source == 'move') {
+			image.items[idx][2] = pos;
+		} 
+
+		if ( source == 'resize' ) {
+			image.items[idx][1]['width'] = option['width'] ;
+			image.items[idx][1]['height'] = option['height'] ;
+		}
+
+
+		// 回写 Excel 表中的栏位
 		if ( source != 'panel' ) return;
-
-
 		var col = option['origin'];
 		if (  typeof col == 'undefined' || col == null  || col == "" ) {
 			console.log(  typeof col , col);
 			return;
-		}	
-
+		}
 
 		var row = $imgeditor.getIndex();
 		var text = option['text'];
@@ -138,18 +146,22 @@ use \Tuanduimao\Loader\App;
 			text = option['src'];
 		}
 
-
-
+		
 		$hot.setDataAtCell(parseInt(row), parseInt(col), text, 'silent' );
 
 	});
 
-	// 会写 Excel 表中的栏位信息
 	$imgeditor.on('page.update', function(event,  data  ){
 
 		var col = data['origin'];
+		if (  typeof col == 'undefined' || col == null  || col == "" ) {
+			return;
+		}
+
 		var row = $imgeditor.getIndex();
 		var text = data['bgimage'];
+
+		// 回写 Excel 表中的栏位
 		$hot.setDataAtCell(parseInt(row), parseInt(col), text, 'silent' );
 
 	});
@@ -157,8 +169,17 @@ use \Tuanduimao\Loader\App;
 	// 添加一个新项目 ( 增加一个栏位 )
 	$imgeditor.on('add', function( id, type, option, pos, source ) {
 		if ( source == 'init' ) return;
-		var idx = image['items'].length -1;
-		image['items'].push([type, option, pos]);
+		pos = pos || {x:0, y:0};
+		var idx = image['items'].push([type, option, pos]);
+		image.map[id] = idx -1;
+	});
+
+	$imgeditor.on('remove', function( id, source ) {
+		if ( source == 'init' ) return;
+		idx = image.map[id];
+		image.items.splice(idx, 1);
+		delete image.map[id];
+		console.log( 'remove', image );
 	});
 
 
@@ -237,7 +258,7 @@ use \Tuanduimao\Loader\App;
 	 * @return {[type]}	  [description]
 	 */
 	function updateImage( data ) {
-		image = data;
+		image = $.extend(image, data);
 	}
 
 
@@ -290,21 +311,20 @@ use \Tuanduimao\Loader\App;
 					}
 				}
 				var id = $imgeditor.add(it[0], it[1], it[2], 'init' );
-				
+
 			}
 
-			image['items'] = [];
+			image['items'] = []; image['map'] = {};
 			var newData = $imgeditor.getData();
 			var newItems = newData['items'] || [];
 			var newPage = newData['page'];
 
+			image['page'] = newPage;
 			for( var id in newItems ) {
 				var it = newItems[id];
-				image['items'].push ( [it.name, it.option, it.pos]);
+				var idx = image['items'].push ( [it.name, it.option, it.pos]);
+				image.map[id] = idx -1;
 			}
-
-			image['page'] = newPage;
-
 		})
 	}
    
