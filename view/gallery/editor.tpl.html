@@ -775,13 +775,12 @@ $(function() {
 
 		imagePanel.show({
 			confirm: function( selected ){
-				console.log( selected );
 				var img = selected[0];
 				$imgeditor.add('image',{
 					width:img['width'],
 					height:img['height'],
 					src:img['origin'],
-					origin:img['origin']
+					origin:-1
 				});
 			}
 		});
@@ -796,7 +795,7 @@ $(function() {
 
 	$('.fn-add-qrcode').click(function(event) {
 		$imgeditor.add('qrcode', {
-			width:300,
+			width:300,origin:-1,
 			text:'https://www.minapages.com',
 		}, {} );
 	});

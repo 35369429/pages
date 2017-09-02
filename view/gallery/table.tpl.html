@@ -56,7 +56,9 @@ use \Tuanduimao\Loader\App;
 
 	   afterChange:function( changes, source){
 
-		   if ( source == 'imgeditor') return { changes:changes, source:'edit' };
+	   	   console.log( changes,  source );
+	   	   
+		   if ( source == 'silent') return { changes:changes, source:'edit' };
 		   if ( changes == null  ) return;
 
 		   var last = changes.slice(-1)[0];
@@ -120,7 +122,15 @@ use \Tuanduimao\Loader\App;
 		}
 
 		if ( source != 'panel' ) return;
+
+
 		var col = option['origin'];
+		if (  typeof col == 'undefined' || col == null  || col == "" ) {
+			console.log(  typeof col , col);
+			return;
+		}	
+
+
 		var row = $imgeditor.getIndex();
 		var text = option['text'];
 
@@ -128,7 +138,9 @@ use \Tuanduimao\Loader\App;
 			text = option['src'];
 		}
 
-		$hot.setDataAtCell(parseInt(row), parseInt(col), text, 'imgeditor' );
+
+
+		$hot.setDataAtCell(parseInt(row), parseInt(col), text, 'silent' );
 
 	});
 
@@ -138,7 +150,7 @@ use \Tuanduimao\Loader\App;
 		var col = data['origin'];
 		var row = $imgeditor.getIndex();
 		var text = data['bgimage'];
-		$hot.setDataAtCell(parseInt(row), parseInt(col), text, 'imgeditor' );
+		$hot.setDataAtCell(parseInt(row), parseInt(col), text, 'silent' );
 
 	});
 
