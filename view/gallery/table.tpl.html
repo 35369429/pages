@@ -279,12 +279,12 @@ use \Tuanduimao\Loader\App;
 			return;
 		}
 
-
 		$imgeditor.setIndex( index );
 		$imgeditor.clean();
 
-		if ( typeof page['origin'] == 'number' && data[page['origin']] != null) {
-			image['page']['bgimage'] = data[page['origin']];
+		var col = page['origin'];
+		if (  typeof col != 'undefined' || col != null  || col != "" ) {
+			page['bgimage'] = image['page']['bgimage'] = data[col];
 		}
 
 		$imgeditor.updatePage( page , function(){
