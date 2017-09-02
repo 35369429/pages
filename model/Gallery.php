@@ -71,7 +71,7 @@ class Gallery extends Model {
 			->putColumn( 'count', $this->type('integer', ['index'=>1]) )			 			 
 
 			// 动态图集状态 on / off / pending / draft
-			->putColumn( 'status', $this->type('string', ['length'=>10,'index'=>1, 'default'=>'on']) )  
+			->putColumn( 'status', $this->type('string', ['length'=>10,'index'=>1, 'default'=>'draft']) )
 		;
 
 
@@ -112,6 +112,76 @@ class Gallery extends Model {
 
 
 	/**
+	 * 编辑器提交的模板数据格式转换
+	 * @param  [type] $template [description]
+	 * @return [type]           [description]
+	 */
+	function editorToDB( $template ) {
+
+		if ( empty($template['page']) || !is_array($template['page'])) {
+			throw new Excp('参数错误 ( page 信息格式不正确  )', 402, ['template'=>$template] );
+		}
+
+		if ( !is_array($template['items'])) {
+			throw new Excp('参数错误 ( items 信息格式不正确 )', 402, ['template'=>$template] );
+		}
+
+		$page  = $template['page'];
+		$items = $template['items'];
+
+		unset($page['index']);
+
+		$resource = []; 
+
+		$data = [
+			"gallery_id" => !empty($page['id']) ? $page['id'] : $this->genGalleryId(),
+			"title" => $page['title'],
+			"intro" => !empty($page['intro']) ? $page['intro'] :  $page['title'],
+			"type" => 'dynamic',
+			"template" => [ "page"=>$page, "items"=>[] ],
+		];
+
+		if ( !empty($page['bgimage']) ) {
+			$resource[$page['bgimage']] = null;
+		}
+
+		foreach ($items as $it ) {
+
+			if ( $it['name'] == 'image' && !empty($it['option']['src']) ) {
+				$resource[$it['option']['src']] = null;
+			} else if  ( $it['name'] == 'qrcode'  ) {
+				if (  !empty($it['option']['logo']) ) {
+					$resource[$it['option']['logo']] = null;
+				}
+
+				unset( $it['option']['src']);
+			} else if ( $it['name'] == 'text'  ) {
+				unset( $it['option']['src']);
+			}
+
+			array_push( $data['template']['items'], [
+				$it['name'],
+				$it['option'], 
+				$it['pos']
+			]);
+		}
+
+		$data['resource'] = $this->download( $resource );
+		return $data;
+	}
+
+
+
+
+	/**
+	 * 将网络图片转存到本地 
+	 */
+	function download( $resource ) {
+		return $resource;
+	}
+
+
+	/**
 	 * 保存图集
 	 * @param  array  $gallery 图集字段清单
 	 * @param  array  $images  图集中的图片清单
@@ -140,7 +210,7 @@ class Gallery extends Model {
 			if ( $this->isTemplateUpdated($last_gallery['template'], $gallery['template']) ) {
 				$gallery['template_update_time'] = "DB::RAW(CURRENT_TIMESTAMP)";
 			}
-			$rs = $this->update_by( 'gallery_id', $gallery );
+			$rs = $this->updateBy( 'gallery_id', $gallery );
 		}
 
 		$this->saveImages( $rs['gallery_id'],  $images );

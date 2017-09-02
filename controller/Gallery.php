@@ -9,6 +9,7 @@ use \Mina\Storage\Local as Storage;
 use \Endroid\QrCode\QrCode as Qrcode;
 use Endroid\QrCode\LabelAlignment;
 use \Endroid\QrCode\ErrorCorrectionLevel;
+use \Mina\Pages\Model\Gallery;
 
 
 
@@ -152,7 +153,33 @@ class GalleryController extends \Tuanduimao\Loader\Controller {
 	 * @return [type] [description]
 	 */
 	function save() {
-		echo Utils::unescape($_POST['data']);
+
+		$json_string = Utils::unescape($_POST['data']);
+		$data = json_decode( $json_string, true );
+
+		if ( empty($data['template']) ) {
+			throw new Excp("参数错误 (template 格式不正确 )", 402, ['json'=>$json_string]);
+		}
+
+		$g = new Gallery();
+		$gallery =  $g->editorToDB( $data['template'] );
+
+		$rs = $g->save( $gallery );
+		Utils::out( $rs );
+		
+	}
+
+
+	function test(){
+		
+		$json_string = file_get_contents(realpath(__DIR__ . "/../test/res/gallery.post.json"));
+		$data = json_decode($json_string, true);
+		$g = new Gallery();
+		$gallery =  $g->editorToDB( $data['template'] );
+
+		$rs = $g->save( $gallery );
+		Utils::out( $rs );
+
 	}
 
 

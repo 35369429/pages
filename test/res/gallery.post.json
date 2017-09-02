@@ -1,0 +1,136 @@
+{
+  "create": [
+    {
+      "data": {
+        "A": "示例文字",
+        "B": "/s/mina/pages/static/defaults/p7.jpg",
+        "C": "二维码链接",
+        "D": "/static-file/media/2017/09/02/cd2a6b5215eca1c7fd4f32a27b8dabc8.jpg",
+        "E": null,
+        "F": null,
+        "G": null,
+        "H": null,
+        "I": null,
+        "J": null,
+        "K": null,
+        "L": null,
+        "M": null,
+        "N": null,
+        "O": null,
+        "P": null,
+        "Q": null,
+        "R": null,
+        "S": null,
+        "T": null,
+        "U": "tmp_1504363357000928.8009687439422"
+      },
+      "row": 0
+    }
+  ],
+  "update": [],
+  "remove": [],
+  "template": {
+    "page": {
+      "id": 1504363343180,
+      "index": 0,
+      "title": "天使之城",
+      "bgimage": "/s/mina/pages/static/defaults/p7.jpg",
+      "origin": 1,
+      "bgcolor": "rgba(254,254,254,1)"
+    },
+    "items": {
+      "1504363363950": {
+        "name": "text",
+        "params": {
+          "width": 68,
+          "height": 168,
+          "text": "示例文字",
+          "font": 1,
+          "size": 24,
+          "color": "rgba(0,0,0,1)",
+          "background": "rgba(255,255,255,0)",
+          "align": "center",
+          "valign": "top",
+          "type": "vertical",
+          "dir": "rtl",
+          "line": 1.2,
+          "space": 0.2,
+          "origin": 0
+        },
+        "option": {
+          "origin": 0,
+          "type": "vertical",
+          "dir": "rtl",
+          "width": 68,
+          "height": 168,
+          "text": "示例文字",
+          "preserveAspectRatio": false,
+          "src": "https://wss.xpmjs.com/_a/mina/image/text?width=68&height=168&text=示例文字&font=1&size=24&color=rgba(0,0,0,1)&background=rgba(255,255,255,0)&align=center&valign=top&type=vertical&dir=rtl&line=1.2&space=0.2&origin=0",
+          "alpha": 1,
+          "font": 1,
+          "size": 24,
+          "color": "rgba(0,0,0,1)",
+          "background": "rgba(255,255,255,0)",
+          "align": "center",
+          "valign": "top",
+          "line": 1.2,
+          "space": 0.2
+        },
+        "pos": {
+          "x": 710,
+          "y": 156
+        }
+      },
+      "1504363359622": {
+        "name": "qrcode",
+        "params": {
+          "text": "二维码链接",
+          "width": 120,
+          "height": 120,
+          "logo": "",
+          "logowidth": 50,
+          "color": "rgba(0,0,0,1)",
+          "background": "rgba(255,255,255,0)",
+          "type": "url",
+          "config": null,
+          "appid": null,
+          "secret": null,
+          "origin": 2
+        },
+        "option": {
+          "origin": 2,
+          "width": 120,
+          "text": "二维码链接",
+          "height": 120,
+          "preserveAspectRatio": true,
+          "src": "https://wss.xpmjs.com/_a/mina/image/qrcode?text=二维码链接&width=120&height=120&logo=&logowidth=50&color=rgba(0,0,0,1)&background=rgba(255,255,255,0)&type=url&config=&appid=&secret=&origin=2",
+          "alpha": 1,
+          "logo": "",
+          "logowidth": 50,
+          "color": "rgba(0,0,0,1)",
+          "background": "rgba(255,255,255,0)",
+          "type": "url",
+          "config": null,
+          "appid": null,
+          "secret": null
+        },
+        "pos": {
+          "x": 660,
+          "y": 20
+        }
+      },
+      "1504363361316": {
+        "name": "image",
+        "option": {
+          "width": "269",
+          "height": "153",
+          "src": "/static-file/media/2017/09/02/cd2a6b5215eca1c7fd4f32a27b8dabc8.jpg",
+          "origin": "3",
+          "alpha": "1",
+          "preserveAspectRatio": true
+        },
+        "pos": []
+      }
+    }
+  }
+}

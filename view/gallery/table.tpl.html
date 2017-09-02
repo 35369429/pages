@@ -124,6 +124,10 @@ use \Tuanduimao\Loader\App;
 		var row = $imgeditor.getIndex();
 		var text = option['text'];
 
+		if ( type == 'image' ) {
+			text = option['src'];
+		}
+
 		$hot.setDataAtCell(parseInt(row), parseInt(col), text, 'imgeditor' );
 
 	});
