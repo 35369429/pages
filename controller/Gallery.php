@@ -146,6 +146,16 @@ class GalleryController extends \Tuanduimao\Loader\Controller {
 	}
 
 
+
+	/**
+	 * 保存 Gallery 信息
+	 * @return [type] [description]
+	 */
+	function save() {
+		echo $_POST['data'];
+	}
+
+
 	/**
 	 * 图集编辑器
 	 * @return 

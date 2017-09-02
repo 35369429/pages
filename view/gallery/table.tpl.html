@@ -5,9 +5,9 @@ use \Tuanduimao\Loader\App;
 	<div id="gallery-table" class="webtable"></div>
 	<div class="row webtable-footer">
 		<div class="col-xs-5">
-			<button class="btn btn-primary  push-15-t push-15-l"> 
+			<button class="btn btn-primary fn-gallery fn-gallery-save  push-15-t push-15-l disabled "> 
 				<i class="fa fa-save"></i> 保存</button>
-			<button class="btn btn-primary  push-15-t push-10-l"> 
+			<button class="btn btn-primary fn-gallery fn-gallery-import push-15-t push-10-l"> 
 				<i class="fa fa-cloud-upload"></i> 导入</button>
 		</div>
 		<div class="col-xs-7 text-muted text-right" style="padding:15px 15px 5px 15px;">
@@ -55,14 +55,24 @@ use \Tuanduimao\Loader\App;
 	   },
 
 	   afterChange:function( changes, source){
-		   
-		   if ( source == 'imgeditor') return;
+
+		   if ( source == 'imgeditor') return { changes:changes, source:'edit' };
 		   if ( changes == null  ) return;
 
 		   var last = changes.slice(-1)[0];
 		   var index = last[0] || 0;
 		   preview(index);
+		   return changes;
 	   },
+
+	   needSubmit: function( need ) {
+	   	 	console.log( 'needSubmit', need );
+	   		if ( need === true ) {
+	   			$('.fn-gallery-save').removeClass('disabled');
+	   		} else {
+	   			$('.fn-gallery-save').addClass('disabled');
+	   		}
+       },
 
 	   afterGetdata: function( resp, status, xhr ){
 			$hot.selectCell(0,0);
@@ -91,12 +101,12 @@ use \Tuanduimao\Loader\App;
 
 
 	// @see https://docs.handsontable.com/0.15.0-beta3/Hooks.html
+	// 选中行更新图片预览
 	$hot.addHook('afterSelectionEnd', function( index ){
 		
 		if ( $hot.latest == index ) {
 			return;
 		}
-
 		$hot.latest = index; 
 		preview( index );
 	});
@@ -105,9 +115,12 @@ use \Tuanduimao\Loader\App;
 
 	// 回写 Excel 表中的栏位
 	$imgeditor.on('update', function(id, type, option, pos, source  ){
+		
+		if ( source != 'api' && source != 'init' ) {
+			$webtable.needSubmit(true);
+		}
 
 		if ( source != 'panel' ) return;
-
 		var col = option['origin'];
 		var row = $imgeditor.getIndex();
 		var text = option['text'];
@@ -116,6 +129,7 @@ use \Tuanduimao\Loader\App;
 
 	});
 
+	// 会写 Excel 表中的栏位信息
 	$imgeditor.on('page.update', function(event,  data  ){
 
 		var col = data['origin'];
@@ -125,16 +139,62 @@ use \Tuanduimao\Loader\App;
 
 	});
 
-	 
-
-
+	// 添加一个新项目 ( 增加一个栏位 )
 	$imgeditor.on('add', function( id, type, option, pos, source ) {
-		
 		if ( source == 'init' ) return;
 		var idx = image['items'].length -1;
 		image['items'].push([type, option, pos]);
+	});
+
+
+	// Gallery 信息保存 & 入库
+	$('.fn-gallery-save').click(function(event) {
+		
+		// loading('保存中, 请稍候...');
+
+		var template = { hello:'world' };
+
+		// 提交数据
+		$webtable.submitData(
+			{
+				url: '<?=App::NR("gallery","save")?>',
+				data:{template: template}
+			}, 
+			function onSuccess( resp, status, xhr ){
+				console.log( resp );
+				success('保存成功');
+				return true;
+			}, 
+			function onError(xhr,status,error){
+				console.log( status, error );
+				failure('保存失败 ( ' + status + ' )' );
+			}
+		);
 
 	});
+
+
+	function loading( message ) {
+		message = message || '保存中，请稍候...';
+		App.loading({message:message}).show();
+	}
+
+	function done(  ) {
+		App.loading().hide();
+	}
+
+	function success( message ) {
+		message = message || '操作成功';
+		App.notify( message);
+		done();
+	}
+
+	function failure( message  ){
+		message = message || '操作失败';
+		App.notify( message, 'fa fa-times','danger'); 
+		done();
+	}
+
 
 
 	/**

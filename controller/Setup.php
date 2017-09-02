@@ -9,24 +9,27 @@ use \Tuanduimao\Conf as Conf;
 class SetupController extends \Tuanduimao\Loader\Controller {
 	
 	function __construct() {
+
+		$this->models = [
+			'\\Mina\\Pages\\Model\\Article', 
+			'\\Mina\\Pages\\Model\\Category', 
+			'\\Mina\\Pages\\Model\\Tag',
+			'\\Mina\\Pages\\Model\\Gallery'
+		];
 	}
 
 
 	function install() {
-	
-		try {
-			App::M('Article')->dropTable();
-			App::M('Category')->dropTable();
-			App::M('Tag')->dropTable();
-		}catch( Excp $e) {}
 
-		try  {
-			App::M('Article')->__schema();
-			App::M('Category')->__schema();
-			App::M('Tag')->__schema();
-		}catch ( Excp $e ) {
-			echo $e->toJSON();
-			return;
+		$models = $this->models;
+		$insts = [];
+		foreach ($models as $mod ) {
+			try { $insts[$mod] = new $mod(); } catch( Excp $e) {echo $e->toJSON(); return;}
+		}
+		
+		foreach ($insts as $inst ) {
+			try { $inst->__clear(); } catch( Excp $e) {echo $e->toJSON(); return;}
+			try { $inst->__schema(); } catch( Excp $e) {echo $e->toJSON(); return;}
 		}
 
 
@@ -41,8 +44,6 @@ class SetupController extends \Tuanduimao\Loader\Controller {
 				"topic3"=>["width"=>null,"height"=>null, "ratio"=>"4:3"],
 				"topic4"=>["width"=>null,"height"=>null, "ratio"=>"2:3"]
 			]);
-
-
 		} catch ( Excp $e ) {
 			echo $e->toJSON();
 			return;
@@ -58,15 +59,15 @@ class SetupController extends \Tuanduimao\Loader\Controller {
 
 	function repair() {
 
-		try  {
-			App::M('Article')->__schema();
-			App::M('Category')->__schema();
-			App::M('Tag')->__schema();
-		}catch ( Excp $e ) {
-			echo $e->toJSON();
-			return;
+		$models = $this->models;
+		$insts = [];
+		foreach ($models as $mod ) {
+			try { $insts[$mod] = new $mod(); } catch( Excp $e) {echo $e->toJSON(); return;}
 		}
-
+		
+		foreach ($insts as $inst ) {
+			try { $inst->__schema(); } catch( Excp $e) {echo $e->toJSON(); return;}
+		}
 
 		try {
 			$option = new \Tuanduimao\Option('mina/pages');
@@ -80,18 +81,22 @@ class SetupController extends \Tuanduimao\Loader\Controller {
 			
 		} catch ( Excp $e ) {}
 		
-
 		echo json_encode('ok');		
 	}
+
 
 	// 卸载
 	function uninstall() {
 
-		try {
-			App::M('Article')->__clear();
-			App::M('Category')->__clear();
-			App::M('Tag')->__clear();
-		}catch( Excp $e) {}
+		$models = $this->models;
+		$insts = [];
+		foreach ($models as $mod ) {
+			try { $insts[$mod] = new $mod(); } catch( Excp $e) {echo $e->toJSON(); return;}
+		}
+		
+		foreach ($insts as $inst ) {
+			try { $inst->__clear(); } catch( Excp $e) {echo $e->toJSON(); return;}
+		}
 
 		try {
 			$option = new \Tuanduimao\Option('mina/pages');
