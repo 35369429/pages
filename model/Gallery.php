@@ -90,6 +90,9 @@ class Gallery extends Model {
 			// 关联 Meida ID 
 			->putColumn( 'media_id', $this->type('string', ['length'=>128, 'index'=>1]) )
 
+			// 动态数据
+			->putColumn( 'data', $this->type('longText', ['json'=>true]) )
+
 			// 动态图集模板 ( 图形编辑器 ) | 为 NULL 选取 gallery 中指定的模板
 			->putColumn( 'template', $this->type('longText', ['json'=>true]) )
 
@@ -106,8 +109,37 @@ class Gallery extends Model {
 			->putColumn( 'generate_update_time', $this->type('timestampTz', ['index'=>1]) )	
 
 			// 图片状态 on / off / pending / draft
-			->putColumn( 'status', $this->type('string', ['length'=>10,'index'=>1, 'default'=>'on']) )  
+			->putColumn( 'status', $this->type('string', ['length'=>10,'index'=>1, 'default'=>'draft']) )  
 		;
+	}
+
+
+
+	/**
+	 * 编辑器提交的模板数据格式转换
+	 * @param  [type] $images [description]
+	 * @return [type]         [description]
+	 */
+	function editorToImage( $images ) {
+
+		$data = [];
+		foreach ($images as $idx=>$img ) {
+			$keys = array_keys($img['data']);
+			$rs = $img['data'];
+			$key = end($keys);
+			$image_id = $rs[$key];
+
+			if ( strpos( $image_id ,'tmp_') == 0 ) {
+				$rs[$key] = $image_id = null;
+			}
+
+			array_push($data, [
+				"image_id" => $image_id,
+				"data" => $rs
+			]);
+		}
+
+		return $data;
 	}
 
 
@@ -116,7 +148,7 @@ class Gallery extends Model {
 	 * @param  [type] $template [description]
 	 * @return [type]           [description]
 	 */
-	function editorToDB( $template ) {
+	function editorToGallery( $template ) {
 
 		if ( empty($template['page']) || !is_array($template['page'])) {
 			throw new Excp('参数错误 ( page 信息格式不正确  )', 402, ['template'=>$template] );
@@ -149,14 +181,30 @@ class Gallery extends Model {
 
 			if ( $it['name'] == 'image' && !empty($it['option']['src']) ) {
 				$resource[$it['option']['src']] = null;
+
+				if ( is_numeric($it['option']['origin']) && intval($it['option']['origin']) >= 0 ) {
+					unset($it['option']['src']);
+				}
+
+
 			} else if  ( $it['name'] == 'qrcode'  ) {
 				if (  !empty($it['option']['logo']) ) {
 					$resource[$it['option']['logo']] = null;
 				}
 
+				if ( is_numeric($it['option']['origin']) && intval($it['option']['origin']) >= 0 ) {
+					unset($it['option']['text']);
+				}
+
 				unset( $it['option']['src']);
 			} else if ( $it['name'] == 'text'  ) {
+				
+				if ( is_numeric($it['option']['origin']) && intval($it['option']['origin']) >= 0 ) {
+					unset($it['option']['text']);
+				}
+
 				unset( $it['option']['src']);
+
 			}
 
 			array_push( $data['template']['items'], [
@@ -184,10 +232,9 @@ class Gallery extends Model {
 	/**
 	 * 保存图集
 	 * @param  array  $gallery 图集字段清单
-	 * @param  array  $images  图集中的图片清单
 	 * @return 
 	 */
-	function save( $gallery, $images=[] ) {
+	function save( $gallery ) {
 
 		// 检查参数
 		if ( !is_array($gallery)) {
@@ -213,7 +260,6 @@ class Gallery extends Model {
 			$rs = $this->updateBy( 'gallery_id', $gallery );
 		}
 
-		$this->saveImages( $rs['gallery_id'],  $images );
 		return $rs;
 	}
 
@@ -245,25 +291,58 @@ class Gallery extends Model {
 
 
 	/**
-	 * 向图集中添加/更新一组图片
-	 * @param [type] $gallery_id [description]
-	 * @param [type] $images     [description]
+	 * 生成图片 ID
 	 */
-	function saveImages( $gallery_id, $images ) {
-	
+	function genImageId() {
+		return time() . rand(10000,99999);
 	}
 
 
 
 	/**
-	 * 移除图片
+	 * 向图集中添加一组图片数据
+	 * @param [type] $gallery_id [description]
+	 * @param [type] $images     [description]
+	 */
+	function createImages( $gallery_id, $images ) {
+
+		$resp = [];
+		foreach ($images as $idx => $image) {
+			$key = end(array_keys($image['data']));
+			$image['gallery_id'] = $gallery_id;
+			$image['image_id'] = $image['data'][$key] = $this->genImageId();
+			$resp[] = $this->image->create( $image );
+		}
+
+		return $resp;
+	}
+
+
+	/**
+	 * 更新一组图片数据
+	 * @param  [type] $images     [description]
+	 */
+	function updateImages( $images ) {
+		$resp = [];
+		foreach ($images as $idx => $image) {
+			$resp[] = $this->image->updateBy( "image_id",  $image );
+		}
+		return $resp;
+	}
+
+
+	/**
+	 * 移除图片数据
 	 * @param  [type] $image_id [description]
 	 * @return [type]           [description]
 	 */
-	function removeImage( $image_id ) {
-
+	function removeImage( $image_ids ) {
+		$resp = [];
+		foreach ($image_ids as $image_id) {
+			$resp[] = $this->image->remove( $image_id, 'image_id');
+		}
+		return $resp;
 	}
-
 
 	function __clear() {
 		$this->image->dropTable();

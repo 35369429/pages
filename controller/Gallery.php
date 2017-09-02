@@ -162,11 +162,20 @@ class GalleryController extends \Tuanduimao\Loader\Controller {
 		}
 
 		$g = new Gallery();
-		$gallery =  $g->editorToDB( $data['template'] );
+		$gallery =  $g->editorToGallery( $data['template'] );
 
 		$rs = $g->save( $gallery );
-		Utils::out( $rs );
-		
+
+		$resp = [
+			"gallery"=>$gallery
+		];
+		if ( !empty($data['create']) ) {
+			$images = $g->editorToImage($data['create']);
+			$resp['create'] = $g->createImages( $rs['gallery_id'], $images );
+		}
+
+		Utils::out( $resp );
+
 	}
 
 
@@ -175,10 +184,10 @@ class GalleryController extends \Tuanduimao\Loader\Controller {
 		$json_string = file_get_contents(realpath(__DIR__ . "/../test/res/gallery.post.json"));
 		$data = json_decode($json_string, true);
 		$g = new Gallery();
-		$gallery =  $g->editorToDB( $data['template'] );
-
+		$images =  $g->editorToImage( $data['create'] );
+		$gallery =  $g->editorToGallery( $data['template'] );
 		$rs = $g->save( $gallery );
-		Utils::out( $rs );
+		$resp['create'] = $g->createImages( $rs['gallery_id'], $images );
 
 	}
 
