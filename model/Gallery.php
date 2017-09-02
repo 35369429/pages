@@ -121,7 +121,7 @@ class Gallery extends Model {
 
 		// 检查参数
 		if ( !is_array($gallery)) {
-			throw new Excp('参数错误', 402, ['gallery'=>$gallery, "images"=>$images] )
+			throw new Excp('参数错误', 402, ['gallery'=>$gallery, "images"=>$images] );
 		}
 
 		if ( empty($gallery['gallery_id']) ){
@@ -159,7 +159,7 @@ class Gallery extends Model {
 		if ( !empty($last)  &&  !empty($current) ) {
 			$last = hash('md4',  json_encode($last));	
 			$curr = hash('md4',  json_encode($current));
-			$is_template_updated =  ($last !== $curr)
+			$is_template_updated =  ($last !== $curr);
 		}
 		return $is_template_updated;
 	}
