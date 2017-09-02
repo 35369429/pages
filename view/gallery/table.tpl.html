@@ -66,7 +66,6 @@ use \Tuanduimao\Loader\App;
 	   },
 
 	   needSubmit: function( need ) {
-	   	 	console.log( 'needSubmit', need );
 	   		if ( need === true ) {
 	   			$('.fn-gallery-save').removeClass('disabled');
 	   		} else {
@@ -150,16 +149,17 @@ use \Tuanduimao\Loader\App;
 	// Gallery 信息保存 & 入库
 	$('.fn-gallery-save').click(function(event) {
 		
-		// loading('保存中, 请稍候...');
-
-		var template = { hello:'world' };
+		loading('保存中, 请稍候...');
 
 		// 提交数据
 		$webtable.submitData(
 			{
 				url: '<?=App::NR("gallery","save")?>',
-				data:{template: template}
-			}, 
+				data:{
+					template:$imgeditor.getData()
+				},
+				escape: true
+			},
 			function onSuccess( resp, status, xhr ){
 				console.log( resp );
 				success('保存成功');

@@ -152,7 +152,7 @@ class GalleryController extends \Tuanduimao\Loader\Controller {
 	 * @return [type] [description]
 	 */
 	function save() {
-		echo $_POST['data'];
+		echo Utils::unescape($_POST['data']);
 	}
 
 
