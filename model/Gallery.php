@@ -351,7 +351,7 @@ class Gallery extends Model {
 	 */
 	function makeImage( $image_id ) {
 
-		return 'c36ef48aa681b9ef0e56b63885ad2384';
+		return '8b93fd6dba07fd3c19f86b1f83ec5bc8';
 	}
 
 
