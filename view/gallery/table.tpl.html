@@ -140,6 +140,9 @@ use \Tuanduimao\Loader\App;
 
 	$imgeditor.on('update', function(id, type, option, pos, source  ){
 		
+
+		if ( source == 'init') return;
+
 		if ( source != 'silent' && source != 'init' ) {
 			$webtable.needSubmit(true);
 		}
@@ -181,7 +184,7 @@ use \Tuanduimao\Loader\App;
 		$imgeditor.updatePage({title:$(this).val()}, function(){}, 'silent' );
 	});
 
-	$imgeditor.on('page.update', function(event,  data  ){
+	$imgeditor.on('page.update', function(event,  data, source  ){
 
 		$('.fn-gallery-title').val(data['title']);
 
@@ -297,6 +300,20 @@ use \Tuanduimao\Loader\App;
 	}
 
 
+	function array_flip( trans ) {
+	  	var tmp_ar = {};
+
+	    for ( var key in trans )
+	    {
+	        if ( trans.hasOwnProperty( key ) )
+	        {
+	            tmp_ar[trans[key]] = key;
+	        }
+	    }
+
+	    return tmp_ar;
+	}
+
 
 	/**
 	 * 图片预览
@@ -316,23 +333,21 @@ use \Tuanduimao\Loader\App;
 		}
 
 		$imgeditor.setIndex( index );
-		$imgeditor.clean('silent');
+		// $imgeditor.clean('silent');
 
-
+		var map = array_flip( image.map );
 		var pagecol = page['origin'];
 		if (  typeof pagecol != 'undefined' || pagecol != null  || pagecol != "" ) {
 			page['bgimage'] = image['page']['bgimage'] = data[pagecol];
 		}
 
 		$imgeditor.updatePage( page , function(){
-			for( var idx in items ) {
+
+			for(  var idx in items ) {
+
+				var id = map[idx] || null;
 				var it = items[idx];
-					it[0] = it[0] || '';
-					it[1] = it[1] || [];
-					it[2] = it[2] || [];
-
-				var origin = parseInt(it[1]['origin']);
-
+				var origin = parseInt(it[1]['origin']);	
 				if ( it[0] == 'image' ) {
 					if ( typeof origin == 'number' && data[origin] != null) {
 						it[1]['src'] = data[origin];
@@ -347,34 +362,82 @@ use \Tuanduimao\Loader\App;
 					}
 				}
 
-				if ( col == origin ) {
-					var id = $imgeditor.add(it[0], it[1], it[2], 'init', function(id ){
+				if ( id != null ) {
+
+					$imgeditor.update(id, it[1], it[2], 'init');
+					if ( col == origin ) {
+						console.log( it[1]['text'],  it[1]['src'] );
 						$imgeditor.select( id, 'user' );
-					});
-				} else {
-					var id = $imgeditor.add(it[0], it[1], it[2], 'init');
+
+					} 
+
+				} else {  // 新建
+					if ( col == origin ) {
+						var id = $imgeditor.add(it[0], it[1], it[2], 'init', function(id ){
+							$imgeditor.select( id, 'user' );
+						});
+					} else {
+						var id = $imgeditor.add(it[0], it[1], it[2], 'init');
+					}
+					image.map[id] = idx;
 				}
 			}
 
-
-			// 选中当前页背景图
+			// // 选中当前页背景图
 			if ( pagecol == col ) {
 				$imgeditor.select( 'page', 'user' );
 			}
 
+			// for( var idx in items ) {
+			// 	var it = items[idx];
+			// 		it[0] = it[0] || '';
+			// 		it[1] = it[1] || [];
+			// 		it[2] = it[2] || [];
 
-			image['items'] = []; image['map'] = {};
-			var newData = $imgeditor.getData();
-			var newItems = newData['items'] || [];
-			var newPage = newData['page'];
+			// 	var origin = parseInt(it[1]['origin']);
 
-			image['page'] = newPage;
+			// 	if ( it[0] == 'image' ) {
+			// 		if ( typeof origin == 'number' && data[origin] != null) {
+			// 			it[1]['src'] = data[origin];
+			// 		}	
+			// 	} else if ( it[0] == 'text' ) {
+			// 		if ( typeof origin == 'number' && data[origin] != null) {
+			// 			it[1]['text'] = data[origin];
+			// 		}
+			// 	} else if ( it[0] == 'qrcode' ) {
+			// 		if ( typeof origin == 'number' && data[origin] != null) {
+			// 			it[1]['text'] = data[origin];
+			// 		}
+			// 	}
 
-			for( var id in newItems ) {
-				var it = newItems[id];
-				var idx = image['items'].push ( [it.name, it.option, it.pos]);
-				image.map[id] = idx -1;
-			}
+			// 	if ( col == origin ) {
+			// 		var id = $imgeditor.add(it[0], it[1], it[2], 'init', function(id ){
+			// 			$imgeditor.select( id, 'user' );
+			// 		});
+			// 	} else {
+			// 		var id = $imgeditor.add(it[0], it[1], it[2], 'init');
+			// 	}
+			// }
+
+
+			// // 选中当前页背景图
+			// if ( pagecol == col ) {
+			// 	$imgeditor.select( 'page', 'user' );
+			// }
+
+
+			// image['items'] = []; image['map'] = {};
+			// var newData = $imgeditor.getData();
+			// var newItems = newData['items'] || [];
+			// var newPage = newData['page'];
+
+			// image['page'] = newPage;
+
+			// for( var id in newItems ) {
+			// 	var it = newItems[id];
+			// 	var idx = image['items'].push ( [it.name, it.option, it.pos]);
+			// 	image.map[id] = idx -1;
+			// }
 		}, 'init' );
 	}
    
