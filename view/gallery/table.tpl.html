@@ -4,6 +4,18 @@ use \Tuanduimao\Loader\App;
 <div class="webtable-content">
 	<div id="gallery-table" class="webtable"></div>
 	<div class="row webtable-footer">
+
+		<div class="col-xs-12 push-15-t">
+			<div class="form-group">
+				<div class="col-xs-12">
+					<div class="input-group">
+						<span class="input-group-addon">图集主题</span>
+						<input class="form-control fn-gallery-title" name="title" type="text" placeholder="" >
+					</div>
+				</div>
+			</div>
+		</div>
+
 		<div class="col-xs-5">
 			<button class="btn btn-primary fn-gallery fn-gallery-save  push-15-t push-15-l disabled "> 
 				<i class="fa fa-save"></i> 保存</button>
@@ -45,10 +57,14 @@ use \Tuanduimao\Loader\App;
 	$imgeditor.mode('modify');
 	$imgeditor.crumb([{name:'批量编辑'}]);
 
+	/**
+	 * 图集模板信息缓存
+	 * @type {Object}
+	 */
 	var image = { page:[], items:[], map:{} }; 
 
 	$('#gallery-table').webtable({
-	   offsetHeight:222,
+	   offsetHeight:272,
 	   readOnly:false,
 	   submitOption:{
 		   'url': '<?=App::NR('gallery', 'save')?>'
@@ -61,8 +77,10 @@ use \Tuanduimao\Loader\App;
 		   if ( changes == null  ) return;
 
 		   var last = changes.slice(-1)[0];
-		   var index = last[0] || 0;
-		   preview(index);
+		   var col = last[0] || 0;
+		   var row = last[1] || 0;
+
+		   preview(col, col);
 		   return changes;
 	   },
 
@@ -82,8 +100,24 @@ use \Tuanduimao\Loader\App;
 
 	var $webtable = $('#gallery-table').webtable('get');
 	var $hot = $webtable.handsontable();
-		$hot.latest = -1;
+		$hot.latest = {
+			row: -1,
+			col: -1
+		}
    
+
+
+	// @see https://docs.handsontable.com/0.15.0-beta3/Hooks.html
+	// 选中行更新图片预览
+	$hot.addHook('afterSelectionEnd', function( row, col ) {
+		if ( $hot.latest.row == row && $hot.latest.col == col ) {
+			return;
+		}
+		$hot.latest = {row:row, col:col};
+		preview( row, col );
+	});
+
+
 
     // 从服务器中读取数据
 	$webtable.getData('<?=App::NR('gallery', 'getdata')?>', function( resp, status, xhr){
@@ -91,32 +125,22 @@ use \Tuanduimao\Loader\App;
 		console.log('getdata pagination', resp['pagination'] );  // 分页信息
 		console.log('getdata status', resp['status'] );  // 状态信息
 		console.log( resp );
-
-
 		updateColumsSelector( resp['columns'], resp['colHeaders'] );
 		updateImage( resp['image'] );
 		return resp;
 	});
 
 
-
-	// @see https://docs.handsontable.com/0.15.0-beta3/Hooks.html
-	// 选中行更新图片预览
-	$hot.addHook('afterSelectionEnd', function( index ){
-		
-		if ( $hot.latest == index ) {
-			return;
-		}
-		$hot.latest = index; 
-		preview( index );
+	// 当管理面板单机时候 （ 转移焦点
+	$('.option-panel').click(function(event){
+		$hot.deselectCell();
 	});
-
-
-
 	
+
+
 	$imgeditor.on('update', function(id, type, option, pos, source  ){
 		
-		if ( source != 'api' && source != 'init' ) {
+		if ( source != 'silent' && source != 'init' ) {
 			$webtable.needSubmit(true);
 		}
 
@@ -151,7 +175,15 @@ use \Tuanduimao\Loader\App;
 
 	});
 
+
+	// 图说主题副本
+	$('.fn-gallery-title').keyup(function(event) {
+		$imgeditor.updatePage({title:$(this).val()}, function(){}, 'silent' );
+	});
+
 	$imgeditor.on('page.update', function(event,  data  ){
+
+		$('.fn-gallery-title').val(data['title']);
 
 		var col = data['origin'];
 		if (  typeof col == 'undefined' || col == null  || col == "" ) {
@@ -259,6 +291,9 @@ use \Tuanduimao\Loader\App;
 	 */
 	function updateImage( data ) {
 		image = $.extend(image, data);
+
+		var title = image['page']['title'] || '未命名';
+		$('.fn-gallery-title').val( title );
 	}
 
 
@@ -268,8 +303,9 @@ use \Tuanduimao\Loader\App;
 	 * @param  {[type]} index [description]
 	 * @return {[type]}       [description]
 	 */
-	function preview( index ) {
+	function preview( row, col ) {
 
+		var index = row;
 		var data = $hot.getDataAtRow( index );
 		var page = image['page'] || [];
 		var items = image['items'] || [];
@@ -280,11 +316,12 @@ use \Tuanduimao\Loader\App;
 		}
 
 		$imgeditor.setIndex( index );
-		$imgeditor.clean();
+		$imgeditor.clean('silent');
 
-		var col = page['origin'];
-		if (  typeof col != 'undefined' || col != null  || col != "" ) {
-			page['bgimage'] = image['page']['bgimage'] = data[col];
+
+		var pagecol = page['origin'];
+		if (  typeof pagecol != 'undefined' || pagecol != null  || pagecol != "" ) {
+			page['bgimage'] = image['page']['bgimage'] = data[pagecol];
 		}
 
 		$imgeditor.updatePage( page , function(){
@@ -295,7 +332,6 @@ use \Tuanduimao\Loader\App;
 					it[2] = it[2] || [];
 
 				var origin = parseInt(it[1]['origin']);
-
 
 				if ( it[0] == 'image' ) {
 					if ( typeof origin == 'number' && data[origin] != null) {
@@ -310,9 +346,22 @@ use \Tuanduimao\Loader\App;
 						it[1]['text'] = data[origin];
 					}
 				}
-				var id = $imgeditor.add(it[0], it[1], it[2], 'init' );
 
+				if ( col == origin ) {
+					var id = $imgeditor.add(it[0], it[1], it[2], 'init', function(id ){
+						$imgeditor.select( id, 'user' );
+					});
+				} else {
+					var id = $imgeditor.add(it[0], it[1], it[2], 'init');
+				}
 			}
+
+
+			// 选中当前页背景图
+			if ( pagecol == col ) {
+				$imgeditor.select( 'page', 'user' );
+			}
+
 
 			image['items'] = []; image['map'] = {};
 			var newData = $imgeditor.getData();
@@ -320,12 +369,13 @@ use \Tuanduimao\Loader\App;
 			var newPage = newData['page'];
 
 			image['page'] = newPage;
+
 			for( var id in newItems ) {
 				var it = newItems[id];
 				var idx = image['items'].push ( [it.name, it.option, it.pos]);
 				image.map[id] = idx -1;
 			}
-		})
+		}, 'init' );
 	}
    
 
