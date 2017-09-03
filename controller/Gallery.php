@@ -18,9 +18,49 @@ class GalleryController extends \Tuanduimao\Loader\Controller {
 	function __construct() {
 	}
 
+
+
+
+	/**
+	 * 帮助页
+	 * @return
+	 */
+	function help() {
+
+		$data = [
+			"gallery" => [
+				"bgimage" => "/s/mina/pages/static/defaults/p7.jpg",
+				"bgcolor" => "rgba(254,254,254,1)",
+				"items" => [
+					["text", ["text"=>"示例文字"], ["x"=>350, "y"=>530]]
+				]
+			]
+		];
+
+		App::render($data, 'gallery', 'help' );
+	}
+
+
+	// 首页
 	function index(){
 
+		$page = !empty($_GET['page']) ? intval($_GET['page']) : 1;
+		$keyword = trim($_GET['keyword']);
+
+		$g = new Gallery();
+		$resp = $g->getGallerys($page, ['keyword'=>$keyword]);
+
+		$data['query'] = [
+			"keyword"=>$keyword,
+			"page" => $pages
+		];
+		
+		$data['gallerys'] = $resp;
 		App::render($data, 'gallery', 'search' );
+
+		// echo "<pre>";
+		// Utils::out( $data );
+		// echo "</pre>";
 
 		return [
 			'js' => [
@@ -47,15 +87,17 @@ class GalleryController extends \Tuanduimao\Loader\Controller {
 	}
 
 
-	/**
-	 * excel 
-	 * @return [type] [description]
-	 */
+
+	// 批量编辑图集图片
 	function table() {
 		App::render($data, 'gallery', 'table' );
 	}
 
+
+
+	// 读取图集中的图片
 	function getdata() {
+
 		$maxlen = 20; $columns = []; $data = [ ["示例文字", "/s/mina/pages/static/defaults/p7.jpg", "二维码链接"] ];
 		for( $i=0; $i<$maxlen; $i++ ) {
 			$name = chr( $i + 65 );
@@ -91,25 +133,6 @@ class GalleryController extends \Tuanduimao\Loader\Controller {
 	
 
 	/**
-	 * 帮助页
-	 * @return
-	 */
-	function help() {
-
-		$data = [
-			"gallery" => [
-				"bgimage" => "/s/mina/pages/static/defaults/p7.jpg",
-				"bgcolor" => "rgba(254,254,254,1)",
-				"items" => [
-					["text", ["text"=>"示例文字"], ["x"=>350, "y"=>530]]
-				]
-			]
-		];
-
-		App::render($data, 'gallery', 'help' );
-	}
-
-	/**
 	 * 图集预览页
 	 * @return [type] [description]
 	 */
@@ -125,27 +148,6 @@ class GalleryController extends \Tuanduimao\Loader\Controller {
 	function select(){
 		App::render($data, 'gallery', 'select' );
 	}
-
-	function columns(){
-		echo json_encode([
-			"items"=>[],
-			"total"=>0
-		]);
-		return;
-		echo json_encode([
-			"items"=>[
-				["text"=>"标题", "id"=>1],
-				["text"=>"姓名", "id"=>2],
-				["text"=>"公司", "id"=>3],
-				["text"=>"地址", "id"=>4],
-				["text"=>"摘要", "id"=>5],
-				["text"=>"创建时间", "id"=>6],
-				["text"=>"更新时间", "id"=>7]
-			],
-			"total"=>20
-		]);
-	}
-
 
 
 	/**
@@ -179,15 +181,41 @@ class GalleryController extends \Tuanduimao\Loader\Controller {
 	}
 
 
-	function test(){
+
+	/**
+	 * 显示图集图片
+	 * @return [type] [description]
+	 */
+	function image() {
+
+		$image_id = $_GET['image_id'];
+		$media_id = $_GET['media_id'];
+		$size = $_GET['size'];
 		
-		$json_string = file_get_contents(realpath(__DIR__ . "/../test/res/gallery.post.json"));
-		$data = json_decode($json_string, true);
+		// 转向 media 图片呈现页
+		if ( empty($media_id) ) { 
+
+			if ( empty($image_id) ) {
+				throw new Excp('参数错误', 402, ['image_id'=>$image_id, 'media_id'=>$media_id]);
+			}
+
+			$g = new Gallery();
+			$media_id = $g->makeImage( $image_id );
+		}
+
+		$url = App::URI("mina", "image", "media", ["media_id"=>$media_id,  'size'=>$size]);
+		header("HTTP/1.1 301 Moved Permanently");
+		header("Location: {$url}");
+
+	}
+
+
+
+	function test(){
 		$g = new Gallery();
-		$images =  $g->editorToImage( $data['create'] );
-		$gallery =  $g->editorToGallery( $data['template'] );
-		$rs = $g->save( $gallery );
-		$resp['create'] = $g->createImages( $rs['gallery_id'], $images );
+		$data = $g->getGallerys(1, ['keyword'=>'山海经']);
+
+		Utils::out( $data );
 
 	}
 

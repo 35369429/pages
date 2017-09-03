@@ -105,6 +105,9 @@ class Gallery extends Model {
 			// 动态图集模板上次更新时间  | 为 NULL 选取 gallery 的时间
 			->putColumn( 'template_update_time', $this->type('timestampTz', ['index'=>1]) )
 
+			// 图片数据模板上次更新时间  | 为 NULL 选取 gallery 的时间
+			->putColumn( 'data_update_time', $this->type('timestampTz', ['index'=>1]) )
+
 			// 图片生成图片时间 
 			->putColumn( 'generate_update_time', $this->type('timestampTz', ['index'=>1]) )	
 
@@ -297,6 +300,59 @@ class Gallery extends Model {
 		return time() . rand(10000,99999);
 	}
 
+
+
+	/**
+	 * 查询图片清单
+	 * @param  [type]  $page    [description]
+	 * @param  [type]  $query   [description]
+	 * @param  integer $perpage [description]
+	 * @return [type]           [description]
+	 */
+	function getImages( $gallery_id, $page=1, $query=[],  $perpage=40 ) {
+
+	}
+
+
+	/**
+	 * 查询图集清单
+	 */
+	function getGallerys( $page=1, $query=[], $perpage=8 ) {
+
+		$qb = $this->query()
+			   ->join("gallery_image", "gallery_image.gallery_id", 'gallery.gallery_id')
+			   ->groupBy('gallery.gallery_id')
+			   ->orderBy('gallery.created_at', 'desc')
+			;
+
+		if ( !empty($query['keyword']) ) {
+			$qb->where('title', 'like', "%{$query['keyword']}%")
+			   ->orWhere('gallery.template', 'like', "%{$query['keyword']}%")
+			   ->orWhere('gallery_image.template', 'like', "%{$query['keyword']}%")
+			   ->orWhere('gallery_image.data', 'like', "%{$query['keyword']}%");
+		}
+
+		$qb->select(
+			"gallery.title", "gallery.intro",  
+			"gallery.type",  "gallery.gallery_id as gallery_id", 
+			"gallery.status as status",
+			"gallery_image.media_id as media_id",
+			"gallery_image.image_id as image_id"
+		);
+		$qb->selectRaw("count(image_id) as count");
+		$resp = $qb->pgArray($perpage, ['gallery._id'], 'page', $page);
+		return $resp;
+	}
+
+	/**
+	 * 制作图片并上传到 Media 中
+	 * @param  [type] $image_id [description]
+	 * @return [type]           [description]
+	 */
+	function makeImage( $image_id ) {
+
+		return 'c36ef48aa681b9ef0e56b63885ad2384';
+	}
 
 
 	/**

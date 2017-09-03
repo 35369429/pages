@@ -179,9 +179,11 @@ use \Tuanduimao\Loader\App;
 	});
 
 
-	// 图说主题副本
+	// 图集主题副本
 	$('.fn-gallery-title').keyup(function(event) {
+		
 		$imgeditor.updatePage({title:$(this).val()}, function(){}, 'silent' );
+		$webtable.needSubmit(true);
 	});
 
 	$imgeditor.on('page.update', function(event,  data, source  ){
@@ -366,10 +368,8 @@ use \Tuanduimao\Loader\App;
 
 					$imgeditor.update(id, it[1], it[2], 'init');
 					if ( col == origin ) {
-						console.log( it[1]['text'],  it[1]['src'] );
 						$imgeditor.select( id, 'user' );
-
-					} 
+					}
 
 				} else {  // 新建
 					if ( col == origin ) {

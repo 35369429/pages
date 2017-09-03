@@ -37,6 +37,18 @@ use \Tuanduimao\Utils as Utils;
 		cursor: default;
 		line-height: 32px;
 	}
+
+	.pagination li span {
+		background: none;
+		border: none;
+	}
+
+	.pagination li span:hover {
+		color: #646466;
+		cursor: default;
+		box-shadow: none;
+
+	}
 	
 
 </style>
@@ -48,7 +60,7 @@ use \Tuanduimao\Utils as Utils;
 			<div  class="col-lg-8 col-md-8 col-sm-8">
 				<div class="input-group input-group-lg">
 					<div class="input-group-addon font-w300"> 全文检索 </div> 
-					<input class="js-icon-search form-control keyword" type="text" placeholder="输入关键词" value="<?=$query['title']?>">
+					<input class="js-icon-search form-control keyword" type="text" placeholder="输入关键词" value="<?=$query['keyword']?>">
 					<span class="input-group-btn">
 						<button class="btn btn-primary font-w300 search" type="button"><i class=" si si-magnifier"></i> 搜索 </button>
 					</span>
@@ -65,25 +77,23 @@ use \Tuanduimao\Utils as Utils;
 		</div>
 	</div> <!-- END Search Section -->
 	
+
+
 	<!-- Gallery Section -->
 	<div class="row items-push js-gallery">
-		<?php 
-		$images = [1,2,3,11,10,4,5,6];
-		foreach ($images as $im) : ?>
+		<?php foreach ($gallerys['data'] as $ga ) : ?>
 		<div class="col-xs-3 animated fadeIn">
-
-			<a class="img-thumb" href="#">
+			<a class="img-thumb" href="<?=App::R('gallery','editor', ['gallery_id'=>$ga['gallery_id'], 'image_id'=>$ga['image_id']])?>">
 				
 				<img 
 					width="100%" 
-					src='https://wss.xpmjs.com/s/mina/pages/static/defaults/p<?=$im?>.jpg' 
+					src='<?=APP::NR("gallery", "image", ["image_id"=>$ga["image_id"], "media_id"=>$ga["media_id"]])?>' 
 					alt=""  >	
-
 			</a>
 
 			<span class="gallery-title">
-				<span class="col-xs-8">图集主题</span>
-				<span class=" col-xs-4 font-s13 text-right">30 幅</span>
+				<span class="col-xs-8"><?=$ga["title"]?></span>
+				<span class=" col-xs-4 font-s13 text-right"><?=$ga["count"]?> 幅</span>
 			</span>
 			
 		</div>
@@ -91,32 +101,50 @@ use \Tuanduimao\Utils as Utils;
 	</div><!-- END Gallery Section -->
 
 	
-	<?php $articles['last'] = 10 ; $articles['curr'] = 3;?>
 	<!-- Gallery Pages -->
-	<div class="text-right">
-		<ul class="pagination">
-			<?php if ($articles['prev'] !== false): ?>
-			<li>
-				<a href="javascript:search('page', '<?=$articles['prev']?>' )">
-					<i class="fa fa-angle-double-left"></i>
-				</a>
-			</li>
-			<?php endif;?>
+	<div class="row">
+		<div class="col-xs-4" >
+			<ul class="pagination">
+				
 
-			<?php for( $i=1; $i<=$articles['last']; $i++) :?>
-			<li class="<?=($i==$articles['curr'])? 'active': ''?>" >
-				<a href="javascript:search('page', '<?=$i?>' )"><?=$i?></a>
-			</li>
-			<?php endfor; ?>
+				<?php if ( !empty($query['keyword'])  ) :?>
+				<li class="<?=($i==$gallerys['curr'])? 'active': ''?>" >
+					<a href="javascript:search('keyword', '' )"> 
+						<i class="fa fa-search"></i>
+						<span class="push-5-r"> <?=$query['keyword']?> </span>
+						<i class="fa fa-times"></i>
+					</a>
+				</li>
+				<?php endif;?>
 
-			<?php if ($articles['next'] !== false): ?>
-			<li>
-				<a href="javascript:search('page', '<?=$articles['next']?>' )">
-					<i class="fa fa-angle-double-right"></i>
-				</a>
-			</li>
-			<?php endif;?>
-		</ul>
+				<li><span >共找到 <?=$gallerys['total']?> 个图集</span></li>
+			</ul>
+		</div>
+		<div class="col-xs-8 text-right" >
+			<ul class="pagination">
+				<?php if ($gallerys['prev'] !== false): ?>
+				<li>
+					<a href="javascript:search('page', '<?=$gallerys['prev']?>' )">
+						<i class="fa fa-angle-double-left"></i>
+					</a>
+				</li>
+				<?php endif;?>
+
+				<?php for( $i=1; $i<=$gallerys['last']; $i++) :?>
+				<li class="<?=($i==$gallerys['curr'])? 'active': ''?>" >
+					<a href="javascript:search('page', '<?=$i?>' )"><?=$i?></a>
+				</li>
+				<?php endfor; ?>
+
+				<?php if ($gallerys['next'] !== false): ?>
+				<li>
+					<a href="javascript:search('page', '<?=$gallerys['next']?>' )">
+						<i class="fa fa-angle-double-right"></i>
+					</a>
+				</li>
+				<?php endif;?>
+			</ul>
+		</div>
 	</div><!-- END Gallery Pages -->
 	
 </div> <!-- END Pagecontent -->
@@ -150,7 +178,7 @@ $(function() {
 	App.initHelpers(['datepicker','select2', 'masked-inputs','tags-inputs', 'slimscroll', 'ajax-confirm']);
 	$('.search').click(function(){
 		var keyword = $('.keyword').val();
-		search('title', keyword);
+		search('keyword', keyword);
 
 	});
 
