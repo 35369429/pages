@@ -656,7 +656,7 @@ $(function() {
 	$('.canvas').imgeditor({
 		// bgimage:'/s/mina/pages/static/defaults/p<?=rand(1,9)?>.jpg',
 		bgcolor:'rgba(254,254,254,1)',
-		action:'php/imgeditor.php',
+		// action:'php/imgeditor.php',
 		toolbar:$('.toolbar'),
 		api: {
 			text: '<?=App::URI("mina", "image", "text")?>',
@@ -671,14 +671,33 @@ $(function() {
 		helper: {
 			em: $('.imgeditor-helper'),
 			pages: {
-				welcome: "<?=App::NR('gallery', 'help')?>",
-				table: "<?=App::NR('gallery', 'table')?>",
-				select:"<?=App::NR('gallery', 'select')?>",
-				detail:  "<?=App::NR('gallery', 'pic')?>",
+				help: "<?=App::NR('gallery', 'help')?>",
+				table:  {
+					url:"<?=App::NR('gallery', 'table')?>",
+					query:{
+						gallery_id:'<?=$gallery_id?>',
+						image_id:'<?=$image_id?>'
+					}
+				},
+				select: {
+					url:"<?=App::NR('gallery', 'select')?>",
+					query:{
+						gallery_id:'<?=$gallery_id?>',
+						image_id:'<?=$image_id?>'
+					}
+				},
+				detail: {
+					url:"<?=App::NR('gallery', 'detail')?>",
+					query:{
+						gallery_id:'<?=$gallery_id?>',
+						image_id:'<?=$image_id?>'
+					}
+				},
 				album: {
 					url:"<?=App::NR('gallery', 'album')?>",
 					query:{
-						type:'grid'
+						gallery_id:'<?=$gallery_id?>',
+						image_id:'<?=$image_id?>'
 					}
 				}
 			}
@@ -691,10 +710,53 @@ $(function() {
 			App.initHelpers(['datepicker','select2', 'colorpicker', 'masked-inputs','tags-inputs','slimscroll']);
 		},
 		load: function( $imgeditor ){
+
+			
+			<?php if ( $editor == 1 ) :?> 
+
+			// 指定要求进入编辑器
 			$imgeditor.open('table', {}, function(){
 				App.loading().hide();
 			});
+
+			<?php elseif ( $select == 1 && !empty($image_id)) :?> 
+
+			// 指定要求进入某图片编辑器
+			$imgeditor.open('select', {}, function(){
+				App.loading().hide();
+			});
+
+			<?php elseif ( !empty($image_id)) :?> 
+
+			// 查看图片详情
+			$imgeditor.open('album', {}, function(){
+				App.loading().hide();
+			});
+			
+			<?php elseif ( !empty($gallery_id)) :?>
+
+			// 浏览图集图片
+			$imgeditor.open('album', {}, function(){
+				App.loading().hide();
+			});
+
+			<?php elseif ( $help == 1 ) :?>
+
+			// 进入编辑面板
+			$imgeditor.open('help', {}, function(){
+				App.loading().hide();
+			});
+
+			<?php else :?> 
+
+			// 进入编辑面板
+			$imgeditor.open('table', {}, function(){
+				App.loading().hide();
+			});
+
+			<?php endif; ?>
 		}
+
 	});
 
 
@@ -909,8 +971,9 @@ $(function() {
 		list = list || [];
 		var len = list.length;
 		var html =  '<a href="<?=APP::R('gallery','index')?>"> 图集列表 </a> ' + 
-					' <i class="fa fa-angle-right"></i> ' +
-					'<a href="javascript:$imgeditor.open(\'welcome\')"> 制作动态图集 </a>';
+					// ' <i class="fa fa-angle-right"></i> ' +
+					// '<a href="javascript:$imgeditor.open(\'welcome\')"> 制作动态图集 </a>';
+					'';
 
 		for ( var i =0; i<len; i ++ ) {
 			var link = list[i];

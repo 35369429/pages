@@ -52,9 +52,9 @@ class GalleryController extends \Tuanduimao\Loader\Controller {
 
 		$data['query'] = [
 			"keyword"=>$keyword,
-			"page" => $pages
+			"page" => $page
 		];
-		
+
 		$data['gallerys'] = $resp;
 		App::render($data, 'gallery', 'search' );
 
@@ -88,14 +88,14 @@ class GalleryController extends \Tuanduimao\Loader\Controller {
 
 
 
-	// 批量编辑图集图片
+	// Helper: 批量编辑图集图片 
 	function table() {
 		App::render($data, 'gallery', 'table' );
 	}
 
 
 
-	// 读取图集中的图片
+	// Ajax: 读取图集中的图片
 	function getdata() {
 
 		$maxlen = 20; $columns = []; $data = [ ["示例文字", "/s/mina/pages/static/defaults/p7.jpg", "二维码链接"] ];
@@ -133,16 +133,48 @@ class GalleryController extends \Tuanduimao\Loader\Controller {
 	
 
 	/**
-	 * 图集预览页
+	 * Helper: 图集预览页
 	 * @return [type] [description]
 	 */
 	function album() {
+
+		$gallery_id = $_POST['gallery_id'];
+		$image_id = $_POST['image_id'];
+		$page = !empty($_POST['page']) ? intval($_POST['page']) : 1;
+		$keyword = trim($_POST['keyword']);
+
+		$g = new Gallery();
+		$resp = $g->getImages($page, [
+			'gallery_id' => $gallery_id,
+			'keyword'=>$keyword]
+		);
+
+		$data['query'] = [
+			"keyword"=>$keyword,
+			"page" => $page,
+			"image_id" => $image_id,
+			"gallery_id" => $gallery_id
+		];
+
+		$data['images'] = $resp;
+		$data['gallery'] = $g->getGallery($gallery_id);
+
+
+		// echo "<pre>";
+		// print_r( $gallery );
+		// echo "</pre>";
+
+		// return;
+
+		// select count(1) as num from core_media where _id<4 order by _id desc;
+
 		App::render($data, 'gallery', 'album' );
+
 	}
 	
 
 	/**
-	 * 选定某个图集
+	 * Helper: 选定某个图集
 	 * @return [type] [description]
 	 */
 	function select(){
@@ -151,7 +183,7 @@ class GalleryController extends \Tuanduimao\Loader\Controller {
 
 
 	/**
-	 * 保存 Gallery 信息
+	 * 保存 Gallery 信息 (未处理Update )
 	 * @return [type] [description]
 	 */
 	function save() {
@@ -212,6 +244,7 @@ class GalleryController extends \Tuanduimao\Loader\Controller {
 
 
 	function test(){
+		Utils::cliOnly();
 		$g = new Gallery();
 		$data = $g->getGallerys(1, ['keyword'=>'山海经']);
 
@@ -226,9 +259,15 @@ class GalleryController extends \Tuanduimao\Loader\Controller {
 	 */
 	function editor() {
 
+		$gallery_id = $_GET['gallery_id'];
+		$image_id = $_GET['image_id'];
+
+		$data = [
+			'gallery_id' => $gallery_id,
+			'image_id' => $image_id
+		];
+
 		App::render($data, 'gallery', 'editor' );
-
-
 		return [
 
 			'js' => [
@@ -269,7 +308,7 @@ class GalleryController extends \Tuanduimao\Loader\Controller {
 			'crumb' => [
 	                "图集" => APP::R('gallery','index'),
 	                "图集列表" => APP::R('gallery','index'),
-	                "制作动态图集" => '',
+	                "动态图集" => '',
 	        ],
 
 	        'active'=> [

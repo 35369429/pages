@@ -84,11 +84,11 @@ use \Tuanduimao\Utils as Utils;
 	<div class="row items-push js-gallery">
 		<?php foreach ($gallerys['data'] as $ga ) : ?>
 		<div class="col-xs-3 animated fadeIn">
-			<a class="img-thumb" href="<?=App::R('gallery','editor', ['gallery_id'=>$ga['gallery_id'], 'image_id'=>$ga['image_id']])?>">
+			<a class="img-thumb" href="<?=App::R('gallery','editor', ['gallery_id'=>$ga['gallery_id'], 'image_id'=>!empty($query['keyword']) ? $ga['image_id'] : ''])?>">
 				
 				<img 
 					width="100%" 
-					src='<?=APP::NR("gallery", "image", ["image_id"=>$ga["image_id"], "media_id"=>$ga["media_id"], "size"=>"small"])?>' 
+					src='<?=$ga["small"]?>' 
 					alt=""  >	
 			</a>
 

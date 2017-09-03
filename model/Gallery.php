@@ -28,6 +28,8 @@ class Gallery extends Model {
 
 		// 图集内图片数据表
 		$this->image = Utils::getTab('gallery_image', "mina_pages_");  
+
+		$this->media = new Media;
 	}
 
 	/**
@@ -309,9 +311,58 @@ class Gallery extends Model {
 	 * @param  integer $perpage [description]
 	 * @return [type]           [description]
 	 */
-	function getImages( $gallery_id, $page=1, $query=[],  $perpage=40 ) {
+	function getImages( $page=1, $query=[],  $perpage=12 ) {
 
+		$qb = $this->image->query()
+			   ->orderBy('created_at', 'desc')
+			;
+
+		if ( !empty($query['keyword']) ) {
+			$qb->where('data', 'like', "%{$query['keyword']}%")
+			   // ->orWhere('gallery.template', 'like', "%{$query['keyword']}%")
+			   ;
+		}
+
+		if ( !empty($query['gallery_id']) ) {
+			$qb->where('gallery_id', '=', "{$query['gallery_id']}");
+		}
+
+		$qb->select('image_id', 'gallery_id', 'image_id', 'status');
+		$resp = $qb->pgArray($perpage, ['_id'], 'page', $page);
+
+
+		// 处理结果
+		foreach ($resp['data'] as $idx => $rs ) {
+			$this->formatImage($resp['data'][$idx]);
+		}
+
+		return $resp;
 	}
+
+
+	// 处理图片数据
+	function formatImage( & $rs ){
+
+		if ( !empty($rs['media_id']) ) {
+			$rs['origin'] = $this->media->getImageUrl($rs['media_id'], 'origin');
+			$rs['small'] = $this->media->getImageUrl($rs['media_id'], 'small');
+			$rs['url'] = $this->media->getImageUrl($rs['media_id'], 'url');
+		} else if (  !empty($rs['image_id']) ) {
+			$rs['origin'] = APP::NR("gallery", "image", ["image_id"=>$rs["image_id"],  "size"=>"origin"]);
+			$rs['small'] = APP::NR("gallery", "image", ["image_id"=>$rs["image_id"],  "size"=>"small"]);
+			$rs['url'] = APP::NR("gallery", "image", ["image_id"=>$rs["image_id"],  "size"=>"url"]);
+		}
+
+		if ( empty($rs['src'])) {
+			$rs['src'] = $rs['origin'];
+			$rs['w'] = 0;
+			$rs['h'] = 0;
+		}
+
+		return $rs;
+	}
+
+
 
 
 	/**
@@ -341,8 +392,61 @@ class Gallery extends Model {
 		);
 		$qb->selectRaw("count(image_id) as count");
 		$resp = $qb->pgArray($perpage, ['gallery._id'], 'page', $page);
+		foreach ($resp['data'] as $idx => $rs) {
+			$this->formatGallery($resp['data'][$idx]);
+		}
 		return $resp;
 	}
+
+
+
+	/**
+	 * 查询图集
+	 * @param  [type] $gallery_id [description]
+	 * @return [type]             [description]
+	 */
+	function getGallery( $gallery_id ) {
+
+		$qb = $this->query()
+			   ->join("gallery_image", "gallery_image.gallery_id", 'gallery.gallery_id')
+			   ->groupBy('gallery.gallery_id')
+			   ->orderBy('gallery.created_at', 'desc')
+			;
+
+		$qb->where('gallery.gallery_id', '=', $gallery_id);
+		$qb->select(
+			"gallery.title", "gallery.intro",  
+			"gallery.type",  "gallery.gallery_id as gallery_id", 
+			"gallery.status as status",
+			"gallery_image.media_id as media_id",
+			"gallery_image.image_id as image_id"
+		);
+		$qb->selectRaw("count(image_id) as count");
+		$resp = $qb->limit(1)->get()->toArray();
+		$resp = end($resp);
+		$this->formatGallery( $resp );
+		return $resp;
+	}
+
+
+
+
+	// 处理图集封面
+	function formatGallery( & $rs ){
+
+		if ( !empty($rs['media_id']) ) {
+			$rs['small'] = $this->media->getImageUrl($rs['media_id'], 'small');
+		} else if (  !empty($rs['image_id']) ) {
+			$rs['small'] = APP::NR("gallery", "image", ["image_id"=>$rs["image_id"],  "size"=>"small"]);
+		}
+
+		return $rs;
+	}
+
+
+
+
+
 
 	/**
 	 * 制作图片并上传到 Media 中
