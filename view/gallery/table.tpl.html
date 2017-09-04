@@ -34,15 +34,10 @@ use \Tuanduimao\Loader\App;
 	var $_GET = <?=json_encode($query)?>;
 
 
-
-
-
-
-
 	$('.canvas-toggle').removeClass('hidden');
 	$imgeditor.display();
 	$imgeditor.mode('modify');
-	$imgeditor.crumb([{name:'批量编辑'}]);
+	
 
 	/**
 	 * 图集模板信息缓存
@@ -460,12 +455,29 @@ use \Tuanduimao\Loader\App;
 					row: -1,
 					col: -1
 				}
+
+				var crumb = [];
+				if ( resp['gallery'] == null) {
+					crumb.push({ name:'新建图集'});
+					$('.images-preview').addClass('hidden');
+					$('.images-print').addClass('hidden');
+					$('.images-download').addClass('hidden');
+
+				} else {
+					crumb.push({ name:resp['gallery']['title'], page:'album'} );
+					crumb.push({name:'修改图集 (第'+ $_GET['page'] +'页)'});
+					$('.images-preview').removeClass('hidden');
+					$('.images-print').removeClass('hidden');
+					$('.images-download').removeClass('hidden');
+				}
+
+				$imgeditor.crumb(crumb);
 				done();
 				return resp;
 			}
 		);
 	}
-	
+
 
 	// 显示第一页
 	search('page', 1);

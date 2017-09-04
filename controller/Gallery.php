@@ -127,8 +127,10 @@ class GalleryController extends \Tuanduimao\Loader\Controller {
 
 		if ( empty($gallery_id) ) {
 			$resp = $g->emptyImageData();	
+			$resp['gallery'] = null;
 		} else  {
 			$resp = $g->getImagesData($page, $query, 10);
+			$resp['gallery'] = $g->getGallery($gallery_id);
 		}
 		
 		$resp['status'] = 'done';
