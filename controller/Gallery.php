@@ -199,6 +199,18 @@ class GalleryController extends \Tuanduimao\Loader\Controller {
 
 
 	/**
+	 * 删除 Gallery
+	 * @return [type] [description]
+	 */
+	function remove() {
+		$gallery_id = !empty($_POST['gallery_id']) ? $_POST['gallery_id'] : $_POST['id'];
+		$g = new Gallery();
+		$resp = $g->rm($gallery_id);
+		Utils::out(['message'=>'删除成功']);
+	}
+
+
+	/**
 	 * 保存 Gallery 信息 (未处理Update )
 	 * @return [type] [description]
 	 */

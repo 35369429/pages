@@ -19,8 +19,48 @@ use \Tuanduimao\Loader\App;
 		<div class="col-xs-5">
 			<button class="btn btn-primary fn-gallery fn-gallery-save  push-15-t push-15-l disabled "> 
 				<i class="fa fa-save"></i> 保存</button>
-			<button class="btn btn-primary fn-gallery fn-gallery-import push-15-t push-10-l"> 
+			<button class="btn btn-primary fn-gallery fn-gallery-import push-15-t push-10-l hidden"> 
 				<i class="fa fa-cloud-upload"></i> 导入</button>
+
+			<button 
+				
+				confirm-title="删除图集"
+                confirm-content="您确定删除本图集吗?"
+                confirm-dismiss = "取消"
+                confirm-submit= "确定"
+                data-param-id="103" 
+                confirm-action="<?=App::NR('gallery','remove')?>"
+
+                event-before="
+					function( btn, modal ) {
+						$('button', modal)
+							.addClass('disabled')
+							.attr('disabled', 'disabled');
+					}
+				"
+
+				event-done="
+					function( data, btn, modal) {
+						$('button', modal)
+							.removeClass('disabled')
+							.removeAttr('disabled');
+					}
+				"
+               event-success="
+					function(btn, modal) {
+						window.location = '<?=App::R('gallery', 'index')?>';
+					}
+				"
+
+				event-error="
+					function( data, btn, modal) {
+						failure('删除失败');
+						return true;
+					}
+				"
+
+				class="btn btn-danger  push-15-t push-10-l fn-gallery-remove gallery-id-require ajax-confirm hidden" type="button">
+				<i class="fa fa-minus-circle"></i> 删除</button>
 		</div>
 		<div class="col-xs-7 text-muted text-right" style="padding:15px 15px 5px 15px;">
 			 <nav class="push-15-r remove-padding  " >
@@ -31,13 +71,12 @@ use \Tuanduimao\Loader\App;
 </div>
 <script type="text/javascript">
 
+
 	var $_GET = <?=json_encode($query)?>;
-
-
 	$('.canvas-toggle').removeClass('hidden');
 	$imgeditor.display();
 	$imgeditor.mode('modify');
-	
+
 
 	/**
 	 * 图集模板信息缓存
@@ -72,9 +111,9 @@ use \Tuanduimao\Loader\App;
 
 	   needSubmit: function( need ) {
 	   		if ( need === true ) {
-	   			$('.fn-gallery-save').removeClass('disabled');
+	   			$('.fn-gallery-save').removeClass('disabled').removeAttr('disabled');
 	   		} else {
-	   			$('.fn-gallery-save').addClass('disabled');
+	   			$('.fn-gallery-save').addClass('disabled').attr('disabled', 'disabled');
 	   		}
        },
 
@@ -163,6 +202,8 @@ use \Tuanduimao\Loader\App;
 
 	$imgeditor.on('page.update', function(event,  data, source  ){
 
+		$webtable.needSubmit(true);
+
 		$('.fn-gallery-title').val(data['title']);
 
 		var col = data['origin'];
@@ -187,11 +228,11 @@ use \Tuanduimao\Loader\App;
 	});
 
 	$imgeditor.on('remove', function( id, source ) {
+		$webtable.needSubmit(true);
 		if ( source == 'init' ) return;
 		idx = image.map[id];
 		image.items.splice(idx, 1);
 		delete image.map[id];
-		console.log( 'remove', image );
 	});
 
 
@@ -340,6 +381,10 @@ use \Tuanduimao\Loader\App;
 			page['bgimage'] = image['page']['bgimage'] = data[pagecol];
 		}
 
+		if ( typeof page['id'] == 'undefined' || page['id'] == "" ) {
+			delete page['id'];
+		}
+
 		$imgeditor.updatePage( page , function(){
 
 			for(  var idx in items ) {
@@ -465,6 +510,7 @@ use \Tuanduimao\Loader\App;
 				$imgeditor.clean('silent');
 				$_GET = resp['query'];
 				if ( typeof $_GET['gallery_id'] != 'undefined' && $_GET['gallery_id'] != null ) {
+					
 					$imgeditor.setId($_GET['gallery_id']);
 				}
 
@@ -474,7 +520,7 @@ use \Tuanduimao\Loader\App;
 				}
 
 				var crumb = [];
-				if ( resp['gallery'] == null) {
+				if ( resp['gallery'] == null ||  resp['gallery'] == false) {
 					crumb.push({ name:'新建图集'});
 					$('.images-preview').addClass('hidden');
 					$('.images-print').addClass('hidden');
@@ -488,6 +534,15 @@ use \Tuanduimao\Loader\App;
 					$('.images-preview').removeClass('hidden');
 					$('.images-print').removeClass('hidden');
 					$('.images-download').removeClass('hidden');
+
+					$('.gallery-id-require')
+						.attr('data-param-id', resp['gallery']['gallery_id'])
+						.attr('data-param-gallery_id', resp['gallery']['gallery_id'])
+						.removeClass('hidden')
+						.removeClass('disabled')
+						.removeAttr('disabled')
+						.show();
+
 				}
 
 				updateColumsSelector( resp['columns'], resp['colHeaders'] );
@@ -500,9 +555,11 @@ use \Tuanduimao\Loader\App;
 		);
 	}
 
+	App.initHelpers(['ajax-confirm']);
 
 	// 显示第一页
 	search('page', 1);
+	
    
 
 </script>

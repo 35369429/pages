@@ -298,6 +298,29 @@ class Gallery extends Model {
 	}
 
 
+
+	/**
+	 * 删除图集
+	 * @param  [type] $gallery_id [description]
+	 * @return [type]             [description]
+	 */
+	function rm( $gallery_id ) {
+
+		if ( empty($gallery_id) ) {
+			throw new Excp('未指定 $gallery_id', 404, ['gallery_id'=>$gallery_id]);
+		}
+
+		// 删除图集图片
+		$resp = $this->image->runsql (
+			"UPDATE {{table}} SET `deleted_at`=? WHERE `gallery_id` = ? ", false, 
+			[date('Y-m-d H:i:s'), $gallery_id]
+		);
+
+		// 删除图集
+		return $this->remove($gallery_id, 'gallery_id') && $resp;
+	}
+
+
 	/**
 	 * 生成图集 ID
 	 * @return
@@ -597,9 +620,6 @@ class Gallery extends Model {
 
 		return $rs;
 	}
-
-
-
 
 
 
