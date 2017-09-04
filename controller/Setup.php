@@ -77,14 +77,13 @@ class SetupController extends \Tuanduimao\Loader\Controller {
 		$gallery['system'] = 1;
 
 		$images = $g->genImageData([
-			[ "A"=>"内容提要", "B"=>"/s/mina/pages/static/defaults/950X500.png", "C"=>"https://minapages.com"]
+			[ "A"=>"内容题要", "B"=>"/s/mina/pages/static/defaults/950X500.png", "C"=>"https://minapages.com"]
 		]);
 
 		$rs = $g->save( $gallery );
 		$resp = $g->createImages( $rs['gallery_id'], $images);
 		$image_id = current($resp)['data']['image_id'];
-		// $g->makeImage($image_id);
-
+		$g->makeImage($image_id);
 
 	}
 
