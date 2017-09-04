@@ -71,7 +71,13 @@ class Gallery extends Model {
 			->putColumn( 'generate_update_time', $this->type('timestampTz', ['index'=>1]) )			 
 
 			// 图集内图片数量
-			->putColumn( 'count', $this->type('integer', ['index'=>1]) )			 			 
+			->putColumn( 'count', $this->type('integer', ['index'=>1]) )	
+
+			// 是否为系统创建的图集 (不可删除，不可改名)
+			->putColumn( 'system', $this->type('boolean', ['default'=>false, 'index'=>1]) )
+
+			// 是否为隐藏图集 ( 在列表中显示 )
+			->putColumn( 'hidden', $this->type('boolean', ['default'=>false, 'index'=>1]) )			 
 
 			// 动态图集状态 on / off / pending / draft
 			->putColumn( 'status', $this->type('string', ['length'=>10,'index'=>1, 'default'=>'draft']) )
@@ -350,21 +356,32 @@ class Gallery extends Model {
 	function getImages( $page=1, $query=[],  $perpage=12 ) {
 
 		$qb = $this->image->query()
-			   ->orderBy('created_at', 'desc')
+			       ->leftjoin('gallery', 'gallery.gallery_id', '=', 'gallery_image.gallery_id')
+				   ->whereNull('gallery_image.deleted_at')
+			   	   ->orderBy('gallery_image.created_at', 'desc')
 			;
 
 		if ( !empty($query['keyword']) ) {
-			$qb->where('data', 'like', "%{$query['keyword']}%")
+			$qb->where('gallery_image.data', 'like', "%{$query['keyword']}%")
 			   // ->orWhere('gallery.template', 'like', "%{$query['keyword']}%")
 			   ;
 		}
 
 		if ( !empty($query['gallery_id']) ) {
-			$qb->where('gallery_id', '=', "{$query['gallery_id']}");
+			$qb->where('gallery_image.gallery_id', '=', "{$query['gallery_id']}");
 		}
 
-		$qb->select('image_id', 'gallery_id', 'media_id',  'status');
-		$resp = $qb->pgArray($perpage, ['_id'], 'page', $page);
+		$qb->select(
+			'gallery_image.image_id', 
+			'gallery_image.gallery_id', 
+			'gallery_image.media_id',  
+			'gallery_image.status',
+			'gallery_image.template_update_time','gallery_image.data_update_time', 'gallery_image.generate_update_time',
+			'gallery.template_update_time as template_update_time_default',
+			'gallery.generate_update_time as generate_update_time_default'
+		);
+
+		$resp = $qb->pgArray($perpage, ['gallery_image._id'], 'page', $page);
 
 
 		// 处理结果
@@ -376,8 +393,25 @@ class Gallery extends Model {
 	}
 
 
-	// 处理图片数据
+	// 处理图片数据 (+过期时间)
 	function formatImage( & $rs ){
+
+		$generate_update_time = !empty($rs['generate_update_time']) ? $rs['generate_update_time'] : $rs['generate_update_time_default'];
+		$template_update_time = !empty($rs['template_update_time']) ? $rs['template_update_time'] : $rs['template_update_time_default'];
+
+		unset($rs['template_update_time_default']);
+		unset($rs['generate_update_time_default']);
+
+		$rs['generate_update_time'] = $generate_update_time;
+		$rs['template_update_time'] = $template_update_time;
+		$rs['data_update_time'] =!empty($rs['data_update_time']) ? $rs['data_update_time'] : $rs['template_update_time'];
+
+		if ( 
+			strtotime($rs['generate_update_time']) < strtotime($rs['template_update_time']) ||
+			strtotime($rs['generate_update_time']) < strtotime($rs['data_update_time'])
+		){
+			$rs['media_id'] = null;
+		}
 
 		if ( !empty($rs['media_id']) ) {
 			$rs['origin'] = $this->media->getImageUrl($rs['media_id'], 'origin');

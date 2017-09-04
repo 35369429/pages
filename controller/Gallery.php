@@ -177,7 +177,7 @@ class GalleryController extends \Tuanduimao\Loader\Controller {
 
 
 		// echo "<pre>";
-		// print_r( $gallery );
+		// print_r( $data );
 		// echo "</pre>";
 
 		// return;
