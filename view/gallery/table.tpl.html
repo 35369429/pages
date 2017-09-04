@@ -373,18 +373,22 @@ use \Tuanduimao\Loader\App;
 			return;
 		}
 
+		// console.log('===page before=', page );
+
 		$imgeditor.setIndex( index );
 		// $imgeditor.clean('silent');
 
 		var map = array_flip( image.map );
 		var pagecol = page['origin'];
-		if (  typeof pagecol != 'undefined' || pagecol != null  || pagecol != "" ) {
+		if (  typeof pagecol != 'undefined' && pagecol != null  && pagecol != "" && pagecol != -1 ) {
 			page['bgimage'] = image['page']['bgimage'] = data[pagecol];
 		}
 
 		if ( typeof page['id'] == 'undefined' || page['id'] == "" ) {
 			delete page['id'];
 		}
+
+		// console.log('===page after=', page );
 
 		$imgeditor.updatePage( page , function(){
 

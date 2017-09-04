@@ -19,6 +19,76 @@ class SetupController extends \Tuanduimao\Loader\Controller {
 	}
 
 
+	private  function gallery_init() {
+
+		$g = new \Mina\Pages\Model\Gallery();
+		$id = $g->genGalleryId();
+
+		$gallery_id = $g->getVar('gallery_id', "WHERE title=? AND system=1 LIMIT 1", ["文章分享图片"]);
+
+		if ( !empty($gallery_id) ) {
+			return;
+		}
+
+		$id = $g->genGalleryId();
+
+		$article_share = [
+			"page" => [
+				"id" => $id,
+				"title"=>"文章分享图片", 
+				"bgimage"=>"/s/mina/pages/static/defaults/804X1280.png", 
+				"bgcolor"=>"rgba(254,254,254,1)",
+				"origin" => -1
+			],
+			"items" => [
+				[
+					"name"=>"qrcode",
+					"option"=>[
+						"text" => "https://www.minapages.com", 
+						"origin"=>2, "width"=>100, "height"=>100, 
+						"type"=>'url'], 
+					"pos"=> ["x"=>676, "y"=>1149] ],
+
+				[
+					"name"=>"image", 
+					"option" => [
+						"width"=>126, "height"=>30, 
+						"src"=>"/s/mina/pages/static/defaults/mp-logo-text.png" ], 
+					"pos"=> ["x"=>21, "y"=>1222] ],
+
+				[
+					"name"=>"image", 
+					"option"=> [
+						"width"=>804, "height"=>423, "origin"=>1 
+						], 
+					"pos"=> ["x"=>0, "y"=>0] ],
+
+				[
+					"name"=>"text", 
+					"option"=>[
+						"origin"=>0,"width"=>644, "height"=>600, "font"=>1, "size"=>24,
+						"color"=> "rgba(35,35,35,1)", "background"=>"rgba(255,255,255,0)", 
+						"type"=>"horizontal" ], 
+					"pos"=> ["x"=>80, "y"=>502]]
+			]
+		];
+
+		$gallery =  $g->editorToGallery( $article_share );
+		$gallery['system'] = 1;
+
+		$images = $g->genImageData([
+			[ "A"=>"内容提要", "B"=>"/s/mina/pages/static/defaults/950X500.png", "C"=>"https://minapages.com"]
+		]);
+
+		$rs = $g->save( $gallery );
+		$resp = $g->createImages( $rs['gallery_id'], $images);
+		$image_id = current($resp)['data']['image_id'];
+		// $g->makeImage($image_id);
+
+
+	}
+
+
 	function install() {
 
 		$models = $this->models;
@@ -45,6 +115,15 @@ class SetupController extends \Tuanduimao\Loader\Controller {
 				"topic4"=>["width"=>null,"height"=>null, "ratio"=>"2:3"]
 			]);
 		} catch ( Excp $e ) {
+			echo $e->toJSON();
+			return;
+		}
+
+
+		// 注册图片分享图集
+		try {
+			$this->gallery_init();
+		}  catch ( Excp $e ) {
 			echo $e->toJSON();
 			return;
 		}
@@ -80,6 +159,11 @@ class SetupController extends \Tuanduimao\Loader\Controller {
 			]);
 			
 		} catch ( Excp $e ) {}
+
+		// 注册图片分享图集
+		try {
+			$this->gallery_init();
+		}  catch ( Excp $e ) {}
 		
 		echo json_encode('ok');		
 	}

@@ -167,6 +167,38 @@ class Gallery extends Model {
 	}
 
 
+
+	function genImageData( $rows ){
+
+		$row = [];
+		$maxcol = 21;
+		for( $i=0; $i<$maxcol; $i++ ) {
+			$name = chr( $i + 65 );
+			$row[$name] = "";
+
+			if ( $i == $maxcol -1 ) {
+				$row[$name] = "tmp_" . time();
+			}
+		}
+		
+		$resp = [];
+
+		foreach ($rows as $idx => $rs) {
+			$data = array_merge($row, $rs);
+			array_push($resp, [
+				'data' => $data,
+				"row" => $idx +1
+			]);
+		}
+
+
+		return $this->editorToImage($resp);
+
+
+
+	}
+
+
 	/**
 	 * 编辑器提交的模板数据格式转换
 	 * @param  [type] $template [description]
@@ -711,11 +743,10 @@ class Gallery extends Model {
 	 */
 	function makeImage( $image_id, $returndata = false ) {
 
-		$prefix = time();
+		$prefix = "";
 		$clean = [];
 		$image = $this->getImageData($image_id);
 		$template = $image['template'];  $data = $image['data']; $resource = $image['resource'];
-		
 		
 
 		if ( empty($template) ) {
@@ -739,9 +770,10 @@ class Gallery extends Model {
 
 		// 缓存制作各种资源图片
 		if ( empty($resource[$bgimage]) ) {
-			$bgimage_tmp = $this->media->tmpName($bgimage);
-			$resp = $this->media->copy( $bgimage, $bgimage_tmp, false);
+			$bgimage_tmp = $this->media->tmpName($prefix.$bgimage);
+			$resp = $this->media->copy( $bgimage, $bgimage_tmp, true);
 			$resource[$bgimage] = $bgimage_tmp;
+			array_push($clean, $bgimage_tmp);
 		}
 
 		$minsize = ['width'=>0, 'height'=>0];
@@ -761,7 +793,7 @@ class Gallery extends Model {
 					if ( !empty($data[$origin])) {
 						$option['text'] = $data[$origin]; 
 					}
-					$this->media->copyText( $option, $text_tmp, false );
+					$this->media->copyText( $option, $text_tmp, true );
 					break;
 
 				case 'qrcode':
@@ -773,7 +805,7 @@ class Gallery extends Model {
 					if ( !empty($img) && empty($resource[$img]) ) {
 						$img_tmp = $this->media->tmpName($prefix. $image_id . $idx . 'logo.png');
 						array_push($clean, $img_tmp);
-						$this->media->copy( $img, $img_tmp, false);
+						$this->media->copy( $img, $img_tmp, true);
 						$resource[$img] = $img_tmp;
 					}
 
@@ -781,7 +813,7 @@ class Gallery extends Model {
 						$option['logo'] = $resource[$img]; 
 					}
 
-					$this->media->copyQrcode( $option, $qrcode_tmp, false);
+					$this->media->copyQrcode( $option, $qrcode_tmp, true);
 					break;
 
 				case 'image':
@@ -793,7 +825,7 @@ class Gallery extends Model {
 
 					if ( !empty($img) && empty($resource[$img]) ) {
 						$img_tmp = $this->media->tmpName($img);
-						$this->media->copy( $img, $img_tmp, false);
+						$this->media->copy( $img, $img_tmp, true);
 						$resource[$img] = $img_tmp;
 						array_push($clean, $img_tmp);
 					}
@@ -840,12 +872,16 @@ class Gallery extends Model {
 
 				case 'text':
 					$img = $this->media->tmpName($prefix. $image_id . $idx . '.png');
-					$im = new Imagick($img);
+					if( is_readable($img) ) {
+						$im = new Imagick($img);
+					}
 					break;
 
 				case 'qrcode':
 					$img = $this->media->tmpName($prefix. $image_id . $idx . '.png');
-					$im = new Imagick($img);
+					if( is_readable($img) ) {
+						$im = new Imagick($img);
+					}
 					break;
 
 				case 'image':
@@ -853,8 +889,10 @@ class Gallery extends Model {
 						$option['src'] = $data[$origin]; 
 					}
 					$img = $resource[$option['src']];
-					$im = new Imagick($img);
-					$im->resizeImage($option['width'], $option['height'], \Imagick::FILTER_BOX, 1);
+					if( is_readable($img) ) {
+						$im = new Imagick($img);
+						$im->resizeImage($option['width'], $option['height'], \Imagick::FILTER_BOX, 1);
+					}
 					break;
 				
 				default:
