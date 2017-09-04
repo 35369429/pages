@@ -217,7 +217,11 @@ class GalleryController extends \Tuanduimao\Loader\Controller {
 	function save() {
 
 		$json_string = Utils::unescape($_POST['data']);
+		$json_string = str_replace("\r",'\\r',  $json_string);
+		$json_string = str_replace("\n",'\\n',  $json_string);
+
 		$data = json_decode( $json_string, true );
+
 
 		if ( empty($data['template']) ) {
 			throw new Excp("参数错误 (template 格式不正确 )", 402, ['json'=>$json_string]);
