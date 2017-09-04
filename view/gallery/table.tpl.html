@@ -272,8 +272,7 @@ use \Tuanduimao\Loader\App;
 	 * @return {[type]}	  [description]
 	 */
 	function updateImage( data ) {
-		image = $.extend(image, data);
-
+		image = $.extend({ page:[], items:[], map:{} }, data);
 		var title = image['page']['title'] || '未命名';
 		$('.fn-gallery-title').val( title );
 	}
@@ -442,6 +441,7 @@ use \Tuanduimao\Loader\App;
 			},
 			function( resp, status, xhr){
 				
+				$imgeditor.clean('silent');
 				updateColumsSelector( resp['columns'], resp['colHeaders'] );
 				updateImage( resp['template'] );
 				renderPage( resp['pagination']);
