@@ -627,6 +627,7 @@ class Gallery extends Model {
 			   ->join("gallery_image", "gallery_image.gallery_id", 'gallery.gallery_id')
 			   ->whereNull('gallery_image.deleted_at')
 			   ->groupBy('gallery.gallery_id')
+			   ->orderBy('gallery.system', 'desc')
 			   ->orderBy('gallery.created_at', 'desc')
 			;
 
@@ -710,8 +711,12 @@ class Gallery extends Model {
 	 */
 	function makeImage( $image_id, $returndata = false ) {
 
+		$prefix = time();
+		$clean = [];
 		$image = $this->getImageData($image_id);
 		$template = $image['template'];  $data = $image['data']; $resource = $image['resource'];
+		
+		
 
 		if ( empty($template) ) {
 			throw new Excp("参数错误", 402, ['image_id'=>$image_id]);
@@ -752,7 +757,7 @@ class Gallery extends Model {
 			switch ($type) {
 
 				case 'text':
-					$text_tmp = $this->media->tmpName($image_id . $idx . '.png');
+					$text_tmp = $this->media->tmpName($prefix. $image_id . $idx . '.png');
 					if ( !empty($data[$origin])) {
 						$option['text'] = $data[$origin]; 
 					}
@@ -760,13 +765,14 @@ class Gallery extends Model {
 					break;
 
 				case 'qrcode':
-					$qrcode_tmp = $this->media->tmpName($image_id . $idx . '.png');
+					$qrcode_tmp = $this->media->tmpName($prefix. $image_id . $idx . '.png');
 					if ( !empty($data[$origin])) {
 						$option['text'] = $data[$origin]; 
 					}
 					$img = $option['logo'];
 					if ( !empty($img) && empty($resource[$img]) ) {
-						$img_tmp = $this->media->tmpName($image_id . $idx . 'logo.png');
+						$img_tmp = $this->media->tmpName($prefix. $image_id . $idx . 'logo.png');
+						array_push($clean, $img_tmp);
 						$this->media->copy( $img, $img_tmp, false);
 						$resource[$img] = $img_tmp;
 					}
@@ -779,11 +785,17 @@ class Gallery extends Model {
 					break;
 
 				case 'image':
+
+					if ( !empty($data[$origin])) {
+						$option['src'] = $data[$origin]; 
+					}
 					$img = $option['src'];
-					if ( empty($resource[$img]) ) {
+
+					if ( !empty($img) && empty($resource[$img]) ) {
 						$img_tmp = $this->media->tmpName($img);
 						$this->media->copy( $img, $img_tmp, false);
 						$resource[$img] = $img_tmp;
+						array_push($clean, $img_tmp);
 					}
 					break;
 				
@@ -817,24 +829,32 @@ class Gallery extends Model {
 			$canvas->compositeImage($bg, \Imagick::COMPOSITE_OVER,0, 0);
 		}
 
+
 		// 贴文字、图片、二维码等
 		foreach ($items as $idx=>$it ) {
-			$type = $it[0]; $option=$it[2]; $pos = $it[2];
-			$img = null;
+			$type = $it[0]; $option=$it[1]; $pos = $it[2];
+			$img = null; $im = null;
+			$origin =  is_numeric($option['origin']) ? $option['origin'] : -1;
+
 			switch ($type) {
 
 				case 'text':
-					$img = $this->media->tmpName($image_id . $idx . '.png');
+					$img = $this->media->tmpName($prefix. $image_id . $idx . '.png');
+					$im = new Imagick($img);
 					break;
 
 				case 'qrcode':
-					$img = $this->media->tmpName($image_id . $idx . '.png');
-				
+					$img = $this->media->tmpName($prefix. $image_id . $idx . '.png');
+					$im = new Imagick($img);
 					break;
 
 				case 'image':
+					if ( !empty($data[$origin])) {
+						$option['src'] = $data[$origin]; 
+					}
 					$img = $resource[$option['src']];
-
+					$im = new Imagick($img);
+					$im->resizeImage($option['width'], $option['height'], \Imagick::FILTER_BOX, 1);
 					break;
 				
 				default:
@@ -842,14 +862,16 @@ class Gallery extends Model {
 					break;
 			}
 
-			if (is_readable($img)) {
-				$canvas->compositeImage(new Imagick($img), \Imagick::COMPOSITE_OVER, $pos['x'], $pos['y']);
+			if ($im != null) {
+				$canvas->compositeImage($im, \Imagick::COMPOSITE_OVER, $pos['x'], $pos['y']);
+				array_push($clean, $img);
 			}
 		}
 
 
 		$img = $this->media->tmpName($image_id . '.png');
 		$canvas->writeImage($img);
+		array_push($clean, $img);
 
 		$rs =  $this->media->uploadImage( $img, null, true, 1 );
 		$media_id = $rs['media_id'];
@@ -864,6 +886,10 @@ class Gallery extends Model {
 			'gallery_id' => $gallery_id, 
 			'generate_update_time'=> date('Y-m-d H:i:s')
 		]);
+
+		foreach ($clean as $file ) {
+			@unlink($file);
+		}
 
 		if ( $returndata == true ) {
 			return $canvas;
