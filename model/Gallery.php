@@ -14,7 +14,8 @@ use \Tuanduimao\Media as Media;
 use \Mina\Delta\Render as Render;
 use \Tuanduimao\Task as Task;
 use \Exception as Exception;
-
+use \Imagick as Imagick;
+use \ImagickPixel as ImagickPixel;
 
 /**
  * 图集数据模型
@@ -382,6 +383,8 @@ class Gallery extends Model {
 			$rs['origin'] = $this->media->getImageUrl($rs['media_id'], 'origin');
 			$rs['small'] = $this->media->getImageUrl($rs['media_id'], 'small');
 			$rs['url'] = $this->media->getImageUrl($rs['media_id'], 'url');
+		
+
 		} else if (  !empty($rs['image_id']) ) {
 			$rs['origin'] = APP::NR("gallery", "image", ["image_id"=>$rs["image_id"],  "size"=>"origin"]);
 			$rs['small'] = APP::NR("gallery", "image", ["image_id"=>$rs["image_id"],  "size"=>"small"]);
@@ -398,6 +401,18 @@ class Gallery extends Model {
 	}
 
 
+	/**
+	 * 读取一张图片
+	 * @param  [type] $image_id [description]
+	 * @return [type]           [description]
+	 */
+	function getImageData( $image_id ) {
+		$resp = $this->getImagesData(1, ['default_only'=>false, 'image_id'=>$image_id]);
+
+		// DATA 降维
+		$resp['data'] = current($resp['data']);
+		return $resp;
+	}
 
 
 	/**
@@ -425,15 +440,24 @@ class Gallery extends Model {
 				;
 		}
 
+		if ( !empty($query['image_id']) ) {
+			$qb->where('gallery_image.image_id', '=', "{$query['image_id']}")
+				;
+		}
+
+		$default_only = !empty($query['default_only']) ? $query['default_only'] : true;
 
 		$qb->select(
 			'gallery_image.image_id', 'gallery_image.gallery_id', 'gallery_image.data',
 			'gallery_image.columns', 'gallery_image.template', 'gallery_image.status',
-			'gallery.columns as columns_default','gallery.template as template_default'
+			'gallery_image.resource',
+			'gallery.columns as columns_default',
+			'gallery.template as template_default',
+			'gallery.resource as resource_default'
 		);
 
 		$resp = $qb->pgArray($perpage, ['gallery_image._id'], 'page', $page);
-		$resp = $this->formatImageData( $resp );
+		$resp = $this->formatImageData( $resp, $default_only );
 		return $resp;
 	}
 
@@ -441,7 +465,7 @@ class Gallery extends Model {
 	// 转换为表格需要数据
 	function formatImageData( $resp, $default_only = true ) {
 
-		$data = [];  $cols = []; $columns =[];  $colHeaders =[];  $pagination = []; $template = [];
+		$data = [];  $cols = []; $columns =[];  $colHeaders =[];  $pagination = []; $template = []; $resource = [];
 
 		foreach ( $resp['data'] as $rs ) {
 			array_push( $data, array_values($rs['data']) );
@@ -455,6 +479,12 @@ class Gallery extends Model {
 				$template = $rs['template'];
 			} else {
 				$template = $rs['template_default'];
+			}
+
+			if ( $default_only !== true && !empty($rs['resource']) ) {
+				$resource = $rs['resource'];
+			} else {
+				$resource = $rs['resource_default'];
 			}
 		}
 
@@ -474,12 +504,17 @@ class Gallery extends Model {
 			$template = json_decode($template, true);
 		}
 
+		if ( !empty($resource) && is_string($resource) ) {
+			$resource = json_decode($resource, true);
+		}
+
 		return [
 			"data" => $data,
 			"columns" => $columns,
 			"colHeaders" => $colHeaders,
 			"pagination" => $pagination,
-			"template" => $template
+			"template" => $template,
+			"resource" => $resource
 		];
 	}
 
@@ -628,9 +663,162 @@ class Gallery extends Model {
 	 * @param  [type] $image_id [description]
 	 * @return [type]           [description]
 	 */
-	function makeImage( $image_id ) {
+	function makeImage( $image_id, $returndata = false ) {
 
-		return '8b93fd6dba07fd3c19f86b1f83ec5bc8';
+		$image = $this->getImageData($image_id);
+		$template = $image['template'];  $data = $image['data']; $resource = $image['resource'];
+
+		if ( empty($template) ) {
+			throw new Excp("参数错误", 402, ['image_id'=>$image_id]);
+		}
+
+		$page = $template['page']; $items = $template['items'];
+		if ( !is_array($items) || !is_array($page) ) {
+			throw new Excp("参数错误", 402, ['image_id'=>$image_id]);
+		}
+
+		// 读取背景数据
+		$bgcolor = !empty($page["bgcolor"]) ? $page["bgcolor"] : 'rgba(255,255,255,0)';
+		$bgimage = $page['bgimage'];
+		$origin =  is_numeric($page['origin']) ? $page['origin'] : -1;
+		if ( !empty($data[$origin])) {
+			$bgimage = $data[$origin];
+		}
+
+		// 缓存制作各种资源图片
+		if ( empty($resource[$bgimage]) ) {
+			$bgimage_tmp = $this->media->tmpName($bgimage);
+			$resp = $this->media->copy( $bgimage, $bgimage_tmp, false);
+			$resource[$bgimage] = $bgimage_tmp;
+		}
+
+		$minsize = ['width'=>0, 'height'=>0];
+		foreach ($items as $idx=>$it ) {
+			$type = $it[0]; $option = $it[1]; $pos = $it[2]; 
+			$origin =  is_numeric($option['origin']) ? $option['origin'] : -1;
+
+			$x = intval($pos['x']) + intval($option['width']);
+			$y = intval($pos['y']) + intval($option['height']);
+			$minsize['width'] = max($x, $minsize['width']);
+			$minsize['height'] = max($y, $minsize['height']);
+
+			switch ($type) {
+
+				case 'text':
+					$text_tmp = $this->media->tmpName($image_id . $idx . '.png');
+					if ( !empty($data[$origin])) {
+						$option['text'] = $data[$origin]; 
+					}
+					$this->media->copyText( $option, $text_tmp, false );
+					break;
+
+				case 'qrcode':
+					$qrcode_tmp = $this->media->tmpName($image_id . $idx . '.png');
+					if ( !empty($data[$origin])) {
+						$option['text'] = $data[$origin]; 
+					}
+					$img = $option['logo'];
+					if ( !empty($img) && empty($resource[$img]) ) {
+						$img_tmp = $this->media->tmpName($image_id . $idx . 'logo.png');
+						$this->media->copy( $img, $img_tmp, false);
+						$resource[$img] = $img_tmp;
+					}
+
+					if ( !empty($resource[$img]) ) {
+						$option['logo'] = $resource[$img]; 
+					}
+
+					$this->media->copyQrcode( $option, $qrcode_tmp, false);
+					break;
+
+				case 'image':
+					$img = $option['src'];
+					if ( empty($resource[$img]) ) {
+						$img_tmp = $this->media->tmpName($img);
+						$this->media->copy( $img, $img_tmp, false);
+						$resource[$img] = $img_tmp;
+					}
+					break;
+				
+				default:
+					# code...
+					break;
+			}
+
+		}
+
+
+		// 制作画布
+		$canvas = new Imagick();
+		$canvas->newImage($minsize['width'], $minsize['height'], new ImagickPixel($bgcolor) );
+		$canvas->setImageFormat('png');
+
+		// 增加背景图片
+		if ( is_readable($resource[$bgimage]) ) {
+			try {
+				$bg = new Imagick($resource[$bgimage]);
+			} catch( Exception $e ) {
+				throw new Excp($e->getMessage(), 500,  ['image_id'=>$image_id]);
+			}
+
+
+			$w = $bg->getImageWidth();
+			$h = $bg->getImageHeight();
+			$canvas = new Imagick();
+			$canvas->newImage($w, $h, new ImagickPixel($bgcolor) );
+			$canvas->setImageFormat('png');
+			$canvas->compositeImage($bg, \Imagick::COMPOSITE_OVER,0, 0);
+		}
+
+		// 贴文字、图片、二维码等
+		foreach ($items as $idx=>$it ) {
+			$type = $it[0]; $option=$it[2]; $pos = $it[2];
+			$img = null;
+			switch ($type) {
+
+				case 'text':
+					$img = $this->media->tmpName($image_id . $idx . '.png');
+					break;
+
+				case 'qrcode':
+					$img = $this->media->tmpName($image_id . $idx . '.png');
+				
+					break;
+
+				case 'image':
+					$img = $resource[$option['src']];
+
+					break;
+				
+				default:
+					# code...
+					break;
+			}
+
+			if (is_readable($img)) {
+				$canvas->compositeImage(new Imagick($img), \Imagick::COMPOSITE_OVER, $pos['x'], $pos['y']);
+			}
+		}
+
+
+		$img = $this->media->tmpName($image_id . '.png');
+		$canvas->writeImage($img);
+
+		$rs =  $this->media->uploadImage( $img, null, true, 1 );
+		$media_id = $rs['media_id'];
+
+		$this->image->updateBy('image_id',[
+			'image_id'=>$image_id,
+			'media_id'=>$media_id,
+			'generate_update_time' => date('Y-m-d H:i:s')
+		]);
+
+		if ( $returndata == true ) {
+			return $canvas;
+		}
+
+		return $media_id;
+
 	}
 
 

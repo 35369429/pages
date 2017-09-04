@@ -278,21 +278,48 @@ class GalleryController extends \Tuanduimao\Loader\Controller {
 		$media_id = $_GET['media_id'];
 		$size = $_GET['size'];
 		
+		$g = new Gallery();
+
 		// 转向 media 图片呈现页
 		if ( empty($media_id) ) { 
 
 			if ( empty($image_id) ) {
-				throw new Excp('参数错误', 402, ['image_id'=>$image_id, 'media_id'=>$media_id]);
+				$url =  App::URI("mina", "image", "error", ["message"=>"图片不存在 ({$image_id})"]);
+				header("HTTP/1.1 301 Moved Permanently");
+				header("Location: {$url}");
+				return;
 			}
 
-			$g = new Gallery();
-			$media_id = $g->makeImage( $image_id );
+			try {
+				$media_id = $g->makeImage( $image_id );
+			} catch( Excp $e  ){
+				$url =  App::URI("mina", "image", "error", ["message"=>"生成图片出错 (" .$e->getMessage().")"]);
+				header("HTTP/1.1 301 Moved Permanently");
+				header("Location: {$url}");
+				return;
+			} catch( Exception $e ) {
+				$url =  App::URI("mina", "image", "error", ["message"=>"生成图片出错 (" .$e->getMessage().")"]);
+				header("HTTP/1.1 301 Moved Permanently");
+				header("Location: {$url}");
+				return;
+			}
 		}
 
-		$url = App::URI("mina", "image", "media", ["media_id"=>$media_id,  'size'=>$size]);
+		$url = $g->media->getImageUrl( $media_id, $size );
 		header("HTTP/1.1 301 Moved Permanently");
 		header("Location: {$url}");
+	}
 
+
+
+	function imagelive() {
+
+		$image_id = $_GET['image_id'];
+
+		$g = new Gallery();
+		$image = $g->makeImage( $image_id , true );
+		// header("Content-Type: image/png");
+		// echo $image;
 	}
 
 
