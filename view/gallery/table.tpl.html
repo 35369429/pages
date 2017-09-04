@@ -23,35 +23,21 @@ use \Tuanduimao\Loader\App;
 				<i class="fa fa-cloud-upload"></i> 导入</button>
 		</div>
 		<div class="col-xs-7 text-muted text-right" style="padding:15px 15px 5px 15px;">
-			 <nav class="push-15-r remove-padding " >
-				<ul class="pagination remove-padding remove-margin">
-					<li class="disabled">
-						<a href="javascript:void(0)"><i class="fa fa-angle-double-left"></i></a>
-					</li>
-					<li class="active">
-						<a href="javascript:void(0)">1</a>
-					</li>
-					<li>
-						<a href="javascript:void(0)">2</a>
-					</li>
-					<li>
-						<a href="javascript:void(0)">3</a>
-					</li>
-					<li>
-						<a href="javascript:void(0)">4</a>
-					</li>
-					<li>
-						<a href="javascript:void(0)">5</a>
-					</li>
-					<li>
-						<a href="javascript:void(0)"><i class="fa fa-angle-double-right"></i></a>
-					</li>
-				</ul>
+			 <nav class="push-15-r remove-padding  " >
+				<ul class="pagination remove-margin"></ul>
 			</nav>
 		</div>
 	</div>
 </div>
 <script type="text/javascript">
+
+	var $_GET = <?=json_encode($query)?>;
+
+
+
+
+
+
 
 	$('.canvas-toggle').removeClass('hidden');
 	$imgeditor.display();
@@ -69,6 +55,10 @@ use \Tuanduimao\Loader\App;
 	   readOnly:false,
 	   submitOption:{
 		   'url': '<?=App::NR('gallery', 'save')?>'
+	   },
+
+	   beforeGetdata: function(){
+	   		loading('读取图片信息...');
 	   },
 
 	   afterChange:function( changes, source){
@@ -119,17 +109,6 @@ use \Tuanduimao\Loader\App;
 	});
 
 
-
-    // 从服务器中读取数据
-	$webtable.getData('<?=App::NR('gallery', 'getdata')?>', function( resp, status, xhr){
-		console.log('getdata success', resp ); 
-		console.log('getdata pagination', resp['pagination'] );  // 分页信息
-		console.log('getdata status', resp['status'] );  // 状态信息
-		console.log( resp );
-		updateColumsSelector( resp['columns'], resp['colHeaders'] );
-		updateImage( resp['image'] );
-		return resp;
-	});
 
 
 	// 当管理面板单机时候 （ 转移焦点
@@ -272,6 +251,8 @@ use \Tuanduimao\Loader\App;
 
 
 
+
+
 	/**
 	 * 更新栏位选择器
 	 * @param  {[type]} columns	[description]
@@ -389,58 +370,105 @@ use \Tuanduimao\Loader\App;
 				$imgeditor.select( 'page', 'user' );
 			}
 
-			// for( var idx in items ) {
-			// 	var it = items[idx];
-			// 		it[0] = it[0] || '';
-			// 		it[1] = it[1] || [];
-			// 		it[2] = it[2] || [];
-
-			// 	var origin = parseInt(it[1]['origin']);
-
-			// 	if ( it[0] == 'image' ) {
-			// 		if ( typeof origin == 'number' && data[origin] != null) {
-			// 			it[1]['src'] = data[origin];
-			// 		}	
-			// 	} else if ( it[0] == 'text' ) {
-			// 		if ( typeof origin == 'number' && data[origin] != null) {
-			// 			it[1]['text'] = data[origin];
-			// 		}
-			// 	} else if ( it[0] == 'qrcode' ) {
-			// 		if ( typeof origin == 'number' && data[origin] != null) {
-			// 			it[1]['text'] = data[origin];
-			// 		}
-			// 	}
-
-			// 	if ( col == origin ) {
-			// 		var id = $imgeditor.add(it[0], it[1], it[2], 'init', function(id ){
-			// 			$imgeditor.select( id, 'user' );
-			// 		});
-			// 	} else {
-			// 		var id = $imgeditor.add(it[0], it[1], it[2], 'init');
-			// 	}
-			// }
-
-
-			// // 选中当前页背景图
-			// if ( pagecol == col ) {
-			// 	$imgeditor.select( 'page', 'user' );
-			// }
-
-
-			// image['items'] = []; image['map'] = {};
-			// var newData = $imgeditor.getData();
-			// var newItems = newData['items'] || [];
-			// var newPage = newData['page'];
-
-			// image['page'] = newPage;
-
-			// for( var id in newItems ) {
-			// 	var it = newItems[id];
-			// 	var idx = image['items'].push ( [it.name, it.option, it.pos]);
-			// 	image.map[id] = idx -1;
-			// }
 		}, 'init' );
 	}
+
+
+	function renderPage( pagination) {
+
+		var nodes = [];
+
+		if ( pagination['prev'] !== false ){
+			nodes.push(
+				'<li>' +
+					'<a href="javascript:search(\'page\', \'' + pagination['prev'] + '\' )">' +
+						'<i class="fa fa-angle-double-left"></i>' +
+					'</a>' +
+				'</li>'
+			);
+		}
+
+		for( var i =1; i<=pagination['last']; i++) {
+
+			var active = '';
+			if ( i== pagination['curr'])  {
+				active = 'active';
+			}
+
+			
+			nodes.push(
+				'<li class="'+active+'">' +
+					'<a href="javascript:search(\'page\', \'' + i + '\' )">' +
+						i +
+					'</a>' +
+				'</li>'
+			);
+		}
+
+
+
+		if ( pagination['next'] !== false ){
+			nodes.push(
+				'<li>' +
+					'<a href="javascript:search(\'page\', \'' + pagination['next'] + '\' )">' +
+						'<i class="fa fa-angle-double-right"></i>' +
+					'</a>' +
+				'</li>'
+			);
+		}
+
+		$('.pagination').html('');
+		for( var i in nodes ) {
+			$('.pagination').append($(nodes[i]));
+		}
+	}
+
+
+
+	function search( key, value ) {
+
+		if ( key !== undefined ) {
+			$_GET[key] = value;
+
+			if ( value == undefined  || value == '') {
+				delete $_GET[key];
+			}
+
+			if ( key != 'page' ) {
+				$_GET['page'] = 1;
+			}
+		}
+
+	    // 从服务器中读取数据
+		$webtable.getData(
+			{
+				url:'<?=App::NR('gallery', 'getdata')?>',
+				data:$_GET
+			},
+			function( resp, status, xhr){
+				
+				updateColumsSelector( resp['columns'], resp['colHeaders'] );
+				updateImage( resp['template'] );
+				renderPage( resp['pagination']);
+
+				$_GET = resp['query'];
+				if ( typeof $_GET['gallery_id'] != 'undefined' && $_GET['gallery_id'] != null ) {
+					$imgeditor.setId($_GET['gallery_id']);
+				}
+
+				$hot.latest = {
+					row: -1,
+					col: -1
+				}
+				done();
+				return resp;
+			}
+		);
+	}
+	
+
+	// 显示第一页
+	search('page', 1);
    
 
 </script>

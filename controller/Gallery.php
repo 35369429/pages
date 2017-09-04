@@ -90,6 +90,19 @@ class GalleryController extends \Tuanduimao\Loader\Controller {
 
 	// Helper: 批量编辑图集图片 
 	function table() {
+		
+		$gallery_id = $_POST['gallery_id'];
+		$image_id = $_POST['image_id'];
+		$page = !empty($_POST['page']) ? intval($_POST['page']) : 1;
+		$keyword = trim($_POST['keyword']);
+
+		$data['query'] = [
+			"keyword"=>$keyword,
+			"page" => $page,
+			"image_id" => $image_id,
+			"gallery_id" => $gallery_id
+		];
+
 		App::render($data, 'gallery', 'table' );
 	}
 
@@ -98,34 +111,28 @@ class GalleryController extends \Tuanduimao\Loader\Controller {
 	// Ajax: 读取图集中的图片
 	function getdata() {
 
-		$maxlen = 20; $columns = []; $data = [ ["示例文字", "/s/mina/pages/static/defaults/p7.jpg", "二维码链接"] ];
-		for( $i=0; $i<$maxlen; $i++ ) {
-			$name = chr( $i + 65 );
-			array_push($columns,["name"=>$name]);
-		}
-		array_push($columns,["name"=>chr(85), 'readOnly'=>true, "renderer"=>"{{unikey}}"]);
+		$gallery_id = $_GET['gallery_id'];
+		$image_id = $_GET['image_id'];
+		$page = !empty($_GET['page']) ? intval($_GET['page']) : 1;
+		$keyword = trim($_GET['keyword']);
 
-		$resp = [
-			"data" => $data,
-			"columns" =>$columns,
-			"colHeaders" => ["名称"],
-			"pagination" => [
-				"total" => 100,
-				"perpage" => 50,
-				"pages" => [1,2,3,4,5,6]
-			],
-			"image" => [
-				"page" => [
-					"bgimage" => "/s/mina/pages/static/defaults/p1.jpg",
-					"origin" =>1
-				],
-				"items" => [
-					[ "text", ["origin"=>0,"type"=>'vertical', "dir"=>'rtl', "width"=>68,"height"=>168], ["x"=>710, 'y'=>155] ],
-					[ "qrcode", ["origin"=>2, "width"=>120], ["x"=>660, "y"=>20]]
-				]
-			],
-			"status" => 'down'
+		$query = [
+			"keyword"=>$keyword,
+			"page" => $page,
+			"image_id" => $image_id,
+			"gallery_id" => $gallery_id
 		];
+
+		$g = new Gallery();
+
+		if ( empty($gallery_id) ) {
+			$resp = $g->emptyImageData();	
+		} else  {
+			$resp = $g->getImagesData($page, $query, 10);
+		}
+		
+		$resp['status'] = 'done';
+		$resp['query'] =  $query;
 
 		echo json_encode($resp);
 	}

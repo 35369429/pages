@@ -243,7 +243,7 @@ class Gallery extends Model {
 
 		// 检查参数
 		if ( !is_array($gallery)) {
-			throw new Excp('参数错误', 402, ['gallery'=>$gallery, "images"=>$images] );
+			throw new Excp('参数错误', 402, ['gallery'=>$gallery] );
 		}
 
 		if ( empty($gallery['gallery_id']) ){
@@ -327,7 +327,7 @@ class Gallery extends Model {
 			$qb->where('gallery_id', '=', "{$query['gallery_id']}");
 		}
 
-		$qb->select('image_id', 'gallery_id', 'image_id', 'status');
+		$qb->select('image_id', 'gallery_id', 'media_id',  'status');
 		$resp = $qb->pgArray($perpage, ['_id'], 'page', $page);
 
 
@@ -360,6 +360,145 @@ class Gallery extends Model {
 		}
 
 		return $rs;
+	}
+
+
+
+
+	/**
+	 * 读取图片
+	 * @param  integer $page    [description]
+	 * @param  array   $query   [description]
+	 * @param  integer $perpage [description]
+	 * @return [type]           [description]
+	 */
+	function getImagesData( $page=1, $query=[], $perpage=40 ) {
+
+		$qb = $this->image->query()
+				->leftjoin('gallery', 'gallery.gallery_id', '=', 'gallery_image.gallery_id')
+				->orderBy('gallery_image._id')
+			;
+
+		if ( !empty($query['keyword']) ) {
+			$qb->where('gallery_image.data', 'like', "%{$query['keyword']}%")
+			   ;
+		}
+
+		if ( !empty($query['gallery_id']) ) {
+			$qb->where('gallery_image.gallery_id', '=', "{$query['gallery_id']}")
+				;
+		}
+
+
+		$qb->select(
+			'gallery_image.image_id', 'gallery_image.gallery_id', 'gallery_image.data',
+			'gallery_image.columns', 'gallery_image.template', 'gallery_image.status',
+			'gallery.columns as columns_default','gallery.template as template_default'
+		);
+
+		$resp = $qb->pgArray($perpage, ['gallery_image._id'], 'page', $page);
+		$resp = $this->formatImageData( $resp );
+		return $resp;
+	}
+
+
+	// 转换为表格需要数据
+	function formatImageData( $resp, $default_only = true ) {
+
+		$data = [];  $cols = []; $columns =[];  $colHeaders =[];  $pagination = []; $template = [];
+
+		foreach ( $resp['data'] as $rs ) {
+			array_push( $data, array_values($rs['data']) );
+			$cols = array_merge($cols, array_keys($rs['data']));
+			
+			if ( !empty($rs['columns']) ) {
+				$colHeaders = array_merge($colHeaders, $rs['columns']);
+			}
+
+			if ( $default_only !== true && !empty($rs['template']) ) {
+				$template = $rs['template'];
+			} else {
+				$template = $rs['template_default'];
+			}
+		}
+
+		$pagination = $resp; unset($pagination['data']);
+
+		$cols = array_unique($cols);
+		$lastColIndex = count($cols) - 1;
+		foreach ($cols as $idx => $col) {
+			if ( $idx == $lastColIndex ) {
+				array_push( $columns, ["name"=>$col, 'readOnly'=>true, "renderer"=>"{{unikey}}"] );
+			} else {
+				array_push( $columns, ["name"=>$col] );
+			}
+		}
+
+		if ( !empty($template) && is_string($template) ) {
+			$template = json_decode($template, true);
+		}
+
+		return [
+			"data" => $data,
+			"columns" => $columns,
+			"colHeaders" => $colHeaders,
+			"pagination" => $pagination,
+			"template" => $template
+		];
+	}
+
+
+	function emptyImageData() {
+
+		$bgimage = rand(1,9);
+		$maxcol = 20; $columns = []; 
+		$data = [ 
+			["示例文字", "/s/mina/pages/static/defaults/p{$bgimage}.jpg", "https://minapages.com"]
+		];
+
+		for( $i=0; $i<$maxcol; $i++ ) {
+			$name = chr( $i + 65 );
+			array_push($columns,["name"=>$name]);
+		}
+		array_push($columns,["name"=>chr(85), 'readOnly'=>true, "renderer"=>"{{unikey}}"]);
+
+		$template = [
+			"page" => [
+				"bgimage" => "/s/mina/pages/static/defaults/{$bgimage}.jpg",
+				"origin" =>1
+			],
+			"items" => [
+				[ 
+					"text", ["origin"=>0,
+						"type"=>'vertical', 
+						"dir"=>'rtl', 
+						"size"=>24, "width"=>24,"height"=>168
+						], 
+					["x"=>750, 'y'=>30] 
+				],
+				[ "qrcode", ["origin"=>2, "width"=>120], ["x"=>30, "y"=>30]]
+			]
+		];
+
+		return [
+			"data" => $data,
+			"columns" => $columns,
+			"colHeaders" =>[],
+			"pagination" => [
+				"total" => 1,
+				"per_page" => 40,
+				"current_page" => 1,
+				"last_page" => 1,
+				"from" => 1, 
+				"to" => 1,
+				"next" => false,
+				"prev" => false,
+				"curr" => 1, 
+				"last" => 1, 
+				"perpage" => 40
+			],
+			"template" => $template
+		];
 	}
 
 
