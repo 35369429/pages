@@ -277,6 +277,12 @@ class Gallery extends Model {
 
 		} else {  // 更新
 
+			// 不可修改主题
+			if ( $last_gallery['system'] == 1 && (empty($gallery['system']) ||  $gallery['system'] == 1)) {
+				unset($gallery['title']);
+				unset($gallery['intro']);
+			}
+
 			// 检查模板是否更新
 			if ( $this->isTemplateUpdated($last_gallery['template'], $gallery['template']) ) {
 				$gallery['template_update_time'] = "DB::RAW(CURRENT_TIMESTAMP)";
@@ -430,6 +436,9 @@ class Gallery extends Model {
 			$rs['w'] = 0;
 			$rs['h'] = 0;
 		}
+
+		$rs['pid'] = $rs['image_id'];
+		// $rs['gid'] = $rs['gallery_id'];
 
 		return $rs;
 	}
@@ -633,6 +642,7 @@ class Gallery extends Model {
 		$qb->select(
 			"gallery.title", "gallery.intro",  
 			"gallery.type",  "gallery.gallery_id as gallery_id", 
+			"gallery.system", "gallery.hidden", 
 			"gallery.status as status",
 			"gallery_image.media_id as media_id",
 			"gallery_image.image_id as image_id"
@@ -664,6 +674,7 @@ class Gallery extends Model {
 		$qb->select(
 			"gallery.title", "gallery.intro",  
 			"gallery.type",  "gallery.gallery_id as gallery_id", 
+			"gallery.system", "gallery.hidden",
 			"gallery.status as status",
 			"gallery_image.media_id as media_id",
 			"gallery_image.image_id as image_id"
@@ -710,6 +721,8 @@ class Gallery extends Model {
 		if ( !is_array($items) || !is_array($page) ) {
 			throw new Excp("参数错误", 402, ['image_id'=>$image_id]);
 		}
+
+		$gallery_id = $page['id'];
 
 		// 读取背景数据
 		$bgcolor = !empty($page["bgcolor"]) ? $page["bgcolor"] : 'rgba(255,255,255,0)';
@@ -845,6 +858,11 @@ class Gallery extends Model {
 			'image_id'=>$image_id,
 			'media_id'=>$media_id,
 			'generate_update_time' => date('Y-m-d H:i:s')
+		]);
+
+		$this->updateBy('gallery_id',[
+			'gallery_id' => $gallery_id, 
+			'generate_update_time'=> date('Y-m-d H:i:s')
 		]);
 
 		if ( $returndata == true ) {

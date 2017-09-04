@@ -311,6 +311,14 @@ class GalleryController extends \Tuanduimao\Loader\Controller {
 	}
 
 
+	function download() {
+		$url = Utils::unescape($_GET['url']);
+		$urlr = explode('pid=', $url);
+		$image_id = $urlr[1];
+		$_GET['image_id'] = $image_id;
+		$this->image();
+	}
+
 
 	function imagelive() {
 
@@ -318,8 +326,8 @@ class GalleryController extends \Tuanduimao\Loader\Controller {
 
 		$g = new Gallery();
 		$image = $g->makeImage( $image_id , true );
-		// header("Content-Type: image/png");
-		// echo $image;
+		header("Content-Type: image/png");
+		echo $image;
 	}
 
 

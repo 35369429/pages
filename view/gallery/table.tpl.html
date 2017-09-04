@@ -544,6 +544,17 @@ use \Tuanduimao\Loader\App;
 						.removeAttr('disabled')
 						.show();
 
+						// fn-gallery-remove
+					// console.log( 'gallery',  resp['gallery'] );
+
+					if ( resp['gallery']['system'] == 1 ){ // 不可删除
+						$('.fn-gallery-remove').addClass('disabled').attr('disabled', 'disabled').addClass('hidden').hide();
+
+						// 不可修改主题
+						$('.fn-gallery-title').addClass('disabled').attr('disabled', 'disabled');
+						$('.page.option-panel input[name="title"]').addClass('disabled').attr('disabled', 'disabled');
+					}
+
 				}
 
 				updateColumsSelector( resp['columns'], resp['colHeaders'] );

@@ -168,20 +168,21 @@ var pswpElement = document.querySelectorAll('.pswp')[0];
 // 内容分享
 var options = {
 	shareButtons: [
-		{id:"wechat", label:"<i class='fa fa-wechat'></i> 分享到微信", url:'/share.php?u={{url}}'},
-		{id:"weibo", label:"<i class='fa fa-weibo'></i> 分享到微博", url:'/share.php?u={{url}}'},
-		{id:"edit", label:"<i class='fa fa-pencil'></i> 修改", url:'/share.php?u={{url}}'},
-		{id:"download", label:"<i class='fa fa-download'></i> 下载", url:'javascript:void(0);'},
-		{id:"print", label:"<i class='fa fa-print'></i> 打印", url:'/share.php?u={{url}}'}
+		// {id:"wechat", label:"<i class='fa fa-wechat'></i> 分享到微信", url:'/share.php?u={{url}}'},
+		// {id:"weibo", label:"<i class='fa fa-weibo'></i> 分享到微博", url:'/share.php?u={{url}}'},
+		{id:"editor", label:"<i class='fa fa-pencil'></i> 修改", url:'/share.php?u={{url}}'},
+		{id:"download", label:"<i class='fa fa-download'></i> 下载",  url:'<?=App::NR("gallery", "download",["url"=>""])?>{{url}}', download:true},
+		// {id:"print", label:"<i class='fa fa-print'></i> 打印", url:'/share.php?u={{url}}'}
 	]
 };
 
 // 打开一张图片
 function openImage( index ) {
+
 	options['index'] = index;
 	var gallery = new PhotoSwipe( pswpElement, PhotoSwipeUI_Default, items, options );
-	gallery.listen('imageLoadComplete', function(index, item) {
-		
+	
+	gallery.listen('imageLoadComplete', function(index, item) {	
 		var img = new Image();
         img.onload = function () {
             item.w = this.width;
@@ -189,19 +190,23 @@ function openImage( index ) {
             gallery.updateSize(true);
         };
         img.src = item.src;
-
-		// console.log( index, item );
-  //       var img = new Image();
-  //       item.w = img.width;
-  //       item.h = img.height;
-  //       gallery.updateSize(true);
     });
 
 	gallery.init();
+
 	gallery.listen('shareLinkClick', function(e, target) {
-		console.log('my self Link shareLinkClick', $(target) );
-		$(target).removeAttr('href');
-		gallery.close();
+		var name = $(target).attr('class').replace('pswp__share--', '');
+		
+		if ( name == 'download') {
+			return true;
+		} else if ( name = 'editor' ) {
+
+			$(target).removeAttr('href');
+			gallery.close();
+			$imgeditor.open('table', $_GET, function(){});
+		}
+		
+
 	});
 }
 
