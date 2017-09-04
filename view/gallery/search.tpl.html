@@ -88,7 +88,7 @@ use \Tuanduimao\Utils as Utils;
 				
 				<img 
 					width="100%" 
-					src='<?=$ga["small"]?>' 
+					data-src='<?=$ga["small"]?>' 
 					alt=""  >	
 			</a>
 
@@ -154,8 +154,10 @@ use \Tuanduimao\Utils as Utils;
 var $_GET = <?=json_encode($query)?>;
 var $_HOME ='<?=App::R("gallery", "index")?>';
 
-function search( key, value ) {
 
+
+function search( key, value ) {
+	
 	if ( key !== undefined ) {
 		$_GET[key] = value;
 
@@ -173,15 +175,38 @@ function search( key, value ) {
 
 }
 
+// 监听图片变化（ 图片生成完后载入 )
+
 
 
 $(function() {
+
+
 	App.initHelpers(['datepicker','select2', 'masked-inputs','tags-inputs', 'slimscroll', 'ajax-confirm']);
 	$('.search').click(function(){
 		var keyword = $('.keyword').val();
 		search('keyword', keyword);
 
 	});
+
+	// App.loading({message:'正在加载图片, 请稍候...'}).show();
+	var loaded = 0;  
+	var total = $('.img-thumb img').length;
+
+	function checkimages() {
+		loaded++;
+		if ( loaded == total) {
+			App.loading().hide();
+		}
+	}
+
+	$('.img-thumb img').each(function(index, item ){
+		$(this).attr('src', $(this).attr('data-src') );
+	})
+
+	$('.img-thumb img')
+		.load(function(){checkimages();})
+		.error(function(){checkimages();});
 
 });
 

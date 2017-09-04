@@ -114,6 +114,10 @@ use \Tuanduimao\Utils as Utils;
 
 <script type="text/javascript">
 
+App.loading({message:'读取数据, 请稍候...'}).show();
+
+var items = <?=json_encode($images['data'])?>
+
 var $_GET = <?=json_encode($query)?>;
 
 function search( key, value ) {
@@ -132,13 +136,34 @@ function search( key, value ) {
 
 	App.loading({message:'读取数据, 请稍候...'}).show();
 	$imgeditor.open('album', $_GET, function(){
-		App.loading().hide();
+		App.loading({message:'制作图片, 请稍候...'}).show();
 	});
 }
 
 
+
+// 监听图片变化（ 图片生成完后载入 )
+var loaded = 0;  
+var total = items.length;
+
+function checkimages() {
+	
+	loaded++;
+	if ( loaded == total) {
+		App.loading().hide();
+	}
+}
+
+$('.img-thumb img')
+	.load(function(){checkimages();})
+	.error(function(){checkimages();});
+
+
+
+
+
 var pswpElement = document.querySelectorAll('.pswp')[0];
-var items = <?=json_encode($images['data'])?>
+
 
 // 内容分享
 var options = {

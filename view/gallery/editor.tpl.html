@@ -730,15 +730,16 @@ $(function() {
 
 			// 查看图片详情
 			$imgeditor.open('album', {}, function(){
-				App.loading().hide();
+				App.loading({message:'制作图片, 请稍候...'}).show();
 			});
 			
 			<?php elseif ( !empty($gallery_id)) :?>
 
 			// 浏览图集图片
 			$imgeditor.open('album', {}, function(){
-				App.loading().hide();
+				App.loading({message:'制作图片, 请稍候...'}).show();
 			});
+
 
 			<?php elseif ( $help == 1 ) :?>
 
