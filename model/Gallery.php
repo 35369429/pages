@@ -388,6 +388,7 @@ class Gallery extends Model {
 
 		$qb = $this->image->query()
 				->leftjoin('gallery', 'gallery.gallery_id', '=', 'gallery_image.gallery_id')
+				->whereNull('gallery_image.deleted_at')
 				->orderBy('gallery_image._id')
 			;
 
@@ -523,15 +524,18 @@ class Gallery extends Model {
 
 		$qb = $this->query()
 			   ->join("gallery_image", "gallery_image.gallery_id", 'gallery.gallery_id')
+			   ->whereNull('gallery_image.deleted_at')
 			   ->groupBy('gallery.gallery_id')
 			   ->orderBy('gallery.created_at', 'desc')
 			;
 
 		if ( !empty($query['keyword']) ) {
 			$qb->where('title', 'like', "%{$query['keyword']}%")
-			   ->orWhere('gallery.template', 'like', "%{$query['keyword']}%")
-			   ->orWhere('gallery_image.template', 'like', "%{$query['keyword']}%")
-			   ->orWhere('gallery_image.data', 'like', "%{$query['keyword']}%");
+			   ->where(function ( $qb ){
+			   	   $qb->where('gallery.template', 'like', "%{$query['keyword']}%");
+				   $qb->orWhere('gallery_image.template', 'like', "%{$query['keyword']}%");
+				   $qb->orWhere('gallery_image.data', 'like', "%{$query['keyword']}%");
+			   });
 		}
 
 		$qb->select(
