@@ -118,8 +118,6 @@ class Gallery extends Model {
 		;
 	}
 
-
-
 	/**
 	 * 编辑器提交的模板数据格式转换
 	 * @param  [type] $images [description]
@@ -129,17 +127,31 @@ class Gallery extends Model {
 
 		$data = [];
 		foreach ($images as $idx=>$img ) {
-			$keys = array_keys($img['data']);
+			
 			$rs = $img['data'];
-			$key = end($keys);
-			$image_id = $rs[$key];
 
-			if ( strpos( $image_id ,'tmp_') == 0 ) {
-				$rs[$key] = $image_id = null;
+			$__tmp = null;
+			$__row = $img['row'];
+			$__unikey = $img['unikey'];
+			$__value = $img['value'];
+
+			if ( empty($__unikey) ) {
+				$keys = array_keys($img['data']);
+				$__unikey = end($keys);
+			}
+
+			$image_id = $rs[$__unikey];
+			if ( strpos( $image_id ,'tmp_') === 0 ) {
+				$__tmp = $image_id;
+				$rs[$__unikey] = $image_id = null;
 			}
 
 			array_push($data, [
 				"image_id" => $image_id,
+				"tmp" => $__tmp,
+				"row" => $__row,
+				"key" => $__unikey,
+				"value" => $__value,
 				"data" => $rs
 			]);
 		}
@@ -607,12 +619,19 @@ class Gallery extends Model {
 
 		$resp = [];
 		foreach ($images as $idx => $image) {
-			$key = end(array_keys($image['data']));
+			$key = $image['key'];
 			$image['gallery_id'] = $gallery_id;
-			$image['image_id'] = $image['data'][$key] = $this->genImageId();
-			$resp[] = $this->image->create( $image );
-		}
+			$unikey =  $image['image_id'] = $image['data'][$key] = $this->genImageId();
+			$row = $image['row'];
+			$tmp = $image['tmp'];
 
+			$resp[$row] = [
+				'data' =>$this->image->create( $image ),
+				'method'=>'create',
+				"tmp" => $tmp,
+				'unikey' => $unikey
+			];
+		}
 		return $resp;
 	}
 
@@ -622,10 +641,20 @@ class Gallery extends Model {
 	 * @param  [type] $images     [description]
 	 */
 	function updateImages( $images ) {
+
 		$resp = [];
 		foreach ($images as $idx => $image) {
-			$resp[] = $this->image->updateBy( "image_id",  $image );
+
+			$key = $image['key'];
+			$unikey =  $image['image_id'] = $image['data'][$key];
+			$row = $image['row'];
+			$resp[$row] =  [
+				'data' =>$this->image->updateBy( "image_id",  $image ),
+				'method'=>'update',
+				'unikey' => $unikey
+			];
 		}
+
 		return $resp;
 	}
 
@@ -635,10 +664,22 @@ class Gallery extends Model {
 	 * @param  [type] $image_id [description]
 	 * @return [type]           [description]
 	 */
-	function removeImage( $image_ids ) {
+	function removeImages( $images ) {
 		$resp = [];
-		foreach ($image_ids as $image_id) {
-			$resp[] = $this->image->remove( $image_id, 'image_id');
+		foreach ($images as $idx => $image) {
+			// $resp[] = $this->image->remove( $image_id, 'image_id');
+			$key = $image['key'];
+			$unikey =  $image['value'];
+			if ( empty($unikey) ) {
+				continue;
+			}
+
+			$row = $image['row'];
+			$resp["-" . $row] =  [
+				'data' =>$this->image->remove( $unikey, 'image_id'),
+				'method'=>'remove',
+				'unikey' => $unikey
+			];
 		}
 		return $resp;
 	}

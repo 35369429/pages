@@ -91,10 +91,12 @@ class GalleryController extends \Tuanduimao\Loader\Controller {
 	// Helper: 批量编辑图集图片 
 	function table() {
 		
-		$gallery_id = $_POST['gallery_id'];
+		$gallery_id = !empty($_POST['gallery_id']) ? $_POST['gallery_id'] : $_POST['id'];
 		$image_id = $_POST['image_id'];
 		$page = !empty($_POST['page']) ? intval($_POST['page']) : 1;
 		$keyword = trim($_POST['keyword']);
+
+
 
 		$data['query'] = [
 			"keyword"=>$keyword,
@@ -125,14 +127,19 @@ class GalleryController extends \Tuanduimao\Loader\Controller {
 
 		$g = new Gallery();
 
-		if ( empty($gallery_id) ) {
-			$resp = $g->emptyImageData();	
-			$resp['gallery'] = null;
-		} else  {
-			$resp = $g->getImagesData($page, $query, 10);
-			$resp['gallery'] = $g->getGallery($gallery_id);
-		}
+		$resp  = []; $gallery = null;
 		
+
+		if ( !empty($gallery_id) ){
+			$resp = $g->getImagesData($page, $query, 40);
+			$gallery = $g->getGallery($gallery_id);
+		}
+
+		if ( empty($resp['data']) ) {
+			$resp = $g->emptyImageData();
+		}
+
+		$resp['gallery'] = $gallery; 
 		$resp['status'] = 'done';
 		$resp['query'] =  $query;
 
@@ -147,7 +154,7 @@ class GalleryController extends \Tuanduimao\Loader\Controller {
 	 */
 	function album() {
 
-		$gallery_id = $_POST['gallery_id'];
+		$gallery_id = !empty($_POST['gallery_id']) ? $_POST['gallery_id'] : $_POST['id'];
 		$image_id = $_POST['image_id'];
 		$page = !empty($_POST['page']) ? intval($_POST['page']) : 1;
 		$keyword = trim($_POST['keyword']);
@@ -204,21 +211,47 @@ class GalleryController extends \Tuanduimao\Loader\Controller {
 			throw new Excp("参数错误 (template 格式不正确 )", 402, ['json'=>$json_string]);
 		}
 
+		if( json_last_error() !== JSON_ERROR_NONE) {
+			throw new Excp('提交数据异常', 500, ['_POST'=>$_POST]);
+		}
+
+		// $g = new Gallery();
+		// $images = array_merge(
+		// 	$g->editorToImage($data['create']), 
+		// 	$g->editorToImage($data['update']), 
+		// 	$g->editorToImage($data['remove'])
+		// );
+		// Utils::out( ['images'=>$images, 'data'=>$data] );
+		// return;
+
 		$g = new Gallery();
 		$gallery =  $g->editorToGallery( $data['template'] );
-
 		$rs = $g->save( $gallery );
-
 		$resp = [
 			"gallery"=>$gallery
 		];
+
+
+		// 新增记录
 		if ( !empty($data['create']) ) {
 			$images = $g->editorToImage($data['create']);
 			$resp['create'] = $g->createImages( $rs['gallery_id'], $images );
 		}
 
-		Utils::out( $resp );
 
+		// 修改记录
+		if ( !empty($data['update']) ) {
+			$images = $g->editorToImage($data['update']);
+			$resp['update'] = $g->updateImages( $images );
+		}
+
+		// 删除记录
+		if ( !empty($data['remove']) ) {
+			$images = $g->editorToImage($data['remove']);
+			$resp['remove'] = $g->removeImages( $images );
+		}
+
+		Utils::out( $resp );
 	}
 
 
@@ -273,7 +306,8 @@ class GalleryController extends \Tuanduimao\Loader\Controller {
 
 		$data = [
 			'gallery_id' => $gallery_id,
-			'image_id' => $image_id
+			'image_id' => $image_id,
+			'editor' => $_GET['editor']
 		];
 
 		App::render($data, 'gallery', 'editor' );

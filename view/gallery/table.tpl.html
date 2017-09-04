@@ -205,12 +205,33 @@ use \Tuanduimao\Loader\App;
 			{
 				url: '<?=App::NR("gallery","save")?>',
 				data:{
+					query: $_GET,
 					template:$imgeditor.getData()
 				},
 				escape: true
 			},
 			function onSuccess( resp, status, xhr ){
-				console.log( resp );
+				
+
+				if ( typeof resp['gallery'] == undefined || resp['gallery'] == null ) {
+					var message = resp['message'] || '未知错误';
+					console.log( resp );	
+					failure('保存失败 ( ' + message + ' )' );
+					return;
+				}
+
+
+				$_GET['gallery_id'] = resp['gallery']['gallery_id'];
+				$imgeditor.setId($_GET['gallery_id']);
+
+				var crumb = [];
+				crumb.push({ name:resp['gallery']['title'], page:'album'} );
+				crumb.push({name:'修改图集 (第'+ $_GET['page'] +'页)'});
+
+				$('.images-preview').removeClass('hidden');
+				$('.images-print').removeClass('hidden');
+				$('.images-download').removeClass('hidden');
+				$imgeditor.crumb(crumb);
 				success('保存成功');
 				return true;
 			}, 
@@ -442,10 +463,6 @@ use \Tuanduimao\Loader\App;
 			function( resp, status, xhr){
 				
 				$imgeditor.clean('silent');
-				updateColumsSelector( resp['columns'], resp['colHeaders'] );
-				updateImage( resp['template'] );
-				renderPage( resp['pagination']);
-
 				$_GET = resp['query'];
 				if ( typeof $_GET['gallery_id'] != 'undefined' && $_GET['gallery_id'] != null ) {
 					$imgeditor.setId($_GET['gallery_id']);
@@ -464,6 +481,8 @@ use \Tuanduimao\Loader\App;
 					$('.images-download').addClass('hidden');
 
 				} else {
+
+					resp['template']['page']['title'] = resp['gallery']['title'];
 					crumb.push({ name:resp['gallery']['title'], page:'album'} );
 					crumb.push({name:'修改图集 (第'+ $_GET['page'] +'页)'});
 					$('.images-preview').removeClass('hidden');
@@ -471,6 +490,9 @@ use \Tuanduimao\Loader\App;
 					$('.images-download').removeClass('hidden');
 				}
 
+				updateColumsSelector( resp['columns'], resp['colHeaders'] );
+				updateImage( resp['template'] );
+				renderPage( resp['pagination']);
 				$imgeditor.crumb(crumb);
 				done();
 				return resp;
