@@ -74,6 +74,7 @@ use \Tuanduimao\Loader\App;
 
 	var $_GET = <?=json_encode($query)?>;
 	$('.canvas-toggle').removeClass('hidden');
+	$('.canvas-toggle').css('visibility', 'hidden');
 	$imgeditor.display();
 	$imgeditor.mode('modify');
 

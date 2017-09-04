@@ -112,9 +112,6 @@ use \Tuanduimao\Utils as Utils;
 
 </div><!-- END content  -->
 
-
-
-
 <script type="text/javascript">
 
 var $_GET = <?=json_encode($query)?>;
@@ -133,7 +130,10 @@ function search( key, value ) {
 		}
 	}
 
-	$imgeditor.open('album', $_GET);
+	App.loading({message:'读取数据, 请稍候...'}).show();
+	$imgeditor.open('album', $_GET, function(){
+		App.loading().hide();
+	});
 }
 
 
@@ -182,7 +182,7 @@ function openImage( index ) {
 
 $imgeditor.display('helper');
 $imgeditor.mode('view');
-$imgeditor.crumb([{name:'<?=$gallery["title"]?>',page:"table"}, {name:'浏览图片'}]);
+$imgeditor.crumb([{name:'<?=$gallery["title"]?>',page:"album"}, {name:'浏览图片'}]);
 $('.canvas-toggle').addClass('hidden');
 
 </script>
