@@ -27,7 +27,9 @@ class SetupController extends \Tuanduimao\Loader\Controller {
 		$gallery_id = $g->getVar('gallery_id', "WHERE title=? AND system=1 LIMIT 1", ["文章分享图片"]);
 
 		if ( !empty($gallery_id) ) {
-			return;
+			try {$resp = $g->getGallery($gallery_id); return; } catch(Excp $e) { 
+				$g->rm($gallery_id); 
+			}
 		}
 
 		$id = $g->genGalleryId();

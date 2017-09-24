@@ -79,17 +79,27 @@ class ArticleController extends \Tuanduimao\Loader\Controller {
 
 	function test(){
 
+		Utils::cliOnly();
+
+		$media = new \Tuanduimao\Media;
+		$path = "/data/stor/public/media/2017/09/24/7d17a1dcd7c0e2b90ae2f7655fd6ff82.ttf";
+
+		$resp = $media->guessTitle( $path, 'application/x-font-ttf');
+
+		Utils::out( $resp );
+
+
 		// 需要安 ffmpeg
 		// apt-get install ffmpeg
-		$ffmpeg = FFMpeg\FFMpeg::create();
+		// $ffmpeg = FFMpeg\FFMpeg::create();
 
 
-		return;
+		// return;
 
-		Utils::cliOnly();
-		set_time_limit(0);
-		$art = new  \Mina\Pages\Model\Article;
-		$art->downloadFromWechat('wx77e0de6921bacc92', 15);
+		// Utils::cliOnly();
+		// set_time_limit(0);
+		// $art = new  \Mina\Pages\Model\Article;
+		// $art->downloadFromWechat('wx77e0de6921bacc92', 15);
 
 		// $art->downloadFromWechat('wx77e0de6921bacc92');
 
@@ -170,6 +180,12 @@ class ArticleController extends \Tuanduimao\Loader\Controller {
 		}
 
 		$data['pages'] = $article->links( $article_id );
+
+		if ( empty($data['pages']) ) {
+			echo "<span class='text-danger'>未找到匹配页面</span>";
+			return;
+		}
+		
 		App::render($data,'article','links.popover');
 	}
 

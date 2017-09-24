@@ -16,8 +16,6 @@ use \Tuanduimao\Task as Task;
 
 use \Exception as Exception;
 
-
-
 define('ARTICLE_PUBLISHED', 'published');  // 文章状态 已发布
 define('ARTICLE_UNPUBLISHED', 'unpublished');  // 文章状态 未发布
 define('ARTICLE_PENDING', 'pending');  // 文章状态 未完成抓取
@@ -29,8 +27,9 @@ define('STATUS_UNPUBLISHED', 'UNPUBLISHED');   // 未发布
 define('STATUS_UNAPPLIED', 'UNAPPLIED');   // 有修改（尚未更新)
 define('STATUS_PENDING', 'PENDING');   // 同步中（数据尚未准备好）
 
-// 默认页面地址
-define('DEFAULT_PAGE_SLUG', '/article/detail');  
+define('DEFAULT_PROJECT_NAME', 'default');  // 默认项目名称
+define('DEFAULT_PAGE_SLUG', '/article/detail');  // 默认页面地址
+define('DEFAULT_PAGE_SLUG_V2', '/desktop/article/detail');  // 默认页面地址V2
 
 
 /**
@@ -705,12 +704,11 @@ class Article extends Model {
 	function links( $article_id,  $category = null ) {
 		$default_home = Utils::getHome( $_SERVER['HTTP_TUANDUIMAO_LOCATION']);
 		$uri = parse_url( $default_home);
-		$pages = [DEFAULT_PAGE_SLUG];
 		$default_project = Utils::getTab('project')->getVar('name', "LIMIT 1");
 		if ( empty($default_project) ) {
-			$default_project = 'deepblue';
+			$default_project = DEFAULT_PROJECT_NAME;
 		}
-		$pages = [$default_project . DEFAULT_PAGE_SLUG ];
+		$pages = [$default_project . DEFAULT_PAGE_SLUG, $default_project . DEFAULT_PAGE_SLUG_V2 ];
 
 
 		if( $category === null ) {
@@ -725,11 +723,9 @@ class Article extends Model {
 			if ( !empty($cates) ) {
 
 				foreach ($cates as $rs ) {
-
 					$rs['project'] = !empty($rs['project']) ? $rs['project'] : $default_project;
 					$rs['page'] = !empty($rs['page']) ? $rs['page'] : DEFAULT_PAGE_SLUG;
 					array_push( $pages, $rs['project'] . $rs['page']);
-					
 				}
 
 				$pages = array_unique($pages);
