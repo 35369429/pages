@@ -605,9 +605,60 @@ class Article extends Model {
 		}
 
 		$draft['status'] = ARTICLE_PUBLISHED; // 文章ID 更新为已发布
-		return $this->updateBy('article_id', $draft );
+		$rs =  $this->updateBy('article_id', $draft );
+
+		// 生成物料
+		$this->makeMaterials( $rs );
+		return $rs;
 	}
 
+
+
+
+	/**
+	 * 生成物料
+	 * @param  [type] $article [description]
+	 * @return [type]             [description]
+	 */
+	function makeMaterials( $article ) {
+
+		$article_id = $article['article_id'];
+		if ( empty($article_id) ) {
+			throw new Excp('制作物料失败, 参数错误', 402, ['article'=>$article]);
+		}
+
+		$param = "article_id:{$article_id}";
+		$images = []; $thumbs = !empty($article['thumbs']) ? $article['thumbs'] : [];
+		$image = [
+			"A" => $article['title'],
+			"B" => $article['summary'],
+			"C" => !empty($article['cover']) ? $article['cover'] : "/s/mina/pages/static/defaults/950X500.png",
+			"E" => $thumbs[0],
+			"F" => $thumbs[1],
+			"G" => $thumbs[2],
+			"H" => $thumbs[3],
+			"I" => $thumbs[4]
+		];
+
+		$g = new Gallery;
+		$g->rmImagesByParam( $param );
+
+		foreach ($article['links'] as $link ) {
+			$link = !empty($link) ? $link['links']['desktop']  : "https://minapages.com";
+			$image['D'] = $link;
+			array_push($images, $image);
+		}
+
+		$images = $g->genImageData($images);
+		$gallerys = $this->gallerys();
+		foreach ($gallerys as $rs ) {
+			$resp = $g->createImages( $rs['gallery_id'], $images, ['param'=>"article_id:{$article_id}"] );
+			foreach ($resp as $im ) {
+				$image_id = $im['data']['image_id'];
+				$g->makeImage($image_id);
+			}
+		}
+	}
 
 
 
@@ -694,6 +745,31 @@ class Article extends Model {
 			return STATUS_PUBLISHED;
 		}
 	}
+
+
+	/**
+	 * 读取文章相关图集
+	 * @param  [type] $article_id [description]
+	 * @return [type]             [description]
+	 */
+	function gallerys() {
+		$g = new Gallery();
+		$gallerys = $g->getGallerys(1, ["param"=>'article'], 5);
+		return $gallerys['data'];
+	}
+
+
+	/**
+	 * 读取文章图集图片
+	 * @param  [type] $article_id [description]
+	 * @return [type]             [description]
+	 */
+	function galleryImages( $article_id ) {
+		$g = new Gallery();
+		$images = $g->getImages(1, ['param'=>"article_id:{$article_id}"], 5);
+		return $images['data'];
+	}
+
 
 
 	/**

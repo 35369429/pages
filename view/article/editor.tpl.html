@@ -470,6 +470,15 @@
 							class="btn btn-primary font-w300  push-10-r  fn-btn on-published on-unapplied popover-btn link hidden ">
 							<i class="fa fa-external-link-square push-5-r"></i> 访问
 						</button>
+
+						<button 
+							type="button"
+							data-form="#general-form"
+							data-action="#"
+							data-placement="top" data-original-title=" "
+							class="btn btn-primary font-w300  push-10-r  fn-btn on-published on-unapplied popover-btn material hidden ">
+							<i class="fa fa-download push-5-r"></i> 物料
+						</button>
 						
 						<button 
 							type="button"
@@ -682,6 +691,23 @@
 		</div>
 	</div>
 </div><!-- END 访问按钮弹出的 Popover 界面 -->
+
+
+<!-- 物料按钮弹出的 Popover 界面 -->
+<div class="material-html">
+	<div class="popover" role="tooltip" style="width:600px; max-width:600px; min-height: 400px;" ><div class="arrow"></div>
+		<div class="row remove-margin">
+			<h3 class="popover-title pull-left font-w300"></h3> 
+			<a href="javascript:$('.fn-btn.material').popover('hide');" 
+				data-id="{{id}}"
+			><i class="si si-close pull-right push-10-t push-10-r"></i></a>
+		</div>
+
+		<div class="row popover-form material links text-center" style="padding:15px;" >
+			<i class="fa-refresh fa-spin fa "></i> 加载中...
+		</div>
+	</div>
+</div><!-- END 物料按钮弹出的 Popover 界面 -->
 
 
 <script type="text/javascript">
@@ -948,6 +974,7 @@ $(function() {
 
 	$('.fn-btn.link').click(function(event) {
 		$('.popover-btn.preview').popover('hide');
+		$('.popover-btn.material').popover('hide');
 
 		var that = this;
 		var url = '<?=App::NR("article", "links", ["id"=>""])?>' + $('input[name="article_id"]').val();
@@ -972,6 +999,28 @@ $(function() {
 			});
 		});
 	});
+
+
+	// 物料功能按钮
+	$('.fn-btn.material').popover({
+		container:$('body'),
+		title:' ',
+		trigger:'manual',
+		template:$('.material-html').html()
+	});
+
+	$('.fn-btn.material').click(function(event) {
+		$('.popover-btn.preview').popover('hide');
+		$('.popover-btn.link').popover('hide');
+
+		var that = this;
+		var url = '<?=App::NR("article", "materials", ["id"=>""])?>' + $('input[name="article_id"]').val();
+		$(this).popover('show');
+		$('body > .popover .material.links').load(url, function(){
+			// console.log( '物料载入完毕', url ); 
+		});
+	});
+
 
 
 	// 复制到微信按钮

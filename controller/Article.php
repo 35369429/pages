@@ -185,8 +185,47 @@ class ArticleController extends \Tuanduimao\Loader\Controller {
 			echo "<span class='text-danger'>未找到匹配页面</span>";
 			return;
 		}
-		
+
 		App::render($data,'article','links.popover');
+	}
+
+
+	/**
+	 * 物料清单
+	 * @return [type] [description]
+	 */
+	function materials(){
+
+		$article_id  = intval($_GET['id']);
+		if ( empty($article_id) ) {
+			echo "<span class='text-danger'>未知文章信息</span>";
+			return;
+		}
+
+		$article = new \Mina\Pages\Model\Article;
+		if ( $article->isPublished($article_id) === false ) {
+			echo "<span class='text-danger'>文章尚未发布</span>";
+			return;
+		}
+
+		$images = $article->galleryImages($article_id);
+		Utils::out( $images );
+
+		return;
+
+		$pages = $article->links( $article_id );
+
+		$data['images'] = [
+			["cname"=>"文章分享图片"]
+		];
+
+		$data['pages'] = [
+			["cname"=>"新闻详情"]
+		];
+
+		// Utils::out( $pages );
+		// echo "<span class='text-danger'>未找到物料</span>";
+		App::render($data,'article','materials.popover');
 	}
 
 

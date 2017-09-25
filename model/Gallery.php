@@ -77,7 +77,11 @@ class Gallery extends Model {
 			->putColumn( 'system', $this->type('boolean', ['default'=>false, 'index'=>1]) )
 
 			// 是否为隐藏图集 ( 在列表中显示 )
-			->putColumn( 'hidden', $this->type('boolean', ['default'=>false, 'index'=>1]) )			 
+			->putColumn( 'hidden', $this->type('boolean', ['default'=>false, 'index'=>1]) )
+
+			// 图集特别参数，用于检索
+			->putColumn( 'param', $this->type('string', ['length'=>128,'index'=>1]) )
+
 
 			// 动态图集状态 on / off / pending / draft
 			->putColumn( 'status', $this->type('string', ['length'=>10,'index'=>1, 'default'=>'draft']) )
@@ -118,7 +122,10 @@ class Gallery extends Model {
 			->putColumn( 'data_update_time', $this->type('timestampTz', ['index'=>1]) )
 
 			// 图片生成图片时间 
-			->putColumn( 'generate_update_time', $this->type('timestampTz', ['index'=>1]) )	
+			->putColumn( 'generate_update_time', $this->type('timestampTz', ['index'=>1]) )
+
+			// 图集特别参数，用于检索
+			->putColumn( 'param', $this->type('string', ['length'=>128,'index'=>1]) )
 
 			// 图片状态 on / off / pending / draft
 			->putColumn( 'status', $this->type('string', ['length'=>10,'index'=>1, 'default'=>'draft']) )  
@@ -367,6 +374,36 @@ class Gallery extends Model {
 
 
 	/**
+	 * 删除图集中的图片
+	 * @param  [type] $gallery_id [description]
+	 * @return [type]             [description]
+	 */
+	function rmImages( $gallery_id ) {
+		// 删除图集图片
+		$resp = $this->image->runsql (
+			"UPDATE {{table}} SET `deleted_at`=? WHERE `gallery_id` = ? ", false, 
+			[date('Y-m-d H:i:s'), $gallery_id]
+		);
+
+		return $resp;
+	}
+
+
+	/**
+	 * 删除图集中的图片ByParam
+	 */
+	function rmImagesByParam( $param ) {
+		$resp = $this->image->runsql (
+			"UPDATE {{table}} SET `deleted_at`=? WHERE `param` = ? ", false, 
+			[date('Y-m-d H:i:s'), $param]
+		);
+		return $resp;
+	}
+
+
+
+
+	/**
 	 * 生成图集 ID
 	 * @return
 	 */
@@ -408,8 +445,14 @@ class Gallery extends Model {
 		if ( !empty($query['gallery_id']) ) {
 			$qb->where('gallery_image.gallery_id', '=', "{$query['gallery_id']}");
 		}
+		
+		if ( !empty($query['param']) ) {
+			$qb->where('gallery_image.param', '=', "{$query['param']}");
+		}
+
 
 		$qb->select(
+			'gallery.title',
 			'gallery_image.image_id', 
 			'gallery_image.gallery_id', 
 			'gallery_image.media_id',  
@@ -672,8 +715,13 @@ class Gallery extends Model {
 			   });
 		}
 
+		if ( !empty($query['param']) ) {
+			$qb->where('gallery.param', '=', $query['param']);
+		}
+
+
 		$qb->select(
-			"gallery.title", "gallery.intro",  
+			"gallery.title", "gallery.intro",  "gallery.param",
 			"gallery.type",  "gallery.gallery_id as gallery_id", 
 			"gallery.system", "gallery.hidden", 
 			"gallery.status as status",
@@ -705,7 +753,7 @@ class Gallery extends Model {
 
 		$qb->where('gallery.gallery_id', '=', $gallery_id);
 		$qb->select(
-			"gallery.title", "gallery.intro",  
+			"gallery.title", "gallery.intro",  "gallery.param",
 			"gallery.type",  "gallery.gallery_id as gallery_id", 
 			"gallery.system", "gallery.hidden",
 			"gallery.status as status",
@@ -937,13 +985,14 @@ class Gallery extends Model {
 
 	}
 
-
 	/**
 	 * 向图集中添加一组图片数据
-	 * @param [type] $gallery_id [description]
-	 * @param [type] $images     [description]
+	 * @param  [type] $gallery_id [description]
+	 * @param  [type] $images     [description]
+	 * @param  array  $extra      [description]
+	 * @return [type]             [description]
 	 */
-	function createImages( $gallery_id, $images ) {
+	function createImages( $gallery_id, $images, $extra = [] ) {
 
 		$resp = [];
 		foreach ($images as $idx => $image) {
@@ -952,6 +1001,7 @@ class Gallery extends Model {
 			$unikey =  $image['image_id'] = $image['data'][$key] = $this->genImageId();
 			$row = $image['row'];
 			$tmp = $image['tmp'];
+			$image = array_merge($image, $extra);
 
 			$resp[$row] = [
 				'data' =>$this->image->create( $image ),

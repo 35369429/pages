@@ -46,8 +46,8 @@ class SetupController extends \Tuanduimao\Loader\Controller {
 				[
 					"name"=>"qrcode",
 					"option"=>[
-						"text" => "https://www.minapages.com", 
-						"origin"=>2, "width"=>100, "height"=>100, 
+						"text" => "https://www.minapages.com", "origin"=>3,
+						 "width"=>100, "height"=>100, 
 						"type"=>'url'], 
 					"pos"=> ["x"=>676, "y"=>1149] ],
 
@@ -61,25 +61,33 @@ class SetupController extends \Tuanduimao\Loader\Controller {
 				[
 					"name"=>"image", 
 					"option"=> [
-						"width"=>804, "height"=>423, "origin"=>1 
+						"width"=>804, "height"=>423, "origin"=>2
 						], 
 					"pos"=> ["x"=>0, "y"=>0] ],
 
 				[
 					"name"=>"text", 
 					"option"=>[
-						"origin"=>0,"width"=>644, "height"=>600, "font"=>1, "size"=>24,
+						"width"=>644, "height"=>52, "font"=>1, "size"=>48,"origin"=>0,
 						"color"=> "rgba(35,35,35,1)", "background"=>"rgba(255,255,255,0)", 
 						"type"=>"horizontal" ], 
-					"pos"=> ["x"=>80, "y"=>502]]
+					"pos"=> ["x"=>80, "y"=>502]],
+				[
+					"name"=>"text", 
+					"option"=>[
+						"width"=>644, "height"=>448, "font"=>1, "size"=>36,"origin"=>1,
+						"color"=> "rgba(153,153,153,1)", "background"=>"rgba(255,255,255,0)", 
+						"type"=>"horizontal" ], 
+					"pos"=> ["x"=>80, "y"=>576]]
 			]
 		];
 
 		$gallery =  $g->editorToGallery( $article_share );
 		$gallery['system'] = 1;
+		$gallery['param'] = 'article';
 
 		$images = $g->genImageData([
-			[ "A"=>"内容题要", "B"=>"/s/mina/pages/static/defaults/950X500.png", "C"=>"https://minapages.com"]
+			["A"=>"文章标题", "B"=>"内容题要", "C"=>"/s/mina/pages/static/defaults/950X500.png", "D"=>"https://minapages.com"]
 		]);
 
 		$rs = $g->save( $gallery );
