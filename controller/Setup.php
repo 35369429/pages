@@ -117,7 +117,7 @@ class SetupController extends \Tuanduimao\Loader\Controller {
 
 			$option = new \Tuanduimao\Option('mina/pages');
 			$option->register("图文主题图片比例配置", "article/image/ratio", [
-				"cover"=>["width"=>900,"height"=>500, "ratio"=>1.8], 
+				"cover"=>["width"=>900,"height"=>500, "ratio"=>"9:5"], 
 				"topic1"=>["width"=>null,"height"=>null, "ratio"=>"1:1"],
 				"topic2"=>["width"=>null,"height"=>null, "ratio"=>"16:9"],
 				"topic3"=>["width"=>null,"height"=>null, "ratio"=>"4:3"],
@@ -160,13 +160,12 @@ class SetupController extends \Tuanduimao\Loader\Controller {
 		try {
 			$option = new \Tuanduimao\Option('mina/pages');
 			$option->register("图文主题图片比例配置", "article/image/ratio", [
-				"cover"=>["width"=>900,"height"=>500, "ratio"=>1.8], 
+				"cover"=>["width"=>900,"height"=>500, "ratio"=>"9:5"], 
 				"topic1"=>["width"=>null,"height"=>null, "ratio"=>"1:1"],
 				"topic2"=>["width"=>null,"height"=>null, "ratio"=>"16:9"],
 				"topic3"=>["width"=>null,"height"=>null, "ratio"=>"4:3"],
 				"topic4"=>["width"=>null,"height"=>null, "ratio"=>"2:3"]
 			]);
-			
 		} catch ( Excp $e ) {}
 
 		// 注册图片分享图集
