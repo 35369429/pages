@@ -614,6 +614,13 @@ class Article extends Model {
 
 
 
+	/**
+	 * 生成二维码
+	 */
+	function makeQrcode( $article ){
+		
+	}
+
 
 	/**
 	 * 生成物料
@@ -628,7 +635,7 @@ class Article extends Model {
 		}
 
 		$param = "article_id:{$article_id}";
-		$images = []; $thumbs = !empty($article['thumbs']) ? $article['thumbs'] : [];
+		$thumbs = !empty($article['thumbs']) ? $article['thumbs'] : [];
 		$image = [
 			"A" => $article['title'],
 			"B" => $article['summary'],
@@ -640,24 +647,30 @@ class Article extends Model {
 			"I" => $thumbs[4]
 		];
 
+		$gallerys = $this->gallerys();
 		$g = new Gallery;
 		$g->rmImagesByParam( $param );
 
 		foreach ($article['links'] as $link ) {
+			$title = !empty($link) ? $link['cname']  : "";
+			
 			$link = !empty($link) ? $link['links']['desktop']  : "https://minapages.com";
 			$image['D'] = $link;
-			array_push($images, $image);
-		}
+			$images = $g->genImageData([$image]);
+			foreach ($gallerys as $rs ) {
+				$resp = $g->createImages( 
+					$rs['gallery_id'], 
+					$images, 
+					['param'=>"article_id:{$article_id}", "title"=>$title] 
+				);
 
-		$images = $g->genImageData($images);
-		$gallerys = $this->gallerys();
-		foreach ($gallerys as $rs ) {
-			$resp = $g->createImages( $rs['gallery_id'], $images, ['param'=>"article_id:{$article_id}"] );
-			foreach ($resp as $im ) {
-				$image_id = $im['data']['image_id'];
-				$g->makeImage($image_id);
+				foreach ($resp as $im ) {
+					$image_id = $im['data']['image_id'];
+					$g->makeImage($image_id);
+				}
 			}
 		}
+		
 	}
 
 
@@ -764,10 +777,28 @@ class Article extends Model {
 	 * @param  [type] $article_id [description]
 	 * @return [type]             [description]
 	 */
-	function galleryImages( $article_id ) {
+	function galleryImages( $article_id, $group=true ) {
 		$g = new Gallery();
-		$images = $g->getImages(1, ['param'=>"article_id:{$article_id}"], 5);
-		return $images['data'];
+		$query  = ['param'=>"article_id:{$article_id}"];
+		
+		$images = $g->getImages(1, $query, 5);
+		$data = $images['data'];
+		
+		if ( $group === true ) {
+			$resp = [];
+			foreach ( $data as $im ) {
+				$title = $im['title'];
+				if ( !is_array($resp[$title])) {
+					$resp[$title] = [];
+				}
+
+				array_push($resp[$title], $im );
+			}
+
+			return $resp;
+		}
+
+		return $data;
 	}
 
 

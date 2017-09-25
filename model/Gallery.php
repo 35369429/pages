@@ -94,6 +94,9 @@ class Gallery extends Model {
 			// 图片ID
 			->putColumn( 'image_id', $this->type('string', ['length'=>128, 'unique'=>1]) )
 
+			// 图片主题
+			->putColumn( 'title', $this->type('string',     ['length'=>128, 'index'=>1]) )   
+
 			// 图片指纹 (用于排重 )
 			->putColumn( 'fingerprint', $this->type('string', ['length'=>128, 'unique'=>1]) )
 
@@ -450,12 +453,15 @@ class Gallery extends Model {
 			$qb->where('gallery_image.param', '=', "{$query['param']}");
 		}
 
+	
+
 
 		$qb->select(
 			'gallery.title',
 			'gallery_image.image_id', 
 			'gallery_image.gallery_id', 
-			'gallery_image.media_id',  
+			'gallery_image.media_id', 
+			'gallery_image.title as image_title', 
 			'gallery_image.status',
 			'gallery_image.template_update_time','gallery_image.data_update_time', 'gallery_image.generate_update_time',
 			'gallery.template_update_time as template_update_time_default',

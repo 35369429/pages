@@ -37,7 +37,7 @@ class SetupController extends \Tuanduimao\Loader\Controller {
 		$article_share = [
 			"page" => [
 				"id" => $id,
-				"title"=>"文章分享图片", 
+				"title"=>"分享图片", 
 				"bgimage"=>"/s/mina/pages/static/defaults/804X1280.png", 
 				"bgcolor"=>"rgba(254,254,254,1)",
 				"origin" => -1

@@ -2,34 +2,48 @@
 use \Tuanduimao\Loader\App as App;
 ?>
 
-<?php foreach($images as $idx=>$im ): ?>
+
+
+<?php 
+	foreach($images as $cname=>$imgs ): 
+	foreach ($imgs as $idx=>$im):
+?>
 <div class="row push-15-t"  style=" padding-left:30px; padding-bottom:5px; padding-right:20px;">
 	<div class="col-xs-6 text-left">
 		<h4 class="font-w300">
-			<?=$im['cname']?> 
+			<?=$im['title']?>( <?=$im['image_title']?> )
 			<span 
 				data-id="<?=$idx?>";
 				class="text-success copy-status font-s14"> </span> 
 		</h4>
 	</div>
 	<div class="col-xs-6">
-		<a href="<?=$pg['links']['desktop']?>" 
-		   target="_blank"
+		<a href="<?=App::URI("mina", "uploader", "download", ["media_id"=>$im['media_id'], "name"=>"{$im['title']}-{$im['image_title']}"])?>" 
 		   class=" btn btn-primary font-w300  btn-sm  btn-minw push-5-r"
 		>	
 		下载图片
 		</a>
 
+		
+		<a href="<?=App::URI("mina", "uploader", "download", ["media_id"=>$im['media_id'], "name"=>"{$im['title']}-{$im['image_title']}"])?>" 
+		   class=" btn btn-primary font-w300  btn-sm  btn-minw push-5-r" style="visibility: hidden;"
+		>	
+		下载到手机
+		</a>
+
+<!-- 
 		<button
 			data-id="<?=$idx?>";
 			data-clipboard-text="<?=$pg['links']['desktop']?>"
-			class=" btn btn-primary font-w300  btn-sm  btn-minw copy-link-url" >	
+			class=" btn btn-primary font-w300  btn-sm  btn-minw copy-link-url " style="visibility: hidden;" >	
 		编辑图片
-		</button>
+		</button> -->
 
 	</div>
 </div>
-<?php endforeach; ?>
+<?php 
+	endforeach;
+	endforeach; ?>
 
 
 <?php foreach($pages as $idx=>$pg ): ?>

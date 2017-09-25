@@ -208,17 +208,8 @@ class ArticleController extends \Tuanduimao\Loader\Controller {
 			return;
 		}
 
-		$images = $article->galleryImages($article_id);
-		Utils::out( $images );
-
-		return;
-
+		$data['images'] = $article->galleryImages($article_id);
 		$pages = $article->links( $article_id );
-
-		$data['images'] = [
-			["cname"=>"文章分享图片"]
-		];
-
 		$data['pages'] = [
 			["cname"=>"新闻详情"]
 		];
