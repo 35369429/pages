@@ -11,7 +11,7 @@ use \Tuanduimao\Loader\App as App;
 <div class="row push-15-t"  style=" padding-left:30px; padding-bottom:5px; padding-right:20px;">
 	<div class="col-xs-6 text-left">
 		<h4 class="font-w300">
-			<?=$im['title']?>( <?=$im['image_title']?> )
+			<?=$im['title']?> ( <?=$im['image_title']?> )
 			<span 
 				data-id="<?=$idx?>";
 				class="text-success copy-status font-s14"> </span> 
@@ -50,26 +50,36 @@ use \Tuanduimao\Loader\App as App;
 <div class="row push-15-t"  style=" padding-left:30px; padding-bottom:5px; padding-right:20px;">
 	<div class="col-xs-6 text-left">
 		<h4 class="font-w300">
-			<?=$pg['cname']?> 
+			本文链接 ( <?=$pg['cname']?> )
 			<span 
 				data-id="<?=$idx?>";
 				class="text-success copy-status font-s14"> </span> 
 		</h4>
 	</div>
 	<div class="col-xs-6">
-		<a href="<?=$pg['links']['desktop']?>" 
-		   target="_blank"
+		<a href='<?=App::URI("mina", "image", "qrcode", [
+			"text"=>$pg["links"]["mobile"], 
+			"width"=>1000,
+			"name"=>"链接二维码-{$pg["cname"]}"
+		])?>'
 		   class=" btn btn-primary font-w300  btn-sm  btn-minw push-5-r"
 		>	
 		下载二维码
 		</a>
-
-		<button
-			data-id="<?=$idx?>";
-			data-clipboard-text="<?=$pg['links']['desktop']?>"
-			class=" btn btn-primary font-w300  btn-sm  btn-minw copy-link-url" >	
+		
+		<?php if (!empty($wxapp) && !empty($pg["links"]["wxapp"]) ) : ?>
+		<a href='<?=App::URI("mina", "image", "qrcode", [
+			"text"=>$pg["links"]["wxapp"], 
+			"type" => "wxapp",
+			"config" => $wxapp,
+			"width"=>1000,
+			"name"=>"小程序码-{$pg["cname"]}"
+		])?>'
+		   class=" btn btn-primary font-w300  btn-sm  btn-minw push-5-r"
+		>	
 		下载小程序码
-		</button>
+		</a>
+		<?php endif; ?>
 
 	</div>
 </div>

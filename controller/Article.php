@@ -186,6 +186,7 @@ class ArticleController extends \Tuanduimao\Loader\Controller {
 			return;
 		}
 
+		$data['wxapp'] = $article->wxapp();
 		App::render($data,'article','links.popover');
 	}
 
@@ -209,13 +210,9 @@ class ArticleController extends \Tuanduimao\Loader\Controller {
 		}
 
 		$data['images'] = $article->galleryImages($article_id);
-		$pages = $article->links( $article_id );
-		$data['pages'] = [
-			["cname"=>"新闻详情"]
-		];
+		$data['pages'] = $article->links( $article_id );
+		$data['wxapp'] = $article->wxapp();
 
-		// Utils::out( $pages );
-		// echo "<span class='text-danger'>未找到物料</span>";
 		App::render($data,'article','materials.popover');
 	}
 
@@ -224,77 +221,77 @@ class ArticleController extends \Tuanduimao\Loader\Controller {
 	 * 生成二维码
 	 * @return [type] [description]
 	 */
-	function qr() {
+	// function qr() {
 
-		$code =  !empty($_REQUEST['link']) ? urldecode($_REQUEST['link']) : 'tuanduimao.com';
-		$option = $_REQUEST;
-		if ( isset( $option['background']) ) {
-			$c = explode(',', $option['background']);
-			if ( count($c) == 4) {
-				$option['background'] = ['r' => $c[0], 'g' => $c[1], 'b' => $c[2], 'a' => $c[3]];
-			}
-		}
+	// 	$code =  !empty($_REQUEST['link']) ? urldecode($_REQUEST['link']) : 'tuanduimao.com';
+	// 	$option = $_REQUEST;
+	// 	if ( isset( $option['background']) ) {
+	// 		$c = explode(',', $option['background']);
+	// 		if ( count($c) == 4) {
+	// 			$option['background'] = ['r' => $c[0], 'g' => $c[1], 'b' => $c[2], 'a' => $c[3]];
+	// 		}
+	// 	}
 
-		if ( isset( $option['foreground']) ) {
-			$c = explode(',', $option['foreground']);
-			if ( count($c) == 4) {
-				$option['foreground'] = ['r' => $c[0], 'g' => $c[1], 'b' => $c[2], 'a' => $c[3]];
-			}
-		}
-		$option['size'] = !empty($option['size']) ? $option['size'] : 300;
-		$option['padding'] = !empty($option['padding']) ? $option['padding'] : 10;
-		$option['background'] = is_array($option['background']) ? $option['background'] : ['r' => 255, 'g' => 255, 'b' => 255, 'a' => 0];
-		$option['foreground'] = is_array($option['color']) ? $option['color'] : ['r' => 0, 'g' => 0, 'b' => 0, 'a' => 0];
-		$option['fontsize'] = !empty($option['fontsize']) ? $option['fontsize'] : 14;
-		$option['label'] = isset($option['label']) ? $option['label'] : '扫描二维码';
-		$option['font'] = !empty($option['font']) ? $option['font'] : 'LantingQianHei.ttf';
-		$logo = !empty($option['logo']) ? $option['logo'] : '';
-		$logosize = !empty($option['logosize']) ? $option['logosize'] : 50;
-
-
-		$qr = new QrCode();
-		$qr ->setWriterByName('png')
-		    ->setEncoding('UTF-8')
-		    ->setText($code)
-		    ->setSize($option['size'])
-		    ->setMargin( $option['padding'] )
-		    ->setErrorCorrectionLevel(ErrorCorrectionLevel::HIGH)
-		    ->setForegroundColor($option['foreground'])
-		    ->setBackgroundColor($option['background'])
-		    ->setLabel(
-		    	$option['label'], $option['fontsize'],  
-		    	Utils::getFontPath(1), 
-		    	LabelAlignment::CENTER )
-		    ->setValidateResult(false);
-
-		if ( !empty($logo) ) {
-
-			$logoBlob = null;
-			if( substr($logo, 0, 4) == 'http' || is_readable($logo) ) {
-				$logoBlob = file_get_contents($logo);
-			} 
-
-			if ( !empty($logoBlob) ) {
-				$logopath = sys_get_temp_dir() . "/" . time() . ".logo";
-				file_put_contents($logopath, $logoBlob);
-				$qr->setLogoPath( $logopath);
-				$qr->setLogoWidth( $logosize );
-			}
-		}
+	// 	if ( isset( $option['foreground']) ) {
+	// 		$c = explode(',', $option['foreground']);
+	// 		if ( count($c) == 4) {
+	// 			$option['foreground'] = ['r' => $c[0], 'g' => $c[1], 'b' => $c[2], 'a' => $c[3]];
+	// 		}
+	// 	}
+	// 	$option['size'] = !empty($option['size']) ? $option['size'] : 300;
+	// 	$option['padding'] = !empty($option['padding']) ? $option['padding'] : 10;
+	// 	$option['background'] = is_array($option['background']) ? $option['background'] : ['r' => 255, 'g' => 255, 'b' => 255, 'a' => 0];
+	// 	$option['foreground'] = is_array($option['color']) ? $option['color'] : ['r' => 0, 'g' => 0, 'b' => 0, 'a' => 0];
+	// 	$option['fontsize'] = !empty($option['fontsize']) ? $option['fontsize'] : 14;
+	// 	$option['label'] = isset($option['label']) ? $option['label'] : '扫描二维码';
+	// 	$option['font'] = !empty($option['font']) ? $option['font'] : 'LantingQianHei.ttf';
+	// 	$logo = !empty($option['logo']) ? $option['logo'] : '';
+	// 	$logosize = !empty($option['logosize']) ? $option['logosize'] : 50;
 
 
-		header('Content-Type: image/png');
-		echo $qr->writeString();
+	// 	$qr = new QrCode();
+	// 	$qr ->setWriterByName('png')
+	// 	    ->setEncoding('UTF-8')
+	// 	    ->setText($code)
+	// 	    ->setSize($option['size'])
+	// 	    ->setMargin( $option['padding'] )
+	// 	    ->setErrorCorrectionLevel(ErrorCorrectionLevel::HIGH)
+	// 	    ->setForegroundColor($option['foreground'])
+	// 	    ->setBackgroundColor($option['background'])
+	// 	    ->setLabel(
+	// 	    	$option['label'], $option['fontsize'],  
+	// 	    	Utils::getFontPath(1), 
+	// 	    	LabelAlignment::CENTER )
+	// 	    ->setValidateResult(false);
 
-	}
+	// 	if ( !empty($logo) ) {
+
+	// 		$logoBlob = null;
+	// 		if( substr($logo, 0, 4) == 'http' || is_readable($logo) ) {
+	// 			$logoBlob = file_get_contents($logo);
+	// 		} 
+
+	// 		if ( !empty($logoBlob) ) {
+	// 			$logopath = sys_get_temp_dir() . "/" . time() . ".logo";
+	// 			file_put_contents($logopath, $logoBlob);
+	// 			$qr->setLogoPath( $logopath);
+	// 			$qr->setLogoWidth( $logosize );
+	// 		}
+	// 	}
+
+
+	// 	header('Content-Type: image/png');
+	// 	echo $qr->writeString();
+
+	// }
 
 
 	/**
 	 * 生成小程序码
 	 * @return [type] [description]
 	 */
-	function apqr(){
-	}
+	// function apqr(){
+	// }
 
 
 	/**

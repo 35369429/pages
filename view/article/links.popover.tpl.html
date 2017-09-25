@@ -32,14 +32,34 @@ use \Tuanduimao\Loader\App as App;
 
 <div class="row" style=" padding-right:30px;padding-left: 20px; padding-bottom: 30px; min-height: 240px;">
 	<div class="col-xs-4">
-		<img src="<?=App::NR('article', 'qr', ['link'=>$pg['links']['mobile'], 'size'=>150, 'fontsize'=>12, 'label'=>'手机浏览器'])?>"  >
+		<img src='<?=App::URI("mina", "image", "qrcode", [
+			"text"=>$pg["links"]["mobile"], 
+			"width"=>150,
+			"padding" => 10,
+			"fontsize"=>12
+		])?>' >
+		<span style="font-size: 16px;cursor: default;">手机浏览器</span>
 	</div>
 	<div class="col-xs-4">
-		<img src="<?=App::NR('article', 'qr', ['link'=>$pg['links']['wechat'], 'size'=>150, 'fontsize'=>12, 'label'=>'微信扫一扫'])?>" >
+		<img src='<?=App::URI("mina", "image", "qrcode", [
+			"text"=>$pg["links"]["wechat"], 
+			"width"=>150,
+			"padding" => 10,
+			"fontsize"=>12
+		])?>' >
+		<span style="font-size: 16px;cursor: default;">微信扫一扫</span>
 	</div>
 	<div class="col-xs-4">
-		<img src="<?=App::NR('article', 'qr', ['link'=>$pg['links']['wxapp'], 'size'=>150, 'fontsize'=>12, 'label'=>'微信小程序'])?>" 
+		<?php if (!empty($wxapp) && !empty($pg["links"]["wxapp"]) ) : ?>
+		<img width="150" style="margin:10px;" src='<?=App::URI("mina", "image", "qrcode", [
+			"text"=>$pg["links"]["wxapp"], 
+			"type" => "wxapp",
+			"config" => $wxapp,
+			"width"=>150
+		])?>' 
 		>
+		<span style="font-size: 16px;cursor: default;">微信小程序</span>
+		<?php endif; ?>
 	</div>
 </div>
 

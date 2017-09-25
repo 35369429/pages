@@ -155,6 +155,23 @@ class Article extends Model {
 	}
 
 
+	function wxapp() {
+
+		$conf = Utils::getConf();
+		$grops = is_array($conf['_groups']) ? $conf['_groups'] : []; 
+
+		$items = [];
+		foreach ($grops as $group => $cfg) {
+			if ( $cfg['type'] == 3 && $cfg['appid'] <> '' ){
+				return $group;
+			}
+		}
+		return null;
+	}
+
+
+
+
 	/**
 	 * 从公众号(订阅号/服务号)下载文章
 	 * $this
@@ -615,11 +632,21 @@ class Article extends Model {
 
 
 	/**
-	 * 生成二维码
+	 * 生成链接二维码图片
 	 */
-	function makeQrcode( $article ){
+	function makeLinks( $article ) {
+		$article_id = $article['article_id'];
+		foreach ($article['links'] as $link ) {
+			$title = !empty($link) ? $link['cname']  : "";
+			$link = !empty($link) ? $link['links']['mobile']  : "https://minapages.com";
+		}
+	}
+
+
+	function makeQrcode( $url ) {
 		
 	}
+
 
 
 	/**
@@ -654,7 +681,7 @@ class Article extends Model {
 		foreach ($article['links'] as $link ) {
 			$title = !empty($link) ? $link['cname']  : "";
 			
-			$link = !empty($link) ? $link['links']['desktop']  : "https://minapages.com";
+			$link = !empty($link) ? $link['links']['mobile']  : "https://minapages.com";
 			$image['D'] = $link;
 			$images = $g->genImageData([$image]);
 			foreach ($gallerys as $rs ) {
