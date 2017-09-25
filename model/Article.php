@@ -631,23 +631,6 @@ class Article extends Model {
 
 
 
-	/**
-	 * 生成链接二维码图片
-	 */
-	function makeLinks( $article ) {
-		$article_id = $article['article_id'];
-		foreach ($article['links'] as $link ) {
-			$title = !empty($link) ? $link['cname']  : "";
-			$link = !empty($link) ? $link['links']['mobile']  : "https://minapages.com";
-		}
-	}
-
-
-	function makeQrcode( $url ) {
-		
-	}
-
-
 
 	/**
 	 * 生成物料
