@@ -1,7 +1,7 @@
 {
     "org": "mina",
     "name": "pages",
-    "version": "1.0.2",
+    "version": "1.0.6",
     "cname": "MINA Pages",
     "image": {
         "color":"/static/icons/app-color.svg",
@@ -32,7 +32,6 @@
     },{
         "slug":"mina/pages/gallery/index",
         "name":"图集",
-        "index": true,
         "icon":{
             "default":"/static/icons/gallery.svg"
         },
