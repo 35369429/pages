@@ -2,21 +2,21 @@
     "org": "mina",
     "name": "pages",
     "version": "1.0.6",
-    "cname": "MINA Pages",
+    "cname": "MINA 页面",
     "image": {
         "color":"/static/icons/app-color.svg",
         "dark":"/static/icons/app-dark.svg",
         "light":"/static/icons/app-light.svg"
     },
     "icontype": "img",
-    "intro": "生成打赏、商品、活动等各种小程序界面，帮助自媒体人实现收款和流量变现。",
+    "intro": "MINA 页面系统。快速生成小程序、网站和APP。支持发布文章、商品、活动等多种页面。",
     "detail": "@readme.md",
     "document": "@document.md",
     "author": "北京云道天成科技有限公司",
     "homepage": "https://www.minapages.com",
     "menu":[{
         "slug":"mina/pages/group",
-        "group":"MINA Pages"
+        "group":"MINA 页面"
     },{
         "slug":"mina/pages/article/index",
         "name":"图文",
