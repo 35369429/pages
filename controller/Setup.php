@@ -93,7 +93,7 @@ class SetupController extends \Tuanduimao\Loader\Controller {
 		$rs = $g->save( $gallery );
 		$resp = $g->createImages( $rs['gallery_id'], $images);
 		$image_id = current($resp)['data']['image_id'];
-		$g->makeImage($image_id);
+		// $g->makeImage($image_id);
 
 	}
 
