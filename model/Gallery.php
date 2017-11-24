@@ -705,7 +705,7 @@ class Gallery extends Model {
 	function getGallerys( $page=1, $query=[], $perpage=8 ) {
 
 		$qb = $this->query()
-			   ->leftjoin("gallery_image", "gallery_image.gallery_id", 'gallery.gallery_id')
+			   ->leftjoin("gallery_image", "gallery_image.gallery_id", '=', 'gallery.gallery_id')
 			   ->whereNull('gallery_image.deleted_at')
 			   ->orderBy('gallery.system', 'desc')
 			   ->orderBy('gallery.created_at', 'desc')
