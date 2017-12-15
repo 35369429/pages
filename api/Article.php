@@ -174,7 +174,7 @@ class Article extends Api {
 		// 查询数据表
 		$art = new \Xpmsns\pages\Model\Article;
 		$qb = $art->query()
-				  ->leftJoin("article_category as ac", 'ac.article_id', '=', 'article.article_id')
+				  ->join("article_category as ac", 'ac.article_id', '=', 'article.article_id')
 				  ->leftJoin('category as c', "c.category_id", '=', 'ac.category_id')
 				  ->leftJoin("article_tag as at", 'at.article_id', '=', 'article.article_id')
 				  ->leftJoin("article_draft as draft", 'draft.article_id', '=', 'article.article_id')

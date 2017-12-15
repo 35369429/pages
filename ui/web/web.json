@@ -1,11 +1,11 @@
 {
 	"cname":"XpmSNS-头条默认主题",
 	"pages":[
-		"/article/desktop/index",
-		"/article/desktop/list",
-		"/article/desktop/detail",
-		"/article/desktop/detail_video",
-		"/article/mobile/detail"
+		"/desktop/article/index",
+		"/desktop/article/list",
+		"/desktop/article/detail",
+		"/desktop/article/detail_video",
+		"/mobile/article/detail"
 	],
 	"common":[
 		"/common"

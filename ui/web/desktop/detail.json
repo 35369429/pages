@@ -36,8 +36,8 @@
 	],
 
 	"align": {
-		"mobile":"/article/mobile/detail",
-		"wechat":"/article/mobile/detail",
+		"mobile":"/mobile/article/detail",
+		"wechat":"/mobile/article/detail",
 		"wxapp": "/article/detail"
 	}
 }

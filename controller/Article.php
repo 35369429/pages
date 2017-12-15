@@ -28,6 +28,12 @@ class ArticleController extends \Xpmse\Loader\Controller {
 		$query['order'] =  isset($_REQUEST['order']) ?  $_REQUEST['order'] : 'create_time desc';
 		$resp  = $art->call('search', $query);
 
+		// echo "<pre>";
+		// print_r($query);
+		// print_r($resp);
+		// echo "</pre>";
+
+
 		$cate = new \Xpmsns\pages\Model\Category;
 		$wechats = $cate->wechat();
 
