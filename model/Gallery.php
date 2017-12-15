@@ -1,18 +1,18 @@
 <?php
-namespace Mina\Pages\Model; 
-define('__NS__', 'Mina\Pages\Model'); // 兼容旧版 App::M 方法调用
+namespace Xpmsns\pages\Model; 
+define('__NS__', 'Xpmsns\pages\Model'); // 兼容旧版 App::M 方法调用
 
-use \Tuanduimao\Loader\App as App;
-use \Tuanduimao\Mem as Mem;
-use \Tuanduimao\Excp as Excp;
-use \Tuanduimao\Err as Err;
-use \Tuanduimao\Conf as Conf;
-use \Tuanduimao\Model as Model;
-use \Tuanduimao\Utils as Utils;
-use \Tuanduimao\Wechat as Wechat;
-use \Tuanduimao\Media as Media;
+use \Xpmse\Loader\App as App;
+use \Xpmse\Mem as Mem;
+use \Xpmse\Excp as Excp;
+use \Xpmse\Err as Err;
+use \Xpmse\Conf as Conf;
+use \Xpmse\Model as Model;
+use \Xpmse\Utils as Utils;
+use \Xpmse\Wechat as Wechat;
+use \Xpmse\Media as Media;
 use \Mina\Delta\Render as Render;
-use \Tuanduimao\Task as Task;
+use \Xpmse\Task as Task;
 use \Exception as Exception;
 use \Imagick as Imagick;
 use \ImagickPixel as ImagickPixel;
@@ -24,11 +24,11 @@ class Gallery extends Model {
 
 	function __construct( $param=[] ) {
 
-		parent::__construct(['prefix'=>'mina_pages_']);
+		parent::__construct(['prefix'=>'xpmsns_pages_']);
 		$this->table('gallery');
 
 		// 图集内图片数据表
-		$this->image = Utils::getTab('gallery_image', "mina_pages_");  
+		$this->image = Utils::getTab('gallery_image', "xpmsns_pages_");  
 
 		$this->media = new Media;
 	}
@@ -648,7 +648,7 @@ class Gallery extends Model {
 		$bgimage = rand(1,9);
 		$maxcol = 20; $columns = []; 
 		$data = [ 
-			["示例文字", "/s/mina/pages/static/defaults/p{$bgimage}.jpg", "https://minapages.com"]
+			["示例文字", "/s/xpmsns/pages/static/defaults/p{$bgimage}.jpg", "https://xpmsns.com"]
 		];
 
 		for( $i=0; $i<$maxcol; $i++ ) {
@@ -659,7 +659,7 @@ class Gallery extends Model {
 
 		$template = [
 			"page" => [
-				"bgimage" => "/s/mina/pages/static/defaults/{$bgimage}.jpg",
+				"bgimage" => "/s/xpmsns/pages/static/defaults/{$bgimage}.jpg",
 				"origin" =>1
 			],
 			"items" => [

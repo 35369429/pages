@@ -1,15 +1,15 @@
 <?php
 
-namespace Mina\Pages\Api;
+namespace Xpmsns\pages\Api;
 
 
 
 
-use \Tuanduimao\Loader\App;
-use \Tuanduimao\Excp;
-use \Tuanduimao\Utils;
-use \Tuanduimao\Api;
-use \Tuanduimao\Wechat as Wechat;
+use \Xpmse\Loader\App;
+use \Xpmse\Excp;
+use \Xpmse\Utils;
+use \Xpmse\Api;
+use \Xpmse\Wechat as Wechat;
 
 
 /**
@@ -172,7 +172,7 @@ class Article extends Api {
 
 
 		// 查询数据表
-		$art = new \Mina\Pages\Model\Article;
+		$art = new \Xpmsns\pages\Model\Article;
 		$qb = $art->query()
 				  ->leftJoin("article_category as ac", 'ac.article_id', '=', 'article.article_id')
 				  ->leftJoin('category as c', "c.category_id", '=', 'ac.category_id')
@@ -321,7 +321,7 @@ class Article extends Api {
 		}
 
 		
-		$art = new \Mina\Pages\Model\Article;
+		$art = new \Xpmsns\pages\Model\Article;
 		$rs = $art->getLine("WHERE article_id=:article_id LIMIT 1", $select, ["article_id"=>$article_id]);
 		if ( empty($rs) ) {
 			throw new Excp("文章不存在", 404,  ['query'=>$query]);

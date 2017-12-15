@@ -3,7 +3,7 @@
     {
       "data": {
         "A": "示例文字",
-        "B": "/s/mina/pages/static/defaults/p7.jpg",
+        "B": "/s/xpmsns/pages/static/defaults/p7.jpg",
         "C": "二维码链接",
         "D": "/static-file/media/2017/09/02/cd2a6b5215eca1c7fd4f32a27b8dabc8.jpg",
         "E": null,
@@ -34,7 +34,7 @@
       "id": 1504363343180,
       "index": 0,
       "title": "天使之城",
-      "bgimage": "/s/mina/pages/static/defaults/p7.jpg",
+      "bgimage": "/s/xpmsns/pages/static/defaults/p7.jpg",
       "origin": 1,
       "bgcolor": "rgba(254,254,254,1)"
     },

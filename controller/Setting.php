@@ -1,12 +1,12 @@
 <?php
-use \Tuanduimao\Loader\App as App;
-use \Tuanduimao\Utils as Utils;
-use \Tuanduimao\Tuan as Tuan;
-use \Tuanduimao\Excp as Excp;
-use \Tuanduimao\Conf as Conf;
+use \Xpmse\Loader\App as App;
+use \Xpmse\Utils as Utils;
+use \Xpmse\Tuan as Tuan;
+use \Xpmse\Excp as Excp;
+use \Xpmse\Conf as Conf;
 
 
-class SettingController extends \Tuanduimao\Loader\Controller {
+class SettingController extends \Xpmse\Loader\Controller {
 	
 	function __construct() {
 	}

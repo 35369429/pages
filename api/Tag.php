@@ -1,11 +1,11 @@
 <?php
 
-namespace Mina\Pages\Api;
+namespace Xpmsns\pages\Api;
 
-use \Tuanduimao\Loader\App;
-use \Tuanduimao\Excp;
-use \Tuanduimao\Utils;
-use \Tuanduimao\Api;
+use \Xpmse\Loader\App;
+use \Xpmse\Excp;
+use \Xpmse\Utils;
+use \Xpmse\Api;
 
 
 /**
@@ -94,7 +94,7 @@ class Tag extends Api {
 
 
 		// 查询数据表
-		$t = new \Mina\Pages\Model\Tag;
+		$t = new \Xpmsns\pages\Model\Tag;
 		$qb = $t->query();
 
 		// 设定查询条件
@@ -185,7 +185,7 @@ class Tag extends Api {
 			}
 		}
 		
-		$cate = new \Mina\Pages\Model\Tag;
+		$cate = new \Xpmsns\pages\Model\Tag;
 		$rs = $cate->getLine("WHERE name=:name LIMIT 1", $select, ["name"=>$name]);
 		if ( empty($rs) ) {
 			throw new Excp("标签不存在", 404,  ['query'=>$query]);

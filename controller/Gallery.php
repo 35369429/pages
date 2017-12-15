@@ -1,19 +1,19 @@
 <?php
-use \Tuanduimao\Loader\App as App;
-use \Tuanduimao\Utils as Utils;
-use \Tuanduimao\Tuan as Tuan;
-use \Tuanduimao\Excp as Excp;
-use \Tuanduimao\Conf as Conf;
-use \Tuanduimao\Task as Task;
+use \Xpmse\Loader\App as App;
+use \Xpmse\Utils as Utils;
+use \Xpmse\Tuan as Tuan;
+use \Xpmse\Excp as Excp;
+use \Xpmse\Conf as Conf;
+use \Xpmse\Task as Task;
 use \Mina\Storage\Local as Storage;
 use \Endroid\QrCode\QrCode as Qrcode;
 use Endroid\QrCode\LabelAlignment;
 use \Endroid\QrCode\ErrorCorrectionLevel;
-use \Mina\Pages\Model\Gallery;
+use \Xpmsns\pages\Model\Gallery;
 
 
 
-class GalleryController extends \Tuanduimao\Loader\Controller {
+class GalleryController extends \Xpmse\Loader\Controller {
 	
 	function __construct() {
 	}
@@ -29,7 +29,7 @@ class GalleryController extends \Tuanduimao\Loader\Controller {
 
 		$data = [
 			"gallery" => [
-				"bgimage" => "/s/mina/pages/static/defaults/p7.jpg",
+				"bgimage" => "/s/xpmsns/pages/static/defaults/p7.jpg",
 				"bgcolor" => "rgba(254,254,254,1)",
 				"items" => [
 					["text", ["text"=>"示例文字"], ["x"=>350, "y"=>530]]
@@ -352,7 +352,7 @@ class GalleryController extends \Tuanduimao\Loader\Controller {
 			"page" => [
 				"id" => $id,
 				"title"=>"文章分享图片", 
-				"bgimage"=>"/s/mina/pages/static/defaults/804X1280.png", 
+				"bgimage"=>"/s/xpmsns/pages/static/defaults/804X1280.png", 
 				"bgcolor"=>"rgba(254,254,254,1)",
 				"origin" => -1
 			],
@@ -360,7 +360,7 @@ class GalleryController extends \Tuanduimao\Loader\Controller {
 				[
 					"name"=>"qrcode",
 					"option"=>[
-						"text" => "https://www.minapages.com", 
+						"text" => "https://www.xpmsns.com", 
 						"origin"=>2, "width"=>100, "height"=>100, 
 						"type"=>'url'], 
 					"pos"=> ["x"=>676, "y"=>1149] ],
@@ -369,7 +369,7 @@ class GalleryController extends \Tuanduimao\Loader\Controller {
 					"name"=>"image", 
 					"option" => [
 						"width"=>126, "height"=>30, 
-						"src"=>"/s/mina/pages/static/defaults/mp-logo-text.png" ], 
+						"src"=>"/s/xpmsns/pages/static/defaults/mp-logo-text.png" ], 
 					"pos"=> ["x"=>21, "y"=>1222] ],
 
 				[
@@ -393,7 +393,7 @@ class GalleryController extends \Tuanduimao\Loader\Controller {
 		$gallery['system'] = 1;
 
 		$images = $g->genImageData([
-			[ "A"=>"内容提要", "B"=>"/s/mina/pages/static/defaults/950X500.png", "C"=>"https://minapages.com"]
+			[ "A"=>"内容提要", "B"=>"/s/xpmsns/pages/static/defaults/950X500.png", "C"=>"https://xpmsns.com"]
 		]);
 
 		$rs = $g->save( $gallery );
@@ -465,7 +465,7 @@ class GalleryController extends \Tuanduimao\Loader\Controller {
 	        ],
 
 	        'active'=> [
-	 			'slug'=>'mina/pages/gallery/index'
+	 			'slug'=>'xpmsns/pages/gallery/index'
 	 		]
 		];
 	}

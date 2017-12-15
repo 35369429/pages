@@ -1,18 +1,18 @@
 <?php
 require_once(__DIR__ . '/../env.php');
 
-use \Tuanduimao\Api;
-use \Tuanduimao\Excp;
-use \Tuanduimao\Utils;
-// use \Mina\Pages\Api\Article;
+use \Xpmse\Api;
+use \Xpmse\Excp;
+use \Xpmse\Utils;
+// use \Xpmsns\pages\Api\Article;
 
-echo "\n\Mina\Pages\Api\Article 测试... \n\n\t";
+echo "\n\Xpmsns\pages\Api\Article 测试... \n\n\t";
 
 class testArticleapi extends PHPUnit_Framework_TestCase {
 
 
 	function testSearch() {
-		$api = new \Mina\Pages\Api\Article;
+		$api = new \Xpmsns\pages\Api\Article;
 		$resp = $api->call('search', [
 			"select" => 'title,publish_time,article_id,category,tag',
 			"page" => 1,
@@ -27,7 +27,7 @@ class testArticleapi extends PHPUnit_Framework_TestCase {
 	}
 
 	function testGet() {
-		$api = new \Mina\Pages\Api\Article;
+		$api = new \Xpmsns\pages\Api\Article;
 		try {
 			$resp = $api->call('get',['articleId'=>31, "select"=>"title,tag,article_id,category"]);
 		}catch( Excp $e) {

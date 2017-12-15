@@ -1,10 +1,10 @@
 <?php
-use \Tuanduimao\Loader\App as App;
-use \Tuanduimao\Utils as Utils;
-use \Tuanduimao\Tuan as Tuan;
-use \Tuanduimao\Excp as Excp;
-use \Tuanduimao\Conf as Conf;
-use \Tuanduimao\Task as Task;
+use \Xpmse\Loader\App as App;
+use \Xpmse\Utils as Utils;
+use \Xpmse\Tuan as Tuan;
+use \Xpmse\Excp as Excp;
+use \Xpmse\Conf as Conf;
+use \Xpmse\Task as Task;
 use \Mina\Storage\Local as Storage;
 use \Endroid\QrCode\QrCode as Qrcode;
 use Endroid\QrCode\LabelAlignment;
@@ -12,7 +12,7 @@ use \Endroid\QrCode\ErrorCorrectionLevel;
 
 
 
-class ArticleController extends \Tuanduimao\Loader\Controller {
+class ArticleController extends \Xpmse\Loader\Controller {
 	
 	function __construct() {
 	}
@@ -21,17 +21,17 @@ class ArticleController extends \Tuanduimao\Loader\Controller {
 	// 图文列表页
 	function index() {
 
-		$art = new \Mina\Pages\Api\Article;
+		$art = new \Xpmsns\pages\Api\Article;
 		$query = $_REQUEST;
 		$query['select'] = ['article_id', 'draft.title as draft_title', 'title', 'author', 'category', 'publish_time', 'update_time', 'create_time', 'status', 'draft.status as draft_status'];
 		$query['perpage'] = isset($_REQUEST['perpage']) ?  $_REQUEST['perpage'] : 10;
 		$query['order'] =  isset($_REQUEST['order']) ?  $_REQUEST['order'] : 'create_time desc';
 		$resp  = $art->call('search', $query);
 
-		$cate = new \Mina\Pages\Model\Category;
+		$cate = new \Xpmsns\pages\Model\Category;
 		$wechats = $cate->wechat();
 
-		$art = new \Mina\Pages\Model\Article;
+		$art = new \Xpmsns\pages\Model\Article;
 		$rs = $art->getline( "WHERE status=?",["count(*) as cnt"], ['pending']);
 		$pending = 0;
 		if ( !empty($rs) ){
@@ -44,7 +44,7 @@ class ArticleController extends \Tuanduimao\Loader\Controller {
 			'query' => $query,
 			'category' => $cate,
 			'pending' => $pending,
-			'article' => new \Mina\Pages\Model\Article,
+			'article' => new \Xpmsns\pages\Model\Article,
 			'wechats' => $wechats
 		];
 
@@ -81,7 +81,7 @@ class ArticleController extends \Tuanduimao\Loader\Controller {
 
 		Utils::cliOnly();
 
-		$media = new \Tuanduimao\Media;
+		$media = new \Xpmse\Media;
 		$path = "/data/stor/public/media/2017/09/24/7d17a1dcd7c0e2b90ae2f7655fd6ff82.ttf";
 
 		$resp = $media->guessTitle( $path, 'application/x-font-ttf');
@@ -98,7 +98,7 @@ class ArticleController extends \Tuanduimao\Loader\Controller {
 
 		// Utils::cliOnly();
 		// set_time_limit(0);
-		// $art = new  \Mina\Pages\Model\Article;
+		// $art = new  \Xpmsns\pages\Model\Article;
 		// $art->downloadFromWechat('wx77e0de6921bacc92', 15);
 
 		// $art->downloadFromWechat('wx77e0de6921bacc92');
@@ -132,7 +132,7 @@ class ArticleController extends \Tuanduimao\Loader\Controller {
 			throw new Excp("未知文章( {$article_id})" , 400, ['article_id'=>$article_id]);
 		}
 
-		$article = new \Mina\Pages\Model\Article;
+		$article = new \Xpmsns\pages\Model\Article;
 		$resp = $article->rm($article_id, 'article_id');
 
 		if ( $resp === false ){
@@ -156,7 +156,7 @@ class ArticleController extends \Tuanduimao\Loader\Controller {
 			return;
 		}
 
-		$article = new \Mina\Pages\Model\Article;
+		$article = new \Xpmsns\pages\Model\Article;
 		$data['pages'] = $article->previewLinks( $article_id);
 		App::render($data,'article','preview.popover');
 	}
@@ -173,7 +173,7 @@ class ArticleController extends \Tuanduimao\Loader\Controller {
 			return;
 		}
 
-		$article = new \Mina\Pages\Model\Article;
+		$article = new \Xpmsns\pages\Model\Article;
 		if ( $article->isPublished($article_id) === false ) {
 			echo "<span class='text-danger'>文章尚未发布</span>";
 			return;
@@ -203,7 +203,7 @@ class ArticleController extends \Tuanduimao\Loader\Controller {
 			return;
 		}
 
-		$article = new \Mina\Pages\Model\Article;
+		$article = new \Xpmsns\pages\Model\Article;
 		if ( $article->isPublished($article_id) === false ) {
 			echo "<span class='text-danger'>文章尚未发布</span>";
 			return;
@@ -223,7 +223,7 @@ class ArticleController extends \Tuanduimao\Loader\Controller {
 	 */
 	function save()  {
 		// sleep(1);
-		$article = new \Mina\Pages\Model\Article;
+		$article = new \Xpmsns\pages\Model\Article;
 		$rs = $article->save( json_decode(App::input(),true) );
 		Utils::out( $rs );
 	}
@@ -244,7 +244,7 @@ class ArticleController extends \Tuanduimao\Loader\Controller {
 
 
 		$offset = isset($_POST['offset']) ? intval($_POST['offset']) : null;
-		$art = new  \Mina\Pages\Model\Article;
+		$art = new  \Xpmsns\pages\Model\Article;
 		foreach ($ids as $appid) {
 			$art->downloadFromWechat($appid, $offset);
 		}
@@ -262,7 +262,7 @@ class ArticleController extends \Tuanduimao\Loader\Controller {
 		if (empty($article_id)) {
 			throw new Excp('未知文章数据', 404, ['article_id'=>$article_id, 'status'=>$status]);
 		}
-		$art = new \Mina\Pages\Model\Article;
+		$art = new \Xpmsns\pages\Model\Article;
 		$rs = $art->downloadImages($article_id, $status );
 		echo json_encode([$article_id, $status, $rs]);
 	}
@@ -277,12 +277,12 @@ class ArticleController extends \Tuanduimao\Loader\Controller {
 
 		$offset = isset($_POST['offset']) ? intval($_POST['offset']) : null;
 		$t = new Task;
-		if ( $t->isRunning('从微信下载文章', 'mina/pages') ) {
+		if ( $t->isRunning('从微信下载文章', 'xpmsns/pages') ) {
 			throw new Excp('下载中，任务尚未完成', 400, ['ids'=>$_POST['ids'], "offset"=>$offset] );	
 		}
 
 		$task_id = $t->run('从微信下载文章', [
-			"app_name" => "mina/pages",
+			"app_name" => "xpmsns/pages",
 			"c" => 'article',
 			'a' => 'realdownfromwechat',
 			'data'=> [
@@ -296,9 +296,9 @@ class ArticleController extends \Tuanduimao\Loader\Controller {
 
 
 	function downstatus() {
-		$art = new \Mina\Pages\Model\Article;
+		$art = new \Xpmsns\pages\Model\Article;
 		$t = new Task;
-		if ( $t->isRunning('从微信下载文章', 'mina/pages') ) {
+		if ( $t->isRunning('从微信下载文章', 'xpmsns/pages') ) {
 			$count  = 1;
 		} else {
 			$rs = $art->getline( "WHERE status=? ",["count(*) as cnt"], ['pending']);
@@ -324,7 +324,7 @@ class ArticleController extends \Tuanduimao\Loader\Controller {
 			throw new Excp('请选择至少一个公众号', 404, ['article_id'=>$article_id, 'mpids'=>$mpids, 'create'=>$create]);
 		}
 
-		$art = new  \Mina\Pages\Model\Article;
+		$art = new  \Xpmsns\pages\Model\Article;
 		foreach ($mpids as $appid) {
 			$art->uploadToWechat($appid, $article_id, $create);
 		}
@@ -344,7 +344,7 @@ class ArticleController extends \Tuanduimao\Loader\Controller {
 			throw new Excp("未知文章( {$data['article_id']})" , 400, ['data'=>$data]);
 		}
 
-		$article = new \Mina\Pages\Model\Article;
+		$article = new \Xpmsns\pages\Model\Article;
 		$rs = $article->unpublished( $data['article_id'] );
 		Utils::out( $rs );
 
@@ -353,17 +353,17 @@ class ArticleController extends \Tuanduimao\Loader\Controller {
 	// 文章编辑器
 	function editor() {
 
-		$opt = new \Tuanduimao\Option('mina/pages');
+		$opt = new \Xpmse\Option('xpmsns/pages');
 		$options = $opt->getAll();
 
-		$art = new \Mina\Pages\Model\Article;
+		$art = new \Xpmsns\pages\Model\Article;
 		$article = ['category'=>[], 'tag'=>[]];
 		if ( !empty( $_GET['id']) ) {
 			$article = $art->load( intval($_GET['id']) );
 		}
 
 
-		$cate = new \Mina\Pages\Model\Category;
+		$cate = new \Xpmsns\pages\Model\Category;
 		$wechats = $cate->wechat();
 
 		$data = [
@@ -407,7 +407,7 @@ class ArticleController extends \Tuanduimao\Loader\Controller {
 	        ],
 
 	        'active'=> [
-	 			'slug'=>'mina/pages/article/index'
+	 			'slug'=>'xpmsns/pages/article/index'
 	 		]
 		];
 	}

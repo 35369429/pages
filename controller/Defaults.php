@@ -1,12 +1,12 @@
 <?php
-use \Tuanduimao\Loader\App as App;
-use \Tuanduimao\Utils as Utils;
-use \Tuanduimao\Tuan as Tuan;
-use \Tuanduimao\Excp as Excp;
-use \Tuanduimao\Conf as Conf;
+use \Xpmse\Loader\App as App;
+use \Xpmse\Utils as Utils;
+use \Xpmse\Tuan as Tuan;
+use \Xpmse\Excp as Excp;
+use \Xpmse\Conf as Conf;
 
 
-class DefaultsController extends \Tuanduimao\Loader\Controller {
+class DefaultsController extends \Xpmse\Loader\Controller {
 	
 	function __construct() {
 	}
@@ -34,7 +34,7 @@ class DefaultsController extends \Tuanduimao\Loader\Controller {
 	 		'active' =>[
 	 			'c'=>'article',
 	 			'a'=>'index'
-	 			// 'slug' => 'mina/pages/article/index'
+	 			// 'slug' => 'xpmsns/pages/article/index'
 	 		],
 			'crumb' => [
 	            "返回图文" => APP::R('article','index'),

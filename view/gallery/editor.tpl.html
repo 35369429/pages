@@ -1,5 +1,5 @@
 <?php
-	use \Tuanduimao\Loader\App as App;
+	use \Xpmse\Loader\App as App;
 ?>
 <script type="text/javascript">
 	DEBUG_ON = true;
@@ -654,7 +654,7 @@ $(function() {
 
 	// 设定画布
 	$('.canvas').imgeditor({
-		// bgimage:'/s/mina/pages/static/defaults/p<?=rand(1,9)?>.jpg',
+		// bgimage:'/s/xpmsns/pages/static/defaults/p<?=rand(1,9)?>.jpg',
 		bgcolor:'rgba(254,254,254,1)',
 		// action:'php/imgeditor.php',
 		toolbar:$('.toolbar'),
@@ -859,7 +859,7 @@ $(function() {
 	$('.fn-add-qrcode').click(function(event) {
 		$imgeditor.add('qrcode', {
 			width:300,origin:-1,
-			text:'https://www.minapages.com',
+			text:'https://www.xpmsns.com',
 		}, {} );
 	});
 

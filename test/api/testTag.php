@@ -1,18 +1,18 @@
 <?php
 require_once(__DIR__ . '/../env.php');
 
-use \Tuanduimao\Api;
-use \Tuanduimao\Excp;
-use \Tuanduimao\Utils;
-// use \Mina\Pages\Api\Article;
+use \Xpmse\Api;
+use \Xpmse\Excp;
+use \Xpmse\Utils;
+// use \Xpmsns\pages\Api\Article;
 
-echo "\n\Mina\Pages\Api\Tag 测试... \n\n\t";
+echo "\n\Xpmsns\pages\Api\Tag 测试... \n\n\t";
 
 class tesTagApi extends PHPUnit_Framework_TestCase {
 
 
 	function testSearch() {
-		$api = new \Mina\Pages\Api\Tag;
+		$api = new \Xpmsns\pages\Api\Tag;
 		try {
 			$resp = $api->call('search', [
 				"inName" => "北京,学术,快讯,上海",
@@ -30,7 +30,7 @@ class tesTagApi extends PHPUnit_Framework_TestCase {
 
 	function testGet() {
 
-		$api = new \Mina\Pages\Api\Tag;
+		$api = new \Xpmsns\pages\Api\Tag;
 		try {
 			$resp = $api->call('get',['name'=>'北京', "select"=>"tag_id,name,name"]);
 		}catch( Excp $e) {

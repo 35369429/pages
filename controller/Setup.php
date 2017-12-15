@@ -1,12 +1,12 @@
 <?php
-use \Tuanduimao\Loader\App as App;
-use \Tuanduimao\Utils as Utils;
-use \Tuanduimao\Tuan as Tuan;
-use \Tuanduimao\Excp as Excp;
-use \Tuanduimao\Conf as Conf;
+use \Xpmse\Loader\App as App;
+use \Xpmse\Utils as Utils;
+use \Xpmse\Tuan as Tuan;
+use \Xpmse\Excp as Excp;
+use \Xpmse\Conf as Conf;
 
 
-class SetupController extends \Tuanduimao\Loader\Controller {
+class SetupController extends \Xpmse\Loader\Controller {
 	
 	function __construct() {
 
@@ -21,7 +21,7 @@ class SetupController extends \Tuanduimao\Loader\Controller {
 
 	private  function gallery_init() {
 
-		$g = new \Mina\Pages\Model\Gallery();
+		$g = new \Xpmsns\pages\Model\Gallery();
 		$id = $g->genGalleryId();
 
 		$gallery_id = $g->getVar('gallery_id', "WHERE title=? AND system=1 LIMIT 1", ["文章分享图片"]);
@@ -38,7 +38,7 @@ class SetupController extends \Tuanduimao\Loader\Controller {
 			"page" => [
 				"id" => $id,
 				"title"=>"分享图片", 
-				"bgimage"=>"/s/mina/pages/static/defaults/804X1280.png", 
+				"bgimage"=>"/s/xpmsns/pages/static/defaults/804X1280.png", 
 				"bgcolor"=>"rgba(254,254,254,1)",
 				"origin" => -1
 			],
@@ -46,7 +46,7 @@ class SetupController extends \Tuanduimao\Loader\Controller {
 				[
 					"name"=>"qrcode",
 					"option"=>[
-						"text" => "https://www.minapages.com", "origin"=>3,
+						"text" => "https://www.xpmsns.com", "origin"=>3,
 						 "width"=>100, "height"=>100, 
 						"type"=>'url'], 
 					"pos"=> ["x"=>676, "y"=>1149] ],
@@ -55,7 +55,7 @@ class SetupController extends \Tuanduimao\Loader\Controller {
 					"name"=>"image", 
 					"option" => [
 						"width"=>126, "height"=>30, 
-						"src"=>"/s/mina/pages/static/defaults/mp-logo-text.png" ], 
+						"src"=>"/s/xpmsns/pages/static/defaults/mp-logo-text.png" ], 
 					"pos"=> ["x"=>21, "y"=>1222] ],
 
 				[
@@ -87,7 +87,7 @@ class SetupController extends \Tuanduimao\Loader\Controller {
 		$gallery['param'] = 'article';
 
 		$images = $g->genImageData([
-			["A"=>"文章标题", "B"=>"内容题要", "C"=>"/s/mina/pages/static/defaults/950X500.png", "D"=>"https://minapages.com"]
+			["A"=>"文章标题", "B"=>"内容题要", "C"=>"/s/xpmsns/pages/static/defaults/950X500.png", "D"=>"https://xpmsns.com"]
 		]);
 
 		$rs = $g->save( $gallery );
@@ -115,7 +115,7 @@ class SetupController extends \Tuanduimao\Loader\Controller {
 		// 注册配置
 		try {
 
-			$option = new \Tuanduimao\Option('mina/pages');
+			$option = new \Xpmse\Option('xpmsns/pages');
 			$option->register("图文主题图片比例配置", "article/image/ratio", [
 				"cover"=>["width"=>900,"height"=>500, "ratio"=>"9:5"], 
 				"topic1"=>["width"=>null,"height"=>null, "ratio"=>"1:1"],
@@ -158,7 +158,7 @@ class SetupController extends \Tuanduimao\Loader\Controller {
 		}
 
 		try {
-			$option = new \Tuanduimao\Option('mina/pages');
+			$option = new \Xpmse\Option('xpmsns/pages');
 			$option->register("图文主题图片比例配置", "article/image/ratio", [
 				"cover"=>["width"=>900,"height"=>500, "ratio"=>"9:5"], 
 				"topic1"=>["width"=>null,"height"=>null, "ratio"=>"1:1"],
@@ -191,7 +191,7 @@ class SetupController extends \Tuanduimao\Loader\Controller {
 		}
 
 		try {
-			$option = new \Tuanduimao\Option('mina/pages');
+			$option = new \Xpmse\Option('xpmsns/pages');
 			$option->unregister();
 		} catch ( Excp $e ) {}
 

@@ -1,18 +1,18 @@
 <?php
-namespace Mina\Pages\Model; 
-define('__NS__', 'Mina\Pages\Model'); // 兼容旧版 App::M 方法调用
+namespace Xpmsns\pages\Model; 
+define('__NS__', 'Xpmsns\pages\Model'); // 兼容旧版 App::M 方法调用
 
-use \Tuanduimao\Loader\App as App;
-use \Tuanduimao\Mem as Mem;
-use \Tuanduimao\Excp as Excp;
-use \Tuanduimao\Err as Err;
-use \Tuanduimao\Conf as Conf;
-use \Tuanduimao\Model as Model;
-use \Tuanduimao\Utils as Utils;
-use \Tuanduimao\Wechat as Wechat;
-use \Tuanduimao\Media as Media;
+use \Xpmse\Loader\App as App;
+use \Xpmse\Mem as Mem;
+use \Xpmse\Excp as Excp;
+use \Xpmse\Err as Err;
+use \Xpmse\Conf as Conf;
+use \Xpmse\Model as Model;
+use \Xpmse\Utils as Utils;
+use \Xpmse\Wechat as Wechat;
+use \Xpmse\Media as Media;
 use \Mina\Delta\Render as Render;
-use \Tuanduimao\Task as Task;
+use \Xpmse\Task as Task;
 
 use \Exception as Exception;
 
@@ -48,13 +48,13 @@ class Article extends Model {
 	 */
 	function __construct( $param=[] ) {
 
-		parent::__construct(['prefix'=>'mina_pages_']);
+		parent::__construct(['prefix'=>'xpmsns_pages_']);
 
 		$this->table('article');
 		$this->delta_render = new Render();
-		$this->article_category = Utils::getTab('article_category', "mina_pages_");  // 分类关联表
-		$this->article_tag = Utils::getTab('article_tag', "mina_pages_");    // 标签关联表
-		$this->article_draft = Utils::getTab('article_draft', "mina_pages_");  // 文章草稿箱
+		$this->article_category = Utils::getTab('article_category', "xpmsns_pages_");  // 分类关联表
+		$this->article_tag = Utils::getTab('article_tag', "xpmsns_pages_");    // 标签关联表
+		$this->article_draft = Utils::getTab('article_draft', "xpmsns_pages_");  // 文章草稿箱
 		$this->page = Utils::getTab('page', 'core_');  // 页面表
 
 
@@ -273,9 +273,9 @@ class Article extends Model {
 		$rs = $this->save( $data );
 		$imgcnt = count($rs['images']);
 		$article_id = $rs['article_id'];
-		$t = new \Tuanduimao\Task;
+		$t = new \Xpmse\Task;
 		$task_id = $t->run('下载文章图片: ' . $rs['title'], [
-			"app_name" => "mina/pages",
+			"app_name" => "xpmsns/pages",
 			"c" => 'article',
 			'a' => 'realdownloadimages',
 			'data'=> [
@@ -293,7 +293,7 @@ class Article extends Model {
 			} catch(Excp $e){
 			} catch(Exception $e){}
 
-			$t = new \Tuanduimao\Task;
+			$t = new \Xpmse\Task;
 			if ( $status == 'failure') {
 				$t->progress($task['task_id'], 100,  "下载图片失败 文章 {$article_id} 图片（{$imgcnt}）");
 			} else {
@@ -649,7 +649,7 @@ class Article extends Model {
 		$image = [
 			"A" => $article['title'],
 			"B" => $article['summary'],
-			"C" => !empty($article['cover']) ? $article['cover'] : "/s/mina/pages/static/defaults/950X500.png",
+			"C" => !empty($article['cover']) ? $article['cover'] : "/s/xpmsns/pages/static/defaults/950X500.png",
 			"E" => $thumbs[0],
 			"F" => $thumbs[1],
 			"G" => $thumbs[2],
@@ -664,7 +664,7 @@ class Article extends Model {
 		foreach ($article['links'] as $link ) {
 			$title = !empty($link) ? $link['cname']  : "";
 			
-			$link = !empty($link) ? $link['links']['mobile']  : "https://minapages.com";
+			$link = !empty($link) ? $link['links']['mobile']  : "https://xpmsns.com";
 			$image['D'] = $link;
 			$images = $g->genImageData([$image]);
 			foreach ($gallerys as $rs ) {
@@ -1333,9 +1333,9 @@ class Article extends Model {
 
 
 	function __clear() {
-		Utils::getTab('article_category', "mina_pages_")->dropTable();
-		Utils::getTab('article_tag', "mina_pages_")->dropTable();
-		Utils::getTab('article_draft', "mina_pages_")->dropTable();
+		Utils::getTab('article_category', "xpmsns_pages_")->dropTable();
+		Utils::getTab('article_tag', "xpmsns_pages_")->dropTable();
+		Utils::getTab('article_draft', "xpmsns_pages_")->dropTable();
 		$this->dropTable();
 	}
 

@@ -1,12 +1,12 @@
 <?php
-use \Tuanduimao\Loader\App as App;
-use \Tuanduimao\Utils as Utils;
-use \Tuanduimao\Tuan as Tuan;
-use \Tuanduimao\Excp as Excp;
-use \Tuanduimao\Conf as Conf;
+use \Xpmse\Loader\App as App;
+use \Xpmse\Utils as Utils;
+use \Xpmse\Tuan as Tuan;
+use \Xpmse\Excp as Excp;
+use \Xpmse\Conf as Conf;
 
 
-class CategoryController extends \Tuanduimao\Loader\Controller {
+class CategoryController extends \Xpmse\Loader\Controller {
 	
 	function __construct() {
 	}
@@ -15,7 +15,7 @@ class CategoryController extends \Tuanduimao\Loader\Controller {
 
 		$data['message'] = '
 		请在 系统 > 数据管理 中修改文章分类信息 
-		<a href="'. App::URI('baas-admin', 'data', 'index',['table'=>'mina_pages_category']).'"> 立即修改</a>';
+		<a href="'. App::URI('baas-admin', 'data', 'index',['table'=>'xpmsns_pages_category']).'"> 立即修改</a>';
 		
 		App::render($data,'web','index');
 		

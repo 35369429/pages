@@ -1,17 +1,17 @@
 <?php
 require_once(__DIR__ . '/../env.php');
 
-use \Tuanduimao\Api;
-use \Tuanduimao\Excp;
-use \Tuanduimao\Utils;
+use \Xpmse\Api;
+use \Xpmse\Excp;
+use \Xpmse\Utils;
 
-echo "\n\Mina\Pages\Model\Article 测试... \n\n\t";
+echo "\n\Xpmsns\pages\Model\Article 测试... \n\n\t";
 
 class testArticleModel extends PHPUnit_Framework_TestCase {
 
 
 	function testLinks() {
-		$m = new \Mina\Pages\Model\Article;
+		$m = new \Xpmsns\pages\Model\Article;
 		$links = $m->links(1);
 		Utils::out( $links );
 

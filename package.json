@@ -1,24 +1,24 @@
 {
-    "org": "mina",
+    "org": "xpmsns",
     "name": "pages",
-    "version": "1.0.6",
-    "cname": "MINA 页面",
+    "version": "1.1.0",
+    "cname": "头条",
     "image": {
         "color":"/static/icons/app-color.svg",
         "dark":"/static/icons/app-dark.svg",
         "light":"/static/icons/app-light.svg"
     },
     "icontype": "img",
-    "intro": "MINA 页面系统。快速生成小程序、网站和APP。支持发布文章、商品、活动等多种页面。",
+    "intro": "全平台CMS系统，支持发布文章、商品、活动等多种页面。",
     "detail": "@readme.md",
     "document": "@document.md",
     "author": "北京云道天成科技有限公司",
-    "homepage": "https://www.minapages.com",
+    "homepage": "https://www.xpmsns.com",
     "menu":[{
-        "slug":"mina/pages/group",
-        "group":"MINA 页面"
+        "slug":"xpmsns/pages/group",
+        "group":"头条"
     },{
-        "slug":"mina/pages/article/index",
+        "slug":"xpmsns/pages/article/index",
         "name":"图文",
         "index": true,
         "icon":{
@@ -30,7 +30,7 @@
         "permission": "boss,admin,manager,user",
         "order":9999
     },{
-        "slug":"mina/pages/gallery/index",
+        "slug":"xpmsns/pages/gallery/index",
         "name":"图集",
         "icon":{
             "default":"/static/icons/gallery.svg"
@@ -41,7 +41,7 @@
         "permission": "boss,admin,manager,user",
         "order":9999
     },{
-        "slug":"mina/pages/category/index",
+        "slug":"xpmsns/pages/category/index",
         "name":"分类",
         "icon":{
             "default":"/static/icons/category.svg"

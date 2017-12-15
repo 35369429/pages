@@ -1,11 +1,11 @@
 <?php
 
-namespace Mina\Pages\Api;
+namespace Xpmsns\pages\Api;
 
-use \Tuanduimao\Loader\App;
-use \Tuanduimao\Excp;
-use \Tuanduimao\Utils;
-use \Tuanduimao\Api;
+use \Xpmse\Loader\App;
+use \Xpmse\Excp;
+use \Xpmse\Utils;
+use \Xpmse\Api;
 
 
 /**
@@ -134,7 +134,7 @@ class Category extends Api {
 
 
 		// 查询数据表
-		$c = new \Mina\Pages\Model\Category;
+		$c = new \Xpmsns\pages\Model\Category;
 		$qb = $c->query();
 
 		// 设定查询条件
@@ -238,7 +238,7 @@ class Category extends Api {
 			}
 		}
 		
-		$cate = new \Mina\Pages\Model\Category;
+		$cate = new \Xpmsns\pages\Model\Category;
 		$rs = $cate->getLine("WHERE category_id=:category_id LIMIT 1", $select, ["category_id"=>$category_id]);
 		if ( empty($rs) ) {
 			throw new Excp("分类不存在", 404,  ['query'=>$query]);
