@@ -11,10 +11,10 @@ class SetupController extends \Xpmse\Loader\Controller {
 	function __construct() {
 
 		$this->models = [
-			'\\Mina\\Pages\\Model\\Article', 
-			'\\Mina\\Pages\\Model\\Category', 
-			'\\Mina\\Pages\\Model\\Tag',
-			'\\Mina\\Pages\\Model\\Gallery'
+			'\\Xpmsns\\Pages\\Model\\Article', 
+			'\\Xpmsns\\Pages\\Model\\Category', 
+			'\\Xpmsns\\Pages\\Model\\Tag',
+			'\\Xpmsns\\Pages\\Model\\Gallery'
 		];
 	}
 
