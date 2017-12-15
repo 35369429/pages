@@ -625,7 +625,7 @@ class Article extends Model {
 		$rs =  $this->updateBy('article_id', $draft );
 
 		// 生成物料
-		$this->makeMaterials( $rs );
+		// $this->makeMaterials( $rs );
 		return $rs;
 	}
 

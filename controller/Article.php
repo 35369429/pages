@@ -215,7 +215,8 @@ class ArticleController extends \Xpmse\Loader\Controller {
 			return;
 		}
 
-		$data['images'] = $article->galleryImages($article_id);
+		$data['images'] = [];
+		// $data['images'] = $article->galleryImages($article_id);
 		$data['pages'] = $article->links( $article_id );
 		$data['wxapp'] = $article->wxapp();
 
