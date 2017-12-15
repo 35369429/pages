@@ -1,0 +1,30 @@
+{
+	"cname":"XpmSNS Pages 默认主题",
+	"pages":[
+		"/hello/world"
+	],
+	"common":[
+		"/common"
+	],
+	"storage": {
+		"engine":"minapages",
+		"options":{
+			"debug":true
+		},
+		"pages":{
+			"remote": "/{PROJECT_NAME}/user/pages",
+			"url": "/static-file/{PROJECT_NAME}/user/pages",
+			"origin": "/static-file/{PROJECT_NAME}/user/pages"
+		},
+		"binds": [
+			{
+				"local": "/web/user/assets",
+				"remote": "/{PROJECT_NAME}/user/assets",
+				"url": "/static-file/{PROJECT_NAME}/user/assets",
+				"origin": "/static-file/{PROJECT_NAME}/user/assets"
+			}
+		]
+	},
+
+	"debug":true
+}
