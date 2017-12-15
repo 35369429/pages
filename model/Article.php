@@ -819,7 +819,8 @@ class Article extends Model {
 	 * @return 
 	 */
 	function links( $article_id,  $category = null ) {
-		$default_home = Utils::getHome( $_SERVER['HTTP_TUANDUIMAO_LOCATION']);
+		// $default_home = Utils::getHome( $_SERVER['HTTP_TUANDUIMAO_LOCATION']);
+		$default_home = Utils::getHomeLink();
 		$uri = parse_url( $default_home);
 		$default_project = Utils::getTab('project')->getVar('name', "LIMIT 1");
 		if ( empty($default_project) ) {

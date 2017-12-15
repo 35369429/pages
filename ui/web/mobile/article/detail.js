@@ -15,7 +15,7 @@ Page({
 		        var logo = window.location.origin + that.data.aridata.cover;
 
 		        var href =  window.location.href;
-		        var dataurl ="/_api/mina/pages/article/signdata?url="+href;
+		        var dataurl ="/_api/xpmsns/pages/article/signdata?url="+href;
 		        $.get(dataurl, function(data) {
 		            wx.config({
 		                debug: false, 

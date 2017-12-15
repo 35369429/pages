@@ -2,7 +2,7 @@
 	"cname":"文章列表页",
 	"data": {
 		"category":{
-			"api":"/mina/pages/category/search",
+			"api":"/xpmsns/pages/category/search",
 			"query":{
 				"select":"category_id,name",
 				"children":false,
@@ -11,7 +11,7 @@
 			}
 		},
 		"article":{
-			"api":"/mina/pages/article/search",
+			"api":"/xpmsns/pages/article/search",
 			"query":{
 				"select":"article_id,title,cover,summary,publish_time,thumbs",
 				"c":"{{__var.slug}}",
@@ -22,7 +22,7 @@
 		},
 
 		"news":{
-			"api":"/mina/pages/article/search",
+			"api":"/xpmsns/pages/article/search",
 			"query":{
 				"select":"article_id,title,publish_time",
 				"category":"新闻公告",
@@ -31,7 +31,7 @@
 			}
 		},
 		"cate":{
-			"api":"/mina/pages/category/search",
+			"api":"/xpmsns/pages/category/search",
 			"query":{
 				"select":"category_id,name",
 				"children":false,

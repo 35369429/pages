@@ -2,7 +2,7 @@
 	"cname":"网站首页",
 	"data": {
 		"category":{
-			"api":"/mina/pages/category/search",
+			"api":"/xpmsns/pages/category/search",
 			"query":{
 				"select":"category_id,name",
 				"children":false,
@@ -11,7 +11,7 @@
 			}
 		},
 		"salon":{
-			"api":"/mina/pages/article/search",
+			"api":"/xpmsns/pages/article/search",
 			"query":{
 				"select":"article_id,title",
 				"category":"医生沙龙",
@@ -20,7 +20,7 @@
 			}
 		},
 		"news":{
-			"api":"/mina/pages/article/search",
+			"api":"/xpmsns/pages/article/search",
 			"query":{
 				"select":"article_id,title,cover,summary,publish_time,thumbs",
 				"category":"新闻公告",
@@ -30,7 +30,7 @@
 		},
 
 		"doctor":{
-			"api":"/mina/pages/article/search",
+			"api":"/xpmsns/pages/article/search",
 			"query":{
 				"select":"article_id,title,cover,origin,summary,publish_time",
 				"category":"专家介绍",
@@ -39,7 +39,7 @@
 			}
 		},
 		"clinic":{
-			"api":"/mina/pages/article/search",
+			"api":"/xpmsns/pages/article/search",
 			"query":{
 				"select":"article_id,title",
 				"category":"网上门诊",
@@ -49,7 +49,7 @@
 		},
 
 		"info":{
-			"api":"/mina/pages/article/search",
+			"api":"/xpmsns/pages/article/search",
 			"query":{
 				"select":"article_id,title",
 				"category":"信息园地",
@@ -59,7 +59,7 @@
 		},
 
 		"school":{
-			"api":"/mina/pages/article/search",
+			"api":"/xpmsns/pages/article/search",
 			"query":{
 				"select":"article_id,title,cover,summary,publish_time",
 				"category":"继续教育",
@@ -69,7 +69,7 @@
 		},
 
 		"hard":{
-			"api":"/mina/pages/article/search",
+			"api":"/xpmsns/pages/article/search",
 			"query":{
 				"select":"article_id,title,cover,summary,publish_time",
 				"category":"疑难病痛",
@@ -79,7 +79,7 @@
 		},
 
 		"newtech":{
-			"api":"/mina/pages/article/search",
+			"api":"/xpmsns/pages/article/search",
 			"query":{
 				"select":"article_id,title,cover,summary,publish_time",
 				"category":"科普知识",
@@ -89,7 +89,7 @@
 		},
 
 		"science":{
-			"api":"/mina/pages/article/search",
+			"api":"/xpmsns/pages/article/search",
 			"query":{
 				"select":"article_id,title,cover,summary,publish_time",
 				"category":"会议通知",

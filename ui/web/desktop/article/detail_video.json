@@ -1,8 +1,8 @@
 {
-	"cname":"默认正文页",
+	"cname":"视频正文页",
 	"data": {
 		"category":{
-			"api":"/mina/pages/category/search",
+			"api":"/xpmsns/pages/category/search",
 			"query":{
 				"select":"category_id,name",
 				"children":false,
@@ -11,13 +11,13 @@
 			}
 		},
 		"article":{
-			"api":"/mina/pages/article/get",
+			"api":"/xpmsns/pages/article/get",
 			"query":{
 				"articleId":"{{__var.id}}"
 			}
 		},
 		"hots":{
-			"api":"/mina/pages/article/search",
+			"api":"/xpmsns/pages/article/search",
 			"query":{
 				"select":"article_id,title,publish_time",
 				"category":"新闻公告",
@@ -32,7 +32,7 @@
 		}
 	},
 	"entries":[
-		{"method":"GET", "router":"/article/{id:\\d+}", "ttl":0}
+		{"method":"GET", "router":"/article/video/{id:\\d+}", "ttl":0}
 	],
 
 	"align": {
