@@ -23,9 +23,9 @@
 		"binds": [
 			{
 				"local": "/web/assets",
-				"remote": "/{PROJECT_NAME}/assets",
-				"url": "/static-file/{PROJECT_NAME}/assets",
-				"origin": "/static-file/{PROJECT_NAME}/assets"
+				"remote": "/{PROJECT_NAME}/assets/pages",
+				"url": "/static-file/{PROJECT_NAME}/assets/pages",
+				"origin": "/static-file/{PROJECT_NAME}/assets/pages"
 			}
 		]
 	},

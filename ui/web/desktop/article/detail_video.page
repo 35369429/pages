@@ -5,7 +5,7 @@
 			欢迎您的光临，今天是 <span></span>
 		</div>
 		<div class="col-lg-5">
-			<!-- <img src="{{__STOR__::/__PROJECT_NAME/assets}}/images/p1_12.png">
+			<!-- <img src="{{__STOR__::/__PROJECT_NAME/assets/pages}}/images/p1_12.png">
 			<span id="webNotice">网站公告：</span>
 			<p class="WebNotice">
 				<a href="#">中国疼痛诊疗网正式开通...</a>
@@ -13,14 +13,14 @@
 			</p> -->
 		</div>
 		<div class="col-lg-3 text-right">
-			<img src="{{__STOR__::/__PROJECT_NAME/assets}}/images/p1_13.png">
+			<img src="{{__STOR__::/__PROJECT_NAME/assets/pages}}/images/p1_13.png">
 			<a href=""> 联系我们 010-83198161 </a>
 		</div>
 	</div>
 </div>
 <!-- 头部的大图 -->
 <div class="header-img">
-	<img src="{{__STOR__::/__PROJECT_NAME/assets}}/images/p1_01.png">
+	<img src="{{__STOR__::/__PROJECT_NAME/assets/pages}}/images/p1_01.png">
 </div>
 <!-- 头部的导航栏 -->
 <div class="header-nav row">
@@ -86,10 +86,10 @@
 </div>
 
 
-<script type="text/javascript" src="{{__STOR__::/__PROJECT_NAME/assets}}/js/jquery-1.10.2.min.js"></script>
-<script type="text/javascript" src="{{__STOR__::/__PROJECT_NAME/assets}}/bootstrap/bootstrap.min.js"></script>
-<script type="text/javascript" src="{{__STOR__::/__PROJECT_NAME/assets}}/js/home-js.js"></script>
-<script type="text/javascript" src="{{__STOR__::/__PROJECT_NAME/assets}}/js/jquery.validate.min.js"></script>
+<script type="text/javascript" src="{{__STOR__::/__PROJECT_NAME/assets/pages}}/js/jquery-1.10.2.min.js"></script>
+<script type="text/javascript" src="{{__STOR__::/__PROJECT_NAME/assets/pages}}/bootstrap/bootstrap.min.js"></script>
+<script type="text/javascript" src="{{__STOR__::/__PROJECT_NAME/assets/pages}}/js/home-js.js"></script>
+<script type="text/javascript" src="{{__STOR__::/__PROJECT_NAME/assets/pages}}/js/jquery.validate.min.js"></script>
 <!-- 最底部版权 -->
 
 <include src="__WEB_ROOT__/common/footer.page" />
