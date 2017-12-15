@@ -1,7 +1,11 @@
 {
-	"cname":"XpmSNS Pages 默认主题",
+	"cname":"XpmSNS-头条默认主题",
 	"pages":[
-		"/hello/world"
+		"/article/desktop/index",
+		"/article/desktop/list",
+		"/article/desktop/detail",
+		"/article/desktop/detail_video",
+		"/article/mobile/detail"
 	],
 	"common":[
 		"/common"
@@ -12,19 +16,18 @@
 			"debug":true
 		},
 		"pages":{
-			"remote": "/{PROJECT_NAME}/user/pages",
-			"url": "/static-file/{PROJECT_NAME}/user/pages",
-			"origin": "/static-file/{PROJECT_NAME}/user/pages"
+			"remote": "/{PROJECT_NAME}/pages",
+			"url": "/static-file/{PROJECT_NAME}/pages",
+			"origin": "/static-file/{PROJECT_NAME}/pages"
 		},
 		"binds": [
 			{
-				"local": "/web/user/assets",
-				"remote": "/{PROJECT_NAME}/user/assets",
-				"url": "/static-file/{PROJECT_NAME}/user/assets",
-				"origin": "/static-file/{PROJECT_NAME}/user/assets"
+				"local": "/web/assets",
+				"remote": "/{PROJECT_NAME}/assets",
+				"url": "/static-file/{PROJECT_NAME}/assets",
+				"origin": "/static-file/{PROJECT_NAME}/assets"
 			}
 		]
 	},
-
 	"debug":true
 }

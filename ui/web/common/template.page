@@ -1,0 +1,12 @@
+<template name="text">
+	<div>
+		<label> {{index}}: {{msg}} </label>
+		<label> Time: {{time}} </label>
+	</div>
+</template>
+<template name="image">
+	<div>
+		<img src="{{src}}">  
+		<label> {{index}}: {{msg}}  Time: {{time}} </label>
+	</div>
+</template>

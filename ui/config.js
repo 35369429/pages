@@ -5,8 +5,8 @@ config = {
 		server:"http://wss.xpmjs.com/",
 		domain:"wss.xpmjs.com",
 		project:"pages",
-		appid:'O4ZMbZHMa5jF8LVr',
-		secret:'mEfQ9BukRqmfY3JdbpTWv48QNr0Y3BWF'
+		appid:'151187416275946',
+		secret:'0516fa148c2584028ee4a30157bfdc27'
 	}
 };
 

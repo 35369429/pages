@@ -1,5 +1,3 @@
-@import '/common/vars.less';
-
 *{
 	margin:0;
 	padding:0;
@@ -31,15 +29,11 @@ body .row{
 .container{
 	width: 100%;
 }
-.header-top {
-	
-	color: #888888;
-	font-size:12px;
+.header-top{
 	width: 1024px;
 	margin-right: 0px;
 	margin-left: 0px;
-	line-height:1.8;
-}	
+}
 
 .header{
 	width:1024px;
@@ -87,11 +81,6 @@ body .row{
 	top:0px;
 	z-index: 10;
 }
-
-.header-nav.fixed {
-	position:fixed;
-}
-
 .header-nav>div{
 	width: 1024px;
 	height: 42px;
@@ -106,11 +95,6 @@ body .row{
 	width: 100%;
 	height: 100%;
 	text-align: center;
-}
-
-.header-nav li:hover, .header-nav a:hover {
-	color:#FFFFFF;
-	background-color: #1CD2A1;
 }
 
 .header-nav .nav-list{
@@ -187,7 +171,6 @@ form .psdname{
 	line-height: 32px;
 }
 .sharon, .block{
-	width: 95%;
 	box-sizing: border-box;
 	border:1px solid #F0F0F0;
 	padding:12px 12px 0px 12px;
@@ -199,32 +182,14 @@ form .psdname{
 .sharon-top, .block-top{
 	height: 16px;
 	line-height: 16px;
-	margin-bottom: 10px;
+	margin-bottom: 20px;
 }
-
 .sharon-line,.block-line{
-	font-style: normal;
-	display: inline-block;
-	font-size:16px;
-	line-height:1.2;
-	font-weight:400;
-	padding-left:.5em;
-	border-left: 4px solid #3E8FE1; 
-	margin-right: 10px;
-	cursor:default;
+	float: left;
+	width: 4px;
+	height: 16px;
+	background-color: #54B2F8;
 }
-
-
-.block-main ul li {
-	width: 100%;
-	font-size:14px;
-	line-height: 1.6;
-	height:22px;
-	word-wrap: break-word;
-	overflow: hidden;	
-}
-
-
 .dc-sharon, .dc-block{
 	font-size: 14px;
 	font-weight: bold;
@@ -302,16 +267,12 @@ form .psdname{
 	float: right;
 	font-size: 12px;
 	font-weight: bold;
-	color:#888888;
+	color:#000;
 }
-
-.notice-main-middone h3 a { font-size:16px; line-height:1.2; color: #555555;}
-.notice-main-middone h3 a:hover { color:#3E8FE1; }
-
 .notice-main-middone h3,.notice-main-middtwo h3{
-	font-size: 16px;
+	font-size: 14px;
 	font-weight: bold;
-	height: 18px;
+	height: 16px;
 	word-break:keep-all;
 	text-overflow: ellipsis;
 	overflow: hidden;
@@ -323,14 +284,13 @@ form .psdname{
 }
 .notice-main-middone div,.notice-main-middtwo div{
 	width:100%;
-	font-size: 14px;
-	height: 40px;
+	font-size: 12px;
+	height: 35px;
 	overflow: hidden;
 	/*word-break: normal;*/
 	/*word-wrap: break-word;*/
 	text-overflow: ellipsis;	
 	position: relative;
-	color:#878787;
 }
 .notice-main-middone div{
 	margin-bottom: 15px;
@@ -351,13 +311,13 @@ form .psdname{
 /*主体-中间-右侧-下部*/
 .notice-main-footer{
 	border-top: 1px dashed #E5E5E5;
-	margin-top: 10px;
+	margin-top: 22px;
 	padding-top: 16px;
 }
 .notice-main-list li{
-	
+	font-size: 12px;
 	overflow: hidden;
-	line-height: 1.2;
+	line-height: 20px;
 	word-break: keep-all;/*
 	text-overflow: ellipsis;*/
 	list-style: disc;
@@ -365,18 +325,14 @@ form .psdname{
 }
 .notice-main-list li a{
 	display: inline-block;
-
+	color:#6A6A6A;
 	width: 100%;
-	font-size: 14px;
-	height:20px;
-	line-height:1.6;
+	height: 20px;
 	/*word-wrap: break-word;*/
 	word-break: keep-all;
 	text-overflow: ellipsis;
 	overflow: hidden;
 }
-
- .notice-main-list li a:hover { color:#3E8FE1; } 
 /*主体-右侧 -上部*/
 #mainTop .dcIntroduce{
 	padding-left: 0px;
@@ -389,7 +345,7 @@ form .psdname{
 .dc-introduce{
 	border:1px solid #F0F0F0;
 	position: relative;
-	padding:25px 0px 6px 0px;
+	padding:25px 0px 6px 15px;
 	box-sizing: border-box;
 }
 .dc-int{
@@ -415,13 +371,16 @@ form .psdname{
 }
 .dc-name-level{
 	margin-top:1.5em;
-	text-align: center;
-	/*padding-left:0px !important;*/
-
+	padding:0px;
+	padding-left:0px !important;
 }
 .dc-name{
+	display: inline-block;
+	height:20px;
+	width:56px;
 	line-height:1.6;
 	font-size: 14px;
+	overflow:hidden;
 	word-break:keep-all;
 	font-weight: bold;
 }
@@ -439,9 +398,6 @@ form .psdname{
 	margin-bottom:15px;
 
 }
-.dc-head{
-	margin-top: 1em;
-}
 .dc-detailsTxt a{
 	display: inline-block;
 	height: 58px;
@@ -451,8 +407,10 @@ form .psdname{
 }
 /*主体-右-下*/
 .netOutpatientService{
+	box-sizing: border-box;
 	margin-top: 17px;
 	padding:10px 55px 0px 12px;
+	border:1px solid #F0F0F0;
 }
 .netOutpatientService-tit{
 	height: 20px;
@@ -527,10 +485,8 @@ form .psdname{
 	overflow: hidden;
 	word-break: keep-all;
 	text-overflow: ellipsis;
-	font-size: 14px;
-	line-height: 1.6;
-	height:18px;
-
+	font-size: 12px;
+	color:#696969;
 }
 .callme{
 	padding-left: 15px;
@@ -618,58 +574,45 @@ form .psdname{
 	border-bottom:1px solid #f1f1f1;
 	padding-left: 15px;
 	padding-right: 15px;
+	padding-top: 10px;
 }
 .channels-item-head i{
-	margin-top: 8px;
-	font-style: normal;
-	display: inline-block;
-	font-size:16px;
-	line-height:1.2;
-	font-weight:400;
-	padding-left:.5em;
-	border-left: 4px solid #3E8FE1; 
+	float:left;
+	width: 4px;
+	height: 16px;
+	background-color: #3E8FE1; 
 	margin-right: 10px;
-	cursor:default;
 }
-
+.channels-item-head span{
+	float: left;
+	font-size: 16px;
+	font-weight: bold;
+}
 .channels-item-head a{
-	display: inline-block;
-	float:right;
-	margin-top: 10px;
-	font-size:12px;
-	line-height:1.2;
+	float: right;
+	font-size: 12px;
 	color: #888888;
 }
 .channels-item-body img{
 	/*padding-left: 0px;*/
 	padding-right: 0px;
 }
-.channels-item-body-txt h5{
-	
+.channels-item-body-txt p:nth-child(1){
+	color: #555555;
 	width: 100%;
 	overflow: hidden;
 	word-break: keep-all;
 	text-overflow: ellipsis;
-	padding:0;
-	margin-top:0;
 }
-
-.channels-item-body-txt h5 a { font-size:16px; line-height:1.2; color: #555555;}
-.channels-item-body-txt h5 a:hover { color:#3E8FE1; }
-.channels-item-body-txt p{
-	font-size: 14px;
-	line-height:1.3;
+.channels-item-body-txt p:nth-child(2){
+	font-size: 12px;
 	color: #878787;
-	height: 36px;
-	width:100%;
+	height: 50px;
 	overflow: hidden;
 	word-wrap: break-word;
 	text-overflow: ellipsis;
 	margin-bottom: 0px;
 }
-
-
-
 .channels-item-body-txt a{
 	color: #878787;
 	font-size: 12px;
@@ -685,23 +628,23 @@ form .psdname{
 }
 .title-time ul a{
 	display: inline-block;
-	height: 16px;
-	line-height: 1.2;
-	font-size:14px;
+	height: 20px;
+	line-height: 20px;
+}
+.title-time ul a span{
+	padding-left: 0px;
+	display: inline-block;
+	height: 20px;
+	overflow: hidden;
 	word-wrap: break-word;
 	text-overflow: ellipsis;
-	overflow: hidden;
-	width:75%;
 }
-
-.release-time{
-	display: inline-block;
-	width: 20%;
-	height:16px;
+.title-time span{
 	font-size: 12px;
 	color:#6A6A6A;
-	text-overflow: ellipsis;
-	overflow: hidden;
+}
+.release-time{
+	text-align: right;
 }
 /*底部友情链接*/
 .footer{
@@ -750,109 +693,4 @@ form .psdname{
 	color:#909193;
 	text-align: center;
 	line-height: 36px;
-}
-
-a:hover {
-	color: #3E8FE1;
-}
-
-a{
-	color: #545454;
-}
-
-.seconds-nav{
-
-	width:100%;
-	height: 30px;
-}
-.seconds-nav>div{
-
-	width: 1024px;
-	height: 30px;
-	margin: 0 auto;
-}
-.seconds-nav-list{
-	margin-top: 20px;
-	margin-left:15px;
-}
-.seconds-nav-list li{
-	display:inline-block;
-	margin-right: 5px;
-	color: #545454;
-}
-.seconds-nav-list a{
-	color: #545454;
-}
-
-
-.main-left .row {
-	padding: 15px;
-	border-bottom: 1px solid #eeeeee;
-}
-
-
-#main-width{
-	width: 1024px;
-	padding-left: 0px;
-	padding-right: 0px;
-	padding-top: 20px;
-}
-
-#main-width .main-left{
-	padding-left: 0px;
-	padding-right: 0px;
-
-}
-#main-width .left-img{
-	padding-left: 0px;
-	padding-right: 0px;
-}
-
-.main-left span{
-	font-size: 14px;
-	color:#545454;
-	line-height:1.6;
-}
-
-
-
-.main-right h4{
-	margin:0px;
-	border-top: 2px solid #3E8FE1;
-	margin-top:-2px;
-	line-height: 1.6;
-	font-weight: 600;
-	display: inline-block;
-	padding: 8px 15px 8px 15px;
-}
-
-
-
-.sidebar-block{
-	border-top: 2px solid #dddddd;
-	background-color:#f4f5f6;
-	padding:0px;
-}
-
-.sidebar-block ul {
-	padding: 0 15px 15px 20px;
-}
-
-.sidebar-block ul li{
-	margin-bottom: 2px;
-	overflow:hidden;
-	word-wrap: break-word;
-	line-height: 1.6;
-	height:24px;
-}
-
-.sidebar-block ul li a:hover {
-	color: #3E8FE1;
-}
-.sidebar-block ul li a{
-	color: #545454;
-}
-
-.block-w-5{
-	margin-top: 10px;
 }
