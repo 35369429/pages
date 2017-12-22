@@ -2,11 +2,24 @@
 ul,li{
 	list-style: none;
 }
+
 a{
 text-decoration:none;
 }
 .test{
 	border: 1px solid red;
+}
+.w-1170px{
+	width: 1170px;
+}
+.w-200px{
+	width: 200px;
+}
+.w-650px{
+	width:750px;
+}
+.w-800px{
+	width:800px;
 }
 .w-all{
 	width: 100%;
@@ -69,7 +82,6 @@ text-decoration:none;
 .oh{
 	overflow: hidden;
 }
-
 
 .fs-16{
 	font-size: 16px;
@@ -308,12 +320,11 @@ text-decoration:none;
 	overflow: hidden;
 	background:#e8e8e8;
 	transform-style:preserve-3d;
-	margin-left:7px;
+	margin-left:4px;
 }
 
 .img-list:before{
 	font-size:0;
-	visibility:hidden;
 	vertical-align:middle;
 }
 .img-item-left>img{
