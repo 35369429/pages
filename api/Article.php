@@ -211,6 +211,7 @@ class Article extends Api {
 		$qb->select( $select )->distinct();
 		// echo "\n" . $qb->getSQL() . "\n";
 
+
 		$result = $qb ->paginate($query['perpage'],['article.article_id'], 'page', $query['page'] );
 		$resultData = $result->toArray();
 		
@@ -218,6 +219,10 @@ class Article extends Api {
 		// 处理结果集
 		$data = $resultData['data'];
 
+		if ( $query['debug'] == 1) {
+			$resp['_sql'] = $qb->getSQL();
+		}
+		
 		$resp['curr'] = $resultData['current_page'];
 		$resp['perpage'] = $resultData['per_page'];
 		
