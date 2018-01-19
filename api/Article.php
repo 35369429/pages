@@ -175,10 +175,10 @@ class Article extends Api {
 		$art = new \Xpmsns\pages\Model\Article;
 		$qb = $art->query()
 				  ->join("article_category as ac", 'ac.article_id', '=', 'article.article_id')
-				  ->leftJoin('category as c', "c.category_id", '=', 'ac.category_id')
-				  ->leftJoin("article_tag as at", 'at.article_id', '=', 'article.article_id')
-				  ->leftJoin("article_draft as draft", 'draft.article_id', '=', 'article.article_id')
-				  ->leftJoin("tag as t", 't.tag_id', '=', 'at.tag_id');
+				  ->rightJoin('category as c', "c.category_id", '=', 'ac.category_id')
+				  ->rightJoin("article_tag as at", 'at.article_id', '=', 'article.article_id')
+				  ->rightJoin("article_draft as draft", 'draft.article_id', '=', 'article.article_id')
+				  ->rightJoin("tag as t", 't.tag_id', '=', 'at.tag_id');
 
 		// 设定查询条件
 		$this->qb( $qb, 'c.name', 'category', $query, ["and", "or", "in"] );
@@ -211,6 +211,7 @@ class Article extends Api {
 		$qb->select( $select )->distinct();
 		// echo "\n" . $qb->getSQL() . "\n";
 
+
 		$result = $qb ->paginate($query['perpage'],['article.article_id'], 'page', $query['page'] );
 		$resultData = $result->toArray();
 		
@@ -218,6 +219,10 @@ class Article extends Api {
 		// 处理结果集
 		$data = $resultData['data'];
 
+		if ( $query['debug'] == 1) {
+			$resp['_sql'] = $qb->getSQL();
+		}
+		
 		$resp['curr'] = $resultData['current_page'];
 		$resp['perpage'] = $resultData['per_page'];
 		
