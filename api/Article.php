@@ -132,14 +132,13 @@ class Article extends Api {
 		$select[] = 'article.article_id as _aid';
 
 
-
-		if ( !empty($query['c']) ) {
-			if ( is_numeric($query['c']) ) {
-				$query['categoryId'] = intval($query['c']);
-			} else {
-				$query['category'] = trim($query['c']);
-			}
-		}
+		// if ( !empty($query['c']) ) {
+		// 	if ( is_numeric($query['c']) ) {
+		// 		$query['categoryId'] = intval($query['c']);
+		// 	} else {
+		// 		$query['category'] = trim($query['c']);
+		// 	}
+		// }
 
 		if ( !empty($query['orC']) ) {
 			if ( is_numeric($query['orC']) ) {
