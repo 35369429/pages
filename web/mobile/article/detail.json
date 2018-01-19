@@ -1,0 +1,22 @@
+{
+	"cname":"默认正文页(手机版) ",
+	"data": {
+		"aridata":{
+			"api":"/xpmsns/pages/article/get",
+			"query":{
+				"articleId":"{{__var.id}}"
+			}
+		},
+		"crumb":"{{article.category.0}}",
+		"page":{
+			"title":"{{article.title}}"
+		}
+	},
+	"entries":[
+		{"method":"GET", "router":"/mobile/article/{id:\\d+}", "ttl":0}
+	],
+
+	"align": {
+		"desktop":"/desktop/article/detail"
+	}
+}

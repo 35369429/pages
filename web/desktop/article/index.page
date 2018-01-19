@@ -1,0 +1,448 @@
+<link rel="stylesheet" type="text/css" href="{{__STOR__::/__PROJECT_NAME/assets/pages}}/css/dataeach.css">
+<include src="__WEB_ROOT__/common/header.page"  />
+<div class="container">
+	<div class="header-top row" id="top">
+		<div class="col-lg-4" id="today" >
+			欢迎您的光临， 今天是 <span></span> <!-- <?=date('Y-m-d H:i:s')?> -->
+		</div>
+		<div class="col-lg-5">
+			<!-- <img src="{{__STOR__::/__PROJECT_NAME/assets/pages}}/images/p1_12.png">
+			<span id="webNotice">网站公告：</span>
+			<p class="WebNotice">
+				<a href="#">中国疼痛诊疗网正式开通...</a>
+				<span>2017-5-9</span>
+			</p> -->
+		</div>
+		<div class="col-lg-3 text-right">
+			<img src="{{__STOR__::/__PROJECT_NAME/assets/pages}}/images/p1_13.png">
+			<a href=""> 联系我们 010-83198161 </a>
+		</div>
+	</div>
+</div>
+<!-- 头部的大图 -->
+<div class="header-img">
+	<img src="{{__STOR__::/__PROJECT_NAME/assets/pages}}/images/p1_01.png">
+</div>
+<!-- 头部的导航栏 -->
+<div class="header-nav row">
+	<div>
+		<ul class="nav-list">
+			<li class="colors">
+				<a href="/">首页</a>
+			</li>
+			<li mp:for="{{navcates}}">
+				<a href="/list/{{item.category_id}}">{{item.name}}</a>
+			</li>
+		</ul>
+	</div>
+</div>
+
+
+<!-- 主体部分 -->
+<div class="container main" id="mainTop">
+	<div class="row">
+	<!-- 主体的左侧 -->
+		<div class="col-lg-3 main-left" id="mainLeft">
+			<div class="landing">
+				<div class="landingTop">
+					<span class="userlanding">用户登录</span>
+					<span class="LOGIN"></span>
+					<span class="register"></span>
+				</div>
+				<div class="form-group">
+					<form role="form" action="#" method="post" id="reg-form">
+						<input type="text" placeholder="用户名" name="username" class="form-control username" id="userName">
+						<input type="text" placeholder="密   码" name="" class="form-control psdname" id="passWord">
+						<button onclick="window.location='/user/signin/mobile'" type="button" class="btn btn-landing">登录</button>
+						<a href="/user/signup" class="forgotpsd">注册账号?</a>
+					</form>
+				</div>
+
+			</div>
+			<div class="block netOutpatientService">
+				<div class="block-top">
+					<i class="block-line">网上门诊</i>
+					<span class="dc-sharon"></span>
+				</div>
+				<div class="block-main">
+					<ul class="block-list">
+						<li mp:for="{{clinic.data}}">
+							<a 
+							target="_blank" 
+							href="/article/{{item.article_id}}" 
+							title="{{item.title}}">{{item.title}}</a>
+						</li>
+					</ul>
+				</div>
+			</div>
+			<div class="block block-w-5">
+				<div class="block-top">
+					<i class="block-line">医生沙龙</i>
+					<span class="dc-sharon"></span>
+				</div>
+				<div class="block-main">
+					<ul class="block-list">
+						<li mp:for="{{salon.data}}">
+							<a 
+							target="_blank" 
+							href="/article/{{item.article_id}}" 
+							title="{{item.title}}">{{item.title}}</a>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+
+
+		<div class="col-lg-6 row">
+			<div class="newNotice-top col-lg-6">
+					<i class="newNotice-top-line"></i>
+					<span class="newNotice">联盟新闻</span>
+					<span class="NEWS">NEWS</span>
+				</div>
+			<div class="notice-main-top col-lg-6">
+					<a href="/list/新闻公告">更多...</a>
+			</div>
+			<div class="col-lg-12">
+				<div class="banner" id="b04">
+					<ul class="testb">
+						
+				        	<li mp:for="{{news.data}}" mp:for-from="0" mp:for-to="4" mp:for-index="{{idx}}" mp:for-item="{{item}}">
+				
+								<img src="{{item.thumbs.2}}" alt="" class="photowid" onclick="window.location='/article/{{item.article_id}}'" >
+							</li>
+						
+				 	</ul>
+					<a href="javascript:void(0);" class="unslider-arrow04 prev"><img class="arrow" id="al" src="{{__STOR__::/__PROJECT_NAME/assets/pages}}/images/arrowl.png" alt="prev" width="20" height="35"></a>
+					<a href="javascript:void(0);" class="unslider-arrow04 next"><img class="arrow" id="ar" src="{{__STOR__::/__PROJECT_NAME/assets/pages}}/images/arrowr.png" alt="next" width="20" height="37"></a>
+				</div>
+			</div>
+			<div class="col-lg-12 p-t-5 p-b-5">
+				<a mp:for="{{news.data}}" mp:for-from="0" mp:for-to="4">
+				<div class="col-lg-12 left">
+					<a href="/article/{{item.article_id}}" target="_blank" title="{{item.title}}"><span>{{item.title}}</span></a>				
+				</div>
+				</a>
+			</div>
+		</div> 
+		<!-- 主体右侧 -->
+		<div class="col-lg-3 dcIntroduce">
+			<!-- 主体右侧上部分 -->
+			<div class="dc-introduce">
+				<div class="dc-int">
+					<span>专家介绍</span>
+					<i></i>
+				</div>
+				<div class="row dc-int-left" mp:for="{{doctor.data}}">
+					<img class="col-lg-12 dc-head"
+					 src="{{item.cover}}">
+					<div class="col-lg-12 dc-name-level">
+						<a href="/article/{{item.article_id}}" class="dc-name">{{item.title}}</a>
+						<span class="dc-level">{{item.origin}}</span>
+					</div>
+				</div>
+				<div class="dc-detailsTxt">
+					<a href="/article/{{item.article_id}}" >
+						{{item.summary}}
+					</a>
+				</div>
+			</div>
+			<!-- 主体右侧下部分 -->
+		</div>
+	</div>
+	<!-- 中间的大图 -->
+	<div class="row middle-img">
+		<a href="/article/105"><img class="col-lg-12" src="{{__STOR__::/__PROJECT_NAME/assets/pages}}/images/banner.png"></a>
+	</div>
+	<!-- 主体中的各个板块 -->
+	<div class="row channels">
+		<div class="col-lg-3 channels-left">
+			<p>信息园地</p>
+			<div class="information">
+				<ul>
+					<li mp:for="{{info.data}}">
+						<a 
+						target="_blank" 
+						href="/article/{{item.article_id}}" 
+						title="{{item.title}}">{{item.title}}</a>
+					</li>
+				</ul>
+			</div>
+			<div class="callme">
+				<!-- 联系我们和医生出诊时间 -->
+				<div class="callme-head">
+					<a href="/article/118">
+						<img src="{{__STOR__::/__PROJECT_NAME/assets/pages}}/images/p1_14.png">
+						<span>联系我们</span>
+					</a>
+				</div>
+				<div class="service-time-tel">
+				<!-- 	<p class="service-time">
+						<span>门诊时间：</span>
+						<span>8:00</span>
+						<span>-</span>
+						<span>22:00</span>
+					</p> -->
+					<p class="service-tel">
+						<span>咨询电话：</span>
+						<span>010</span>
+						<span>-</span>
+						<span>83198161</span>
+					</p>
+				</div>
+				<div class="dc-time">
+
+					<p>
+						<span class="name">倪家骧</span>
+						<span>教授、主任医师</span>
+						<span>周一上午特需</span>
+					</p>
+
+					<p>
+						<span class="name">赖光辉</span>
+						<span>主任医师</span>
+						<span>周一上午</span>
+					</p>
+
+					<p>
+						<span class="name">杨立强</span>
+						<span>副主任医师</span>
+						<span>周一下午</span>
+					</p>
+
+					<p>
+						<span class="name">岳剑宁</span>
+						<span>副主任医师</span>
+						<span>周二下午</span>
+					</p>
+
+					<p>
+						<span class="name">武百山</span>
+						<span>副主任医师</span>
+						<span>周三下午</span>
+					</p>
+
+					<p>
+						<span class="name">公维义</span>
+						<span>副主任医师</span>
+						<span>周四上午</span>
+					</p>
+				</div>
+			</div>
+			<!-- 医院主页和地址 -->
+			<div class="url-route">
+				<div class="hospital-url">
+					<p>
+						<span>中心网站：</span>
+						<a href="http://www.paincentre.cn"> www.paincentre.cn </a>
+						<!-- <span>网上门诊：搜狐-健康-健康论坛-疼痛专科</span> -->
+					</p>
+					<p>
+						<span>就医地点：</span>
+						<span>宣武医院门诊楼5楼</span>
+					</p>
+					<p>
+						<span>乘车路线：</span>
+						<span>地铁2号线、7、25、44、47、48、309、337、616、703、820、821、848、922、964、特2、特4、特7长椿街站下车；6、50、53、57、109、623、715、743、822、特5路牛街站下车</span>
+					</p>
+				</div>
+			</div>
+		</div>
+		<!-- 大图下面右侧 -->
+		<div class="col-lg-9 channels-right row">
+			<div class="col-lg-6 channelsItem">
+				<div class="channels-item">
+					<div class="channels-item-head">
+						<i>会议通知</i>
+						<a href="/list/会议通知">更多...</a>
+					</div>
+					<div class="row channels-item-body">
+						<img class="col-lg-5"  src="{{science.data.0.cover}}">
+						<div class="col-lg-7 channels-item-body-txt">
+							<h5><a href="/article/{{science.data.0.article_id}}" target="_blank" >{{science.data.0.title}}</a></h5>
+							<p>{{science.data.0.summary}} 
+								<a href="/article/{{science.data.0.article_id}}" target="_blank" >【<span>详情</span>】</a></p>
+						</div>
+						<div class="col-lg-12 title-time">
+							<ul>
+								<li mp:for="{{science.data}}" mp:for-from="1">
+									<a  href="/article/{{item.article_id}}" target="_blank" >
+									{{item.title}}</a>
+									<span class="release-time">{{item.publish_time}}</span>
+								</li>
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>
+		<!-- 大图下面右侧的第一个频道 -->
+			<div class="col-lg-6 channelsItem">
+				<div class="channels-item">
+					<div class="channels-item-head">
+						<i>继续教育</i>
+						<a href="/list/继续教育">更多...</a>
+					</div>
+					<div class="row channels-item-body">
+						<img class="col-lg-5"  src="{{school.data.0.cover}}">
+						<div class="col-lg-7 channels-item-body-txt">
+							<h5><a href="/article/{{school.data.0.article_id}}">{{school.data.0.title}}</a></h5>
+							<p>{{school.data.0.summary}} 
+								<a href="/article/{{school.data.0.article_id}}" target="_blank" >详情</a></p>
+						</div>
+						<div class="col-lg-12 title-time">
+							<ul>
+								<li mp:for="{{school.data}}" mp:for-from="1">
+									<a  href="/article/{{item.article_id}}" target="_blank" >
+									{{item.title}}</a>
+									<span class="release-time">{{item.publish_time}}</span>
+								</li>
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div> 
+
+			<div class="col-lg-6 channelsItem">
+				<div class="channels-item">
+					<div class="channels-item-head">
+						<i>疑难病痛</i>
+						<a href="/list/疑难病痛">更多...</a>
+					</div>
+					<div class="row channels-item-body">
+						<img class="col-lg-5"  src="{{hard.data.0.cover}}">
+						<div class="col-lg-7 channels-item-body-txt">
+							<h5><a href="/article/{{hard.data.0.article_id}}" target="_blank" >{{hard.data.0.title}}</a></h5>
+							<p>{{hard.data.0.summary}} 
+								<a href="/article/{{hard.data.0.article_id}}" target="_blank" >【<span>详情</span>】</a></p>
+						</div>
+						<div class="col-lg-12 title-time">
+							<ul>
+								<li mp:for="{{hard.data}}" mp:for-from="1">
+									<a  href="/article/{{item.article_id}}" target="_blank" >
+									{{item.title}}</a>
+									<span class="release-time">{{item.publish_time}}</span>
+								</li>
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-lg-6 channelsItem">
+				<div class="channels-item">
+					<div class="channels-item-head">
+						<i>科普知识</i>
+						<a href="/list/科普知识">更多...</a>
+					</div>
+					<div class="row channels-item-body">
+						<img class="col-lg-5"  src="{{newtech.data.0.cover}}">
+						<div class="col-lg-7 channels-item-body-txt">
+							<h5><a href="/article/{{newtech.data.0.article_id}}" target="_blank" >{{newtech.data.0.title}}</a></h5>
+							<p>{{newtech.data.0.summary}} 
+								<a href="/article/{{newtech.data.0.article_id}}" target="_blank" >【<span>详情</span>】</a></p>
+						</div>
+						<div class="col-lg-12 title-time">
+							<ul>
+								<li mp:for="{{newtech.data}}" mp:for-from="1">
+									<a  href="/article/{{item.article_id}}" target="_blank" >
+									{{item.title}}</a>
+									<span class="release-time">{{item.publish_time}}</span>
+								</li>
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- 下面的友情链接 -->
+	<div class="footer">
+		<ul class="link-list">
+			<li class="link-list-li1">
+				<a href="#">
+					<i></i>
+					<span>友情链接</span>
+				</a>
+			</li>
+			<li>
+				<a href="#">
+					<img src="{{__STOR__::/__PROJECT_NAME/assets/pages}}/images/p1_09.png">
+				</a>
+			</li>
+			<li>
+				<a href="#">
+					<img src="{{__STOR__::/__PROJECT_NAME/assets/pages}}/images/p1_10.png">
+				</a>
+			</li>
+			<li>
+				<a href="#">
+					<img src="{{__STOR__::/__PROJECT_NAME/assets/pages}}/images/p1_11.png">
+				</a>
+			</li>
+			<li>
+				<a href="#">
+					<img src="{{__STOR__::/__PROJECT_NAME/assets/pages}}/images/p1_09.png">
+				</a>
+			</li>
+			<li>
+				<a href="#">
+					<img src="{{__STOR__::/__PROJECT_NAME/assets/pages}}/images/p1_10.png">
+				</a>
+			</li>
+			<li>
+				<a href="#">
+					<img src="{{__STOR__::/__PROJECT_NAME/assets/pages}}/images/p1_11.png">
+				</a>
+			</li>
+			<li>
+				<a href="#">
+					<img src="{{__STOR__::/__PROJECT_NAME/assets/pages}}/images/p1_09.png">
+				</a>
+			</li>
+			<li>
+				<a href="#">
+					<img src="{{__STOR__::/__PROJECT_NAME/assets/pages}}/images/p1_10.png">
+				</a>
+			</li>
+			<li>
+				<a href="#">
+					<img src="{{__STOR__::/__PROJECT_NAME/assets/pages}}/images/p1_11.png">
+				</a>
+			</li>
+		</ul>
+	</div>
+</div>
+
+
+<script type="text/javascript" src="{{__STOR__::/__PROJECT_NAME/assets/pages}}/js/jquery-1.10.2.min.js"></script>
+<script type="text/javascript" src="{{__STOR__::/__PROJECT_NAME/assets/pages}}/bootstrap/bootstrap.min.js"></script>
+<script type="text/javascript" src="{{__STOR__::/__PROJECT_NAME/assets/pages}}/js/home-js.js"></script>
+<script type="text/javascript" src="{{__STOR__::/__PROJECT_NAME/assets/pages}}/js/jquery.validate.min.js"></script>
+<script type="text/javascript" src="{{__STOR__::/__PROJECT_NAME/assets/pages}}/js/unslider.min.js"></script>
+<!-- 最底部版权 -->
+<include src="__WEB_ROOT__/common/footer.page"  />
+
+<script>
+
+$(document).ready(function(e) {
+
+    var unslider04 = $('#b04').unslider({
+
+		dots: true,
+		speed: 500,
+		delay: 3000,
+
+	}),
+
+	data04 = unslider04.data('unslider');
+
+	
+
+	$('.unslider-arrow04').click(function() {
+
+        var fn = this.className.split(' ')[1];
+        data04[fn]();
+	});
+
+});
+
+</script>
