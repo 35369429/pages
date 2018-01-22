@@ -1,10 +1,12 @@
 [{
 	"name":"默认",
 	"fullname":"默认",
+	"slug":"default",
 	"priority":1
 },{
 	"name":"热点",
 	"fullname":"热点",
+	"slug":"hot",
 	"param":"isnav=true",
 	"priority":100
 },{
