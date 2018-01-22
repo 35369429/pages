@@ -1,0 +1,18 @@
+{	
+	"find":{
+		"/^\\/[0-9a-zA-Z]+/":"detail"
+	},
+	"index": {},
+	"detail": {
+		"origin_url": "{url}",
+		"thumbs":".article-content img|src:@image{1,2}",
+		"images":".article-content img|src:@image",
+		"a2":".article-content img|src:@image{2}",
+		"a1":".article-content img|src:@image[1]",
+		"title":"title",
+		"author":".article-sub span:@text[0]",
+		"publish_date": ".article-sub span:@text[1]",
+		"delta":".article-content:delta",
+		"content":".article-content:html"
+	}
+}

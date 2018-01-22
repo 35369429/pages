@@ -46,12 +46,13 @@ class SettingController extends \Xpmse\Loader\Controller {
 
 	function hello(){
 		$spider = new \Xpmsns\pages\Model\Spider;
-		$resp = $spider->crawl( 
+		$data = $spider->crawl( 
 			// "https://www.toutiao.com/a6513648077373440515/"
 			"https://mp.weixin.qq.com/s?__biz=MzIzMTA0NzI1OQ==&mid=212221252&idx=1&sn=8259879462ea08afb41a4c995aa27061&scene=1&srcid=0930ftVT16lyJjofbBYMsght&from=singlemessage&isappinstalled=0#rd" 
 		);
 
-		echo json_encode($resp);
+		echo "<div style='padding:40px;'>{$data['content']}</div>";
+		// print_r($data);
 	}
 
 

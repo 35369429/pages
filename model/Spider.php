@@ -8,6 +8,9 @@ use \Xpmse\Err as Err;
 use \Xpmse\Conf as Conf;
 use \Xpmse\Model as Model;
 use \Xpmse\Utils as Utils;
+use \Xpmse\Media as Media;
+use \Mina\Delta\Render as DeltaRender;
+
 use \Spatie\Browsershot\Browsershot;
 use PHPHtmlParser\Dom;
 
@@ -19,6 +22,9 @@ use PHPHtmlParser\Dom;
 class Spider {
 
 	function __construct( $param=[] ) {
+		$this->delta_render = new DeltaRender( $param );
+		$this->media = new Media( $param );
+		$this->hasCrawled = [];
 	}
 
 
@@ -27,12 +33,60 @@ class Spider {
 	 * @param  [type] $imgUrl [description]
 	 * @return [type]         [description]
 	 */
-	function crawlImage( $imgUrl, $node ) {
-		$url =  $imgUrl;
-		$node->setAttribute('src', $url );
-		$node->setAttribute('data-src', $url );
-		return  $imgUrl;
+	function crawlImage( $url, $node ) {
+
+		if ( !empty($this->hasCrawled[$url]) ) {
+			return  $url;
+		}
+
+		$ext =  $this->media->getExt($url);
+		if ( !in_array($img, ['png', 'jpg', 'jpeg', 'gif', 'svg']) ) {
+			$ext = 'png';
+		}
+		$rs = $this->media->uploadImage($url, $ext);
+		$newurl = $rs['url'];
+		$node->setAttribute('src',  $newurl );
+		$node->setAttribute('data-src',  $newurl );
+		$this->hasCrawled[$newurl] = $url;
+		return $newurl;
 	}
+
+
+
+	/**
+	 * 解析字段
+	 * @param  [type] $node [description]
+	 * @param  [type] $type [description]
+	 * @param  [type] $attr [description]
+	 * @return [type]       [description]
+	 */
+	private function parseField( $node, $type, $attr ) {
+
+		switch ($type) {
+		
+			case 'image':
+				$src = $node->getAttribute($attr);
+				$val = $this->crawlImage( $src, $node );
+				break;
+			case 'text' : 
+				$val = $node->text;
+				break;
+			case 'html' : 
+				$val = $node->innerHTML;
+				break;
+			case 'delta':
+				$html = $node->innerHTML;			
+				$this->delta_render->loadByHTML($html);
+				$val = $this->delta_render->delta();
+				break;
+			default:
+				$val = $node->text;
+				break;
+		}
+
+		return $val;
+	}
+
 
 
 	/**
@@ -48,7 +102,7 @@ class Spider {
 		$uri['url'] = $url;
 		$json_file = __DIR__ . "/spider/{$uri['host']}.json";
 		if (  !is_readable($json_file) ) {
-			throw new Excp("未找到该网站采集规则", 404, ['url'=>$url]);
+			throw new Excp("未找到该网站采集规则", 404, ['url'=>$url, 'json_file'=>$json_file]);
 		}
 
 		$path = str_replace("{$uri['scheme']}://{$uri['host']}", '', $url);
@@ -81,112 +135,80 @@ class Spider {
 		$data = [];
 		foreach ($rule as $key => $ru ) {
 
-			$type= 'text';
-			$attrRu = explode(':', $ru);
-			if ( count($attrRu) == 2 ) {
-				$type= $attrRu[1];
+
+			$type = 'text'; $attr = null; 
+			$params = explode(':', $ru);
+			if ( count($params) == 2 ) {
+				$type=$params[1];
+			}
+			$params = explode('|', $params[0]);
+			$ru = $params[0];
+			if ( count($params) == 2 ) {
+				$attr = $params[1];
 			}
 
-			$attr = explode('|', $attrRu[0]);
 
-			if ( count($attr) == 1 ) {
-				$attr[1] = 'name';
-			}
-
-
-			if ( $ru[0] == '@'  ) {  // 数组
-				
-				$ru = trim(str_replace('@', '', $attr[0]));
-				// echo "@| $ru \n";
+			if ( $type[0] == '@'  ) {  // 数组
+				$type = trim(str_replace('@', '', $type));
 				$nodes = $dom->find($ru);
-				$data[$key] = [];
-				foreach ($nodes as $node) {
-					try {
-						if ( $type == 'text' ) {
-							$value = $node->text;
-						} else if ( $type == 'html') {
-							$value = $node->innerHTML;
-						} else {
-							$value = $node->getAttribute($attr[1]);
-						}
+				$from = 0;
+				$to = count($nodes);
 
-						if ( $type == "image" ) {
-							$value = $this->crawlImage($value, $node );
-						}
-
-						$data[$key][] = $value;
-
-					} catch( Exception $e ) {}
+				// 读取指定长度 @sometype{5}
+				if ( preg_match("/\{([0-9]+)\}[ ]*$/", $type, $match) ) {
 					
+					if ( $match[1] >= $to ) {
+						$match[1] = $to;
+					}
+					$to = $match[1];
+					$type = trim(str_replace($match[0], '', $type));
 				}
 
 
+				// 读取指定下表 @sometype{1,5}
+				if ( preg_match("/\{([0-9]+),([0-9]+)\}[ ]*$/", $type, $match) ) {
+					
+					if ( $match[2] >= $to ) {
+						$match[2] = $to;
+					}
+
+					$from=$match[1];
+					$to = $match[2];
+					$type = trim(str_replace($match[0], '', $type));
+				}
+
+				// 读取指定下标 @sometype[1]
+				if ( preg_match("/\[([0-9]+)\][ ]*$/", $type, $match) ) {
+
+					if ( $match[1] >= $to ) {
+						continue;
+					}
+
+					$from=$match[1];
+					$type = trim(str_replace($match[0], '', $type));
+					$node = $nodes[$from];
+					$data[$key] = $this->parseField($node, $type, $attr );
+					continue;
+
+				}
+
+				for( $i=$from; $i<$to; $i++) {
+					$node = $nodes[$i];
+					$data[$key][] = $this->parseField($node, $type, $attr );
+				}
+
+				// echo   "from=$from to=$to \n";
 			} else if ( $ru[0] == '{' && substr($ru, -1) == '}') {
-				
 				$ru = trim(substr($ru, 1, count($ru)-2));
 				$data[$key] = $uri[$ru];
-				// echo "{}| $ru \n";
 
 			} else {
-				// echo "$ru \n";
-				$ru = trim($ru);
-				$node = $dom->find($attr[0]);
-
-				try {
-					if ( $type == 'text' ) {
-						$value = $node->text;
-					} else if ( $type == 'html') {
-						$value = $node->innerHTML;
-					} else {
-						$value = $node->getAttribute($attr[1]);
-					}
-					if ( $type == "image" ) {
-						$value = $this->crawlImage($value);
-					}
-
-
-				} catch( Exception $e ) {}
-
-				$data[$key] = $value;
+				$node= $dom->find($ru);
+				$data[$key] = $this->parseField( $node, $type, $attr );
 			}
 		}
 
 
 		return $data;
-		print_r($data);
-
-		// echo htmlspecialchars($html);
-
-		exit;
-
-
-
-
-
-		$imgs = $dom->find('img');
-		$title = $dom->find('title') ;
-		$spans = $dom->find('.article-sub > span');
-
-		echo $title->text;
-		echo $spans[0]->text;
-		echo $spans[1]->text;
-
-		foreach ($imgs as $img) {
-			echo "IMG: " . $img->getAttribute('src') . "\n";
-		}
-
-
-		// echo  $page->find('#post-user');
-		// exit;
-		return [
-			// "uri"=>$uri,
-			// "query"=>$query,
-			"url"=>$url,
-			"html" => $html
-			// "title"=>$page->find('#activity-name')->text(),
-			// "author"=>$page->find('#post-user')->text(),
-			// "publish_time"=>$page->find('#post-date')->text()
-			// "body" => $page->find('body')->text()
-		];
 	}
 }
