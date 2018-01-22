@@ -86,7 +86,7 @@ class Article extends Model {
 	function __schema() {
 			
 		$struct = [
-			'article_id'=> ['bigInteger', ['length'=>20, 'unique'=>1]],  // 文章 ID  ( 同 _id )
+			'article_id'=> ['string', ['length'=>128, 'unique'=>true]],  // 文章 ID  ( 同 _id )
 			'outer_id'=> ['string', ['length'=>128, 'unique'=>1]],  // 外部ID用于数据同步下载 ( 同 _id )
 			'cover'=> ['string',  ['length'=>256]],   // 文章封面
 			'thumbs' =>['text',  ["json"=>true]],     // 主题图片(三张)
@@ -1102,6 +1102,10 @@ class Article extends Model {
 	}
 
 
+	
+	function genId() {
+		return uniqid();
+	}
 
 
 	/**
@@ -1111,7 +1115,7 @@ class Article extends Model {
 	 */
 	function create( $data ) {
 
-		$data['article_id'] = $this->nextid();
+		$data['article_id'] = $this->genId();
 
 		if ( !isset($data['user']) ) {
 			$data['user'] = App::$user['userid'];

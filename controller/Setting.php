@@ -43,8 +43,34 @@ class SettingController extends \Xpmse\Loader\Controller {
 		];
 	}
 
+
+
 	function faker() {
-		echo "hello";
+		$this->loadcates();
+		echo json_encode(['code'=>0, 'message'=>'数据生成完毕']);
+	}
+
+
+	private function loadcates( $json_file=null ) {
+		if ( empty($json_file) ) {
+			$json_file = __DIR__ . "/../test/res/category.json";
+		}
+
+		if ( !file_exists($json_file) ) {
+			throw new Excp("类型文件不存在 ($json_file)",404 );
+		}
+
+		$json_text = file_get_contents($json_file);
+		$cates = Utils::json_decode($json_text);
+
+		$cate = new \Xpmsns\Pages\Model\Category;
+		$cate->runSQL("truncate table {{table}}");
+
+		foreach ($cates as $c ) {
+			$c['status'] = 'on';
+			$cate->create( $c );
+		}
+
 	}
 
 }

@@ -1,0 +1,76 @@
+[{
+	"name":"默认",
+	"fullname":"默认",
+	"priority":1
+},{
+	"name":"热点",
+	"fullname":"热点",
+	"param":"isnav=true",
+	"priority":100
+},{
+
+	"name":"视频",
+	"fullname":"视频",
+	"param":"isnav=true",
+	"priority":200
+},{
+
+	"name":"图集",
+	"fullname":"图集",
+	"param":"isnav=true",
+	"priority":300
+},{
+
+	"name":"下载",
+	"fullname":"下载",
+	"param":"isnav=true",
+	"priority":400
+},{
+
+	"name":"段子",
+	"fullname":"段子",
+	"param":"isnav=true",
+	"priority":500
+},{
+
+	"name":"社会",
+	"fullname":"社会",
+	"param":"isnav=true",
+	"priority":600
+},{
+
+	"name":"娱乐",
+	"fullname":"娱乐",
+	"param":"isnav=true",
+	"priority":700
+},{
+
+	"name":"游戏",
+	"fullname":"游戏",
+	"param":"isnav=true",
+	"priority":800
+},{
+
+	"name":"体育",
+	"fullname":"体育",
+	"param":"isnav=true",
+	"priority":900
+},{
+
+	"name":"汽车",
+	"fullname":"汽车",
+	"param":"isnav=true",
+	"priority":1000
+},{
+
+	"name":"科技",
+	"fullname":"科技",
+	"param":"isnav=true",
+	"priority":1100
+},{
+
+	"name":"财经",
+	"fullname":"财经",
+	"param":"isnav=true",
+	"priority":1200
+}]

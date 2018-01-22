@@ -98,6 +98,29 @@ class SetupController extends \Xpmse\Loader\Controller {
 	}
 
 
+	/**
+	 * 初始化默认数据
+	 * @return [type] [description]
+	 */
+	private function defaults_init() {
+
+		// 注册配置
+		$option = new \Xpmse\Option('xpmsns/pages');
+		$option->register("图文主题图片比例配置", "article/image/ratio", [
+			"cover"=>["width"=>900,"height"=>500, "ratio"=>"9:5"], 
+			"topic1"=>["width"=>null,"height"=>null, "ratio"=>"1:1"],
+			"topic2"=>["width"=>null,"height"=>null, "ratio"=>"16:9"],
+			"topic3"=>["width"=>null,"height"=>null, "ratio"=>"4:3"],
+			"topic4"=>["width"=>null,"height"=>null, "ratio"=>"2:3"]
+		]);
+
+
+		// 添加默认分类
+		$cate = new \Xpmsns\Pages\Model\Category;
+		$cate->create(["name"=>"默认","fullname"=>"默认"]);
+	}
+
+
 	function install() {
 
 		$models = $this->models;
@@ -111,23 +134,13 @@ class SetupController extends \Xpmse\Loader\Controller {
 			try { $inst->__schema(); } catch( Excp $e) {echo $e->toJSON(); return;}
 		}
 
-
-		// 注册配置
 		try {
-
-			$option = new \Xpmse\Option('xpmsns/pages');
-			$option->register("图文主题图片比例配置", "article/image/ratio", [
-				"cover"=>["width"=>900,"height"=>500, "ratio"=>"9:5"], 
-				"topic1"=>["width"=>null,"height"=>null, "ratio"=>"1:1"],
-				"topic2"=>["width"=>null,"height"=>null, "ratio"=>"16:9"],
-				"topic3"=>["width"=>null,"height"=>null, "ratio"=>"4:3"],
-				"topic4"=>["width"=>null,"height"=>null, "ratio"=>"2:3"]
-			]);
-		} catch ( Excp $e ) {
+			$this->defaults_init();
+		}  catch ( Excp $e ) {
 			echo $e->toJSON();
 			return;
 		}
-
+		
 
 		// 注册图片分享图集
 		try {
