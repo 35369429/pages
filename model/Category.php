@@ -32,14 +32,14 @@ class Category extends Model {
 	 */
 	function __schema() {
 			
-			$this->putColumn( 'category_id', $this->type('bigInteger', ['length'=>20]) )  // 类型ID ( 同 _id )
+			$this->putColumn( 'category_id', $this->type('string', ['length'=>128, 'unique'=>true]) )  // 类型ID ( 同 _id )
 				 ->putColumn( 'project', $this->type('string',  ['length'=>128, 'index'=>1]) )  // 所属项目
 				 ->putColumn( 'page', $this->type('string',     ['length'=>128, 'index'=>1]) )  // 正文(默认)页面
 				 ->putColumn( 'wechat', $this->type('string', ['index'=>1, "length"=>64]) )      // 绑定公众号
 				 ->putColumn( 'wechat_offset', $this->type('integer', ['default'=>"0"]) )      // 同步文章的 Offset
 				 ->putColumn( 'name', $this->type('string',  ['length'=>128]) )  // 类型名称
 				 ->putColumn( 'fullname', $this->type('string',  ['length'=>256]) )  // 类型全名
-				 ->putColumn( 'parent_id', $this->type('bigInteger', ["default"=>"0", "index"=>1]) ) // 父类 ID 
+				 ->putColumn( 'parent_id', $this->type('string', ["default"=>"0", "index"=>1]) ) // 父类 ID 
 				 ->putColumn( 'priority', $this->type('integer', ['index'=>1, 'default'=>"0"]) ) // 优先级排序
 				 ->putColumn( 'hidden', $this->type('boolean', ['index'=>1, 'default'=>"0"]) )   // 是否隐藏
 				 ->putColumn( 'param', $this->type('string',     ['length'=>128, 'index'=>1]) )  // 自定义参数
@@ -47,8 +47,18 @@ class Category extends Model {
 		;
 	}
 
+	function __clear() {
+		$this->dropTable();
+	}
+
+
+	function genId() {
+		return uniqid();
+	}
+
+
 	function create( $data ) {
-		$data['category_id'] = $this->nextid();
+		$data['category_id'] = $this->genId();
 		return parent::create( $data );
 	}
 
@@ -147,8 +157,5 @@ class Category extends Model {
 	}
 
 
-	function __clear() {
-		$this->dropTable();
-	}
-
+	
 }
