@@ -1,0 +1,13 @@
+{	
+	"cname":"网站首页",
+	"data": {
+		
+	},
+	"entries":[
+		{"method":"GET", "router":"/", "ttl":0}
+	],
+	
+	"align": {
+		"desktop":"desktop/index"
+	}
+}

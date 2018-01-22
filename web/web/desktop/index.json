@@ -1,0 +1,19 @@
+{	
+	"cname":"网站首页",
+	"data": {
+		"category":{
+			"api":"/xpmsns/pages/category/search",
+			"query":{
+				"param":"isnav=true",
+				"status":"on"
+			}
+		}
+	},
+	"entries":[
+		{"method":"GET", "router":"/", "ttl":0}
+	],
+	
+	"align": {
+		"mobile":"/mobile/index"
+	}
+}

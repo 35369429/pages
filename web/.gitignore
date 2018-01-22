@@ -1,0 +1,6 @@
+config.js
+web/web.json
+package-lock.json
+node_modules
+.cache
+.tmp

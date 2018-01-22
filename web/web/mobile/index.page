@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>首页</title>
+	<link href="{{__STOR__::/__PROJECT_NAME/assets}}/css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
+	<link href="{{__STOR__::/__PROJECT_NAME/assets}}/css/index.css" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+
+
+
+	<div class="w-all t-c pr">
+		<a href="/data/listdata" target="_blank">
+			<div class="respd">
+			
+			</div>
+		</a>
+
+		<a href="/data/detail" target="_blank">
+			<div class="respd1">
+			
+			</div>
+		</a>
+		<a href="/data/detail" target="_blank">
+			<div class="respd2">
+			
+			</div>
+		</a>
+		<a href="/data/detail" target="_blank">
+			<div class="respd3">
+			
+			</div>
+		</a>
+		<div class="row testp">
+			<a href="/"><div class="h-47 w-30px left"></div></a>
+			<a href="/data/listdata" target="_blank"><div class="h-47 w-30px left"></div></a>
+			<a href="/data/listdata" target="_blank"><div class="h-47 w-30px left"></div></a>
+			<a href="/data/listdata" target="_blank"><div class="h-47 w-30px left"></div></a>
+			<a href="/data/listdata" target="_blank"><div class="h-47 w-30px left"></div></a>
+			<a href="/data/listdata" target="_blank"><div class="h-47 w-30px left"></div></a>
+			<a href="/data/listdata" target="_blank"><div class="h-47 w-30px left"></div></a>
+			<a href="/data/party"  target="_blank"><div class="h-47 w-30px left"></div></a>
+			<a href="/data/about" target="_blank"><div class="h-47 w-30px left"></div></a>
+		</div>
+		<img src="{{__STOR__::/__PROJECT_NAME/assets}}/images/index.jpg" alt="" class="w-95">
+	</div>
+</body>
+</html>
