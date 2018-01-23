@@ -81,6 +81,13 @@ class ArticleController extends \Xpmse\Loader\Controller {
 	}
 
 
+	/**
+	 * 采集模块
+	 * @return [type] [description]
+	 */
+	function collect() {
+		Utils::out( $_GET );
+	}
 
 
 	function test(){

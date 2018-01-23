@@ -1,0 +1,25 @@
+{
+  "manifest_version": 2,
+
+  "name": "XpmSNS头条管理工具",
+  "description": "XpmSNS头条管理工具，快速采集文章，文章录入神器。",
+  "version": "1.0",
+  "browser_action": {
+    "default_icon": "icon.png",
+    "default_popup": "popup.html"
+  },
+  "background": { 
+    "scripts": ["background.js"]
+  },
+  "icons": {
+    "16": "icon.png",
+    "48": "icon.png",
+    "128": "icon.png"
+  },
+  "permissions": [
+    "activeTab",
+    "storage",
+    "contextMenus",
+    "notifications"
+  ]
+}
