@@ -144,9 +144,9 @@ class ArticleController extends \Xpmse\Loader\Controller {
 		}
 
 		$article = new \Xpmsns\pages\Model\Article;
-		$article->collect(['url'=>$url, 'category'=>$_POST['category'], 'status'=>$_POST['status']]);
+		$rs=$article->collect(['url'=>$url, 'category'=>$_POST['category'], 'status'=>$_POST['status']]);
 
-		echo json_encode(['code'=>0, 'message'=>'done']);
+		echo json_encode(['code'=>0, 'message'=>'done', 'article_id'=>$rs['article_id']]);
 	}
 
 
