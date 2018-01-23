@@ -86,7 +86,59 @@ class ArticleController extends \Xpmse\Loader\Controller {
 	 * @return [type] [description]
 	 */
 	function collect() {
-		Utils::out( $_GET );
+		$cate = new \Xpmsns\pages\Model\Category;
+	
+		$data = [
+			'url' => $_GET['url'],
+			'published'=> $_GET['published'],
+			'category' => $cate
+		];
+
+		App::render($data,'article','collect.widget');
+		return [
+
+			'js' => [
+		 			"js/plugins/select2/select2.full.min.js",
+		 			"js/plugins/jquery-tags-input/jquery.tagsinput.min.js",
+		 			"js/plugins/bootstrap-datepicker/bootstrap-datepicker.min.js",
+		 			'js/plugins/masked-inputs/jquery.maskedinput.min.js',
+		 			"js/plugins/jquery-validation/jquery.validate.min.js",
+		    		"js/plugins/jquery-ui/jquery-ui.min.js"
+				],
+			'css'=>[
+				"js/plugins/bootstrap-datepicker/bootstrap-datepicker3.min.css",
+	 			"js/plugins/select2/select2.min.css",
+	 			"js/plugins/select2/select2-bootstrap.min.css",
+	 			"js/plugins/jquery-tags-input/jquery.tagsinput.min.css"
+	 		],
+
+			'crumb' => [
+	                "图文" => APP::R('article','index'),
+	                "文章列表" => APP::R('article','index'),
+	                "转采文章" => '',
+	        ],
+
+	        'active'=> [
+	 			'slug'=>'xpmsns/pages/article/index'
+	 		]
+		];
+	}
+
+
+	/**
+	 * 采集
+	 * @return [type] [description]
+	 */
+	function docollect() {
+		$url = $_POST['url'];
+		if ( empty($url) ) {
+			throw new Excp("请提供目标网页地址", 404, ['post'=>$_POST]);
+		}
+		
+		$article = new \Xpmsns\pages\Model\Article;
+		$article->collect(['url'=>$url, 'category'=>$_POST['category'], 'status'=>$_POST['status']]);
+
+		echo json_encode(['code'=>0, 'message'=>'done']);
 	}
 
 

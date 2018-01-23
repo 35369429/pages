@@ -42,6 +42,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 	let host = document.getElementById('host');
 	let quickly = document.getElementById('quickly');
+	let published = document.getElementById('published');
 	let loginBtn = document.getElementById('loginBtn');
 	let fwdBtn = document.getElementById('fwdBtn');
 
@@ -49,6 +50,7 @@ document.addEventListener('DOMContentLoaded', () => {
 	getConfig(( config )=>{
 		host.value = config['host'] || "";
 		quickly.checked = config['quickly'] || false;
+		published.checked = config['published'] || false;
 	});
 
 
@@ -63,6 +65,13 @@ document.addEventListener('DOMContentLoaded', () => {
 	// 设定快速转采
 	quickly.addEventListener('change', () => {
 		setConfig('quickly', quickly.checked ,(result)=>{
+			console.log( result );
+		});
+	});
+
+	// 设定快速发布
+	published.addEventListener('change', () => {
+		setConfig('published', published.checked ,(result)=>{
 			console.log( result );
 		});
 	});
@@ -91,7 +100,8 @@ document.addEventListener('DOMContentLoaded', () => {
 		}
 
 		let qk = quickly.checked ?  1 : 0;
-		let url = getHome(host.value) + '/n/xpmsns/pages/article/collect';
+		let pb = published.checked ?  1 : 0;
+		let url = getHome(host.value) + '/i/xpmsns/pages/article/collect';
 		let queryInfo = {
 			active: true,
 			currentWindow: true
@@ -100,7 +110,7 @@ document.addEventListener('DOMContentLoaded', () => {
 		chrome.tabs.query(queryInfo, (tabs) => {
 			let tab = tabs[0];
 			let u = tab.url;
-			url = url + '?url=' + escape(u) + '&quickly=' + qk;
+			url = url + '?url=' + escape(u) + '&quickly=' + qk + '&published=' + pb;
 			chrome.tabs.create({url: url });
 		});
 

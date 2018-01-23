@@ -39,8 +39,9 @@ function fwd(link) {
 		}
 
 		let qk =config['quickly'] ?  1 : 0;
-		let url = getHome(host) + '/n/xpmsns/pages/article/collect';
-			url = url + '?url=' + escape(link) + '&quickly=' + qk;
+		let pb =config['published'] ?  1 : 0;
+		let url = getHome(host) + '/i/xpmsns/pages/article/collect';
+			url = url + '?url=' + escape(link) + '&quickly=' + qk + '&published=' + pb;
 			chrome.tabs.create({url: url });
 	});				 
 }

@@ -13,7 +13,6 @@ use \Xpmse\Wechat as Wechat;
 use \Xpmse\Media as Media;
 use \Mina\Delta\Render as Render;
 use \Xpmse\Task as Task;
-
 use \Exception as Exception;
 
 define('ARTICLE_PUBLISHED', 'published');  // 文章状态 已发布
@@ -170,6 +169,29 @@ class Article extends Model {
 	}
 
 
+	function collect( $data ) {
+
+		$url = $data['url'];
+		if ( empty($url) ) {
+			throw new Excp("请提供目标网页地址", 404, ['data'=>$data]);
+		}
+
+		$spider = new Spider();
+		$page = $spider->crawl($url);
+		$data = array_merge($page, $data);
+
+		if ( empty($data['category']) ) {
+			$cate = new Category();
+			$data['category'] = $cate->getVar('category_id', "WHERE slug='default' LIMIT 1");
+		}
+
+
+		if ( empty($data['status']) ) {
+			$data['status'] = ARTICLE_UNPUBLISHED;
+		}
+
+		return $this->save($data);
+	}
 
 
 	/**
