@@ -94,9 +94,30 @@ class ArticleController extends \Xpmse\Loader\Controller {
 	 * @return [type] [description]
 	 */
 	function collect() {
+
+		if ($_GET['quickly'] == 1) {
+
+			$url  = $_GET['url'];
+			if ( empty($url) ) {
+				throw new Excp("请提供目标网页地址", 404, ['_GET'=>$_GET]);
+			}
+
+			$status = null;
+			if ( $_GET['published'] == '1') {
+				$status = 'published';
+			}
+
+			$article = new \Xpmsns\pages\Model\Article;
+			$rs=$article->collect(['url'=>$url,  'status'=>$status]);
+
+			header("Location: " . App::R('article', 'editor', ['id'=>$rs['article_id']]) );
+			return;
+		}
+
 		$cate = new \Xpmsns\pages\Model\Category;
 	
 		$data = [
+			'home' => Utils::getHome(App::$APP_HOME_LOCATION),
 			'url' => $_GET['url'],
 			'published'=> $_GET['published'],
 			'category' => $cate
