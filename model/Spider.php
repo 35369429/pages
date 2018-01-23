@@ -35,6 +35,10 @@ class Spider {
 	 */
 	function crawlImage( $url, $node ) {
 
+		if ( empty($url) ) {
+			return "";
+		}
+
 		if ( !empty($this->hasCrawled[$url]) ) {
 			return  $url;
 		}
