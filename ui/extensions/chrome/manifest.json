@@ -1,20 +1,22 @@
 {
   "manifest_version": 2,
 
-  "name": "XpmSNS头条管理工具",
-  "description": "XpmSNS头条管理工具，快速采集文章，文章录入神器。",
+  "name": "XpmSNS管理工具",
+  "description": "XpmSNS管理工具，快速采集文章，文章录入神器。",
   "version": "1.0",
+  "update_url":"https://www.xpmsns.com/update/extensions/chrome.xml",
+  "homepage_url":"https://www.xpmsns.com",
   "browser_action": {
-    "default_icon": "icon.png",
+    "default_icon": "icon-16.png",
     "default_popup": "popup.html"
   },
   "background": { 
     "scripts": ["background.js"]
   },
   "icons": {
-    "16": "icon.png",
-    "48": "icon.png",
-    "128": "icon.png"
+    "16": "icon-16.png",
+    "48": "icon-48.png",
+    "128": "icon-128.png"
   },
   "permissions": [
     "activeTab",
