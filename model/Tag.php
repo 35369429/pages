@@ -32,7 +32,7 @@ class Tag extends Model {
 	 */
 	function __schema() {
 			
-			$this->putColumn( 'tag_id', $this->type('bigInteger', ['length'=>20]) )  // 标签ID ( 同 _id )
+			$this->putColumn( 'tag_id', $this->type('string', ['length'=>128, 'unique'=>1]) )  // 标签ID ( 同 _id )
 				 ->putColumn( 'name', $this->type('string',  ['length'=>128]) )  // 标签名称
 				 ->putColumn( 'param', $this->type('string',     ['length'=>128, 'index'=>1]) )  //自定义参数
 		;
@@ -68,8 +68,12 @@ class Tag extends Model {
 
 	}
 
+	function genId() {
+		return uniqid();
+	}
+
 	function create( $data ) {
-		$data['tag_id'] = $this->nextid();
+		$data['tag_id'] = $this->genId();
 		return parent::create( $data );
 	}
 

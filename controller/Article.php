@@ -28,6 +28,8 @@ class ArticleController extends \Xpmse\Loader\Controller {
 		$query['order'] =  isset($_REQUEST['order']) ?  $_REQUEST['order'] : 'create_time desc';
 		$resp  = $art->call('search', $query);
 
+
+
 		// echo "<pre>";
 		// print_r($query);
 		// print_r($resp);
@@ -53,6 +55,12 @@ class ArticleController extends \Xpmse\Loader\Controller {
 			'article' => new \Xpmsns\pages\Model\Article,
 			'wechats' => $wechats
 		];
+
+		if ( $_GET['debug'] == 1 ) {
+			echo "<pre>";
+			print_r($data);
+			echo "</pre>";
+		}
 
 		App::render($data,'article','search.index');
 		
@@ -134,7 +142,7 @@ class ArticleController extends \Xpmse\Loader\Controller {
 		if ( empty($url) ) {
 			throw new Excp("请提供目标网页地址", 404, ['post'=>$_POST]);
 		}
-		
+
 		$article = new \Xpmsns\pages\Model\Article;
 		$article->collect(['url'=>$url, 'category'=>$_POST['category'], 'status'=>$_POST['status']]);
 
@@ -215,7 +223,7 @@ class ArticleController extends \Xpmse\Loader\Controller {
 	 */
 	function previewlinks(){
 
-		$article_id  = intval($_GET['id']);
+		$article_id  = $_GET['id'];
 		if ( empty($article_id) ) {
 			echo "<span class='text-danger'>文章尚未保存</span>";
 			return;
@@ -232,7 +240,7 @@ class ArticleController extends \Xpmse\Loader\Controller {
 	 * @return [type] [description]
 	 */
 	function links() {
-		$article_id  = intval($_GET['id']);
+		$article_id  = $_GET['id'];
 		if ( empty($article_id) ) {
 			echo "<span class='text-danger'>未知文章信息</span>";
 			return;
@@ -262,7 +270,7 @@ class ArticleController extends \Xpmse\Loader\Controller {
 	 */
 	function materials(){
 
-		$article_id  = intval($_GET['id']);
+		$article_id  = $_GET['id'];
 		if ( empty($article_id) ) {
 			echo "<span class='text-danger'>未知文章信息</span>";
 			return;
@@ -378,7 +386,7 @@ class ArticleController extends \Xpmse\Loader\Controller {
 
 
 	function uptowechat() {
-		$article_id = intval($_POST['id']);
+		$article_id = $_POST['id'];
 		$mpids = explode(',', $_POST['mpids']);
 		$create = isset($_POST['create']) ? $_POST['create'] : null;
 
@@ -425,7 +433,7 @@ class ArticleController extends \Xpmse\Loader\Controller {
 		$art = new \Xpmsns\pages\Model\Article;
 		$article = ['category'=>[], 'tag'=>[]];
 		if ( !empty( $_GET['id']) ) {
-			$article = $art->load( intval($_GET['id']) );
+			$article = $art->load( $_GET['id'] );
 		}
 
 
