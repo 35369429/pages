@@ -1,11 +1,8 @@
 {
-	"cname":"XpmSNS-头条默认主题",
+	"cname":"MINA Pages 默认主题",
 	"pages":[
-		"/desktop/article/index",
-		"/desktop/article/list",
-		"/desktop/article/detail",
-		"/desktop/article/detail_video",
-		"/mobile/article/detail"
+		"/desktop/index",
+		"/mobile/index"
 	],
 	"common":[
 		"/common"
@@ -16,18 +13,19 @@
 			"debug":true
 		},
 		"pages":{
-			"remote": "/{PROJECT_NAME}/pages",
-			"url": "/static-file/{PROJECT_NAME}/pages",
-			"origin": "/static-file/{PROJECT_NAME}/pages"
+			"remote": "/web/pages",
+			"url": "/static-file/{PROJECT_NAME}/user/pages",
+			"origin": "/static-file/{PROJECT_NAME}/user/pages"
 		},
 		"binds": [
 			{
 				"local": "/web/assets",
-				"remote": "/{PROJECT_NAME}/assets/pages",
-				"url": "/static-file/{PROJECT_NAME}/assets/pages",
-				"origin": "/static-file/{PROJECT_NAME}/assets/pages"
+				"remote": "/{PROJECT_NAME}/assets",
+				"url": "/static-file/{PROJECT_NAME}/user/assets",
+				"origin": "/static-file/{PROJECT_NAME}/user/assets"
 			}
 		]
 	},
+
 	"debug":true
 }

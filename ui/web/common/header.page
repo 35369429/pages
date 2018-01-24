@@ -1,13 +1,12 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
-	<title>{{page.title}}-XpmSNS</title>
 	<meta charset="UTF-8">
-	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<meta content="text/html; charset=utf-8" http-equiv="Content-Type">
-	<meta name="description" content="{{page.description}}">
-	<meta name="keywords" content="{{page.keywords}}">
-	<meta name="author" content="{{page.author}}">
-	<meta name="generator" content="GitBook 3.1.1">
-	<link rel="stylesheet" type="text/css" href="{{__STOR__::/__PROJECT_NAME/assets/pages}}/bootstrap/bootstrap.min.css">
+	<title>主页</title>
+	<link href="{{__STOR__::/__PROJECT_NAME/assets}}/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+	<link href="{{__STOR__::/__PROJECT_NAME/assets}}/css/index.css" rel="stylesheet" type="text/css" />
+	<script type="text/javascript" src="{{__STOR__::/__PROJECT_NAME/assets}}/js/jq-min-1.9.1.js"></script>
+	<script type="text/javascript" src="{{__STOR__::/__PROJECT_NAME/assets}}/js/index.js"></script>
+	<script type="text/javascript" src="{{__STOR__::/__PROJECT_NAME/assets}}/js/bootstrap.min.js"></script>
 </head>
-<body class="deepblue" >
+<body>  
