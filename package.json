@@ -9,7 +9,7 @@
         "light":"/static/icons/app-light.svg"
     },
     "icontype": "img",
-    "intro": "全平台+智能CMS系统，支持发布文章、商品、活动等多种页面。",
+    "intro": "全平台+智能CMS系统，支持从微信公众号下载文章、页面转采、视频、文件本地上传等多项功能。",
     "detail": "@readme.md",
     "document": "@document.md",
     "author": "北京云道天成科技有限公司",
