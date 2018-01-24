@@ -33,6 +33,7 @@ class Category extends Model {
 	function __schema() {
 			
 			$this->putColumn( 'category_id', $this->type('string', ['length'=>128, 'unique'=>true]) )  // 类型ID ( 同 _id )
+				 ->putColumn( 'slug', $this->type('string',  ['length'=>128, 'unique'=>true]) )  // 类型别名
 				 ->putColumn( 'project', $this->type('string',  ['length'=>128, 'index'=>1]) )  // 所属项目
 				 ->putColumn( 'page', $this->type('string',     ['length'=>128, 'index'=>1]) )  // 正文(默认)页面
 				 ->putColumn( 'wechat', $this->type('string', ['index'=>1, "length"=>64]) )      // 绑定公众号
@@ -59,6 +60,9 @@ class Category extends Model {
 
 	function create( $data ) {
 		$data['category_id'] = $this->genId();
+		if ( empty($data['slug']) ) {
+			$data['slug'] = $data['category_id'];
+		}
 		return parent::create( $data );
 	}
 

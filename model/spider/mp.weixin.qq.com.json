@@ -1,0 +1,16 @@
+{	
+	"find":{
+		"/^\\/s/":"detail"
+	},
+	"index": {},
+	"detail": {
+		"origin_url": "{url}",
+		"thumbs":".rich_media_thumb|data-src:@image{3}",
+		"images":".rich_media_content img|data-src:@image",
+		"title":"title",
+		"author":"#post-user",
+		"publish_date": "#post-date",
+		"delta":".rich_media_content:delta",
+		"content":".rich_media_content:html"
+	}
+}

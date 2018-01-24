@@ -13,7 +13,6 @@ use \Xpmse\Wechat as Wechat;
 use \Xpmse\Media as Media;
 use \Mina\Delta\Render as Render;
 use \Xpmse\Task as Task;
-
 use \Exception as Exception;
 
 define('ARTICLE_PUBLISHED', 'published');  // 文章状态 已发布
@@ -139,18 +138,18 @@ class Article extends Model {
 		// $article_category = $this->article_category ;
 		// if ( $article_category->tableExists() === false) {
 		//
-		$this->article_category->putColumn( 'article_id', $this->type('bigInteger', ['index'=>1 , 'length'=>20 ]) )  // 文章 ID 
-				                ->putColumn( 'category_id', $this->type('bigInteger', ['index'=>1 , 'length'=>20]) )
-				                ->putColumn( 'unique_id', $this->type('string', ['length'=>40, 'unique'=>1]) );
+		$this->article_category->putColumn( 'article_id', $this->type('string', ['index'=>1 , 'length'=>128 ]) )  // 文章 ID 
+				                ->putColumn( 'category_id', $this->type('string', ['index'=>1 , 'length'=>128]) )
+				                ->putColumn( 'unique_id', $this->type('string', ['length'=>128, 'unique'=>true]) );
 
 		// }
 
 		// 关联表 article_tag
 		// $article_tag = $this->article_tag;
 		// if ( $article_tag->tableExists() === false) {
-		$this->article_tag->putColumn( 'article_id', $this->type('bigInteger', ['index'=>1 , 'length'=>20]) )  // 文章 ID 
-				           ->putColumn( 'tag_id', $this->type('bigInteger', ['index'=>1 , 'length'=>20]) )
-				           ->putColumn( 'unique_id', $this->type('string', ['length'=>40, 'unique'=>1]) );
+		$this->article_tag->putColumn( 'article_id', $this->type('string', ['index'=>1 , 'length'=>128]) )  // 文章 ID 
+				           ->putColumn( 'tag_id', $this->type('string', ['index'=>1 , 'length'=>128]) )
+				           ->putColumn( 'unique_id', $this->type('string', ['length'=>128, 'unique'=>true]) );
 		// }
 	}
 
@@ -170,6 +169,29 @@ class Article extends Model {
 	}
 
 
+	function collect( $data ) {
+
+		$url = $data['url'];
+		if ( empty($url) ) {
+			throw new Excp("请提供目标网页地址", 404, ['data'=>$data]);
+		}
+
+		$spider = new Spider();
+		$page = $spider->crawl($url);
+		$data = array_merge($page, $data);
+
+		if ( empty($data['category']) ) {
+			$cate = new Category();
+			$data['category'] = $cate->getVar('category_id', "WHERE slug='default' LIMIT 1");
+		}
+
+
+		if ( empty($data['status']) ) {
+			$data['status'] = ARTICLE_UNPUBLISHED;
+		}
+
+		return $this->save($data);
+	}
 
 
 	/**
@@ -535,7 +557,14 @@ class Article extends Model {
 	function load( $article_id, $draft = true ) {
 
 		if ( $draft === true ) {
-			$rs = $this->article_draft->getLine("WHERE article_id=?", ['*'], [$article_id]);
+
+			$qb =$this->article_draft->query()->where('article_id', '=', $article_id)->limit(1)->select('*');
+			$rows = $qb->get()->toArray();
+			$rs = current($rows);
+
+			// echo $qb->getSql();
+
+			// $rs = $this->article_draft->getLine("WHERE article_id=?", ['*'], [$article_id]);
 			if ( !empty($rs) ) {
 				$this->format( $rs );
 				return $rs;
@@ -1053,13 +1082,21 @@ class Article extends Model {
 			$article_id = $rs['article_id'];
 
 			// 清除旧分类
-			$this->article_category->runsql("update {{table}} set deleted_at=? where article_id=? ", false, [
-				date('Y-m-d H:i:s'), 
-				$article_id
-			]);  
+			// $this->article_category->runsql("update {{table}} set deleted_at=? where article_id=? ", false, [
+			// 	date('Y-m-d H:i:s'), 
+			// 	$article_id
+			// ]);
+
 
 			// 添加新分类
 			$category = is_array($data['category']) ? $data['category'] : [$data['category']];
+			$rows = $this->article_category->query()->where('article_id', '=', $article_id)->select('category_id')->get()->toArray();
+			$oldcates = array_column($rows, 'category_id');
+			$removeCates = array_diff( $oldcates,$category);
+			foreach ($removeCates as $cid ) {
+				$this->article_category->remove( $data['article_id']. $cid, 'unique_id',false);
+			}
+
 			foreach ($category as $cid ) {
 				$this->article_category->createOrUpdate([
 					"article_id" => $data['article_id'],
@@ -1074,20 +1111,29 @@ class Article extends Model {
 
 			$article_id = $rs['article_id'];
 
-			$time = date('Y-m-d H:i:s');
-			// 清空旧 Tag
-			$this->article_tag->runsql(
-				"update {{table}} set deleted_at=? where article_id=? ", fasle, 
-				[$time, $article_id]
-			);  
+			// $time = date('Y-m-d H:i:s');
+			// // 清空旧 Tag
+			// $this->article_tag->runsql(
+			// 	"update {{table}} set deleted_at=? where article_id=? ", fasle, 
+			// 	[$time, $article_id]
+			// );  
 			
+
+			$rows = $this->article_tag->query()->where('article_id', '=', $article_id)->select('tag_id')->get()->toArray();
+			$oldtags = array_column($rows, 'tag_id');
+
 			if ( is_string($data['tag']) ) {
 				$data['tag'] = explode(',' , $data['tag']);
 			}
 
+
 			$tag = new Tag;
 			$tagnames = is_array($data['tag']) ? $data['tag'] : [$data['tag']];
 			$tagids = $tag->put( $tagnames );
+			$removeTags = array_diff( $oldtags, $tagids);
+			foreach ($removeTags as $tid ) {
+				$this->article_tag->remove( $data['article_id']. $tid, 'unique_id',false);
+			}
 
 			foreach ($tagids as $tid ) {
 				$this->article_tag->createOrUpdate([
@@ -1180,13 +1226,16 @@ class Article extends Model {
 		}
 
 		$args = array_merge(['article_category.article_id as aid'], $args);
-		$rows = $c->query()
-		     ->rightJoin('article_category', 'article_category.category_id', '=', 'category.category_id')
+		$qb = $c->query()
+		     ->leftJoin('article_category', 'article_category.category_id', '=', 'category.category_id')
 		     ->whereIn( "article_category.article_id", $article_ids )
 		     ->where("status", '=', "on")
 		     ->select($args)
-		     ->limit( 50 )
-		     ->get()->toArray();
+		     ->limit( 50 );
+
+		 // echo $qb->getSql();
+
+		$rows = $qb ->get()->toArray();
 
 		  
 
@@ -1320,7 +1369,6 @@ class Article extends Model {
 		     ->select($args)
 		     ->limit( 50 )
 		     ->get()->toArray();
-
 
 		if ( empty($resp) ) return [];
 

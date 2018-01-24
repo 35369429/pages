@@ -117,7 +117,7 @@ class SetupController extends \Xpmse\Loader\Controller {
 
 		// 添加默认分类
 		$cate = new \Xpmsns\Pages\Model\Category;
-		$cate->create(["name"=>"默认","fullname"=>"默认"]);
+		$cate->create(["name"=>"默认","fullname"=>"默认", "slug"=>"default"]);
 	}
 
 

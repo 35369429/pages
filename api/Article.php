@@ -173,11 +173,14 @@ class Article extends Api {
 		// 查询数据表
 		$art = new \Xpmsns\pages\Model\Article;
 		$qb = $art->query()
-				  ->join("article_category as ac", 'ac.article_id', '=', 'article.article_id')
+				  ->leftJoin("article_category as ac", 'ac.article_id', '=', 'article.article_id')
 				  ->leftJoin('category as c', "c.category_id", '=', 'ac.category_id')
 				  ->leftJoin("article_tag as at", 'at.article_id', '=', 'article.article_id')
 				  ->leftJoin("article_draft as draft", 'draft.article_id', '=', 'article.article_id')
 				  ->leftJoin("tag as t", 't.tag_id', '=', 'at.tag_id');
+			;
+
+		// echo $qb->getSql();
 
 		// 设定查询条件
 		$this->qb( $qb, 'c.name', 'category', $query, ["and", "or", "in"] );
@@ -242,6 +245,7 @@ class Article extends Api {
 
 		$pad = [];
 		if ( $getCategory ) {
+			// echo 'getCategory';
 			$pad = Utils::pad($data, '_aid');
 			$categories = $art->getCategoriesGroup($pad['data'], "category.category_id","name","fullname","project","page","parent_id","priority","hidden","param" );
 		}

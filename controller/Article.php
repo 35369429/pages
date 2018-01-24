@@ -28,6 +28,8 @@ class ArticleController extends \Xpmse\Loader\Controller {
 		$query['order'] =  isset($_REQUEST['order']) ?  $_REQUEST['order'] : 'create_time desc';
 		$resp  = $art->call('search', $query);
 
+
+
 		// echo "<pre>";
 		// print_r($query);
 		// print_r($resp);
@@ -53,6 +55,12 @@ class ArticleController extends \Xpmse\Loader\Controller {
 			'article' => new \Xpmsns\pages\Model\Article,
 			'wechats' => $wechats
 		];
+
+		if ( $_GET['debug'] == 1 ) {
+			echo "<pre>";
+			print_r($data);
+			echo "</pre>";
+		}
 
 		App::render($data,'article','search.index');
 		
@@ -81,6 +89,86 @@ class ArticleController extends \Xpmse\Loader\Controller {
 	}
 
 
+	/**
+	 * 采集模块
+	 * @return [type] [description]
+	 */
+	function collect() {
+
+		if ($_GET['quickly'] == 1) {
+
+			$url  = $_GET['url'];
+			if ( empty($url) ) {
+				throw new Excp("请提供目标网页地址", 404, ['_GET'=>$_GET]);
+			}
+
+			$status = null;
+			if ( $_GET['published'] == '1') {
+				$status = 'published';
+			}
+
+			$article = new \Xpmsns\pages\Model\Article;
+			$rs=$article->collect(['url'=>$url,  'status'=>$status]);
+
+			header("Location: " . App::R('article', 'editor', ['id'=>$rs['article_id']]) );
+			return;
+		}
+
+		$cate = new \Xpmsns\pages\Model\Category;
+	
+		$data = [
+			'home' => Utils::getHome(App::$APP_HOME_LOCATION),
+			'url' => $_GET['url'],
+			'published'=> $_GET['published'],
+			'category' => $cate
+		];
+
+		App::render($data,'article','collect.widget');
+		return [
+
+			'js' => [
+		 			"js/plugins/select2/select2.full.min.js",
+		 			"js/plugins/jquery-tags-input/jquery.tagsinput.min.js",
+		 			"js/plugins/bootstrap-datepicker/bootstrap-datepicker.min.js",
+		 			'js/plugins/masked-inputs/jquery.maskedinput.min.js',
+		 			"js/plugins/jquery-validation/jquery.validate.min.js",
+		    		"js/plugins/jquery-ui/jquery-ui.min.js"
+				],
+			'css'=>[
+				"js/plugins/bootstrap-datepicker/bootstrap-datepicker3.min.css",
+	 			"js/plugins/select2/select2.min.css",
+	 			"js/plugins/select2/select2-bootstrap.min.css",
+	 			"js/plugins/jquery-tags-input/jquery.tagsinput.min.css"
+	 		],
+
+			'crumb' => [
+	                "图文" => APP::R('article','index'),
+	                "文章列表" => APP::R('article','index'),
+	                "转采文章" => '',
+	        ],
+
+	        'active'=> [
+	 			'slug'=>'xpmsns/pages/article/index'
+	 		]
+		];
+	}
+
+
+	/**
+	 * 采集
+	 * @return [type] [description]
+	 */
+	function docollect() {
+		$url = $_POST['url'];
+		if ( empty($url) ) {
+			throw new Excp("请提供目标网页地址", 404, ['post'=>$_POST]);
+		}
+
+		$article = new \Xpmsns\pages\Model\Article;
+		$rs=$article->collect(['url'=>$url, 'category'=>$_POST['category'], 'status'=>$_POST['status']]);
+
+		echo json_encode(['code'=>0, 'message'=>'done', 'article_id'=>$rs['article_id']]);
+	}
 
 
 	function test(){
@@ -156,7 +244,7 @@ class ArticleController extends \Xpmse\Loader\Controller {
 	 */
 	function previewlinks(){
 
-		$article_id  = intval($_GET['id']);
+		$article_id  = $_GET['id'];
 		if ( empty($article_id) ) {
 			echo "<span class='text-danger'>文章尚未保存</span>";
 			return;
@@ -173,7 +261,7 @@ class ArticleController extends \Xpmse\Loader\Controller {
 	 * @return [type] [description]
 	 */
 	function links() {
-		$article_id  = intval($_GET['id']);
+		$article_id  = $_GET['id'];
 		if ( empty($article_id) ) {
 			echo "<span class='text-danger'>未知文章信息</span>";
 			return;
@@ -203,7 +291,7 @@ class ArticleController extends \Xpmse\Loader\Controller {
 	 */
 	function materials(){
 
-		$article_id  = intval($_GET['id']);
+		$article_id  = $_GET['id'];
 		if ( empty($article_id) ) {
 			echo "<span class='text-danger'>未知文章信息</span>";
 			return;
@@ -319,7 +407,7 @@ class ArticleController extends \Xpmse\Loader\Controller {
 
 
 	function uptowechat() {
-		$article_id = intval($_POST['id']);
+		$article_id = $_POST['id'];
 		$mpids = explode(',', $_POST['mpids']);
 		$create = isset($_POST['create']) ? $_POST['create'] : null;
 
@@ -366,7 +454,7 @@ class ArticleController extends \Xpmse\Loader\Controller {
 		$art = new \Xpmsns\pages\Model\Article;
 		$article = ['category'=>[], 'tag'=>[]];
 		if ( !empty( $_GET['id']) ) {
-			$article = $art->load( intval($_GET['id']) );
+			$article = $art->load( $_GET['id'] );
 		}
 
 
