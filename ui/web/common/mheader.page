@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>手机页面就</title>
+	<link href="{{__STOR__::/__PROJECT_NAME/assets}}/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+	<link href="{{__STOR__::/__PROJECT_NAME/assets}}/css/index.css" rel="stylesheet" type="text/css" />
+	<script type="text/javascript" src="{{__STOR__::/__PROJECT_NAME/assets}}/js/jq-min-1.9.1.js"></script>
+	<script type="text/javascript" src="{{__STOR__::/__PROJECT_NAME/assets}}/js/index.js"></script>
+	<script type="text/javascript" src="{{__STOR__::/__PROJECT_NAME/assets}}/js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="{{__STOR__::/__PROJECT_NAME/assets}}/js/flexible.js"></script>
+	<script type="text/javascript" src="{{__STOR__::/__PROJECT_NAME/assets}}/js/iscroll.js"></script>
+	<script type="text/javascript" src="{{__STOR__::/__PROJECT_NAME/assets}}/js/navbarscroll.js"></script>
+	<script type="text/javascript" src="{{__STOR__::/__PROJECT_NAME/assets}}/js/unslider.min.js"></script>
+	<LINK  href="{{__STOR__::/__PROJECT_NAME/assets}}/css/bodong.css" type=text/css rel=stylesheet>
+</head>
+<body>
