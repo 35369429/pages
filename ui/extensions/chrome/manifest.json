@@ -4,7 +4,6 @@
   "name": "XpmSNS管理工具",
   "description": "XpmSNS管理工具，快速采集文章，文章录入神器。",
   "version": "1.0",
-  "update_url":"https://www.xpmsns.com/update/extensions/chrome.xml",
   "homepage_url":"https://www.xpmsns.com",
   "browser_action": {
     "default_icon": "icon-16.png",
