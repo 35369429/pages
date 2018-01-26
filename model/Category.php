@@ -40,7 +40,8 @@ class Category extends Model {
 				 ->putColumn( 'wechat_offset', $this->type('integer', ['default'=>"0"]) )      // 同步文章的 Offset
 				 ->putColumn( 'name', $this->type('string',  ['length'=>128]) )  // 类型名称
 				 ->putColumn( 'fullname', $this->type('string',  ['length'=>256]) )  // 类型全名
-				 ->putColumn( 'parent_id', $this->type('string', ["default"=>"0", "index"=>1]) ) // 父类 ID 
+				 ->putColumn( 'root_id', $this->type('string', ["index"=>1] )) //  根ID 
+				 ->putColumn( 'parent_id', $this->type('string', ["index"=>1] )) // 父类 ID 
 				 ->putColumn( 'priority', $this->type('integer', ['index'=>1, 'default'=>"0"]) ) // 优先级排序
 				 ->putColumn( 'hidden', $this->type('boolean', ['index'=>1, 'default'=>"0"]) )   // 是否隐藏
 				 ->putColumn( 'param', $this->type('string',     ['length'=>128, 'index'=>1]) )  // 自定义参数
@@ -65,6 +66,161 @@ class Category extends Model {
 		}
 		return parent::create( $data );
 	}
+
+
+	/**
+	 * 分类查询
+	 */
+	function search( $query = [] ) {
+
+		$qb = $this->query();
+		
+		// 按关键词查找 (昵称/手机号/邮箱)
+		if ( array_key_exists('keyword', $query) && !empty($query['keyword']) ) {
+			$qb->where(function ( $qb ) use($query) {
+			   	$qb->where("name", "like", "%{$query['keyword']}%");
+				$qb->orWhere("fullname","like", "%{$query['keyword']}%");
+			});
+		} else {
+			$qb->whereNull('parent_id');
+		}
+
+
+		// 排序: 最新发表
+		if ( array_key_exists('order', $query)  ) {
+			$order = explode(' ', $query['order']);
+			$order[1] = !empty($order[1]) ? $order[1] : 'asc';
+			$qb->orderBy($order[0], $order[1] );
+		}
+		
+		// 页码
+		$page = array_key_exists('page', $query) ?  intval( $query['page']) : 1;
+		$perpage = array_key_exists('perpage', $query) ?  intval( $query['perpage']) : 20;
+
+		// 查询一级分类
+		$cates = $qb->select("*")->pgArray($perpage, ['_id'], 'page', $page);
+
+		// 查询一级分类全部字分类
+		$root_ids = array_column($cates['data'], 'category_id');
+		$sub_categories = $this->getSubCategories( $root_ids );
+
+		foreach ($cates['data'] as & $ca ) {
+			$category_id = $ca['category_id'];
+			$this->format($ca);
+			$ca['sub'] = [ 'total' => 0 ];
+			if ( is_array($sub_categories['data'][$category_id]) ) {
+				$ca['sub'] = [
+					'data' => $sub_categories['data'][$category_id],
+					'tree' => $sub_categories['tree'][$category_id],
+					'total' => count($sub_categories['data'][$category_id])
+				];
+			}
+		}
+		return $cates;
+	}
+
+	function format( & $category ) {
+		return $category;
+	}
+
+
+
+	/**
+	 * 遍历分类
+	 * @param  [type] $root_id [description]
+	 * @param  [type] $cates   [description]
+	 * @return [type]          [description]
+	 */
+	function walk( & $cates_tree, $fn, $depth=0 ) {
+		$depth ++;
+		if ( !is_callable($fn) ) {
+			$fn = function( $data, $depth ) {};
+		}
+
+		if ( empty($cates_tree) ){
+			return;
+		}
+
+		foreach ($cates_tree as $cate ) {
+			$fn( $cate, $depth );
+
+			$children = $cate['children'];
+			if ( empty($children) ) {
+				continue;
+			}
+
+			$this->walk( $children, $fn, $depth);
+
+		}
+	}
+
+
+	/**
+	 * 查询一级分类的所有子分类
+	 */
+	function getSubCategories( $root_ids ) {
+
+		$qb = $this->query();
+		$sub_categories = $qb->whereIn('root_id', $root_ids)->get()->toArray();
+
+		// 遍历
+		$map =[]; $data = [];
+		foreach ($sub_categories as $ca ) {
+			$category_id = $ca['category_id'];
+			$parent_id = $ca['parent_id'];
+			$root_id = $ca['root_id'];
+
+			if ( !is_array($map[$parent_id]) ) {
+				$map[$parent_id] = [];
+			}
+
+			if ( !is_array($data[$root_id]) ) {
+				$data[$root_id] = [];
+			}
+
+			// 格式化数据
+			$this->format($ca);
+			array_push($map[$parent_id], $ca );
+			array_push($data[$root_id], $ca );
+		}
+
+
+		foreach ($root_ids as $root) {
+			$tree[$root] = $this->catesTree( $root, $map ) ;
+		}
+
+		return [ 'data'=>$data, 'map'=>$map, 'tree'=>$tree];
+	}
+
+
+	/**
+	 * 生成分类树
+	 * @param  [type] $parent_id [description]
+	 * @param  [type] $cates_map [description]
+	 * @return [type]            [description]
+	 */
+	function catesTree( $parent_id,  & $cates_map ) {
+
+		$data = $cates_map[$parent_id]; 
+		if ( $data == null ) {
+			$data = [];
+		}
+
+		// 子集
+		foreach ( $data  as $idx=>$ca ) {
+			$parent_id = $ca['category_id'];
+
+			if ( empty($parent_id) ) {
+				$data[$idx]['children'] = [];
+			} else {
+
+				$data[$idx]['children'] = $this->catesTree( $parent_id, $cates_map );
+			}
+		}
+
+		return $data;
+	}
+
 
 
 	/**
