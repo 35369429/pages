@@ -69,6 +69,20 @@ class Category extends Model {
 
 
 	/**
+	 * 读取分类信息
+	 * @param  [type] $category_id [description]
+	 * @return [type]              [description]
+	 */
+	function getById( $category_id ) {
+		$qb = $this->query();
+		$rows = $qb->where('category_id', '=', $category_id)->limit(1)->get()->toArray();
+		$rs =  current($rows);
+		$this->format($rs);
+		return $rs;
+	}
+
+
+	/**
 	 * 分类查询
 	 */
 	function search( $query = [] ) {

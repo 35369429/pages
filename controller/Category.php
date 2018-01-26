@@ -11,6 +11,11 @@ class CategoryController extends \Xpmse\Loader\Controller {
 	function __construct() {
 	}
 
+
+	/**
+	 * 分类列表检索
+	 * @return [type] [description]
+	 */
 	function index() {	
 
 		$query = $_GET;
@@ -25,7 +30,6 @@ class CategoryController extends \Xpmse\Loader\Controller {
 			'cates' => $cates,
 			'c' => $c
 		];
-
 
 		if ( $_GET['debug'] == 1 ) {
 			echo "<pre>";
@@ -55,6 +59,63 @@ class CategoryController extends \Xpmse\Loader\Controller {
 		];
 	}
 
+
+	/**
+	 * 分类编辑
+	 * @return
+	 */
+	function edit() {
+
+		$category_id = $_GET['category_id'];
+		$parent_id = $_GET['parent_id'];
+		$action_name = '添加分类';
+		$c = new \Xpmsns\Pages\Model\Category;
+		$cates = $c->search(['perpage'=>100]);
+		if ( !empty($category_id) ) {
+			$ca = $c->getById($category_id);
+			if ( !empty($ca) ) {
+				$action_name =  $ca['name'];
+			}
+		}
+
+		$data = [
+			'action_name' =>  $action_name,
+			'category_id'=>$category_id,
+			'parent_id' => $parent_id,
+			'cates' => $cates,
+			'ca' => $ca,
+			'c' => $c
+		];
+
+		App::render($data,'category','edit');
+		return [
+			'js' => [
+		 			"js/plugins/select2/select2.full.min.js",
+		 			"js/plugins/jquery-tags-input/jquery.tagsinput.min.js",
+		 			"js/plugins/bootstrap-datepicker/bootstrap-datepicker.min.js",
+		 			'js/plugins/masked-inputs/jquery.maskedinput.min.js',
+		 			"js/plugins/jquery-validation/jquery.validate.min.js",
+		    		"js/plugins/jquery-ui/jquery-ui.min.js"
+				],
+			'css'=>[
+				"js/plugins/bootstrap-datepicker/bootstrap-datepicker3.min.css",
+	 			"js/plugins/select2/select2.min.css",
+	 			"js/plugins/select2/select2-bootstrap.min.css",
+	 			"js/plugins/jquery-tags-input/jquery.tagsinput.min.css"
+	 		],
+
+			'crumb' => [
+	            "分类" => APP::R('category','index'),
+	            "管理分类" => APP::R('category','index'),
+	            "$action_name" => ""
+	        ],
+
+	        'active'=> [
+	 			'slug'=>'xpmsns/pages/category/index'
+	 		]
+		];
+
+	}
 
 
 	function faker() {

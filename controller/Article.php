@@ -72,8 +72,6 @@ class ArticleController extends \Xpmse\Loader\Controller {
 		 			"js/plugins/cropper/cropper.min.js",
 		 			'js/plugins/masked-inputs/jquery.maskedinput.min.js',
 		 			'js/plugins/jquery-tags-input/jquery.tagsinput.min.js',
-			 		"js/plugins/dropzonejs/dropzone.min.js",
-			 		"js/plugins/cropper/cropper.min.js",
 		    		'js/plugins/jquery-ui/jquery-ui.min.js',
 	        		'js/plugins/bootstrap-datepicker/bootstrap-datepicker.min.js',
 				],
