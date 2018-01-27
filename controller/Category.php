@@ -59,6 +59,26 @@ class CategoryController extends \Xpmse\Loader\Controller {
 		];
 	}
 
+	/**
+	 * 保存分类
+	 * @return
+	 */
+	function save() {
+		$data = $_POST;
+		$c = new \Xpmsns\Pages\Model\Category;
+		$rs = $c->save( $data );
+		echo json_encode($rs);
+	}
+
+	function remove(){
+
+		$category_id = $_POST['category_id'];
+		$c = new \Xpmsns\Pages\Model\Category;
+		$cids =$c->removeById( $category_id );
+		echo json_encode(['message'=>"删除成功", 'extra'=>['category_ids'=>$cids]]);
+	}
+
+
 
 	/**
 	 * 分类编辑

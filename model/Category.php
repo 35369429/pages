@@ -59,12 +59,98 @@ class Category extends Model {
 	}
 
 
+	/**
+	 * 添加分类
+	 * @param  [type] $data [description]
+	 * @return [type]       [description]
+	 */
 	function create( $data ) {
 		$data['category_id'] = $this->genId();
 		if ( empty($data['slug']) ) {
 			$data['slug'] = $data['category_id'];
 		}
+
+
 		return parent::create( $data );
+	}
+
+
+	/**
+	 * 删除分类
+	 * @param  [type] $category_id [description]
+	 * @return [type]              [description]
+	 */
+	function removeById( $category_id ) {
+
+		$cids  = [$category_id];
+		$this->each( function($cate, $depth) use( & $cids ) {
+			array_push($cids, $cate['category_id']);
+		}, $category_id);
+
+		$cidstr = '("'.implode('","', $cids).'")';
+
+		// 删除分类和子类
+		$this->runSql('
+			UPDATE {{table}} 
+			SET `slug`=NULL, `deleted_at`=CURRENT_TIME() 
+			WHERE category_id in ' . $cidstr, 
+			false);
+
+		return $cids;
+
+	}
+
+
+	/**
+	 * 保存分类 ( 创建或者添加 )
+	 * @param  [type] $data [description]
+	 * @return [type]       [description]
+	 */
+	function save( $data ) {
+
+		// 子分类
+		if ( !empty($data['parent_id'])  ) {
+
+			$pa = $this->getById($data['parent_id']);
+			if (!empty($pa) ) {
+				$data['root_id'] = !empty($pa['root_id']) ? $pa['parent_id'] : $data['parent_id'];
+			} else {
+				$data['parent_id'] = null;
+			}
+		}
+
+		if ( empty($data['parent_id']) ) {
+			$data['parent_id'] = null;
+			$data['root_id'] = null;
+		}
+
+		// 创建分类
+		if ( empty($data['category_id']) ) {
+			return $this->create($data);
+		}
+
+		// 更新分类
+		$rs = $this->updateBy('category_id', $data);
+
+		// 更新分类子类的 Root
+		$cids = [];
+		$this->each( function($cate, $depth) use( & $cids ) {
+			array_push($cids, $cate['category_id']);
+		}, $rs['category_id']);
+
+		if ( !empty($cids) ) {
+			// 更新子分类 root
+			$root = !empty($rs['root_id']) ? $rs['root_id'] : $rs['category_id'];
+			$cidstr = '("'.implode('","', $cids).'")';
+			$this->runSql('
+				UPDATE {{table}} 
+				SET `root_id`="'.$root.'", `updated_at`=CURRENT_TIME() 
+				WHERE category_id in ' . $cidstr, 
+				false);
+
+		}
+
+		return $rs;
 	}
 
 

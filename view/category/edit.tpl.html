@@ -1,11 +1,11 @@
 <?php use \Xpmse\Loader\App; ?>
 <style type="text/css">
 
-	.collect-form {
-		padding-top: 40px;
-		padding-bottom: 40px;
+	.form {
+		padding-top: 60px;
+		padding-bottom: 60px;
 	}
-	.collect-form label {
+	.form label {
 		font-size: 16px;
 	}
 
@@ -79,9 +79,13 @@
 			
 		</div> <!-- END block-header -->
 
-		<div class="block-content " >
-			<form class="form-horizontal collect-form" >
+		<div class="block-content form" >
+
+			<form class="form-horizontal user-form" >
 				
+				<!-- 分类ID: Category_id -->
+				<input  type="hidden" name="category_id" value="<?=$ca['category_id']?>" />
+
 				<!-- 名称 -->
 				<div class="form-group">
 					<label class="col-xs-2 control-label" for="name">名称:</label>
@@ -92,9 +96,9 @@
 				
 				<!-- 选择分类 -->
 				<div class="form-group">
-					<label class="col-xs-2 control-label" for="category">上级分类:</label>
+					<label class="col-xs-2 control-label" for="parent_id">上级分类:</label>
 					<div class="col-xs-9">
-						<select class="js-select2 form-control input-lg" name="category" style="width: 100%;" data-placeholder="请选择上级分类">
+						<select class="js-select2 form-control input-lg" name="parent_id" style="width: 100%;" data-placeholder="请选择上级分类">
 							<option value="0">无</option>
 
 							<?php foreach ($cates['data'] as $rs) : ?>
@@ -173,12 +177,56 @@
 				<div class="form-group">
 					<label class="col-xs-2 control-label" for="url"></label>
 					<div class="col-xs-9">
-						<button class="btn btn-lg btn-primary btn-minw fn-action fn-save push-50-r" type="button">保存</button>
-						<button class="btn btn-lg btn-danger btn-minw fn-action fn-remove" type="button">删除</button>
+						<button class="btn btn-lg btn-primary btn-minw fn-action fn-save push-50-r" type="submit">保存</button>
+						<button 
+							confirm-title="请确认删除分类"
+				            confirm-content="您确定删除分类以及其子分类 <strong><?=$ca['name']?>(<?=$ca['category_id']?> )</strong>"
+				            confirm-dismiss = "取消"
+				            confirm-submit= "确定"
+				            data-param-category_id="<?=$ca['category_id']?>" 
+				            confirm-action="<?=App::NR('category','remove')?>"
+
+				            event-before="
+								function( btn, modal ) {
+									$('button', modal)
+										.addClass('disabled')
+										.attr('disabled', 'disabled');
+								}
+							"
+
+							event-done="
+								function( data, btn, modal) {
+									$('button', modal)
+										.removeClass('disabled')
+										.removeAttr('disabled');
+								}
+							"
+					        event-success="
+								function(btn, modal) {
+									success('分类删除成功');
+									setTimeout(function(){
+										// 转向分类列表页
+										window.location = '<?=App::R('category','index')?>';
+									}, 1000);
+								}
+							"
+
+							event-error="
+								function( data, btn, modal) {
+									failure( '分类删除失败 ('+ data['message'] + ')');
+									return true;
+								}
+							"
+
+						class="btn btn-lg btn-danger btn-minw ajax-confirm fn-action fn-remove" type="button">删除</button>
 					</div>
 				</div><!-- END 保存数据 -->
 
+			</form>	
+			<form class="form-horizontal developer-form" >
 
+				<!-- 分类ID: Category_id -->
+				<input  type="hidden" name="category_id" value="<?=$ca['category_id']?>" />
 
 				<div class="form-group push-50-t">
 					<div class="col-xs-10 col-xs-offset-1">
@@ -187,7 +235,6 @@
 					</div>
 				</div>
 				
-
 				<!-- 自定义参数 -->
 				<div class="form-group">
 					<label class="col-xs-2 control-label" for="slug">分类别名:</label>
@@ -226,7 +273,7 @@
 				<div class="form-group">
 					<label class="col-xs-2 control-label" for="url"></label>
 					<div class="col-xs-9">
-						<button class="btn btn-lg btn-danger btn-minw fn-action fn-save-admin" type="button">保存</button>
+						<button class="btn btn-lg btn-danger btn-minw fn-action fn-save-admin" type="submit">保存</button>
 					</div>
 				</div><!-- END 保存数据 -->
 
@@ -236,44 +283,167 @@
 </div>
 
 <script type="text/javascript">
-$(function(){
-	App.initHelpers(['datepicker','select2', 'masked-inputs','tags-inputs',  'ajax-confirm', 'slimscroll']);
-	$('.fn-collect').click(function(event) {
 
-		var api = '<?=App::NR("article","docollect")?>';
-		var data = $('.collect-form').serializeData();
-		if (data['url'] == null) {
-			App.notify( '请填写目标网页地址', 'fa fa-times','danger'); 
-			return;
+function pending( message ) {
+	$('.fn-action')
+		.addClass('disabled')
+		.attr('disabled', 'disabled');
+	App.loading({message:message}).show();
+}
+
+
+function success( message ) {
+	App.notify( message );
+}
+
+function failure( message,  validation ) {
+	validation = validation  || null;
+	message = message || null;
+
+	if ( typeof message == 'object' ) {
+		validation.showErrors(message);
+		return;
+	}
+
+	if ( message != null ) {
+		App.notify( message, 'fa fa-times', 'danger' );
+	}
+}
+
+function done() {
+	App.loading().hide();
+	$('.fn-action')
+		.removeClass('disabled')
+		.removeAttr('disabled');
+}
+
+
+/**
+ * 保存表单
+ */
+
+function save( form, validation ) {
+
+	var api = '<?=App::NR("category", "save");?>';
+	var data = $(form).serializeData();
+
+	pending('保存中, 请稍候...');
+	// POST 数据
+	jQuery.post( api, data, function( data, textStatus, xhr) {
+
+		done();
+
+		if ( typeof data['code'] == 'string' ) {
+			data['code'] = parseInt(data['code']);
 		}
 
-		App.loading({message:'转采中,请稍候..'}).show();
+		// 返回数据异常
+		if ( typeof data['code'] == 'number' && data['code'] !== 0 ) {
 
-		jQuery.post( api, data, function( data, textStatus, xhr) {
-			App.loading().hide();
-
-			// 返回数据异常
-			if ( data['code'] !== 0 && data['code'] !== "0" ) {
-
-				var message = data['message'] || "未知错误";
-				App.notify( message, 'fa fa-times','danger'); 
+			if ( typeof data['extra'] == 'object' && typeof data['extra']['errors'] == 'object'  ) {
+				failure( data['extra']['errors'], validation );
 				return;
 			}
 
-			// 转采成功
-			$('.collect-form input[name=url]').val('');
-			App.notify('转采成功');
-			setTimeout(function(){
-				window.location = '<?=App::R("article","editor", ["id"=>""])?>' +  data['article_id'];
-			}, 1000);
+			var message = data['message'] || "未知错误";
+			failure( message );
+			return;
+		}
 
-		}, 'json')
+		// 更新ID
+		$('input[name=category_id]').val( data['category_id'] );
 
-		.error(function( xhr, status, message) {
-			App.loading().hide();
-			App.notify( message, 'fa fa-times','danger'); 
-			console.log( status, xhr.status, ' message=', message );
-		});
+		// 保存成功
+		success('保存成功');
+
+	}, 'json')
+
+	.error(function( xhr, status, message) {
+		failure("保存失败, 网络错误 ( " + xhr.status + ' ' + message+" )");
+		console.log( status, xhr.status, ' message=', message );
+	});
+}
+
+
+$(function(){
+	
+	App.initHelpers(['datepicker','select2', 'masked-inputs','tags-inputs',  'ajax-confirm', 'slimscroll']);
+
+	// 表单验证
+	$('.user-form').validate({
+		errorClass: 'help-block animated fadeInDown',
+		errorElement: 'div',
+		errorPlacement: function(error, e) {				
+			jQuery(e).parents('.form-group .col-xs-9').append(error);
+		},
+		highlight: function(e) {
+			jQuery(e).closest('.form-group .col-xs-9').parent().removeClass('has-error').addClass('has-error');
+			jQuery(e).closest('.help-block').remove();
+		},
+		unhighlight:function(e){
+			jQuery(e).closest('.form-group .col-xs-9').parent().removeClass('has-error');
+			jQuery(e).closest('.help-block .col-xs-9').remove();
+		},
+		success: function(e) {
+			jQuery(e).closest('.form-group .col-xs-9').parent().removeClass('has-error');
+			jQuery(e).closest('.help-block').remove();
+		},
+
+		submitHandler: function(form) {
+			save( form, this);
+			return false;
+		},
+
+		rules: {
+			name: {
+				required: true,
+				minlength: 2,
+				maxlength: 20
+			},
+
+			priority: {
+				digits:true 
+			}
+		},
+
+		messages: {
+			name: {
+				required: '请填写分类名称',
+				minlength: '分类名称至少两个字',
+				maxlength: '分类名称不能超过20个字'
+			},
+			priority: '请输入数字，数字越小排序越靠前'
+		}
+	});
+
+
+	// 表单验证
+	$('.developer-form').validate({
+		errorClass: 'help-block animated fadeInDown',
+		errorElement: 'div',
+		errorPlacement: function(error, e) {				
+			jQuery(e).parents('.form-group .col-xs-9').append(error);
+		},
+		highlight: function(e) {
+			jQuery(e).closest('.form-group .col-xs-9').parent().removeClass('has-error').addClass('has-error');
+			jQuery(e).closest('.help-block').remove();
+		},
+		unhighlight:function(e){
+			jQuery(e).closest('.form-group .col-xs-9').parent().removeClass('has-error');
+			jQuery(e).closest('.help-block .col-xs-9').remove();
+		},
+		success: function(e) {
+			jQuery(e).closest('.form-group .col-xs-9').parent().removeClass('has-error');
+			jQuery(e).closest('.help-block').remove();
+		},
+
+		submitHandler: function(form) {
+			save( form, this);
+			return false;
+		},
+
+		rules: {},
+		messages: {}
 	});
 })
 	
