@@ -86,7 +86,9 @@ class Article extends Api {
 	 */
 	protected function search( $query=[] ) {
 
-		$select = empty($query['select']) ? '*' : $query['select'];
+		$select = empty($query['select']) ? [
+			'article_id', 'cover', 'author', 'origin',"article_id","cover","title","author","origin","origin_url","summary","seo_title","seo_keywords","seo_summary","publish_time","tag", "images", "thumbs", "videos","category", "stick", "audios"
+		] : $query['select'];
 		$select = is_array($select) ? $select : explode(',', $select);
 
 		// 验证 Select 参数
@@ -220,6 +222,10 @@ class Article extends Api {
 
 		// 处理结果集
 		$data = $resultData['data'];
+
+		foreach ($data as & $rs ) {
+			$art->format( $rs );
+		}
 
 		if ( $query['debug'] == 1) {
 			$resp['_sql'] = $qb->getSQL();

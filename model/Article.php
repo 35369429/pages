@@ -72,7 +72,7 @@ class Article extends Model {
 		// 	]
 		// ];
 		// $this->stor = new Local( $options );
-		$this->media = new Media;
+		$this->media = new Media(['host'=>Utils::getHome(Utils::getLocation())]);
 
 	}
 
@@ -585,6 +585,17 @@ class Article extends Model {
 				$article['publish_time'] = date('@ H时i分', $time);
 				$article['publish_date'] = date('m/d/2017', $time);
 				// $article['time'] = $time;
+			}
+		}
+
+		if ( array_key_exists('images', $article)  && is_array($article['images']) && count($article['images']) > 0) {
+
+			foreach ($article['images'] as & $img ) {
+				if ( is_array($img) &&  !empty($img['path']) ) {
+					$img = $this->media->get( $img['path']);
+				} else if ( is_string($img) ) {
+					$img = $this->media->get( $img);
+				}
 			}
 		}
 
