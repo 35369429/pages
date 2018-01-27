@@ -176,7 +176,7 @@ class Article extends Model {
 			throw new Excp("请提供目标网页地址", 404, ['data'=>$data]);
 		}
 
-		$spider = new Spider();
+		$spider = new Spider(['host'=>Utils::getHome(Utils::getLocation())]);
 		$page = $spider->crawl($url);
 		$data = array_merge($page, $data);
 
@@ -598,6 +598,27 @@ class Article extends Model {
 				}
 			}
 		}
+
+		if ( array_key_exists('thumbs', $article)  && is_array($article['thumbs']) && count($article['thumbs']) > 0) {
+
+			foreach ($article['thumbs'] as & $img ) {
+				if ( is_array($img) &&  !empty($img['path']) ) {
+					$img = $this->media->get( $img['path']);
+				} else if ( is_string($img) && !empty($img) ) {
+					$img = $this->media->get( $img);
+					// $img = $u['url'];
+				}
+			}
+		}
+
+
+		if (is_string($article['cover']) && substr( $article['cover'],0,1) == '/') {
+			$u = $this->media->get($article['cover']);
+			// print_r($u);
+			$article['cover'] = $u['url'];
+		}
+
+		// /static-file/media/2018/01/27/3dfc350d905fcd64a5e219dd09a49eea.png
 
 		// if ( !isset($article['delta']) || empty($article['delta']) ) {
 		// 	$article['delta'] = 'null';

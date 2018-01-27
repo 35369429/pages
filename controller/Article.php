@@ -10,7 +10,9 @@ use \Endroid\QrCode\QrCode as Qrcode;
 use Endroid\QrCode\LabelAlignment;
 use \Endroid\QrCode\ErrorCorrectionLevel;
 
-
+use andreskrey\Readability\Readability;
+use andreskrey\Readability\HTMLParser;
+use andreskrey\Readability\Configuration;
 
 class ArticleController extends \Xpmse\Loader\Controller {
 	
@@ -164,6 +166,15 @@ class ArticleController extends \Xpmse\Loader\Controller {
 
 
 	function test(){
+
+
+		$readability = new Readability(new Configuration());
+
+
+		print_r( $readability);
+
+		return;
+
 
 		Utils::cliOnly();
 

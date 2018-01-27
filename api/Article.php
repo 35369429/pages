@@ -87,13 +87,15 @@ class Article extends Api {
 	protected function search( $query=[] ) {
 
 		$select = empty($query['select']) ? [
-			'article_id', 'cover', 'author', 'origin',"article_id","cover","title","author","origin","origin_url","summary","seo_title","seo_keywords","seo_summary","publish_time","tag", "images", "thumbs", "videos","category", "stick", "audios"
+			'article_id', 'cover', 'author', 'origin',"article_id","cover","title","author","origin","origin_url","summary","seo_title",
+			"seo_keywords","seo_summary","publish_time","tag", "images", "thumbs", "videos","category", "stick", "audios",
+			"param"
 		] : $query['select'];
 		$select = is_array($select) ? $select : explode(',', $select);
 
 		// 验证 Select 参数
 		$getTag = false; $getCategory = false;
-		$allowFields = ["*","article_id","cover","title","author","origin","origin_url","summary","seo_title","seo_keywords","seo_summary","publish_time","update_time","create_time","sync","content","ap_content","draft","ap_draft","history","stick","status","category", "tag", "images", "thumbs", "videos", "audios"];
+		$allowFields = ["*","article_id","cover","title","author","origin","origin_url","summary","seo_title","seo_keywords","seo_summary","publish_time","update_time","create_time","sync","content","ap_content","draft","ap_draft","history","stick","status","category", "tag", "images", "thumbs", "videos", "audios", "param"];
 
 		foreach ($select as $idx => $field) {
 

@@ -221,7 +221,7 @@
 										<?=$name?> (建议尺寸 <?=$options['article/image/ratio'][$topic]['ratio']?>)
 									</div>
 									<div class="push-15">
-										<input type="hidden" id="thumbs-<?=$i?>"  name="thumbs[]" value="<?=$article['thumbs'][$i]?>" >
+										<input type="hidden" id="thumbs-<?=$i?>"  name="thumbs[]" value="<?=$article['thumbs'][$i]['path']?>" >
 										<button class="btn btn-sm push-10-r btn-default thumbs-<?=$i?>-selector" type="button"> 
 											选择图片 
 										</button>
@@ -233,7 +233,7 @@
 									</div>
 
 									<?php if ( !empty($article['thumbs']) && !empty($article['thumbs'][$i]) ) :?>
-									<img name="thumbs-<?=$i?>" src="<?=$article['thumbs'][$i]?>" style="width:100%;" >
+									<img name="thumbs-<?=$i?>" src="<?=$article['thumbs'][$i]['url']?>" style="width:100%;" >
 									<?php endif; ?>
 
 								</div>
@@ -449,11 +449,7 @@
 						</span>
 					</div>
 					<div class="col-xs-10 text-left" >
-
 						<textarea class="hidden content-html"><?=$article["content"]?></textarea>
-
-						
-
 						<button 
 							type="button" 
 							data-form="#general-form"
@@ -573,100 +569,6 @@
 							class="btn btn-success font-w300 push-10-l push-10-r fn-btn copytowechat fn-btn ">
 							<i class="fa fa-wechat push-5-r"></i> 复制 
 						</button>
-
-
-						<!-- 微信公众号同步 
-						<?php if ( !empty($wechats) ) : ?>
-						<button 
-							confirm-title="<i class='fa fa-wechat'></i> 请选择上传到哪些公众号 ..."
-							confirm-content="<ul  class='list-group' >
-								<?php foreach($wechats as $we) : ?>
-								<li class='list-group-item'>
-									<label class='css-input css-checkbox css-checkbox-success'>
-		                               <input name='wxmp' type='checkbox' value='<?=$we['appid']?>' checked ><span class='push-10-r'></span> 
-		                               <span class='push-10-r'> <i class='fa fa-wechat'></i>   <?=$we['name']?>   </span>
-		                               <span class='push-10-r'> 绑定分类: <?=$we['category']?>  </span>
-		                               <span> AppID: <?=$we['appid']?>  </span>
-		                            </label>
-		                            <span name='wxmp' class='hidden push-10-r pull-right'><i class='fa fa-refresh fa-spin'></i></span>
-								</li>
-								<?php endforeach; ?>
-
-								<div class='push-15-t push-15-l'>
-									<label class='css-input css-checkbox css-checkbox-danger '> 
-										<input name='sync-create' type='checkbox' value='1'  ><span class='push-10-r'></span>  
-										作为新图文素材上传  <span class='text-danger'> ( 将新建一个图文素材 )</span>
-									</label>
-								</div>
-
-							</ul>"
-							confirm-submit="立即上传"
-							confirm-action="<?=App::NR('Article', 'uptowechat');?>"
-							event-before="
-								function( btn, modal ) {
-									var names = [];
-									$('input[name=wxmp]',modal ).each( function( idx, mp ) {
-										if ( $(mp).prop('checked') === true ){
-											names.push( $(mp).val() );
-										}
-									});
-
-									$(btn).attr('data-param-mpids', names);
-									if ($('input[name=sync-create]', modal).prop('checked') == true) {
-										$(btn).attr('data-param-create', 1);
-									} else {
-										$(btn).removeAttr('data-param-create');
-									}
-									
-									$('button', modal)
-										.addClass('disabled')
-										.attr('disabled', 'disabled');
-									$('span[name=wxmp]', modal).removeClass('hidden').show();
-								}
-							"
-							event-success="
-								function(btn, modal) {
-									$('.webeditor-counter').hide();
-									$('.webeditor-status')
-										.removeClass('text-danger')
-										.removeClass('text-muted')
-										.addClass('text-success')
-										.html('<i class=\'fa fa-check\'></i>  上传成功');
-
-		
-									savetimeout = setTimeout(function(){
-										$('.webeditor-status').html('');
-										$('.webeditor-counter').show();
-									}, 2000);
-								}
-							"
-
-							event-error="
-								function( data, btn, modal) {
-									console.log('fail', data);
-									var message = data['message'] || '上传失败';
-									App.notify( message, 'fa fa-times','danger'); 
-								}
-							"
-
-							event-done="
-								function( data, btn, modal) {
-									$('span[name=wxmp]',modal ).addClass('hidden').hide();
-
-									$('button', modal)
-										.removeClass('disabled')
-										.removeAttr('disabled');
-								}
-							"
-							class="btn btn-success font-w300 ajax-confirm  pull-right fn-btn  
-								on-saved on-published on-unapplied  on-unpublished hidden 
-								uptowechat ">
-
-							<i class="fa fa-wechat"></i> 上传
-						</button>
-						<?php endif;?>  END 微信公众号同步 -->
-						
-						
 
 
 					</div>
@@ -1155,7 +1057,7 @@ $(function() {
 				var $input = $('input[id="thumbs-<?=$i?>"]', '.webeditor-cover');
 				var $parent = $('.thumbs-<?=$i?>-selector', '.webeditor-cover').parent().parent();
 
-				$input.val( selected[0]['url'] );
+				$input.val( selected[0]['path'] );
 				if ( $img.length == 0 ) {
 					$parent.append('<img name="thumbs-<?=$i?>" src="'+ selected[0]['url'] +'" style="width:100%" >');
 					return;
@@ -1220,7 +1122,7 @@ $(function() {
 		imagePanel.show({
 			confirm: function( selected ) {  // 选中图片
 				if ( selected.length === 0 ) return ;
-				$editor.coverAdd( selected[0]['url'] , selected[0]['url']);
+				$editor.coverAdd( selected[0]['url'] , selected[0]['path']);
 			},
 			multiple:1
 		});

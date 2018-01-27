@@ -12,8 +12,13 @@ use \Xpmse\Media as Media;
 use \Mina\Delta\Render as DeltaRender;
 
 use \Spatie\Browsershot\Browsershot;
-use PHPHtmlParser\Dom;
+use \PHPHtmlParser\Dom;
+// use \Readability\Readability;
 
+
+use andreskrey\Readability\Readability;
+use andreskrey\Readability\HTMLParser;
+use andreskrey\Readability\Configuration;
 
 
 /**
@@ -33,7 +38,7 @@ class Spider {
 	 * @param  [type] $imgUrl [description]
 	 * @return [type]         [description]
 	 */
-	function crawlImage( $url, $node ) {
+	function crawlImage( $url, & $node ) {
 
 		if ( empty($url) ) {
 			return "";
@@ -48,9 +53,12 @@ class Spider {
 			$ext = 'png';
 		}
 		$rs = $this->media->uploadImage($url, $ext);
+
 		$newurl = $rs['url'];
 		$node->setAttribute('src',  $newurl );
 		$node->setAttribute('data-src',  $newurl );
+		$node->setAttribute('data-path',  $rs['path'] );
+		$node->setAttribute('data-xxxx',  $rs['path'] );
 		$this->hasCrawled[$newurl] = $url;
 		return $newurl;
 	}
@@ -66,6 +74,8 @@ class Spider {
 	 */
 	private function parseField( $node, $type, $attr ) {
 
+		$readability = new Readability(new Configuration());
+
 		switch ($type) {
 		
 			case 'image':
@@ -80,6 +90,33 @@ class Spider {
 				break;
 			case 'delta':
 				$html = $node->innerHTML;			
+				$this->delta_render->loadByHTML($html);
+				$val = $this->delta_render->delta();
+				break;
+			case 'html-readability':
+				$html = $node->innerHTML;
+				$val = $html;
+
+				// try {
+				// 	$html = str_replace('section', 'div', $html);
+				// 	$readability->parse($html);
+				// 	$val =  $readability->getContent();
+
+				// } catch (ParseException $e) {
+				// 	// echo sprintf('Error processing text: %s', $e->getMessage);
+				// }
+				break;
+			case 'delta-readability':
+				echo 'delta-readability';
+				$html = $node->innerHTML;
+				// try {
+				// 	$readability->parse($html);
+				// 	$html =  $readability->getContent();
+				// } catch (ParseException $e) {
+				// 	// echo sprintf('Error processing text: %s', $e->getMessage);
+				// }
+				var_dump($html);
+
 				$this->delta_render->loadByHTML($html);
 				$val = $this->delta_render->delta();
 				break;
@@ -132,6 +169,8 @@ class Spider {
 			->bodyHtml();
 		;
 
+		// 过滤掉不支持的 tag
+		$html = str_replace('section', 'div', $html);
 		$dom = new Dom;
 		$dom->loadStr($html, []);
 
