@@ -330,19 +330,22 @@ class Category extends Model {
 	 * @param  integer $depth     [description]
 	 * @return [type]             [description]
 	 */
-	function each( $fn, $parent_id=0, $depth=0 ) {
+	function each( $fn, $parent_id=null, $depth=0 ) {
 		
 		$depth ++;
 		if ( !is_callable($fn) ) {
 			$fn = function( $data, $depth ) {};
 		}
+		
+		$qb = $this->query()->where('status', '=', 'on');
+		$qb->where('parent_id','=', $parent_id)	;
+		$resp = $qb->get()->toArray();
 
-		$resp = $this->select("where parent_id=? and status='on' ", ['*'], [$parent_id]);
-		if ( empty($resp['data']) ) {
+		if ( empty($resp) ) {
 			return;
 		}
 
-		foreach ($resp['data'] as $rs ) {
+		foreach ($resp as $rs ) {
 			$fn( $rs, $depth );
 			$this->each( $fn, $rs['category_id'], $depth);
 		}

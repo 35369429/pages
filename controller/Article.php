@@ -28,14 +28,6 @@ class ArticleController extends \Xpmse\Loader\Controller {
 		$query['order'] =  isset($_REQUEST['order']) ?  $_REQUEST['order'] : 'create_time desc';
 		$resp  = $art->call('search', $query);
 
-
-
-		// echo "<pre>";
-		// print_r($query);
-		// print_r($resp);
-		// echo "</pre>";
-
-
 		$cate = new \Xpmsns\pages\Model\Category;
 		$wechats = $cate->wechat();
 
@@ -113,12 +105,14 @@ class ArticleController extends \Xpmse\Loader\Controller {
 		}
 
 		$cate = new \Xpmsns\pages\Model\Category;
+		$cates = $cate->search(["perpage"=>100]);
 	
 		$data = [
 			'home' => Utils::getHome(App::$APP_HOME_LOCATION),
 			'url' => $_GET['url'],
 			'published'=> $_GET['published'],
-			'category' => $cate
+			'category' => $cate,
+			'cates' =>$cates
 		];
 
 		App::render($data,'article','collect.widget');
@@ -458,11 +452,13 @@ class ArticleController extends \Xpmse\Loader\Controller {
 
 		$cate = new \Xpmsns\pages\Model\Category;
 		$wechats = $cate->wechat();
+		$cates = $cate->search(["perpage"=>100]);
 
 		$data = [
 			'article' => $article,
 			'wechats' => $wechats,
 			'category' => $cate,
+			'cates' => $cates,
 			'options' => $options['map']
 		];
 
