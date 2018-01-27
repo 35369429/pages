@@ -185,6 +185,11 @@ class Article extends Model {
 			$data['category'] = $cate->getVar('category_id', "WHERE slug='default' LIMIT 1");
 		}
 
+		if( !empty($data['publish_date']) ) {
+			$time = strtotime($data['publish_date']);
+			$data['publish_time'] = date('Y-m-d H:i:s', $time);
+			unset($data['publish_date']);
+		}
 
 		if ( empty($data['status']) ) {
 			$data['status'] = ARTICLE_UNPUBLISHED;
@@ -386,7 +391,7 @@ class Article extends Model {
 		// 替换 Cover 图片
 		if ( !empty($rs['cover']) ) {
 			$rs = $this->media->uploadImage($rs['cover'], null, false);
-			$updateData['cover'] = $rs['url'];
+			$updateData['cover'] = $rs['path'];
 		}
 
 		return $this->save( $updateData );
@@ -614,8 +619,7 @@ class Article extends Model {
 
 		if (is_string($article['cover']) && substr( $article['cover'],0,1) == '/') {
 			$u = $this->media->get($article['cover']);
-			// print_r($u);
-			$article['cover'] = $u['url'];
+			$article['cover'] = $u;
 		}
 
 		// /static-file/media/2018/01/27/3dfc350d905fcd64a5e219dd09a49eea.png

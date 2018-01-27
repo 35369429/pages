@@ -170,11 +170,11 @@
 							<div class="row">
 								<div class="col-xs-6 remove-padding preview border" >
 									<?php if (!empty($article['cover'])) :?>
-									<img name="cover" src="<?=$article['cover']?>" >
+									<img name="cover" src="<?=$article['cover']['url']?>" >
 									<?php endif; ?>
 								</div>
 								<div class="col-xs-6 remove-padding">
-									<input type="hidden" name="cover" value="<?=$article['cover']?>" >
+									<input type="hidden" name="cover" value="<?=$article['cover']['path']?>" >
 									<div>
 										<button class="btn btn-minw push-15-l btn-default cover-selector" type="button"> 选择封面图片 </button>
 									</div>

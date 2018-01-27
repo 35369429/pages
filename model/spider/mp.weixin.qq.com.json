@@ -5,7 +5,8 @@
 	"index": {},
 	"detail": {
 		"origin_url": "{url}",
-		"thumbs":".rich_media_thumb|data-src:@image{3}",
+		"cover":".rich_media_content  img|data-src:@image[0]",
+		"thumbs":".rich_media_content img|data-src:@image{4}",
 		"images":".rich_media_content img|data-src:@image",
 		"title":"title",
 		"author":"#post-user",

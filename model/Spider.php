@@ -19,6 +19,7 @@ use \PHPHtmlParser\Dom;
 use andreskrey\Readability\Readability;
 use andreskrey\Readability\HTMLParser;
 use andreskrey\Readability\Configuration;
+use \Exception as Exception;
 
 
 /**
@@ -45,22 +46,29 @@ class Spider {
 		}
 
 		if ( !empty($this->hasCrawled[$url]) ) {
-			return  $url;
+			return $this->hasCrawled[$url]['path'];
+			// return  $url;
 		}
 
 		$ext =  $this->media->getExt($url);
 		if ( !in_array($img, ['png', 'jpg', 'jpeg', 'gif', 'svg']) ) {
 			$ext = 'png';
 		}
-		$rs = $this->media->uploadImage($url, $ext);
+		try {
+			$rs = $this->media->uploadImage($url, $ext);
+		} catch( Excp $e) {
+			return $url;
+		} catch( Exception $e ){
+			return $url;
+		}
 
 		$newurl = $rs['url'];
 		$node->setAttribute('src',  $newurl );
 		$node->setAttribute('data-src',  $newurl );
 		$node->setAttribute('data-path',  $rs['path'] );
 		$node->setAttribute('data-xxxx',  $rs['path'] );
-		$this->hasCrawled[$newurl] = $url;
-		return $newurl;
+		$this->hasCrawled[$newurl] = $rs;
+		return $rs['path'];
 	}
 
 
