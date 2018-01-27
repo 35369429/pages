@@ -118,7 +118,7 @@ class Category extends Api {
 
 		// 是否包含子类
 		$query['children'] = isset($query['children']) ? $query['children'] : true;
-		$query['parentId'] = isset($query['parentId']) ? $query['parentId'] : 0;
+		$query['parentId'] = isset($query['parentId']) ? $query['parentId'] : null;
 
 
 		// Order 默认参数
