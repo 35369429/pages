@@ -109,7 +109,7 @@ class Category extends Model {
 	function save( $data ) {
 
 		// 子分类
-		if ( !empty($data['parent_id'])  ) {
+		if ( array_key_exists('parent_id', $data) &&  !empty($data['parent_id'])  ) {
 
 			$pa = $this->getById($data['parent_id']);
 			if (!empty($pa) ) {
@@ -119,13 +119,13 @@ class Category extends Model {
 			}
 		}
 
-		if ( empty($data['parent_id']) ) {
+		if ( array_key_exists('parent_id', $data) && empty($data['parent_id']) ) {
 			$data['parent_id'] = null;
 			$data['root_id'] = null;
 		}
 
 		// 创建分类
-		if ( empty($data['category_id']) ) {
+		if ( empty($data['category_id'])  ) {
 			return $this->create($data);
 		}
 
