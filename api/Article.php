@@ -346,6 +346,8 @@ class Article extends Api {
 			throw new Excp("文章不存在", 404,  ['query'=>$query]);
 		}
 
+		$art->format($rs);
+
 		if( $getCategory) {
 			$rs['category'] = $art->getCategories($article_id,"category.category_id","name","fullname","project","page","parent_id","priority","hidden","param" );
 		}

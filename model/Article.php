@@ -621,6 +621,12 @@ class Article extends Model {
 			$article['cover'] = $u;
 		}
 
+		if ( !empty($article["content"]) ) {
+			$article["content"] = str_replace("\n", "", $article['content']);
+			$article["content"] = str_replace("\t", "", $article['content']);
+			$article["content"] = str_replace("\r", "", $article['content']);
+		}
+
 		// /static-file/media/2018/01/27/3dfc350d905fcd64a5e219dd09a49eea.png
 
 		// if ( !isset($article['delta']) || empty($article['delta']) ) {
