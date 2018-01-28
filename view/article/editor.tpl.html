@@ -221,7 +221,8 @@
 										<?=$name?> (建议尺寸 <?=$options['article/image/ratio'][$topic]['ratio']?>)
 									</div>
 									<div class="push-15">
-										<input type="hidden" id="thumbs-<?=$i?>"  name="thumbs[]" value="<?=$article['thumbs'][$i]['path']?>" >
+										<input type="hidden" id="thumbs-<?=$i?>"  name="thumbs[]" 
+										value="<?=!isset($article['thumbs'][$i]['path']) ? '' : $article['thumbs'][$i]['path']?>" >
 										<button class="btn btn-sm push-10-r btn-default thumbs-<?=$i?>-selector" type="button"> 
 											选择图片 
 										</button>
@@ -233,7 +234,7 @@
 									</div>
 
 									<?php if ( !empty($article['thumbs']) && !empty($article['thumbs'][$i]) ) :?>
-									<img name="thumbs-<?=$i?>" src="<?=$article['thumbs'][$i]['url']?>" style="width:100%;" >
+									<img name="thumbs-<?=$i?>" src="<?=!isset($article['thumbs'][$i]['url']) ? '' : $article['thumbs'][$i]['url']?>" style="width:100%;" >
 									<?php endif; ?>
 
 								</div>

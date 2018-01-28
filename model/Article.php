@@ -588,8 +588,7 @@ class Article extends Model {
 			$article['publish_time'] = null;
 			if ( $time > 0 ) {
 				$article['publish_time'] = date('@ H时i分', $time);
-				$article['publish_date'] = date('m/d/2017', $time);
-				// $article['time'] = $time;
+				$article['publish_date'] = date('m/d/Y', $time);
 			}
 		}
 

@@ -210,6 +210,8 @@ class Article extends Api {
 				throw new Excp(" order 参数错误 ({$orderArr[0]} 非法字段)", 400, ['query'=>$query]);
 			}
 
+			// echo 'article.'. $orderArr[0] .  "  , " . $orderArr[1]; 
+
 			$qb->orderBy('article.'.$orderArr[0],$orderArr[1]);
 		}
 		
@@ -267,8 +269,8 @@ class Article extends Api {
 
 
 		// 处理结果集数据
-		$resp['data'] = [];
-		foreach ($data as $idx => $rs ) {
+		// $resp['data'] = [];
+		foreach ($resp['data'] as & $rs ) {
 			$aid = $rs['_aid'];unset($rs['_aid']);
 
 			if ( $getCategory) {
@@ -278,7 +280,7 @@ class Article extends Api {
 				$rs['tag'] = $tags[$aid];
 			}
 	
-			$resp['data'][$idx] = $rs;
+			// $resp['data'][$idx] = $rs;
 		}
 
 		return $resp;
