@@ -1,21 +1,20 @@
 /**
- * MINA Pages 模板 （ List )
- *
- *
+ * MINA Pages 模板 （ Detail )
  */
 
-import * as faker from  '../common/faker.js';
+// import * as faker from  '../common/faker.js';
 // import Vdom from '../common/vdom.js'
+let app = getApp();
 
 Page({
-	data:{ data:{}, system:{}, loading:'' },
+	data:{ rs:{}, system:{}, loading:'' },
 
 	onShareAppMessage: function(res) {
 
 		let that = this;
 		return {
-			title:that.data.data.title,
-			path:'/article/detail?id=' + that.data.data.id,
+			title:that.data.rs.title,
+			path:'/article/detail?id=' + that.data.article.article_id,
 			success: function(res) {
 				wx.showToast({
 					title: '转发成功',
@@ -26,21 +25,38 @@ Page({
 		}
 	},
 
-	getArticle: function( id ) {
+	getArticle: function( article_id ) {
 
-		let that = this;
-		return new Promise( function( resolve, reject ) {
-			setTimeout(function(){
+		let xpm = app.xpm;
+		let $get = xpm.api('/xpmsns/pages/article/get');
 
-				let data = faker.detail;
-					data['page'] = data['page'] || 'no';
-					data['system'] = that.system;
-				that.setData( {data:data} );
-				that.done();
-				resolve(data);
+		return new Promise((resolve, reject)=>{
+	    	$get().get({articleId:article_id}).then(( article )=>{
+
+	    		// console.log( article );
+
+	    		this.done();
+	    		this.setData({rs:article});
+	    		resolve(article);
+	    	}).catch( (excp) => {
+	      		// 读取数据失败
+	      		console.log( 'excp:',  excp );
+	    	});
+    	});
+
+		// let that = this;
+		// return new Promise( function( resolve, reject ) {
+		// 	setTimeout(function(){
+
+		// 		let data = faker.detail;
+		// 			data['page'] = data['page'] || 'no';
+		// 			data['system'] = that.system;
+		// 		that.setData( {data:data} );
+		// 		that.done();
+		// 		resolve(data);
 					
-			}, 0);
-		});
+		// 	}, 0);
+		// });
 	},
 
 	onLoad: function( params ) {
@@ -52,7 +68,7 @@ Page({
 		data['page'] = 'default';
 		data['system'] = wx.getSystemInfoSync();
 		this.setData({system:data['system'], data:data});
-		this.getArticle( params['id'] ).then();
+		this.getArticle( params['id'] );
 
 	},
 
