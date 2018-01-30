@@ -1,11 +1,7 @@
 /**
- * MINA Pages 模板 （ List )
- *
- *
+ * XpmSNS头条模板 （ List )
  */
-
-import * as faker from  '../common/faker.js';
-
+let app = getApp();
 Page({
 
 	data: { 
@@ -30,8 +26,8 @@ Page({
 			console.log(res.target)
 		}
 
-		let cid = this.data.categories[this.data.category]['id'];
-		let title = this.data.categories[this.data.category]['name'] + ' - MINA Pages';
+		let cid = this.data.categories[this.data.category]['category_id'];
+		let title = this.data.categories[this.data.category]['name'] + ' - XpmSNS/头条';
 
 		return {
 			title:title,
@@ -53,7 +49,7 @@ Page({
 		}
 
 		let that = this;
-		let cid = this.data.categories[this.data.category]['id'];
+		let cid = this.data.categories[this.data.category]['category_id'];
 		that.refresh();
 		that.getArticles( 1, cid )
 			.then(function( articles ) {
@@ -78,7 +74,7 @@ Page({
 			categories[data.id]['class'] = 'active';
 
 		let title = categories[data.id]['name'];
-			title = title + ' - MINA Pages';
+			title = title + ' - XpmSNS/头条';
 			wx.setNavigationBarTitle({title: title});
 
 		that.loading();
@@ -106,15 +102,16 @@ Page({
 			return;
 		}
 
+		let cid = this.data.categories[this.data.category]['category_id'];
 		let that = this;
+
 		that.loading();
-		that.getArticles( this.data.pagination.next )
+		that.getArticles( this.data.pagination.next, cid )
 			.then(function( articles ) {
 
 				that.pushArticles( articles );
 				that.done();
 			})
-
 	},
 
 	replaceArticles: function( articles ) {
@@ -141,21 +138,49 @@ Page({
 	 */
 	getCategoris: function( cid ) {
 
-		let that = this;
+		let xpm = app.xpm;
+		let $search = xpm.api('/xpmsns/pages/category/search');
 
-		return new Promise(function( resolve, reject ) {
+		return new Promise( (resolve, reject) => {
+			$search().get({perpage:40, page:1, param:'isnav=true', order:'priority asc'}).then(( cates )=>{
+				
+				let total = cates.total || 0;
+				let categories = cates.data;
+				let current = null;
+				let title = null;
 
-			let categories = faker.categories;
-			for( var idx in categories ) {
-				if ( categories[idx]['class'] == 'active' )  {
-					let title = categories[idx]['name'];
-						title = title + ' - MINA Pages';
-					that.setData({category:idx});
-					wx.setNavigationBarTitle({title: title});
+
+				if ( total == 0 ) {
+					console.log('someting Error', cates );
+					reject(excp);
+					return;
 				}
-			}
 
-			resolve(faker.categories);
+				for( var idx in categories ) {
+					let cid = categories[idx]['category_id'];
+					categories[idx]['class'] = "";
+					if ( categories[idx]['class'] == 'active' )  {
+						current = idx;
+					}
+				}
+
+				if ( current == null ) {
+					current = 0 ;
+				}
+
+				cid = categories[current]['category_id'];
+				title = categories[current]['name']  + " - 头条/XpmSNS";
+				categories[current]['class'] = 'active';
+				this.setData({category:current});
+				wx.setNavigationBarTitle({title: title});
+
+				console.log(categories, this.data );
+				resolve(categories);
+
+			}).catch( (excp) => {
+				console.log('someting Error', excp );
+				reject(excp);
+			});
 		});
 	},
 
@@ -165,49 +190,63 @@ Page({
 	 * @param  {[type]} cateid [description]
 	 * @return {[type]}        [description]
 	 */
-	getArticles: function( page, cateid ) {
+	getArticles: function( page, cid ) {
 
 		page = page || 1;
-		cateid = cateid || null;
-		let that = this;
+		cid = cid || null;
+		let xpm = app.xpm;
+		let $search = xpm.api('/xpmsns/pages/article/search');
+      	return new Promise( (resolve, reject) => {
+	      	$search().get({page:page, perpage:15, categoryId:cid, order:'publish_time desc'})
+	      	.then((articles)=>{
+	      		this.setData({pagination:articles});
+	      		for( var idx in articles['data'] ) {
+	      			articles['data'][idx]['template'] = 'image';  // 根据数据选择呈现样式
+	      		}
 
-		return new Promise(function( resolve, reject ) {
-
-			setTimeout(function(){
-				that.done();
-
-				if ( page == 1) {
-					that.setData({pagination:{curr:1, next:2, prev:false}});
-				} else {
-					that.setData({pagination:{curr:2, next:false, prev:1}});
-				}
-
-				resolve(faker["articles-" + page]);
-			}, 2000);
-
-		});
+	      		this.done();
+	      		resolve( articles['data'] );
+	      	})
+	      	.catch(( excp )=>{
+	      		this.done();
+	      		console.log('someting error', excp);
+	      	})
+      	});
 	},
 
-
-
 	onLoad: function ( params ) {
-		let that = this;
+
 		let cid = params['cid'] || "";
-		that.setData({system:wx.getSystemInfoSync()});
+		this.setData({system:wx.getSystemInfoSync()});
+		if ( cid == "" ) {
 
-		Promise.all([that.getCategoris(cid), that.getArticles(1, cid) ] )
-
-		.then( function( resp ) {
-
-			that.setData({
-				"categories": resp[0],
-				"articles" : resp[1],
+			this.getCategoris(cid).then((cates)=>{
+				this.setData({categories:cates});
+				let idx = this.data.category;
+				cid = cates[idx]['category_id'];
+				return cid;
+			}).then( (cid) =>{
+				return this.getArticles(1, cid );
+			}).then( (articles ) =>{
+				this.setData({articles:articles});
+			}).catch(function( excp ) {
+				console.log( 'someting error', excp);
 			});
 
-		}).catch(function( error ) {
-			console.log( 'someting error');
+		} else {
 
-		})
+			Promise.all([this.getCategoris(cid), this.getArticles(1, cid) ] )
+
+			.then( ( resp ) => {
+				this.setData({
+					"categories": resp[0],
+					"articles" : resp[1],
+				});
+			}).catch(function( excp ) {
+				console.log( 'someting error', excp);
+			})
+		}
+
 	},
 
 	isLoading: function() {

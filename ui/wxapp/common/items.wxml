@@ -1,15 +1,13 @@
 <template name="item-image">
-<view class="item item-image" bindtap="detail" data-id="{{article.id}}" >
-	<view class="image" data-id="{{article.id}}">
-		<image mode="aspectFill" src="{{article.images[0]}}" data-id="{{article.id}}" ></image>
+<view class="item item-image" bindtap="detail" data-id="{{article.article_id}}" >
+	<view class="image">
+		<image mode="aspectFill" src="{{article.cover['url']}}" ></image>
 	</view>
-	<view class="summary" data-id="{{article.id}}" > 
-		<view class="title" data-id="{{article.id}}"  >{{article.title}}</view>
-		<view class="note" data-id="{{article.id}}" >
-			<view data-id="{{article.id}}" 
-				wx:for="{{article.tags}}" wx:for-item="tag" wx:key="*this"
-				  class="tag" >{{tag}}</view>
-			<view class="origin" data-id="{{article.id}}" >{{article.origin}}</view>
+	<view class="summary" > 
+		<view class="title">{{article.title}}</view>
+		<view class="note">
+			<view class="it">{{article.publish_date}}</view>
+			<view class="it" >{{article.author}}</view>
 		</view>
 	</view>
 </view>

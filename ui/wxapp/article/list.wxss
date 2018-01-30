@@ -14,6 +14,7 @@
 	top:0;
 	padding-left: 16rpx;
 	padding-right: 16rpx;
+	/*border-bottom: 2rpx solid #efefef;*/
 }
 
 .wrapper .menu .item {
@@ -40,9 +41,12 @@
 
 /** 文章列表样式 */
 .articles {
-	margin-top: 72rpx;
+	margin-top: 74rpx;
 	height:600rpx;
+	/*padding-top:16rpx;*/
+	/*border-top: 2rpx solid #efefef;*/
 }
+
 
 .articles .item {
 	padding-top: 16rpx;
@@ -50,12 +54,9 @@
 	padding-left: 24rpx;
 	padding-right: 24rpx;
 	border-bottom: 2rpx solid #efefef;
-	margin-bottom: 16rpx;
+	/*margin-bottom: 16rpx;*/
 }
 
-.articles .item:last-child{
-	border-bottom:none;
-}
 
 .articles .item image {
 	background-color: #eeeeee;
@@ -66,7 +67,14 @@
 	color: #a9a9a9;
 	font-size:28rpx;
 	margin-top:10rpx;
+	justify-content:space-between;
 }
+
+.articles .item .note .it {
+	margin-right: .1em;
+	font-size: 28rpx;
+}
+
 
 .articles .item .note .tag:not(:first-child):before {
 	font-size:28rpx;
@@ -75,7 +83,7 @@
 }
 
 .articles  .item .origin{
-	margin-left: auto;
+	/*margin-left: auto;*/
 }
 
 .articles .title  {
@@ -95,15 +103,18 @@
 	margin-right: 15rpx;
 }
 .articles .item-image .image image {
-	width: 192rpx; height: 144rpx;
+	width: 192rpx; 
+	height: 144rpx;
 }
 
 .articles .item-image .summary {
 	padding: 2rpx;
+	width: 100%;
 }
 
 .articles .item-image .summary .title  {
 	height: 90rpx;
+	min-height: 90rpx;
 	overflow: hidden;
 }
 

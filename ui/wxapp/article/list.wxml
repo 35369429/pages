@@ -34,12 +34,12 @@
 		
 		<!-- Menu Item -->
 		<view 
-			wx:for="{{categories}}" wx:for-index="idx" wx:for-item="cate"  wx:key="id"
-			bindtap="loadArticlesByCate" data-id="{{idx}}" data-cid="{{cate.id}}"
+			wx:for="{{categories}}" wx:for-index="idx" wx:for-item="cate"  wx:key="category_id"
+			bindtap="loadArticlesByCate" data-id="{{idx}}" data-cid="{{cate.category_id}}"
 			class="{{cate.class}}  item">{{cate.name}}</view>  <!-- END Menu Item-->
 
 	</scroll-view> <!-- END Menu -->
 
 
 
-</view> <!-- END Wrapper
+</view> <!-- END Wrapper -->
