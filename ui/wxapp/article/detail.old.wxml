@@ -1,0 +1,80 @@
+<!-- 文章列表页 -->
+<import src="/common/html.wxml" />
+
+<template name="default">
+	<view class="cover" wx:if="{{data.cover != ''}}">
+		
+		<image  class="html-cover"  mode="aspectFill" src="{{data.cover}}" 
+			style="width:100%;"  ></image>
+	</view>
+	<view class="title">{{data.title}}</view>
+	<view class="note">
+		<view class="origin">{{data.origin}}</view>
+		<view class="published_at">{{data.published_at}}</view>
+	</view>
+	
+	<view class="content" style="min-height:{{data.system.windowHeight}}px">
+		<template is="html-node" wx:for="{{data.content.children}}" data="{{item}}" wx:key="*this" ></template>
+	</view>
+
+	<view class="footer">
+		
+		<view class="note">
+			<view wx:for="{{data.tags}}" wx:for-item="tag" wx:key="*this"  class="tag" >{{tag}} </view>
+			  <view class="close" > (全文完) </view>
+		</view>
+
+		<view class="hr" ></view>
+
+		<view class="mina">
+			本文采用 
+			<image src="/res/icons/mina.svg"  mode="aspectFit" /> 
+			<view> MINA Pages </view> 
+			制作发布
+		</view>
+	</view>
+
+</template>
+
+<template name="video">
+	
+	<video src="{{data.video}}"  style="width:100%;height:100%;"  controls="true"  objectFit="fill"></video>
+
+	
+	<view class="title">{{data.title}}</view>
+	<view class="note">
+		<view wx:for="{{data.tags}}" wx:for-item="tag" wx:key="*this"
+			  class="tag" >{{tag}}</view>
+		<view class="published_at">{{data.published_at}}</view>
+		<view class="video-origin">{{data.origin}}</view>
+	</view>
+
+	<view class="content" style="min-height:{{data.system.windowHeight}}px">
+		<template is="html-node" wx:for="{{data.content.children}}" data="{{item}}" wx:key="*this" ></template>
+	</view>
+
+	<view class="footer">
+
+		<view class="hr" ></view>
+
+		<view class="mina">
+			本文采用 
+			<image src="/res/icons/mina.svg"  mode="aspectFit" /> 
+			<view> MINA Pages </view> 
+			制作发布
+		</view>
+	</view>
+
+</template>
+
+
+<!-- Wrapper -->
+<view class="wrapper">
+	<view  style="text-align:center;{{loading}}">
+		<image src="/res/icons/loading.gif" mode="aspectFill" 
+			style="width:160rpx;height:160rpx;"/>
+	</view>
+	<template is="{{data.page}}" data="{{data}}"></template>
+</view>
+
+

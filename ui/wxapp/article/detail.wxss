@@ -45,22 +45,21 @@
 	border-bottom: 2rpx solid #efefef;
 }
 
-.wrapper .footer .mina {
-	height: 48rpx;
+
+.wrapper .footer .xpmsns {
+	height: 64rpx;
+	line-height: 64rpx;
 	line-height: 1.6;
 	text-align: center;
-	font-size: 24rpx;
+	font-size: 18rpx;
 	color: #cecece;
 	margin-top:30rpx;
+	margin-bottom: 40rpx;
 }
 
-.wrapper .footer  .mina view {
-	display: inline-block;
-	color:#46c37b;
-}
-.wrapper .footer  .mina image {
-	width: 24rpx; 
-	height:24rpx;
+.wrapper .footer  .xpmsns image {
+	width: 64rpx; 
+	height:64rpx;
 	margin-right: .2em;
 }
 
