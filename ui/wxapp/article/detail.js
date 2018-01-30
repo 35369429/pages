@@ -33,7 +33,7 @@ Page({
 		return new Promise((resolve, reject)=>{
 	    	$get().get({articleId:article_id}).then(( article )=>{
 
-	    		// console.log( article );
+	    		console.log( article );
 
 	    		this.done();
 	    		this.setData({rs:article});
