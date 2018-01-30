@@ -1,0 +1,84 @@
+.wrapper {
+	color: #3a3a3a;
+}
+
+.wrapper .hidden {
+	display: none;
+}
+
+.wrapper .reminds {
+	text-align: center;
+}
+
+.wrapper .up-down-loading{
+	width: 96rpx;
+	height: 96rpx;
+}
+
+.html-span,{
+	font-weight: normal;
+}
+
+.html-p, .html-div{
+	font-size: 36rpx;
+	letter-spacing:.2;
+	line-height: 1.6;
+	font-weight: normal;
+}
+.html-p {
+	margin-bottom: 32rpx;
+}
+
+.html-ul, .html-ol {
+	margin-bottom: 32rpx;
+	padding-left: 64rpx;
+}
+
+.html-ul .html-li {
+	font-size: 36rpx;
+	letter-spacing:.2;
+	line-height: 1.6;
+}
+
+
+.html-h1 {
+	font-size: 48rpx;
+	line-height: 1.6;
+	font-weight: 500;
+}
+
+.html-h2 {
+	font-size:42rpx;
+	line-height: 1.6;
+	font-weight: 400;
+}
+
+.html-h3 {
+	font-size:36rpx;
+	line-height: 1.6;
+	font-weight: 400;
+}
+
+.html-h4 {
+	font-size:30rpx;
+	line-height: 1.6;
+	font-weight: 400;
+}
+
+.html-h5 {
+	font-size:24rpx;
+	line-height: 1.6;
+	font-weight: 400;
+}
+
+.html-h6 {
+	font-size:18rpx;
+	line-height: 1.6;
+	font-weight: 400;
+}
+
+.html-h7 {
+	font-size:12rpx;
+	line-height: 1.6;
+	font-weight: 400;
+}

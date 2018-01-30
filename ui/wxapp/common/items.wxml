@@ -1,0 +1,110 @@
+<template name="item-image">
+<view class="item item-image" bindtap="detail" data-id="{{article.id}}" >
+	<view class="image" data-id="{{article.id}}">
+		<image mode="aspectFill" src="{{article.images[0]}}" data-id="{{article.id}}" ></image>
+	</view>
+	<view class="summary" data-id="{{article.id}}" > 
+		<view class="title" data-id="{{article.id}}"  >{{article.title}}</view>
+		<view class="note" data-id="{{article.id}}" >
+			<view data-id="{{article.id}}" 
+				wx:for="{{article.tags}}" wx:for-item="tag" wx:key="*this"
+				  class="tag" >{{tag}}</view>
+			<view class="origin" data-id="{{article.id}}" >{{article.origin}}</view>
+		</view>
+	</view>
+</view>
+</template>
+
+<template name="item-large-image">
+<view class="item item-large-image"  bindtap="detail" data-id="{{article.id}}" >
+	<view class="title" data-id="{{article.id}}" >{{article.title}}</view>
+	<view class="image" data-id="{{article.id}}" >
+		<image mode="aspectFill" src="{{article.images[0]}}" data-id="{{article.id}}" ></image>
+	</view>
+	<view class="note" data-id="{{article.id}}" >
+		<view wx:for="{{article.tags}}" wx:for-item="tag" wx:key="*this" data-id="{{article.id}}" 
+			  class="tag" >{{tag}}</view>
+		<view class="origin" data-id="{{article.id}}" >{{article.origin}}</view>
+	</view>
+</view> 
+</template>
+
+<template name="item-3-images">
+<view class="item item-3-images" bindtap="detail" data-id="{{article.id}}" >
+	<view class="title" data-id="{{article.id}}" >{{article.title}}</view>
+	<view class="image" data-id="{{article.id}}">
+		<image mode="aspectFill" data-id="{{article.id}}" src="{{article.images[0]}}"></image>
+		<image mode="aspectFill" data-id="{{article.id}}" src="{{article.images[1]}}"></image>
+		<image mode="aspectFill" data-id="{{article.id}}" src="{{article.images[2]}}"></image>
+	</view>
+</view> 
+</template>
+
+<template name="item-6-images">
+<view class="item item-6-images" bindtap="detail" data-id="{{article.id}}">
+	<view class="title" data-id="{{article.id}}">{{article.title}}</view>
+	<view class="image" data-id="{{article.id}}">
+		<image mode="aspectFill"  src="{{article.images[0]}}" data-id="{{article.id}}"></image>
+		<image mode="aspectFill" src="{{article.images[1]}}" data-id="{{article.id}}" ></image>
+		<image mode="aspectFill" src="{{article.images[2]}}" data-id="{{article.id}}"></image>
+	</view>
+	<view class="image" data-id="{{article.id}}">
+		<image mode="aspectFill" src="{{article.images[3]}}" data-id="{{article.id}}"></image>
+		<image mode="aspectFill" src="{{article.images[4]}}" data-id="{{article.id}}"></image>
+		<image mode="aspectFill" src="{{article.images[5]}}" data-id="{{article.id}}"></image>
+	</view>
+</view> 
+</template>
+
+<template name="item-video">
+<view class="item item-video" bindtap="detail" data-id="{{article.id}}">
+	<view class="image" data-id="{{article.id}}">
+		<image mode="aspectFill" src="{{article.images[0]}}" data-id="{{article.id}}"></image>
+		<image mode="scaleToFill" src="/res/icons/play.png" class="icon" data-id="{{article.id}}"></image>
+	</view>
+	<view class="summary" data-id="{{article.id}}"> 
+		<view class="title" data-id="{{article.id}}" >{{article.title}}</view>
+		<view class="note" data-id="{{article.id}}" >
+			<view wx:for="{{article.tags}}" wx:for-item="tag" wx:key="*this" data-id="{{article.id}}"
+				  class="tag" >{{tag}}</view>
+			<view class="origin" data-id="{{article.id}}">{{article.origin}}</view>
+		</view>
+	</view>
+</view>
+</template>
+
+<template name="item-large-video">
+<view class="item item-large-video"   bindtap="detail" data-id="{{article.id}}" >
+	<view class="title" data-id="{{article.id}}">{{article.title}}</view>
+	<view class="image" data-id="{{article.id}}">
+		<image mode="aspectFill" src="{{article.images[0]}}" data-id="{{article.id}}" ></image>
+		<image mode="scaleToFill" src="/res/icons/play.png" class="icon" data-id="{{article.id}}"></image>
+	</view>
+	<view class="note" data-id="{{article.id}}">
+		<view wx:for="{{article.tags}}" wx:for-item="tag" wx:key="*this" data-id="{{article.id}}"
+			  class="tag" data-id="{{article.id}}" >{{tag}}</view>
+		<view class="origin" data-id="{{article.id}}">{{article.origin}}</view>
+	</view>
+</view> 
+</template>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

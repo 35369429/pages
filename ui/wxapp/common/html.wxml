@@ -1,0 +1,115 @@
+<!-- HTML 模板 -->
+<template name="html-node">
+	<template is="html-{{item.tag}}" data="{{item}}"></template>
+</template>
+
+<!-- div & p & span & image  -->
+<template name="html-div">
+	<view class="html-div"  style="{{item.attrs.style}}">
+		{{item.text}}
+		<template is="html-{{item.tag}}" data="{{item}}"  wx:for="{{item.children}}" data="{{item}}" wx:key="*this"></template>
+	</view>
+</template>
+
+<template name="html-p">
+	<view class="html-p" style="{{item.attrs.style}}" >
+		{{item.text}}
+		<template is="html-{{item.tag}}" data="{{item}}"  wx:for="{{item.children}}" data="{{item}}" wx:key="*this"></template>
+	</view>
+</template>
+
+<template name="html-span">
+	<view class="html-span"  style="{{item.attrs.style}}" >
+		{{item.text}}
+	</view>
+</template>
+
+
+<!-- H1 ~ H7 -->
+<template name="html-h1">
+	<view class="html-h1"  style="{{item.attrs.style}}">
+		{{item.text}}
+		<template is="html-{{item.tag}}" data="{{item}}"  wx:for="{{item.children}}" data="{{item}}" wx:key="*this"></template>
+	</view>
+</template>
+<template name="html-h2">
+	<view class="html-h2"  style="{{item.attrs.style}}">
+		{{item.text}}
+		<template is="html-{{item.tag}}" data="{{item}}"  wx:for="{{item.children}}" data="{{item}}" wx:key="*this"></template>
+	</view>
+</template>
+<template name="html-h3">
+	<view class="html-h3"  style="{{item.attrs.style}}">
+		{{item.text}}
+		<template is="html-{{item.tag}}" data="{{item}}"  wx:for="{{item.children}}" data="{{item}}" wx:key="*this"></template>
+	</view>
+</template>
+<template name="html-h4">
+	<view class="html-h4"  style="{{item.attrs.style}}">
+		{{item.text}}
+		<template is="html-{{item.tag}}" data="{{item}}"  wx:for="{{item.children}}" data="{{item}}" wx:key="*this"></template>
+	</view>
+</template>
+<template name="html-h5">
+	<view class="html-h5"  style="{{item.attrs.style}}">
+		{{item.text}}
+		<template is="html-{{item.tag}}" data="{{item}}"  wx:for="{{item.children}}" data="{{item}}" wx:key="*this"></template>
+	</view>
+</template>
+<template name="html-h6">
+	<view class="html-h6"  style="{{item.attrs.style}}">
+		{{item.text}}
+		<template is="html-{{item.tag}}" data="{{item}}"  wx:for="{{item.children}}" data="{{item}}" wx:key="*this"></template>
+	</view>
+</template>
+<template name="html-h7">
+	<view class="html-h7"  style="{{item.attrs.style}}">
+		{{item.text}}
+		<template is="html-{{item.tag}}" data="{{item}}"  wx:for="{{item.children}}" data="{{item}}" wx:key="*this"></template>
+	</view>
+</template>
+
+<!-- HR 等 -->
+<template name="html-hr">
+	<view class="html-hr"  style="{{item.attrs.style}}">
+		{{item.text}}
+	</view>
+</template>
+
+<!-- 列表 -->
+<template name="html-ul">
+	<view class="html-ul"  style="{{item.attrs.style}}">
+		{{item.text}}
+		<template is="html-{{item.tag}}" data="{{item}}"  wx:for="{{item.children}}" data="{{item}}" wx:key="*this"></template>
+	</view>
+</template>
+<template name="html-ol">
+	<view class="html-ol"  style="{{item.attrs.style}}">
+		{{item.text}}
+		<template is="html-{{item.tag}}" data="{{item}}"  wx:for="{{item.children}}" data="{{item}}" wx:key="*this"></template>
+	</view>
+</template>
+<template name="html-li">
+	<view class="html-li"  style="{{item.attrs.style}}">
+		{{item.text}}
+		<template is="html-{{item.tag}}" data="{{item}}"  wx:for="{{item.children}}" data="{{item}}" wx:key="*this"></template>
+	</view>
+</template>
+
+
+<!-- image/video/audio -->
+<template name="html-image">
+<image  
+	class="html-image" 
+	mode="aspectFit"
+	src="{{item.attrs.src}}"
+	style="width:{{item.attrs.width}};height:{{item.attrs.height}};{{item.attrs.style}}" 
+></image>
+</template>
+<template name="html-video" >
+	<video src="{{item.attrs.src}}" 
+		style="width:100%;height:100%;" 
+		controls="true"  objectFit="fill"></video>
+</template>
+<template name="html-audio"></template>
+
