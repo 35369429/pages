@@ -13,7 +13,7 @@ Page({
 	},
 
 	detail: function( event ) {
-		let data = event.target.dataset;
+		let data = event.currentTarget.dataset;
 		wx.navigateTo({url:'detail?id=' + data.id});
 		console.log( data );
 	},
@@ -31,7 +31,7 @@ Page({
 
 		return {
 			title:title,
-			path:'/article/list?cid=' + cid,
+			path:'/article/list?cid=' + cid + '&index=' + this.data.category,
 			success: function(res) {
 				wx.showToast({
 					title: '转发成功',
@@ -118,17 +118,14 @@ Page({
 		this.setData({articles:articles});
 	},
 
+
 	pushArticles: function( articles ) {
 
 		let articles_origin = this.data.articles;
-
 		for( let i in articles ) {
 			articles_origin.push(articles[i]);
 		}
-
 		this.setData({articles:articles_origin});
-
-
 	},
 
 
@@ -149,7 +146,6 @@ Page({
 				let current = null;
 				let title = null;
 
-
 				if ( total == 0 ) {
 					console.log('someting Error', cates );
 					reject(excp);
@@ -157,9 +153,11 @@ Page({
 				}
 
 				for( var idx in categories ) {
-					let cid = categories[idx]['category_id'];
 					categories[idx]['class'] = "";
 					if ( categories[idx]['class'] == 'active' )  {
+						current = idx;
+					}
+					if (  categories[idx]['category_id']  == cid  ) {
 						current = idx;
 					}
 				}

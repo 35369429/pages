@@ -33,8 +33,10 @@
 }
 
 .wrapper .menu .item.active {
-	border-bottom: 6rpx solid #eb4944;
-	color: #eb4944;
+	/*border-bottom: 6rpx solid #eb4944;*/
+	/*color: #eb4944;*/
+	border-bottom: 6rpx solid #eb4e39;
+	color: #eb4e39;
 	font-weight: 400;
 }
 

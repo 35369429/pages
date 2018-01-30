@@ -1,5 +1,6 @@
 {
     "navigationBarTitleText": "XpmSNS/头条",
-    "navigationBarBackgroundColor":"#ea413c",
+    "backgroundColor":"#fafafa",
+    "navigationBarBackgroundColor":"#eb4e39",
     "navigationBarTextStyle":"white"
 }
