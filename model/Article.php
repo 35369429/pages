@@ -583,6 +583,20 @@ class Article extends Model {
 
 	function format( & $article ) {
 
+		if ( !empty($article["content"]) ) {
+
+			$article["content"] = str_replace("\n", "", $article['content']);
+			$article["content"] = str_replace("\t", "", $article['content']);
+			$article["content"] = str_replace("\r", "", $article['content']);
+
+			$render = new \Mina\Delta\Render;
+			$article['ap_content'] = $render->loadByHTML($article["content"])->wxapp();
+			$article["images"] = $render->images();
+			
+		}
+
+
+
 		if ( isset($article['publish_time']) ) {
 			$time = strtotime($article['publish_time']);
 			$article['publish_time'] = null;
@@ -621,11 +635,9 @@ class Article extends Model {
 			$article['cover'] = $u;
 		}
 
-		if ( !empty($article["content"]) ) {
-			$article["content"] = str_replace("\n", "", $article['content']);
-			$article["content"] = str_replace("\t", "", $article['content']);
-			$article["content"] = str_replace("\r", "", $article['content']);
-		}
+
+
+
 
 		// /static-file/media/2018/01/27/3dfc350d905fcd64a5e219dd09a49eea.png
 
