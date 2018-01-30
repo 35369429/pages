@@ -1,3 +1,5 @@
 ui/node_modules
 ui/.cache
 ui/.tmp
+
+ui/wxapp/project.config.json
