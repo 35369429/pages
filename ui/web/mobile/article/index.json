@@ -1,13 +1,12 @@
 {	
-	"cname":"网站首页",
-	"data": {
-		
-	},
+	"cname":"首页",
+	"data": {},
 	"entries":[
-		{"method":"GET", "router":"/", "ttl":0}
+		{"method":"GET", "router":"/m/article", "ttl":0}
 	],
 	
-	"align": {
-		"desktop":"desktop/index"
+	"alias": {
+		"desktop":"/desktop/article/index",
+		"wxapp":"/article/list"
 	}
 }

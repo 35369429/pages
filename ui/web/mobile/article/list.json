@@ -47,11 +47,11 @@
 		}
 	},
 	"entries":[
-		{"method":"GET", "router":"/list/{slug:.+}", "ttl":0}
+		{"method":"GET", "router":"/m/article/list/{cid:.+}", "ttl":0}
 	],
 
-	"align": {
-		"mobile":"/mobile/article/detail",
-		"wxapp":"/article/detail"
+	"alias": {
+		"desktop":"/desktop/article/list",
+		"wxapp": "/article/list"
 	}
 }

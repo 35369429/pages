@@ -32,12 +32,11 @@
 		}
 	},
 	"entries":[
-		{"method":"GET", "router":"/article/{id:\\d+}", "ttl":0}
+		{"method":"GET", "router":"/m/article/{id:[0-9a-zA-Z]+}", "ttl":0}
 	],
 
-	"align": {
-		"mobile":"/mobile/article/detail",
-		"wechat":"/mobile/article/detail",
+	"alias": {
+		"desktop":"/desktop/article/detail",
 		"wxapp": "/article/detail"
 	}
 }

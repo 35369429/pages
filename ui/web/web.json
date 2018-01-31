@@ -1,8 +1,8 @@
 {
-	"cname":"MINA Pages 默认主题",
+	"cname":"XpmSNS默认主题",
 	"pages":[
 		"/desktop/article/index",
-		"/mobile/article/index"
+		"/mobile/article/detail"
 	],
 	"common":[
 		"/common"
