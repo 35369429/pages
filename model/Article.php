@@ -904,7 +904,7 @@ class Article extends Model {
 		// $default_home = Utils::getHome( $_SERVER['HTTP_TUANDUIMAO_LOCATION']);
 		$default_home = Utils::getHomeLink();
 		$uri = parse_url( $default_home);
-		$default_project = Utils::getTab('project')->getVar('name', "LIMIT 1");
+		$default_project = Utils::getTab('project')->getVar('name', "WHERE `default`=1 LIMIT 1");
 		if ( empty($default_project) ) {
 			$default_project = DEFAULT_PROJECT_NAME;
 		}
