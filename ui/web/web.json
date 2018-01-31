@@ -5,7 +5,7 @@
 		"/mobile/article/detail"
 	],
 	"common":[
-		"/common"
+		"/moible/common"
 	],
 	"storage": {
 		"engine":"minapages",
@@ -13,19 +13,18 @@
 			"debug":true
 		},
 		"pages":{
-			"remote": "/web/pages",
-			"url": "/static-file/{PROJECT_NAME}/user/pages",
-			"origin": "/static-file/{PROJECT_NAME}/user/pages"
+			"remote": "/{PROJECT_NAME}/pages",
+			"url": "/static-file/{PROJECT_NAME}/pages",
+			"origin": "/static-file/{PROJECT_NAME}/pages"
 		},
 		"binds": [
 			{
-				"local": "/web/assets",
-				"remote": "/{PROJECT_NAME}/assets",
-				"url": "/static-file/{PROJECT_NAME}/user/assets",
-				"origin": "/static-file/{PROJECT_NAME}/user/assets"
+				"local": "/web/mobile/assets",
+				"remote": "/{PROJECT_NAME}/moible/assets",
+				"url": "/static-file/{PROJECT_NAME}/moible/assets",
+				"origin": "/static-file/{PROJECT_NAME}/moible/assets"
 			}
 		]
 	},
-
 	"debug":true
 }
