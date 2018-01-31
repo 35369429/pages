@@ -940,7 +940,7 @@ class Article extends Model {
 						->leftJoin('project', 'project.name', '=', 'page.project')
 						->whereIn('slug', $pages)
 						->select(
-							'page.cname as cname', 'page.name as name', 'page.slug as slug', 'align', 'adapt',
+							'page.cname as cname', 'page.name as name', 'page.slug as slug', 'alias', 'adapt',
 							'project.name as project', 'project.domain as domain'
 						)
 						->get()
@@ -961,23 +961,20 @@ class Article extends Model {
 				$page_slugs_map[$pg['slug']] = $pg;
 			}
 
-			foreach( $pg['align'] as $type => $pg_align ) {  // 处理联合页面
+			foreach( $pg['alias'] as $type => $pg_alias ) {  // 处理联合页面
 				if ( $type != 'wxapp') {
-					$pages[$idx]['links'][$type] = $pg_align;
-					$page_slugs[] =  $pg_align;
+					$pages[$idx]['links'][$type] = $pg_alias;
+					$page_slugs[] =  $pg_alias;
 				} else {
-					$pages[$idx]['links'][$type] = '/' . $pg_align . '?id=' . $article_id; 
+					$pages[$idx]['links'][$type] = '/' . $pg_alias . '?id=' . $article_id; 
 				}
 			}
 
 			$pages[$idx]['article_id'] = $article_id;
 
-			unset($pages[$idx]['align'] );
+			unset($pages[$idx]['alias'] );
 			unset($pages[$idx]['adapt'] );
 		}
-
-		
-
 
 		// 获取适配链接
 		$entry_maps = $this->getEntries( $article_id, $page_slugs );
@@ -1084,7 +1081,7 @@ class Article extends Model {
 		// 读取页面详细信息
 		$pages = $this->page->query()
 						->whereIn('slug', $pages)
-						->select('cname', 'name', 'slug', 'align', 'adapt')
+						->select('cname', 'name', 'slug', 'alias', 'adapt')
 						->get()
 						->toArray();
 		// 获取适配链接
@@ -1094,16 +1091,16 @@ class Article extends Model {
 				$pages[$idx]['links'][$type] = App::NR('article' , 'preview', ['p'=>$pg['slug'], 'id'=>$article_id]);
 			}
 
-			foreach( $pg['align'] as $type => $pg_align ) {  // 处理联合页面
+			foreach( $pg['alias'] as $type => $pg_alias ) {  // 处理联合页面
 				if ( $type != 'wxapp') {
-					$pages[$idx]['links'][$type] =  App::NR('article' , 'preview', ['p'=>$pg_align, 'id'=>$article_id]);
+					$pages[$idx]['links'][$type] =  App::NR('article' , 'preview', ['p'=>$pg_alias, 'id'=>$article_id]);
 				} else {
-					$pages[$idx]['links'][$type] = '/' . $pg_align . '?id=' . $article_id . '&preview=1'; 
+					$pages[$idx]['links'][$type] = '/' . $pg_alias . '?id=' . $article_id . '&preview=1'; 
 				}
 			}
 
 			$pages[$idx]['article_id'] = $article_id;
-			unset($pages[$idx]['align'] );
+			unset($pages[$idx]['alias'] );
 			unset($pages[$idx]['adapt'] );
 		}
 
