@@ -17,10 +17,10 @@
 	<div><img src="{{__STOR__::/__PROJECT_NAME/mobile/assets}}/icons/xpmsns.svg"  mode="aspectFit" /></div>
 	<div>本文采用XpmSNS发布</div>
 </div>
-<include src="__WEB_ROOT__/mobile/common/footer.page"  />
+
 
 <script type="text/javascript" mp:if="{{__var.__browser == 'wechat' }}">
-	
+	// 微信分享
 	var code = '{{wechat.code}}'
 	if ( code == '') {
 		// console.log('weixin', '{{__var.__browser}}', '===');
@@ -71,3 +71,5 @@
 		}
 	}
 </script>
+
+<include src="__WEB_ROOT__/mobile/common/footer.page"  />
