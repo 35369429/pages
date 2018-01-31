@@ -14,7 +14,7 @@ Page({
 		let that = this;
 		return {
 			title:that.data.rs.title,
-			path:'/article/detail?id=' + that.data.article.article_id,
+			path:'/default/article/detail?id=' + that.data.rs.article_id,
 			success: function(res) {
 				wx.showToast({
 					title: '转发成功',

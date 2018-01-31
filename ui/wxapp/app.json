@@ -1,7 +1,7 @@
 {
 	"pages":[
-		"article/list",
-		"article/detail"
+		"default/article/list",
+		"default/article/detail"
 	],
 	"window":{
 		"backgroundTextStyle":"light",

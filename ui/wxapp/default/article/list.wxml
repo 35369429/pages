@@ -1,5 +1,5 @@
 <!-- 新闻列表页 -->
-<import src="/common/items.wxml"/>
+<import src="/default/common/items.wxml"/>
 <!-- Wrapper -->
 <view class="wrapper">
 
@@ -14,7 +14,7 @@
 
 		<!-- Loading -->
 		<view class="refresh  reminds {{status.refresh}}">
-			<image src="/res/icons/loading.gif" mode="aspectFill" class="up-down-loading" />
+			<image src="/default/res/icons/loading.gif" mode="aspectFill" class="up-down-loading" />
 		</view><!-- END Loading -->
 	
 		<template 
@@ -23,7 +23,7 @@
 
 		<!-- Loading -->
 		<view class="loading  reminds {{status.more}}">
-			<image src="/res/icons/loading.gif" mode="aspectFill" class="up-down-loading" />
+			<image src="/default/res/icons/loading.gif" mode="aspectFill" class="up-down-loading" />
 		</view><!-- END Loading -->
 
 

@@ -1,10 +1,10 @@
 <!-- 文章列表页 -->
-<import src="/common/html.wxml" />
+<import src="/default/common/html.wxml" />
 
 <!-- Wrapper -->
 <view class="wrapper">
 	<view  style="text-align:center;{{loading}}">
-		<image src="/res/icons/loading.gif" mode="aspectFill" 
+		<image src="/default/res/icons/loading.gif" mode="aspectFill" 
 			style="width:160rpx;height:160rpx;"/>
 	</view>
 	<view class="cover" wx:if="{{rs.cover.url != ''}}">
@@ -33,7 +33,7 @@
 		<view class="hr" ></view>
 	
 		<view class="xpmsns">
-			<view><image src="/res/icons/xpmsns.svg"  mode="aspectFit" /></view>
+			<view><image src="/default/res/icons/xpmsns.svg"  mode="aspectFit" /></view>
 			<view>本文采用XpmSNS发布</view>
 		</view>
 	

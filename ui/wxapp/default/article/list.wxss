@@ -1,4 +1,4 @@
-@import "/common/style.wxss"
+@import "/default/common/style.wxss"
 
 /**
  *  主色: #ea413c ;  copy 网易

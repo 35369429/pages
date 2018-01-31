@@ -31,7 +31,7 @@ Page({
 
 		return {
 			title:title,
-			path:'/article/list?cid=' + cid + '&index=' + this.data.category,
+			path:'/default/article/list?cid=' + cid + '&index=' + this.data.category,
 			success: function(res) {
 				wx.showToast({
 					title: '转发成功',

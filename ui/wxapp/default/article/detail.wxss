@@ -1,4 +1,4 @@
-@import "/common/style.wxss"
+@import "/default/common/style.wxss"
 
 .video-title {
 	padding: 10rpx;
