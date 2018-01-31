@@ -1028,8 +1028,8 @@ class Article extends Model {
 			foreach ($entries as $idx=>$entry ) {
 				if ( $entry['method'] != 'GET') continue;
 
-				$entry['router'] = str_replace('{id:\\d+}', $article_id,  $entry['router']);
-				$entry['router'] = str_replace('{article_id:\\d+}', $article_id,  $entry['router']);
+				$entry['router'] = str_replace('{id:[0-9a-zA-Z]+}', $article_id,  $entry['router']);
+				$entry['router'] = str_replace('{article_id:[0-9a-zA-Z]+}', $article_id,  $entry['router']);
 				$resp[$slug]['entries'][$idx] = $entry['router'];
 				$resp[$slug]['latest'] = $entry['router'];
 			}

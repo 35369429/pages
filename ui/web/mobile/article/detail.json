@@ -1,5 +1,5 @@
 {
-	"cname":"默认正文页",
+	"cname":"默认正文页-手机版",
 	"data": {
 		"article":{
 			"api":"/xpmsns/pages/article/get",

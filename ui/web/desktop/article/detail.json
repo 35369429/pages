@@ -1,5 +1,5 @@
 {
-	"cname":"默认正文页",
+	"cname":"默认正文页-桌面版",
 	"data": {
 		"category":{
 			"api":"/xpmsns/pages/category/search",
@@ -32,10 +32,9 @@
 		}
 	},
 	"entries":[
-		{"method":"GET", "router":"/article/{id:\\d+}", "ttl":0}
+		{"method":"GET", "router":"/article/{id:[0-9a-zA-Z]+}", "ttl":0}
 	],
-
-	"align": {
+	"alias": {
 		"mobile":"/mobile/article/detail",
 		"wechat":"/mobile/article/detail",
 		"wxapp": "/article/detail"
