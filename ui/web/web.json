@@ -5,7 +5,7 @@
 		"/mobile/article/detail"
 	],
 	"common":[
-		"/moible/common"
+		"/mobile/common"
 	],
 	"storage": {
 		"engine":"minapages",
@@ -20,9 +20,9 @@
 		"binds": [
 			{
 				"local": "/web/mobile/assets",
-				"remote": "/{PROJECT_NAME}/moible/assets",
-				"url": "/static-file/{PROJECT_NAME}/moible/assets",
-				"origin": "/static-file/{PROJECT_NAME}/moible/assets"
+				"remote": "/{PROJECT_NAME}/mobile/assets",
+				"url": "/static-file/{PROJECT_NAME}/mobile/assets",
+				"origin": "/static-file/{PROJECT_NAME}/mobile/assets"
 			}
 		]
 	},

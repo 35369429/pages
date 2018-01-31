@@ -1,34 +1,19 @@
 {
 	"cname":"默认正文页",
 	"data": {
-		"category":{
-			"api":"/xpmsns/pages/category/search",
-			"query":{
-				"select":"category_id,name",
-				"children":false,
-				"param":"isnav=true",
-				"status":"on"
-			}
-		},
 		"article":{
 			"api":"/xpmsns/pages/article/get",
 			"query":{
 				"articleId":"{{__var.id}}"
 			}
 		},
-		"hots":{
-			"api":"/xpmsns/pages/article/search",
-			"query":{
-				"select":"article_id,title,publish_time",
-				"category":"新闻公告",
-				"perpage":6,
-				"order":"publish_time desc"
-			}
+		"wechat":{
+			"api":"/xpmsns/pages/article/wechat",
+			"query":{}
 		},
-		"navcates":"{{category.data}}",
-		"crumb":"{{article.category.0}}",
 		"page":{
-			"title":"{{article.title}}"
+			"title":"{{article.title}}",
+			"browser":"weixin"
 		}
 	},
 	"entries":[

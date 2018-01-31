@@ -361,15 +361,25 @@ class Article extends Api {
 
 
 	/**
-	 * 签名
+	 * 微信分享签名
 	 */
-	protected  function signdata($query=[]){
+	protected  function wechat($query=[]){
 
+		$conf = Utils::getConf();
+		$eftconf = $conf['_type'][2];
+		if ( empty($eftconf) ) {
+			$eftconf =  $conf['_type'][1];
+		}
 
-		$wxconf =[
-			'appid'=>"wx77e0de6921bacc92",
-			'secret'=>"b0cd3ea48a1aa3df5e9f88d70889a040"		
-		]; 
+		$wxconf = current($eftconf);
+		$appid = $query['appid'];
+		if ( empty($appid) && !empty($conf['_map'][$appid]) ) {
+			$wxconf = $conf['_map'][$appid];
+		}
+
+		if ( empty($wxconf) ) {
+			return ["code"=>404,"message"=>"未发现有效公众号配置"];
+		}
 
 		$wechat = new Wechat($wxconf);
 		// 自动获取地址 
