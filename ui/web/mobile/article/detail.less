@@ -3,7 +3,7 @@
 
 .page-content {
 	padding: 20px 15px 15px;
-	background-color: #fff;
+	background-color: @white;
 	font-size:17px;
 	min-height:700px;
 
@@ -22,7 +22,7 @@
 		span {
 			display: inline-block;
 			font-size: 17px;
-			color:#8c8c8c;
+			color:@textLight;
 			vertical-align:middle;
 			margin-right: 8px;
 			margin-bottom: 10px;
@@ -44,7 +44,7 @@
 		}
 
 		blockquote {
-			border-left: 4px solid #8c8c8c;
+			border-left: 4px solid @textLight;
 			padding-left:.4em;
 		}
 
@@ -52,8 +52,8 @@
 			font-size:14px;
 			line-height:1.2;
 			font-family: monospace;
-			color:#ffffff;
-			background: #232323;
+			color:@white;
+			background: @textDark;
 			padding:15px 10px 10px;
 			display:block;
 		}
@@ -68,23 +68,6 @@
 			padding: 0.5em;
 			
 			li {  list-style-type: decimal; list-style-position:inside;}
-		}
-	}
-}
-
-.nav {
-	background: #fff;
-	font-size:15px;
-	padding:20px 15px 15px;
-	.pull-right {
-		float: right;
-	}
-	li {
-		display: inline-block;
-		color: #8c8c8c;	
-		a {
-
-			color:#467be5;
 		}
 	}
 }

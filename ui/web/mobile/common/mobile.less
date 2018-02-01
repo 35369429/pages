@@ -1,13 +1,25 @@
 @charset "utf-8";
+@import '/mobile/common/vars.less';
+
 /* CSS Document */
 /*! normalize.css v3.0.3 | MIT License | github.com/necolas/normalize.css */
 html { font-size: 20px; width: 100%;  font-family: "Helvetica Neue","Hiragino Sans GB","Microsoft YaHei","ED1F53", Arial,sans-serif, 'Apple Color Emoji';  -ms-text-size-adjust: 100%;  -webkit-text-size-adjust: 100%;  }
 * {-webkit-box-sizing: border-box;-moz-box-sizing: border-box; box-sizing: border-box; margin:0; padding:0;}
 body { 
-	color:#666; font-family: "Helvetica Neue","Hiragino Sans GB","Microsoft YaHei","ED1F53", Arial,sans-serif, 'Apple Color Emoji'; background:#f7f7f7; margin: 0 auto; width: 100%; max-width:750px;
-	
-	h1, h2, h3, h4, h5, h6, p{color:#232323; padding: 0; margin: 0; text-align: left; font-weight: 500;}
-	a{outline:none;cursor:pointer;color:#666;}
+	color:@textGrey; 
+	background:@greyTiny;
+	font-family: "Helvetica Neue","Hiragino Sans GB","Microsoft YaHei","ED1F53", Arial,sans-serif, 'Apple Color Emoji'; 
+	margin: 0 auto; width: 100%; max-width:750px;
+	h1, h2, h3, h4, h5, h6, p{
+		color:@textDark; 
+		padding: 0; margin: 0; text-align: left; font-weight: 500;
+	}
+
+	a{
+		color:@textGrey;
+		outline:none;cursor:pointer;
+	}
+
 	a:link,a:visited{text-decoration:none;}
 	a:hover{ text-decoration:none;}
 	li{ list-style:none;}
@@ -15,7 +27,84 @@ body {
 	ul{margin:0; padding: 0;}
 	ul:after,.row:after{content: "";clear: both;display: table;line-height: 0;height: 0;}
 	input, textarea{-webkit-appearance:none;}
+
+	header {
+
+		display: flex;
+		flex-direction: row;
+		justify-content: space-between;
+		background: @white;
+		padding: 0px 20px 0px 20px;
+		border-bottom: 1px solid @greyLight;
+			
+		.titleBar {
+
+			display:flex;
+			flex-direction: row;
+			font-size: 18px;
+			height: 64px;
+			line-height:68px;
+
+			img { 
+				width:32px; 
+				margin-right: 5px;
+			}
+
+			span {
+				color: @primary;
+			}
+
+		}
+
+	
+		nav {
+			margin-top:16px;
+			font-size: 18px;
+		}
+
+		nav a {
+
+			color: @textDark;
+			height:32px;
+			img {
+				width:32px;
+			}
+		}
+
+		nav .current {
+			color: @primary;
+		}
+
+		nav ul, nav:active ul { 
+			line-height: 24px;
+			display: none;
+			position: absolute;
+			padding: 20px;
+			background: #fff;
+			border: 5px solid #444;
+			top: 48px;
+			right: 20px;
+			width: 50%;
+			border-radius: 4px 0 4px 4px;
+
+		}
+
+		nav li {
+
+			text-align: center;
+			width: 100%;
+			padding: 10px 0;
+			margin: 0;
+
+		}
+
+		nav:hover ul {
+			display: block;
+		}
+	}
+	
 	.WY{margin:0 auto;}
+	
 	.img-responsive {
 	   width: 100%; 
 	   height: auto; 
@@ -26,11 +115,11 @@ body {
 		flex-direction: column;
 		justify-content: center;
 		align-items:center;
-		background-color: #ffffff;
+		background-color: @light;
 		padding: 40px 0 40px 0;
-		border-top: 1px solid #f7f7f7;
+		border-top: 1px solid @greyTiny;
 		font-size: 14px;
-		color: #cecece;
+		color: @greyMuted;
 		font-weight:300;
 		img { 
 			width:42px; height:42px;

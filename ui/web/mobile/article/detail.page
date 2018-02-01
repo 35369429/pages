@@ -1,4 +1,4 @@
-<include src="__WEB_ROOT__/mobile/common/header.page"  />
+<include src="__WEB_ROOT__/mobile/common/head.page"  />
 <div class="page-content">
 	<h2>{{article.title}}</h2>
 	<div class="meta-list">

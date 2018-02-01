@@ -1,44 +1,45 @@
-@import '/common/vars.less';
-@import '/web.less';
+@charset "utf-8";
+@import '/mobile/common/mobile.less';
 
-.title-list a {
-	display: block;
-}
-.title-list h3{
-	margin-top:0px;
-	font-size:22px;
-	color: #545454;
-	line-height:1.2;
+.wrapper {
+	background-color:@white;
+	margin-top:10px;
+	padding: 0px 20px 0px 20px;
+	border-top: 1px solid @greyLight;
 }
 
+.item {
+	display: flex;
+	flex-direction: row;
+	justify-content:space-between;
+	border-bottom: 1px solid @greyLight;
+	padding: 20px 0 20px 0;
 
+	.content {
+		display: flex;
+		flex-direction: column;
+		justify-content:space-between;
+	}
 
+	.title {
+		color: @text;
+		font-size: 20px;
+	}
 
-/*分页*/
-.paging{
+	.sub {
+		color: @greyMuted;
+		font-size: 15px;
+		margin-top: 10px;
+	}
+	.cover {
+		min-width: 120px;
+		min-height: 90px;
+		width: 120px;
+		height: 90px;
 
-	margin-top:20px;
-	margin-bottom: 20px;
-	overflow: hidden;
+	}
 }
 
-.paging ul {
-	display:block;
-
+.item:last-child {
+	border-bottom: 0px;
 }
-.paging li{
-	display: inline-block;
-	margin-left: 20px;
-}
-
-.paging li a{
-	font-size: 16px;
-	color: #3C89D9;
-}
-
-.paging li.active a {
-	font-weight: 400;
-	color:#545454;
-}
-
-
