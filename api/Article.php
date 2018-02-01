@@ -275,6 +275,9 @@ class Article extends Api {
 
 			if ( $getCategory) {
 				$rs['category'] = $categories[$aid];
+				if ( is_array($rs['category']) ) {
+					$rs['category_last'] = end($rs['category']);
+				}
 			}
 			if ( $getCategory) {
 				$rs['tag'] = $tags[$aid];
@@ -350,6 +353,10 @@ class Article extends Api {
 
 		if( $getCategory) {
 			$rs['category'] = $art->getCategories($article_id,"category.category_id","name","fullname","project","page","parent_id","priority","hidden","param" );
+
+			if ( is_array($rs['category']) ) {
+				$rs['category_last'] = end($rs['category']);
+			}
 		}
 
 		if ( $getTag ) {
