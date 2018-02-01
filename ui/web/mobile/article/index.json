@@ -1,5 +1,5 @@
 {	
-	"cname":"首页",
+	"cname":"首页-手机版",
 	"data": {},
 	"entries":[
 		{"method":"GET", "router":"/m/article", "ttl":0}
