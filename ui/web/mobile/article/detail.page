@@ -12,8 +12,8 @@
 		{{article.content}}
 	</div>
 
-	<div class="more" mp:if="{{article.category.category_last}}">
-		<a class="btn btn-default btn-full" href="/m/article/list/{{article.category.category_last.category_id}}"> 更多相关内容 </a>
+	<div class="more" mp:if="{{article.category_last}}">
+		<a class="btn btn-default btn-full" href="/m/article/list/{{article.category_last.category_id}}"> 更多相关内容 </a>
 	</div>
 </div>
 
