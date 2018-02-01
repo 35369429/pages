@@ -67,7 +67,7 @@
 
 				wx.onMenuShareAppMessage({
 					title: "{{TRIM(current.name)}}|XpmSNS/头条", // 分享标题
-					desc: "汇聚最有价值文章", // 分享描述
+					desc: "汇聚最有价值文章资讯！", // 分享描述
 					link: "{{wechat.url}}", 
 					imgUrl:imgUrl, // 分享图标
 					success: function () { 
