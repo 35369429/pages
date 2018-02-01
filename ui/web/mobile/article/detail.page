@@ -1,5 +1,5 @@
 <include src="__WEB_ROOT__/mobile/common/head.page"  />
-<div class="page-content">
+<div class="wrapper">
 	<h2>{{article.title}}</h2>
 	<div class="meta-list">
 		<span> {{article.author}} </span>
@@ -11,11 +11,15 @@
 		</p>
 		{{article.content}}
 	</div>
+
+	<div class="more" mp:if="{{article.category.1}}">
+		<a class="btn btn-default btn-full" href="/m/article/list/{{article.category.1.category_id}}"> 更多相关内容 </a>
+	</div>
 </div>
 
 <div class="xpmsns">
 	<div><img src="{{__STOR__::/__PROJECT_NAME/mobile/assets}}/icons/xpmsns.svg"  mode="aspectFit" /></div>
-	<div>本文采用XpmSNS发布</div>
+	<div>本页采用XpmSNS发布</div>
 </div>
 
 

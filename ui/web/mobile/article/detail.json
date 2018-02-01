@@ -12,8 +12,7 @@
 			"query":{}
 		},
 		"page":{
-			"title":"{{article.title}}",
-			"browser":"weixin"
+			"title":"{{article.title}}"
 		}
 	},
 	"entries":[

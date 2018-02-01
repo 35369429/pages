@@ -10,6 +10,12 @@
 				"param":"isnav=true"
 			}
 		},
+
+		"wechat":{
+			"api":"/xpmsns/pages/article/wechat",
+			"query":{}
+		},
+		
 		"articles":{
 			"api":"/xpmsns/pages/article/search",
 			"query":{
