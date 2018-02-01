@@ -10,8 +10,11 @@
 		</div>
 		<div 
 			class="cover" 
-			mp:if="{{rs.cover.url}}"  
-			style="background:url({{rs.cover.url}}) center center" >
+			mp:if="{{rs.cover.url}}"   >
+			<img
+			    data-sizes="120x90"
+			    data-src="{{rs.cover.url}}"
+			  	class="lazyload" />
 		</div>
 	</div>
 </div>

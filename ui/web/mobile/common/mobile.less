@@ -68,6 +68,10 @@ body {
 			height:32px;
 			img {
 				width:32px;
+				path {
+					fill: @primary;
+					background-color: @primary;
+				}
 			}
 		}
 
@@ -79,25 +83,29 @@ body {
 			line-height: 24px;
 			display: none;
 			position: absolute;
-			padding: 20px;
+			padding: 10px 20px 10px 20px;
 			background: #fff;
-			border: 5px solid #444;
-			top: 48px;
-			right: 20px;
-			width: 50%;
+			border: 1px solid @greyLight;
+			border-bottom: 2px solid @greyDark;
+			top: 64px;
+			right: 0px;
+			width: 100%;
 			border-radius: 4px 0 4px 4px;
 
 		}
 
 		nav li {
-
-			text-align: center;
+			text-align: left;
 			width: 100%;
 			padding: 10px 0;
 			margin: 0;
+			border-bottom: 1px solid @greyLight;
 
 		}
 
+		nav li:last-child {
+			border-bottom:none;
+		}
 		nav:hover ul {
 			display: block;
 		}

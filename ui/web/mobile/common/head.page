@@ -7,9 +7,13 @@
 	<meta name="viewport" content="initial-scale=1, maximum-scale=1">
 	<meta name="apple-mobile-web-app-capable" content="yes">
 	<meta name="apple-mobile-web-app-status-bar-style" content="black">
-    <link href="https://cdn.bootcss.com/KaTeX/0.7.1/katex.min.css" rel="stylesheet">
 	<title>{{page.title}}-XpmSNS/头条</title>
+	
 	<!-- 微信 JS SDK -->
 	<script type="text/javascript" src="//res.wx.qq.com/open/js/jweixin-1.2.0.js" mp:if="{{__var.__browser == 'wechat'}}"></script>
+
+	<!-- Image Load Lazysizes @see 	https://github.com/aFarkas/lazysizes -->
+	<script type="text/javascript" src="{{__STOR__::/__PROJECT_NAME/mobile/assets}}/js/lazysizes.min.js"></script>
+
 </head>
 <body>
