@@ -1,7 +1,172 @@
 <include src="__WEB_ROOT__/desktop/common/head.page"  />
 <include src="__WEB_ROOT__/desktop/common/header.page"  />
 
-	<div class="container m-top-15 m-bottom-10">
+<div class="container"><div class="row">
+	<!-- 左侧菜单导航 -->
+	<div class="col-xs-2 nav">
+		<div class="logo">
+			<img src="{{__STOR__::/__PROJECT_NAME/desktop/assets}}/images/xpmsns-logo.png" alt=""  class="title_block">
+		</div>
+		<ul class="nav-list">
+			<li mp:for="{{categories.data}}" 
+				mp:for-item="{{ca}}" 
+				class="{{ (ca.category_id == current.category_id) ? 'active'}}" 
+			>
+				<a href="/article/list/{{ca.category_id}}">{{ca.name}}</a>
+			</li>
+		</ul>
+	</div> <!-- END 左侧菜单导航 -->
+
+	<!-- 内容区 -->
+	<div class="col-xs-7">
+
+		<!-- 焦点图 -->
+		<section class="focus">
+			<div class="out">
+				<ul class="img">
+					<li><a href="#"><img src="{{__STOR__::/__PROJECT_NAME/desktop/assets}}/images/1.jpg" alt=""></a></li>
+					<li><a href="#"><img src="{{__STOR__::/__PROJECT_NAME/desktop/assets}}/images/2.jpg" alt=""></a></li>
+					<li><a href="#"><img src="{{__STOR__::/__PROJECT_NAME/desktop/assets}}/images/3.jpg" alt=""></a></li>
+					<li><a href="#"><img src="{{__STOR__::/__PROJECT_NAME/desktop/assets}}/images/4.jpg" alt=""></a></li>
+					<li><a href="#"><img src="{{__STOR__::/__PROJECT_NAME/desktop/assets}}/images/5.jpg" alt=""></a></li>
+					<li><a href="#"><img src="{{__STOR__::/__PROJECT_NAME/desktop/assets}}/images/6.jpg" alt=""></a></li>
+					<li><a href="#"><img src="{{__STOR__::/__PROJECT_NAME/desktop/assets}}/images/2.jpg" alt=""></a></li>
+				</ul>
+				<ul class="num fm fs-14">
+					<li>哲学</li>
+					<li>思想</li>
+					<li>理论</li>
+					<li>学潮</li>
+					<li>太平</li>
+					<li>大和</li>
+					<li>题目</li>
+				</ul>
+			</div>
+		</section><!-- END 焦点图 -->
+	
+		<!-- 文章列表-->
+		<section class="articles">
+			<!-- 文章列表项 -->
+			<div class="article-item-1" mp:for="{{articles.data}}" mp:for-item="{{rs}}" >
+				<div class="image" mp:if="{{rs.cover.url}}"> 
+					<img
+						width="150"
+					    data-sizes="150X100"
+					    data-src="{{rs.cover.url}}"
+					  	class="lazyload" />
+				</div>
+				<div class="content">
+					<h5><a href="/article/{{rs.article_id}}">{{rs.title}}</a></h5>
+					<p>
+						<a class="category" href="/article/list/{{rs.category_last.category_id}}">{{rs.category_last.name}}</a>
+						<span class="author">{{rs.author}}</span>
+						<span class="pubtime">{{rs.publish_date}}</span>
+					</p>
+				</div>
+				<div class="clear"></div>
+			</div> <!-- END 文章列表项 -->
+
+		</section><!-- END 文章列表-->
+
+	</div> <!-- END 内容区 -->
+	<div class="col-xs-3">
+
+		<section class="alimama block">
+			<div class="block-content">
+				阿里妈妈广告位
+			</div>
+		</section>
+
+		<section class="hot block">
+			<div class="block-title">24小时热文</div>
+			<div class="block-content">
+			</div>
+		</section>
+
+		<!-- 24小时新闻展示图 -->
+					<div class="row m-r-0 m-l-0 m-top-20  fm b-f4f5f6">
+						<div class="row m-r-0 m-l-0 m-t-15 m-top-15">
+							<div class="newblock left b-f88c00 m-top-1"></div>
+							<span class="left  c-333333  m-left-10">24小时新闻</span>
+						</div>
+
+						<div class="row">
+							<div class="col-md-12 col-lg-12 fm">
+								<div class="col-md-3 col-lg-3 p-top-10 p-bottom-10">
+									<img src="{{__STOR__::/__PROJECT_NAME/desktop/assets}}/images/test.jpg" alt="" class="timeblock">
+								</div>
+								<div class="col-md-9 col-lg-9 p-top-20 p-bottom-20">
+									马克龙送给习近平的“国礼马” 进入30天隔离检疫期
+								</div>
+								<div class="col-md-3 col-lg-3 p-top-10 p-bottom-10">
+									<img src="{{__STOR__::/__PROJECT_NAME/desktop/assets}}/images/test.jpg" alt="" class="timeblock">
+								</div>
+								<div class="col-md-9 col-lg-9 p-top-20 p-bottom-20">
+									马克龙送给习近平的“国礼马” 进入30天隔离检疫期
+								</div>
+								<div class="col-md-3 col-lg-3 p-top-10 p-bottom-10">
+									<img src="{{__STOR__::/__PROJECT_NAME/desktop/assets}}/images/test.jpg" alt="" class="timeblock">
+								</div>
+								<div class="col-md-9 col-lg-9 p-top-20 p-bottom-20">
+									马克龙送给习近平的“国礼马” 进入30天隔离检疫期
+								</div>
+							</div>
+						</div>
+					</div>
+					<!-- 24小时新闻展示图end -->
+
+
+
+		<div class="row m-r-0 m-l-0 m-top-20  fm b-f4f5f6">
+			<div class="row m-r-0 m-l-0 m-t-15 m-top-15">
+				<div class="newblock left b-f88c00 m-top-1"></div>
+				<span class="left  c-333333  m-left-10">更多</span>
+			</div>	
+
+			<div class="row m-r-0 m-l-0 fm c-828282">
+				<div class="col-md-6 col-lg-6  oh p-top-5 p-bottom-5 t-c">
+					关于MINA Pages
+				</div>
+
+				<div class="col-md-6 col-lg-6  oh p-top-5 p-bottom-5 t-c">
+					加入MINA Pages
+				</div>
+			</div>
+
+			<div class="row m-r-0 m-l-0 fm c-828282">
+				<div class="col-md-3 col-lg-3 oh p-top-5 p-bottom-5 t-c">
+					媒体报道
+				</div>
+
+				<div class="col-md-3 col-lg-3 oh p-top-5 p-bottom-5 t-c">
+					媒体合作
+				</div>
+				<div class="col-md-3 col-lg-3 oh p-top-5 p-bottom-5 t-c">
+					产品合作
+				</div>
+
+				<div class="col-md-3 col-lg-3 oh p-top-5 p-bottom-5 t-c">
+					产品说明
+				</div>
+			</div>
+			<div class="row m-r-0 m-l-0 fm c-828282 m-bottom-15">
+				<div class="col-md-3 col-lg-3  oh p-top-5 p-bottom-5 t-c">
+					广告投放
+				</div>
+
+				<div class="col-md-3 col-lg-3  oh p-top-5 p-bottom-5 t-c">
+					联系我们
+				</div>
+			</div>
+		</div>
+
+	</div>
+	
+</div></div>
+
+
+
+<div class="container m-top-15 m-bottom-10 hidden">
 			<div  class="row">
 				<!-- 左侧 -->
 	 			<div class="col-md-2 col-lg-2  t-c">
@@ -9,29 +174,15 @@
 						<div class="title-logo oh">
 	 						<img src="{{__STOR__::/__PROJECT_NAME/desktop/assets}}/images/xpmsns-logo.png" alt=""  class="title_block">
 	 					</div>
-	 					<div class="wd_160 m-top-10 fs-16 lh-40 fm  center">
-							<div class="center w-70 t-c h-40 c-333333  cp bs-4  m-bottom-10 tj">
-								推荐
-							</div>
-							<div class="center w-70 t-c h-40  cp bs-4 c-333333 m-bottom-10 tj">
-								推荐
-							</div>
-							<div class="center w-70 t-c h-40  cp bs-4 c-333333 m-bottom-10 tj">
-								推荐
-							</div>
-							<div class="center w-70 t-c h-40  cp bs-4 c-333333 m-bottom-10 tj">
-								推荐
-							</div>
-							<div class="center w-70 t-c h-40  cp bs-4 c-333333 m-bottom-10 tj">
-								推荐
-							</div>
-							<div class="center w-70 t-c h-40  cp bs-4 c-333333 m-bottom-10 tj">
-								推荐
-							</div>
-							<div class="center w-70 t-c h-40  cp bs-4 c-333333 m-bottom-10 tj">
-								推荐
-							</div>
-						</div>
+	 					<ul class="wd_160 m-top-10 fs-16 lh-40 fm  center">
+							<li class="center w-70 t-c h-40 c-333333  cp bs-4  m-bottom-10 tj" 
+								mp:for="{{categories.data}}" 
+								mp:for-item="{{ca}}" 
+								class="{{ (ca.category_id == current.category_id) ? 'active'}}" 
+							>
+								<a href="#">{{ca.name}}</a>
+							</li>
+						</ul>
 	 				</div>
 				</div>
 				<!-- 左侧end -->

@@ -9,5 +9,6 @@
 	<script type="text/javascript" src="{{__STOR__::/__PROJECT_NAME/desktop/assets}}/js/jquery-1.9.1.min.js"></script>
 	<script type="text/javascript" src="{{__STOR__::/__PROJECT_NAME/desktop/assets}}/js/index.js"></script>
 	<script type="text/javascript" src="{{__STOR__::/__PROJECT_NAME/desktop/assets}}/js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="{{__STOR__::/__PROJECT_NAME/desktop/assets}}/js/lazysizes.min.js"></script>
 </head>
 <body>

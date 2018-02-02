@@ -20,15 +20,11 @@
 					data-content="<img width='150' onclick=$('[data-toggle=popover]').popover('hide') src='{{__STOR__::/__PROJECT_NAME/desktop/assets}}/images/qr-m-index.png' />"  > 
 					手机版 <span class="m-left-5"><i class="fa fa-angle-down"></i> </span></a>
 			</li>
-			<li><a href="#"> 
-				<span >北京</span>
-				<span class="m-left-5">晴</span>
-				<span class="m-left-5">24 / 30</span>	
-			 </a></li>
 		</ul>
 		<ul class="tb-list right">
 			<li><a href="#"> 联系购买 </a></li>
 			<li><a href="#"> 产品官网 </a></li>
 		</ul>
 	</div>
+	<div class="clear"></div>
 </header>
