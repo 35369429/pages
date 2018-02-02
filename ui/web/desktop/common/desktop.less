@@ -1,6 +1,8 @@
 @charset "utf-8";
 @import '/desktop/common/vars.less';
 
+html { font-size: 16px; width: 100%;  font-family: "Helvetica Neue","Hiragino Sans GB","Microsoft YaHei","ED1F53", Arial,sans-serif, 'Apple Color Emoji';  -ms-text-size-adjust: 100%;  -webkit-text-size-adjust: 100%;  }
+* {-webkit-box-sizing: border-box;-moz-box-sizing: border-box; box-sizing: border-box; margin:0; padding:0;}
 input{outline:none;}
 ul,li{
 	list-style: none;
@@ -12,6 +14,54 @@ ul,li{
 a{
 	text-decoration: none;
 }
+
+
+
+/**
+ * 重载 Bootstrap 样式
+ */
+.popover {
+	-webkit-box-shadow: none;
+	box-shadow:none;
+	border-radius:4px;
+	border-color: @borderGreyLight;
+}
+
+
+header {
+	.topbar {
+		font-size:14px;
+		font-weight:400;
+		height:34px;
+		line-height: 34px;
+		color: @white;
+		background-color: @bgDark;
+
+		.tb-list {
+			a { 
+				color: @white; 
+				padding: 0 20px 0 20px;
+			}
+
+			a:hover {
+				text-decoration: none;
+				color: @textLight;
+			}
+			li {
+				display: inline-block;
+				border-right: 1px solid @borderGrey;
+			}
+
+			li:last-child {
+				border-right:none;
+			}
+		}
+
+	}
+}
+
+
+
 .test2{
 	border: 1px solid  green;
 }
@@ -513,10 +563,6 @@ a{
 /*内边距end*/
 
 
-
-
-
-
 /*头部字体*/
 .title-zt{
 	color:#ffffff;
@@ -531,13 +577,12 @@ a{
 /*头部logo*/
 .title-logo{
 	width: 160px;
-	height:80px;
+	height:40px;
+
+	img { width:160px; height:40px; }
 
 }
-.title_block{
-	width: 160px;
-	height:80px;
-}
+
 .title_block_list{
 	width: 160px;
 	height:40px;

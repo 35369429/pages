@@ -1,25 +1,13 @@
 <include src="__WEB_ROOT__/desktop/common/head.page"  />
-	<div class="b-222222">
-		<div class="container b-222222 c-ffffff fs-14 p-top-5 p-bottom-5 fm">
-			<div class="left">
-				<span >南昌</span>
-				<span class="m-left-10">晴</span>
-				<span class="m-left-10">24 / 30</span>	
-			</div>
-			<div class="right">
-				<span>反馈</span>
-				<span>侵权投诉</span>
-			</div>
-		</div>
-	</div>
-	
+<include src="__WEB_ROOT__/desktop/common/header.page"  />
+
 	<div class="container m-top-15 m-bottom-10">
 			<div  class="row">
 				<!-- 左侧 -->
 	 			<div class="col-md-2 col-lg-2  t-c">
 	 				<div class="pf oh">
 						<div class="title-logo oh">
-	 						<img src="{{__STOR__::/__PROJECT_NAME/desktop/assets}}/images/test.jpg" alt=""  class="title_block">
+	 						<img src="{{__STOR__::/__PROJECT_NAME/desktop/assets}}/images/xpmsns-logo.png" alt=""  class="title_block">
 	 					</div>
 	 					<div class="wd_160 m-top-10 fs-16 lh-40 fm  center">
 							<div class="center w-70 t-c h-40 c-333333  cp bs-4  m-bottom-10 tj">
@@ -53,15 +41,13 @@
 					<div class="row">
 						<div class="out">
 							<ul class="img">
-								<li>
-									<a href="#"><img src="{{__STOR__::/__PROJECT_NAME/desktop/assets}}/images/1.jpg" alt=""></a>
-								</li>
+								<li><a href="#"><img src="{{__STOR__::/__PROJECT_NAME/desktop/assets}}/images/1.jpg" alt=""></a></li>
 								<li><a href="#"><img src="{{__STOR__::/__PROJECT_NAME/desktop/assets}}/images/2.jpg" alt=""></a></li>
 								<li><a href="#"><img src="{{__STOR__::/__PROJECT_NAME/desktop/assets}}/images/3.jpg" alt=""></a></li>
 								<li><a href="#"><img src="{{__STOR__::/__PROJECT_NAME/desktop/assets}}/images/4.jpg" alt=""></a></li>
 								<li><a href="#"><img src="{{__STOR__::/__PROJECT_NAME/desktop/assets}}/images/5.jpg" alt=""></a></li>
 								<li><a href="#"><img src="{{__STOR__::/__PROJECT_NAME/desktop/assets}}/images/6.jpg" alt=""></a></li>
-								<li><a href="#"><img src="http://img.taopic.com/uploads/allimg/140729/240450-140HZP45790.jpg" alt=""></a></li>
+								<li><a href="#"><img ssrc="{{__STOR__::/__PROJECT_NAME/desktop/assets}}/images/6.jpg" alt=""></a></li>
 							</ul>
 							<ul class="num fm fs-14">
 								<li>哲学</li>

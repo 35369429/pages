@@ -5,6 +5,7 @@
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<title>{{page.title}}-XpmSNS/头条</title>
 	<link href="{{__STOR__::/__PROJECT_NAME/desktop/assets}}/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+	<link href="{{__STOR__::/__PROJECT_NAME/desktop/assets}}/fonts/fontawesome/css/fontawesome-all.min.css" rel="stylesheet" type="text/css">
 	<script type="text/javascript" src="{{__STOR__::/__PROJECT_NAME/desktop/assets}}/js/jquery-1.9.1.min.js"></script>
 	<script type="text/javascript" src="{{__STOR__::/__PROJECT_NAME/desktop/assets}}/js/index.js"></script>
 	<script type="text/javascript" src="{{__STOR__::/__PROJECT_NAME/desktop/assets}}/js/bootstrap.min.js"></script>
