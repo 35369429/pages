@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>{{page.title}}-XpmSNS/头条</title>
+	<link href="{{__STOR__::/__PROJECT_NAME/desktop/assets}}/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+	<script type="text/javascript" src="{{__STOR__::/__PROJECT_NAME/desktop/assets}}/js/jquery-1.9.1.min.js"></script>
+	<script type="text/javascript" src="{{__STOR__::/__PROJECT_NAME/desktop/assets}}/js/index.js"></script>
+	<script type="text/javascript" src="{{__STOR__::/__PROJECT_NAME/desktop/assets}}/js/bootstrap.min.js"></script>
+</head>
+<body>

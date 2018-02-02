@@ -1,4 +1,4 @@
-<include src="__WEB_ROOT__/common/header.page"  />
+<include src="__WEB_ROOT__/desktop/common/head.page"  />
 <!-- <div class="container">
 	<div class="header-top row" id="top">
 		<div class="col-lg-4" id="today" >
@@ -91,4 +91,4 @@
 <script type="text/javascript" src="{{__STOR__::/__PROJECT_NAME/assets/pages}}/js/jquery.validate.min.js"></script>
 <!-- 最底部版权 -->
 
-<include src="__WEB_ROOT__/common/footer.page" />
+<include src="__WEB_ROOT__/desktop/common/footer.page" />

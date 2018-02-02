@@ -7,13 +7,18 @@
 				"param":"isnav=true",
 				"status":"on"
 			}
+		},
+		"page":{
+			"title":"首页"
 		}
 	},
 	"entries":[
-		{"method":"GET", "router":"/", "ttl":0}
+		{"method":"GET", "router":"/article", "ttl":0}
 	],
 	
-	"align": {
-		"mobile":"/mobile/index"
+	"alias": {
+		"mobile":"/mobile/article/list",
+		"wechat":"/mobile/article/list",
+		"wxapp": "/article"
 	}
 }

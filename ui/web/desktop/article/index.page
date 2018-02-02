@@ -1,4 +1,4 @@
-<include src="__WEB_ROOT__/common/header.page"  />
+<include src="__WEB_ROOT__/desktop/common/head.page"  />
 	<div class="b-222222">
 		<div class="container b-222222 c-ffffff fs-14 p-top-5 p-bottom-5 fm">
 			<div class="left">
@@ -19,7 +19,7 @@
 	 			<div class="col-md-2 col-lg-2  t-c">
 	 				<div class="pf oh">
 						<div class="title-logo oh">
-	 						<img src="{{__STOR__::/__PROJECT_NAME/assets}}/images/test.jpg" alt=""  class="title_block">
+	 						<img src="{{__STOR__::/__PROJECT_NAME/desktop/assets}}/images/test.jpg" alt=""  class="title_block">
 	 					</div>
 	 					<div class="wd_160 m-top-10 fs-16 lh-40 fm  center">
 							<div class="center w-70 t-c h-40 c-333333  cp bs-4  m-bottom-10 tj">
@@ -54,13 +54,13 @@
 						<div class="out">
 							<ul class="img">
 								<li>
-									<a href="#"><img src="{{__STOR__::/__PROJECT_NAME/assets}}/images/1.jpg" alt=""></a>
+									<a href="#"><img src="{{__STOR__::/__PROJECT_NAME/desktop/assets}}/images/1.jpg" alt=""></a>
 								</li>
-								<li><a href="#"><img src="{{__STOR__::/__PROJECT_NAME/assets}}/images/2.jpg" alt=""></a></li>
-								<li><a href="#"><img src="{{__STOR__::/__PROJECT_NAME/assets}}/images/3.jpg" alt=""></a></li>
-								<li><a href="#"><img src="{{__STOR__::/__PROJECT_NAME/assets}}/images/4.jpg" alt=""></a></li>
-								<li><a href="#"><img src="{{__STOR__::/__PROJECT_NAME/assets}}/images/5.jpg" alt=""></a></li>
-								<li><a href="#"><img src="{{__STOR__::/__PROJECT_NAME/assets}}/images/6.jpg" alt=""></a></li>
+								<li><a href="#"><img src="{{__STOR__::/__PROJECT_NAME/desktop/assets}}/images/2.jpg" alt=""></a></li>
+								<li><a href="#"><img src="{{__STOR__::/__PROJECT_NAME/desktop/assets}}/images/3.jpg" alt=""></a></li>
+								<li><a href="#"><img src="{{__STOR__::/__PROJECT_NAME/desktop/assets}}/images/4.jpg" alt=""></a></li>
+								<li><a href="#"><img src="{{__STOR__::/__PROJECT_NAME/desktop/assets}}/images/5.jpg" alt=""></a></li>
+								<li><a href="#"><img src="{{__STOR__::/__PROJECT_NAME/desktop/assets}}/images/6.jpg" alt=""></a></li>
 								<li><a href="#"><img src="http://img.taopic.com/uploads/allimg/140729/240450-140HZP45790.jpg" alt=""></a></li>
 							</ul>
 							<ul class="num fm fs-14">
@@ -83,7 +83,7 @@
 					
 					<div class="row b-b-e8e8e8">
 						<div class="col-md-3 col-lg-3  oh p-l-0 p-r-0 m-bottom-15 m-top-5">
-							<img src="{{__STOR__::/__PROJECT_NAME/assets}}/images/test2.jpg" alt="" class="w-all">
+							<img src="{{__STOR__::/__PROJECT_NAME/desktop/assets}}/images/test2.jpg" alt="" class="w-all">
 						</div>
 						
 						<div class="col-md-9 col-lg-9 p-bottom-10 fm fs-18 m-top-5">
@@ -95,7 +95,7 @@
 									新闻
 								</div>
 								<div class="left fs-14 m-top-3 c-787878">
-									<img src="{{__STOR__::/__PROJECT_NAME/assets}}/images/photo.jpg" alt="" class="tz m-left-9">
+									<img src="{{__STOR__::/__PROJECT_NAME/desktop/assets}}/images/photo.jpg" alt="" class="tz m-left-9">
 									<span class="m-left-9">红星新闻</span>
 									<span>.</span>
 									<span>159条评论</span>
@@ -116,7 +116,7 @@
 									新闻
 								</div>
 								<div class="left fs-14 m-top-3 c-787878">
-									<img src="{{__STOR__::/__PROJECT_NAME/assets}}/images/photo.jpg" alt="" class="tz m-left-9">
+									<img src="{{__STOR__::/__PROJECT_NAME/desktop/assets}}/images/photo.jpg" alt="" class="tz m-left-9">
 									<span class="m-left-9">红星新闻</span>
 									<span>.</span>
 									<span>159条评论</span>
@@ -134,16 +134,16 @@
 							</div>
 							<div class="row p-l-0  p-r-0 m-r-0 m-l-0 m-top-10">
 								<div class="col-md-3 col-lg-3">
-									<img src="{{__STOR__::/__PROJECT_NAME/assets}}/images/test2.jpg"  class="left w-all">	
+									<img src="{{__STOR__::/__PROJECT_NAME/desktop/assets}}/images/test2.jpg"  class="left w-all">	
 								</div>
 								<div class="col-md-3 col-lg-3">
-									<img src="{{__STOR__::/__PROJECT_NAME/assets}}/images/test2.jpg"  class="left w-all">	
+									<img src="{{__STOR__::/__PROJECT_NAME/desktop/assets}}/images/test2.jpg"  class="left w-all">	
 								</div>
 								<div class="col-md-3 col-lg-3">
-									<img src="{{__STOR__::/__PROJECT_NAME/assets}}/images/test2.jpg"  class="left w-all">	
+									<img src="{{__STOR__::/__PROJECT_NAME/desktop/assets}}/images/test2.jpg"  class="left w-all">	
 								</div>
 								<div class="col-md-3 col-lg-3">
-									<img src="{{__STOR__::/__PROJECT_NAME/assets}}/images/test2.jpg"  class="left w-all">	
+									<img src="{{__STOR__::/__PROJECT_NAME/desktop/assets}}/images/test2.jpg"  class="left w-all">	
 								</div>
 							</div>
 							
@@ -152,7 +152,7 @@
 									新闻
 								</div>
 								<div class="left fs-14 m-top-3 c-787878">
-									<img src="{{__STOR__::/__PROJECT_NAME/assets}}/images/photo.jpg" alt="" class="tz m-left-9">
+									<img src="{{__STOR__::/__PROJECT_NAME/desktop/assets}}/images/photo.jpg" alt="" class="tz m-left-9">
 									<span class="m-left-9">红星新闻</span>
 									<span>.</span>
 									<span>159条评论</span>
@@ -165,9 +165,6 @@
 				</div>
 				<!-- 中部end -->
 
-			
-				
-				
 
 				<!-- 右侧 -->
 				<div class="col-lg-4 col-md-4 p-r-0">
@@ -198,7 +195,7 @@
 						</div>
 						<div class="row m-r-0 m-l-0 m-top-15">
 							<div class="col-md-12">
-								<img src="{{__STOR__::/__PROJECT_NAME/assets}}/images/test.jpg" alt="" class="newphoto">
+								<img src="{{__STOR__::/__PROJECT_NAME/desktop/assets}}/images/test.jpg" alt="" class="newphoto">
 							</div>
 						</div>
 						
@@ -234,19 +231,19 @@
 						<div class="row">
 							<div class="col-md-12 col-lg-12 fm">
 								<div class="col-md-3 col-lg-3 p-top-10 p-bottom-10">
-									<img src="{{__STOR__::/__PROJECT_NAME/assets}}/images/test.jpg" alt="" class="timeblock">
+									<img src="{{__STOR__::/__PROJECT_NAME/desktop/assets}}/images/test.jpg" alt="" class="timeblock">
 								</div>
 								<div class="col-md-9 col-lg-9 p-top-20 p-bottom-20">
 									马克龙送给习近平的“国礼马” 进入30天隔离检疫期
 								</div>
 								<div class="col-md-3 col-lg-3 p-top-10 p-bottom-10">
-									<img src="{{__STOR__::/__PROJECT_NAME/assets}}/images/test.jpg" alt="" class="timeblock">
+									<img src="{{__STOR__::/__PROJECT_NAME/desktop/assets}}/images/test.jpg" alt="" class="timeblock">
 								</div>
 								<div class="col-md-9 col-lg-9 p-top-20 p-bottom-20">
 									马克龙送给习近平的“国礼马” 进入30天隔离检疫期
 								</div>
 								<div class="col-md-3 col-lg-3 p-top-10 p-bottom-10">
-									<img src="{{__STOR__::/__PROJECT_NAME/assets}}/images/test.jpg" alt="" class="timeblock">
+									<img src="{{__STOR__::/__PROJECT_NAME/desktop/assets}}/images/test.jpg" alt="" class="timeblock">
 								</div>
 								<div class="col-md-9 col-lg-9 p-top-20 p-bottom-20">
 									马克龙送给习近平的“国礼马” 进入30天隔离检疫期
@@ -276,7 +273,7 @@
 
 						<div class="row m-r-0 m-l-0  m-top-15 m-bottom-15">
 							<div class="col-md-5 col-lg-5 oh">
-								<img src="{{__STOR__::/__PROJECT_NAME/assets}}/images/test.jpg" alt="" class="hotimg">
+								<img src="{{__STOR__::/__PROJECT_NAME/desktop/assets}}/images/test.jpg" alt="" class="hotimg">
 							</div>
 							<div class="col-md-7 col-lg-7  oh">
 								<div class="w-all  oh">
@@ -310,7 +307,7 @@
 						<div class="row m-r-0 m-l-0  m-top-15 m-bottom-15">
 							<div class="col-md-6 col-lg-6  oh p-top-15 p-bottom-15">
 								<div class="w-all oh">
-									<img src="{{__STOR__::/__PROJECT_NAME/assets}}/images/test.jpg" alt="" class="w-all">
+									<img src="{{__STOR__::/__PROJECT_NAME/desktop/assets}}/images/test.jpg" alt="" class="w-all">
 								</div>
 								<div class="w-all">
 									军改后，习近平向哪些部队机构授予军旗
@@ -318,7 +315,7 @@
 							</div>
 							<div class="col-md-6 col-lg-6  oh p-top-15 p-bottom-15">
 								<div class="w-all oh">
-									<img src="{{__STOR__::/__PROJECT_NAME/assets}}/images/test.jpg" alt="" class="w-all">
+									<img src="{{__STOR__::/__PROJECT_NAME/desktop/assets}}/images/test.jpg" alt="" class="w-all">
 								</div>
 								<div class="w-all">
 									长江3千吨运煤轮船侧翻
@@ -461,10 +458,10 @@
 		<div class="block_last">
 
 			<div class="block_top">
-				<img src="{{__STOR__::/__PROJECT_NAME/assets}}/images/zhiding.png" alt="" class="sx_png">
+				<img src="{{__STOR__::/__PROJECT_NAME/desktop/assets}}/images/zhiding.png" alt="" class="sx_png">
 			</div>
 			<div class="block_fulsh">
-				<img src="{{__STOR__::/__PROJECT_NAME/assets}}/images/shuaxin.png" alt="" class="sx_png">
+				<img src="{{__STOR__::/__PROJECT_NAME/desktop/assets}}/images/shuaxin.png" alt="" class="sx_png">
 			</div>
 		</div>
-<include src="__WEB_ROOT__/common/footer.page" />
+<include src="__WEB_ROOT__/desktop/common/footer.page" />
