@@ -2,14 +2,22 @@
 	<div class="topbar">
 		<ul class="tb-list left">
 			<li><a href="#"> 下载APP </a></li>
-			<li><a href="#"> 小程序 <span class="m-left-5"><i class="fa fa-angle-down"></i> </span></a></li>
 			<li>
 				<a  href="#" 
 					data-html="true"
 					data-toggle="popover" 
 				 	data-placement="bottom"
 					data-container="body" 
-					data-content="<img width='150' src='{{__STOR__::/__PROJECT_NAME/desktop/assets}}/images/qr-m-index.png' />"  > 
+					data-content="<img width='150' onclick=$('[data-toggle=popover]').popover('hide') src='{{__STOR__::/__PROJECT_NAME/desktop/assets}}/images/qr-wxapp-index.jpg' />"  > 
+					小程序 <span class="m-left-5"><i class="fa fa-angle-down"></i> </span></a>
+			</li>
+			<li>
+				<a  href="#" 
+					data-html="true"
+					data-toggle="popover" 
+				 	data-placement="bottom"
+					data-container="body" 
+					data-content="<img width='150' onclick=$('[data-toggle=popover]').popover('hide') src='{{__STOR__::/__PROJECT_NAME/desktop/assets}}/images/qr-m-index.png' />"  > 
 					手机版 <span class="m-left-5"><i class="fa fa-angle-down"></i> </span></a>
 			</li>
 			<li><a href="#"> 
