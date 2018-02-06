@@ -185,6 +185,9 @@ section.articles {
 }
 
 
+/**
+ * 内容块
+ */
 .block {
 	margin: 0 0 15px 0;
 	background:@blueLight;
@@ -198,7 +201,47 @@ section.articles {
 	}
 
 	.block-content {
-		height: 300px;
+		min-height: 50px;
+		padding: 0 15px 0 15px ;
+	}
+
+	.item-1 {
+		
+		font-size:14px;
+		border-bottom: 1px solid @grey;
+		padding:.5em 0 .5em 0;
+		
+		a {
+				color:@text;
+				text-decoration:none;
+			}
+
+		.image {
+			float: left;
+			width:60px;
+			height:60px;
+			margin-right:.5em;
+			overflow:hidden;
+		}
+
+		a:hover, .image img:hover {
+			filter:alpha(opacity=80);
+	    	-moz-opacity:0.8;  
+	    	-khtml-opacity: 0.8;  
+			opacity: 0.8; 
+		}
+
+		.title {
+		}
+	}
+
+	.item-1:first-child {
+		padding-top:0;
+	}
+
+	.item-1:last-child {
+		border-bottom:none;
+		padding-bottom:15px;
 	}
 }
 

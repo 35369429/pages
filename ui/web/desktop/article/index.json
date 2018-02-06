@@ -10,9 +10,7 @@
 				"param":"isnav=true"
 			}
 		},
-		
 		"current":"{{categories.data.0}}",
-
 		"articles":{
 			"api":"/xpmsns/pages/article/search",
 			"query":{
@@ -22,6 +20,7 @@
 				"page":"{{__get.page}}"
 			}
 		},
+		"hots":[{"name":"a"},{"name":"b"},{"name":"c"}],
 		"page":{
 			"title":"{{current.name}}"
 		}
