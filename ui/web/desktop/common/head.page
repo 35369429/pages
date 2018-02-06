@@ -1,8 +1,13 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
+	<meta name="renderer" content="webkit">
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="description" content="XpmSNS开源互动应用支持六大平台，可以快速帮您搭建下一代智能地方门户、行业门户、全端官网和互动服务平台。" />
+	<meta name="keywords" content="XpmSNS,WordPress,网站建设,网站制作,cms,企业建站,建站系统" />
+	<link href="{{__STOR__::/__PROJECT_NAME/desktop/assets}}/images/favicon_16.ico" rel="shortcut icon" type="image/x-icon" />
+
 	<title>{{page.title}}-XpmSNS/头条</title>
 	<link href="{{__STOR__::/__PROJECT_NAME/desktop/assets}}/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
 	<link href="{{__STOR__::/__PROJECT_NAME/desktop/assets}}/fonts/fontawesome/css/fontawesome-all.min.css" rel="stylesheet" type="text/css">
