@@ -99,50 +99,36 @@
 			</div>
 		</section>
 
+		<section class="about block">
+			<div class="block-content">
+				<ul>
+					<li> © 2018 XpmSNS </li>
+					<li> 京ICP备14050225号-7</li>
+					<li> 公司: 北京云道天成科技有限公司</li>
+					<li> 电话: 400-617-9608</li>
+					<li> 地址: 北京市昌平区北清路8号 </li>
+					
+					<li class="image">
+						<span> 微信小程序 </span>
+						<img width='150'  src='{{__STOR__::/__PROJECT_NAME/desktop/assets}}/images/qr-wxapp-index.jpg' />
+					</li>
+					<li class="image">
+						<span> 微信版 ( HTML5 ) </span>
+						<img width='150'  src='{{__STOR__::/__PROJECT_NAME/desktop/assets}}/images/qr-m-index.png' />
+					</li>
 
+					<li class="image">
+						<span> 安卓客户端 ( iOS 审核中 ) </span>
+						<img width='150'  src='{{__STOR__::/__PROJECT_NAME/desktop/assets}}/images/qr-m-index.png' />
+					</li>
 
-		<div class="row m-r-0 m-l-0 m-top-20  fm b-f4f5f6">
-			<div class="row m-r-0 m-l-0 m-t-15 m-top-15">
-				<div class="newblock left b-f88c00 m-top-1"></div>
-				<span class="left  c-333333  m-left-10">更多</span>
-			</div>	
-
-			<div class="row m-r-0 m-l-0 fm c-828282">
-				<div class="col-md-6 col-lg-6  oh p-top-5 p-bottom-5 t-c">
-					关于MINA Pages
-				</div>
-
-				<div class="col-md-6 col-lg-6  oh p-top-5 p-bottom-5 t-c">
-					加入MINA Pages
-				</div>
+					<li class="image">
+						<span> 官方微信公众号 </span>
+						<img width='150'  src='{{__STOR__::/__PROJECT_NAME/desktop/assets}}/images/qr-m-index.png' />
+					</li>
+				</ul>
 			</div>
-
-			<div class="row m-r-0 m-l-0 fm c-828282">
-				<div class="col-md-3 col-lg-3 oh p-top-5 p-bottom-5 t-c">
-					媒体报道
-				</div>
-
-				<div class="col-md-3 col-lg-3 oh p-top-5 p-bottom-5 t-c">
-					媒体合作
-				</div>
-				<div class="col-md-3 col-lg-3 oh p-top-5 p-bottom-5 t-c">
-					产品合作
-				</div>
-
-				<div class="col-md-3 col-lg-3 oh p-top-5 p-bottom-5 t-c">
-					产品说明
-				</div>
-			</div>
-			<div class="row m-r-0 m-l-0 fm c-828282 m-bottom-15">
-				<div class="col-md-3 col-lg-3  oh p-top-5 p-bottom-5 t-c">
-					广告投放
-				</div>
-
-				<div class="col-md-3 col-lg-3  oh p-top-5 p-bottom-5 t-c">
-					联系我们
-				</div>
-			</div>
-		</div>
+		</section>
 
 	</div><!-- END 右侧推荐内容区 -->
 

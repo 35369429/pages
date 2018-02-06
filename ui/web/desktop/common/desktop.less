@@ -201,8 +201,38 @@ section.articles {
 	}
 
 	.block-content {
+		height: auto;
 		min-height: 50px;
 		padding: 0 15px 0 15px ;
+	}
+
+	ul {
+		
+		padding: 15px 0 15px 0;
+
+		li {
+			display:inline-block;
+			height: auto;
+			line-height:24px;
+			font-size:14px;
+			color: @greyDark;
+		}
+	
+		li.image {
+			width: 100%;
+			margin: 1em 0 .5em 0;
+			text-align: center;
+
+			span {
+				display: inline-block;
+				width: 100%;
+			}
+			img {
+				width: 80%;
+				display:block;
+				margin: .5em auto;
+			}
+		}
 	}
 
 	.item-1 {
@@ -242,13 +272,6 @@ section.articles {
 	.item-1:last-child {
 		border-bottom:none;
 		padding-bottom:15px;
-	}
-}
-
-section.alimama {
-	.block-content {
-		padding:20px;
-		height: 295px;
 	}
 }
 
