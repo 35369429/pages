@@ -72,13 +72,17 @@
 
 	<!-- 右侧推荐内容区 -->
 	<div class="col-xs-3">
-
-		<section class="alimama block">
+		
+		<!-- 阿里妈妈 广告 -->
+		<section class="alimama block block-full">
 			<div class="block-content">
-				阿里妈妈广告位
+				<a href="https://s.click.taobao.com/Wc5q6Uw" target="_blank">
+					<img width="100%" src="{{__STOR__::/__PROJECT_NAME/desktop/assets}}/images/aliyun-a-320x427.jpg">
+				</a>
 			</div>
-		</section>
-
+		</section> <!-- END 阿里妈妈广告 -->
+		
+		<!-- 24小时热文 -->
 		<section class="hot block">
 			<div class="block-title">24小时热文</div>
 			<div class="block-content"  >
@@ -97,8 +101,9 @@
 					<div class="clear"></div>
 				</div>
 			</div>
-		</section>
+		</section> <!-- 24小时热文END  -->
 
+		<!-- 关于我们 -->
 		<section class="about block">
 			<div class="block-content">
 				<ul>
@@ -128,11 +133,9 @@
 					</li>
 				</ul>
 			</div>
-		</section>
+		</section> <!-- 关于我们 END -->
 
 	</div><!-- END 右侧推荐内容区 -->
-
-	
 </div></div>
 
 
