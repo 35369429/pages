@@ -1,12 +1,41 @@
 {	
 	"cname":"首页-手机版",
-	"data": {},
+	"data": {
+		"categories":{
+			"api":"/xpmsns/pages/category/search",
+			"query":{
+				"select":"category_id,name",
+				"order":"priority asc",
+				"children":false,
+				"param":"isnav=true"
+			}
+		},
+		"current":"{{categories.data.0}}",
+
+		"wechat":{
+			"api":"/xpmsns/pages/article/wechat",
+			"query":{}
+		},
+		
+		"articles":{
+			"api":"/xpmsns/pages/article/search",
+			"query":{
+				"perpage":15,
+				"order":"publish_time desc",
+				"categoryId":"{{current.category_id}}",
+				"page":"{{__get.page}}"
+			}
+		},
+		"page":{
+			"title":"{{current.name}}"
+		}
+	},
 	"entries":[
 		{"method":"GET", "router":"/m/article", "ttl":0}
 	],
 	
 	"alias": {
 		"desktop":"/desktop/article/index",
-		"wxapp":"/article/list"
+		"wxapp":"/article/index"
 	}
 }
