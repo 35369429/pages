@@ -44,11 +44,11 @@
 			<!-- 文章列表项 -->
 			<div class="article-item-1" mp:for="{{articles.data}}" mp:for-item="{{rs}}" >
 				<div class="image" mp:if="{{rs.cover.url}}"> 
-					<img
+					<a href="/article/{{rs.article_id}}"><img
 						width="150"
 					    data-sizes="150X100"
 					    data-src="{{rs.cover.url}}"
-					  	class="lazyload" />
+					  	class="lazyload" /></a>
 				</div>
 				<div class="content">
 					<h5><a href="/article/{{rs.article_id}}" >{{rs.title}}</a></h5>
@@ -129,11 +129,15 @@
 				</ul>
 			</div>
 		</section> <!-- 关于我们 END -->
-
 	</div><!-- END 右侧推荐内容区 -->
-</div></div>
 
+	<ul class="float-tooltip hidden">
+		<li><a href="javascript:$('html,body').animate({scrollTop: '0px'}, 300);"><i class="fa fa-rocket"></i></a> </li>
+		<li><a href="javascript:window.location.reload();"><i class="fa fa-sync"></i> </a> </li>
+	</ul>
+</div></div><!-- END row END container -->
 
+<!-- 
 <div class="block_last">
 	<div class="block_top">
 		<img src="{{__STOR__::/__PROJECT_NAME/desktop/assets}}/images/zhiding.png" alt="" class="sx_png">
@@ -141,7 +145,7 @@
 	<div class="block_fulsh">
 		<img src="{{__STOR__::/__PROJECT_NAME/desktop/assets}}/images/shuaxin.png" alt="" class="sx_png">
 	</div>
-</div>
+</div> -->
 
 
 <include src="__WEB_ROOT__/desktop/common/footer.page" />
