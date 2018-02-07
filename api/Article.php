@@ -60,13 +60,13 @@ class Article extends Api {
 
 		// 首页推荐的内容
 		if ( in_array('articles', $section) ) {
-			$query['praram'] = '首页';
+			$query['param'] = '首页';
 			$data['articles'] = $this->search($query);
 		}
 
 		// 焦点图
 		if ( in_array('focus', $section) ) {
-			$query['praram'] = '焦点';
+			$query['param'] = '焦点';
 			$query['perpage'] = 4;
 			$query['page'] = 1;
 			$data['focus'] = $this->search($query);
@@ -74,7 +74,7 @@ class Article extends Api {
 
 		// 热点
 		if ( in_array('hot', $section) ) {
-			$query['praram'] = '热文';
+			$query['param'] = '热文';
 			$query['perpage'] = 6;
 			$query['page'] = 1;
 			$data['hot'] = $this->search($query);
