@@ -408,6 +408,17 @@ class Article extends Api {
 	}
 
 
+	protected function qrcode( $query ) {
+		$GLOBALS['_RESPONSE-CONTENT-TYPE'] = 'application/image';
+		M('Media')->qrcode($_GET, $image );
+		header('Content-type: image/png');
+		if (isset($_GET['name'])) {
+			header("Content-Disposition: attachment; filename=\"{$_GET['name']}.png\"");
+		}
+		echo $image;
+	}
+
+
 	/**
 	 * 微信分享签名
 	 */

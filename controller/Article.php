@@ -165,42 +165,7 @@ class ArticleController extends \Xpmse\Loader\Controller {
 	}
 
 
-	function test(){
-
-
-		$readability = new Readability(new Configuration());
-
-
-		print_r( $readability);
-
-		return;
-
-
-		Utils::cliOnly();
-
-		$media = new \Xpmse\Media;
-		$path = "/data/stor/public/media/2017/09/24/7d17a1dcd7c0e2b90ae2f7655fd6ff82.ttf";
-
-		$resp = $media->guessTitle( $path, 'application/x-font-ttf');
-
-		Utils::out( $resp );
-
-
-		// 需要安 ffmpeg
-		// apt-get install ffmpeg
-		// $ffmpeg = FFMpeg\FFMpeg::create();
-
-
-		// return;
-
-		// Utils::cliOnly();
-		// set_time_limit(0);
-		// $art = new  \Xpmsns\pages\Model\Article;
-		// $art->downloadFromWechat('wx77e0de6921bacc92', 15);
-
-		// $art->downloadFromWechat('wx77e0de6921bacc92');
-
-	}
+	
 
 
 	function testschedule() {
