@@ -132,22 +132,13 @@
 			</div>
 		</section> <!-- 关于我们 END -->
 	</div><!-- END 右侧推荐内容区 -->
-
+	
+	<!-- 返回到顶部等工具 -->
 	<ul class="float-tooltip hidden">
 		<li><a href="javascript:$('html,body').animate({scrollTop: '0px'}, 300);"><i class="fa fa-rocket"></i></a> </li>
 		<li><a href="javascript:window.location.reload();"><i class="fa fa-sync"></i> </a> </li>
-	</ul>
+	</ul><!-- END 返回到顶部等工具 -->
+
 </div></div><!-- END row END container -->
 
-<!-- 
-<div class="block_last">
-	<div class="block_top">
-		<img src="{{__STOR__::/__PROJECT_NAME/desktop/assets}}/images/zhiding.png" alt="" class="sx_png">
-	</div>
-	<div class="block_fulsh">
-		<img src="{{__STOR__::/__PROJECT_NAME/desktop/assets}}/images/shuaxin.png" alt="" class="sx_png">
-	</div>
-</div> -->
-
-
-<include src="__WEB_ROOT__/desktop/common/footer.page" />
+<include src="__WEB_ROOT__/desktop/common/foot.page" />

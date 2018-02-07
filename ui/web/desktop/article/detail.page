@@ -91,4 +91,4 @@
 <script type="text/javascript" src="{{__STOR__::/__PROJECT_NAME/assets/pages}}/js/jquery.validate.min.js"></script>
 <!-- 最底部版权 -->
 
-<include src="__WEB_ROOT__/desktop/common/footer.page" />
+<include src="__WEB_ROOT__/desktop/common/foot.page" />

@@ -87,4 +87,4 @@
 	}
 </script>
 
-<include src="__WEB_ROOT__/mobile/common/footer.page"  />
+<include src="__WEB_ROOT__/mobile/common/foot.page"  />
