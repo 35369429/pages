@@ -8,11 +8,8 @@ Page({
 	},
 
 	init: function(){
-		$("[data-toggle='popover']").popover({trigger:'hover'});
-
 		this.advChange();
 	 	this.slide();
-	 	this.fixTooltip();
 	},
 
 
@@ -53,20 +50,6 @@ Page({
 			$('.slide .items li').hide();
 			$('.slide .items [data-id='+id+']').fadeIn();
 		});
-	},
-
-	/**
-	 * 优化 float-tooltip 呈现
-	 * @return {[type]} [description]
-	 */
-	fixTooltip: function(){
-		let margin = 32;
-		let left =  $('.container').offset().left +  $('.container').width()  +  margin;
-		$('.float-tooltip').css('right', '0px');
-		$('.float-tooltip').css('left', left + 'px');
-		$('.float-tooltip').hide();
-		$('.float-tooltip').removeClass('hidden');
-		$('.float-tooltip').fadeIn();
 	}
 
 })
