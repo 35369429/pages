@@ -46,7 +46,48 @@ class Article extends Api {
 
 
 	/**
+	 * 查询推荐信息
+	 * @param  [type] $query [description]
+	 * @param  [type] $data  [description]
+	 * @return [type]        [description]
+	 */
+	protected function recommend( $query ) {
+		
+		$section =  !empty($query['section']) ? explode(',',$query['section']) : ['hot', 'focus', 'articles'];
+		$data = [];
+
+		$query['order'] = 'publish_time desc';
+
+		// 首页推荐的内容
+		if ( in_array('articles', $section) ) {
+			$query['praram'] = '首页';
+			$data['articles'] = $this->search($query);
+		}
+
+		// 焦点图
+		if ( in_array('focus', $section) ) {
+			$query['praram'] = '焦点';
+			$query['perpage'] = 4;
+			$query['page'] = 1;
+			$data['focus'] = $this->search($query);
+		}
+
+		// 热点
+		if ( in_array('hot', $section) ) {
+			$query['praram'] = '热文';
+			$query['perpage'] = 6;
+			$query['page'] = 1;
+			$data['hot'] = $this->search($query);
+		}
+
+		return $data;
+	}
+
+
+
+	/**
 	 * 查询文章列表
+	 * @@@ 具体查询实现，应在Model中 @@@
 	 *
 	 * 读取字段 select 默认 *
 	 *
