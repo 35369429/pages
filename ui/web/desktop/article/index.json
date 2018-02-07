@@ -20,6 +20,14 @@
 				"page":"{{__get.page}}"
 			}
 		},
+		"recommend": {
+			"api":"/xpmsns/pages/article/recommend",
+			"query":{
+				"section":"hot,focus"
+			}
+		},
+		"hot": "{{recommend.hot.data}}",
+		"focus": "{{recommend.focus.data}}",
 		"advs": [{
 				"image":"{{__STOR__::/__PROJECT_NAME/desktop/assets}}/images/aliyun-a-320x427.jpg",
 				"link":"https://s.click.taobao.com/t?e=m%3D2%26s%3Dhoxv%2FgDMwLwcQipKwQzePCperVdZeJviEViQ0P1Vf2kguMN8XjClAiXf1vKdgZdQvI5DWFYHmxXiIpTKtwc9j3TQ485k9SezlChjoNCSihyXCewRplqrABVF%2BG%2F2LD3qKIUZKvQyk4%2FkxFiXT%2FI5kdv2ej9RFznDI7hRLPtBsnnfiZ1OxkhRwDBkcElHipW7P37PZ5d3Efk3VTMPr8ftLkWbo0ZyKcLixiXvDf8DaRs%3D"

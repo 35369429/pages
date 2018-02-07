@@ -22,24 +22,19 @@
 
 		<!-- 焦点图 -->
 		<section class="focus">
-			<div class="out">
-				<ul class="img">
-					<li><a href="#"><img src="{{__STOR__::/__PROJECT_NAME/desktop/assets}}/images/1.jpg" alt=""></a></li>
-					<li><a href="#"><img src="{{__STOR__::/__PROJECT_NAME/desktop/assets}}/images/2.jpg" alt=""></a></li>
-					<li><a href="#"><img src="{{__STOR__::/__PROJECT_NAME/desktop/assets}}/images/3.jpg" alt=""></a></li>
-					<li><a href="#"><img src="{{__STOR__::/__PROJECT_NAME/desktop/assets}}/images/4.jpg" alt=""></a></li>
-					<li><a href="#"><img src="{{__STOR__::/__PROJECT_NAME/desktop/assets}}/images/5.jpg" alt=""></a></li>
-					<li><a href="#"><img src="{{__STOR__::/__PROJECT_NAME/desktop/assets}}/images/6.jpg" alt=""></a></li>
-					<li><a href="#"><img src="{{__STOR__::/__PROJECT_NAME/desktop/assets}}/images/2.jpg" alt=""></a></li>
+			<div class="slide">
+				<ul class="items">
+					<li data-id="{{rs.article_id}}" mp:for="{{focus}}" mp:for-from="0" mp:for-to="7"  mp:for-index="{{idx}}"  mp:for-item="{{rs}}">
+						
+						<a href="/article/{{rs.article_id}}" ><img src="{{rs.thumbs.1.url}}"></a>
+						<h5>{{rs.title}}</h5>
+					</li>
 				</ul>
-				<ul class="num fm fs-14">
-					<li>哲学</li>
-					<li>思想</li>
-					<li>理论</li>
-					<li>学潮</li>
-					<li>太平</li>
-					<li>大和</li>
-					<li>题目</li>
+				<ul class="tags" >
+					<li data-id="{{rs.article_id}}" class="{{ (idx == 0) ? 'active'}}" 
+						mp:for="{{focus}}" mp:for-from="0" mp:for-to="7"  mp:for-index="{{idx}}"  mp:for-item="{{rs}}" > 
+						{{rs.category_last.name}}
+					</li>
 				</ul>
 			</div>
 		</section><!-- END 焦点图 -->
@@ -56,7 +51,7 @@
 					  	class="lazyload" />
 				</div>
 				<div class="content">
-					<h5><a href="/article/{{rs.article_id}}">{{rs.title}}</a></h5>
+					<h5><a href="/article/{{rs.article_id}}" >{{rs.title}}</a></h5>
 					<p>
 						<a class="category" href="/article/list/{{rs.category_last.category_id}}">{{rs.category_last.name}}</a>
 						<span class="author">{{rs.author}}</span>
@@ -86,18 +81,18 @@
 		<section class="hot block">
 			<div class="block-title">24小时热文</div>
 			<div class="block-content"  >
-				<div class="item-1" mp:for-from="0" mp:for-to="6"  mp:for-index="{{idx}}"  mp:for-item="{{it}}">
+				<div class="item-1" mp:for="{{hot}}" mp:for-from="0" mp:for-to="6"  mp:for-index="{{idx}}"  mp:for-item="{{rs}}">
 					<div class="image">
-						<a href="#">
+						<a href="/article/{{rs.article_id}}">
 							<img
 								wdith="60"
 								height="60"
 						    	data-sizes="60X60"
-						    	data-src="{{__STOR__::/__PROJECT_NAME/desktop/assets}}/images/test.jpg"
+						    	data-src="{{rs.cover.url}}"
 						  		class="lazyload" />
 					  	</a>
 					</div>
-					<div class="title"> <a href="#">马克龙送给习近平的“国礼马” 进入30天隔离检疫期</a> </div>
+					<div class="title"> <a href="/article/{{rs.article_id}}">{{rs.title}}</a> </div>
 					<div class="clear"></div>
 				</div>
 			</div>

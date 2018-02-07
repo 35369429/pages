@@ -11,6 +11,7 @@ Page({
 		$("[data-toggle='popover']").popover({trigger:'hover'});
 
 		this.advChange();
+	 	this.slide();
 	},
 
 
@@ -35,7 +36,22 @@ Page({
 		setTimeout(()=>{
 			this.advChange();
 		}, 2000);
-	}
+	},
 
+	/**
+	 * 焦点图
+	 * @return {[type]} [description]
+	 */
+	slide: function(){
+
+		$('.slide .tags li').mouseover(function( event ){
+			let id = $(this).attr('data-id');
+			$('.slide .tags li').removeClass('active');
+			$(this).addClass('active');
+
+			$('.slide .items li').hide();
+			$('.slide .items [data-id='+id+']').fadeIn();
+		});
+	}
 
 })
