@@ -55,7 +55,7 @@ class Article extends Model {
 		$this->article_tag = Utils::getTab('article_tag', "xpmsns_pages_");    // 标签关联表
 		$this->article_draft = Utils::getTab('article_draft', "xpmsns_pages_");  // 文章草稿箱
 		$this->page = Utils::getTab('page', 'core_');  // 页面表
-
+		$this->host = Utils::getHome(Utils::getLocation());  // 页面跟地址
 
 		// $root = Conf::G("storage/local/bucket/public/root");
 		// $options = [
@@ -72,7 +72,7 @@ class Article extends Model {
 		// 	]
 		// ];
 		// $this->stor = new Local( $options );
-		$this->media = new Media(['host'=>Utils::getHome(Utils::getLocation())]);
+		$this->media = new Media(['host'=>$this->host]);
 
 	}
 
@@ -635,15 +635,7 @@ class Article extends Model {
 			$article['cover'] = $u;
 		}
 
-
-
-
-
-		// /static-file/media/2018/01/27/3dfc350d905fcd64a5e219dd09a49eea.png
-
-		// if ( !isset($article['delta']) || empty($article['delta']) ) {
-		// 	$article['delta'] = 'null';
-		// }
+		$article['home'] = $this->host;
 
 		return $article;
 	}
