@@ -67,8 +67,8 @@ class Article extends Api {
 		// 焦点图
 		if ( in_array('focus', $section) ) {
 			$query['param'] = '焦点';
-			$query['perpage'] = 4;
-			$query['page'] = 10;
+			$query['perpage'] = 10;
+			$query['page'] = 1;
 			$data['focus'] = $this->search($query);
 		}
 
