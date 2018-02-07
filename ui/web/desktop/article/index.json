@@ -48,8 +48,8 @@
 	],
 	
 	"alias": {
-		"mobile":"/mobile/article",
-		"wechat":"/mobile/article",
+		"mobile":"/mobile/article/index",
+		"wechat":"/mobile/article/index",
 		"wxapp": "/article"
 	}
 }
