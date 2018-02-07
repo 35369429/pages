@@ -1,57 +1,59 @@
 {	
-	"cname":"文章列表页",
+	"cname":"头条文章列表页",
 	"data": {
-		"category":{
+		"categories":{
 			"api":"/xpmsns/pages/category/search",
 			"query":{
 				"select":"category_id,name",
+				"order":"priority asc",
 				"children":false,
-				"param":"isnav=true",
-				"status":"on"
+				"param":"isnav=true"
 			}
 		},
-		"article":{
+		"current":"{{categories.data.0}}",
+		"articles":{
 			"api":"/xpmsns/pages/article/search",
 			"query":{
-				"select":"article_id,title,cover,summary,publish_time,thumbs",
-				"c":"{{__var.slug}}",
-				"perpage":20,
-				"page":"{{__get.page}}",
-				"order":"publish_time desc"
+				"perpage":15,
+				"order":"publish_time desc",
+				"categoryId":"{{__var.cid}}",
+				"page":"{{__get.page}}"
 			}
 		},
-
-		"news":{
-			"api":"/xpmsns/pages/article/search",
+		"recommend": {
+			"api":"/xpmsns/pages/article/recommend",
 			"query":{
-				"select":"article_id,title,publish_time",
-				"category":"新闻公告",
-				"perpage":6,
-				"order":"publish_time desc"
+				"section":"hot"
 			}
 		},
-		"cate":{
-			"api":"/xpmsns/pages/category/search",
+		"advs": [{
+				"image":"{{__STOR__::/__PROJECT_NAME/desktop/assets}}/images/aliyun-a-320x427.jpg",
+				"link":"https://s.click.taobao.com/t?e=m%3D2%26s%3Dhoxv%2FgDMwLwcQipKwQzePCperVdZeJviEViQ0P1Vf2kguMN8XjClAiXf1vKdgZdQvI5DWFYHmxXiIpTKtwc9j3TQ485k9SezlChjoNCSihyXCewRplqrABVF%2BG%2F2LD3qKIUZKvQyk4%2FkxFiXT%2FI5kdv2ej9RFznDI7hRLPtBsnnfiZ1OxkhRwDBkcElHipW7P37PZ5d3Efk3VTMPr8ftLkWbo0ZyKcLixiXvDf8DaRs%3D"
+			},{
+				"image":"{{__STOR__::/__PROJECT_NAME/desktop/assets}}/images/aliyun-b-320x427.jpg",
+				"link":"https://s.click.taobao.com/t?e=m%3D2%26s%3D3R8qIgmfL8kcQipKwQzePCperVdZeJviEViQ0P1Vf2kguMN8XjClAiXf1vKdgZdQfb8WuKZvbQziIpTKtwc9j3TQ485k9SezlChjoNCSihyXCewRplqrABVF%2BG%2F2LD3qKIUZKvQyk4%2FkxFiXT%2FI5kdv2ej9RFznDI7hRLPtBsnnfiZ1OxkhRwDBkcElHipW7oVEPwGLBv10I8N6H4TM8K0Wbo0ZyKcLixiXvDf8DaRs%3D"
+			},{
+				"image":"{{__STOR__::/__PROJECT_NAME/desktop/assets}}/images/aliyun-c-320x427.jpg",
+				"link":"https://s.click.taobao.com/t?e=m%3D2%26s%3Dj5M924%2BedkkcQipKwQzePCperVdZeJviEViQ0P1Vf2kguMN8XjClAiXf1vKdgZdQ9%2FAHEBIhN%2BPiIpTKtwc9j3TQ485k9SezlChjoNCSihyXCewRplqrABVF%2BG%2F2LD3qKIUZKvQyk4%2FkxFiXT%2FI5kdv2ej9RFznDI7hRLPtBsnnfiZ1OxkhRwDBkcElHipW7P37PZ5d3EfkhhwnYyXLnHpDoUWJTlJsdRZujRnIpwuLGJe8N%2FwNpGw%3D%3D"
+			}
+		],
+		"hot": "{{recommend.hot.data}}",
+		"current":{
+			"api":"/xpmsns/pages/category/get",
 			"query":{
-				"select":"category_id,name",
-				"children":false,
-				"perpage":1,
-				"slug":"{{__var.slug}}",
-				"status":"on"
+				"categoryId":"{{__var.cid}}"
 			}
 		},
-		"navcates":"{{category.data}}",
-		"current":"{{cate.data.0}}",
 		"page":{
-			"title":"{{cate.data.0.name}}"
+			"title":"{{current.name}}"
 		}
 	},
 	"entries":[
-		{"method":"GET", "router":"/list/{slug:.+}", "ttl":0}
+		{"method":"GET", "router":"/article/list/{cid:.+}", "ttl":0}
 	],
 
 	"align": {
-		"mobile":"/mobile/article/detail",
-		"wxapp":"/article/detail"
+		"mobile":"/mobile/article/list",
+		"wxapp":"/article/list"
 	}
 }

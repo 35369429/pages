@@ -2,6 +2,7 @@
 	"cname":"XpmSNS默认主题",
 	"pages":[
 		"/desktop/article/index",
+		"/desktop/article/list",
 		"/desktop/article/detail",
 		"/mobile/article/detail",
 		"/mobile/article/list"
