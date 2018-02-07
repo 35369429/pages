@@ -68,14 +68,14 @@ class Article extends Api {
 		if ( in_array('focus', $section) ) {
 			$query['param'] = '焦点';
 			$query['perpage'] = 4;
-			$query['page'] = 1;
+			$query['page'] = 10;
 			$data['focus'] = $this->search($query);
 		}
 
 		// 热点
 		if ( in_array('hot', $section) ) {
 			$query['param'] = '热文';
-			$query['perpage'] = 6;
+			$query['perpage'] = 10;
 			$query['page'] = 1;
 			$data['hot'] = $this->search($query);
 		}
