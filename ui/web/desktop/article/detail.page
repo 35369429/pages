@@ -62,7 +62,7 @@
 		<section class="article">
 			<div class="title">
 				<h1>{{article.title}}</h1>
-				<span>作者: {{article.author}} </span>
+				<span>{{article.author}} </span>
 				<span>{{article.publish_date}} </span>
 			</div>
 			
