@@ -101,36 +101,8 @@
 		</section> <!-- 24小时热文END  -->
 
 		<!-- 关于我们 -->
-		<section class="about block">
-			<div class="block-content">
-				<ul>
-					<li> © 2018 XpmSNS.com </li>
-					<li> 京ICP备14050225号-7</li>
-					<li> 公司: 北京云道天成科技有限公司</li>
-					<li> 电话: 400-617-9608</li>
-					<li> 地址: 北京市昌平区北清路8号三一重工产业园区</li>
-					
-					<li class="image">
-						<span> 微信小程序 </span>
-						<img width='150'  src='{{__STOR__::/__PROJECT_NAME/desktop/assets}}/images/qr-wxapp-index.jpg' />
-					</li>
-					<li class="image">
-						<span> 微信版 ( HTML5 ) </span>
-						<img width='150'  src='{{__STOR__::/__PROJECT_NAME/desktop/assets}}/images/qr-m-index.png' />
-					</li>
+		<include src="__WEB_ROOT__/desktop/common/aboutus.page" />
 
-					<li class="image">
-						<span> 安卓客户端 ( iOS 审核中 ) </span>
-						<img width='150'  src='{{__STOR__::/__PROJECT_NAME/desktop/assets}}/images/qr-m-index.png' />
-					</li>
-
-					<li class="image">
-						<span> 官方微信公众号 </span>
-						<img width='150'  src='{{__STOR__::/__PROJECT_NAME/desktop/assets}}/images/qr-m-index.png' />
-					</li>
-				</ul>
-			</div>
-		</section> <!-- 关于我们 END -->
 	</div><!-- END 右侧推荐内容区 -->
 	
 	<!-- 返回到顶部等工具 -->
