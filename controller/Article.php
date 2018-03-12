@@ -137,12 +137,11 @@ class ArticleController extends \Xpmse\Loader\Controller {
 
 			'crumb' => [
 	                "图文" => APP::R('article','index'),
-	                "文章列表" => APP::R('article','index'),
 	                "转采文章" => '',
 	        ],
 
 	        'active'=> [
-	 			'slug'=>'xpmsns/pages/article/index'
+	 			'slug'=>'xpmsns/pages/article/collect'
 	 		]
 		];
 	}
@@ -163,6 +162,47 @@ class ArticleController extends \Xpmse\Loader\Controller {
 
 		echo json_encode(['code'=>0, 'message'=>'done', 'article_id'=>$rs['article_id']]);
 	}
+
+
+
+	/**
+	 * SEO 首页
+	 * @return [type] [description]
+	 */
+	function seo(){
+
+		App::render($data,'article','seo.widget');
+
+		return [
+
+			'js' => [
+		 			"js/plugins/select2/select2.full.min.js",
+		 			"js/plugins/jquery-tags-input/jquery.tagsinput.min.js",
+		 			"js/plugins/bootstrap-datepicker/bootstrap-datepicker.min.js",
+		 			'js/plugins/masked-inputs/jquery.maskedinput.min.js',
+		 			"js/plugins/jquery-validation/jquery.validate.min.js",
+		    		"js/plugins/jquery-ui/jquery-ui.min.js"
+				],
+			'css'=>[
+				"js/plugins/bootstrap-datepicker/bootstrap-datepicker3.min.css",
+	 			"js/plugins/select2/select2.min.css",
+	 			"js/plugins/select2/select2-bootstrap.min.css",
+	 			"js/plugins/jquery-tags-input/jquery.tagsinput.min.css"
+	 		],
+
+			'crumb' => [
+	                "图文" => APP::R('article','index'),
+	                "搜索引擎优化" => '',
+	        ],
+
+	        'active'=> [
+	 			'slug'=>'xpmsns/pages/article/seo'
+	 		]
+		];
+	}
+
+
+
 
 
 	
