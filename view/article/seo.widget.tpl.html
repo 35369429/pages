@@ -1,11 +1,11 @@
 <?php use \Xpmse\Loader\App; use \Xpmse\Utils; ?>
 <style type="text/css">
 
-	.collect-form {
+	.form-horizontal {
 		padding-top: 40px;
 		padding-bottom: 40px;
 	}
-	.collect-form label {
+	.form-horizontal label {
 		font-size: 16px;
 	}
 
@@ -81,12 +81,12 @@
 				
 				<!-- 站点地图 -->
 				<div class="form-group">
-					<label class="col-xs-2 control-label" for="url">站点地图:</label>
+					<label class="col-xs-2 control-label" for="sitemap">站点地图:</label>
 					<div class="col-xs-9">
 						<div class="input-group">
-							<input class="form-control input-lg"  type="text" name="url" value="<?=Utils::getHome()?>/sitemap.xml" disabled>
+							<input class="form-control input-lg"  type="text" name="sitemap" value="<?=Utils::getHome()?>/sitemap.xml" disabled>
 							<span class="input-group-btn">
-								<button class="btn btn-lg btn-primary" type="button">查看</button>
+								<a class="btn btn-lg btn-primary" href="<?=Utils::getHome()?>/sitemap.xml" target="_blank" type="button">查看</a>
 							</span>
 						</div>
 					</div>
@@ -99,7 +99,7 @@
 						<div class="input-group">
 							<input class="form-control input-lg"  type="text" name="url" value="<?=Utils::getHome()?>/robot.txt" disabled>
 							<span class="input-group-btn">
-								<button class="btn btn-lg btn-primary" type="button">修改</button>
+								<button class="btn btn-lg btn-primary fn-action fn-robots" type="button">修改</button>
 							</span>
 						</div>
 					</div>
@@ -129,36 +129,36 @@
 		</div> <!-- END block-header -->
 
 		<div class="block-content " >
-			<form class="form-horizontal collect-form" >
+			<form class="form-horizontal baidulinks-form" >
 				
 				<!-- 百度Token -->
 				<div class="form-group">
 					<label class="col-xs-2 control-label" for="url">准入密钥:</label>
 					<div class="col-xs-9">
-						<input class="form-control input-lg"  type="text" name="url" value="<?=$url?>" placeholder="请填写链接提交的站点准入密钥（Token）">
+						<input class="form-control input-lg"  type="text" name="token" value="<?=$baidu['token']?>" placeholder="请填写链接提交的站点准入密钥（Token）">
 					</div>
 				</div><!-- END 百度Token -->
 				
 
 				<!-- 推送计划 -->
 				<div class="form-group">
-					<label class="col-xs-2 control-label" for="category">更新频次:</label>
+					<label class="col-xs-2 control-label" for="schedule">更新频次:</label>
 					<div class="col-xs-9">
-						<select class="js-select2 form-control input-lg" name="category" style="width: 100%;">
+						<select class="js-select2 form-control input-lg" name="schedule" value="<?=$baidu['token']?>" style="width: 100%;">
 							<option></option>
-							<option class="daily" selected>每天</option>
-							<option class="weekly">每周 </option>
-							<option class="weekly">每月</option>
+							<option value="daily" selected>每天</option>
+							<option value="weekly">每周 </option>
+							<option value="weekly">每月</option>
 						</select>
 					</div>
 				</div><!-- END 推送计划 -->
 
 				<!-- 网页地址 -->
 				<div class="form-group">
-					<label class="col-xs-2 control-label" for="status"></label>
+					<label class="col-xs-2 control-label" for="auto"></label>
 					<div class="col-xs-9">
 						<label class="css-input css-checkbox css-checkbox-primary" >
-					   		<input name="status" value="published" type="checkbox" <?=($published == 1) ? 'checked' : '' ?> ><span></span> 发布/更新文章时自动提交
+					   		<input name="auto" value="1" type="checkbox" <?=($baidu['auto'] == 1) ? 'checked' : '' ?> ><span></span> 发布/更新/删除文章时自动提交
 						</label>
 					</div>
 				</div><!-- END 网页地址 -->
@@ -190,19 +190,65 @@
 	</div>
 </div>
 
-<script type="text/javascript">
-$(function(){
-	App.initHelpers(['datepicker','select2', 'masked-inputs','tags-inputs',  'ajax-confirm', 'slimscroll']);
-	$('.fn-collect').click(function(event) {
 
-		var api = '<?=App::NR("article","docollect")?>';
-		var data = $('.collect-form').serializeData();
-		if (data['url'] == null) {
-			App.notify( '请填写目标网页地址', 'fa fa-times','danger'); 
+<!-- 弹窗 -->
+<!-- 应用浏览器 Modal -->
+<div class="modal fade " id="_app_browser" tabindex="-1" role="dialog" aria-hidden="true" data-backdrop="static">
+	<div class="modal-dialog modal-dialog-fromtop modal-lg">
+		<div class="modal-content">
+		</div>
+	</div>
+</div>
+<!-- 弹窗  -->
+
+
+<script type="text/javascript">
+
+function logs() {
+	let url = '<?=App::NR("article", "seoUpdateLogs");?>';
+	$('#_app_browser .modal-content').html('<div class="text-center" style="padding:40px;"><i class="fa fa-refresh fa-2x fa-spin"></i></div>');
+	$('#_app_browser').modal('show');
+	$('#_app_browser .modal-content').load(url);
+}
+
+function robots() {
+	let url = '<?=App::NR("article", "seoRobots");?>';
+	$('#_app_browser .modal-content').html('<div class="text-center" style="padding:40px;"><i class="fa fa-refresh fa-2x fa-spin"></i></div>');
+	$('#_app_browser').modal('show');
+	$('#_app_browser .modal-content').load(url);
+}
+
+
+$(function() {
+
+	App.initHelpers(['datepicker','select2', 'masked-inputs','tags-inputs',  'ajax-confirm', 'slimscroll']);
+
+
+	/**
+	 * 打开日志
+	 */
+	$('.fn-logs').click(function(){
+		logs();
+	});
+
+
+	$('.fn-robots').click(function(){
+		robots();
+	});
+
+	/**
+	 * 更新链接提交计划
+	 */
+	$('.fn-update').click(function(event) {
+
+		var api = '<?=App::NR("article","seoUpdate")?>';
+		var data = $('.baidulinks-form').serializeData();
+		if (data['token'] == null) {
+			App.notify( '请填写链接提交准入秘钥', 'fa fa-times','danger'); 
 			return;
 		}
 
-		App.loading({message:'转采中,请稍候..'}).show();
+		App.loading({message:'更新中,请稍候..'}).show();
 
 		jQuery.post( api, data, function( data, textStatus, xhr) {
 			App.loading().hide();
@@ -215,12 +261,8 @@ $(function(){
 				return;
 			}
 
-			// 转采成功
-			$('.collect-form input[name=url]').val('');
-			App.notify('转采成功');
-			setTimeout(function(){
-				window.location = '<?=App::R("article","editor", ["id"=>""])?>' +  data['article_id'];
-			}, 1000);
+			// 更新成功
+			App.notify('更新成功');
 
 		}, 'json')
 
@@ -229,8 +271,6 @@ $(function(){
 			App.notify( message, 'fa fa-times','danger'); 
 			console.log( status, xhr.status, ' message=', message );
 		});
-
-
 
 	});
 })
