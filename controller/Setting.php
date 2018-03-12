@@ -8,7 +8,9 @@ use \Xpmse\Conf as Conf;
 
 class SettingController extends \Xpmse\Loader\Controller {
 	
+	private $option = null;
 	function __construct() {
+		$this->option = new \Xpmse\Option('xpmsns/pages');
 	}
 
 
@@ -18,6 +20,25 @@ class SettingController extends \Xpmse\Loader\Controller {
 	 * @return [type] [description]
 	 */
 	function seo(){
+
+		$baidulinks = $this->option->get('setting/seo/baidulinks');
+
+		if ( empty($baidulinks) ) {
+
+			$baidulinks = [
+				"token" => "",
+				"schedule" => "daily",
+				"auto" => 1
+			];
+
+			try {
+				$this->option->register('百度链接提交计划', 'setting/seo/baidulinks', $baidulinks );	
+			}catch( Excp $e ) {}	
+		}
+
+		$data = [
+			"baidu" => $baidulinks
+		];
 
 		App::render($data,'setting','seo');
 
@@ -51,23 +72,79 @@ class SettingController extends \Xpmse\Loader\Controller {
 
 
 	/**
-	 * SEO 设定机器人表单
+	 * SEO 爬虫协议
 	 * @return [type] [description]
 	 */
 	function seoRobots() {
+
+		$robots = $this->option->get('setting/seo/robots');
+		if ( empty($robots) ) {
+			$robots = "Disallow: /bin/\n"
+					. "Sitemap: ".Utils::getHome()."/sitemap.xml\n"
+					. "Sitemap: ".Utils::getHome()."/sitemap.html\n";
+
+			try {
+				$this->option->register('爬虫抓取协议', 'setting/seo/robots', $robots );
+			}catch( Excp $e ) {}
+		}
+
+		$data = [
+			"robots" => $robots
+		];
 		App::render($data,'setting','seo.robots');
 	}
+
+
+	/**
+	 * SEO 修改爬虫协议
+	 * @return [type] [description]
+	 */
+	function seoRobotsUpdate() {
+		
+		$robots = trim($_POST['robots']);
+		if ( empty($robots) ) {
+			throw new Excp("爬虫协议格式不正确", 402, ['post'=>$_POST]);
+		}
+
+		$this->option->set('setting/seo/robots', $robots);
+		echo json_encode(['code'=>0, 'message'=>'更新成功']);
+
+	}
+
+
+	/**
+	 * SEO 百度链接提交计划
+	 * @return
+	 */
+	function seoUpdate() {
+
+		$links = $_POST;
+		if ( empty($links['token']) ) {
+			throw new Excp("请提交准入秘钥", 402, ['post'=>$_POST]);
+		}
+
+		if ( !array_key_exists('auto', $links) ) {
+			$links['auto'] = 0;
+		}
+
+		if ( !array_key_exists('schedule', $links) ) {
+			$links['schedule'] = 'daily';
+		}
+
+		$this->option->set('setting/seo/baidulinks', $links);
+		echo json_encode(['code'=>0, 'message'=>'更新成功']);
+	}
+
 
 
 
 	/**
 	 * SEO 百度链接提交日志
-	 * @return [type] [description]
+	 * @return
 	 */
 	function seoUpdateLogs(){
 		App::render($data,'setting','seo.updatelogs');
 	}
-
 
 
 	/**

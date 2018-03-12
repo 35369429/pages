@@ -159,9 +159,9 @@
 					<div class="col-xs-9">
 						<select class="js-select2 form-control input-lg" name="schedule" value="<?=$baidu['token']?>" style="width: 100%;">
 							<option></option>
-							<option value="daily" selected>每天</option>
-							<option value="weekly">每周 </option>
-							<option value="weekly">每月</option>
+							<option value="daily" <?=($baidu['schedule'] == 'daily') ? 'selected' : ''?> >每天</option>
+							<option value="weekly"  <?=($baidu['schedule'] == 'weekly') ? 'selected' : ''?>  >每周 </option>
+							<option value="monthly"  <?=($baidu['schedule'] == 'monthly') ? 'selected' : ''?>  >每月</option>
 						</select>
 					</div>
 				</div><!-- END 推送计划 -->
@@ -191,7 +191,7 @@
 				<div style="padding:20px 40px 20px 40px;">
 
 					<p> <h4 class="font-w400"> 如何获取链接提交准入密钥 ？</h4></p>
-					<h5 class="font-w300">  在百度资源平台注册，并添加网站。即可获得准入密钥。 <a href="https://ziyuan.baidu.com/linksubmit/index?site=<?=Utils::getHome()?>">查看准入秘钥</a>
+					<h5 class="font-w300">  在百度资源平台注册，并添加网站。即可获得准入密钥。 <a target="_blank" href="https://ziyuan.baidu.com/linksubmit/index">查看准入秘钥</a>
 					<p> 
 						
 						<div> <img src="/s/xpmsns/pages/static/seo/baidu.png" width="800" > </div>
@@ -216,6 +216,16 @@
 
 
 <script type="text/javascript">
+
+function lock() {
+	$('.fn-action').addClass('disabled');
+	$('.fn-action').attr('disabled','disabled');
+}
+
+function unlock() {
+	$('.fn-action').removeClass('disabled');
+	$('.fn-action').removeAttr('disabled');
+}
 
 function logs() {
 	let url = '<?=App::NR("setting", "seoUpdateLogs");?>';
@@ -261,9 +271,11 @@ $(function() {
 			return;
 		}
 
+		lock();
 		App.loading({message:'更新中,请稍候..'}).show();
 
 		jQuery.post( api, data, function( data, textStatus, xhr) {
+			unlock();
 			App.loading().hide();
 
 			// 返回数据异常
@@ -280,6 +292,7 @@ $(function() {
 		}, 'json')
 
 		.error(function( xhr, status, message) {
+			unlock();
 			App.loading().hide();
 			App.notify( message, 'fa fa-times','danger'); 
 			console.log( status, xhr.status, ' message=', message );

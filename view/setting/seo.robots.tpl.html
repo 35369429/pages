@@ -9,7 +9,7 @@
 		<h3 class="block-title"> <i class="fa fa-arrow-right"></i> 设定 robots.txt 抓取协议 </h3>
 	</div>
 	<div class="block-content" style="padding-top:10px;padding-bottom: 20px;">
-		<form class="form-horizontal" >
+		<form class="form-horizontal robots-form" >
 			<!-- 协议地址 -->
 			<div class="form-group">
 				<label class="col-xs-2 control-label" for="url">协议地址:</label>
@@ -27,7 +27,7 @@
 			<div class="form-group">
 				<label class="col-xs-2 control-label" for="url">抓取协议:</label>
 				<div class="col-xs-9">
-					<textarea class="form-control"  name="robots" rows="8" placeholder="User-agent: *"></textarea>
+					<textarea class="form-control"  name="robots" rows="8" placeholder="User-agent: *"><?=$robots?></textarea>
 				</div>
 			</div><!-- END 协议正文 -->
 
@@ -44,3 +44,46 @@
 		</form>
 	</div>
 </div>
+
+<script type="text/javascript">
+
+$(function(){
+
+	/**
+	 * 更新链接提交计划
+	 */
+	$('.fn-update').click(function(event) {
+
+		var api = '<?=App::NR("setting","seoRobotsUpdate")?>';
+		var data = $('.robots-form').serializeData();
+		if (data['robots'] == null) {
+			App.notify( '请填写内容抓取协议', 'fa fa-times','danger'); 
+			return;
+		}
+
+		lock();
+		jQuery.post( api, data, function( data, textStatus, xhr) {
+			
+			unlock();
+
+			// 返回数据异常
+			if ( data['code'] !== 0 && data['code'] !== "0" ) {
+				var message = data['message'] || "未知错误";
+				App.notify( message, 'fa fa-times','danger'); 
+				return;
+			}
+
+			// 更新成功
+			App.notify('更新成功');
+
+		}, 'json')
+
+		.error(function( xhr, status, message) {
+			unlock();
+			App.notify( message, 'fa fa-times','danger'); 
+			console.log( status, xhr.status, ' message=', message );
+		});
+
+	});
+})
+</script>
