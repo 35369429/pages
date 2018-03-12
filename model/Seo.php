@@ -253,6 +253,11 @@ class Seo {
 	}
 
 
+	/**
+	 * 咱未实现删除链接
+	 * @param  [type] $article_ids [description]
+	 * @return [type]              [description]
+	 */
 	function removeBaiduLinks( $article_ids ) {
 
 		return true;

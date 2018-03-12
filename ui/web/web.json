@@ -6,7 +6,9 @@
 		"/desktop/article/detail",
 		"/mobile/article/index",
 		"/mobile/article/detail",
-		"/mobile/article/list"
+		"/mobile/article/list",
+		"/site/sitemap/index",
+		"/site/sitemap/detail"
 	],
 	"common":[
 		"/mobile/common",

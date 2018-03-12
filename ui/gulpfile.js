@@ -244,7 +244,7 @@ function uploadFile( file, options={}  ) { // 上传文件到指定地址
 			    		reject({
 							code:500, 
 							message:'JSON 解析错误', 
-							extra:{statusCode:res.statusCode, body:data.toString()}
+							extra:{file:file, statusCode:res.statusCode, body:data.toString()}
 						});
 						return;
 			    	}
