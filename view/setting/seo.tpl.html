@@ -92,25 +92,12 @@
 					</div>
 				</div><!-- END 站点地图 -->
 
-				<!-- 站点地图 -->
-				<div class="form-group">
-					<label class="col-xs-2 control-label" for="sitemap">站点地图:</label>
-					<div class="col-xs-9">
-						<div class="input-group">
-							<input class="form-control input-lg"  type="text" name="sitemap" value="<?=Utils::getHome()?>/sitemap.html" disabled>
-							<span class="input-group-btn">
-								<a class="btn btn-lg btn-primary" href="<?=Utils::getHome()?>/sitemap.html" target="_blank" type="button">查看</a>
-							</span>
-						</div>
-					</div>
-				</div><!-- END 站点地图 -->
-
 				<!-- 抓取协议 -->
 				<div class="form-group">
 					<label class="col-xs-2 control-label" for="url">抓取协议:</label>
 					<div class="col-xs-9">
 						<div class="input-group">
-							<input class="form-control input-lg"  type="text" name="url" value="<?=Utils::getHome()?>/robot.txt" disabled>
+							<input class="form-control input-lg"  type="text" name="url" value="<?=Utils::getHome()?>/robots.txt" disabled>
 							<span class="input-group-btn">
 								<button class="btn btn-lg btn-primary fn-action fn-robots" type="button">修改</button>
 							</span>
@@ -165,6 +152,16 @@
 						</select>
 					</div>
 				</div><!-- END 推送计划 -->
+
+
+				<!-- 正文链接 -->
+				<div class="form-group">
+					<label class="col-xs-2 control-label" for="link">正文链接:</label>
+					<div class="col-xs-9">
+						<input class="form-control input-lg"  type="text" name="link" value="<?=$baidu['link']?>" placeholder="请填写正文页链接, 默认为: /article/{{id}}">
+					</div>
+				</div><!-- END 正文链接 -->
+
 
 				<!-- 网页地址 -->
 				<div class="form-group">

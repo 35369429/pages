@@ -80,8 +80,7 @@ class SettingController extends \Xpmse\Loader\Controller {
 		$robots = $this->option->get('setting/seo/robots');
 		if ( empty($robots) ) {
 			$robots = "Disallow: /bin/\n"
-					. "Sitemap: ".Utils::getHome()."/sitemap.xml\n"
-					. "Sitemap: ".Utils::getHome()."/sitemap.html\n";
+					. "Sitemap: ".Utils::getHome()."/sitemap.xml\n";
 
 			try {
 				$this->option->register('爬虫抓取协议', 'setting/seo/robots', $robots );

@@ -21,6 +21,12 @@ class Site extends Api {
 		parent::__construct();
 	}
 
+	function robots( $query ) {
+		$seo = new \Xpmsns\pages\Model\Seo;
+		return ["text"=>$seo->getRobots()];
+	}
+
+
 	function sitemap( $query ) {
 
 		$idx = $query['index'];
@@ -31,7 +37,7 @@ class Site extends Api {
 			$idxs = $seo->getSiteMapIndex($perpage);
 			return ['indexes'=>$idxs, 'home'=>Utils::getHome()];
 		}
-		
+
 		return $seo->getSiteMap( $idx, $perpage );
 	}
 }

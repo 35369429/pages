@@ -8,7 +8,8 @@
 		"/mobile/article/detail",
 		"/mobile/article/list",
 		"/site/sitemap/index",
-		"/site/sitemap/detail"
+		"/site/sitemap/detail",
+		"/site/robots"
 	],
 	"common":[
 		"/mobile/common",
