@@ -108,6 +108,8 @@ class SettingController extends \Xpmse\Loader\Controller {
 		$this->option->set('setting/seo/robots', $robots);
 		echo json_encode(['code'=>0, 'message'=>'更新成功']);
 
+
+
 	}
 
 
@@ -131,9 +133,40 @@ class SettingController extends \Xpmse\Loader\Controller {
 		}
 
 		$this->option->set('setting/seo/baidulinks', $links);
+
+
+		// 注册 schedule 
+		
+		if ( $links['schedule'] == 'daily' ) {
+			$schedule = '16 03 * * * *';
+		} else if ( $links['schedule'] == 'weekly') {
+			$schedule = '16 03 * * * *';
+		} else if ( $links['schedule'] == 'monthly' ) {
+			$schedule = '16 03 * * * *';
+		}
+
+		$schedule = '21 03 * * * *';
+		$task = new \Xpmse\Task;
+
+		if ( $task->isExists("向百度提交链接", "xpmsns/pages") ) {
+			$task->rm("向百度提交链接", "xpmsns/pages");
+		}
+
+		$task->register("向百度提交链接", $schedule, [
+			"app_name" => "xpmsns/pages",
+			"c" => 'setting',
+			'a' => 'seoSumbmitBaiduLinks'
+		]);
+
 		echo json_encode(['code'=>0, 'message'=>'更新成功']);
 	}
 
+	// 提交数据
+	function seoSumbmitBaiduLinks() {
+		$seo = new \Xpmsns\pages\Model\Seo;
+		$resp = $seo->submitBaiduLinks();
+		echo json_encode($resp);
+	}
 
 
 

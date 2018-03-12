@@ -158,7 +158,7 @@
 				<div class="form-group">
 					<label class="col-xs-2 control-label" for="link">正文链接:</label>
 					<div class="col-xs-9">
-						<input class="form-control input-lg"  type="text" name="link" value="<?=$baidu['link']?>" placeholder="请填写正文页链接, 默认为: /article/{{id}}">
+						<input class="form-control input-lg"  type="text" name="link" value="<?=empty($baidu['link']) ? '/article/{{id}}' : $baidu['link'] ?>" placeholder="请填写正文页链接, 默认为: /article/{{id}}">
 					</div>
 				</div><!-- END 正文链接 -->
 
@@ -178,7 +178,7 @@
 					<label class="col-xs-2 control-label" for="url"></label>
 					<div class="col-xs-9">
 						<button class="btn btn-lg btn-primary btn-minw push-15-r fn-action fn-update" type="button">更新提交计划</button>
-						<button class="btn btn-lg btn-default btn-minw fn-action fn-logs" type="button">查看提交日志</button>
+						<button class="btn btn-lg btn-default btn-minw fn-action fn-logs hidden" type="button">查看提交日志</button>
 					</div>
 				</div><!-- END 提交更新 -->
 
