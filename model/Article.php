@@ -103,6 +103,7 @@ class Article extends Model {
 			'publish_time'=> ['timestampTz',  ["index"=>1]],   // 发表时间
 			'update_time'=> ['timestampTz',  ["index"=>1]],  // 更新时间
 			'create_time'=> ['timestampTz',  ["index"=>1]],  // 创建时间
+			'baidulink_time'=> ['timestampTz',  ["index"=>1]],   // 提交到百度的时间
 			'sync'=> ['string',  ["json"=>true, 'length'=>600]],  // 公众号同步状态
 			'content'=> ['longText',  []],  // 正文 (WEB)
 			'ap_content'=> ['longText',  ["json"=>true]],  // 小程序正文
@@ -123,7 +124,7 @@ class Article extends Model {
 			'tag'=>['longText', ['json'=>true] ]   // 标签映射信息 ( 仅用于草稿信息 )
 		];
 
-		// 天剑文章表和草稿表结构
+		// 添加文章表和草稿表结构
 		foreach ($struct as $field => $args ) {
 			$this->putColumn( $field, $this->type($args[0], $args[1]) );
 			$this->article_draft->putColumn( $field, $this->type($args[0], $args[1]) );
