@@ -92,6 +92,19 @@
 					</div>
 				</div><!-- END 站点地图 -->
 
+				<!-- 站点地图 -->
+				<div class="form-group">
+					<label class="col-xs-2 control-label" for="sitemap">站点地图:</label>
+					<div class="col-xs-9">
+						<div class="input-group">
+							<input class="form-control input-lg"  type="text" name="sitemap" value="<?=Utils::getHome()?>/sitemap.html" disabled>
+							<span class="input-group-btn">
+								<a class="btn btn-lg btn-primary" href="<?=Utils::getHome()?>/sitemap.html" target="_blank" type="button">查看</a>
+							</span>
+						</div>
+					</div>
+				</div><!-- END 站点地图 -->
+
 				<!-- 抓取协议 -->
 				<div class="form-group">
 					<label class="col-xs-2 control-label" for="url">抓取协议:</label>
@@ -163,14 +176,14 @@
 					</div>
 				</div><!-- END 网页地址 -->
 
-				<!-- 执行抓取 -->
+				<!-- 提交更新 -->
 				<div class="form-group">
 					<label class="col-xs-2 control-label" for="url"></label>
 					<div class="col-xs-9">
 						<button class="btn btn-lg btn-primary btn-minw push-15-r fn-action fn-update" type="button">更新提交计划</button>
 						<button class="btn btn-lg btn-default btn-minw fn-action fn-logs" type="button">查看提交日志</button>
 					</div>
-				</div><!-- END 执行抓取 -->
+				</div><!-- END 提交更新 -->
 
 
 				<hr class="push-50-t">
@@ -205,14 +218,14 @@
 <script type="text/javascript">
 
 function logs() {
-	let url = '<?=App::NR("article", "seoUpdateLogs");?>';
+	let url = '<?=App::NR("setting", "seoUpdateLogs");?>';
 	$('#_app_browser .modal-content').html('<div class="text-center" style="padding:40px;"><i class="fa fa-refresh fa-2x fa-spin"></i></div>');
 	$('#_app_browser').modal('show');
 	$('#_app_browser .modal-content').load(url);
 }
 
 function robots() {
-	let url = '<?=App::NR("article", "seoRobots");?>';
+	let url = '<?=App::NR("setting", "seoRobots");?>';
 	$('#_app_browser .modal-content').html('<div class="text-center" style="padding:40px;"><i class="fa fa-refresh fa-2x fa-spin"></i></div>');
 	$('#_app_browser').modal('show');
 	$('#_app_browser .modal-content').load(url);
@@ -241,7 +254,7 @@ $(function() {
 	 */
 	$('.fn-update').click(function(event) {
 
-		var api = '<?=App::NR("article","seoUpdate")?>';
+		var api = '<?=App::NR("setting","seoUpdate")?>';
 		var data = $('.baidulinks-form').serializeData();
 		if (data['token'] == null) {
 			App.notify( '请填写链接提交准入秘钥', 'fa fa-times','danger'); 

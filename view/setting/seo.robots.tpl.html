@@ -1,0 +1,46 @@
+<?php use \Xpmse\Loader\App; use \Xpmse\Utils; ?>
+<div class="block block-themed remove-margin">
+	<div class="block-header bg-primary">
+		<ul class="block-options">
+			<li>
+				 <button type="button" onclick="$('#_app_browser').modal('hide');"><i class="fa fa-times"></i></button>
+			</li>
+		</ul>
+		<h3 class="block-title"> <i class="fa fa-arrow-right"></i> 设定 robots.txt 抓取协议 </h3>
+	</div>
+	<div class="block-content" style="padding-top:10px;padding-bottom: 20px;">
+		<form class="form-horizontal" >
+			<!-- 协议地址 -->
+			<div class="form-group">
+				<label class="col-xs-2 control-label" for="url">协议地址:</label>
+				<div class="col-xs-9">
+					<div class="input-group">
+						<input class="form-control input-lg"  type="text" name="url" value="<?=Utils::getHome()?>/robots.txt" disabled>
+						<span class="input-group-btn">
+							<a class="btn btn-lg btn-primary fn-action" href="<?=Utils::getHome()?>/robots.txt" target="_blank" type="button">查看</a>
+						</span>
+					</div>
+				</div>
+			</div><!-- END 协议地址 -->
+
+			<!-- 协议正文 -->
+			<div class="form-group">
+				<label class="col-xs-2 control-label" for="url">抓取协议:</label>
+				<div class="col-xs-9">
+					<textarea class="form-control"  name="robots" rows="8" placeholder="User-agent: *"></textarea>
+				</div>
+			</div><!-- END 协议正文 -->
+
+
+			<!-- 提交更新 -->
+			<div class="form-group">
+				<label class="col-xs-2 control-label" for="url"></label>
+				<div class="col-xs-9">
+					<button class="btn btn-lg btn-primary btn-minw push-15-r fn-action fn-update" type="button">提交更新</button>
+					<a class="btn btn-lg btn-default btn-minw fn-action fn-logs" href="http://tool.chinaz.com/robots/" target="_blank"> 生成工具</a>
+				</div>
+			</div><!-- END 提交更新 -->
+
+		</form>
+	</div>
+</div>
