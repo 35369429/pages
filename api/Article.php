@@ -441,8 +441,13 @@ class Article extends Api {
 		}
 
 		$wechat = new Wechat($wxconf);
-		// 自动获取地址 
-		return $wechat->getSignature( $query['url'], $wxconf['appid'], $wxconf['secret']);	
+
+		try {
+			// 自动获取地址 
+			return $wechat->getSignature( $query['url'], $wxconf['appid'], $wxconf['secret']);	
+		} catch( Excp $e ) {
+			return ["code"=>500,"message"=>$e->getMessage()];
+		}
 		
 	}
 }
