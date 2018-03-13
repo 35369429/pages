@@ -327,6 +327,17 @@ class Article extends Api {
 			// $resp['data'][$idx] = $rs;
 		}
 
+		$arr  =  [];
+		if(!empty($resp['last'])){
+			for ($i=1; $i <= 3; $i++) { 
+				$arr[$i]  = $i;
+			}
+		}
+
+		$resp['arr'] = $arr;
+
+
+
 		return $resp;
 
 	}
