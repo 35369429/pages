@@ -9,6 +9,7 @@ config = {
 		secret:'0516fa148c2584028ee4a30157bfdc27'
 	},
 	wxapp:{
+		"cli":"/Applications/wechatwebdevtools.app/Contents/Resources/app.nw/bin/cli",
 		"appdid": "wx0550a96041cf486c",
 		"secret": "f2e5c4aee55269f427dabc07057d2113"
 	}

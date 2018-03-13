@@ -5,3 +5,5 @@ ui/.tmp
 ui/wxapp/project.config.json
 
 ui/wxapp/xpmjs/
+
+ui/config-huicong.js
