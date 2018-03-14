@@ -329,7 +329,7 @@ class Article extends Api {
 
 		$arr  =  [];
 		if(!empty($resp['last'])){
-			for ($i=1; $i <= 3; $i++) { 
+			for ($i=1; $i <= $resp['last']; $i++) { 
 				$arr[$i]  = $i;
 			}
 		}
