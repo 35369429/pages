@@ -180,6 +180,7 @@ class Category extends Model {
 			$qb->where(function ( $qb ) use($query) {
 			   	$qb->where("name", "like", "%{$query['keyword']}%");
 				$qb->orWhere("fullname","like", "%{$query['keyword']}%");
+				$qb->orWhere("param","like", "%{$query['keyword']}%");
 			});
 		} else {
 			$qb->whereNull('parent_id');

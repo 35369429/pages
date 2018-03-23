@@ -38,7 +38,7 @@ class Category extends Api {
 		     ]);
 	}
 
-
+	
 	/**
 	 * 查询分类列表
 	 *
