@@ -44,6 +44,11 @@
 		"crumb":"{{article.category.0}}",
 		"page":{
 			"title":"{{article.title}}"
+		},
+		"seo": {
+			"title":"{{article.title}}",
+			"keywords":"{{article.seo_keywords}}",
+			"description":"{{article.seo_summary}}"
 		}
 	},
 	"entries":[

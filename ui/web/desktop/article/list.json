@@ -52,6 +52,11 @@
 		},
 		"page":{
 			"title":"{{current.name}}"
+		},
+		"seo": {
+			"title":"{{current.name}}",
+			"keywords":"{{site.site_name}}",
+			"description":"{{site.site_intro}}"
 		}
 	},
 	"entries":[

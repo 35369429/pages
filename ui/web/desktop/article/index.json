@@ -46,6 +46,11 @@
 		"page":{
 			"title":"{{current.name}}",
 			"logo":"{{site.site_logo}}"
+		},
+		"seo": {
+			"title":"{{current.name}}",
+			"keywords":"{{site.site_name}}",
+			"description":"{{site.site_intro}}"
 		}
 	},
 	"entries":[
