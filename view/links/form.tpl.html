@@ -245,7 +245,11 @@ use \Xpmse\Utils;
 				<div class="form-group">
 					<label class="col-xs-2 control-label" for="url"></label>
 					<div class="col-xs-9">
-						<button class="btn btn-lg btn-primary btn-minw fn-action fn-save push-50-r" type="submit">保存</button>
+						<button class="btn btn-lg btn-primary btn-minw fn-action fn-save push-20-r" type="submit">保存</button>
+						<button 
+							data-param-id="<?=$rs['links_id']?>"
+							class="btn btn-lg btn-primary btn-minw fn-action fn-saved-only fn-duplicate push-50-r" type="button">复制</button>
+
 						<button 
 							confirm-title="请确认删除友链 "
 				            confirm-content="您确定删除友链 <strong><?=$rs['name']?>(<?=$rs['links_id']?> )</strong>"
@@ -272,7 +276,6 @@ use \Xpmse\Utils;
 								function(btn, modal) {
 									success('友链删除成功');
 									setTimeout(function(){
-										// 转向分类列表页
 										window.location = '<?=App::R('links','index')?>';
 									}, 1000);
 								}
@@ -285,7 +288,7 @@ use \Xpmse\Utils;
 								}
 							"
 
-						class="btn btn-lg btn-danger btn-minw ajax-confirm fn-action fn-remove" type="button">删除</button>
+						class="btn btn-lg btn-danger btn-minw ajax-confirm fn-action fn-saved-only fn-remove" type="button">删除</button>
 					</div>
 				</div><!-- END 保存数据 -->
 			</form>
@@ -365,8 +368,17 @@ function save( form, validation ) {
 			return;
 		}
 
+		if ( typeof  data['links_id'] == 'undefined' ) {
+			var message = data['message'] || "未知错误";
+			failure( message );
+			return;
+		}
+		
+
 		// 更新ID
 		$('input[name=links_id]').val( data['links_id'] );
+		$('.fn-saved-only').removeClass('hidden');
+		$('.fn-saved-only').attr('data-param-id', data['links_id']);
 
 		// 保存成功
 		success('保存成功');
@@ -409,28 +421,22 @@ $(function(){
 			return false;
 		},
 
-		rules: {
-			name: {
-				required: true,
-				minlength: 2,
-				maxlength: 20
-			},
+		rules: {},
+		messages: {}
 
-			priority: {
-				digits:true 
-			}
-		},
-
-		messages: {
-			name: {
-				required: '请填写分类名称',
-				minlength: '分类名称至少两个字',
-				maxlength: '分类名称不能超过20个字'
-			},
-			priority: '请输入数字，数字越小排序越靠前'
-		}
 	});
 
+
+	$('.fn-duplicate').click(function(){
+		var api = "<?=App::R('links','duplicate', ['links_id'=>''])?>";
+		var id = $(this).attr('data-param-id');
+		var url = api + id;
+		window.location = url;
+	})
+
+	if ( $('input[name="links_id"]').val() == '' || $('input[name="links_id"]').val() == undefined ) {
+		$('.fn-saved-only').addClass('hidden');
+	}
 })
 	
 </script>

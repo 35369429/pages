@@ -4,7 +4,7 @@
  * 友链数据模型
  *
  * 程序作者: XpmSE机器人
- * 最后修改: 2018-03-29 11:17:05
+ * 最后修改: 2018-03-30 03:13:28
  * 程序母版: /data/stor/private/templates/xpmsns/model/code/model/Name.php
  */
 namespace Xpmsns\Pages\Model;
@@ -239,10 +239,12 @@ class Links extends Model {
 	 * @param mix $index 如果是数组，替换当前 index
 	 * @return array 已上传文件信息 {"url":"访问地址...", "path":"文件路径...", "origin":"原始文件访问地址..." }
 	 */
-	function uploadLogo($links_id, $file_path) {
+	function uploadLogo($links_id, $file_path, $upload_only=false ) {
 
-		$fs =  $this->meida->uploadFile( $file_path );
-		$this->updateBy('links_id', ["links_id"=>$links_id, "logo"=>$fs['path']]);
+		$fs =  $this->media->uploadFile( $file_path );
+		if ( $upload_only !== true ) {
+			$this->updateBy('links_id', ["links_id"=>$links_id, "logo"=>$fs['path']]);
+		}
 		return $fs;
 	}
 
@@ -254,10 +256,12 @@ class Links extends Model {
 	 * @param mix $index 如果是数组，替换当前 index
 	 * @return array 已上传文件信息 {"url":"访问地址...", "path":"文件路径...", "origin":"原始文件访问地址..." }
 	 */
-	function uploadLogoByLinksSlug($links_slug, $file_path) {
+	function uploadLogoByLinksSlug($links_slug, $file_path, $upload_only=false ) {
 
-		$fs =  $this->meida->uploadFile( $file_path );
-		$this->updateBy('links_slug', ["links_slug"=>$links_slug, "logo"=>$fs['path']]);
+		$fs =  $this->media->uploadFile( $file_path );
+		if ( $upload_only !== true ) {
+			$this->updateBy('links_slug', ["links_slug"=>$links_slug, "logo"=>$fs['path']]);
+		}
 		return $fs;
 	}
 

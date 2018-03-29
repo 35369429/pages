@@ -4,7 +4,7 @@
  * 站点配置数据模型
  *
  * 程序作者: XpmSE机器人
- * 最后修改: 2018-03-29 11:17:21
+ * 最后修改: 2018-03-30 03:13:18
  * 程序母版: /data/stor/private/templates/xpmsns/model/code/model/Name.php
  */
 namespace Xpmsns\Pages\Model;
@@ -283,10 +283,12 @@ class Siteconf extends Model {
 	 * @param mix $index 如果是数组，替换当前 index
 	 * @return array 已上传文件信息 {"url":"访问地址...", "path":"文件路径...", "origin":"原始文件访问地址..." }
 	 */
-	function uploadSitelogo($site_id, $file_path) {
+	function uploadSitelogo($site_id, $file_path, $upload_only=false ) {
 
-		$fs =  $this->meida->uploadFile( $file_path );
-		$this->updateBy('site_id', ["site_id"=>$site_id, "site_logo"=>$fs['path']]);
+		$fs =  $this->media->uploadFile( $file_path );
+		if ( $upload_only !== true ) {
+			$this->updateBy('site_id', ["site_id"=>$site_id, "site_logo"=>$fs['path']]);
+		}
 		return $fs;
 	}
 
@@ -298,10 +300,12 @@ class Siteconf extends Model {
 	 * @param mix $index 如果是数组，替换当前 index
 	 * @return array 已上传文件信息 {"url":"访问地址...", "path":"文件路径...", "origin":"原始文件访问地址..." }
 	 */
-	function uploadQrwxapp($site_id, $file_path) {
+	function uploadQrwxapp($site_id, $file_path, $upload_only=false ) {
 
-		$fs =  $this->meida->uploadFile( $file_path );
-		$this->updateBy('site_id', ["site_id"=>$site_id, "qr_wxapp"=>$fs['path']]);
+		$fs =  $this->media->uploadFile( $file_path );
+		if ( $upload_only !== true ) {
+			$this->updateBy('site_id', ["site_id"=>$site_id, "qr_wxapp"=>$fs['path']]);
+		}
 		return $fs;
 	}
 
@@ -313,10 +317,12 @@ class Siteconf extends Model {
 	 * @param mix $index 如果是数组，替换当前 index
 	 * @return array 已上传文件信息 {"url":"访问地址...", "path":"文件路径...", "origin":"原始文件访问地址..." }
 	 */
-	function uploadQrwxpub($site_id, $file_path) {
+	function uploadQrwxpub($site_id, $file_path, $upload_only=false ) {
 
-		$fs =  $this->meida->uploadFile( $file_path );
-		$this->updateBy('site_id', ["site_id"=>$site_id, "qr_wxpub"=>$fs['path']]);
+		$fs =  $this->media->uploadFile( $file_path );
+		if ( $upload_only !== true ) {
+			$this->updateBy('site_id', ["site_id"=>$site_id, "qr_wxpub"=>$fs['path']]);
+		}
 		return $fs;
 	}
 
@@ -328,10 +334,12 @@ class Siteconf extends Model {
 	 * @param mix $index 如果是数组，替换当前 index
 	 * @return array 已上传文件信息 {"url":"访问地址...", "path":"文件路径...", "origin":"原始文件访问地址..." }
 	 */
-	function uploadQrwxse($site_id, $file_path) {
+	function uploadQrwxse($site_id, $file_path, $upload_only=false ) {
 
-		$fs =  $this->meida->uploadFile( $file_path );
-		$this->updateBy('site_id', ["site_id"=>$site_id, "qr_wxse"=>$fs['path']]);
+		$fs =  $this->media->uploadFile( $file_path );
+		if ( $upload_only !== true ) {
+			$this->updateBy('site_id', ["site_id"=>$site_id, "qr_wxse"=>$fs['path']]);
+		}
 		return $fs;
 	}
 
@@ -343,10 +351,12 @@ class Siteconf extends Model {
 	 * @param mix $index 如果是数组，替换当前 index
 	 * @return array 已上传文件信息 {"url":"访问地址...", "path":"文件路径...", "origin":"原始文件访问地址..." }
 	 */
-	function uploadQrandroid($site_id, $file_path) {
+	function uploadQrandroid($site_id, $file_path, $upload_only=false ) {
 
-		$fs =  $this->meida->uploadFile( $file_path );
-		$this->updateBy('site_id', ["site_id"=>$site_id, "qr_android"=>$fs['path']]);
+		$fs =  $this->media->uploadFile( $file_path );
+		if ( $upload_only !== true ) {
+			$this->updateBy('site_id', ["site_id"=>$site_id, "qr_android"=>$fs['path']]);
+		}
 		return $fs;
 	}
 
@@ -358,10 +368,12 @@ class Siteconf extends Model {
 	 * @param mix $index 如果是数组，替换当前 index
 	 * @return array 已上传文件信息 {"url":"访问地址...", "path":"文件路径...", "origin":"原始文件访问地址..." }
 	 */
-	function uploadQrios($site_id, $file_path) {
+	function uploadQrios($site_id, $file_path, $upload_only=false ) {
 
-		$fs =  $this->meida->uploadFile( $file_path );
-		$this->updateBy('site_id', ["site_id"=>$site_id, "qr_ios"=>$fs['path']]);
+		$fs =  $this->media->uploadFile( $file_path );
+		if ( $upload_only !== true ) {
+			$this->updateBy('site_id', ["site_id"=>$site_id, "qr_ios"=>$fs['path']]);
+		}
 		return $fs;
 	}
 
@@ -373,10 +385,12 @@ class Siteconf extends Model {
 	 * @param mix $index 如果是数组，替换当前 index
 	 * @return array 已上传文件信息 {"url":"访问地址...", "path":"文件路径...", "origin":"原始文件访问地址..." }
 	 */
-	function uploadSitelogoBySiteSlug($site_slug, $file_path) {
+	function uploadSitelogoBySiteSlug($site_slug, $file_path, $upload_only=false ) {
 
-		$fs =  $this->meida->uploadFile( $file_path );
-		$this->updateBy('site_slug', ["site_slug"=>$site_slug, "site_logo"=>$fs['path']]);
+		$fs =  $this->media->uploadFile( $file_path );
+		if ( $upload_only !== true ) {
+			$this->updateBy('site_slug', ["site_slug"=>$site_slug, "site_logo"=>$fs['path']]);
+		}
 		return $fs;
 	}
 
@@ -388,10 +402,12 @@ class Siteconf extends Model {
 	 * @param mix $index 如果是数组，替换当前 index
 	 * @return array 已上传文件信息 {"url":"访问地址...", "path":"文件路径...", "origin":"原始文件访问地址..." }
 	 */
-	function uploadQrwxappBySiteSlug($site_slug, $file_path) {
+	function uploadQrwxappBySiteSlug($site_slug, $file_path, $upload_only=false ) {
 
-		$fs =  $this->meida->uploadFile( $file_path );
-		$this->updateBy('site_slug', ["site_slug"=>$site_slug, "qr_wxapp"=>$fs['path']]);
+		$fs =  $this->media->uploadFile( $file_path );
+		if ( $upload_only !== true ) {
+			$this->updateBy('site_slug', ["site_slug"=>$site_slug, "qr_wxapp"=>$fs['path']]);
+		}
 		return $fs;
 	}
 
@@ -403,10 +419,12 @@ class Siteconf extends Model {
 	 * @param mix $index 如果是数组，替换当前 index
 	 * @return array 已上传文件信息 {"url":"访问地址...", "path":"文件路径...", "origin":"原始文件访问地址..." }
 	 */
-	function uploadQrwxpubBySiteSlug($site_slug, $file_path) {
+	function uploadQrwxpubBySiteSlug($site_slug, $file_path, $upload_only=false ) {
 
-		$fs =  $this->meida->uploadFile( $file_path );
-		$this->updateBy('site_slug', ["site_slug"=>$site_slug, "qr_wxpub"=>$fs['path']]);
+		$fs =  $this->media->uploadFile( $file_path );
+		if ( $upload_only !== true ) {
+			$this->updateBy('site_slug', ["site_slug"=>$site_slug, "qr_wxpub"=>$fs['path']]);
+		}
 		return $fs;
 	}
 
@@ -418,10 +436,12 @@ class Siteconf extends Model {
 	 * @param mix $index 如果是数组，替换当前 index
 	 * @return array 已上传文件信息 {"url":"访问地址...", "path":"文件路径...", "origin":"原始文件访问地址..." }
 	 */
-	function uploadQrwxseBySiteSlug($site_slug, $file_path) {
+	function uploadQrwxseBySiteSlug($site_slug, $file_path, $upload_only=false ) {
 
-		$fs =  $this->meida->uploadFile( $file_path );
-		$this->updateBy('site_slug', ["site_slug"=>$site_slug, "qr_wxse"=>$fs['path']]);
+		$fs =  $this->media->uploadFile( $file_path );
+		if ( $upload_only !== true ) {
+			$this->updateBy('site_slug', ["site_slug"=>$site_slug, "qr_wxse"=>$fs['path']]);
+		}
 		return $fs;
 	}
 
@@ -433,10 +453,12 @@ class Siteconf extends Model {
 	 * @param mix $index 如果是数组，替换当前 index
 	 * @return array 已上传文件信息 {"url":"访问地址...", "path":"文件路径...", "origin":"原始文件访问地址..." }
 	 */
-	function uploadQrandroidBySiteSlug($site_slug, $file_path) {
+	function uploadQrandroidBySiteSlug($site_slug, $file_path, $upload_only=false ) {
 
-		$fs =  $this->meida->uploadFile( $file_path );
-		$this->updateBy('site_slug', ["site_slug"=>$site_slug, "qr_android"=>$fs['path']]);
+		$fs =  $this->media->uploadFile( $file_path );
+		if ( $upload_only !== true ) {
+			$this->updateBy('site_slug', ["site_slug"=>$site_slug, "qr_android"=>$fs['path']]);
+		}
 		return $fs;
 	}
 
@@ -448,10 +470,12 @@ class Siteconf extends Model {
 	 * @param mix $index 如果是数组，替换当前 index
 	 * @return array 已上传文件信息 {"url":"访问地址...", "path":"文件路径...", "origin":"原始文件访问地址..." }
 	 */
-	function uploadQriosBySiteSlug($site_slug, $file_path) {
+	function uploadQriosBySiteSlug($site_slug, $file_path, $upload_only=false ) {
 
-		$fs =  $this->meida->uploadFile( $file_path );
-		$this->updateBy('site_slug', ["site_slug"=>$site_slug, "qr_ios"=>$fs['path']]);
+		$fs =  $this->media->uploadFile( $file_path );
+		if ( $upload_only !== true ) {
+			$this->updateBy('site_slug', ["site_slug"=>$site_slug, "qr_ios"=>$fs['path']]);
+		}
 		return $fs;
 	}
 

@@ -4,7 +4,7 @@
  * 友链数据接口 
  *
  * 程序作者: XpmSE机器人
- * 最后修改: 2018-03-29 11:17:05
+ * 最后修改: 2018-03-30 03:13:28
  * 程序母版: /data/stor/private/templates/xpmsns/model/code/api/Name.php
  */
 namespace Xpmsns\Pages\Api;

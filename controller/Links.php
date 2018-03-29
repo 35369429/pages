@@ -4,7 +4,7 @@
  * 友链控制器
  *
  * 程序作者: XpmSE机器人
- * 最后修改: 2018-03-29 11:17:05
+ * 最后修改: 2018-03-30 03:13:28
  * 程序母版: /data/stor/private/templates/xpmsns/model/code/controller/Name.php
  */
 
@@ -133,7 +133,7 @@ class LinksController extends \Xpmse\Loader\Controller {
 
 
 	/**
-	 * 保存分类
+	 * 保存友链
 	 * @return
 	 */
 	function save() {
@@ -143,11 +143,77 @@ class LinksController extends \Xpmse\Loader\Controller {
 		echo json_encode($rs);
 	}
 
+	/**
+	 * 删除友链
+	 * @return [type] [description]
+	 */
 	function remove(){
 		$links_id = $_POST['links_id'];
 		$inst = new \Xpmsns\Pages\Model\Links;
 		$links_ids =$inst->remove( $links_id, "links_id" );
 		echo json_encode(['message'=>"删除成功", 'extra'=>['$links_ids'=>$links_ids]]);
+	}
+
+	/**
+	 * 复制友链
+	 * @return
+	 */
+	function duplicate(){
+		$links_id = $_GET['links_id'];
+		$inst = new \Xpmsns\Pages\Model\Links;
+		$rs =$inst->getByLinksId( $links_id );
+		$action_name =  $rs['name'] . ' 副本';
+
+		// 删除唯一索引字段
+		unset($rs['links_id']);
+		unset($rs['links_slug']);
+
+		// 复制图片
+		if ( is_array($rs['logo']) &&  !empty($rs['logo']['local'])) {
+			$rs['logo'] = $inst->uploadLogo( $links_id, $rs['logo']['local'], true);
+		}
+
+		$data = [
+			'action_name' =>  $action_name,
+			'links_id'=>$links_id,
+			'rs' => $rs
+		];
+
+		if ( $_GET['debug'] == 1 ) {
+			Utils::out($data);
+			return;
+		}
+
+		
+		App::render($data,'links','form');
+
+		return [
+			'js' => [
+		 			"js/plugins/select2/select2.full.min.js",
+		 			"js/plugins/dropzonejs/dropzone.min.js",
+		 			"js/plugins/cropper/cropper.min.js",
+		 			"js/plugins/jquery-tags-input/jquery.tagsinput.min.js",
+		 			"js/plugins/bootstrap-datepicker/bootstrap-datepicker.min.js",
+		 			'js/plugins/masked-inputs/jquery.maskedinput.min.js',
+		 			"js/plugins/jquery-validation/jquery.validate.min.js",
+		    		"js/plugins/jquery-ui/jquery-ui.min.js"
+				],
+			'css'=>[
+				"js/plugins/bootstrap-datepicker/bootstrap-datepicker3.min.css",
+	 			"js/plugins/select2/select2.min.css",
+	 			"js/plugins/select2/select2-bootstrap.min.css",
+	 			"js/plugins/jquery-tags-input/jquery.tagsinput.min.css"
+	 		],
+
+			'crumb' => [
+	            "友链" => APP::R('links','index'),
+	            "友链管理" =>APP::R('links','index'),
+	            "$action_name" => ''
+	        ],
+	        'active'=> [
+	 			'slug'=>'xpmsns/pages/links/index'
+	 		]
+		];
 	}
 
 

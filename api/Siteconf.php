@@ -4,7 +4,7 @@
  * 站点配置数据接口 
  *
  * 程序作者: XpmSE机器人
- * 最后修改: 2018-03-29 11:17:21
+ * 最后修改: 2018-03-30 03:13:18
  * 程序母版: /data/stor/private/templates/xpmsns/model/code/api/Name.php
  */
 namespace Xpmsns\Pages\Api;
