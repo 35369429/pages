@@ -41,28 +41,61 @@
 		"permission": "boss,admin,manager,user",
 		"order":9999
 	},{
-        "slug":"xpmsns/pages/article/collect",
-        "name":"采集",
-        "icon":{
-            "default":"/static/icons/collect.svg"
-        },
-        "icontype": "img",
-        "linktype":"i",
-        "link":"{article,collect}",
-        "permission": "boss,admin,manager,user",
-        "order":9999
-    },{
-        "slug":"xpmsns/pages/setting/seo",
-        "name":"SEO",
-        "icon":{
-            "default":"/static/icons/seo.svg"
-        },
-        "icontype": "img",
-        "linktype":"i",
-        "link":"{setting,seo}",
-        "permission": "boss,admin,manager,user",
-        "order":9999
-    }],
+		"slug":"xpmsns/pages/article/collect",
+		"name":"采集",
+		"icon":{
+			"default":"/static/icons/collect.svg"
+		},
+		"icontype": "img",
+		"linktype":"i",
+		"link":"{article,collect}",
+		"permission": "boss,admin,manager,user",
+		"order":9999
+	},{
+		"slug":"xpmsns/pages/setting/seo",
+		"name":"SEO",
+		"icon":{
+			"default":"/static/icons/seo.svg"
+		},
+		"icontype": "img",
+		"linktype":"i",
+		"link":"{setting,seo}",
+		"permission": "boss,admin,manager,user",
+		"order":9999
+	},{
+		"slug":"xpmsns/pages/adv/index",
+		"name":"广告",
+		"icon":{
+			"default":"/static/icons/adv.svg"
+		},
+		"icontype": "img",
+		"linktype":"i",
+		"link":"{adv,index}",
+		"permission": "boss,admin,manager,user",
+		"order":9999
+	},{
+		"slug":"xpmsns/pages/links/index",
+		"name":"友链",
+		"icon":{
+			"default":"/static/icons/links.svg"
+		},
+		"icontype": "img",
+		"linktype":"i",
+		"link":"{links,index}",
+		"permission": "boss,admin,manager,user",
+		"order":9999
+	},{
+		"slug":"xpmsns/pages/about/index",
+		"name":"关于",
+		"icon":{
+			"default":"/static/icons/about.svg"
+		},
+		"icontype": "img",
+		"linktype":"i",
+		"link":"{about,index}",
+		"permission": "boss,admin,manager,user",
+		"order":9999
+	}],
 	"dependencies": [],
 	"injections": [],
 	"api": [],

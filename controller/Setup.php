@@ -14,12 +14,15 @@ class SetupController extends \Xpmse\Loader\Controller {
 			'\\Xpmsns\\Pages\\Model\\Article', 
 			'\\Xpmsns\\Pages\\Model\\Category', 
 			'\\Xpmsns\\Pages\\Model\\Tag',
-			'\\Xpmsns\\Pages\\Model\\Gallery'
+			'\\Xpmsns\\Pages\\Model\\Gallery',
+			'\\Xpmsns\\Pages\\Model\\Adv'
 		];
 	}
 
 
 	private  function gallery_init() {
+
+		return;
 
 		$g = new \Xpmsns\pages\Model\Gallery();
 		$id = $g->genGalleryId();
