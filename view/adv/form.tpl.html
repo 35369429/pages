@@ -108,17 +108,17 @@ use \Xpmse\Utils;
 
 				<!-- END 尺寸  -->
 				 
-				<!-- 轮播广告图  -->
-				<!-- END标准下拉选择组件 -->
+				<!-- 广告图  -->
+				<!-- 标准组图上传组件 -->
 
 
 <!-- 标准组图上传组件 -->
 
 	<?php if(count($rs['images']) < 1): ?><?php $steps = 1 -  count($rs['images']); for( $i=0; $i<$steps; $i++){ $rs['images'][] = [];} ?><?php endif ?><?php foreach ( $rs['images'] as $img ): ?>	
-	<!-- 轮播广告图 (images) 开始  -->
+	<!-- 广告图 (images) 开始  -->
 	<div class="xpmse-images" name="images">
 		<div class="form-group " >
-			<label class="col-xs-2 control-label" for="images">轮播广告图</label>
+			<label class="col-xs-2 control-label" for="images">广告图</label>
 			<div class="col-xs-8">
 		   		<div name="images" class="file-uploader rounded rounded-4 push-10-t"
 					data-api='/_a/mina/uploader/upload?type=image'
@@ -144,7 +144,7 @@ use \Xpmse\Utils;
 				<a href="javascript:void(0);" data-action="remove" class="text-danger"> <i class="fa fa-minus font-s20"></i> </a> 
 			</div>
 		</div> 
-	</div><!-- xpmse-images 结束 轮播广告图 (images) -->
+	</div><!-- xpmse-images 结束 广告图 (images) -->
 	<?php endforeach; ?> 
 
 	<script type="text/javascript">
@@ -165,7 +165,7 @@ use \Xpmse\Utils;
 		});
 	</script>
 
-				<!-- END 轮播广告图  -->
+				<!-- END 广告图  -->
 				 
 				<!-- 位置编号  -->
 				<!-- 标准输入框 -->
