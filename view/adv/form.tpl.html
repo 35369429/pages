@@ -36,12 +36,66 @@ use \Xpmse\Utils;
 				<input type="hidden" name="adv_id" value="<?=$rs['adv_id']?>" >
 	
 				 
-				<!-- 名称  -->
+				<!-- 位置名称  -->
 				<!-- 标准输入框 -->
 
-	<!-- 名称 (name) 开始  -->
+	<!-- 位置名称 (position_name) 开始  -->
 	<div class="form-group ">
-		<label class="col-xs-2 control-label" for="name">名称 <span class="text-danger">*</span></label>
+		<label class="col-xs-2 control-label" for="position_name">位置名称 <span class="text-danger">*</span></label>
+		<div class="col-xs-8">
+			<input class="form-control input-lg"  
+				type="text" 
+				id="position_name" name="position_name" 
+				placeholder="广告位置名称, 如: 首页右侧栏位"  
+				value="<?=$rs['position_name']?>" /> 
+			<div class="help-block"></div>
+		</div>
+	</div><!-- 结束 位置名称 (position_name) -->
+
+				<!-- END 位置名称  -->
+				 
+				<!-- 位置编号  -->
+				<!-- 标准输入框 -->
+
+	<!-- 位置编号 (position_no) 开始  -->
+	<div class="form-group ">
+		<label class="col-xs-2 control-label" for="position_no">位置编号 <span class="text-danger">*</span></label>
+		<div class="col-xs-8">
+			<input class="form-control input-lg"  
+				type="text" 
+				id="position_no" name="position_no" 
+				placeholder="广告位置编号, 如: A-M-001"  
+				value="<?=$rs['position_no']?>" /> 
+			<div class="help-block">用户前端呈现检索条件</div>
+		</div>
+	</div><!-- 结束 位置编号 (position_no) -->
+
+				<!-- END 位置编号  -->
+				 
+				<!-- 优先级排序  -->
+				<!-- 标准输入框 -->
+
+	<!-- 优先级排序 (priority) 开始  -->
+	<div class="form-group ">
+		<label class="col-xs-2 control-label" for="priority">优先级排序</label>
+		<div class="col-xs-8">
+			<input class="form-control input-lg"  
+				type="text" 
+				id="priority" name="priority" 
+				placeholder="广告呈现排序"  
+				value="<?=$rs['priority']?>" /> 
+			<div class="help-block">数字越小排越靠前</div>
+		</div>
+	</div><!-- 结束 优先级排序 (priority) -->
+
+				<!-- END 优先级排序  -->
+				 
+				<!-- 广告名称  -->
+				<!-- 标准输入框 -->
+
+	<!-- 广告名称 (name) 开始  -->
+	<div class="form-group ">
+		<label class="col-xs-2 control-label" for="name">广告名称 <span class="text-danger">*</span></label>
 		<div class="col-xs-8">
 			<input class="form-control input-lg"  
 				type="text" 
@@ -50,16 +104,16 @@ use \Xpmse\Utils;
 				value="<?=$rs['name']?>" /> 
 			<div class="help-block"></div>
 		</div>
-	</div><!-- 结束 名称 (name) -->
+	</div><!-- 结束 广告名称 (name) -->
 
-				<!-- END 名称  -->
+				<!-- END 广告名称  -->
 				 
-				<!-- 别名  -->
+				<!-- 广告别名  -->
 				<!-- 标准输入框 -->
 
-	<!-- 别名 (adv_slug) 开始  -->
+	<!-- 广告别名 (adv_slug) 开始  -->
 	<div class="form-group ">
-		<label class="col-xs-2 control-label" for="adv_slug">别名 <span class="text-danger">*</span></label>
+		<label class="col-xs-2 control-label" for="adv_slug">广告别名 <span class="text-danger">*</span></label>
 		<div class="col-xs-8">
 			<input class="form-control input-lg"  
 				type="text" 
@@ -68,9 +122,9 @@ use \Xpmse\Utils;
 				value="<?=$rs['adv_slug']?>" /> 
 			<div class="help-block"></div>
 		</div>
-	</div><!-- 结束 别名 (adv_slug) -->
+	</div><!-- 结束 广告别名 (adv_slug) -->
 
-				<!-- END 别名  -->
+				<!-- END 广告别名  -->
 				 
 				<!-- 链接  -->
 				<!-- 标准输入框 -->
@@ -167,60 +221,6 @@ use \Xpmse\Utils;
 
 				<!-- END 广告图  -->
 				 
-				<!-- 位置编号  -->
-				<!-- 标准输入框 -->
-
-	<!-- 位置编号 (position_no) 开始  -->
-	<div class="form-group ">
-		<label class="col-xs-2 control-label" for="position_no">位置编号 <span class="text-danger">*</span></label>
-		<div class="col-xs-8">
-			<input class="form-control input-lg"  
-				type="text" 
-				id="position_no" name="position_no" 
-				placeholder="广告位置编号, 如: A-M-001"  
-				value="<?=$rs['position_no']?>" /> 
-			<div class="help-block">用户前端呈现检索条件</div>
-		</div>
-	</div><!-- 结束 位置编号 (position_no) -->
-
-				<!-- END 位置编号  -->
-				 
-				<!-- 位置名称  -->
-				<!-- 标准输入框 -->
-
-	<!-- 位置名称 (position_name) 开始  -->
-	<div class="form-group ">
-		<label class="col-xs-2 control-label" for="position_name">位置名称 <span class="text-danger">*</span></label>
-		<div class="col-xs-8">
-			<input class="form-control input-lg"  
-				type="text" 
-				id="position_name" name="position_name" 
-				placeholder="广告位置名称, 如: 首页右侧栏位"  
-				value="<?=$rs['position_name']?>" /> 
-			<div class="help-block"></div>
-		</div>
-	</div><!-- 结束 位置名称 (position_name) -->
-
-				<!-- END 位置名称  -->
-				 
-				<!-- 有效期  -->
-				<!-- 标准输入框 -->
-
-	<!-- 有效期 (expired) 开始  -->
-	<div class="form-group ">
-		<label class="col-xs-2 control-label" for="expired">有效期</label>
-		<div class="col-xs-8">
-			<input class="form-control input-lg"  
-				type="text" 
-				id="expired" name="expired" 
-				placeholder=""  
-				value="<?=$rs['expired']?>" /> 
-			<div class="help-block">请选择广告呈现有效期, 如不选择则长期有效。</div>
-		</div>
-	</div><!-- 结束 有效期 (expired) -->
-
-				<!-- END 有效期  -->
-				 
 				<!-- 文案  -->
 				<!-- 标准组图上传组件 -->
 
@@ -279,24 +279,6 @@ use \Xpmse\Utils;
 	</div><!-- 结束 点击量 (pageview) -->
 
 				<!-- END 点击量  -->
-				 
-				<!-- 优先级  -->
-				<!-- 标准输入框 -->
-
-	<!-- 优先级 (priority) 开始  -->
-	<div class="form-group ">
-		<label class="col-xs-2 control-label" for="priority">优先级</label>
-		<div class="col-xs-8">
-			<input class="form-control input-lg"  
-				type="text" 
-				id="priority" name="priority" 
-				placeholder="优先级排序，数值越高越靠前。"  
-				value="<?=$rs['priority']?>" /> 
-			<div class="help-block">优先级排序，数值越高越靠前。</div>
-		</div>
-	</div><!-- 结束 优先级 (priority) -->
-
-				<!-- END 优先级  -->
 				 
 				<!-- 单价  -->
 				<!-- 标准输入框 -->
@@ -368,7 +350,11 @@ use \Xpmse\Utils;
 				<div class="form-group">
 					<label class="col-xs-2 control-label" for="url"></label>
 					<div class="col-xs-9">
-						<button class="btn btn-lg btn-primary btn-minw fn-action fn-save push-50-r" type="submit">保存</button>
+						<button class="btn btn-lg btn-primary btn-minw fn-action fn-save push-20-r" type="submit">保存</button>
+						<button 
+							data-param-id="<?=$rs['adv_id']?>"
+							class="btn btn-lg btn-primary btn-minw fn-action fn-saved-only fn-duplicate push-50-r" type="button">复制</button>
+
 						<button 
 							confirm-title="请确认删除广告 "
 				            confirm-content="您确定删除广告 <strong><?=$rs['name']?>(<?=$rs['adv_id']?> )</strong>"
@@ -395,7 +381,6 @@ use \Xpmse\Utils;
 								function(btn, modal) {
 									success('广告删除成功');
 									setTimeout(function(){
-										// 转向分类列表页
 										window.location = '<?=App::R('adv','index')?>';
 									}, 1000);
 								}
@@ -408,7 +393,7 @@ use \Xpmse\Utils;
 								}
 							"
 
-						class="btn btn-lg btn-danger btn-minw ajax-confirm fn-action fn-remove" type="button">删除</button>
+						class="btn btn-lg btn-danger btn-minw ajax-confirm fn-action fn-saved-only fn-remove" type="button">删除</button>
 					</div>
 				</div><!-- END 保存数据 -->
 			</form>
@@ -488,8 +473,17 @@ function save( form, validation ) {
 			return;
 		}
 
+		if ( typeof  data['adv_id'] == 'undefined' ) {
+			var message = data['message'] || "未知错误";
+			failure( message );
+			return;
+		}
+		
+
 		// 更新ID
 		$('input[name=adv_id]').val( data['adv_id'] );
+		$('.fn-saved-only').removeClass('hidden');
+		$('.fn-saved-only').attr('data-param-id', data['adv_id']);
 
 		// 保存成功
 		success('保存成功');
@@ -532,28 +526,22 @@ $(function(){
 			return false;
 		},
 
-		rules: {
-			name: {
-				required: true,
-				minlength: 2,
-				maxlength: 20
-			},
+		rules: {},
+		messages: {}
 
-			priority: {
-				digits:true 
-			}
-		},
-
-		messages: {
-			name: {
-				required: '请填写分类名称',
-				minlength: '分类名称至少两个字',
-				maxlength: '分类名称不能超过20个字'
-			},
-			priority: '请输入数字，数字越小排序越靠前'
-		}
 	});
 
+
+	$('.fn-duplicate').click(function(){
+		var api = "<?=App::R('adv','duplicate', ['adv_id'=>''])?>";
+		var id = $(this).attr('data-param-id');
+		var url = api + id;
+		window.location = url;
+	})
+
+	if ( $('input[name="adv_id"]').val() == '' || $('input[name="adv_id"]').val() == undefined ) {
+		$('.fn-saved-only').addClass('hidden');
+	}
 })
 	
 </script>

@@ -210,6 +210,8 @@ use \Xpmse\Utils;
 								 
 								<th class="font-w300"> 位置名称 </th>
 								 
+								<th class="font-w300"> 优先级 </th>
+								 
 								<th class="font-w300"> 名称 </th>
 								 
 								<th class="font-w300"> 广告图片(多图) </th>
@@ -235,6 +237,12 @@ use \Xpmse\Utils;
 								<td class="font-w300">  
 									 
 										<?=$rs["position_name"]?> 
+									 
+								</td>
+								 
+								<td class="font-w300">  
+									 
+										<?=$rs["priority"]?> 
 									 
 								</td>
 								 
@@ -275,7 +283,7 @@ use \Xpmse\Utils;
 						</tbody>
 
 						<tfoot>
-							<tr><td colspan="6"> <nav class="pull-right">
+							<tr><td colspan="7"> <nav class="pull-right">
 
 								<ul class="pagination">
 									<?php if ($response['prev'] !== false): ?>

@@ -4,7 +4,7 @@
  * 广告数据模型
  *
  * 程序作者: XpmSE机器人
- * 最后修改: 2018-03-29 11:17:14
+ * 最后修改: 2018-03-30 00:46:09
  * 程序母版: /data/stor/private/templates/xpmsns/model/code/model/Name.php
  */
 namespace Xpmsns\Pages\Model;
@@ -288,18 +288,20 @@ class Adv extends Model {
 	 * @param mix $index 如果是数组，替换当前 index
 	 * @return array 已上传文件信息 {"url":"访问地址...", "path":"文件路径...", "origin":"原始文件访问地址..." }
 	 */
-	function uploadImages($adv_id, $file_path, $index=null) {
+	function uploadImages($adv_id, $file_path, $index=null, $upload_only=false ) {
 
-		$rs = $this->getBy('adv_id', $adv_id, [$file_field_name]);
-		$paths = empty($rs[$file_field_name]) ? [] : $rs[$file_field_name];
-		$fs = $this->meida->uploadFile( $file_path );
+		$rs = $this->getBy('adv_id', $adv_id, ["images"]);
+		$paths = empty($rs["images"]) ? [] : $rs["images"];
+		$fs = $this->media->uploadFile( $file_path );
 		if ( $index === null ) {
 			array_push($paths, $fs['path']);
 		} else {
 			$paths[$index] = $fs['path'];
 		}
 
-		$this->updateBy('adv_id', ["adv_id"=>$adv_id, "images"=>$paths] );
+		if ( $upload_only !== true ) {
+			$this->updateBy('adv_id', ["adv_id"=>$adv_id, "images"=>$paths] );
+		}
 
 		return $fs;
 	}
@@ -312,10 +314,12 @@ class Adv extends Model {
 	 * @param mix $index 如果是数组，替换当前 index
 	 * @return array 已上传文件信息 {"url":"访问地址...", "path":"文件路径...", "origin":"原始文件访问地址..." }
 	 */
-	function uploadCover($adv_id, $file_path) {
+	function uploadCover($adv_id, $file_path, $upload_only=false ) {
 
-		$fs =  $this->meida->uploadFile( $file_path );
-		$this->updateBy('adv_id', ["adv_id"=>$adv_id, "cover"=>$fs['path']]);
+		$fs =  $this->media->uploadFile( $file_path );
+		if ( $upload_only !== true ) {
+			$this->updateBy('adv_id', ["adv_id"=>$adv_id, "cover"=>$fs['path']]);
+		}
 		return $fs;
 	}
 
@@ -327,10 +331,12 @@ class Adv extends Model {
 	 * @param mix $index 如果是数组，替换当前 index
 	 * @return array 已上传文件信息 {"url":"访问地址...", "path":"文件路径...", "origin":"原始文件访问地址..." }
 	 */
-	function uploadTerms($adv_id, $file_path) {
+	function uploadTerms($adv_id, $file_path, $upload_only=false ) {
 
 		$fs =  $this->meidaPrivate->uploadFile( $file_path );
-		$this->updateBy('adv_id', ["adv_id"=>$adv_id, "terms"=>$fs['path']]);
+		if ( $upload_only !== true ) {
+			$this->updateBy('adv_id', ["adv_id"=>$adv_id, "terms"=>$fs['path']]);
+		}
 		return $fs;
 	}
 
@@ -342,18 +348,20 @@ class Adv extends Model {
 	 * @param mix $index 如果是数组，替换当前 index
 	 * @return array 已上传文件信息 {"url":"访问地址...", "path":"文件路径...", "origin":"原始文件访问地址..." }
 	 */
-	function uploadImagesByAdvSlug($adv_slug, $file_path, $index=null) {
+	function uploadImagesByAdvSlug($adv_slug, $file_path, $index=null, $upload_only=false ) {
 
-		$rs = $this->getBy('adv_slug', $adv_slug, [$file_field_name]);
-		$paths = empty($rs[$file_field_name]) ? [] : $rs[$file_field_name];
-		$fs = $this->meida->uploadFile( $file_path );
+		$rs = $this->getBy('adv_slug', $adv_slug, ["images"]);
+		$paths = empty($rs["images"]) ? [] : $rs["images"];
+		$fs = $this->media->uploadFile( $file_path );
 		if ( $index === null ) {
 			array_push($paths, $fs['path']);
 		} else {
 			$paths[$index] = $fs['path'];
 		}
 
-		$this->updateBy('adv_slug', ["adv_slug"=>$adv_slug, "images"=>$paths] );
+		if ( $upload_only !== true ) {
+			$this->updateBy('adv_slug', ["adv_slug"=>$adv_slug, "images"=>$paths] );
+		}
 
 		return $fs;
 	}
@@ -366,10 +374,12 @@ class Adv extends Model {
 	 * @param mix $index 如果是数组，替换当前 index
 	 * @return array 已上传文件信息 {"url":"访问地址...", "path":"文件路径...", "origin":"原始文件访问地址..." }
 	 */
-	function uploadCoverByAdvSlug($adv_slug, $file_path) {
+	function uploadCoverByAdvSlug($adv_slug, $file_path, $upload_only=false ) {
 
-		$fs =  $this->meida->uploadFile( $file_path );
-		$this->updateBy('adv_slug', ["adv_slug"=>$adv_slug, "cover"=>$fs['path']]);
+		$fs =  $this->media->uploadFile( $file_path );
+		if ( $upload_only !== true ) {
+			$this->updateBy('adv_slug', ["adv_slug"=>$adv_slug, "cover"=>$fs['path']]);
+		}
 		return $fs;
 	}
 
@@ -381,10 +391,12 @@ class Adv extends Model {
 	 * @param mix $index 如果是数组，替换当前 index
 	 * @return array 已上传文件信息 {"url":"访问地址...", "path":"文件路径...", "origin":"原始文件访问地址..." }
 	 */
-	function uploadTermsByAdvSlug($adv_slug, $file_path) {
+	function uploadTermsByAdvSlug($adv_slug, $file_path, $upload_only=false ) {
 
 		$fs =  $this->meidaPrivate->uploadFile( $file_path );
-		$this->updateBy('adv_slug', ["adv_slug"=>$adv_slug, "terms"=>$fs['path']]);
+		if ( $upload_only !== true ) {
+			$this->updateBy('adv_slug', ["adv_slug"=>$adv_slug, "terms"=>$fs['path']]);
+		}
 		return $fs;
 	}
 
@@ -426,7 +438,7 @@ class Adv extends Model {
 	/**
 	 * 按条件检索广告记录
 	 * @param  array  $query
-	 *         	      $query['select'] 选取字段，默认选择 ["position_no","position_name","name","images","paystatus","status"]
+	 *         	      $query['select'] 选取字段，默认选择 ["position_no","position_name","priority","name","images","paystatus","status"]
 	 *         	      $query['page'] 页码，默认为 1
 	 *         	      $query['perpage'] 每页显示记录数，默认为 20
 	 *			      $query["keyword"] 按关键词查询
@@ -445,7 +457,7 @@ class Adv extends Model {
 	 */
 	function search( $query = [] ) {
 
-		$select = empty($query['select']) ? ["position_no","position_name","name","images","paystatus","status"] : $query['select'];
+		$select = empty($query['select']) ? ["position_no","position_name","priority","name","images","paystatus","status"] : $query['select'];
 		if ( is_string($select) ) {
 			$select = explode(',', $select);
 		}

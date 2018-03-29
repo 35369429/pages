@@ -480,8 +480,8 @@ function mergePage( src ){
 			.pipe(replace(/__WEB_ROOT__/g, ':' + __WEB_ROOT__)).on('error', reject)
 			.pipe(include()).on('error', reject)
 			.pipe(include_import()).on('error', reject)
-			.pipe(replace(/\{\{__STOR__\:\:(.+)\}\}/g, function( match, p1, offset, string ) {// let reg = new RegExp("\{\{__STOR__\:\:(.+)\}\}", "g");
-
+			.pipe(replace(/\{\{__STOR__\:\:([^\{\{]+)\}\}/g, function( match, p1, offset, string ) {// let reg = new RegExp("\{\{__STOR__\:\:(.+)\}\}", "g");
+				
 				let remote = p1.replace('__PROJECT_NAME', project );
 				let bind =  bindsMap[remote];
 				if ( typeof bind != 'object' ) {
@@ -778,7 +778,7 @@ function web_page(){
 				.pipe(replace(/__WEB_ROOT__/g, ':' + __WEB_ROOT__)).on('error', reject)
 				.pipe(include()).on('error', reject)
 				.pipe(include_import()).on('error', reject)
-				.pipe(replace(/\{\{__STOR__\:\:(.+)\}\}/g, function( match, p1, offset, string ) {// let reg = new RegExp("\{\{__STOR__\:\:(.+)\}\}", "g");
+				.pipe(replace(/\{\{__STOR__\:\:([^\{\{]+)\}\}/g, function( match, p1, offset, string ) {// let reg = new RegExp("\{\{__STOR__\:\:(.+)\}\}", "g");
 
 					let remote = p1.replace('__PROJECT_NAME', project );
 					let bind =  bindsMap[remote];
@@ -1068,7 +1068,8 @@ gulp.task('default',['watch']);
 
 let __WXAPP_ROOT__ = path.resolve(__dirname, './wxapp');
 let __WXAPP_CONF__ = path.resolve(__dirname, './wxapp/config.js');
-let wxapp = CONF['wxapp']['cli'];
+let wxapp = '';
+try { wxapp = CONF['wxapp']['cli']; } catch(e) {}
 let wxapp_login = wxapp + ' -l';
 let wxapp_conf = 'cd ' + __dirname  + ' && gulp wxapp-config';
 
@@ -1099,8 +1100,9 @@ gulp.task('wxapp-config',()=>{
 	fs.writeFileSync(__WXAPP_CONF__, content);
 });
 
+let wxapp_newconf = {};
 let timestamp = Date.parse(new Date());
-let wxapp_newconf = require(__WXAPP_CONF__);
+try { wxapp_newconf = require(__WXAPP_CONF__); } catch(e){}
 let version = wxapp_newconf['version'] || '1.0.0';
 let wxapp_upload = wxapp + ' -u '+version+'@' + __WXAPP_ROOT__ + ' --upload-desc \'\'\'auto-release@' + timestamp + '\'\'\'';
 
