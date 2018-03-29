@@ -6,7 +6,7 @@
 	<div class="col-xs-2">
 		<div class="nav" >
 			<div class="logo">
-				<a href="/article"><img src="{{__STOR__::/__PROJECT_NAME/desktop/assets}}/images/xpmsns-logo.png" alt=""  class="title_block"></a>
+				<a href="/article"><img src="{{site.site_logo.url}}" alt=""  class="title_block"></a>
 			</div>
 			<ul class="nav-list">
 				<li mp:for="{{categories.data}}" 

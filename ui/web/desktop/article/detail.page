@@ -32,7 +32,7 @@
 	<div class="crumb">
 		<div class="container">
 			<div class="logo">
-				<a href="/article"><img src="{{__STOR__::/__PROJECT_NAME/desktop/assets}}/images/xpmsns-logo.png" alt=""  class="title_block"></a>
+				<a href="/article"><img src="{{site.site_logo.url}}" alt=""  class="title_block"></a>
 			</div>
 			<ul>
 				<li><a href="/article">首页</a></li>

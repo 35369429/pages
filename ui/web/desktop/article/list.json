@@ -1,6 +1,13 @@
 {	
 	"cname":"头条文章列表页",
 	"data": {
+		"site":{
+			"api":"/xpmsns/pages/siteconf/get",
+			"query":{
+				"site_slug":"pc-home",
+				"select":"*"
+			}
+		},
 		"categories":{
 			"api":"/xpmsns/pages/category/search",
 			"query":{

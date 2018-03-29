@@ -18,6 +18,13 @@
 				"perpage":"200"
 			}
 		},
+		"site":{
+			"api":"/xpmsns/pages/siteconf/get",
+			"query":{
+				"site_slug":"pc-home",
+				"select":"*"
+			}
+		},
 		"current":"{{categories.data.0}}",
 		"articles":{
 			"api":"/xpmsns/pages/article/search",
@@ -37,7 +44,8 @@
 		"hot": "{{recommend.hot.data}}",
 		"focus": "{{recommend.focus.data}}",
 		"page":{
-			"title":"{{current.name}}"
+			"title":"{{current.name}}",
+			"logo":"{{site.site_logo}}"
 		}
 	},
 	"entries":[

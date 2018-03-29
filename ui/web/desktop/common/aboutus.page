@@ -2,29 +2,19 @@
 <section class="about block">
 	<div class="block-content">
 		<ul>
-			<li> © 2018 XpmSNS.com </li>
-			<li> 京ICP备14050225号-7</li>
-			<li> 公司: 北京云道天成科技有限公司</li>
-			<li> 电话: 400-617-9608</li>
-			<li> 地址: 北京市昌平区北清路8号三一重工产业园区</li>
+			<li> © 2018 {{site.site_name}} </li>
+			<li> {{site.site_no}}</li>
+			<li> 公司: {{site.company}}</li>
+			<li> 电话: {{site.tel}}</li>
+			<li> 地址: {{site.address}}</li>
 			
 			<li class="image">
 				<span> 微信小程序 </span>
-				<img width='150'  src='{{__STOR__::/__PROJECT_NAME/desktop/assets}}/images/qr-wxapp-index.jpg' />
+				<img width='150'  src='{{site.qr_wxapp.url}}' />
 			</li>
 			<li class="image">
-				<span> 微信版 ( HTML5 ) </span>
-				<img width='150'  src='{{__STOR__::/__PROJECT_NAME/desktop/assets}}/images/qr-m-index.png' />
-			</li>
-
-			<li class="image">
-				<span> 安卓客户端 ( iOS 审核中 ) </span>
-				<img width='150'  src='{{__STOR__::/__PROJECT_NAME/desktop/assets}}/images/qr-m-index.png' />
-			</li>
-
-			<li class="image">
-				<span> 官方微信公众号 </span>
-				<img width='150'  src='{{__STOR__::/__PROJECT_NAME/desktop/assets}}/images/qr-m-index.png' />
+				<span> 官方微信 </span>
+				<img width='150'  src='{{site.qr_wxpub.url}}' />
 			</li>
 		</ul>
 	</div>
