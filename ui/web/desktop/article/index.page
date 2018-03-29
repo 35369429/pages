@@ -2,6 +2,11 @@
 <include src="__WEB_ROOT__/desktop/common/header.page"  />
 
 <div class="container"><div class="row">
+	<!-- A-T-001 广告 -->
+	<div class="col-xs-12 advs" mp:for="{{advs.data}}" mp:if="{{item.position_no == 'A-T-001'}}">
+		<a href="{{item.link}}" target="_blank"><img width="{{item.size}}" src="{{item.images.0.url}}"></a>
+	</div><!-- END A-T-001 广告 -->
+
 	<!-- 左侧菜单导航 -->
 	<div class="col-xs-2">
 		<div class="nav" >
@@ -44,23 +49,54 @@
 		<!-- 文章列表-->
 		<section class="articles">
 			<!-- 文章列表项 -->
-			<div class="article-item-1" mp:for="{{articles.data}}" mp:for-item="{{rs}}" >
-				<div class="image" mp:if="{{rs.cover.url}}"> 
-					<a href="/article/{{rs.article_id}}"><img
-						width="150"
-					    data-sizes="150X100"
-					    data-src="{{rs.cover.url}}"
-					  	class="lazyload" /></a>
+			<div mp:for="{{articles.data}}" mp:for-item="{{rs}}" mp:for-index="{{idx}}"  >
+
+				<div  mp:if="{{idx == 1}}">
+					<div class="article-item-ad-1" mp:for="{{advs.data}}" mp:if="{{item.position_no == 'A-M-001'}}">
+						<div class="image"   > 
+							<a href="{{item.link}}"><img
+								width="100%"
+							    data-sizes="150X100"
+							    data-src="{{item.images.0.url}}"
+							  	class="lazyload" /></a>
+						</div>
+						<div class="clear"></div>
+					</div>
 				</div>
-				<div class="content">
-					<h5><a href="/article/{{rs.article_id}}" >{{rs.title}}</a></h5>
-					<p>
-						<a class="category" href="/article/list/{{rs.category_last.category_id}}">{{rs.category_last.name}}</a>
-						<span class="author">{{rs.author}}</span>
-						<span class="pubtime">{{rs.publish_date}}</span>
-					</p>
+
+
+				<div  mp:if="{{idx == 3}}">
+					<div class="article-item-ad-3"  mp:for="{{advs.data}}" mp:if="{{item.position_no == 'A-M-002'}}" >
+						<div class="image" mp:for="{{item.images}}" mp:for-item="{{img}}" mp:for-index="{{idx}}" mp:if="{{idx < 3}}" > 
+							<a href="/article/{{rs.article_id}}"><img
+								width="100%"
+							    data-sizes="150X100"
+							    data-src="{{img.url}}"
+							  	class="lazyload" /></a>
+						</div>
+						<div class="clear"></div>
+					</div>
 				</div>
-				<div class="clear"></div>
+
+
+				<div class="article-item-1">
+					<div class="image" mp:if="{{rs.cover.url}}"> 
+						<a href="/article/{{rs.article_id}}"><img
+							width="150"
+						    data-sizes="150X100"
+						    data-src="{{rs.cover.url}}"
+						  	class="lazyload" /></a>
+					</div>
+					<div class="content">
+						<h5><a href="/article/{{rs.article_id}}" >{{rs.title}} {{idx}} </a></h5>
+						<p>
+							<a class="category" href="/article/list/{{rs.category_last.category_id}}">{{rs.category_last.name}}</a>
+							<span class="author">{{rs.author}}</span>
+							<span class="pubtime">{{rs.publish_date}}</span>
+						</p>
+					</div>
+					<div class="clear"></div>
+				</div>
 			</div> <!-- END 文章列表项 -->
 
 		</section><!-- END 文章列表-->
@@ -70,14 +106,14 @@
 	<!-- 右侧推荐内容区 -->
 	<div class="col-xs-3">
 		
-		<!-- 阿里妈妈 广告 -->
-		<section class="alimama block block-full">
-			<div class="block-content">
-				<a href="https://s.click.taobao.com/Wc5q6Uw" target="_blank">
-					<img width="100%" src="{{__STOR__::/__PROJECT_NAME/desktop/assets}}/images/aliyun-a-320x427.jpg">
+		<!-- A-R-001 广告 -->
+		<section class="block block-full" mp:for="{{advs.data}}" mp:if="{{item.position_no == 'A-R-001'}}">
+			<div class="block-content" class="A-R-001">
+				<a mp:for="{{item.images}}"  mp:for-index="{{idx}}"  mp:for-item="{{img}}" href="{{item.link}}" target="_blank"  class="{{ (idx != 0) ? 'hidden' }}">
+					<img  width="100%" src="{{img.url}}">
 				</a>
 			</div>
-		</section> <!-- END 阿里妈妈广告 -->
+		</section> <!-- END A-R-001 -->
 		
 		<!-- 24小时热文 -->
 		<section class="hot block">
@@ -99,6 +135,15 @@
 				</div>
 			</div>
 		</section> <!-- 24小时热文END  -->
+
+		<!-- A-R-002 广告 -->
+		<section class="block block-full" mp:for="{{advs.data}}" mp:if="{{item.position_no == 'A-R-002'}}">
+			<div class="block-content" class="A-R-002">
+				<a mp:for="{{item.images}}"  mp:for-index="{{idx}}"  mp:for-item="{{img}}" href="{{item.link}}" target="_blank"  class="{{ (idx != 0) ? 'hidden' }}">
+					<img  width="100%" src="{{img.url}}">
+				</a>
+			</div>
+		</section> <!-- END A-R-001 -->
 
 		<!-- 关于我们 -->
 		<include src="__WEB_ROOT__/desktop/common/aboutus.page" />

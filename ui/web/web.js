@@ -41,6 +41,34 @@ Web({
 
 	onError:function( error ) {
 		console.log( 'Error=', error, SERVICE_URL );
-	}
+	},
 
+
+	/**
+	 * 轮播广告代码
+	 * @return
+	 */
+	advPlay:function( selector, timeout ) {
+
+		timeout = timeout || 2000;
+		let next = 0;
+		$(selector + ' a').each( (idx,item )=>{
+			if ( !$(item).hasClass('hidden') ){
+				next = idx + 1;
+				// console.log( 'hasClass', idx);
+			}
+		});
+		// console.log( next ,  $(selector + ' img').length);
+
+		if (next >= $(selector + ' a').length ) {
+			next = 0;
+		}
+
+		$(selector + ' a').addClass('hidden');
+		$($(selector + ' a')[next]).removeClass('hidden');
+
+		setTimeout(()=>{
+			this.advPlay( selector, timeout );
+		}, timeout);
+	}
 });

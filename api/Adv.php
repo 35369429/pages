@@ -4,7 +4,7 @@
  * 广告数据接口 
  *
  * 程序作者: XpmSE机器人
- * 最后修改: 2018-03-30 00:46:09
+ * 最后修改: 2018-03-30 01:16:05
  * 程序母版: /data/stor/private/templates/xpmsns/model/code/api/Name.php
  */
 namespace Xpmsns\Pages\Api;
@@ -272,7 +272,7 @@ class Adv extends Api {
 	/**
 	 * 根据条件检索广告记录
 	 * @param  array $query GET 参数
-	 *         	      $query['select'] 选取字段，默认选择 ["adv_id","adv_slug","name","intro","images","size","position_no","status"]
+	 *         	      $query['select'] 选取字段，默认选择 ["adv_id","adv_slug","name","intro","link","images","size","position_no","status"]
 	 *         	      $query['page'] 页码，默认为 1
 	 *         	      $query['perpage'] 每页显示记录数，默认为 20
 	 *			      $query["keyword"] 按关键词查询
@@ -288,7 +288,7 @@ class Adv extends Api {
 	 *			      $query["orderby_expired_asc"]  按有效期 ASC 排序
      *
 	 * @param  array $data  POST 参数
-	 *         	      $data['select'] 选取字段，默认选择 ["adv_id","adv_slug","name","intro","images","size","position_no","status"]
+	 *         	      $data['select'] 选取字段，默认选择 ["adv_id","adv_slug","name","intro","link","images","size","position_no","status"]
 	 *         	      $data['page'] 页码，默认为 1
 	 *         	      $data['perpage'] 每页显示记录数，默认为 20
 	 *			      $data["keyword"] 按关键词查询
@@ -332,7 +332,7 @@ class Adv extends Api {
 		$data = array_merge( $query, $data );
 
 		// 读取字段
-		$select = empty($data['select']) ? ["adv_id","adv_slug","name","intro","images","size","position_no","status"] : $data['select'];
+		$select = empty($data['select']) ? ["adv_id","adv_slug","name","intro","link","images","size","position_no","status"] : $data['select'];
 		if ( is_string($select) ) {
 			$select = explode(',', $select);
 		}
