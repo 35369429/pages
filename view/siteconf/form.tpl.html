@@ -1,0 +1,637 @@
+                                                                                                                                                                                                                                                                                                                    
+      	  	  	  	  	  	    	  	  	  	  	  	          
+<?php 
+use \Xpmse\Loader\App; 
+use \Xpmse\Utils;
+?>
+<style type="text/css">
+
+	.form {
+		padding-top: 60px;
+		padding-bottom: 60px;
+	}
+</style>
+
+
+<!-- Page Content -->
+<div class="content "> 
+	<div class="block block-bordered " >
+		<div class="block-header remove-margin" >
+
+			<h3 class="block-title" >
+				<a href="<?=App::R('siteconf', 'index')?>" class="text-default">
+                    <i class="fa fa-arrow-circle-o-left"></i> 
+                    站点配置列表 
+                </a> / <?=$action_name?> 
+			</h3>
+			
+		</div> <!-- END block-header -->
+
+		<div class="block-content form" >
+
+			<form class="form-horizontal siteconf-form form-lg" action= '<?=App::NR("siteconf", "save");?>' >
+
+				<!-- 隐藏域 -->
+				<input type="hidden" name="site_id" value="<?=$rs['site_id']?>" >
+	
+				 
+				<!-- 别名  -->
+				<!-- 标准输入框 -->
+
+	<!-- 别名 (site_slug) 开始  -->
+	<div class="form-group ">
+		<label class="col-xs-2 control-label" for="site_slug">别名 <span class="text-danger">*</span></label>
+		<div class="col-xs-8">
+			<input class="form-control input-lg"  
+				type="text" 
+				id="site_slug" name="site_slug" 
+				placeholder="请填写配置别名"  
+				value="<?=$rs['site_slug']?>" /> 
+			<div class="help-block"></div>
+		</div>
+	</div><!-- 结束 别名 (site_slug) -->
+
+				<!-- END 别名  -->
+				 
+				<!-- 呈现位置  -->
+				<!-- 标准输入框 -->
+
+	<!-- 呈现位置 (position) 开始  -->
+	<div class="form-group ">
+		<label class="col-xs-2 control-label" for="position">呈现位置</label>
+		<div class="col-xs-8">
+			<input class="form-control input-lg"  
+				type="text" 
+				id="position" name="position" 
+				placeholder="请填写呈现位置"  
+				value="<?=$rs['position']?>" /> 
+			<div class="help-block"></div>
+		</div>
+	</div><!-- 结束 呈现位置 (position) -->
+
+				<!-- END 呈现位置  -->
+				 
+				<!-- 网站名称  -->
+				<!-- 标准输入框 -->
+
+	<!-- 网站名称 (site_name) 开始  -->
+	<div class="form-group ">
+		<label class="col-xs-2 control-label" for="site_name">网站名称</label>
+		<div class="col-xs-8">
+			<input class="form-control input-lg"  
+				type="text" 
+				id="site_name" name="site_name" 
+				placeholder="请填写网站名称"  
+				value="<?=$rs['site_name']?>" /> 
+			<div class="help-block"></div>
+		</div>
+	</div><!-- 结束 网站名称 (site_name) -->
+
+				<!-- END 网站名称  -->
+				 
+				<!-- 网站LOGO  -->
+				<!-- END标准下拉选择组件 -->
+
+<!-- 标准组图上传组件 -->
+
+	<!-- 网站LOGO (site_logo) 开始  -->
+	<div class="xpmse-images" name="site_logo">
+		<div class="form-group " >
+			<label class="col-xs-2 control-label" for="site_logo">网站LOGO</label>
+			<div class="col-xs-8">
+		   		<div name="site_logo" class="file-uploader rounded rounded-4 push-10-t"
+					data-api='/_a/mina/uploader/upload?type=image'
+					data-title='请上传网站LOGO'
+					data-previews=""
+					data-width="300"
+					data-height="75"
+					data-icon="fa fa-image" 
+					data-placeholder="请上传网站LOGO" 
+					data-allow-types=".png"
+					data-maxsize="20"
+					data-progress="yes"
+					data-cropable="yes"
+					data-draggable="yes"
+					data-src="<?=$rs['site_logo']['url']?>"
+					data-path="<?=$rs['site_logo']['path']?>"
+					></div>
+				<div class="help-block"></div>
+			</div>
+		</div> 
+	</div><!-- xpmse-images 结束 网站LOGO (site_logo) -->
+
+				<!-- END 网站LOGO  -->
+				 
+				<!-- 网站简介  -->
+				<!-- 标准组图上传组件 -->
+
+
+
+
+
+<!-- 标准输入框组件 -->
+
+	<!-- 网站简介 (site_intro) 开始  -->
+	<div class="form-group ">
+		<label class="col-xs-2 control-label" for="site_intro">网站简介</label>
+		<div class="col-xs-8">
+			<textarea class="form-control input-lg"  
+				type="text" 
+				id="site_intro" name="site_intro" rows=""
+				placeholder="请填写网站简介"><?=$rs['site_intro']?></textarea> 
+			<div class="help-block"></div>
+		</div>
+	</div><!-- 结束 网站简介 (site_intro) -->
+
+				<!-- END 网站简介  -->
+				 
+				<!-- 官网地址  -->
+				<!-- 标准输入框 -->
+
+	<!-- 官网地址 (site_homepage) 开始  -->
+	<div class="form-group ">
+		<label class="col-xs-2 control-label" for="site_homepage">官网地址</label>
+		<div class="col-xs-8">
+			<input class="form-control input-lg"  
+				type="text" 
+				id="site_homepage" name="site_homepage" 
+				placeholder="请填写官网地址"  
+				value="<?=$rs['site_homepage']?>" /> 
+			<div class="help-block"></div>
+		</div>
+	</div><!-- 结束 官网地址 (site_homepage) -->
+
+				<!-- END 官网地址  -->
+				 
+				<!-- 客户端下载地址  -->
+				<!-- 标准输入框 -->
+
+	<!-- 客户端下载地址 (site_downloadpage) 开始  -->
+	<div class="form-group ">
+		<label class="col-xs-2 control-label" for="site_downloadpage">客户端下载地址</label>
+		<div class="col-xs-8">
+			<input class="form-control input-lg"  
+				type="text" 
+				id="site_downloadpage" name="site_downloadpage" 
+				placeholder="请填写客户端下载地址"  
+				value="<?=$rs['site_downloadpage']?>" /> 
+			<div class="help-block"></div>
+		</div>
+	</div><!-- 结束 客户端下载地址 (site_downloadpage) -->
+
+				<!-- END 客户端下载地址  -->
+				 
+				<!-- 网站备案号  -->
+				<!-- 标准输入框 -->
+
+	<!-- 网站备案号 (site_no) 开始  -->
+	<div class="form-group ">
+		<label class="col-xs-2 control-label" for="site_no">网站备案号</label>
+		<div class="col-xs-8">
+			<input class="form-control input-lg"  
+				type="text" 
+				id="site_no" name="site_no" 
+				placeholder="请填写网站备案号"  
+				value="<?=$rs['site_no']?>" /> 
+			<div class="help-block"></div>
+		</div>
+	</div><!-- 结束 网站备案号 (site_no) -->
+
+				<!-- END 网站备案号  -->
+				 
+				<!-- 公司名称  -->
+				<!-- 标准输入框 -->
+
+	<!-- 公司名称 (company) 开始  -->
+	<div class="form-group ">
+		<label class="col-xs-2 control-label" for="company">公司名称</label>
+		<div class="col-xs-8">
+			<input class="form-control input-lg"  
+				type="text" 
+				id="company" name="company" 
+				placeholder="请填写公司名称"  
+				value="<?=$rs['company']?>" /> 
+			<div class="help-block"></div>
+		</div>
+	</div><!-- 结束 公司名称 (company) -->
+
+				<!-- END 公司名称  -->
+				 
+				<!-- 公司地址  -->
+				<!-- 标准输入框 -->
+
+	<!-- 公司地址 (address) 开始  -->
+	<div class="form-group ">
+		<label class="col-xs-2 control-label" for="address">公司地址</label>
+		<div class="col-xs-8">
+			<input class="form-control input-lg"  
+				type="text" 
+				id="address" name="address" 
+				placeholder="请填写公司地址"  
+				value="<?=$rs['address']?>" /> 
+			<div class="help-block"></div>
+		</div>
+	</div><!-- 结束 公司地址 (address) -->
+
+				<!-- END 公司地址  -->
+				 
+				<!-- 客服电话  -->
+				<!-- 标准输入框 -->
+
+	<!-- 客服电话 (tel) 开始  -->
+	<div class="form-group ">
+		<label class="col-xs-2 control-label" for="tel">客服电话</label>
+		<div class="col-xs-8">
+			<input class="form-control input-lg"  
+				type="text" 
+				id="tel" name="tel" 
+				placeholder="请填写客服电话"  
+				value="<?=$rs['tel']?>" /> 
+			<div class="help-block"></div>
+		</div>
+	</div><!-- 结束 客服电话 (tel) -->
+
+				<!-- END 客服电话  -->
+				 
+				<!-- 小程序二维码  -->
+				<!-- END标准下拉选择组件 -->
+
+<!-- 标准组图上传组件 -->
+
+	<!-- 小程序二维码 (qr_wxapp) 开始  -->
+	<div class="xpmse-images" name="qr_wxapp">
+		<div class="form-group " >
+			<label class="col-xs-2 control-label" for="qr_wxapp">小程序二维码</label>
+			<div class="col-xs-8">
+		   		<div name="qr_wxapp" class="file-uploader rounded rounded-4 push-10-t"
+					data-api='/_a/mina/uploader/upload?type=image'
+					data-title='请上传小程序二维码'
+					data-previews=""
+					data-width="200"
+					data-height="200"
+					data-icon="fa fa-image" 
+					data-placeholder="请上传小程序二维码" 
+					data-allow-types=".png,.jpg"
+					data-maxsize="20"
+					data-progress="yes"
+					data-cropable="1"
+					data-draggable="yes"
+					data-src="<?=$rs['qr_wxapp']['url']?>"
+					data-path="<?=$rs['qr_wxapp']['path']?>"
+					></div>
+				<div class="help-block"></div>
+			</div>
+		</div> 
+	</div><!-- xpmse-images 结束 小程序二维码 (qr_wxapp) -->
+
+				<!-- END 小程序二维码  -->
+				 
+				<!-- 订阅号二维码  -->
+				<!-- END标准下拉选择组件 -->
+
+<!-- 标准组图上传组件 -->
+
+	<!-- 订阅号二维码 (qr_wxpub) 开始  -->
+	<div class="xpmse-images" name="qr_wxpub">
+		<div class="form-group " >
+			<label class="col-xs-2 control-label" for="qr_wxpub">订阅号二维码</label>
+			<div class="col-xs-8">
+		   		<div name="qr_wxpub" class="file-uploader rounded rounded-4 push-10-t"
+					data-api='/_a/mina/uploader/upload?type=image'
+					data-title='请上传订阅号二维码'
+					data-previews=""
+					data-width="200"
+					data-height="200"
+					data-icon="fa fa-image" 
+					data-placeholder="请上传订阅号二维码" 
+					data-allow-types=".png,.jpg"
+					data-maxsize="20"
+					data-progress="yes"
+					data-cropable="1"
+					data-draggable="yes"
+					data-src="<?=$rs['qr_wxpub']['url']?>"
+					data-path="<?=$rs['qr_wxpub']['path']?>"
+					></div>
+				<div class="help-block"></div>
+			</div>
+		</div> 
+	</div><!-- xpmse-images 结束 订阅号二维码 (qr_wxpub) -->
+
+				<!-- END 订阅号二维码  -->
+				 
+				<!-- 服务号二维码  -->
+				<!-- END标准下拉选择组件 -->
+
+<!-- 标准组图上传组件 -->
+
+	<!-- 服务号二维码 (qr_wxse) 开始  -->
+	<div class="xpmse-images" name="qr_wxse">
+		<div class="form-group " >
+			<label class="col-xs-2 control-label" for="qr_wxse">服务号二维码</label>
+			<div class="col-xs-8">
+		   		<div name="qr_wxse" class="file-uploader rounded rounded-4 push-10-t"
+					data-api='/_a/mina/uploader/upload?type=image'
+					data-title='请上传服务号二维码'
+					data-previews=""
+					data-width="200"
+					data-height="200"
+					data-icon="fa fa-image" 
+					data-placeholder="请上传服务号二维码" 
+					data-allow-types=".png,.jpg"
+					data-maxsize="20"
+					data-progress="yes"
+					data-cropable="1"
+					data-draggable="yes"
+					data-src="<?=$rs['qr_wxse']['url']?>"
+					data-path="<?=$rs['qr_wxse']['path']?>"
+					></div>
+				<div class="help-block"></div>
+			</div>
+		</div> 
+	</div><!-- xpmse-images 结束 服务号二维码 (qr_wxse) -->
+
+				<!-- END 服务号二维码  -->
+				 
+				<!-- 安卓客户端二维码  -->
+				<!-- END标准下拉选择组件 -->
+
+<!-- 标准组图上传组件 -->
+
+	<!-- 安卓客户端二维码 (qr_android) 开始  -->
+	<div class="xpmse-images" name="qr_android">
+		<div class="form-group " >
+			<label class="col-xs-2 control-label" for="qr_android">安卓客户端二维码</label>
+			<div class="col-xs-8">
+		   		<div name="qr_android" class="file-uploader rounded rounded-4 push-10-t"
+					data-api='/_a/mina/uploader/upload?type=image'
+					data-title='请上传安卓客户端二维码'
+					data-previews=""
+					data-width="200"
+					data-height="200"
+					data-icon="fa fa-image" 
+					data-placeholder="请上传安卓客户端二维码" 
+					data-allow-types=".png,.jpg"
+					data-maxsize="20"
+					data-progress="yes"
+					data-cropable="1"
+					data-draggable="yes"
+					data-src="<?=$rs['qr_android']['url']?>"
+					data-path="<?=$rs['qr_android']['path']?>"
+					></div>
+				<div class="help-block"></div>
+			</div>
+		</div> 
+	</div><!-- xpmse-images 结束 安卓客户端二维码 (qr_android) -->
+
+				<!-- END 安卓客户端二维码  -->
+				 
+				<!-- 苹果客户端二维码  -->
+				<!-- END标准下拉选择组件 -->
+
+<!-- 标准组图上传组件 -->
+
+	<!-- 苹果客户端二维码 (qr_ios) 开始  -->
+	<div class="xpmse-images" name="qr_ios">
+		<div class="form-group " >
+			<label class="col-xs-2 control-label" for="qr_ios">苹果客户端二维码</label>
+			<div class="col-xs-8">
+		   		<div name="qr_ios" class="file-uploader rounded rounded-4 push-10-t"
+					data-api='/_a/mina/uploader/upload?type=image'
+					data-title='请上传苹果客户端二维码'
+					data-previews=""
+					data-width="200"
+					data-height="200"
+					data-icon="fa fa-image" 
+					data-placeholder="请上传苹果客户端二维码" 
+					data-allow-types=".png,.jpg"
+					data-maxsize="20"
+					data-progress="yes"
+					data-cropable="1"
+					data-draggable="yes"
+					data-src="<?=$rs['qr_ios']['url']?>"
+					data-path="<?=$rs['qr_ios']['path']?>"
+					></div>
+				<div class="help-block"></div>
+			</div>
+		</div> 
+	</div><!-- xpmse-images 结束 苹果客户端二维码 (qr_ios) -->
+
+				<!-- END 苹果客户端二维码  -->
+				 
+				<!-- 状态  -->
+				<!-- END 标准选择框 -->
+
+
+<!-- 标准下拉选择组件 -->
+ 
+	<!-- 状态 (status) 开始  -->
+	<div class="form-group ">
+		<label class="col-xs-2 control-label" for="status">状态 <span class="text-danger">*</span></label>
+		<div class="col-xs-8">
+			<select class="js-select2 form-control input-lg" id="status" name="status" style="width: 100%;" data-placeholder="请选择广告状态">
+				<option></option>
+				<?php $rs["status"] = is_string($rs["status"]) ? [$rs["status"]] : $rs["status"] ; ?>
+<option value="online" <?=("online" == "online" && empty($rs["status"]) || in_array("online", $rs["status"]) ) ? "selected" : ""?> > 上线</option>
+
+<option value="offline" <?=("online" == "offline" && empty($rs["status"]) || in_array("offline", $rs["status"]) ) ? "selected" : ""?> >  下线</option>
+
+			</select>
+			<div class="help-block"></div>
+		</div>
+	</div><!-- 结束 状态 (status) -->
+
+				<!-- END 状态  -->
+								
+				<!-- 保存数据 -->
+				<div class="form-group">
+					<label class="col-xs-2 control-label" for="url"></label>
+					<div class="col-xs-9">
+						<button class="btn btn-lg btn-primary btn-minw fn-action fn-save push-50-r" type="submit">保存</button>
+						<button 
+							confirm-title="请确认删除站点配置 "
+				            confirm-content="您确定删除站点配置 <strong><?=$rs['position']?>(<?=$rs['site_id']?> )</strong>"
+				            confirm-dismiss = "取消"
+				            confirm-submit= "确定"
+				            data-param-site_id="<?=$ca['site_id']?>" 
+				            confirm-action="<?=App::NR('siteconf','remove')?>"
+				            event-before="
+								function( btn, modal ) {
+									$('button', modal)
+										.addClass('disabled')
+										.attr('disabled', 'disabled');
+								}
+							"
+
+							event-done="
+								function( data, btn, modal) {
+									$('button', modal)
+										.removeClass('disabled')
+										.removeAttr('disabled');
+								}
+							"
+					        event-success="
+								function(btn, modal) {
+									success('站点配置删除成功');
+									setTimeout(function(){
+										// 转向分类列表页
+										window.location = '<?=App::R('siteconf','index')?>';
+									}, 1000);
+								}
+							"
+
+							event-error="
+								function( data, btn, modal) {
+									failure( '站点配置删除失败 ('+ data['message'] + ')');
+									return true;
+								}
+							"
+
+						class="btn btn-lg btn-danger btn-minw ajax-confirm fn-action fn-remove" type="button">删除</button>
+					</div>
+				</div><!-- END 保存数据 -->
+			</form>
+		</div>
+	</div>
+</div>
+
+<script type="text/javascript">
+function pending( message ) {
+	$('.fn-action')
+		.addClass('disabled')
+		.attr('disabled', 'disabled');
+	App.loading({message:message}).show();
+}
+
+
+function success( message ) {
+	App.notify( message );
+}
+
+function failure( message,  validation ) {
+	validation = validation  || null;
+	message = message || null;
+
+	if ( typeof message == 'object' ) {
+		validation.showErrors(message);
+		return;
+	}
+
+	if ( message != null ) {
+		App.notify( message, 'fa fa-times', 'danger' );
+	}
+}
+
+function done() {
+	App.loading().hide();
+	$('.fn-action')
+		.removeClass('disabled')
+		.removeAttr('disabled');
+}
+
+
+/**
+ * 保存表单
+ */
+function save( form, validation ) {
+
+	var api =$(form).attr("action");
+
+	try {
+		var data = $(form).serializeData(true);
+	} catch( e  ){
+		console.log( e );
+		return ;
+	}
+
+	pending('保存中, 请稍候...');
+	// POST 数据
+	jQuery.post( api, data, function( data, textStatus, xhr) {
+
+		done();
+
+		if ( typeof data['code'] == 'string' ) {
+			data['code'] = parseInt(data['code']);
+		}
+
+		// 返回数据异常
+		if ( typeof data['code'] == 'number' && data['code'] !== 0 ) {
+
+			if ( typeof data['extra'] == 'object' && typeof data['extra']['errors'] == 'object'  ) {
+				failure( data['extra']['errors'], validation );
+				return;
+			}
+
+			var message = data['message'] || "未知错误";
+			failure( message );
+			return;
+		}
+
+		// 更新ID
+		$('input[name=site_id]').val( data['site_id'] );
+
+		// 保存成功
+		success('保存成功');
+
+	}, 'json')
+
+	.error(function( xhr, status, message) {
+		failure("保存失败, 网络错误 ( " + xhr.status + ' ' + message+" )");
+		console.log( status, xhr.status, ' message=', message );
+	});
+}
+
+
+$(function(){
+	
+	App.initHelpers(['datepicker','select2', 'masked-inputs','tags-inputs',  'ajax-confirm', 'slimscroll', 'file-uploader', 'image-crop']);
+
+	// 表单验证
+	$('.siteconf-form').validate({
+		errorClass: 'help-block animated fadeInDown',
+		errorElement: 'div',
+		errorPlacement: function(error, e) {				
+			jQuery(e).parents('.form-group .col-xs-8').append(error);
+		},
+		highlight: function(e) {
+			jQuery(e).closest('.form-group .col-xs-8').parent().removeClass('has-error').addClass('has-error');
+			jQuery(e).closest('.help-block').remove();
+		},
+		unhighlight:function(e){
+			jQuery(e).closest('.form-group .col-xs-8').parent().removeClass('has-error');
+			jQuery(e).closest('.help-block .col-xs-8').remove();
+		},
+		success: function(e) {
+			jQuery(e).closest('.form-group .col-xs-8').parent().removeClass('has-error');
+			jQuery(e).closest('.help-block').remove();
+		},
+
+		submitHandler: function(form) {
+			save( form, this);
+			return false;
+		},
+
+		rules: {
+			name: {
+				required: true,
+				minlength: 2,
+				maxlength: 20
+			},
+
+			priority: {
+				digits:true 
+			}
+		},
+
+		messages: {
+			name: {
+				required: '请填写分类名称',
+				minlength: '分类名称至少两个字',
+				maxlength: '分类名称不能超过20个字'
+			},
+			priority: '请输入数字，数字越小排序越靠前'
+		}
+	});
+
+})
+	
+</script>

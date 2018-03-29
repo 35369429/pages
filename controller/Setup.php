@@ -15,7 +15,9 @@ class SetupController extends \Xpmse\Loader\Controller {
 			'\\Xpmsns\\Pages\\Model\\Category', 
 			'\\Xpmsns\\Pages\\Model\\Tag',
 			'\\Xpmsns\\Pages\\Model\\Gallery',
-			'\\Xpmsns\\Pages\\Model\\Adv'
+			'\\Xpmsns\\Pages\\Model\\Adv',
+			'\\Xpmsns\\Pages\\Model\\Links',
+			'\\Xpmsns\\Pages\\Model\\Siteconf'
 		];
 	}
 

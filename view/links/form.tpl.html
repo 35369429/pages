@@ -1,0 +1,436 @@
+                                                                                                                                                      
+      	  	  	  	  	  	    	  	  	  	  	  	          
+<?php 
+use \Xpmse\Loader\App; 
+use \Xpmse\Utils;
+?>
+<style type="text/css">
+
+	.form {
+		padding-top: 60px;
+		padding-bottom: 60px;
+	}
+</style>
+
+
+<!-- Page Content -->
+<div class="content "> 
+	<div class="block block-bordered " >
+		<div class="block-header remove-margin" >
+
+			<h3 class="block-title" >
+				<a href="<?=App::R('links', 'index')?>" class="text-default">
+                    <i class="fa fa-arrow-circle-o-left"></i> 
+                    友链列表 
+                </a> / <?=$action_name?> 
+			</h3>
+			
+		</div> <!-- END block-header -->
+
+		<div class="block-content form" >
+
+			<form class="form-horizontal links-form form-lg" action= '<?=App::NR("links", "save");?>' >
+
+				<!-- 隐藏域 -->
+				<input type="hidden" name="links_id" value="<?=$rs['links_id']?>" >
+	
+				 
+				<!-- 名称  -->
+				<!-- 标准输入框 -->
+
+	<!-- 名称 (name) 开始  -->
+	<div class="form-group ">
+		<label class="col-xs-2 control-label" for="name">名称 <span class="text-danger">*</span></label>
+		<div class="col-xs-8">
+			<input class="form-control input-lg"  
+				type="text" 
+				id="name" name="name" 
+				placeholder="请填写广告名称"  
+				value="<?=$rs['name']?>" /> 
+			<div class="help-block"></div>
+		</div>
+	</div><!-- 结束 名称 (name) -->
+
+				<!-- END 名称  -->
+				 
+				<!-- 别名  -->
+				<!-- 标准输入框 -->
+
+	<!-- 别名 (links_slug) 开始  -->
+	<div class="form-group ">
+		<label class="col-xs-2 control-label" for="links_slug">别名 <span class="text-danger">*</span></label>
+		<div class="col-xs-8">
+			<input class="form-control input-lg"  
+				type="text" 
+				id="links_slug" name="links_slug" 
+				placeholder="请填写广告唯一别名"  
+				value="<?=$rs['links_slug']?>" /> 
+			<div class="help-block"></div>
+		</div>
+	</div><!-- 结束 别名 (links_slug) -->
+
+				<!-- END 别名  -->
+				 
+				<!-- 链接  -->
+				<!-- 标准输入框 -->
+
+	<!-- 链接 (link) 开始  -->
+	<div class="form-group ">
+		<label class="col-xs-2 control-label" for="link">链接 <span class="text-danger">*</span></label>
+		<div class="col-xs-8">
+			<input class="form-control input-lg"  
+				type="text" 
+				id="link" name="link" 
+				placeholder="请填写广告链接"  
+				value="<?=$rs['link']?>" /> 
+			<div class="help-block"></div>
+		</div>
+	</div><!-- 结束 链接 (link) -->
+
+				<!-- END 链接  -->
+				 
+				<!-- 尺寸  -->
+				<!-- 标准输入框 -->
+
+	<!-- 尺寸 (size) 开始  -->
+	<div class="form-group ">
+		<label class="col-xs-2 control-label" for="size">尺寸 <span class="text-danger">*</span></label>
+		<div class="col-xs-8">
+			<input class="form-control input-lg"  
+				type="text" 
+				id="size" name="size" 
+				placeholder="填写广告广告尺寸, 例如 400X400"  
+				value="<?=$rs['size']?>" /> 
+			<div class="help-block">广告尺寸格式为宽度X高度, 例如: 300X150</div>
+		</div>
+	</div><!-- 结束 尺寸 (size) -->
+
+				<!-- END 尺寸  -->
+				 
+				<!-- LOGO  -->
+				<!-- END标准下拉选择组件 -->
+
+<!-- 标准组图上传组件 -->
+
+	<!-- LOGO (logo) 开始  -->
+	<div class="xpmse-images" name="logo">
+		<div class="form-group " >
+			<label class="col-xs-2 control-label" for="logo">LOGO</label>
+			<div class="col-xs-8">
+		   		<div name="logo" class="file-uploader rounded rounded-4 push-10-t"
+					data-api='/_a/mina/uploader/upload?type=image'
+					data-title='上传LOGO图片'
+					data-previews=""
+					data-width="300"
+					data-height="100"
+					data-icon="fa fa-image" 
+					data-placeholder="上传LOGO图片" 
+					data-allow-types=".jpg,.png,.gif"
+					data-maxsize="20"
+					data-progress="yes"
+					data-cropable="1"
+					data-draggable="yes"
+					data-src="<?=$rs['logo']['url']?>"
+					data-path="<?=$rs['logo']['path']?>"
+					></div>
+				<div class="help-block"></div>
+			</div>
+		</div> 
+	</div><!-- xpmse-images 结束 LOGO (logo) -->
+
+				<!-- END LOGO  -->
+				 
+				<!-- 位置  -->
+				<!-- 标准输入框 -->
+
+	<!-- 位置 (position) 开始  -->
+	<div class="form-group ">
+		<label class="col-xs-2 control-label" for="position">位置 <span class="text-danger">*</span></label>
+		<div class="col-xs-8">
+			<input class="form-control input-lg"  
+				type="text" 
+				id="position" name="position" 
+				placeholder="友链呈现位置编号, 如: A-M-001"  
+				value="<?=$rs['position']?>" /> 
+			<div class="help-block">前端呈现检索条件</div>
+		</div>
+	</div><!-- 结束 位置 (position) -->
+
+				<!-- END 位置  -->
+				 
+				<!-- 简介  -->
+				<!-- 标准组图上传组件 -->
+
+
+
+
+
+<!-- 标准输入框组件 -->
+
+	<!-- 简介 (summary) 开始  -->
+	<div class="form-group ">
+		<label class="col-xs-2 control-label" for="summary">简介</label>
+		<div class="col-xs-8">
+			<textarea class="form-control input-lg"  
+				type="text" 
+				id="summary" name="summary" rows="3"
+				placeholder="请填写友链简介"><?=$rs['summary']?></textarea> 
+			<div class="help-block"></div>
+		</div>
+	</div><!-- 结束 简介 (summary) -->
+
+				<!-- END 简介  -->
+				 
+				<!-- 点击量  -->
+				<!-- 标准输入框 -->
+
+	<!-- 点击量 (pageview) 开始  -->
+	<div class="form-group ">
+		<label class="col-xs-2 control-label" for="pageview">点击量</label>
+		<div class="col-xs-8">
+			<input class="form-control input-lg"  
+				type="text" 
+				id="pageview" name="pageview" 
+				placeholder="广告点击次数"  
+				value="<?=$rs['pageview']?>" /> 
+			<div class="help-block"></div>
+		</div>
+	</div><!-- 结束 点击量 (pageview) -->
+
+				<!-- END 点击量  -->
+				 
+				<!-- 优先级  -->
+				<!-- 标准输入框 -->
+
+	<!-- 优先级 (priority) 开始  -->
+	<div class="form-group ">
+		<label class="col-xs-2 control-label" for="priority">优先级</label>
+		<div class="col-xs-8">
+			<input class="form-control input-lg"  
+				type="text" 
+				id="priority" name="priority" 
+				placeholder="优先级排序，数值越高越靠前。"  
+				value="<?=$rs['priority']?>" /> 
+			<div class="help-block">优先级排序，数值越高越靠前。</div>
+		</div>
+	</div><!-- 结束 优先级 (priority) -->
+
+				<!-- END 优先级  -->
+				 
+				<!-- 状态  -->
+				<!-- END 标准选择框 -->
+
+
+<!-- 标准下拉选择组件 -->
+ 
+	<!-- 状态 (status) 开始  -->
+	<div class="form-group ">
+		<label class="col-xs-2 control-label" for="status">状态 <span class="text-danger">*</span></label>
+		<div class="col-xs-8">
+			<select class="js-select2 form-control input-lg" id="status" name="status" style="width: 100%;" data-placeholder="请选择广告状态">
+				<option></option>
+				<?php $rs["status"] = is_string($rs["status"]) ? [$rs["status"]] : $rs["status"] ; ?>
+<option value="online" <?=("online" == "online" && empty($rs["status"]) || in_array("online", $rs["status"]) ) ? "selected" : ""?> > 上线</option>
+
+<option value="offline" <?=("online" == "offline" && empty($rs["status"]) || in_array("offline", $rs["status"]) ) ? "selected" : ""?> >  下线</option>
+
+			</select>
+			<div class="help-block"></div>
+		</div>
+	</div><!-- 结束 状态 (status) -->
+
+				<!-- END 状态  -->
+								
+				<!-- 保存数据 -->
+				<div class="form-group">
+					<label class="col-xs-2 control-label" for="url"></label>
+					<div class="col-xs-9">
+						<button class="btn btn-lg btn-primary btn-minw fn-action fn-save push-50-r" type="submit">保存</button>
+						<button 
+							confirm-title="请确认删除友链 "
+				            confirm-content="您确定删除友链 <strong><?=$rs['name']?>(<?=$rs['links_id']?> )</strong>"
+				            confirm-dismiss = "取消"
+				            confirm-submit= "确定"
+				            data-param-links_id="<?=$ca['links_id']?>" 
+				            confirm-action="<?=App::NR('links','remove')?>"
+				            event-before="
+								function( btn, modal ) {
+									$('button', modal)
+										.addClass('disabled')
+										.attr('disabled', 'disabled');
+								}
+							"
+
+							event-done="
+								function( data, btn, modal) {
+									$('button', modal)
+										.removeClass('disabled')
+										.removeAttr('disabled');
+								}
+							"
+					        event-success="
+								function(btn, modal) {
+									success('友链删除成功');
+									setTimeout(function(){
+										// 转向分类列表页
+										window.location = '<?=App::R('links','index')?>';
+									}, 1000);
+								}
+							"
+
+							event-error="
+								function( data, btn, modal) {
+									failure( '友链删除失败 ('+ data['message'] + ')');
+									return true;
+								}
+							"
+
+						class="btn btn-lg btn-danger btn-minw ajax-confirm fn-action fn-remove" type="button">删除</button>
+					</div>
+				</div><!-- END 保存数据 -->
+			</form>
+		</div>
+	</div>
+</div>
+
+<script type="text/javascript">
+function pending( message ) {
+	$('.fn-action')
+		.addClass('disabled')
+		.attr('disabled', 'disabled');
+	App.loading({message:message}).show();
+}
+
+
+function success( message ) {
+	App.notify( message );
+}
+
+function failure( message,  validation ) {
+	validation = validation  || null;
+	message = message || null;
+
+	if ( typeof message == 'object' ) {
+		validation.showErrors(message);
+		return;
+	}
+
+	if ( message != null ) {
+		App.notify( message, 'fa fa-times', 'danger' );
+	}
+}
+
+function done() {
+	App.loading().hide();
+	$('.fn-action')
+		.removeClass('disabled')
+		.removeAttr('disabled');
+}
+
+
+/**
+ * 保存表单
+ */
+function save( form, validation ) {
+
+	var api =$(form).attr("action");
+
+	try {
+		var data = $(form).serializeData(true);
+	} catch( e  ){
+		console.log( e );
+		return ;
+	}
+
+	pending('保存中, 请稍候...');
+	// POST 数据
+	jQuery.post( api, data, function( data, textStatus, xhr) {
+
+		done();
+
+		if ( typeof data['code'] == 'string' ) {
+			data['code'] = parseInt(data['code']);
+		}
+
+		// 返回数据异常
+		if ( typeof data['code'] == 'number' && data['code'] !== 0 ) {
+
+			if ( typeof data['extra'] == 'object' && typeof data['extra']['errors'] == 'object'  ) {
+				failure( data['extra']['errors'], validation );
+				return;
+			}
+
+			var message = data['message'] || "未知错误";
+			failure( message );
+			return;
+		}
+
+		// 更新ID
+		$('input[name=links_id]').val( data['links_id'] );
+
+		// 保存成功
+		success('保存成功');
+
+	}, 'json')
+
+	.error(function( xhr, status, message) {
+		failure("保存失败, 网络错误 ( " + xhr.status + ' ' + message+" )");
+		console.log( status, xhr.status, ' message=', message );
+	});
+}
+
+
+$(function(){
+	
+	App.initHelpers(['datepicker','select2', 'masked-inputs','tags-inputs',  'ajax-confirm', 'slimscroll', 'file-uploader', 'image-crop']);
+
+	// 表单验证
+	$('.links-form').validate({
+		errorClass: 'help-block animated fadeInDown',
+		errorElement: 'div',
+		errorPlacement: function(error, e) {				
+			jQuery(e).parents('.form-group .col-xs-8').append(error);
+		},
+		highlight: function(e) {
+			jQuery(e).closest('.form-group .col-xs-8').parent().removeClass('has-error').addClass('has-error');
+			jQuery(e).closest('.help-block').remove();
+		},
+		unhighlight:function(e){
+			jQuery(e).closest('.form-group .col-xs-8').parent().removeClass('has-error');
+			jQuery(e).closest('.help-block .col-xs-8').remove();
+		},
+		success: function(e) {
+			jQuery(e).closest('.form-group .col-xs-8').parent().removeClass('has-error');
+			jQuery(e).closest('.help-block').remove();
+		},
+
+		submitHandler: function(form) {
+			save( form, this);
+			return false;
+		},
+
+		rules: {
+			name: {
+				required: true,
+				minlength: 2,
+				maxlength: 20
+			},
+
+			priority: {
+				digits:true 
+			}
+		},
+
+		messages: {
+			name: {
+				required: '请填写分类名称',
+				minlength: '分类名称至少两个字',
+				maxlength: '分类名称不能超过20个字'
+			},
+			priority: '请输入数字，数字越小排序越靠前'
+		}
+	});
+
+})
+	
+</script>
