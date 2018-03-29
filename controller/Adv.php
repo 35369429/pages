@@ -4,7 +4,7 @@
  * 广告控制器
  *
  * 程序作者: XpmSE机器人
- * 最后修改: 2018-03-29 09:44:16
+ * 最后修改: 2018-03-29 11:17:14
  * 程序母版: /data/stor/private/templates/xpmsns/model/code/controller/Name.php
  */
 
@@ -146,7 +146,7 @@ class AdvController extends \Xpmse\Loader\Controller {
 	function remove(){
 		$adv_id = $_POST['adv_id'];
 		$inst = new \Xpmsns\Pages\Model\Adv;
-		$adv_ids =$c->removeByAdvId( $adv_id );
+		$adv_ids =$inst->remove( $adv_id, "adv_id" );
 		echo json_encode(['message'=>"删除成功", 'extra'=>['$adv_ids'=>$adv_ids]]);
 	}
 

@@ -4,7 +4,7 @@
  * 广告数据模型
  *
  * 程序作者: XpmSE机器人
- * 最后修改: 2018-03-29 09:44:17
+ * 最后修改: 2018-03-29 11:17:14
  * 程序母版: /data/stor/private/templates/xpmsns/model/code/model/Name.php
  */
 namespace Xpmsns\Pages\Model;
@@ -105,7 +105,7 @@ class Adv extends Model {
 
 		// 格式化广告图片(多图)
 		// 返回: [{"url":"访问地址...", "path":"文件路径...", "origin":"原始文件访问地址..." }]
-		if ( array_key_exists('images', $rs ) && !empty($rs["images"]) ) {
+		if ( array_key_exists('images', $rs ) ) {
 			$rs["images"] = !is_array($rs["images"]) ? [] : $rs["images"];
 			foreach ($rs["images"] as & $file ) {
 				$file =empty($file) ? [] : $this->media->get( $file );
@@ -114,13 +114,13 @@ class Adv extends Model {
 
 		// 格式化封面图片
 		// 返回: {"url":"访问地址...", "path":"文件路径...", "origin":"原始文件访问地址..." }
-		if ( array_key_exists('cover', $rs ) && !empty($rs["cover"]) ) {
+		if ( array_key_exists('cover', $rs ) ) {
 			$rs["cover"] = empty($rs["cover"]) ? [] : $this->media->get( $rs["cover"] );
 		}
 
 		// 格式化服务协议
 		// 返回: {"url":"访问地址...", "path":"文件路径...", "origin":"原始文件访问地址..." }
-		if ( array_key_exists('terms', $rs ) && !empty($rs["terms"]) ) {
+		if ( array_key_exists('terms', $rs ) ) {
 			$rs["terms"] = empty($rs["terms"]) ? [] : $this->meidaPrivate->get( $rs["terms"] );
 		}
 

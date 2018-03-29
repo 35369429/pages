@@ -251,7 +251,7 @@ use \Xpmse\Utils;
 				            confirm-content="您确定删除友链 <strong><?=$rs['name']?>(<?=$rs['links_id']?> )</strong>"
 				            confirm-dismiss = "取消"
 				            confirm-submit= "确定"
-				            data-param-links_id="<?=$ca['links_id']?>" 
+				            data-param-links_id="<?=$rs['links_id']?>" 
 				            confirm-action="<?=App::NR('links','remove')?>"
 				            event-before="
 								function( btn, modal ) {

@@ -4,7 +4,7 @@
  * 友链数据模型
  *
  * 程序作者: XpmSE机器人
- * 最后修改: 2018-03-29 10:24:39
+ * 最后修改: 2018-03-29 11:17:05
  * 程序母版: /data/stor/private/templates/xpmsns/model/code/model/Name.php
  */
 namespace Xpmsns\Pages\Model;
@@ -90,7 +90,7 @@ class Links extends Model {
 
 		// 格式化LOGO
 		// 返回: {"url":"访问地址...", "path":"文件路径...", "origin":"原始文件访问地址..." }
-		if ( array_key_exists('logo', $rs ) && !empty($rs["logo"]) ) {
+		if ( array_key_exists('logo', $rs ) ) {
 			$rs["logo"] = empty($rs["logo"]) ? [] : $this->media->get( $rs["logo"] );
 		}
 

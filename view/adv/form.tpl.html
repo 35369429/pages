@@ -374,7 +374,7 @@ use \Xpmse\Utils;
 				            confirm-content="您确定删除广告 <strong><?=$rs['name']?>(<?=$rs['adv_id']?> )</strong>"
 				            confirm-dismiss = "取消"
 				            confirm-submit= "确定"
-				            data-param-adv_id="<?=$ca['adv_id']?>" 
+				            data-param-adv_id="<?=$rs['adv_id']?>" 
 				            confirm-action="<?=App::NR('adv','remove')?>"
 				            event-before="
 								function( btn, modal ) {

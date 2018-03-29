@@ -4,7 +4,7 @@
  * 友链控制器
  *
  * 程序作者: XpmSE机器人
- * 最后修改: 2018-03-29 10:24:39
+ * 最后修改: 2018-03-29 11:17:05
  * 程序母版: /data/stor/private/templates/xpmsns/model/code/controller/Name.php
  */
 
@@ -146,7 +146,7 @@ class LinksController extends \Xpmse\Loader\Controller {
 	function remove(){
 		$links_id = $_POST['links_id'];
 		$inst = new \Xpmsns\Pages\Model\Links;
-		$links_ids =$c->removeByLinksId( $links_id );
+		$links_ids =$inst->remove( $links_id, "links_id" );
 		echo json_encode(['message'=>"删除成功", 'extra'=>['$links_ids'=>$links_ids]]);
 	}
 
