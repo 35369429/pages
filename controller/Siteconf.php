@@ -4,7 +4,7 @@
  * 站点配置控制器
  *
  * 程序作者: XpmSE机器人
- * 最后修改: 2018-03-29 11:09:18
+ * 最后修改: 2018-03-29 11:15:52
  * 程序母版: /data/stor/private/templates/xpmsns/model/code/controller/Name.php
  */
 
@@ -146,7 +146,7 @@ class SiteconfController extends \Xpmse\Loader\Controller {
 	function remove(){
 		$site_id = $_POST['site_id'];
 		$inst = new \Xpmsns\Pages\Model\Siteconf;
-		$site_ids =$c->removeBySiteId( $site_id );
+		$site_ids =$inst->remove( $site_id, "site_id" );
 		echo json_encode(['message'=>"删除成功", 'extra'=>['$site_ids'=>$site_ids]]);
 	}
 

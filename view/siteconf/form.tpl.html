@@ -452,7 +452,7 @@ use \Xpmse\Utils;
 				            confirm-content="您确定删除站点配置 <strong><?=$rs['position']?>(<?=$rs['site_id']?> )</strong>"
 				            confirm-dismiss = "取消"
 				            confirm-submit= "确定"
-				            data-param-site_id="<?=$ca['site_id']?>" 
+				            data-param-site_id="<?=$rs['site_id']?>" 
 				            confirm-action="<?=App::NR('siteconf','remove')?>"
 				            event-before="
 								function( btn, modal ) {
