@@ -59,6 +59,20 @@ class Category extends Model {
 	}
 
 
+	function getInByCategoryId( $ids, $select = ['*'] ) {
+
+		$qb = $this->query();
+		$qb->whereIn("category_id", $ids);
+		$qb->select($select);
+		$rows = $qb->get()->toArray();
+		$map = [];
+		foreach ($rows as & $rs ) {
+			$this->format($rs);
+			$map[$rs['category_id']] = $rs;
+		}
+		return $map;
+	}
+
 	/**
 	 * 添加分类
 	 * @param  [type] $data [description]
@@ -174,6 +188,12 @@ class Category extends Model {
 	function search( $query = [] ) {
 
 		$qb = $this->query();
+
+		$select = empty($query['select']) ? ["*"] : $query['select'];
+		if ( is_string($select) ) {
+			$select = explode(',', $select);
+		}
+
 		
 		// 按关键词查找 (昵称/手机号/邮箱)
 		if ( array_key_exists('keyword', $query) && !empty($query['keyword']) ) {
@@ -199,7 +219,7 @@ class Category extends Model {
 		$perpage = array_key_exists('perpage', $query) ?  intval( $query['perpage']) : 20;
 
 		// 查询一级分类
-		$cates = $qb->select("*")->pgArray($perpage, ['_id'], 'page', $page);
+		$cates = $qb->select($select)->pgArray($perpage, ['_id'], 'page', $page);
 
 		// 查询一级分类全部字分类
 		$root_ids = array_column($cates['data'], 'category_id');
