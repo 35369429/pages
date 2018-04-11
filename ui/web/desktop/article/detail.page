@@ -51,7 +51,7 @@
 	<div class="col-xs-2">
 		<div class="nav" >
 			<div class="image"> <img src="/_api/xpmsns/pages/article/qrcode?width=120&text={{article.home}}/m/article/{{article.article_id}}" > </div>
-			<div class="desp"> <span>微信扫一扫, 手机浏览</span> </div>
+			<div class="desp"> <span>微信扫一扫,手机浏览</span> </div>
 		</div>
 	</div> <!-- END 左侧菜单导航 -->
 
