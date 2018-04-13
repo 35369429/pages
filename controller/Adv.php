@@ -25,6 +25,10 @@ class AdvController extends \Xpmse\Loader\Controller {
 	 */
 	function index() {	
 
+		echo __VHOST_NAME . " : __VHOST_NAME\n";
+		echo __MULTIPLE . " : __MULTIPLE\n";
+		echo __CLUSTER . " : __CLUSTER\n";
+
 		$search  = $query = $_GET;
 		$inst = new \Xpmsns\Pages\Model\Adv;
 		if ( !empty($search['order']) ) {
