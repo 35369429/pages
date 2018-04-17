@@ -74,7 +74,7 @@ class Article extends Model {
 		// $this->stor = new Local( $options );
 		$this->media = new Media(['host'=>$this->host]);
 
-		print_r( $this->host );
+		echo "host={$this->host}\n";
 		print_r( $_SERVER );
 
 
