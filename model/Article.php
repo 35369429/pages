@@ -55,7 +55,7 @@ class Article extends Model {
 		$this->article_tag = Utils::getTab('article_tag', "xpmsns_pages_");    // 标签关联表
 		$this->article_draft = Utils::getTab('article_draft', "xpmsns_pages_");  // 文章草稿箱
 		$this->page = Utils::getTab('page', 'core_');  // 页面表
-		$this->host = Utils::getHome(Utils::getLocation());  // 页面跟地址
+		$this->host = Utils::getHome();  // 页面跟地址
 
 		// $root = Conf::G("storage/local/bucket/public/root");
 		// $options = [
@@ -631,13 +631,11 @@ class Article extends Model {
 		}
 
 
-		if (is_string($article['cover']) && substr( $article['cover'],0,1) == '/') {
+		if (is_string($article['cover']) && substr( $article['cover'],0,4) != 'http') {
 			$u = $this->media->get($article['cover']);
 			$article['cover'] = $u;
 		}
-
 		$article['home'] = $this->host;
-
 		return $article;
 	}
 
