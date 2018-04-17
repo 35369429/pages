@@ -597,7 +597,6 @@ class Article extends Model {
 		}
 
 
-
 		if ( isset($article['publish_time']) ) {
 			$time = strtotime($article['publish_time']);
 			$article['publish_time'] = null;
@@ -610,9 +609,13 @@ class Article extends Model {
 		if ( array_key_exists('images', $article)  && is_array($article['images']) && count($article['images']) > 0) {
 
 			foreach ($article['images'] as & $img ) {
+
+
 				if ( is_array($img) &&  !empty($img['path']) ) {
+					$img['path'] = str_replace('/static-file/media', '', $img['path']); // 兼容旧版
 					$img = $this->media->get( $img['path']);
 				} else if ( is_string($img) ) {
+					$img = str_replace('/static-file/media', '', $img); // 兼容旧版
 					$img = $this->media->get( $img);
 				}
 			}
@@ -621,23 +624,25 @@ class Article extends Model {
 		if ( array_key_exists('thumbs', $article)  && is_array($article['thumbs']) && count($article['thumbs']) > 0) {
 
 			foreach ($article['thumbs'] as & $img ) {
+				
 				if ( is_array($img) &&  !empty($img['path']) ) {
+					$img['path'] = str_replace('/static-file/media', '', $img['path']); // 兼容旧版
 					$img = $this->media->get( $img['path']);
 				} else if ( is_string($img) && !empty($img) ) {
+					$img = str_replace('/static-file/media', '', $img); // 兼容旧版
 					$img = $this->media->get( $img);
 					// $img = $u['url'];
 				}
 			}
 		}
 
-
 		if (!empty($article['cover']) && substr( $article['cover'],0,4) != 'http') {
 
-			// 兼容旧版
-			$article['cover'] = str_replace('/static-file/media', '', $article['cover']);
+			
+			
 			$u = $this->media->get($article['cover']);
 			$article['cover'] = $u;
-			
+
 		}
 		$article['home'] = $this->host;
 		return $article;
