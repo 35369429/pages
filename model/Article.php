@@ -637,9 +637,8 @@ class Article extends Model {
 		}
 
 		if (!empty($article['cover']) && substr( $article['cover'],0,4) != 'http') {
-
 			
-			
+			$article['cover'] = str_replace('/static-file/media', '', $article['cover']); // 兼容旧版
 			$u = $this->media->get($article['cover']);
 			$article['cover'] = $u;
 
