@@ -631,9 +631,13 @@ class Article extends Model {
 		}
 
 
-		if (is_string($article['cover']) && substr( $article['cover'],0,4) != 'http') {
+		if (!empty($article['cover']) && substr( $article['cover'],0,4) != 'http') {
+
+			// 兼容旧版
+			$article['cover'] = str_replace('/static-file/media', '', $article['cover']);
 			$u = $this->media->get($article['cover']);
 			$article['cover'] = $u;
+			
 		}
 		$article['home'] = $this->host;
 		return $article;
