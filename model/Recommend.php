@@ -4,7 +4,7 @@
  * 推荐数据模型
  *
  * 程序作者: XpmSE机器人
- * 最后修改: 2018-04-24 23:14:26
+ * 最后修改: 2018-04-24 23:23:23
  * 程序母版: /data/stor/private/templates/xpmsns/model/code/model/Name.php
  */
 namespace Xpmsns\Pages\Model;
@@ -107,12 +107,12 @@ class Recommend extends Model {
 		  		"auto" => [
 		  			"value" => "auto",
 		  			"name" => "智能",
-		  			"style" => "primary"
+		  			"style" => "danger"
 		  		],
 		  		"static" => [
 		  			"value" => "static",
 		  			"name" => "静态",
-		  			"style" => "info"
+		  			"style" => "primary"
 		  		],
 			];
 			$rs["_type_name"] = "type";
