@@ -53,8 +53,8 @@ class CategoryController extends \Xpmse\Loader\Controller {
 	 			"js/plugins/select2/select2-bootstrap.min.css"
 	 		],
 			'crumb' => [
-	            "分类" => APP::R('category','index'),
-	            "分类管理" =>'',
+	            "栏目" => APP::R('category','index'),
+	            "栏目管理" =>'',
 	        ]
 		];
 	}

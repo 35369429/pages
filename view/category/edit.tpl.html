@@ -71,7 +71,7 @@
 			<h3 class="block-title" >
 				<a href="<?=App::R('category', 'index')?>" class="text-default">
                     <i class="fa fa-arrow-circle-o-left"></i> 
-                    分类列表 
+                    栏目列表 
                 </a> / <?=$action_name?> 
 				<!-- <i class="fa fa-lock push-5-l  lock_status text-muted" style="width:18px;"></i> -->
 				<!-- <span class="text-danger status push-10-l font-s13"></span> -->
@@ -83,37 +83,37 @@
 
 			<form class="form-horizontal user-form" >
 				
-				<!-- 分类ID: Category_id -->
+				<!-- 栏目ID: Category_id -->
 				<input  type="hidden" name="category_id" value="<?=$ca['category_id']?>" />
 
 				<!-- 名称 -->
 				<div class="form-group">
 					<label class="col-xs-2 control-label" for="name">名称:</label>
 					<div class="col-xs-9">
-						<input class="form-control input-lg"  type="text" name="name" value="<?=$ca['name']?>" placeholder="请填写分类名称">
+						<input class="form-control input-lg"  type="text" name="name" value="<?=$ca['name']?>" placeholder="请填写栏目名称">
 					</div>
 				</div><!-- END 名称 -->
 				
-				<!-- 选择分类 -->
+				<!-- 选择栏目 -->
 				<div class="form-group">
-					<label class="col-xs-2 control-label" for="parent_id">上级分类:</label>
+					<label class="col-xs-2 control-label" for="parent_id">上级栏目:</label>
 					<div class="col-xs-9">
-						<select class="js-select2 form-control input-lg" name="parent_id" style="width: 100%;" data-placeholder="请选择上级分类">
+						<select class="js-select2 form-control input-lg" name="parent_id" style="width: 100%;" data-placeholder="请选择上级栏目">
 							<option value="0">无</option>
 
 							<?php foreach ($cates['data'] as $rs) : ?>
 							<optgroup label="<?=$rs['name']?>" value="<?=$rs['category_id']?>"  >
 							
-								<!-- 一级分类 -->
+								<!-- 一级栏目 -->
 								<option 
 									value="<?=$rs['category_id']?>"   
 									<?=($rs['category_id'] == $parent_id)?'selected':''?> 
 									<?=($rs['category_id'] == $ca['parent_id'])?'selected':''?> 
 								>
 									<?=$rs['name']?>	
-								</option><!-- END 一级分类 -->
+								</option><!-- END 一级栏目 -->
 								
-								<!-- 一级分类子分类 -->
+								<!-- 一级栏目子栏目 -->
 								<?php
 								$namer =[]; $rootname = $rs['name'];
 								$c->walk($rs['sub']['tree'], function($rs, $depth) use( & $namer, $rootname, $s, $ca ){
@@ -132,7 +132,7 @@
 										::
 										<?=$name?>
 									<?php endforeach;?>
-								</option><!-- END 一级分类子分类 -->	
+								</option><!-- END 一级栏目子栏目 -->	
 								<?php
 								});
 								?>
@@ -141,7 +141,7 @@
 							<?php endforeach; ?>
 						</select>
 					</div>
-				</div> <!-- END 选择分类 -->
+				</div> <!-- END 选择栏目 -->
 
 				
 				<!-- 优先级 -->
@@ -168,7 +168,7 @@
 					<label class="col-xs-2 control-label" for="hidden"></label>
 					<div class="col-xs-9">
 						<label class="css-input css-checkbox css-checkbox-primary" >
-                       		<input name="hidden" value="1" type="checkbox" <?=($ca['hidden'] == 1) ? 'checked' : '' ?> ><span></span> 隐藏分类
+                       		<input name="hidden" value="1" type="checkbox" <?=($ca['hidden'] == 1) ? 'checked' : '' ?> ><span></span> 隐藏栏目
                         </label>
 					</div>
 				</div><!-- END 是否隐藏 -->
@@ -179,8 +179,8 @@
 					<div class="col-xs-9">
 						<button class="btn btn-lg btn-primary btn-minw fn-action fn-save push-50-r" type="submit">保存</button>
 						<button 
-							confirm-title="请确认删除分类"
-				            confirm-content="您确定删除分类以及其子分类 <strong><?=$ca['name']?>(<?=$ca['category_id']?> )</strong>"
+							confirm-title="请确认删除栏目"
+				            confirm-content="您确定删除栏目以及其子栏目 <strong><?=$ca['name']?>(<?=$ca['category_id']?> )</strong>"
 				            confirm-dismiss = "取消"
 				            confirm-submit= "确定"
 				            data-param-category_id="<?=$ca['category_id']?>" 
@@ -203,9 +203,9 @@
 							"
 					        event-success="
 								function(btn, modal) {
-									success('分类删除成功');
+									success('栏目删除成功');
 									setTimeout(function(){
-										// 转向分类列表页
+										// 转向栏目列表页
 										window.location = '<?=App::R('category','index')?>';
 									}, 1000);
 								}
@@ -213,7 +213,7 @@
 
 							event-error="
 								function( data, btn, modal) {
-									failure( '分类删除失败 ('+ data['message'] + ')');
+									failure( '栏目删除失败 ('+ data['message'] + ')');
 									return true;
 								}
 							"
@@ -225,7 +225,7 @@
 			</form>	
 			<form class="form-horizontal developer-form" >
 
-				<!-- 分类ID: Category_id -->
+				<!-- 栏目ID: Category_id -->
 				<input  type="hidden" name="category_id" value="<?=$ca['category_id']?>" />
 
 				<div class="form-group push-50-t">
@@ -237,9 +237,9 @@
 				
 				<!-- 自定义参数 -->
 				<div class="form-group">
-					<label class="col-xs-2 control-label" for="slug">分类别名:</label>
+					<label class="col-xs-2 control-label" for="slug">栏目别名:</label>
 					<div class="col-xs-9">
-						<input class="form-control input-lg"  type="text" name="slug" value="<?=$ca['slug']?>" placeholder="填写分类别名">
+						<input class="form-control input-lg"  type="text" name="slug" value="<?=$ca['slug']?>" placeholder="填写栏目别名">
 					</div>
 				</div><!-- END 自定义参数 -->
 				
@@ -256,7 +256,7 @@
 				<div class="form-group">
 					<label class="col-xs-2 control-label" for="project">所属项目:</label>
 					<div class="col-xs-9">
-						<input class="form-control input-lg"  type="text" name="project" value="<?=$ca['project']?>" placeholder="分类隶属项目 ">
+						<input class="form-control input-lg"  type="text" name="project" value="<?=$ca['project']?>" placeholder="栏目隶属项目 ">
 					</div>
 				</div><!-- END 所属项目 -->
 
@@ -264,7 +264,7 @@
 				<div class="form-group">
 					<label class="col-xs-2 control-label" for="project">正文页模板:</label>
 					<div class="col-xs-9">
-						<input class="form-control input-lg"  type="text" name="page" value="<?=$ca['page']?>" placeholder="该分类下文章正文页默认模板">
+						<input class="form-control input-lg"  type="text" name="page" value="<?=$ca['page']?>" placeholder="该栏目下文章正文页默认模板">
 					</div>
 				</div><!-- END 正文页 -->
 
@@ -408,9 +408,9 @@ $(function(){
 
 		messages: {
 			name: {
-				required: '请填写分类名称',
-				minlength: '分类名称至少两个字',
-				maxlength: '分类名称不能超过20个字'
+				required: '请填写栏目名称',
+				minlength: '栏目名称至少两个字',
+				maxlength: '栏目名称不能超过20个字'
 			},
 			priority: '请输入数字，数字越小排序越靠前'
 		}

@@ -1,0 +1,465 @@
+<?php 
+use \Xpmse\Loader\App; 
+use \Xpmse\Utils;
+use \Xpmse\T;
+?>
+<style type="text/css">
+	.form {
+		padding-top: 60px;
+		padding-bottom: 60px;
+	}
+</style>
+
+
+<!-- Page Content -->
+<div class="content"> 
+	<div class="block block-bordered " >
+		<div class="block-header remove-margin" >
+
+			<h3 class="block-title" >
+				<a href="<?=App::R('recommend', 'index')?>" class="text-default">
+                    <i class="fa fa-arrow-circle-o-left"></i> 
+                    推荐列表 
+                </a> / <?=$action_name?> 
+			</h3>
+			
+		</div> <!-- END block-header -->
+
+		<div class="block-content form recommend-content js-draggable-items" >
+
+			<form class="form-horizontal recommend-form form-lg" action= '<?=App::NR("recommend", "save");?>' >
+
+				<!-- 隐藏域 -->
+				<input type="hidden" name="recommend_id" value="<?=$rs['recommend_id']?>" >
+	
+	<!-- 单行文本: 主题 (title) 开始  -->
+	<div class="form-group   ">
+		<label class="col-xs-2 control-label" for="title">主题<span class="text-danger">*</span></label>
+		<div class="col-xs-8">
+			<input class="form-control input-lg"  
+				type="text" 
+				id="title" name="title" 
+				placeholder="请填写推荐主题"  
+				value="<?=T::v('<%=title | e(\'html\')%>', $rs )?>" /> 
+			<div class="help-block"></div>
+		</div>
+	</div><!-- END 单行文本: 主题 (title) -->
+
+
+
+ 
+	<!-- 下拉选择: 推荐方式 (type) 开始  -->
+	<div class="form-group   ">
+		<label class="col-xs-2 control-label" for="type">推荐方式<span class="text-danger">*</span></label>
+		<div class="col-xs-8">
+			<select class="js-select2 form-control input-lg" style="width: 100%;"
+					id="type" name="type"  
+					data-placeholder="请选择推荐方式" >
+				<option></option>
+				<?php $rs["type"] = is_string($rs["type"]) ? [$rs["type"]] : $rs["type"] ; if (empty($rs["type"])) { $rs["type"] = ["auto"]; } ?>
+<option value="auto" <?=in_array("auto", $rs["type"]) ? "selected" : ""?> > 智能</option>
+<option value="static" <?=in_array("static", $rs["type"]) ? "selected" : ""?> > 静态</option>
+			</select>
+			<div class="help-block"></div>
+		</div>
+	</div><!-- END 下拉选择: 推荐方式 (type) -->
+
+
+
+ 
+	<!-- 下拉选择: 排序方式 (orderby) 开始  -->
+	<div class="form-group   ">
+		<label class="col-xs-2 control-label" for="orderby">排序方式<span class="text-danger">*</span></label>
+		<div class="col-xs-8">
+			<select class="js-select2 form-control input-lg" style="width: 100%;"
+					id="orderby" name="orderby"  
+					data-placeholder="请选择排序方式" >
+				<option></option>
+				<?php $rs["orderby"] = is_string($rs["orderby"]) ? [$rs["orderby"]] : $rs["orderby"] ; if (empty($rs["orderby"])) { $rs["orderby"] = ["publish_time"]; } ?>
+<option value="publish_time" <?=in_array("publish_time", $rs["orderby"]) ? "selected" : ""?> > 最新发表</option>
+<option value="page_view" <?=in_array("page_view", $rs["orderby"]) ? "selected" : ""?> >  最多浏览</option>
+<option value="favorite" <?=in_array("favorite", $rs["orderby"]) ? "selected" : ""?> >  最多点赞</option>
+<option value="comment" <?=in_array("comment", $rs["orderby"]) ? "selected" : ""?> >  最多评论</option>
+			</select>
+			<div class="help-block"></div>
+		</div>
+	</div><!-- END 下拉选择: 排序方式 (orderby) -->
+
+	<!-- 单行文本: 关键词 (keywords) 开始  -->
+	<div class="form-group   ">
+		<label class="col-xs-2 control-label" for="keywords">关键词</label>
+		<div class="col-xs-8">
+			<input class="form-control input-lg"  
+				type="text" 
+				id="keywords" name="keywords" 
+				placeholder="请填写搜索关键词"  
+				value="<?=T::v('<%=keywords | e(\'html\')%>', $rs )?>" /> 
+			<div class="help-block">多个用 ", " 分割</div>
+		</div>
+	</div><!-- END 单行文本: 关键词 (keywords) -->
+
+
+
+ 
+	<!-- 下拉选择(动态数据): 指定栏目 (categories) 开始  -->
+	<div class="form-group   ">
+		<label class="col-xs-2 control-label" for="categories">指定栏目</label>
+		<div class="col-xs-8"> 
+			<select class="js-select2 form-control input-lg" style="width: 100%;" 
+					id="categories" name="categories" 
+					data-language="zh-CN"
+					data-param-cancelable="0"
+					data-param-cancel="取消选择"
+					data-param-model="\Xpmsns\Pages\Model\Category"
+					data-param-table="category"
+					data-param-fields="category_id,name"
+					data-param-style="{{name}}({{category_id}})"
+					data-param-option="category_id"
+					data-param-default=""
+					data-ajax-url="/_a/mina/helper/select2?method=get"
+					data-preload-url="/_a/mina/helper/select2?method=get&preload=<?=T::v('<%=categories | join(\',\')%>', $rs )?>"
+					data-placeholder="请选择相关栏目的文章"  multiple data-select2-multiple=1  >
+				<option></option>
+			</select>
+			<div class="help-block"></div>
+		</div>
+		 
+	</div><!-- END 下拉选择(动态数据): 指定栏目 (categories) -->
+
+
+
+ 
+	<!-- 下拉选择(动态数据): 指定文章 (articles) 开始  -->
+	<div class="form-group   ">
+		<label class="col-xs-2 control-label" for="articles">指定文章</label>
+		<div class="col-xs-8"> 
+			<select class="js-select2 form-control input-lg" style="width: 100%;" 
+					id="articles" name="articles" 
+					data-language="zh-CN"
+					data-param-cancelable="0"
+					data-param-cancel="取消选择"
+					data-param-model="\Xpmsns\Pages\Model\Article"
+					data-param-table="article"
+					data-param-fields="article_id,title"
+					data-param-style="{{title}}({{article_id}})"
+					data-param-option="article_id"
+					data-param-default=""
+					data-ajax-url="/_a/mina/helper/select2?method=get"
+					data-preload-url="/_a/mina/helper/select2?method=get&preload=<?=T::v('<%=articles | join(\',\')%>', $rs )?>"
+					data-placeholder="请选择文章"  multiple data-select2-multiple=1  >
+				<option></option>
+			</select>
+			<div class="help-block"></div>
+		</div>
+		 
+	</div><!-- END 下拉选择(动态数据): 指定文章 (articles) -->
+
+
+
+
+	<!-- 多图片组上传: 呈现图片 (images) 开始  -->
+	<div class="xpmse-image-groups-content    draggable-column">
+
+		<?php if(count($rs['images']) < 1): ?><?php $steps = 1 -  count($rs['images']); for( $i=0; $i<$steps; $i++){ $rs['images'][] = [];} ?><?php endif ?><?php foreach ( $rs['images'] as $img ): ?> 
+		<div class="xpmse-image-groups draggable-item" data-nested="images">
+			<div class="form-group " >
+				<label class="col-xs-2 control-label draggable-handler" for="images">呈现图片</label>
+				<div class="col-xs-4" style="width:340px;" >
+			   		<div name="images" class="file-uploader rounded rounded-4"
+						data-api='/_a/mina/uploader/upload?type=image'
+						data-title=''
+						data-previews=""
+						data-width="320"
+						data-height="180"
+						data-icon="fa fa-image" 
+						data-placeholder="请上传推荐位图片" 
+						data-allow-types="image/png,image/jpg,image/jpeg,image/gif"
+						data-maxsize="20"
+						data-progress="yes"
+						data-cropable="yes"
+						data-draggable="yes"
+						data-src="<?=T::v('<%=url%>', $img )?>"
+						data-path="<?=T::v('<%=path%>', $img )?>"
+						data-multiple="1"
+						data-nested-value="1"
+						></div>
+					<div class="help-block"></div>
+				</div>
+				<div class="col-xs-4">
+					<div class="col-xs-12">
+						<input 
+							class="form-control input-lg"  
+							type="text" 
+							data-name="title" 
+							placeholder="请输入图片标题"
+							value="<?=T::v('<%=title | e(\'html\')%>', $img )?>" /> 
+					</div>
+					<div class="col-xs-12 push-10-t">
+						<textarea class="form-control input-lg"  
+							data-name="summary" rows="4"
+							placeholder="请输入图片介绍"><?=T::v('<%=summary | e(\'html\')%>', $img )?></textarea> 
+					</div>
+				</div>
+				<div class="col-xs-2 push-10-t">
+					<a href="javascript:void(0);" data-action="add"    class="text-success push-20-r"> <i class="fa fa-plus font-s20"></i> </a> 
+					<a href="javascript:void(0);" data-action="remove" class="text-danger"> <i class="fa fa-minus font-s20"></i> </a> 
+				</div>
+			</div> 
+		</div>
+		<?php endforeach; ?> 
+
+		<script type="text/javascript">
+			$('.xpmse-image-groups[data-nested="images"]').Multipliable({
+				added: function( elm ) {
+					App.initHelper('file-uploader', {handler: $(elm).find('.file-uploader')} );
+				},
+				removed: function(){},
+				html: function( elm ){ 
+					var html = $(elm).clone();
+					var resp = $(html);
+					resp.find('.file-uploader').html('');
+					resp.find('.file-uploader').attr('data-src', '');
+					resp.find('.file-uploader').attr('data-path', '');
+					resp.find('input[type=hidden]').remove();
+					resp.find('input').val('');
+					resp.find('textarea').val('');
+					return resp;
+				}
+			});
+		</script>
+	</div><!-- END 多图片组上传: 呈现图片 (images) -->
+
+				
+
+				<!--  提交按钮 -->
+				<div class="block block-quickpanel">
+					<div class="block-quickpanel-content  " >
+						<div class="form-group">
+							<!-- 功能组 -->
+							<div class="col-xs-12 push-20-t text-center">
+								
+								<a href="<?=App::R('recommend', 'index')?>"
+									class="btn btn-lg btn-primary font-w300 btn-minw push-20-r user-action fn-back" >
+										<i class="fa fa-angle-double-left push-5-r"></i> 推荐列表 
+								</a>
+
+								<button  
+									type="submit" 
+									class="btn btn-lg btn-primary font-w300 btn-minw  push-20-r fn-action fn-save  ">
+										<i class="fa fa-save push-5-r"></i> 保存
+								</button>
+
+								<button  
+									type="button" 
+									data-param-id="<?=$rs['recommend_id']?>"
+									class="btn btn-lg btn-primary font-w300 btn-minw  push-50-r fn-action fn-saved-only fn-duplicate  ">
+										<i class="fa fa-files-o push-5-r"></i> 复制
+								</button>
+
+								
+
+								<button 
+									type="button"
+									class="btn btn-lg btn-danger btn-minw ajax-confirm fn-action fn-saved-only fn-remove"
+									confirm-title="请确认删除推荐 "
+						            confirm-content="您确定删除推荐 <strong><?=$rs['name=title']?>(<?=$rs['recommend_id']?> )</strong>"
+						            confirm-dismiss = "取消"
+						            confirm-submit= "确定"
+						            confirm-action="<?=App::NR('recommend','remove')?>"
+						            event-before="
+										function( btn, modal ) {
+											$('button', modal)
+												.addClass('disabled')
+												.attr('disabled', 'disabled');
+										}
+									"
+									event-done="
+										function( data, btn, modal) {
+											$('button', modal)
+												.removeClass('disabled')
+												.removeAttr('disabled');
+										}
+									"
+							        event-success="
+										function(btn, modal) {
+											success('推荐删除成功');
+											setTimeout(function(){
+												window.location = '<?=App::R('recommend','index')?>';
+											}, 1000);
+										}
+									"
+									event-error="
+										function( data, btn, modal) {
+											failure( '推荐删除失败 ('+ data['message'] + ')');
+											return true;
+										}
+									"
+
+									data-param-recommend_id="<?=$rs['recommend_id']?>" 
+	
+									 >
+										<i class="fa fa-minus-circle push-5-r"></i> 删除
+								</button>
+
+							</div>
+						</div>
+						<div class="bg-primary text-white text-center bottom-line"></div>	
+					</div>
+				</div> <!-- END 提交按钮 -->
+
+			</form>
+		</div> <!-- END block-content form -->
+	</div> <!-- END block block-bordered -->
+</div><!-- END content -->
+
+
+
+
+
+<script type="text/javascript">
+function pending( message ) {
+	$('.fn-action')
+		.addClass('disabled')
+		.attr('disabled', 'disabled');
+	App.loading({message:message}).show();
+}
+
+
+function success( message ) {
+	App.notify( message );
+}
+
+function failure( message,  validation ) {
+	validation = validation  || null;
+	message = message || null;
+
+	if ( typeof message == 'object' ) {
+		validation.showErrors(message);
+		return;
+	}
+
+	if ( message != null ) {
+		App.notify( message, 'fa fa-times', 'danger' );
+	}
+}
+
+function done() {
+	App.loading().hide();
+	$('.fn-action')
+		.removeClass('disabled')
+		.removeAttr('disabled');
+}
+
+
+/**
+ * 保存表单
+ */
+function save( form, validation ) {
+
+	var api =$(form).attr("action");
+
+	try {
+		var data = $(form).serializeData(true);
+	} catch( e  ){
+		console.log( e );
+		return ;
+	}
+
+	pending('保存中, 请稍候...');
+	// POST 数据
+	jQuery.post( api, data, function( data, textStatus, xhr) {
+
+		done();
+
+		if ( typeof data['code'] == 'string' ) {
+			data['code'] = parseInt(data['code']);
+		}
+
+		// 返回数据异常
+		if ( typeof data['code'] == 'number' && data['code'] !== 0 ) {
+
+			if ( typeof data['extra'] == 'object' && typeof data['extra']['errors'] == 'object'  ) {
+				failure( data['extra']['errors'], validation );
+				return;
+			}
+
+			var message = data['message'] || "未知错误";
+			failure( message );
+			return;
+		}
+
+		if ( typeof  data['recommend_id'] == 'undefined' ) {
+			var message = data['message'] || "未知错误";
+			failure( message );
+			return;
+		}
+		
+
+		// 更新ID
+		$('input[name=recommend_id]').val( data['recommend_id'] );
+		$('.fn-saved-only').removeClass('hidden');
+		$('.fn-saved-only').attr('data-param-id', data['recommend_id']);
+
+		// 保存成功
+		success('保存成功');
+
+	}, 'json')
+
+	.error(function( xhr, status, message) {
+		failure("保存失败, 网络错误 ( " + xhr.status + ' ' + message+" )");
+		console.log( status, xhr.status, ' message=', message );
+	});
+}
+
+
+$(function(){
+
+	// 设定高度
+	$('.recommend-content').css('minHeight', $(document).outerHeight() );
+	
+	App.initHelpers(['datepicker','select2', 'js-draggable-items', 'masked-inputs','tags-inputs',  'ajax-confirm', 'slimscroll', 'file-uploader', 'image-crop']);
+
+	// 表单验证
+	$('.recommend-form').validate({
+		errorClass: 'help-block animated fadeInDown',
+		errorElement: 'div',
+		errorPlacement: function(error, e) {				
+			jQuery(e).parents('.form-group .col-xs-8').append(error);
+		},
+		highlight: function(e) {
+			jQuery(e).closest('.form-group .col-xs-8').parent().removeClass('has-error').addClass('has-error');
+			jQuery(e).closest('.help-block').remove();
+		},
+		unhighlight:function(e){
+			jQuery(e).closest('.form-group .col-xs-8').parent().removeClass('has-error');
+			jQuery(e).closest('.help-block .col-xs-8').remove();
+		},
+		success: function(e) {
+			jQuery(e).closest('.form-group .col-xs-8').parent().removeClass('has-error');
+			jQuery(e).closest('.help-block').remove();
+		},
+
+		submitHandler: function(form) {
+			save( form, this);
+			return false;
+		},
+
+		rules: {},
+		messages: {}
+
+	});
+
+
+	$('.fn-duplicate').click(function(){
+		var api = "<?=App::R('recommend','duplicate', ['recommend_id'=>''])?>";
+		var id = $(this).attr('data-param-id');
+		var url = api + id;
+		window.location = url;
+	})
+
+	if ( $('input[name="recommend_id"]').val() == '' || $('input[name="recommend_id"]').val() == undefined ) {
+		$('.fn-saved-only').addClass('hidden');
+	}
+})
+	
+</script>

@@ -169,6 +169,47 @@ class Article extends Model {
 	}
 
 
+	/**
+	 * 文章查询
+	 */
+	function search( $query = [] ) {
+
+		$qb = $this->query();
+
+		$select = empty($query['select']) ? ["*"] : $query['select'];
+		if ( is_string($select) ) {
+			$select = explode(',', $select);
+		}
+		
+		// 按关键词查找 
+		if ( array_key_exists('keyword', $query) && !empty($query['keyword']) ) {
+			$qb->where(function ( $qb ) use($query) {
+			   	$qb->where("title", "like", "%{$query['keyword']}%");
+			});
+		}
+
+
+		// 排序: 最新发表
+		if ( array_key_exists('order', $query)  ) {
+			$order = explode(' ', $query['order']);
+			$order[1] = !empty($order[1]) ? $order[1] : 'asc';
+			$qb->orderBy($order[0], $order[1] );
+		}
+		
+		// 页码
+		$page = array_key_exists('page', $query) ?  intval( $query['page']) : 1;
+		$perpage = array_key_exists('perpage', $query) ?  intval( $query['perpage']) : 20;
+
+		// 查询文章列表
+		$articles = $qb->select($select)->pgArray( $perpage, ['_id'], 'page', $page );
+
+		return $articles;
+	}
+
+
+
+
+	// 采集
 	function collect( $data ) {
 
 		$url = $data['url'];

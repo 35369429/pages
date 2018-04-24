@@ -5,8 +5,8 @@ config = {
 		server:"https://wss.xpmjs.com",
 		domain:"wss.xpmjs.com",
 		project:"default",
-		appid:'151187416275946',
-		secret:'0516fa148c2584028ee4a30157bfdc27'
+		appid:'152389239297374',
+		secret:'500970dad3324330f8a1085939f20360'
 	},
 	wxapp:{
 		"cli":"/Applications/wechatwebdevtools.app/Contents/Resources/app.nw/bin/cli",
