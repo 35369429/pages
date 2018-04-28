@@ -207,6 +207,42 @@ class Article extends Model {
 	}
 
 
+	/**
+	 * + getInByArticleId 方法
+	 * @return [type] [description]
+	 */
+	function getInByArticleId( $article_ids, $select='article.article_id, article.title', $order=["article.created_at"=>"asc"] ) {
+
+		if ( is_string($select) ) {
+			$select = explode(',', $select);
+		}
+
+		// 增加表单查询索引字段
+		array_push($select, "article.article_id");
+
+		// 创建查询构造器
+		$qb = Utils::getTab("xpmsns_pages_article as article", "{none}")->query();
+  		
+		// 排序
+		foreach ($order as $field => $order ) {
+			$qb->orderBy( $field, $order );
+		}
+		$qb->select( $select );
+		$data = $qb->get()->toArray(); 
+
+		$map = [];
+
+ 		$article_ids = []; // 读取 inWhere article 数据
+ 		$category_ids = []; // 读取 inWhere category 数据
+		foreach ($data as & $rs ) {
+			$this->format($rs);
+			$map[$rs['article_id']] = $rs;
+			
+		}
+		return $map;
+	}
+
+
 
 
 	// 采集

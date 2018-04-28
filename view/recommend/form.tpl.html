@@ -94,7 +94,7 @@ use \Xpmse\T;
 				id="keywords" name="keywords" 
 				placeholder="请填写搜索关键词"  
 				value="<?=T::v('<%=keywords | e(\'html\')%>', $rs )?>" /> 
-			<div class="help-block">多个用 ", " 分割</div>
+			<div class="help-block">多个用 </div>
 		</div>
 	</div><!-- END 单行文本: 关键词 (keywords) -->
 
@@ -456,6 +456,10 @@ $(function(){
 	if ( $('input[name="recommend_id"]').val() == '' || $('input[name="recommend_id"]').val() == undefined ) {
 		$('.fn-saved-only').addClass('hidden');
 	}
+
+// 自定义代码
+
+
 })
 	
 </script>
