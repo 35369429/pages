@@ -4,11 +4,11 @@
  * 推荐数据模型
  *
  * 程序作者: XpmSE机器人
- * 最后修改: 2018-04-28 14:50:47
+ * 最后修改: 2018-04-29 09:52:48
  * 程序母版: /data/stor/private/templates/xpmsns/model/code/model/Name.php
  */
 namespace Xpmsns\Pages\Model;
-             
+                  
 use \Xpmse\Excp;
 use \Xpmse\Model;
 use \Xpmse\Utils;
@@ -61,8 +61,18 @@ class Recommend extends Model {
 		$this->putColumn( 'title', $this->type("string", ["length"=>100, "index"=>true, "null"=>true]));
 		// 方式
 		$this->putColumn( 'type', $this->type("string", ["length"=>20, "index"=>true, "default"=>"auto", "null"=>true]));
-		// 呈现图片
+		// 摘要图片
 		$this->putColumn( 'images', $this->type("text", ["json"=>true, "null"=>true]));
+		// PC端模板
+		$this->putColumn( 'tpl_pc', $this->type("longtext", ["null"=>true]));
+		// 手机端模板
+		$this->putColumn( 'tpl_h5', $this->type("longtext", ["null"=>true]));
+		// 小程序模板
+		$this->putColumn( 'tpl_wxapp', $this->type("longtext", ["null"=>true]));
+		// 安卓模板
+		$this->putColumn( 'tpl_android', $this->type("longtext", ["null"=>true]));
+		// iOS模板
+		$this->putColumn( 'tpl_ios', $this->type("longtext", ["null"=>true]));
 		// 关键词
 		$this->putColumn( 'keywords', $this->type("text", ["null"=>true]));
 		// 相关栏目
@@ -83,7 +93,7 @@ class Recommend extends Model {
 	 */
 	public function format( & $rs ) {
 
-		// 格式化: 呈现图片
+		// 格式化: 摘要图片
 		// 返回值: [{"url":"访问地址...", "path":"文件路径...", "origin":"原始文件访问地址..." }]
 		if ( array_key_exists('images', $rs ) ) {
 			$rs["images"] = !is_array($rs["images"]) ? [] : $rs["images"];
@@ -162,7 +172,12 @@ class Recommend extends Model {
 	 *          	  $rs["recommend_id"],  // 推荐ID 
 	 *          	  $rs["title"],  // 主题 
 	 *          	  $rs["type"],  // 方式 
-	 *          	  $rs["images"],  // 呈现图片 
+	 *          	  $rs["images"],  // 摘要图片 
+	 *          	  $rs["tpl_pc"],  // PC端模板 
+	 *          	  $rs["tpl_h5"],  // 手机端模板 
+	 *          	  $rs["tpl_wxapp"],  // 小程序模板 
+	 *          	  $rs["tpl_android"],  // 安卓模板 
+	 *          	  $rs["tpl_ios"],  // iOS模板 
 	 *          	  $rs["keywords"],  // 关键词 
 	 *          	  $rs["categories"],  // 相关栏目 
 	 *                $rs["_map_category"][$categories[n]]["category_id"], // category.category_id
@@ -344,7 +359,7 @@ class Recommend extends Model {
 	}
 
 	/**
-	 * 根据推荐ID上传呈现图片。
+	 * 根据推荐ID上传摘要图片。
 	 * @param string $recommend_id 推荐ID
 	 * @param string $file_path 文件路径
 	 * @param mix $index 如果是数组，替换当前 index
@@ -457,7 +472,12 @@ class Recommend extends Model {
 	 *               	["recommend_id"],  // 推荐ID 
 	 *               	["title"],  // 主题 
 	 *               	["type"],  // 方式 
-	 *               	["images"],  // 呈现图片 
+	 *               	["images"],  // 摘要图片 
+	 *               	["tpl_pc"],  // PC端模板 
+	 *               	["tpl_h5"],  // 手机端模板 
+	 *               	["tpl_wxapp"],  // 小程序模板 
+	 *               	["tpl_android"],  // 安卓模板 
+	 *               	["tpl_ios"],  // iOS模板 
 	 *               	["keywords"],  // 关键词 
 	 *               	["categories"],  // 相关栏目 
 	 *               	["category"][$categories[n]]["category_id"], // category.category_id
@@ -658,7 +678,12 @@ class Recommend extends Model {
 			"recommend_id",  // 推荐ID
 			"title",  // 主题
 			"type",  // 方式
-			"images",  // 呈现图片
+			"images",  // 摘要图片
+			"tpl_pc",  // PC端模板
+			"tpl_h5",  // 手机端模板
+			"tpl_wxapp",  // 小程序模板
+			"tpl_android",  // 安卓模板
+			"tpl_ios",  // iOS模板
 			"keywords",  // 关键词
 			"categories",  // 相关栏目
 			"articles",  // 相关文章

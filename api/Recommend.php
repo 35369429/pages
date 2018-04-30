@@ -4,11 +4,11 @@
  * 推荐数据接口 
  *
  * 程序作者: XpmSE机器人
- * 最后修改: 2018-04-28 14:50:46
+ * 最后修改: 2018-04-29 09:52:46
  * 程序母版: /data/stor/private/templates/xpmsns/model/code/api/Name.php
  */
 namespace Xpmsns\Pages\Api;
-             
+                  
 
 use \Xpmse\Loader\App;
 use \Xpmse\Excp;
@@ -43,7 +43,12 @@ class Recommend extends Api {
 	 *               	["recommend_id"],  // 推荐ID 
 	 *               	["title"],  // 主题 
 	 *               	["type"],  // 方式 
-	 *               	["images"],  // 呈现图片 
+	 *               	["images"],  // 摘要图片 
+	 *               	["tpl_pc"],  // PC端模板 
+	 *               	["tpl_h5"],  // 手机端模板 
+	 *               	["tpl_wxapp"],  // 小程序模板 
+	 *               	["tpl_android"],  // 安卓模板 
+	 *               	["tpl_ios"],  // iOS模板 
 	 *               	["keywords"],  // 关键词 
 	 *               	["categories"],  // 相关栏目 
 	*               	["_map_category"][$categories[n]]["category_id"], // category.category_id
@@ -134,7 +139,12 @@ class Recommend extends Api {
 	 *               $data['recommend_id'] 推荐ID
 	 *               $data['title'] 主题
 	 *               $data['type'] 方式
-	 *               $data['images'] 呈现图片
+	 *               $data['images'] 摘要图片
+	 *               $data['tpl_pc'] PC端模板
+	 *               $data['tpl_h5'] 手机端模板
+	 *               $data['tpl_wxapp'] 小程序模板
+	 *               $data['tpl_android'] 安卓模板
+	 *               $data['tpl_ios'] iOS模板
 	 *               $data['keywords'] 关键词
 	 *               $data['categories'] 相关栏目
 	 *               $data['articles'] 相关文章
@@ -174,7 +184,12 @@ class Recommend extends Api {
 	 *               $data['recommend_id'] 推荐ID
 	 *               $data['title'] 主题
 	 *               $data['type'] 方式
-	 *               $data['images'] 呈现图片
+	 *               $data['images'] 摘要图片
+	 *               $data['tpl_pc'] PC端模板
+	 *               $data['tpl_h5'] 手机端模板
+	 *               $data['tpl_wxapp'] 小程序模板
+	 *               $data['tpl_android'] 安卓模板
+	 *               $data['tpl_ios'] iOS模板
 	 *               $data['keywords'] 关键词
 	 *               $data['categories'] 相关栏目
 	 *               $data['articles'] 相关文章
@@ -266,7 +281,12 @@ class Recommend extends Api {
 	 *               	["recommend_id"],  // 推荐ID 
 	 *               	["title"],  // 主题 
 	 *               	["type"],  // 方式 
-	 *               	["images"],  // 呈现图片 
+	 *               	["images"],  // 摘要图片 
+	 *               	["tpl_pc"],  // PC端模板 
+	 *               	["tpl_h5"],  // 手机端模板 
+	 *               	["tpl_wxapp"],  // 小程序模板 
+	 *               	["tpl_android"],  // 安卓模板 
+	 *               	["tpl_ios"],  // iOS模板 
 	 *               	["keywords"],  // 关键词 
 	 *               	["categories"],  // 相关栏目 
 	*               	["category"][$categories[n]]["category_id"], // category.category_id
