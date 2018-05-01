@@ -179,6 +179,12 @@ class ArticleController extends \Xpmse\Loader\Controller {
 		Utils::out(['code'=>0, 'message'=>'testrun success']);
 	}
 
+	function testsch() {
+		Utils::cliOnly();
+		$art = new \Xpmsns\pages\Model\Article;
+		$art->__schema();
+	}
+
 
 	/**
 	 * 删除文章

@@ -96,8 +96,9 @@ class Article extends Model {
 			'origin'=> ['string',  ['length'=>128, 'index'=>1]],  // 来源
 			'origin_url'=>['string',  ['length'=>256]],  // 来源网址
 			'summary'=> ['string',  ['length'=>600]],  // 摘要
-			'seo_title'=> ['string',  ['length'=>256]],  // 搜索引擎标题
-			'seo_keywords'=> ['string',  ['length'=>256]],  // 搜索引擎关键词
+			'keywords' => ['string',['length'=>600]],  // 提取关键词
+			'seo_title'=> ['string',  ['length'=>600]],  // 搜索引擎标题
+			'seo_keywords'=> ['string',  ['length'=>600]],  // 搜索引擎关键词
 			'seo_summary'=> ['string',  ['length'=>600]],   // 搜索引擎显示摘要
 			'publish_time'=> ['timestampTz',  ["index"=>1]],   // 发表时间
 			'update_time'=> ['timestampTz',  ["index"=>1]],  // 更新时间
@@ -114,6 +115,13 @@ class Article extends Model {
 			'user' => ['string', ['length'=>128,'index'=>1]], // 最后编辑用户ID
 			'policies' => ['string', ['json'=>true]], // 文章权限预留字段
 			'status'=> ['string', ['length'=>40,'index'=>1, 'default'=>ARTICLE_UNPUBLISHED]],  // 文章状态 unpublished/published/pending
+
+			// + 各种用户行为记录统计 (主要用于排序)
+			'view_cnt' => ['bigInteger', ['index'=>1, 'default'=>0]], // 浏览量
+			'like_cnt' => ['bigInteger', ['index'=>1, 'default'=>0]],  // 点赞(喜欢)数量 
+			'dislike_cnt' => ['bigInteger', ['index'=>1, 'default'=>0]],  // 讨厌 (不喜欢)数量 
+			'comment_cnt'  => ['bigInteger', ['index'=>1, 'default'=>0]]   // 评论数量
+
 		];
 
 		$struct_draft_only = [
