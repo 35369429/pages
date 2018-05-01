@@ -1,6 +1,7 @@
 {
 	"pages":[
 		"default/article/list",
+		"default/article/recommend",
 		"default/article/detail"
 	],
 	"window":{

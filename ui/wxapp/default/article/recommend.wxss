@@ -1,0 +1,261 @@
+@import "/default/common/style.wxss"
+
+/**
+ *  主色: #ea413c ;  copy 网易
+ *  文字: #3a3a3a ;  主文字
+ *  灰文字: #a9a9a9;
+ */
+
+.wrapper .menu {
+	white-space: nowrap;
+	color: #a9a9a9;
+	background: #FFFFFF;
+	padding-left: 16rpx;
+	padding-right: 16rpx;
+	/*border-bottom: 2rpx solid #efefef;*/
+}
+
+.wrapper .menu .item {
+	/* padding: 10rpx; */
+	display: inline-block;
+	padding-left: 20rpx;
+	padding-right: 20rpx;
+	padding-top: 2rpx;
+	padding-bottom: 2rpx;
+	text-align: center;
+	
+	font-size: 32rpx;
+	line-height: 64rpx;
+	font-weight: 300;
+	height: 64rpx;
+}
+
+.wrapper .menu .item.active {
+	/*border-bottom: 6rpx solid #eb4944;*/
+	/*color: #eb4944;*/
+	border-bottom: 6rpx solid #eb4e39;
+	color: #eb4e39;
+	font-weight: 400;
+}
+
+
+/** 文章列表样式 */
+.articles {
+	margin-top: 0rpx;
+	height:600rpx;
+	/*padding-top:16rpx;*/
+	/*border-top: 2rpx solid #efefef;*/
+}
+
+
+.articles .item {
+	padding-top: 24rpx;
+	padding-bottom: 24rpx;
+	padding-left: 24rpx;
+	padding-right: 24rpx;
+	border-bottom: 2rpx solid #efefef;
+	/*margin-bottom: 16rpx;*/
+}
+
+
+.articles .item image {
+	background-color: #eeeeee;
+}
+
+.articles .item .note {
+	display: flex;
+	color: #a9a9a9;
+	font-size:24rpx;
+	margin-bottom: 24rpx;
+	justify-content:space-between;
+}
+
+.articles .item .note .it {
+	margin-right: .1em;
+	font-size: 24rpx;
+}
+
+.articles .item .note .tag:not(:first-child):before {
+	font-size:28rpx;
+	margin-right: .1em;
+	content: "、"
+}
+
+.articles .item .origin{
+	/*margin-left: auto;*/
+}
+
+.articles .title  {
+	font-size: 36rpx;
+	letter-spacing:1;
+	line-height: 1.2;
+}
+
+/* 标准文章摘要呈现 */
+
+.articles .item-image-recommend {
+	display: flex;
+	padding-bottom: 16rpx;
+}
+
+.articles .item-image-recommend .image {
+	margin-right: 15rpx;
+}
+.articles .item-image-recommend .image image {
+	width: 260rpx; 
+	height: 200rpx;
+}
+
+.articles .item-image-recommend .summary {
+	display: flex;
+	flex-direction:column;
+	justify-content:space-between;
+	padding: 2rpx;
+	width: 100%;
+}
+
+.articles .item-image-recommend .summary .title  {
+	height: 90rpx;
+	min-height: 90rpx;
+	line-height: 48rpx;
+	overflow: hidden;
+}
+
+/** 大图片文章摘要呈现 */
+
+.articles .item-large-image {
+	padding-bottom: 32rpx;
+}
+.articles .item-large-image .image {
+}
+
+.articles .item-large-image .image image {
+	
+	width: 100%;
+	height: 346rpx;
+}
+
+.articles .item-large-image .title {
+	overflow: hidden;
+	white-space: nowrap;
+	height: 45rpx;
+	padding:15rpx;
+	color: #FFFFFF;
+	background: rgba(0,0,0,.5);
+	margin-top: -80rpx;
+	position: relative;
+
+}
+
+/** 三图片文章摘要呈现 */
+
+.articles .item-3-images {
+	padding-bottom: 32rpx;
+}
+
+.articles .item-3-images .image {
+	display: flex;
+	margin-top:10rpx;
+}
+
+.articles .item-3-images .image  image {height: 162rpx;}
+.articles .item-3-images .image image:not(:first-child)  {
+	margin-left:8rpx;
+}
+.articles .item-3-images .image image:not(:last-child) {
+	margin-right:8rpx;
+}
+
+/** 六图片文章摘要呈现 */
+
+.articles .item-6-images {
+	padding-bottom: 32rpx;
+}
+
+.articles .item-6-images .image {
+	display: flex;
+	margin-top:10rpx;
+}
+
+.articles .item-6-images .image  image {height: 162rpx;}
+.articles .item-6-images .image image:not(:first-child)  {
+	margin-left:8rpx;
+}
+.articles .item-6-images .image image:not(:last-child) {
+	margin-right:8rpx;
+}
+
+
+/** 视频文章摘要呈现 */
+
+.articles .item-video {
+	display: flex;
+	height: 150rpx;
+	padding-bottom: 32rpx;
+}
+
+.articles .item-video .image {
+	margin-right: 15rpx;
+}
+.articles .item-video .image image {
+	width: 192rpx; height: 144rpx;
+}
+
+.articles .item-video .summary {
+	padding: 2rpx;
+}
+
+.articles .item-video .summary .title  {
+	height: 90rpx;
+	overflow: hidden;
+}
+
+.articles .item-video .image .icon {
+	position: relative;
+	width: 64rpx; height: 64rpx;
+	top: -120rpx;left: 64rpx;
+	background: transparent;
+}
+
+/** 视频文章大图摘要呈现 */
+.articles .item-large-video {
+	padding-bottom: 32rpx;
+}
+.articles .item-large-video .image {
+	height: 368rpx;
+}
+
+.articles .item-large-video .image image {
+	width: 100%;
+	height: 346rpx;
+}
+
+.articles .item-large-video .image .icon {
+	position: relative;
+	width: 64rpx; height: 64rpx;
+	top: -220rpx;left:45%;
+	background: transparent;
+}
+
+.articles .item-large-video .title {
+	overflow: hidden;
+	line-height: 1.2;
+	height: 102rpx;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

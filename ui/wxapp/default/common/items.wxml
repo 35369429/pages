@@ -1,4 +1,4 @@
-<template name="item-image">
+<template name="item-image"><!-- 单图模板 -->
 <view class="item item-image" bindtap="detail" data-id="{{article.article_id}}" >
 	<view class="image">
 		<image mode="aspectFill" src="{{article.cover['url']}}" ></image>
@@ -12,6 +12,22 @@
 	</view>
 </view>
 </template>
+
+<template name="item-image-recommend"> <!-- 单图模板 -->
+<view class="item item-image-recommend" bindtap="detail" data-id="{{article.article_id}}" >
+	<view class="image">
+		<image mode="aspectFill" src="{{article.cover['url']}}" ></image>
+	</view>
+	<view class="summary" > 
+		<view class="title">{{article.title}}</view>
+		<view class="note">
+			<view class="it">{{article.like_cnt ? article.like_cnt : 0}} 赞</view>
+			<view class="it" >{{article.view_cnt ? article.view_cnt : 0}} 阅读</view>
+		</view>
+	</view>
+</view>
+</template>
+
 
 <template name="item-large-image">
 <view class="item item-large-image"  bindtap="detail" data-id="{{article.id}}" >

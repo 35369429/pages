@@ -1,0 +1,51 @@
+<!-- 新闻列表页 -->
+<import src="/default/common/items.wxml"/>
+<!-- Wrapper -->
+<view class="wrapper">
+
+	<!-- Articles -->
+	<scroll-view  scroll-y="true" class="articles" 
+		enable-back-to-top="true"	
+		bindscrolltolower="loadNextPage"  
+		lower-threshold="100"
+		bindscrolltoupper="refreshArticles"
+		upper-threshold="0"
+		style="height:{{system.windowHeight-0}}px" >
+		<!-- Loading -->
+		<view class="refresh  reminds {{status.refresh}}">
+			<image src="/default/res/icons/loading.gif" mode="aspectFill" class="up-down-loading" />
+		</view><!-- END Loading -->
+		
+		<!-- 焦点文章 -->
+		<view class="item item-large-image"  bindtap="detail" data-id="{{fst.article_id}}" >
+			<view class="image" data-id="{{fst.article_id}}" >
+				<image mode="aspectFill" src="{{fst.cover.url}}" data-id="{{fst.article_id}}" ></image>
+				<view class="title" data-id="{{fst.article_id}}" >{{fst.title}}</view>
+			</view>
+		</view> 
+		<!-- END 焦点图 -->
+
+		<!-- Menu 放在下方，绕过图片挡住的坑-->
+		<scroll-view scroll-x="true" class="menu">
+			<!-- Menu Item -->
+			<view 
+				wx:for="{{categories}}" wx:for-index="idx" wx:for-item="cate"  wx:key="category_id"
+				bindtap="loadArticlesByCate" data-id="{{idx}}" data-cid="{{cate.category_id}}"
+				class="{{cate.class}}  item">{{cate.name}}</view>  <!-- END Menu Item-->
+		</scroll-view> <!-- END Menu -->
+	
+		<template 
+			wx:for="{{articles}}"  wx:for-item="article" wx:key="id"
+			is="item-{{article.template}}-recommend" data="{{article}}"   ></template>
+
+		<!-- Loading -->
+		<view class="loading reminds {{status.more}}">
+			<image src="/default/res/icons/loading.gif" mode="aspectFill" class="up-down-loading" />
+		</view><!-- END Loading -->
+
+
+	</scroll-view><!-- END Articles -->
+
+
+
+</view> <!-- END Wrapper -->
