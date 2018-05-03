@@ -25,6 +25,10 @@ Page({
 		}
 	},
 
+	demo: function(){
+		wx.redirectTo({url:'/default/article/recommend'});
+	},
+
 	getArticle: function( article_id ) {
 
 		let xpm = app.xpm;

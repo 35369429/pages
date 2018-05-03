@@ -33,7 +33,7 @@
 		<view class="hr" ></view>
 	
 		<view class="xpmsns">
-			<view><image src="/default/res/icons/xpmsns.svg"  mode="aspectFit" /></view>
+			<view><image src="/default/res/icons/xpmsns.svg"  mode="aspectFit" bindtap="demo" /></view>
 			<view>本文采用XpmSNS发布</view>
 		</view>
 	

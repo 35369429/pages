@@ -27,11 +27,12 @@ Page({
 		}
 
 		let cid = this.data.categories[this.data.category]['category_id'];
-		let title = this.data.categories[this.data.category]['name'] + ' - XpmSNS/头条';
+		let title = this.data.categories[this.data.category]['name'] + ' - 国家医管中心';
 
 		return {
 			title:title,
-			path:'/default/article/list?cid=' + cid + '&index=' + this.data.category,
+			// path:'/default/article/recommend?cid=' + cid + '&index=' + this.data.category,
+			path:'/default/article/recommend',
 			success: function(res) {
 				wx.showToast({
 					title: '转发成功',
@@ -74,7 +75,7 @@ Page({
 			categories[data.id]['class'] = 'active';
 
 		let title = categories[data.id]['name'];
-			title = title + ' - XpmSNS/头条';
+			title = title + ' - 国家医管中心';
 			wx.setNavigationBarTitle({title: title});
 
 		that.loading();
@@ -167,7 +168,7 @@ Page({
 				}
 
 				cid = categories[current]['category_id'];
-				title = categories[current]['name']  + " - 头条/XpmSNS";
+				title = categories[current]['name']  + " - 国家医管中心";
 				categories[current]['class'] = 'active';
 				this.setData({category:current});
 				wx.setNavigationBarTitle({title: title});

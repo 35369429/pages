@@ -33,8 +33,9 @@
 .wrapper .menu .item.active {
 	/*border-bottom: 6rpx solid #eb4944;*/
 	/*color: #eb4944;*/
-	border-bottom: 6rpx solid #eb4e39;
-	color: #eb4e39;
+	/*border-bottom: 6rpx solid #eb4e39;*/
+	border-bottom: 6rpx solid #57c98d;
+	color: #57c98d;
 	font-weight: 400;
 }
 
