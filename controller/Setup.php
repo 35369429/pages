@@ -61,12 +61,15 @@ class SetupController extends \Xpmse\Loader\Controller {
 		$rec = new \Xpmsns\Pages\Model\Recommend;
 		$rec->saveBySlug(["title"=>"本周热文","slug"=>"weekly_hotnews", "orderby"=>"view_cnt", "period"=>'weekly', "type"=>"auto"]);
 		$rec->saveBySlug(["title"=>"本周热评","slug"=>"weekly_hotreviews", "orderby"=>"comment_cnt", "period"=>'weekly', "type"=>"auto"]);
-		$rec->saveBySlug(["title"=>"今日热文","slug"=>"daily_hotnews", "orderby"=>"view_cnt", "period"=>'weekly', "type"=>"auto"]);
+		$rec->saveBySlug(["title"=>"本周热文","slug"=>"7days_hotnews", "orderby"=>"view_cnt", "period"=>'7days', "type"=>"auto"]);
+		$rec->saveBySlug(["title"=>"本周热评","slug"=>"7days_hotreviews", "orderby"=>"comment_cnt", "period"=>'7days', "type"=>"auto"]);
+		$rec->saveBySlug(["title"=>"今日热文","slug"=>"daily_hotnews", "orderby"=>"view_cnt", "period"=>'daily', "type"=>"auto"]);
 		$rec->saveBySlug(["title"=>"今日热评","slug"=>"daily_hotreviews", "orderby"=>"comment_cnt", "period"=>'daily', "type"=>"auto"]);
 		$rec->saveBySlug(["title"=>"24小时热文","slug"=>"24hours_hotnews", "orderby"=>"view_cnt", "period"=>'24hours', "type"=>"auto"]);
 		$rec->saveBySlug(["title"=>"24小时热评","slug"=>"24hours_hotreviews", "orderby"=>"comment_cnt", "period"=>'24hours', "type"=>"auto"]);
-		$rec->saveBySlug(["title"=>"最新文章","slug"=>"latest", "orderby"=>"publish_time", "type"=>"auto"]);
-		$rec->saveBySlug(["title"=>"正文页底部相关推荐","slug"=>"latest", "orderby"=>"publish_time", "type"=>"auto"]);
+		$rec->saveBySlug(["title"=>"最新文章","slug"=>"latest", "orderby"=>"publish_time", "period"=>"unlimited", "type"=>"auto"]);
+		$rec->saveBySlug(["title"=>"最热文章","slug"=>"hotnews", "orderby"=>"publish_time", "period"=>"unlimited",   "type"=>"auto"]);
+		$rec->saveBySlug(["title"=>"正文页相关推荐","slug"=>"detail", "orderby"=>"publish_time",  "period"=>"unlimited",  "type"=>"auto"]);
 
 	}
 

@@ -237,13 +237,90 @@ class Article extends Model {
 
 		// 按关键词词组查找 ( 非搜索 )
 		if ( array_key_exists('keywords', $query) && !empty($query['keywords']) ) {
+
+			// 过滤空值
 			$keywords = is_string($query['keywords']) ? explode(',', $query['keywords']) : $query['keywords'];
-			$qb->where(function ( $qb ) use($keywords) {
-				$qb->whereIn("t.name", $keywords); // 标签符合关键词
-				foreach( $keywords as $idx=>$keyword ) {
-					$qb->orWhere("keywords", "like", "%{$keyword}%");  // 名称符合关键词
+			foreach( $keywords as $idx=>$key ) {
+				$keywords[$idx] = trim($key);
+				if  ( empty($keywords[$idx]) ) {
+					unset($keywords[$idx]);
 				}
-			});
+			}
+
+			if ( !empty($keywords) ) {
+				$qb->where(function ( $qb ) use($keywords) {
+					$qb->whereIn("t.name", $keywords); // 标签符合关键词
+					foreach( $keywords as $idx=>$keyword ) {
+						$qb->orWhere("keywords", "like", "%{$keyword}%");  // 名称符合关键词
+					}
+				});
+			}
+		}
+
+
+		// 按时间范围
+		if ( array_key_exists('period', $query) && !empty($query['period']) ) {
+			$now = empty($query['now']) ? date('Y-m-d H:i:s') : date('Y-m-d H:i:s', strtotime($query['now']) );
+			$now_t = strtotime( $now );
+
+			switch ($query['period']) {
+
+				case '24hours':  // 24小时
+					$from = date('Y-m-d H:i:s', strtotime("-24 hours",$now_t));
+					$qb->where('publish_time' , '<=', $now );
+					$qb->where('publish_time' , '>=', $from );
+					break;
+
+				case 'daily' : // 当天
+					$from = date('Y-m-d 00:00:00', $now_t);
+					$end = date('Y-m-d 23:59:59', $now_t);
+					$qb->where('publish_time' , '<=', $end );
+					$qb->where('publish_time' , '>=', $from );
+					break;
+
+				case '7days': // 7天
+					$end = date('Y-m-d 00:00:00', $now_t);
+					$end_t = strtotime($end);
+					$from = date('Y-m-d 23:59:59',  strtotime("-7 days",$end_t));
+					$qb->where('publish_time' , '<=', $end );
+					$qb->where('publish_time' , '>=', $from );
+					break;
+
+				case 'weekly': // 本周
+					$from = date('Y-m-d 00:00:00', strtotime('-1 Monday',$now_t));
+					$from_t = strtotime($from);
+					$end = date('Y-m-d 23:59:59',  strtotime("+1 Weeks",$from_t));
+					$qb->where('publish_time' , '<=', $end );
+					$qb->where('publish_time' , '>=', $from );
+					break;
+
+				case '30days': // 30天
+					$end = date('Y-m-d 00:00:00', $now_t);
+					$end_t = strtotime($end);
+					$from = date('Y-m-d 23:59:59',  strtotime("-30 days",$end_t));
+					$qb->where('publish_time' , '<=', $end );
+					$qb->where('publish_time' , '>=', $from );
+					break;
+
+				case 'monthly': // 本月
+					$from = date('Y-m-01 00:00:00', $now_t);
+					$from_t = strtotime($from);
+					$end = date('Y-m-d 23:59:59',  strtotime("+1 Month",$from_t));
+					$qb->where('publish_time' , '<=', $end );
+					$qb->where('publish_time' , '>=', $from );
+					break;
+
+				case 'yearly':  // 今年
+					$from = date('Y-01-01 00:00:00', $now_t);
+					$end = date('Y-12-31 23:59:59',  $now_t);
+					$qb->where('publish_time' , '<=', $end );
+					$qb->where('publish_time' , '>=', $from );
+					break;
+
+				default: // 无限
+					# code...
+					break;
+			}
 		}
 
 		// 按分类ID查找
@@ -287,6 +364,7 @@ class Article extends Model {
 
 		if ( $_GET['debug'] == 1 ) {
 			$articles['_sql'] = $qb->getSql();
+			$articles['_query'] = $query; 
 		}
 
 		// 格式化数据

@@ -91,7 +91,9 @@ use \Xpmse\T;
 				<?php $rs["period"] = is_string($rs["period"]) ? [$rs["period"]] : $rs["period"] ; if (empty($rs["period"])) { $rs["period"] = ["auto"]; } ?>
 <option value="24hours" <?=in_array("24hours", $rs["period"]) ? "selected" : ""?> > 24小时</option>
 <option value="daily" <?=in_array("daily", $rs["period"]) ? "selected" : ""?> > 今日</option>
+<option value="7days" <?=in_array("7days", $rs["period"]) ? "selected" : ""?> > 7天</option>
 <option value="weekly" <?=in_array("weekly", $rs["period"]) ? "selected" : ""?> > 本周</option>
+<option value="30days" <?=in_array("30days", $rs["period"]) ? "selected" : ""?> > 30天</option>
 <option value="monthly" <?=in_array("monthly", $rs["period"]) ? "selected" : ""?> > 本月</option>
 <option value="yearly" <?=in_array("yearly", $rs["period"]) ? "selected" : ""?> > 今年</option>
 <option value="unlimited" <?=in_array("unlimited", $rs["period"]) ? "selected" : ""?> > 无限</option>

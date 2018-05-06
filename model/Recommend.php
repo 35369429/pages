@@ -4,7 +4,7 @@
  * 推荐数据模型
  *
  * 程序作者: XpmSE机器人
- * 最后修改: 2018-05-06 22:25:49
+ * 最后修改: 2018-05-06 23:36:39
  * 程序母版: /data/stor/private/templates/xpmsns/model/code/model/Name.php
  */
 namespace Xpmsns\Pages\Model;
@@ -47,9 +47,9 @@ class Recommend extends Model {
 	/**
 	 * 自定义函数 选取推荐文章
 	 */
-	function getArticlesBy( $type,  $recommend_id,  $keywords=[], $page=1, $perpage=20 ) {
+	function getArticlesBy( $type,  $recommend_id,  $keywords=[], $now=null, $page=1, $perpage=20 ) {
 	
-		$select = ['recommend.title', 'recommend.type', 'recommend.keywords', "orderby", 'articles', 'categories'];
+		$select = ['recommend.title', 'recommend.type', 'recommend.keywords', "recommend.period", "orderby", 'articles', 'categories'];
 		$method = "getBy{$type}";
 		if ( !method_exists( $this, $method) ) {
 			throw new Excp( "推荐数据查询方法不存在", 404, ['method'=>$method] );
@@ -62,6 +62,10 @@ class Recommend extends Model {
 
 		$art = new Article;
 		$query = [];
+      
+		if ( !empty($now) ) {
+          $query['now'] = $now;
+        }
 		
 		// 数据排序
 		switch ($recommend['orderby']) {
@@ -85,11 +89,17 @@ class Recommend extends Model {
 				break;
 		}
 
+		if ( !empty($recommend['period']) ) {
+			$query['period'] = $recommend['period'];
+		}
+
 
 		// 自动根据关键词关联
 		if ( $recommend['type'] == 'auto' ) {
 
-			$recommend['keywords'] = explode(',', $recommend['keywords']);
+			$recommend['keywords'] = str_replace("\r", "", $recommend['keywords']);
+			$recommend['keywords'] = str_replace("\n", "", $recommend['keywords']);
+			$recommend['keywords'] = explode(',', trim($recommend['keywords']) );
 			$keywords = is_string($keywords) ? explode(',',$keywords) : $keywords;
 			$keywords = array_merge( $recommend['keywords'], $keywords );
 
@@ -115,14 +125,14 @@ class Recommend extends Model {
 	/**
 	 * 自定义函数 按推荐ID选取推荐文章
 	 */
-	function getArticles(  $recommend_id,  $keywords=[], $page=1, $perpage=20 ) {
-		return $this->getArticlesBy('recommend_id', $recommend_id,  $keywords, $page, $perpage );
+	function getArticles(  $recommend_id,  $keywords=[], $now=null, $page=1, $perpage=20 ) {
+		return $this->getArticlesBy('recommend_id', $recommend_id, $keywords, $now, $page, $perpage );
 	}
 	/**
 	 * 自定义函数 按别名选取推荐文章
 	 */
-	function getArticlesBySlug(  $recommend_id,  $keywords=[], $page=1, $perpage=20 ) {
-		return $this->getArticlesBy('slug', $recommend_id,  $keywords, $page, $perpage );
+	function getArticlesBySlug(  $recommend_id,  $keywords=[], $now=null, $page=1, $perpage=20 ) {
+		return $this->getArticlesBy('slug', $recommend_id,  $keywords, $now, $page, $perpage );
 	}
 
 	/**
@@ -213,9 +223,19 @@ class Recommend extends Model {
 		  			"name" => "今日",
 		  			"style" => "info"
 		  		],
+		  		"7days" => [
+		  			"value" => "7days",
+		  			"name" => "7天",
+		  			"style" => "info"
+		  		],
 		  		"weekly" => [
 		  			"value" => "weekly",
 		  			"name" => "本周",
+		  			"style" => "info"
+		  		],
+		  		"30days" => [
+		  			"value" => "30days",
+		  			"name" => "30天",
 		  			"style" => "info"
 		  		],
 		  		"monthly" => [

@@ -136,7 +136,9 @@ use \Xpmse\T;
 									<i class="glyphicon glyphicon-list-alt"></i> 
 									<?=($query['period'] == '24hours') ? '24小时' : '' ?>
 									<?=($query['period'] == 'daily') ? '今日' : '' ?>
+									<?=($query['period'] == '7days') ? '7天' : '' ?>
 									<?=($query['period'] == 'weekly') ? '本周' : '' ?>
+									<?=($query['period'] == '30days') ? '30天' : '' ?>
 									<?=($query['period'] == 'monthly') ? '本月' : '' ?>
 									<?=($query['period'] == 'yearly') ? '今年' : '' ?>
 									<?=($query['period'] == 'unlimited') ? '无限' : '' ?>
@@ -162,8 +164,18 @@ use \Xpmse\T;
 										</a>
 									</li>
 									<li >
+										<a href="javascript:search('period','7days')">
+										   7天
+										</a>
+									</li>
+									<li >
 										<a href="javascript:search('period','weekly')">
 										   本周
+										</a>
+									</li>
+									<li >
+										<a href="javascript:search('period','30days')">
+										   30天
 										</a>
 									</li>
 									<li >

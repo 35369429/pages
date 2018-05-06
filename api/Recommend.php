@@ -4,7 +4,7 @@
  * 推荐数据接口 
  *
  * 程序作者: XpmSE机器人
- * 最后修改: 2018-05-06 22:25:48
+ * 最后修改: 2018-05-06 23:36:37
  * 程序母版: /data/stor/private/templates/xpmsns/model/code/api/Name.php
  */
 namespace Xpmsns\Pages\Api;
@@ -36,11 +36,13 @@ class Recommend extends Api {
 		$keywords = !empty($data['keywords']) ?  explode(',',$data['keywords']) : []; 
 		$page = !empty($data['page']) ?  $data['page'] : 1; 
 		$perpage = !empty($data['perpage']) ?  $data['perpage'] : 20; 
+      	$now = !empty($data['now']) ?  $data['now'] : null; 
+         
 
 		if ( array_key_exists('slug', $data) && !empty($data['slug']) ) {
-			return $inst->getArticlesBySlug( $data['slug'], $keywords, $page, $perpage);
+			return $inst->getArticlesBySlug( $data['slug'], $keywords, $now, $page, $perpage);
 		} else if ( array_key_exists('recommend_id', $data) && !empty($data['recommend_id']) ) {
-			return $inst->getArticles( $data['recommend_id'], $keywords, $page, $perpage);
+			return $inst->getArticles( $data['recommend_id'], $keywords, $now, $page, $perpage);
 		}
 
 		throw new Excp('错误的查询参数', 402, ['query'=>$query, 'data'=>$data]);
