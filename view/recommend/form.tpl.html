@@ -45,6 +45,19 @@ use \Xpmse\T;
 		</div>
 	</div><!-- END 单行文本: 主题 (title) -->
 
+	<!-- 单行文本: 别名 (slug) 开始  -->
+	<div class="form-group   ">
+		<label class="col-xs-2 control-label" for="slug">别名<span class="text-danger">*</span></label>
+		<div class="col-xs-8">
+			<input class="form-control input-lg"  
+				type="text" 
+				id="slug" name="slug" 
+				placeholder="请填写推荐别名"  
+				value="<?=T::v('<%=slug | e(\'html\')%>', $rs )?>" /> 
+			<div class="help-block"></div>
+		</div>
+	</div><!-- END 单行文本: 别名 (slug) -->
+
 
 
  
@@ -77,9 +90,10 @@ use \Xpmse\T;
 				<option></option>
 				<?php $rs["orderby"] = is_string($rs["orderby"]) ? [$rs["orderby"]] : $rs["orderby"] ; if (empty($rs["orderby"])) { $rs["orderby"] = ["publish_time"]; } ?>
 <option value="publish_time" <?=in_array("publish_time", $rs["orderby"]) ? "selected" : ""?> > 最新发表</option>
-<option value="page_view" <?=in_array("page_view", $rs["orderby"]) ? "selected" : ""?> >  最多浏览</option>
-<option value="favorite" <?=in_array("favorite", $rs["orderby"]) ? "selected" : ""?> >  最多点赞</option>
-<option value="comment" <?=in_array("comment", $rs["orderby"]) ? "selected" : ""?> >  最多评论</option>
+<option value="view_cnt" <?=in_array("view_cnt", $rs["orderby"]) ? "selected" : ""?> >  最多浏览</option>
+<option value="like_cnt" <?=in_array("like_cnt", $rs["orderby"]) ? "selected" : ""?> >  最多点赞</option>
+<option value="comment_cnt" <?=in_array("comment_cnt", $rs["orderby"]) ? "selected" : ""?> >  最多评论</option>
+<option value="dislike_cnt" <?=in_array("dislike_cnt", $rs["orderby"]) ? "selected" : ""?> > 最多讨厌</option>
 			</select>
 			<div class="help-block"></div>
 		</div>

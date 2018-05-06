@@ -4,11 +4,11 @@
  * 推荐数据模型
  *
  * 程序作者: XpmSE机器人
- * 最后修改: 2018-04-29 09:52:48
+ * 最后修改: 2018-05-06 17:42:51
  * 程序母版: /data/stor/private/templates/xpmsns/model/code/model/Name.php
  */
 namespace Xpmsns\Pages\Model;
-                  
+                    
 use \Xpmse\Excp;
 use \Xpmse\Model;
 use \Xpmse\Utils;
@@ -45,9 +45,85 @@ class Recommend extends Model {
 	}
 
 	/**
-	 * 自定义函数 
+	 * 自定义函数 选取推荐文章
 	 */
+	function getArticlesBy( $type,  $recommend_id,  $keywords=[], $page=1, $perpage=20 ) {
+	
+		$select = ['recommend.title', 'recommend.type', 'recommend.keywords', "orderby", 'articles', 'categories'];
+		$method = "getBy{$type}";
+		if ( !method_exists( $this, $method) ) {
+			throw new Excp( "推荐数据查询方法不存在", 404, ['method'=>$method] );
+		}
+      	$recommend = $this->$method( $recommend_id ,  $select );
+		
+		if ( empty($recommend) ) {
+			throw new Excp( "推荐数据不存在", 404, ['recommend_id'=>$recommend_id] );
+		}
 
+		$art = new Article;
+		$query = [];
+		
+		// 数据排序
+		switch ($recommend['orderby']) {
+			case 'publish_time': 
+				$query['order'] =  "publish_time desc";
+				break;
+			case 'view_cnt':
+				$query['order'] =  "view_cnt desc";
+				break;
+			case 'like_cnt':
+				$query['order'] =  "like_cnt desc";
+				break;
+			case 'dislike_cnt':
+				$query['order'] =  "dislike_cnt desc";
+				break;
+			case 'comment_cnt':
+				$query['order'] =  "comment_cnt desc";
+				break;
+			default:
+				$query['order'] =  "publish_time desc";
+				break;
+		}
+
+
+		// 自动根据关键词关联
+		if ( $recommend['type'] == 'auto' ) {
+
+			$recommend['keywords'] = explode(',', $recommend['keywords']);
+			$keywords = is_string($keywords) ? explode(',',$keywords) : $keywords;
+			$keywords = array_merge( $recommend['keywords'], $keywords );
+
+			// 按关键词提取数据
+			$query['keywords'] =$keywords;
+
+			// 按分类提取数据
+			if ( !empty($recommend['categories']) ) {
+				$query['category_ids'] = $recommend['categories'];
+			}
+
+			return $art->search($query);
+
+		// 静态关联
+		} else if ( $recommend['type'] == 'static' )  {
+			
+			// 提取选定文章信息
+			$query['article_ids'] = $recommend['articles'];
+			return $art->search($query);
+		}
+
+	}
+	/**
+	 * 自定义函数 按推荐ID选取推荐文章
+	 */
+	function getArticles(  $recommend_id,  $keywords=[], $page=1, $perpage=20 ) {
+		return $this->getArticlesBy('recommend_id', $recommend_id,  $keywords, $page, $perpage );
+	}
+	/**
+	 * 自定义函数 按别名选取推荐文章
+	 */
+	function getArticlesBySlug(  $recommend_id,  $keywords=[], $page=1, $perpage=20 ) {
+		return $this->getArticlesBy('slug', $recommend_id,  $keywords, $page, $perpage );
+	}
 
 	/**
 	 * 创建数据表
@@ -59,20 +135,12 @@ class Recommend extends Model {
 		$this->putColumn( 'recommend_id', $this->type("string", ["length"=>128, "unique"=>true, "null"=>true]));
 		// 主题
 		$this->putColumn( 'title', $this->type("string", ["length"=>100, "index"=>true, "null"=>true]));
+		// 别名
+		$this->putColumn( 'slug', $this->type("string", ["length"=>100, "unique"=>true, "null"=>true]));
 		// 方式
 		$this->putColumn( 'type', $this->type("string", ["length"=>20, "index"=>true, "default"=>"auto", "null"=>true]));
 		// 摘要图片
 		$this->putColumn( 'images', $this->type("text", ["json"=>true, "null"=>true]));
-		// PC端模板
-		$this->putColumn( 'tpl_pc', $this->type("longtext", ["null"=>true]));
-		// 手机端模板
-		$this->putColumn( 'tpl_h5', $this->type("longtext", ["null"=>true]));
-		// 小程序模板
-		$this->putColumn( 'tpl_wxapp', $this->type("longtext", ["null"=>true]));
-		// 安卓模板
-		$this->putColumn( 'tpl_android', $this->type("longtext", ["null"=>true]));
-		// iOS模板
-		$this->putColumn( 'tpl_ios', $this->type("longtext", ["null"=>true]));
 		// 关键词
 		$this->putColumn( 'keywords', $this->type("text", ["null"=>true]));
 		// 相关栏目
@@ -138,19 +206,24 @@ class Recommend extends Model {
 		  			"name" => "最新发表",
 		  			"style" => "info"
 		  		],
-		  		"page_view" => [
-		  			"value" => "page_view",
+		  		"view_cnt" => [
+		  			"value" => "view_cnt",
 		  			"name" => "最多浏览",
 		  			"style" => "info"
 		  		],
-		  		"favorite" => [
-		  			"value" => "favorite",
+		  		"like_cnt" => [
+		  			"value" => "like_cnt",
 		  			"name" => "最多点赞",
 		  			"style" => "info"
 		  		],
-		  		"comment" => [
-		  			"value" => "comment",
+		  		"comment_cnt" => [
+		  			"value" => "comment_cnt",
 		  			"name" => "最多评论",
+		  			"style" => "info"
+		  		],
+		  		"dislike_cnt" => [
+		  			"value" => "dislike_cnt",
+		  			"name" => "最多讨厌",
 		  			"style" => "info"
 		  		],
 			];
@@ -171,6 +244,7 @@ class Recommend extends Model {
 	 * @return array $rs 结果集 
 	 *          	  $rs["recommend_id"],  // 推荐ID 
 	 *          	  $rs["title"],  // 主题 
+	 *          	  $rs["slug"],  // 别名 
 	 *          	  $rs["type"],  // 方式 
 	 *          	  $rs["images"],  // 摘要图片 
 	 *          	  $rs["tpl_pc"],  // PC端模板 
@@ -217,6 +291,9 @@ class Recommend extends Model {
 	 *                $rs["_map_article"][$articles[n]]["user"], // article.user
 	 *                $rs["_map_article"][$articles[n]]["policies"], // article.policies
 	 *                $rs["_map_article"][$articles[n]]["status"], // article.status
+	 *                $rs["_map_article"][$articles[n]]["page_view"], // article.page_view
+	 *                $rs["_map_article"][$articles[n]]["favorite"], // article.favorite
+	 *                $rs["_map_article"][$articles[n]]["comment"], // article.comment
 	 *                $rs["_map_category"][$categories[n]]["created_at"], // category.created_at
 	 *                $rs["_map_category"][$categories[n]]["updated_at"], // category.updated_at
 	 *                $rs["_map_category"][$categories[n]]["slug"], // category.slug
@@ -278,7 +355,17 @@ class Recommend extends Model {
 		return $rs;
 	}
 
-		
+		/**
+	 * 按推荐ID查询一组推荐记录
+	 * @param array   $recommend_ids 唯一主键数组 ["$recommend_id1","$recommend_id2" ...]
+	 * @param array   $order        排序方式 ["field"=>"asc", "field2"=>"desc"...]
+	 * @param array   $select       选取字段，默认选取所有
+	 * @return array 推荐记录MAP {"recommend_id1":{"key":"value",...}...}
+	 */
+	public function getIn($recommend_ids, $select=["recommend.recommend_id","recommend.title","recommend.type","recommend.keywords","recommend.orderby","recommend.created_at","recommend.updated_at"], $order=["recommend.created_at"=>"asc"] ) {
+		return $this->getInByRecommendId( $recommend_ids, $select, $order);
+	}
+	
 
 	/**
 	 * 按推荐ID查询一组推荐记录
@@ -354,7 +441,204 @@ class Recommend extends Model {
 		// 增加表单查询索引字段
 		array_push($select, "recommend.recommend_id");
 		$inwhereSelect = $this->formatSelect( $select ); // 过滤 inWhere 查询字段
-		$rs = $this->saveBy("recommend_id", $data, ["recommend_id"], ['_id', 'recommend_id']);
+		$rs = $this->saveBy("recommend_id", $data, ["recommend_id", "slug"], ['_id', 'recommend_id']);
+		return $this->getByRecommendId( $rs['recommend_id'], $select );
+	}
+	
+	/**
+	 * 按别名查询一条推荐记录
+	 * @param string $slug 唯一主键
+	 * @return array $rs 结果集 
+	 *          	  $rs["recommend_id"],  // 推荐ID 
+	 *          	  $rs["title"],  // 主题 
+	 *          	  $rs["slug"],  // 别名 
+	 *          	  $rs["type"],  // 方式 
+	 *          	  $rs["images"],  // 摘要图片 
+	 *          	  $rs["tpl_pc"],  // PC端模板 
+	 *          	  $rs["tpl_h5"],  // 手机端模板 
+	 *          	  $rs["tpl_wxapp"],  // 小程序模板 
+	 *          	  $rs["tpl_android"],  // 安卓模板 
+	 *          	  $rs["tpl_ios"],  // iOS模板 
+	 *          	  $rs["keywords"],  // 关键词 
+	 *          	  $rs["categories"],  // 相关栏目 
+	 *                $rs["_map_category"][$categories[n]]["category_id"], // category.category_id
+	 *          	  $rs["articles"],  // 相关文章 
+	 *                $rs["_map_article"][$articles[n]]["article_id"], // article.article_id
+	 *          	  $rs["orderby"],  // 排序方式 
+	 *          	  $rs["created_at"],  // 创建时间 
+	 *          	  $rs["updated_at"],  // 更新时间 
+	 *                $rs["_map_article"][$articles[n]]["created_at"], // article.created_at
+	 *                $rs["_map_article"][$articles[n]]["updated_at"], // article.updated_at
+	 *                $rs["_map_article"][$articles[n]]["outer_id"], // article.outer_id
+	 *                $rs["_map_article"][$articles[n]]["cover"], // article.cover
+	 *                $rs["_map_article"][$articles[n]]["thumbs"], // article.thumbs
+	 *                $rs["_map_article"][$articles[n]]["images"], // article.images
+	 *                $rs["_map_article"][$articles[n]]["videos"], // article.videos
+	 *                $rs["_map_article"][$articles[n]]["audios"], // article.audios
+	 *                $rs["_map_article"][$articles[n]]["title"], // article.title
+	 *                $rs["_map_article"][$articles[n]]["author"], // article.author
+	 *                $rs["_map_article"][$articles[n]]["origin"], // article.origin
+	 *                $rs["_map_article"][$articles[n]]["origin_url"], // article.origin_url
+	 *                $rs["_map_article"][$articles[n]]["summary"], // article.summary
+	 *                $rs["_map_article"][$articles[n]]["seo_title"], // article.seo_title
+	 *                $rs["_map_article"][$articles[n]]["seo_keywords"], // article.seo_keywords
+	 *                $rs["_map_article"][$articles[n]]["seo_summary"], // article.seo_summary
+	 *                $rs["_map_article"][$articles[n]]["publish_time"], // article.publish_time
+	 *                $rs["_map_article"][$articles[n]]["update_time"], // article.update_time
+	 *                $rs["_map_article"][$articles[n]]["create_time"], // article.create_time
+	 *                $rs["_map_article"][$articles[n]]["baidulink_time"], // article.baidulink_time
+	 *                $rs["_map_article"][$articles[n]]["sync"], // article.sync
+	 *                $rs["_map_article"][$articles[n]]["content"], // article.content
+	 *                $rs["_map_article"][$articles[n]]["ap_content"], // article.ap_content
+	 *                $rs["_map_article"][$articles[n]]["delta"], // article.delta
+	 *                $rs["_map_article"][$articles[n]]["param"], // article.param
+	 *                $rs["_map_article"][$articles[n]]["stick"], // article.stick
+	 *                $rs["_map_article"][$articles[n]]["preview"], // article.preview
+	 *                $rs["_map_article"][$articles[n]]["links"], // article.links
+	 *                $rs["_map_article"][$articles[n]]["user"], // article.user
+	 *                $rs["_map_article"][$articles[n]]["policies"], // article.policies
+	 *                $rs["_map_article"][$articles[n]]["status"], // article.status
+	 *                $rs["_map_article"][$articles[n]]["page_view"], // article.page_view
+	 *                $rs["_map_article"][$articles[n]]["favorite"], // article.favorite
+	 *                $rs["_map_article"][$articles[n]]["comment"], // article.comment
+	 *                $rs["_map_category"][$categories[n]]["created_at"], // category.created_at
+	 *                $rs["_map_category"][$categories[n]]["updated_at"], // category.updated_at
+	 *                $rs["_map_category"][$categories[n]]["slug"], // category.slug
+	 *                $rs["_map_category"][$categories[n]]["project"], // category.project
+	 *                $rs["_map_category"][$categories[n]]["page"], // category.page
+	 *                $rs["_map_category"][$categories[n]]["wechat"], // category.wechat
+	 *                $rs["_map_category"][$categories[n]]["wechat_offset"], // category.wechat_offset
+	 *                $rs["_map_category"][$categories[n]]["name"], // category.name
+	 *                $rs["_map_category"][$categories[n]]["fullname"], // category.fullname
+	 *                $rs["_map_category"][$categories[n]]["root_id"], // category.root_id
+	 *                $rs["_map_category"][$categories[n]]["parent_id"], // category.parent_id
+	 *                $rs["_map_category"][$categories[n]]["priority"], // category.priority
+	 *                $rs["_map_category"][$categories[n]]["hidden"], // category.hidden
+	 *                $rs["_map_category"][$categories[n]]["param"], // category.param
+	 *                $rs["_map_category"][$categories[n]]["status"], // category.status
+	 */
+	public function getBySlug( $slug, $select=['*']) {
+		
+		if ( is_string($select) ) {
+			$select = explode(',', $select);
+		}
+
+
+		// 增加表单查询索引字段
+		array_push($select, "recommend.recommend_id");
+		$inwhereSelect = $this->formatSelect( $select ); // 过滤 inWhere 查询字段
+
+		// 创建查询构造器
+		$qb = Utils::getTab("xpmsns_pages_recommend as recommend", "{none}")->query();
+  		$qb->where('slug', '=', $slug );
+		$qb->limit( 1 );
+		$qb->select($select);
+		$rows = $qb->get()->toArray();
+		if( empty($rows) ) {
+			return [];
+		}
+
+		$rs = current( $rows );
+		$this->format($rs);
+
+ 		$article_ids = []; // 读取 inWhere article 数据
+		$article_ids = array_merge($article_ids, is_array($rs["articles"]) ? $rs["articles"] : [$rs["articles"]]);
+ 		$category_ids = []; // 读取 inWhere category 数据
+		$category_ids = array_merge($category_ids, is_array($rs["categories"]) ? $rs["categories"] : [$rs["categories"]]);
+
+ 		// 读取 inWhere article 数据
+		if ( !empty($inwhereSelect["article"]) && method_exists("\\Xpmsns\\Pages\\Model\\Article", 'getInByArticleId') ) {
+			$article_ids = array_unique($article_ids);
+			$selectFields = $inwhereSelect["article"];
+			$rs["_map_article"] = (new \Xpmsns\Pages\Model\Article)->getInByArticleId($article_ids, $selectFields);
+		}
+ 		// 读取 inWhere category 数据
+		if ( !empty($inwhereSelect["category"]) && method_exists("\\Xpmsns\\Pages\\Model\\Category", 'getInByCategoryId') ) {
+			$category_ids = array_unique($category_ids);
+			$selectFields = $inwhereSelect["category"];
+			$rs["_map_category"] = (new \Xpmsns\Pages\Model\Category)->getInByCategoryId($category_ids, $selectFields);
+		}
+
+		return $rs;
+	}
+
+	
+
+	/**
+	 * 按别名查询一组推荐记录
+	 * @param array   $slugs 唯一主键数组 ["$slug1","$slug2" ...]
+	 * @param array   $order        排序方式 ["field"=>"asc", "field2"=>"desc"...]
+	 * @param array   $select       选取字段，默认选取所有
+	 * @return array 推荐记录MAP {"slug1":{"key":"value",...}...}
+	 */
+	public function getInBySlug($slugs, $select=["recommend.recommend_id","recommend.title","recommend.type","recommend.keywords","recommend.orderby","recommend.created_at","recommend.updated_at"], $order=["recommend.created_at"=>"asc"] ) {
+		
+		if ( is_string($select) ) {
+			$select = explode(',', $select);
+		}
+
+		// 增加表单查询索引字段
+		array_push($select, "recommend.recommend_id");
+		$inwhereSelect = $this->formatSelect( $select ); // 过滤 inWhere 查询字段
+
+		// 创建查询构造器
+		$qb = Utils::getTab("xpmsns_pages_recommend as recommend", "{none}")->query();
+  		
+		// 排序
+		foreach ($order as $field => $order ) {
+			$qb->orderBy( $field, $order );
+		}
+		$qb->select( $select );
+		$data = $qb->get()->toArray(); 
+
+		$map = [];
+
+ 		$article_ids = []; // 读取 inWhere article 数据
+ 		$category_ids = []; // 读取 inWhere category 数据
+		foreach ($data as & $rs ) {
+			$this->format($rs);
+			$map[$rs['slug']] = $rs;
+			
+ 			// for inWhere article
+			$article_ids = array_merge($article_ids, is_array($rs["articles"]) ? $rs["articles"] : [$rs["articles"]]);
+ 			// for inWhere category
+			$category_ids = array_merge($category_ids, is_array($rs["categories"]) ? $rs["categories"] : [$rs["categories"]]);
+		}
+
+ 		// 读取 inWhere article 数据
+		if ( !empty($inwhereSelect["article"]) && method_exists("\\Xpmsns\\Pages\\Model\\Article", 'getInByArticleId') ) {
+			$article_ids = array_unique($article_ids);
+			$selectFields = $inwhereSelect["article"];
+			$map["_map_article"] = (new \Xpmsns\Pages\Model\Article)->getInByArticleId($article_ids, $selectFields);
+		}
+ 		// 读取 inWhere category 数据
+		if ( !empty($inwhereSelect["category"]) && method_exists("\\Xpmsns\\Pages\\Model\\Category", 'getInByCategoryId') ) {
+			$category_ids = array_unique($category_ids);
+			$selectFields = $inwhereSelect["category"];
+			$map["_map_category"] = (new \Xpmsns\Pages\Model\Category)->getInByCategoryId($category_ids, $selectFields);
+		}
+
+
+		return $map;
+	}
+
+
+	/**
+	 * 按别名保存推荐记录。(记录不存在则创建，存在则更新)
+	 * @param array $data 记录数组 (key:value 结构)
+	 * @param array $select 返回的字段，默认返回全部
+	 * @return array 数据记录数组
+	 */
+	public function saveBySlug( $data, $select=["*"] ) {
+
+		if ( is_string($select) ) {
+			$select = explode(',', $select);
+		}
+
+		// 增加表单查询索引字段
+		array_push($select, "recommend.recommend_id");
+		$inwhereSelect = $this->formatSelect( $select ); // 过滤 inWhere 查询字段
+		$rs = $this->saveBy("slug", $data, ["recommend_id", "slug"], ['_id', 'recommend_id']);
 		return $this->getByRecommendId( $rs['recommend_id'], $select );
 	}
 
@@ -378,6 +662,31 @@ class Recommend extends Model {
 
 		if ( $upload_only !== true ) {
 			$this->updateBy('recommend_id', ["recommend_id"=>$recommend_id, "images"=>$paths] );
+		}
+
+		return $fs;
+	}
+
+	/**
+	 * 根据别名上传摘要图片。
+	 * @param string $slug 别名
+	 * @param string $file_path 文件路径
+	 * @param mix $index 如果是数组，替换当前 index
+	 * @return array 已上传文件信息 {"url":"访问地址...", "path":"文件路径...", "origin":"原始文件访问地址..." }
+	 */
+	public function uploadImagesBySlug($slug, $file_path, $index=null, $upload_only=false ) {
+
+		$rs = $this->getBy('slug', $slug, ["images"]);
+		$paths = empty($rs["images"]) ? [] : $rs["images"];
+		$fs = $this->media->uploadFile( $file_path );
+		if ( $index === null ) {
+			array_push($paths, $fs['path']);
+		} else {
+			$paths[$index] = $fs['path'];
+		}
+
+		if ( $upload_only !== true ) {
+			$this->updateBy('slug', ["slug"=>$slug, "images"=>$paths] );
 		}
 
 		return $fs;
@@ -471,6 +780,7 @@ class Recommend extends Model {
 	 * @return array 推荐记录集 {"total":100, "page":1, "perpage":20, data:[{"key":"val"}...], "from":1, "to":1, "prev":false, "next":1, "curr":10, "last":20}
 	 *               	["recommend_id"],  // 推荐ID 
 	 *               	["title"],  // 主题 
+	 *               	["slug"],  // 别名 
 	 *               	["type"],  // 方式 
 	 *               	["images"],  // 摘要图片 
 	 *               	["tpl_pc"],  // PC端模板 
@@ -517,6 +827,9 @@ class Recommend extends Model {
 	 *               	["article"][$articles[n]]["user"], // article.user
 	 *               	["article"][$articles[n]]["policies"], // article.policies
 	 *               	["article"][$articles[n]]["status"], // article.status
+	 *               	["article"][$articles[n]]["page_view"], // article.page_view
+	 *               	["article"][$articles[n]]["favorite"], // article.favorite
+	 *               	["article"][$articles[n]]["comment"], // article.comment
 	 *               	["category"][$categories[n]]["created_at"], // category.created_at
 	 *               	["category"][$categories[n]]["updated_at"], // category.updated_at
 	 *               	["category"][$categories[n]]["slug"], // category.slug
@@ -552,6 +865,7 @@ class Recommend extends Model {
 			$qb->where(function ( $qb ) use($query) {
 				$qb->where("recommend.recommend_id", "like", "%{$query['keyword']}%");
 				$qb->orWhere("recommend.title","like", "%{$query['keyword']}%");
+				$qb->orWhere("recommend.slug","like", "%{$query['keyword']}%");
 			});
 		}
 
@@ -677,6 +991,7 @@ class Recommend extends Model {
 		return [
 			"recommend_id",  // 推荐ID
 			"title",  // 主题
+			"slug",  // 别名
 			"type",  // 方式
 			"images",  // 摘要图片
 			"tpl_pc",  // PC端模板

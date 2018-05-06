@@ -4,11 +4,11 @@
  * 推荐数据接口 
  *
  * 程序作者: XpmSE机器人
- * 最后修改: 2018-04-29 09:52:46
+ * 最后修改: 2018-05-06 17:42:50
  * 程序母版: /data/stor/private/templates/xpmsns/model/code/api/Name.php
  */
 namespace Xpmsns\Pages\Api;
-                  
+                    
 
 use \Xpmse\Loader\App;
 use \Xpmse\Excp;
@@ -25,23 +25,43 @@ class Recommend extends Api {
 	}
 
 	/**
-	 * 自定义函数 
+	 * 自定义函数 读取推荐文章
 	 */
+	protected function getArticles( $query, $data ) {
+		
+		// 支持POST和GET查询
+		$data = array_merge( $query, $data );
 
+		$inst = new \Xpmsns\Pages\Model\Recommend;
+		$keywords = !empty($data['keywords']) ?  explode(',',$data['keywords']) : []; 
+		$page = !empty($data['page']) ?  $data['page'] : 1; 
+		$perpage = !empty($data['perpage']) ?  $data['perpage'] : 20; 
+
+		if ( array_key_exists('slug', $data) && !empty($data['slug']) ) {
+			return $inst->getArticlesBySlug( $data['slug'], $keywords, $page, $perpage);
+		} else if ( array_key_exists('recommend_id', $data) && !empty($data['recommend_id']) ) {
+			return $inst->getArticles( $data['recommend_id'], $keywords, $page, $perpage);
+		}
+
+		throw new Excp('错误的查询参数', 402, ['query'=>$query, 'data'=>$data]);
+	}
 
 	/**
 	 * 查询一条推荐记录
 	 * @param  array $query GET 参数
 	 *               $query['select']  读取字段, 默认 ["recommend.recommend_id","recommend.title","recommend.type","recommend.images","recommend.keywords","recommend.orderby","recommend.created_at","recommend.updated_at","a.article_id","a.title","c.category_id","c.name"]
 	 * 				 $query['recommend_id']  按查询 (多条用 "," 分割)
+	 * 				 $query['slug']  按查询 (多条用 "," 分割)
      *
 	 * @param  array $data  POST 参数
 	 *               $data['select']  返回字段, 默认 ["recommend.recommend_id","recommend.title","recommend.type","recommend.images","recommend.keywords","recommend.orderby","recommend.created_at","recommend.updated_at","a.article_id","a.title","c.category_id","c.name"]
 	 * 				 $data['recommend_id']  按查询 (多条用 "," 分割)
+	 * 				 $data['slug']  按查询 (多条用 "," 分割)
 	 *
 	 * @return array 推荐记录 Key Value 结构数据 
 	 *               	["recommend_id"],  // 推荐ID 
 	 *               	["title"],  // 主题 
+	 *               	["slug"],  // 别名 
 	 *               	["type"],  // 方式 
 	 *               	["images"],  // 摘要图片 
 	 *               	["tpl_pc"],  // PC端模板 
@@ -88,6 +108,9 @@ class Recommend extends Api {
 	*               	["_map_article"][$articles[n]]["user"], // article.user
 	*               	["_map_article"][$articles[n]]["policies"], // article.policies
 	*               	["_map_article"][$articles[n]]["status"], // article.status
+	*               	["_map_article"][$articles[n]]["page_view"], // article.page_view
+	*               	["_map_article"][$articles[n]]["favorite"], // article.favorite
+	*               	["_map_article"][$articles[n]]["comment"], // article.comment
 	*               	["_map_category"][$categories[n]]["created_at"], // category.created_at
 	*               	["_map_category"][$categories[n]]["updated_at"], // category.updated_at
 	*               	["_map_category"][$categories[n]]["slug"], // category.slug
@@ -129,6 +152,19 @@ class Recommend extends Api {
 			return $inst->getByRecommendId($data["recommend_id"], $select);
 		}
 
+		// 按别名
+		if ( !empty($data["slug"]) ) {
+			
+			$keys = explode(',', $data["slug"]);
+			if ( count( $keys )  > 1 ) {
+				$inst = new \Xpmsns\Pages\Model\Recommend;
+				return $inst->getInBySlug($keys, $select);
+			}
+
+			$inst = new \Xpmsns\Pages\Model\Recommend;
+			return $inst->getBySlug($data["slug"], $select);
+		}
+
 		throw new Excp("未知查询条件", 404, ['query'=>$query, 'data'=>$data]);
 	}
 
@@ -138,6 +174,7 @@ class Recommend extends Api {
 	 * @param  array $data  POST 参数新增的字段记录 
 	 *               $data['recommend_id'] 推荐ID
 	 *               $data['title'] 主题
+	 *               $data['slug'] 别名
 	 *               $data['type'] 方式
 	 *               $data['images'] 摘要图片
 	 *               $data['tpl_pc'] PC端模板
@@ -175,81 +212,8 @@ class Recommend extends Api {
 	}
 
 
-	/**
-	 * 更新一条推荐记录
-	 * @param  array $query GET 参数
-	 * 				 $query['name=recommend_id']  按更新
-     *
-	 * @param  array $data  POST 参数 更新字段记录 
-	 *               $data['recommend_id'] 推荐ID
-	 *               $data['title'] 主题
-	 *               $data['type'] 方式
-	 *               $data['images'] 摘要图片
-	 *               $data['tpl_pc'] PC端模板
-	 *               $data['tpl_h5'] 手机端模板
-	 *               $data['tpl_wxapp'] 小程序模板
-	 *               $data['tpl_android'] 安卓模板
-	 *               $data['tpl_ios'] iOS模板
-	 *               $data['keywords'] 关键词
-	 *               $data['categories'] 相关栏目
-	 *               $data['articles'] 相关文章
-	 *               $data['orderby'] 排序方式
-	 *
-	 * @return array 更新的推荐记录 @see get()
-	 * 
-	 */
-	protected function update( $query, $data ) {
-
-		if ( !empty($query['_secret']) ) { 
-			// secret校验，一般用于小程序 & 移动应用
-			$this->authSecret($query['_secret']);
-		} else {
-			// 签名校验，一般用于后台程序调用
-			$this->auth($query); 
-		}
-
-		// 按推荐ID
-		if ( !empty($query["recommend_id"]) ) {
-			$data = array_merge( $data, ["recommend_id"=>$query["recommend_id"]] );
-			$inst = new \Xpmsns\Pages\Model\Recommend;
-			$rs = $inst->updateBy("recommend_id",$data);
-			return $inst->getByRecommendId($rs["recommend_id"]);
-		}
-
-		throw new Excp("未知查询条件", 404, ['query'=>$query, 'data'=>$data]);
-	}
 
 
-	/**
-	 * 删除一条推荐记录
-	 * @param  array $query GET 参数
-	 * 				 $query['recommend_id']  按推荐ID 删除
-     *
-	 * @param  array $data  POST 参数
-	 * @return bool 成功返回 ["code"=>0, "message"=>"删除成功"]
-	 */
-	protected function delete( $query, $data ) {
-
-		if ( !empty($query['_secret']) ) { 
-			// secret校验，一般用于小程序 & 移动应用
-			$this->authSecret($query['_secret']);
-		} else {
-			// 签名校验，一般用于后台程序调用
-			$this->auth($query); 
-		}
-
-		// 按推荐ID
-		if ( !empty($query["recommend_id"]) ) {
-			$inst = new \Xpmsns\Pages\Model\Recommend;
-			$resp = $inst->remove($query['recommend_id'], "recommend_id");
-			if ( $resp ) {
-				return ["code"=>0, "message"=>"删除成功"];
-			}
-			throw new Excp("删除失败", 500, ['query'=>$query, 'data'=>$data, 'response'=>$resp]);
-		}
-
-		throw new Excp("未知查询条件", 404, ['query'=>$query, 'data'=>$data]);
-	}
 
 
 	/**
@@ -280,6 +244,7 @@ class Recommend extends Api {
 	 *               data:[{"key":"val"}...] 字段
 	 *               	["recommend_id"],  // 推荐ID 
 	 *               	["title"],  // 主题 
+	 *               	["slug"],  // 别名 
 	 *               	["type"],  // 方式 
 	 *               	["images"],  // 摘要图片 
 	 *               	["tpl_pc"],  // PC端模板 
@@ -326,6 +291,9 @@ class Recommend extends Api {
 	*               	["article"][$articles[n]]["user"], // article.user
 	*               	["article"][$articles[n]]["policies"], // article.policies
 	*               	["article"][$articles[n]]["status"], // article.status
+	*               	["article"][$articles[n]]["page_view"], // article.page_view
+	*               	["article"][$articles[n]]["favorite"], // article.favorite
+	*               	["article"][$articles[n]]["comment"], // article.comment
 	*               	["category"][$categories[n]]["created_at"], // category.created_at
 	*               	["category"][$categories[n]]["updated_at"], // category.updated_at
 	*               	["category"][$categories[n]]["slug"], // category.slug
@@ -359,26 +327,5 @@ class Recommend extends Api {
 		return $inst->search( $data );
 	}
 
-	/**
-	 * 文件上传接口 (上传控件名称 )
-	 * @param  array $query [description]
-	 *               $query["private"]  上传文件为私有文件
-	 * @param  [type] $data  [description]
-	 * @return array 文件信息 {"url":"访问地址...", "path":"文件路径...", "origin":"原始文件访问地址..." }
-	 */
-	protected function upload( $query, $data, $files ) {
-		// secret校验，一般用于小程序 & 移动应用
-		$this->authSecret($query['_secret']);  
-
-		$fname = $files['file']['tmp_name'];
-		if ( $query['private'] ) {
-			$media = new \Xpmse\Media(["host" => Utils::getHome(), 'private'=>true]);
-		} else {
-			$media = new \Xpmse\Media(["host" => Utils::getHome()]);
-		}
-		$ext = $media->getExt($fname);
-		$rs = $media->uploadFile($fname, $ext);
-		return $rs;
-	}
 
 }

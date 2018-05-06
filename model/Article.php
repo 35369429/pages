@@ -96,7 +96,6 @@ class Article extends Model {
 			'origin'=> ['string',  ['length'=>128, 'index'=>1]],  // 来源
 			'origin_url'=>['string',  ['length'=>256]],  // 来源网址
 			'summary'=> ['string',  ['length'=>600]],  // 摘要
-			'keywords' => ['string',['length'=>600]],  // 提取关键词
 			'seo_title'=> ['string',  ['length'=>600]],  // 搜索引擎标题
 			'seo_keywords'=> ['string',  ['length'=>600]],  // 搜索引擎关键词
 			'seo_summary'=> ['string',  ['length'=>600]],   // 搜索引擎显示摘要
@@ -105,7 +104,7 @@ class Article extends Model {
 			'create_time'=> ['timestampTz',  ["index"=>1]],  // 创建时间
 			'baidulink_time'=> ['timestampTz',  ["index"=>1]],   // 提交到百度的时间
 			'sync'=> ['string',  ["json"=>true, 'length'=>600]],  // 公众号同步状态
-			'content'=> ['longText',  []],  // 正文 (WEB)
+			'content'=> ['longText',  [] ],  // 正文 (WEB)
 			'ap_content'=> ['longText',  ["json"=>true]],  // 小程序正文
 			'delta'=> ['longText',  ["json"=>true]],  // 编辑状态文章 (Delta )
 			'param'=> ['string', ['length'=>128,'index'=>1]],  // 自定义查询条件
@@ -115,13 +114,6 @@ class Article extends Model {
 			'user' => ['string', ['length'=>128,'index'=>1]], // 最后编辑用户ID
 			'policies' => ['string', ['json'=>true]], // 文章权限预留字段
 			'status'=> ['string', ['length'=>40,'index'=>1, 'default'=>ARTICLE_UNPUBLISHED]],  // 文章状态 unpublished/published/pending
-
-			// + 各种用户行为记录统计 (主要用于排序)
-			'view_cnt' => ['bigInteger', ['index'=>1, 'default'=>0]], // 浏览量
-			'like_cnt' => ['bigInteger', ['index'=>1, 'default'=>0]],  // 点赞(喜欢)数量 
-			'dislike_cnt' => ['bigInteger', ['index'=>1, 'default'=>0]],  // 讨厌 (不喜欢)数量 
-			'comment_cnt'  => ['bigInteger', ['index'=>1, 'default'=>0]]   // 评论数量
-
 		];
 
 		$struct_draft_only = [
@@ -131,10 +123,24 @@ class Article extends Model {
 			'tag'=>['longText', ['json'=>true] ]   // 标签映射信息 ( 仅用于草稿信息 )
 		];
 
+
+		$article_only = [
+			'keywords' => ['string',['length'=>600, 'index'=>1]],  // 提取关键词
+			'view_cnt' => ['bigInteger', ['index'=>1, 'default'=>0]], // 浏览量
+			'like_cnt' => ['bigInteger', ['index'=>1, 'default'=>0]],  // 点赞(喜欢)数量 
+			'dislike_cnt' => ['bigInteger', ['index'=>1, 'default'=>0]],  // 讨厌 (不喜欢)数量 
+			'comment_cnt'  => ['bigInteger', ['index'=>1, 'default'=>0]]   // 评论数量
+		];
+
 		// 添加文章表和草稿表结构
 		foreach ($struct as $field => $args ) {
 			$this->putColumn( $field, $this->type($args[0], $args[1]) );
 			$this->article_draft->putColumn( $field, $this->type($args[0], $args[1]) );
+		}
+
+		// 添加文章表表结构
+		foreach ($article_only as $field => $args ) {
+			$this->putColumn( $field, $this->type($args[0], $args[1]) );
 		}
 
 		// 添加草稿表结构
@@ -145,7 +151,6 @@ class Article extends Model {
 		// 关联表 article_category
 		// $article_category = $this->article_category ;
 		// if ( $article_category->tableExists() === false) {
-		//
 		$this->article_category->putColumn( 'article_id', $this->type('string', ['index'=>1 , 'length'=>128 ]) )  // 文章 ID 
 				                ->putColumn( 'category_id', $this->type('string', ['index'=>1 , 'length'=>128]) )
 				                ->putColumn( 'unique_id', $this->type('string', ['length'=>128, 'unique'=>true]) );
@@ -162,6 +167,10 @@ class Article extends Model {
 	}
 
 
+	/**
+	 * 读取微信小程序配置
+	 * @return [type] [description]
+	 */
 	function wxapp() {
 
 		$conf = Utils::getConf();
@@ -177,28 +186,85 @@ class Article extends Model {
 	}
 
 
+
 	/**
-	 * 文章查询
+	 * (已发布)文章查询
 	 */
 	function search( $query = [] ) {
 
-		$qb = $this->query();
+		$qb = $this->query()
+				   ->leftJoin("article_category as ac", "ac.article_id", "=", "article.article_id")
+				   ->leftJoin("category as c", "c.category_id", "=", "ac.category_id")
+				   ->leftJoin("article_tag as at", 'at.article_id', "=", "article.article_id")
+				   ->leftJoin("tag as t", "t.tag_id", "=", "at.tag_id")
+			;
 
-		$select = empty($query['select']) ? ["*"] : $query['select'];
+		$select_defaults = [
+			"article.article_id", "article.title", "article.summary", 
+			"article.origin", "article.origin_url", "article.author", 
+			"article.cover", "article.images", "article.thumbs",
+			"article.view_cnt", "article.like_cnt", "article.dislike_cnt", "article.comment_cnt"
+		];
+		$select = empty($query['select']) ? $select_defaults : $query['select'];
 		if ( is_string($select) ) {
 			$select = explode(',', $select);
 		}
+
+		// 按文章分类查找
+		if ( array_key_exists('article_ids', $query)  && !empty($query['article_ids']) ) {
+			$aids = is_string($query['article_ids']) ? explode(',', $query['article_ids']) : $query['article_ids'];
+			if ( !empty($aids) ) {
+				$qb->whereIn('article.article_id', $aids );
+			}
+		}
 		
+
 		// 按关键词查找 
 		if ( array_key_exists('keyword', $query) && !empty($query['keyword']) ) {
 			$qb->where(function ( $qb ) use($query) {
 			   	$qb->where("title", "like", "%{$query['keyword']}%");
+			   	$qb->orWhere("keywords", "like", "%{$query['keyword']}%");
+			   	$qb->orWhere("t.name", '=',  $query['keyword']);  // 或者标签符合关键词
 			});
 		}
 
+		// 按关键词词组查找 ( 非搜索 )
+		if ( array_key_exists('keywords', $query) && !empty($query['keywords']) ) {
+			$keywords = is_string($query['keywords']) ? explode(',', $query['keywords']) : $query['keywords'];
+			$qb->where(function ( $qb ) use($keywords) {
+				$qb->whereIn("t.name", $keywords); // 标签符合关键词
+				foreach( $keywords as $idx=>$keyword ) {
+					$qb->orWhere("keywords", "like", "%{$keyword}%");  // 名称符合关键词
+				}
+			});
+		}
+
+		// 按分类ID查找
+		if ( array_key_exists('category_ids', $query)  && !empty($query['category_ids']) ) {
+			$cids = is_string($query['category_ids']) ? explode(',', $query['category_ids']) : $query['category_ids'];
+			if ( !empty($cids) ) {
+				$qb->whereIn('ac.category_id', $cids );
+			}
+		}
+
+		// 按分类名称查找
+		if ( array_key_exists('categories', $query)  && !empty($query['categories']) ) {
+			$cates = is_string($query['categories']) ? explode(',', $query['categories']) : $query['categories'];
+			if ( !empty($cates) ) {
+				$qb->whereIn('c.name', $cates );
+			}
+		}
+
+		// 按标签查找
+		if ( array_key_exists('tags', $query)  && !empty($query['tags']) ) {
+			$tags = is_string($query['tags']) ? explode(',', $query['tags']) : $query['tags'];
+			if ( !empty($tags) ) {
+				$qb->whereIn('t.name', $tags );
+			}
+		}
 
 		// 排序: 最新发表
-		if ( array_key_exists('order', $query)  ) {
+		if ( array_key_exists('order', $query) && !empty($query['order'])  ) {
 			$order = explode(' ', $query['order']);
 			$order[1] = !empty($order[1]) ? $order[1] : 'asc';
 			$qb->orderBy($order[0], $order[1] );
@@ -208,8 +274,20 @@ class Article extends Model {
 		$page = array_key_exists('page', $query) ?  intval( $query['page']) : 1;
 		$perpage = array_key_exists('perpage', $query) ?  intval( $query['perpage']) : 20;
 
+
+
+
 		// 查询文章列表
-		$articles = $qb->select($select)->pgArray( $perpage, ['_id'], 'page', $page );
+		$articles = $qb->select($select)->pgArray( $perpage, ['article._id'], 'page', $page );
+
+		if ( $_GET['debug'] == 1 ) {
+			$articles['_sql'] = $qb->getSql();
+		}
+
+		// 格式化数据
+		foreach ($articles['data'] as & $rs ) {
+			$this->format($rs);
+		}
 
 		return $articles;
 	}
@@ -237,9 +315,7 @@ class Article extends Model {
 		}
 		$qb->select( $select );
 		$data = $qb->get()->toArray(); 
-
 		$map = [];
-
  		$article_ids = []; // 读取 inWhere article 数据
  		$category_ids = []; // 读取 inWhere category 数据
 		foreach ($data as & $rs ) {
