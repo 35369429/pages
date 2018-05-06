@@ -23,87 +23,6 @@ class SetupController extends \Xpmse\Loader\Controller {
 	}
 
 
-	private  function gallery_init() {
-
-		return;
-
-		$g = new \Xpmsns\pages\Model\Gallery();
-		$id = $g->genGalleryId();
-
-		$gallery_id = $g->getVar('gallery_id', "WHERE title=? AND system=1 LIMIT 1", ["文章分享图片"]);
-
-		if ( !empty($gallery_id) ) {
-			try {$resp = $g->getGallery($gallery_id); return; } catch(Excp $e) { 
-				$g->rm($gallery_id); 
-			}
-		}
-
-		$id = $g->genGalleryId();
-
-		$article_share = [
-			"page" => [
-				"id" => $id,
-				"title"=>"分享图片", 
-				"bgimage"=>"/s/xpmsns/pages/static/defaults/804X1280.png", 
-				"bgcolor"=>"rgba(254,254,254,1)",
-				"origin" => -1
-			],
-			"items" => [
-				[
-					"name"=>"qrcode",
-					"option"=>[
-						"text" => "https://www.xpmsns.com", "origin"=>3,
-						 "width"=>100, "height"=>100, 
-						"type"=>'url'], 
-					"pos"=> ["x"=>676, "y"=>1149] ],
-
-				[
-					"name"=>"image", 
-					"option" => [
-						"width"=>126, "height"=>30, 
-						"src"=>"/s/xpmsns/pages/static/defaults/mp-logo-text.png" ], 
-					"pos"=> ["x"=>21, "y"=>1222] ],
-
-				[
-					"name"=>"image", 
-					"option"=> [
-						"width"=>804, "height"=>423, "origin"=>2
-						], 
-					"pos"=> ["x"=>0, "y"=>0] ],
-
-				[
-					"name"=>"text", 
-					"option"=>[
-						"width"=>644, "height"=>52, "font"=>1, "size"=>48,"origin"=>0,
-						"color"=> "rgba(35,35,35,1)", "background"=>"rgba(255,255,255,0)", 
-						"type"=>"horizontal" ], 
-					"pos"=> ["x"=>80, "y"=>502]],
-				[
-					"name"=>"text", 
-					"option"=>[
-						"width"=>644, "height"=>448, "font"=>1, "size"=>36,"origin"=>1,
-						"color"=> "rgba(153,153,153,1)", "background"=>"rgba(255,255,255,0)", 
-						"type"=>"horizontal" ], 
-					"pos"=> ["x"=>80, "y"=>576]]
-			]
-		];
-
-		$gallery =  $g->editorToGallery( $article_share );
-		$gallery['system'] = 1;
-		$gallery['param'] = 'article';
-
-		$images = $g->genImageData([
-			["A"=>"文章标题", "B"=>"内容题要", "C"=>"/s/xpmsns/pages/static/defaults/950X500.png", "D"=>"https://xpmsns.com"]
-		]);
-
-		$rs = $g->save( $gallery );
-		$resp = $g->createImages( $rs['gallery_id'], $images);
-		$image_id = current($resp)['data']['image_id'];
-		// $g->makeImage($image_id);
-
-	}
-
-
 	/**
 	 * 初始化默认数据
 	 * @return [type] [description]
@@ -112,18 +31,31 @@ class SetupController extends \Xpmse\Loader\Controller {
 
 		// 注册配置
 		$option = new \Xpmse\Option('xpmsns/pages');
-		$option->register("图文主题图片比例配置", "article/image/ratio", [
-			"cover"=>["width"=>900,"height"=>500, "ratio"=>"9:5"], 
-			"topic1"=>["width"=>null,"height"=>null, "ratio"=>"1:1"],
-			"topic2"=>["width"=>null,"height"=>null, "ratio"=>"16:9"],
-			"topic3"=>["width"=>null,"height"=>null, "ratio"=>"4:3"],
-			"topic4"=>["width"=>null,"height"=>null, "ratio"=>"2:3"]
-		]);
+		$ratio = $option->get("article/image/ratio");
+		if ( $ratio == null ) {
+			$option->register("图文主题图片比例配置", "article/image/ratio", [
+				"cover"=>["width"=>900,"height"=>500, "ratio"=>"9:5"], 
+				"topic1"=>["width"=>null,"height"=>null, "ratio"=>"1:1"],
+				"topic2"=>["width"=>null,"height"=>null, "ratio"=>"16:9"],
+				"topic3"=>["width"=>null,"height"=>null, "ratio"=>"4:3"],
+				"topic4"=>["width"=>null,"height"=>null, "ratio"=>"2:3"]
+			]);
+		}
 
 
 		// 添加默认分类
 		$cate = new \Xpmsns\Pages\Model\Category;
-		$cate->create(["name"=>"默认","fullname"=>"默认", "slug"=>"default"]);
+		$cate->saveBySlug(["name"=>"默认","fullname"=>"默认", "slug"=>"default"]);
+
+		// 添加默认配置项
+		$site = new \Xpmsns\Pages\Model\Siteconf;
+		$site->saveBySiteSlug(["site_slug"=>'global',  'position'=>"全局"]);
+		$site->saveBySiteSlug(["site_slug"=>'pc-home', 'position'=>"PC-首页"]);
+		$site->saveBySiteSlug(["site_slug"=>'h5-home', 'position'=>"H5-首页"]);
+		$site->saveBySiteSlug(["site_slug"=>'wxapp-home', 'position'=>"小程序-首页"]);
+		$site->saveBySiteSlug(["site_slug"=>'android-home', 'position'=>"安卓-首页"]);
+		$site->saveBySiteSlug(["site_slug"=>'ios-home', 'position'=>"iOS-首页"]);
+
 	}
 
 
@@ -140,22 +72,9 @@ class SetupController extends \Xpmse\Loader\Controller {
 			try { $inst->__schema(); } catch( Excp $e) {echo $e->toJSON(); return;}
 		}
 
-		try {
-			$this->defaults_init();
-		}  catch ( Excp $e ) {
-			echo $e->toJSON();
-			return;
-		}
-		
-
-		// 注册图片分享图集
-		try {
-			$this->gallery_init();
-		}  catch ( Excp $e ) {
-			echo $e->toJSON();
-			return;
-		}
-
+		// 初始化默认配置
+		try { $this->defaults_init(); }  catch ( Excp $e ) { echo $e->toJSON(); return;}
+	
 		echo json_encode('ok');
 	}
 
@@ -165,7 +84,7 @@ class SetupController extends \Xpmse\Loader\Controller {
 	}
 
 	function repair() {
-
+		
 		$models = $this->models;
 		$insts = [];
 		foreach ($models as $mod ) {
@@ -173,25 +92,12 @@ class SetupController extends \Xpmse\Loader\Controller {
 		}
 		
 		foreach ($insts as $inst ) {
-			try { $inst->__schema(); } catch( Excp $e) {echo $e->toJSON(); return;}
+			try { $inst->__schema(); } catch( Excp $e) { echo $e->toJSON(); return;}
 		}
 
-		try {
-			$option = new \Xpmse\Option('xpmsns/pages');
-			$option->register("图文主题图片比例配置", "article/image/ratio", [
-				"cover"=>["width"=>900,"height"=>500, "ratio"=>"9:5"], 
-				"topic1"=>["width"=>null,"height"=>null, "ratio"=>"1:1"],
-				"topic2"=>["width"=>null,"height"=>null, "ratio"=>"16:9"],
-				"topic3"=>["width"=>null,"height"=>null, "ratio"=>"4:3"],
-				"topic4"=>["width"=>null,"height"=>null, "ratio"=>"2:3"]
-			]);
-		} catch ( Excp $e ) {}
 
-		// 注册图片分享图集
-		try {
-			$this->gallery_init();
-		}  catch ( Excp $e ) {}
-		
+		// 初始化默认配置
+		try { $this->defaults_init(); }  catch ( Excp $e ) { echo $e->toJSON(); return;}
 		echo json_encode('ok');		
 	}
 

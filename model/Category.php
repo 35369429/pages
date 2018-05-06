@@ -120,6 +120,25 @@ class Category extends Model {
 	 * @param  [type] $data [description]
 	 * @return [type]       [description]
 	 */
+	function saveBySlug( $data ) {
+
+		if ( empty($data['slug']) ) {
+			throw new Excp("错误的参数，无 slug 数值", 402, ['data'=>$data]);
+		}
+		$c = $this->getBy('slug', $data['slug']);
+
+		if ( !empty($c) ) {
+			$data['category_id'] = $c['category_id'];
+		}
+		return $this->save($data);
+	}
+
+
+	/**
+	 * 保存分类 ( 创建或者添加 )
+	 * @param  [type] $data [description]
+	 * @return [type]       [description]
+	 */
 	function save( $data ) {
 
 		// 子分类
