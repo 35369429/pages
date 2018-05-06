@@ -49,12 +49,24 @@ class SetupController extends \Xpmse\Loader\Controller {
 
 		// 添加默认配置项
 		$site = new \Xpmsns\Pages\Model\Siteconf;
-		$site->saveBySiteSlug(["site_slug"=>'global',  'position'=>"全局"]);
-		$site->saveBySiteSlug(["site_slug"=>'pc-home', 'position'=>"PC-首页"]);
-		$site->saveBySiteSlug(["site_slug"=>'h5-home', 'position'=>"H5-首页"]);
-		$site->saveBySiteSlug(["site_slug"=>'wxapp-home', 'position'=>"小程序-首页"]);
-		$site->saveBySiteSlug(["site_slug"=>'android-home', 'position'=>"安卓-首页"]);
-		$site->saveBySiteSlug(["site_slug"=>'ios-home', 'position'=>"iOS-首页"]);
+		$site->saveBySiteSlug(["site_slug"=>'global',  'position'=>"全局默认配置"]);
+		$site->saveBySiteSlug(["site_slug"=>'pc', 'position'=>"桌面WEB界面"]);
+		$site->saveBySiteSlug(["site_slug"=>'h5', 'position'=>"手机H5界面"]);
+		$site->saveBySiteSlug(["site_slug"=>'wxapp', 'position'=>"微信小程序"]);
+		$site->saveBySiteSlug(["site_slug"=>'android', 'position'=>"安卓客户端"]);
+		$site->saveBySiteSlug(["site_slug"=>'ios', 'position'=>"iOS客户端"]);
+
+
+		// 添加默认推荐项
+		$rec = new \Xpmsns\Pages\Model\Recommend;
+		$rec->saveBySlug(["title"=>"本周热文","slug"=>"weekly_hotnews", "orderby"=>"view_cnt", "period"=>'weekly', "type"=>"auto"]);
+		$rec->saveBySlug(["title"=>"本周热评","slug"=>"weekly_hotreviews", "orderby"=>"comment_cnt", "period"=>'weekly', "type"=>"auto"]);
+		$rec->saveBySlug(["title"=>"今日热文","slug"=>"daily_hotnews", "orderby"=>"view_cnt", "period"=>'weekly', "type"=>"auto"]);
+		$rec->saveBySlug(["title"=>"今日热评","slug"=>"daily_hotreviews", "orderby"=>"comment_cnt", "period"=>'daily', "type"=>"auto"]);
+		$rec->saveBySlug(["title"=>"24小时热文","slug"=>"24hours_hotnews", "orderby"=>"view_cnt", "period"=>'24hours', "type"=>"auto"]);
+		$rec->saveBySlug(["title"=>"24小时热评","slug"=>"24hours_hotreviews", "orderby"=>"comment_cnt", "period"=>'24hours', "type"=>"auto"]);
+		$rec->saveBySlug(["title"=>"最新文章","slug"=>"latest", "orderby"=>"publish_time", "type"=>"auto"]);
+		$rec->saveBySlug(["title"=>"正文页底部相关推荐","slug"=>"latest", "orderby"=>"publish_time", "type"=>"auto"]);
 
 	}
 
@@ -84,7 +96,7 @@ class SetupController extends \Xpmse\Loader\Controller {
 	}
 
 	function repair() {
-		
+
 		$models = $this->models;
 		$insts = [];
 		foreach ($models as $mod ) {

@@ -4,11 +4,11 @@
  * 推荐数据接口 
  *
  * 程序作者: XpmSE机器人
- * 最后修改: 2018-05-06 17:42:50
+ * 最后修改: 2018-05-06 22:25:48
  * 程序母版: /data/stor/private/templates/xpmsns/model/code/api/Name.php
  */
 namespace Xpmsns\Pages\Api;
-                    
+                     
 
 use \Xpmse\Loader\App;
 use \Xpmse\Excp;
@@ -49,12 +49,12 @@ class Recommend extends Api {
 	/**
 	 * 查询一条推荐记录
 	 * @param  array $query GET 参数
-	 *               $query['select']  读取字段, 默认 ["recommend.recommend_id","recommend.title","recommend.type","recommend.images","recommend.keywords","recommend.orderby","recommend.created_at","recommend.updated_at","a.article_id","a.title","c.category_id","c.name"]
+	 *               $query['select']  读取字段, 默认 ["recommend.recommend_id","recommend.title","recommend.slug","recommend.type","recommend.period","recommend.images","recommend.tpl_pc","recommend.tpl_h5","recommend.tpl_wxapp","recommend.tpl_android","recommend.tpl_ios","recommend.keywords","recommend.orderby","recommend.created_at","recommend.updated_at","a.article_id","a.title","c.category_id","c.name"]
 	 * 				 $query['recommend_id']  按查询 (多条用 "," 分割)
 	 * 				 $query['slug']  按查询 (多条用 "," 分割)
      *
 	 * @param  array $data  POST 参数
-	 *               $data['select']  返回字段, 默认 ["recommend.recommend_id","recommend.title","recommend.type","recommend.images","recommend.keywords","recommend.orderby","recommend.created_at","recommend.updated_at","a.article_id","a.title","c.category_id","c.name"]
+	 *               $data['select']  返回字段, 默认 ["recommend.recommend_id","recommend.title","recommend.slug","recommend.type","recommend.period","recommend.images","recommend.tpl_pc","recommend.tpl_h5","recommend.tpl_wxapp","recommend.tpl_android","recommend.tpl_ios","recommend.keywords","recommend.orderby","recommend.created_at","recommend.updated_at","a.article_id","a.title","c.category_id","c.name"]
 	 * 				 $data['recommend_id']  按查询 (多条用 "," 分割)
 	 * 				 $data['slug']  按查询 (多条用 "," 分割)
 	 *
@@ -63,6 +63,7 @@ class Recommend extends Api {
 	 *               	["title"],  // 主题 
 	 *               	["slug"],  // 别名 
 	 *               	["type"],  // 方式 
+	 *               	["period"],  // 周期 
 	 *               	["images"],  // 摘要图片 
 	 *               	["tpl_pc"],  // PC端模板 
 	 *               	["tpl_h5"],  // 手机端模板 
@@ -134,7 +135,7 @@ class Recommend extends Api {
 		$data = array_merge( $query, $data );
 
 		// 读取字段
-		$select = empty($data['select']) ? ["recommend.recommend_id","recommend.title","recommend.type","recommend.images","recommend.keywords","recommend.orderby","recommend.created_at","recommend.updated_at","a.article_id","a.title","c.category_id","c.name"] : $data['select'];
+		$select = empty($data['select']) ? ["recommend.recommend_id","recommend.title","recommend.slug","recommend.type","recommend.period","recommend.images","recommend.tpl_pc","recommend.tpl_h5","recommend.tpl_wxapp","recommend.tpl_android","recommend.tpl_ios","recommend.keywords","recommend.orderby","recommend.created_at","recommend.updated_at","a.article_id","a.title","c.category_id","c.name"] : $data['select'];
 		if ( is_string($select) ) {
 			$select = explode(',', $select);
 		}
@@ -176,6 +177,7 @@ class Recommend extends Api {
 	 *               $data['title'] 主题
 	 *               $data['slug'] 别名
 	 *               $data['type'] 方式
+	 *               $data['period'] 周期
 	 *               $data['images'] 摘要图片
 	 *               $data['tpl_pc'] PC端模板
 	 *               $data['tpl_h5'] 手机端模板
@@ -225,6 +227,7 @@ class Recommend extends Api {
 	 *			      $query["keyword"] 按关键词查询
 	 *			      $query["recommend_id"] 按推荐ID查询 ( AND = )
 	 *			      $query["type"] 按方式查询 ( AND = )
+	 *			      $query["period"] 按周期查询 ( AND = )
 	 *			      $query["title"] 按主题查询 ( AND LIKE )
 	 *			      $query["orderby_created_at_asc"]  按创建时间 ASC 排序
 	 *			      $query["orderby_updated_at_asc"]  按更新时间 ASC 排序
@@ -236,6 +239,7 @@ class Recommend extends Api {
 	 *			      $data["keyword"] 按关键词查询
 	 *			      $data["recommend_id"] 按推荐ID查询 ( AND = )
 	 *			      $data["type"] 按方式查询 ( AND = )
+	 *			      $data["period"] 按周期查询 ( AND = )
 	 *			      $data["title"] 按主题查询 ( AND LIKE )
 	 *			      $data["orderby_created_at_asc"]  按创建时间 ASC 排序
 	 *			      $data["orderby_updated_at_asc"]  按更新时间 ASC 排序
@@ -246,6 +250,7 @@ class Recommend extends Api {
 	 *               	["title"],  // 主题 
 	 *               	["slug"],  // 别名 
 	 *               	["type"],  // 方式 
+	 *               	["period"],  // 周期 
 	 *               	["images"],  // 摘要图片 
 	 *               	["tpl_pc"],  // PC端模板 
 	 *               	["tpl_h5"],  // 手机端模板 

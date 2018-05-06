@@ -80,6 +80,29 @@ use \Xpmse\T;
 
 
  
+	<!-- 下拉选择: 统计周期 (period) 开始  -->
+	<div class="form-group   ">
+		<label class="col-xs-2 control-label" for="period">统计周期</label>
+		<div class="col-xs-8">
+			<select class="js-select2 form-control input-lg" style="width: 100%;"
+					id="period" name="period"  
+					data-placeholder="请选择统计周期" >
+				<option></option>
+				<?php $rs["period"] = is_string($rs["period"]) ? [$rs["period"]] : $rs["period"] ; if (empty($rs["period"])) { $rs["period"] = ["auto"]; } ?>
+<option value="24hours" <?=in_array("24hours", $rs["period"]) ? "selected" : ""?> > 24小时</option>
+<option value="daily" <?=in_array("daily", $rs["period"]) ? "selected" : ""?> > 今日</option>
+<option value="weekly" <?=in_array("weekly", $rs["period"]) ? "selected" : ""?> > 本周</option>
+<option value="monthly" <?=in_array("monthly", $rs["period"]) ? "selected" : ""?> > 本月</option>
+<option value="yearly" <?=in_array("yearly", $rs["period"]) ? "selected" : ""?> > 今年</option>
+<option value="unlimited" <?=in_array("unlimited", $rs["period"]) ? "selected" : ""?> > 无限</option>
+			</select>
+			<div class="help-block"></div>
+		</div>
+	</div><!-- END 下拉选择: 统计周期 (period) -->
+
+
+
+ 
 	<!-- 下拉选择: 排序方式 (orderby) 开始  -->
 	<div class="form-group   ">
 		<label class="col-xs-2 control-label" for="orderby">排序方式<span class="text-danger">*</span></label>

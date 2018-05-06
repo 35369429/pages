@@ -4,11 +4,11 @@
  * 推荐数据模型
  *
  * 程序作者: XpmSE机器人
- * 最后修改: 2018-05-06 17:42:51
+ * 最后修改: 2018-05-06 22:25:49
  * 程序母版: /data/stor/private/templates/xpmsns/model/code/model/Name.php
  */
 namespace Xpmsns\Pages\Model;
-                    
+                     
 use \Xpmse\Excp;
 use \Xpmse\Model;
 use \Xpmse\Utils;
@@ -139,6 +139,8 @@ class Recommend extends Model {
 		$this->putColumn( 'slug', $this->type("string", ["length"=>100, "unique"=>true, "null"=>true]));
 		// 方式
 		$this->putColumn( 'type', $this->type("string", ["length"=>20, "index"=>true, "default"=>"auto", "null"=>true]));
+		// 周期
+		$this->putColumn( 'period', $this->type("string", ["length"=>100, "index"=>true, "null"=>true]));
 		// 摘要图片
 		$this->putColumn( 'images', $this->type("text", ["json"=>true, "null"=>true]));
 		// 关键词
@@ -197,6 +199,45 @@ class Recommend extends Model {
 			$rs["_type"] = $rs["_type_types"][$rs["type"]];
 		}
 
+		// 格式化: 周期
+		// 返回值: "_period_types" 所有状态表述, "_period_name" 状态名称,  "_period" 当前状态表述, "period" 当前状态数值
+		if ( array_key_exists('period', $rs ) && !empty($rs['period']) ) {
+			$rs["_period_types"] = [
+		  		"24hours" => [
+		  			"value" => "24hours",
+		  			"name" => "24小时",
+		  			"style" => "info"
+		  		],
+		  		"daily" => [
+		  			"value" => "daily",
+		  			"name" => "今日",
+		  			"style" => "info"
+		  		],
+		  		"weekly" => [
+		  			"value" => "weekly",
+		  			"name" => "本周",
+		  			"style" => "info"
+		  		],
+		  		"monthly" => [
+		  			"value" => "monthly",
+		  			"name" => "本月",
+		  			"style" => "info"
+		  		],
+		  		"yearly" => [
+		  			"value" => "yearly",
+		  			"name" => "今年",
+		  			"style" => "info"
+		  		],
+		  		"unlimited" => [
+		  			"value" => "unlimited",
+		  			"name" => "无限",
+		  			"style" => "info"
+		  		],
+			];
+			$rs["_period_name"] = "period";
+			$rs["_period"] = $rs["_period_types"][$rs["period"]];
+		}
+
 		// 格式化: 排序方式
 		// 返回值: "_orderby_types" 所有状态表述, "_orderby_name" 状态名称,  "_orderby" 当前状态表述, "orderby" 当前状态数值
 		if ( array_key_exists('orderby', $rs ) && !empty($rs['orderby']) ) {
@@ -246,6 +287,7 @@ class Recommend extends Model {
 	 *          	  $rs["title"],  // 主题 
 	 *          	  $rs["slug"],  // 别名 
 	 *          	  $rs["type"],  // 方式 
+	 *          	  $rs["period"],  // 周期 
 	 *          	  $rs["images"],  // 摘要图片 
 	 *          	  $rs["tpl_pc"],  // PC端模板 
 	 *          	  $rs["tpl_h5"],  // 手机端模板 
@@ -362,7 +404,7 @@ class Recommend extends Model {
 	 * @param array   $select       选取字段，默认选取所有
 	 * @return array 推荐记录MAP {"recommend_id1":{"key":"value",...}...}
 	 */
-	public function getIn($recommend_ids, $select=["recommend.recommend_id","recommend.title","recommend.type","recommend.keywords","recommend.orderby","recommend.created_at","recommend.updated_at"], $order=["recommend.created_at"=>"asc"] ) {
+	public function getIn($recommend_ids, $select=["recommend.slug","recommend.title","recommend.type","recommend.period","recommend.orderby","recommend.keywords","recommend.created_at","recommend.updated_at"], $order=["recommend.created_at"=>"asc"] ) {
 		return $this->getInByRecommendId( $recommend_ids, $select, $order);
 	}
 	
@@ -374,7 +416,7 @@ class Recommend extends Model {
 	 * @param array   $select       选取字段，默认选取所有
 	 * @return array 推荐记录MAP {"recommend_id1":{"key":"value",...}...}
 	 */
-	public function getInByRecommendId($recommend_ids, $select=["recommend.recommend_id","recommend.title","recommend.type","recommend.keywords","recommend.orderby","recommend.created_at","recommend.updated_at"], $order=["recommend.created_at"=>"asc"] ) {
+	public function getInByRecommendId($recommend_ids, $select=["recommend.slug","recommend.title","recommend.type","recommend.period","recommend.orderby","recommend.keywords","recommend.created_at","recommend.updated_at"], $order=["recommend.created_at"=>"asc"] ) {
 		
 		if ( is_string($select) ) {
 			$select = explode(',', $select);
@@ -453,6 +495,7 @@ class Recommend extends Model {
 	 *          	  $rs["title"],  // 主题 
 	 *          	  $rs["slug"],  // 别名 
 	 *          	  $rs["type"],  // 方式 
+	 *          	  $rs["period"],  // 周期 
 	 *          	  $rs["images"],  // 摘要图片 
 	 *          	  $rs["tpl_pc"],  // PC端模板 
 	 *          	  $rs["tpl_h5"],  // 手机端模板 
@@ -571,7 +614,7 @@ class Recommend extends Model {
 	 * @param array   $select       选取字段，默认选取所有
 	 * @return array 推荐记录MAP {"slug1":{"key":"value",...}...}
 	 */
-	public function getInBySlug($slugs, $select=["recommend.recommend_id","recommend.title","recommend.type","recommend.keywords","recommend.orderby","recommend.created_at","recommend.updated_at"], $order=["recommend.created_at"=>"asc"] ) {
+	public function getInBySlug($slugs, $select=["recommend.slug","recommend.title","recommend.type","recommend.period","recommend.orderby","recommend.keywords","recommend.created_at","recommend.updated_at"], $order=["recommend.created_at"=>"asc"] ) {
 		
 		if ( is_string($select) ) {
 			$select = explode(',', $select);
@@ -713,7 +756,7 @@ class Recommend extends Model {
 	 * @param array   $order   排序方式 ["field"=>"asc", "field2"=>"desc"...]
 	 * @return array 推荐记录数组 [{"key":"value",...}...]
 	 */
-	public function top( $limit=100, $select=["recommend.recommend_id","recommend.title","recommend.type","recommend.keywords","recommend.orderby","recommend.created_at","recommend.updated_at"], $order=["recommend.created_at"=>"asc"] ) {
+	public function top( $limit=100, $select=["recommend.slug","recommend.title","recommend.type","recommend.period","recommend.orderby","recommend.keywords","recommend.created_at","recommend.updated_at"], $order=["recommend.created_at"=>"asc"] ) {
 
 		if ( is_string($select) ) {
 			$select = explode(',', $select);
@@ -767,12 +810,13 @@ class Recommend extends Model {
 	/**
 	 * 按条件检索推荐记录
 	 * @param  array  $query
-	 *         	      $query['select'] 选取字段，默认选择 ["recommend.recommend_id","recommend.title","recommend.type","recommend.keywords","recommend.orderby","recommend.created_at","recommend.updated_at"]
+	 *         	      $query['select'] 选取字段，默认选择 ["recommend.slug","recommend.title","recommend.type","recommend.period","recommend.orderby","recommend.keywords","recommend.created_at","recommend.updated_at"]
 	 *         	      $query['page'] 页码，默认为 1
 	 *         	      $query['perpage'] 每页显示记录数，默认为 20
 	 *			      $query["keyword"] 按关键词查询
 	 *			      $query["recommend_id"] 按推荐ID查询 ( = )
-	 *			      $query["type"] 按类型查询 ( = )
+	 *			      $query["type"] 按推荐方式查询 ( = )
+	 *			      $query["period"] 按统计周期查询 ( = )
 	 *			      $query["title"] 按主题查询 ( LIKE )
 	 *			      $query["orderby_created_at_asc"]  按创建时间 ASC 排序
 	 *			      $query["orderby_updated_at_asc"]  按更新时间 ASC 排序
@@ -782,6 +826,7 @@ class Recommend extends Model {
 	 *               	["title"],  // 主题 
 	 *               	["slug"],  // 别名 
 	 *               	["type"],  // 方式 
+	 *               	["period"],  // 周期 
 	 *               	["images"],  // 摘要图片 
 	 *               	["tpl_pc"],  // PC端模板 
 	 *               	["tpl_h5"],  // 手机端模板 
@@ -848,7 +893,7 @@ class Recommend extends Model {
 	 */
 	public function search( $query = [] ) {
 
-		$select = empty($query['select']) ? ["recommend.recommend_id","recommend.title","recommend.type","recommend.keywords","recommend.orderby","recommend.created_at","recommend.updated_at"] : $query['select'];
+		$select = empty($query['select']) ? ["recommend.slug","recommend.title","recommend.type","recommend.period","recommend.orderby","recommend.keywords","recommend.created_at","recommend.updated_at"] : $query['select'];
 		if ( is_string($select) ) {
 			$select = explode(',', $select);
 		}
@@ -875,9 +920,14 @@ class Recommend extends Model {
 			$qb->where("recommend.recommend_id", '=', "{$query['recommend_id']}" );
 		}
 		  
-		// 按类型查询 (=)  
+		// 按推荐方式查询 (=)  
 		if ( array_key_exists("type", $query) &&!empty($query['type']) ) {
 			$qb->where("recommend.type", '=', "{$query['type']}" );
+		}
+		  
+		// 按统计周期查询 (=)  
+		if ( array_key_exists("period", $query) &&!empty($query['period']) ) {
+			$qb->where("recommend.period", '=', "{$query['period']}" );
 		}
 		  
 		// 按主题查询 (LIKE)  
@@ -993,6 +1043,7 @@ class Recommend extends Model {
 			"title",  // 主题
 			"slug",  // 别名
 			"type",  // 方式
+			"period",  // 周期
 			"images",  // 摘要图片
 			"tpl_pc",  // PC端模板
 			"tpl_h5",  // 手机端模板

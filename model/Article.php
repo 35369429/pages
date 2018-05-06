@@ -210,6 +210,13 @@ class Article extends Model {
 			$select = explode(',', $select);
 		}
 
+		foreach ($select as & $se ) {
+			if ( strpos( $se, ".") === false ) {
+				$se = "article.{$se}";
+			}
+		}
+
+
 		// 按文章分类查找
 		if ( array_key_exists('article_ids', $query)  && !empty($query['article_ids']) ) {
 			$aids = is_string($query['article_ids']) ? explode(',', $query['article_ids']) : $query['article_ids'];
@@ -275,8 +282,6 @@ class Article extends Model {
 		$perpage = array_key_exists('perpage', $query) ?  intval( $query['perpage']) : 20;
 
 
-
-
 		// 查询文章列表
 		$articles = $qb->select($select)->pgArray( $perpage, ['article._id'], 'page', $page );
 
@@ -299,6 +304,8 @@ class Article extends Model {
 	 */
 	function getInByArticleId( $article_ids, $select='article.article_id, article.title', $order=["article.created_at"=>"asc"] ) {
 
+		$article_ids = is_array($article_ids) ? $article_ids  : [];
+
 		if ( is_string($select) ) {
 			$select = explode(',', $select);
 		}
@@ -308,6 +315,7 @@ class Article extends Model {
 
 		// 创建查询构造器
 		$qb = Utils::getTab("xpmsns_pages_article as article", "{none}")->query();
+		$qb->whereIn('article_id', $article_ids);
   		
 		// 排序
 		foreach ($order as $field => $order ) {
@@ -316,8 +324,6 @@ class Article extends Model {
 		$qb->select( $select );
 		$data = $qb->get()->toArray(); 
 		$map = [];
- 		$article_ids = []; // 读取 inWhere article 数据
- 		$category_ids = []; // 读取 inWhere category 数据
 		foreach ($data as & $rs ) {
 			$this->format($rs);
 			$map[$rs['article_id']] = $rs;

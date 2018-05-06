@@ -130,6 +130,60 @@ use \Xpmse\T;
 								</ul>
 							</div> <!-- END 推荐方式过滤 -->
 
+							<!-- 统计周期过滤 -->
+							<div class="btn-group pull-right push-20-l" role="group">  
+								<button class="btn btn-default btn-xs dropdown-toggle" type="button" data-toggle="dropdown" >
+									<i class="glyphicon glyphicon-list-alt"></i> 
+									<?=($query['period'] == '24hours') ? '24小时' : '' ?>
+									<?=($query['period'] == 'daily') ? '今日' : '' ?>
+									<?=($query['period'] == 'weekly') ? '本周' : '' ?>
+									<?=($query['period'] == 'monthly') ? '本月' : '' ?>
+									<?=($query['period'] == 'yearly') ? '今年' : '' ?>
+									<?=($query['period'] == 'unlimited') ? '无限' : '' ?>
+									<?=(empty($query['period'])) ? '统计周期' : '' ?>
+									<span class="caret"></span> 
+								</button>
+
+								<ul class="dropdown-menu dropdown-menu-right"  style="min-width: 87px;">
+									<li class="dropdown-header">统计周期</li>
+									<li>
+										<a href="javascript:search('period','')">
+										   全部
+										</a>
+									</li>
+									<li >
+										<a href="javascript:search('period','24hours')">
+										   24小时
+										</a>
+									</li>
+									<li >
+										<a href="javascript:search('period','daily')">
+										   今日
+										</a>
+									</li>
+									<li >
+										<a href="javascript:search('period','weekly')">
+										   本周
+										</a>
+									</li>
+									<li >
+										<a href="javascript:search('period','monthly')">
+										   本月
+										</a>
+									</li>
+									<li >
+										<a href="javascript:search('period','yearly')">
+										   今年
+										</a>
+									</li>
+									<li >
+										<a href="javascript:search('period','unlimited')">
+										   无限
+										</a>
+									</li>
+								</ul>
+							</div> <!-- END 统计周期过滤 -->
+
 
 						</div><!-- END col-xs-7 -->
 
@@ -140,11 +194,12 @@ use \Xpmse\T;
 					<table class="js-table-checkable table table-hover remove-margin">
 						<thead>
 							<tr>
-								<th class="font-w300"> 推荐ID </th>
+								<th class="font-w300"> 别名 </th>
 								<th class="font-w300"> 主题 </th>
 								<th class="font-w300"> 推荐方式 </th>
-								<th class="font-w300"> 关键词 </th>
+								<th class="font-w300"> 统计周期 </th>
 								<th class="font-w300"> 文章排序 </th>
+								<th class="font-w300"> 关键词 </th>
 								<th class="font-w300"> 创建时间 </th>
 								<th class="font-w300"> 操作 </th>
 							</tr>
@@ -155,7 +210,7 @@ use \Xpmse\T;
 							<tr data-toggle="block-group" 
 								onclick="window.location='<?=App::R('recommend', 'detail', ['recommend_id'=>$rs['recommend_id']])?>'" >
 								<td class="font-w300">
-									<?php $v=null; $v=T::s("{{recommend_id}}", $rs ); echo empty($v) ? T::s("", $rs ) : $v; ?>
+									<?php $v=null; $v=T::s("{{slug}}", $rs ); echo empty($v) ? T::s("", $rs ) : $v; ?>
 								</td>
 								<td class="font-w300">
 									<?php $v=null; $v=T::s("{{title}}", $rs ); echo empty($v) ? T::s("", $rs ) : $v; ?>
@@ -164,10 +219,13 @@ use \Xpmse\T;
 									<span class="text-<?=$rs['_type']['style']?>"><?=$rs['_type']['name'] ? $rs['_type']['name']  : $rs['type'] ?></span>
 								</td>
 								<td class="font-w300">
-									<?php $v=null; $v=T::s("{{keywords}}", $rs ); echo empty($v) ? T::s("", $rs ) : $v; ?>
+									<span class="text-<?=$rs['_period']['style']?>"><?=$rs['_period']['name'] ? $rs['_period']['name']  : $rs['period'] ?></span>
 								</td>
 								<td class="font-w300">
 									<span class="text-<?=$rs['_orderby']['style']?>"><?=$rs['_orderby']['name'] ? $rs['_orderby']['name']  : $rs['orderby'] ?></span>
+								</td>
+								<td class="font-w300">
+									<?php $v=null; $v=T::s("{{keywords}}", $rs ); echo empty($v) ? T::s("", $rs ) : $v; ?>
 								</td>
 								<td class="font-w300">
 									<?php $v=null; $v=T::s("{{ updated_at ? updated_at : created_at }}", $rs ); echo empty($v) ? T::s("", $rs ) : $v; ?>
@@ -181,7 +239,7 @@ use \Xpmse\T;
 						</tbody>
 
 						<tfoot>
-							<tr><td colspan="7"> <nav class="pull-right">
+							<tr><td colspan="8"> <nav class="pull-right">
 
 								<ul class="pagination">
 									<?php if ($response['prev'] !== false): ?>
