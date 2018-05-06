@@ -382,6 +382,11 @@ class Article extends Model {
 
 		
 		$count = $wechat->countMedia();
+		if ( is_a($count, '\Xpmse\Err') ) { //  抛出异常
+			throw new Excp($count->message, $count->code, $count->extra);
+		}
+
+
 		$offset = ($offset === null) ? intval($c['offset']) : intval( $offset );
 		$total = intval($count['news_count']) - $offset;
 		$page = ceil($total / $perpage );
@@ -390,6 +395,7 @@ class Article extends Model {
 			$from = $perpage * $i + $offset;
 			$resp = $wechat->searchMedia($from, $perpage, 'news');
 			foreach ($resp['item'] as $item ) {
+				print_r( $item );
 				foreach ($item['content']['news_item'] as $idx=>$media ) {
 					$this->importWechatMedia($c, $item['media_id'], $media, $idx );
 				}
@@ -434,11 +440,11 @@ class Article extends Model {
 			$data['article_id'] = $rs['article_id'];
 		}
 
-
 		$this->delta_render->loadByHTML($media['content']);
 		$delta = $this->delta_render->delta();
 		$images =  $this->delta_render->images();
 		$data['delta'] = $delta;
+		$data['content'] = $media['content'];
 		$data['images'] = $images;
 		$data['title'] = $media['title'];
 		$data['author'] = $media['author'];
