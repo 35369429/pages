@@ -360,7 +360,7 @@ class Article extends Model {
 
 
 		// 查询文章列表
-		$articles = $qb->select($select)->pgArray( $perpage, ['article._id'], 'page', $page );
+		$articles = $qb->select($select)->distinct()->pgArray( $perpage, ['article._id'], 'page', $page );
 
 		if ( $_GET['debug'] == 1 ) {
 			$articles['_sql'] = $qb->getSql();
