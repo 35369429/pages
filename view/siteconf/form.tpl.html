@@ -1,11 +1,9 @@
-                                                                                                                                                                                                                                                                                                                    
-      	  	  	  	  	  	    	  	  	  	  	  	          
 <?php 
 use \Xpmse\Loader\App; 
 use \Xpmse\Utils;
+use \Xpmse\T;
 ?>
 <style type="text/css">
-
 	.form {
 		padding-top: 60px;
 		padding-bottom: 60px;
@@ -14,7 +12,7 @@ use \Xpmse\Utils;
 
 
 <!-- Page Content -->
-<div class="content "> 
+<div class="content"> 
 	<div class="block block-bordered " >
 		<div class="block-header remove-margin" >
 
@@ -27,75 +25,57 @@ use \Xpmse\Utils;
 			
 		</div> <!-- END block-header -->
 
-		<div class="block-content form" >
+		<div class="block-content form siteconf-content js-draggable-items" >
 
 			<form class="form-horizontal siteconf-form form-lg" action= '<?=App::NR("siteconf", "save");?>' >
 
 				<!-- 隐藏域 -->
 				<input type="hidden" name="site_id" value="<?=$rs['site_id']?>" >
 	
-				 
-				<!-- 别名  -->
-				<!-- 标准输入框 -->
-
-	<!-- 别名 (site_slug) 开始  -->
-	<div class="form-group ">
-		<label class="col-xs-2 control-label" for="site_slug">别名 <span class="text-danger">*</span></label>
+	<!-- 单行文本: 别名 (site_slug) 开始  -->
+	<div class="form-group   ">
+		<label class="col-xs-2 control-label" for="site_slug">别名<span class="text-danger">*</span></label>
 		<div class="col-xs-8">
 			<input class="form-control input-lg"  
 				type="text" 
 				id="site_slug" name="site_slug" 
 				placeholder="请填写配置别名"  
-				value="<?=$rs['site_slug']?>" /> 
+				value="<?=T::v('<%=site_slug | e(\'html\')%>', $rs )?>" /> 
 			<div class="help-block"></div>
 		</div>
-	</div><!-- 结束 别名 (site_slug) -->
+	</div><!-- END 单行文本: 别名 (site_slug) -->
 
-				<!-- END 别名  -->
-				 
-				<!-- 呈现位置  -->
-				<!-- 标准输入框 -->
-
-	<!-- 呈现位置 (position) 开始  -->
-	<div class="form-group ">
+	<!-- 单行文本: 呈现位置 (position) 开始  -->
+	<div class="form-group   ">
 		<label class="col-xs-2 control-label" for="position">呈现位置</label>
 		<div class="col-xs-8">
 			<input class="form-control input-lg"  
 				type="text" 
 				id="position" name="position" 
 				placeholder="请填写呈现位置"  
-				value="<?=$rs['position']?>" /> 
+				value="<?=T::v('<%=position | e(\'html\')%>', $rs )?>" /> 
 			<div class="help-block"></div>
 		</div>
-	</div><!-- 结束 呈现位置 (position) -->
+	</div><!-- END 单行文本: 呈现位置 (position) -->
 
-				<!-- END 呈现位置  -->
-				 
-				<!-- 网站名称  -->
-				<!-- 标准输入框 -->
-
-	<!-- 网站名称 (site_name) 开始  -->
-	<div class="form-group ">
+	<!-- 单行文本: 网站名称 (site_name) 开始  -->
+	<div class="form-group   ">
 		<label class="col-xs-2 control-label" for="site_name">网站名称</label>
 		<div class="col-xs-8">
 			<input class="form-control input-lg"  
 				type="text" 
 				id="site_name" name="site_name" 
 				placeholder="请填写网站名称"  
-				value="<?=$rs['site_name']?>" /> 
+				value="<?=T::v('<%=site_name | e(\'html\')%>', $rs )?>" /> 
 			<div class="help-block"></div>
 		</div>
-	</div><!-- 结束 网站名称 (site_name) -->
+	</div><!-- END 单行文本: 网站名称 (site_name) -->
 
-				<!-- END 网站名称  -->
-				 
-				<!-- 网站LOGO  -->
-				<!-- END标准下拉选择组件 -->
 
-<!-- 标准组图上传组件 -->
 
-	<!-- 网站LOGO (site_logo) 开始  -->
-	<div class="xpmse-images" name="site_logo">
+
+	<!-- 单图上传: 网站LOGO (site_logo) 开始  -->
+	<div class="xpmse-images  " name="site_logo">
 		<div class="form-group " >
 			<label class="col-xs-2 control-label" for="site_logo">网站LOGO</label>
 			<div class="col-xs-8">
@@ -112,154 +92,112 @@ use \Xpmse\Utils;
 					data-progress="yes"
 					data-cropable="yes"
 					data-draggable="yes"
-					data-src="<?=$rs['site_logo']['url']?>"
-					data-path="<?=$rs['site_logo']['path']?>"
+					data-src="<?=T::v('<%=site_logo.url%>', $rs )?>"
+					data-path="<?=T::v('<%=site_logo.path%>', $rs )?>"
 					></div>
 				<div class="help-block"></div>
 			</div>
 		</div> 
-	</div><!-- xpmse-images 结束 网站LOGO (site_logo) -->
-
-				<!-- END 网站LOGO  -->
-				 
-				<!-- 网站简介  -->
-				<!-- 标准组图上传组件 -->
+	</div><!-- END 单图上传: 网站LOGO (site_logo) -->
 
 
 
 
-
-<!-- 标准输入框组件 -->
-
-	<!-- 网站简介 (site_intro) 开始  -->
-	<div class="form-group ">
+	<!-- 文本域: 网站简介 (site_intro) 开始  -->
+	<div class="form-group   ">
 		<label class="col-xs-2 control-label" for="site_intro">网站简介</label>
 		<div class="col-xs-8">
 			<textarea class="form-control input-lg"  
 				type="text" 
 				id="site_intro" name="site_intro" rows=""
-				placeholder="请填写网站简介"><?=$rs['site_intro']?></textarea> 
+				placeholder="请填写网站简介"><?=T::v('<%=site_intro  | e(\'html\')%>', $rs )?></textarea> 
 			<div class="help-block"></div>
 		</div>
-	</div><!-- 结束 网站简介 (site_intro) -->
+	</div><!-- END 文本域: 网站简介 (site_intro) -->
 
-				<!-- END 网站简介  -->
-				 
-				<!-- 官网地址  -->
-				<!-- 标准输入框 -->
-
-	<!-- 官网地址 (site_homepage) 开始  -->
-	<div class="form-group ">
+	<!-- 单行文本: 官网地址 (site_homepage) 开始  -->
+	<div class="form-group   ">
 		<label class="col-xs-2 control-label" for="site_homepage">官网地址</label>
 		<div class="col-xs-8">
 			<input class="form-control input-lg"  
 				type="text" 
 				id="site_homepage" name="site_homepage" 
 				placeholder="请填写官网地址"  
-				value="<?=$rs['site_homepage']?>" /> 
+				value="<?=T::v('<%=site_homepage | e(\'html\')%>', $rs )?>" /> 
 			<div class="help-block"></div>
 		</div>
-	</div><!-- 结束 官网地址 (site_homepage) -->
+	</div><!-- END 单行文本: 官网地址 (site_homepage) -->
 
-				<!-- END 官网地址  -->
-				 
-				<!-- 客户端下载地址  -->
-				<!-- 标准输入框 -->
-
-	<!-- 客户端下载地址 (site_downloadpage) 开始  -->
-	<div class="form-group ">
+	<!-- 单行文本: 客户端下载地址 (site_downloadpage) 开始  -->
+	<div class="form-group   ">
 		<label class="col-xs-2 control-label" for="site_downloadpage">客户端下载地址</label>
 		<div class="col-xs-8">
 			<input class="form-control input-lg"  
 				type="text" 
 				id="site_downloadpage" name="site_downloadpage" 
 				placeholder="请填写客户端下载地址"  
-				value="<?=$rs['site_downloadpage']?>" /> 
+				value="<?=T::v('<%=site_downloadpage | e(\'html\')%>', $rs )?>" /> 
 			<div class="help-block"></div>
 		</div>
-	</div><!-- 结束 客户端下载地址 (site_downloadpage) -->
+	</div><!-- END 单行文本: 客户端下载地址 (site_downloadpage) -->
 
-				<!-- END 客户端下载地址  -->
-				 
-				<!-- 网站备案号  -->
-				<!-- 标准输入框 -->
-
-	<!-- 网站备案号 (site_no) 开始  -->
-	<div class="form-group ">
+	<!-- 单行文本: 网站备案号 (site_no) 开始  -->
+	<div class="form-group   ">
 		<label class="col-xs-2 control-label" for="site_no">网站备案号</label>
 		<div class="col-xs-8">
 			<input class="form-control input-lg"  
 				type="text" 
 				id="site_no" name="site_no" 
 				placeholder="请填写网站备案号"  
-				value="<?=$rs['site_no']?>" /> 
+				value="<?=T::v('<%=site_no | e(\'html\')%>', $rs )?>" /> 
 			<div class="help-block"></div>
 		</div>
-	</div><!-- 结束 网站备案号 (site_no) -->
+	</div><!-- END 单行文本: 网站备案号 (site_no) -->
 
-				<!-- END 网站备案号  -->
-				 
-				<!-- 公司名称  -->
-				<!-- 标准输入框 -->
-
-	<!-- 公司名称 (company) 开始  -->
-	<div class="form-group ">
+	<!-- 单行文本: 公司名称 (company) 开始  -->
+	<div class="form-group   ">
 		<label class="col-xs-2 control-label" for="company">公司名称</label>
 		<div class="col-xs-8">
 			<input class="form-control input-lg"  
 				type="text" 
 				id="company" name="company" 
 				placeholder="请填写公司名称"  
-				value="<?=$rs['company']?>" /> 
+				value="<?=T::v('<%=company | e(\'html\')%>', $rs )?>" /> 
 			<div class="help-block"></div>
 		</div>
-	</div><!-- 结束 公司名称 (company) -->
+	</div><!-- END 单行文本: 公司名称 (company) -->
 
-				<!-- END 公司名称  -->
-				 
-				<!-- 公司地址  -->
-				<!-- 标准输入框 -->
-
-	<!-- 公司地址 (address) 开始  -->
-	<div class="form-group ">
+	<!-- 单行文本: 公司地址 (address) 开始  -->
+	<div class="form-group   ">
 		<label class="col-xs-2 control-label" for="address">公司地址</label>
 		<div class="col-xs-8">
 			<input class="form-control input-lg"  
 				type="text" 
 				id="address" name="address" 
 				placeholder="请填写公司地址"  
-				value="<?=$rs['address']?>" /> 
+				value="<?=T::v('<%=address | e(\'html\')%>', $rs )?>" /> 
 			<div class="help-block"></div>
 		</div>
-	</div><!-- 结束 公司地址 (address) -->
+	</div><!-- END 单行文本: 公司地址 (address) -->
 
-				<!-- END 公司地址  -->
-				 
-				<!-- 客服电话  -->
-				<!-- 标准输入框 -->
-
-	<!-- 客服电话 (tel) 开始  -->
-	<div class="form-group ">
+	<!-- 单行文本: 客服电话 (tel) 开始  -->
+	<div class="form-group   ">
 		<label class="col-xs-2 control-label" for="tel">客服电话</label>
 		<div class="col-xs-8">
 			<input class="form-control input-lg"  
 				type="text" 
 				id="tel" name="tel" 
 				placeholder="请填写客服电话"  
-				value="<?=$rs['tel']?>" /> 
+				value="<?=T::v('<%=tel | e(\'html\')%>', $rs )?>" /> 
 			<div class="help-block"></div>
 		</div>
-	</div><!-- 结束 客服电话 (tel) -->
+	</div><!-- END 单行文本: 客服电话 (tel) -->
 
-				<!-- END 客服电话  -->
-				 
-				<!-- 小程序二维码  -->
-				<!-- END标准下拉选择组件 -->
 
-<!-- 标准组图上传组件 -->
 
-	<!-- 小程序二维码 (qr_wxapp) 开始  -->
-	<div class="xpmse-images" name="qr_wxapp">
+
+	<!-- 单图上传: 小程序二维码 (qr_wxapp) 开始  -->
+	<div class="xpmse-images  " name="qr_wxapp">
 		<div class="form-group " >
 			<label class="col-xs-2 control-label" for="qr_wxapp">小程序二维码</label>
 			<div class="col-xs-8">
@@ -276,23 +214,19 @@ use \Xpmse\Utils;
 					data-progress="yes"
 					data-cropable="1"
 					data-draggable="yes"
-					data-src="<?=$rs['qr_wxapp']['url']?>"
-					data-path="<?=$rs['qr_wxapp']['path']?>"
+					data-src="<?=T::v('<%=qr_wxapp.url%>', $rs )?>"
+					data-path="<?=T::v('<%=qr_wxapp.path%>', $rs )?>"
 					></div>
 				<div class="help-block"></div>
 			</div>
 		</div> 
-	</div><!-- xpmse-images 结束 小程序二维码 (qr_wxapp) -->
+	</div><!-- END 单图上传: 小程序二维码 (qr_wxapp) -->
 
-				<!-- END 小程序二维码  -->
-				 
-				<!-- 订阅号二维码  -->
-				<!-- END标准下拉选择组件 -->
 
-<!-- 标准组图上传组件 -->
 
-	<!-- 订阅号二维码 (qr_wxpub) 开始  -->
-	<div class="xpmse-images" name="qr_wxpub">
+
+	<!-- 单图上传: 订阅号二维码 (qr_wxpub) 开始  -->
+	<div class="xpmse-images  " name="qr_wxpub">
 		<div class="form-group " >
 			<label class="col-xs-2 control-label" for="qr_wxpub">订阅号二维码</label>
 			<div class="col-xs-8">
@@ -309,23 +243,19 @@ use \Xpmse\Utils;
 					data-progress="yes"
 					data-cropable="1"
 					data-draggable="yes"
-					data-src="<?=$rs['qr_wxpub']['url']?>"
-					data-path="<?=$rs['qr_wxpub']['path']?>"
+					data-src="<?=T::v('<%=qr_wxpub.url%>', $rs )?>"
+					data-path="<?=T::v('<%=qr_wxpub.path%>', $rs )?>"
 					></div>
 				<div class="help-block"></div>
 			</div>
 		</div> 
-	</div><!-- xpmse-images 结束 订阅号二维码 (qr_wxpub) -->
+	</div><!-- END 单图上传: 订阅号二维码 (qr_wxpub) -->
 
-				<!-- END 订阅号二维码  -->
-				 
-				<!-- 服务号二维码  -->
-				<!-- END标准下拉选择组件 -->
 
-<!-- 标准组图上传组件 -->
 
-	<!-- 服务号二维码 (qr_wxse) 开始  -->
-	<div class="xpmse-images" name="qr_wxse">
+
+	<!-- 单图上传: 服务号二维码 (qr_wxse) 开始  -->
+	<div class="xpmse-images  " name="qr_wxse">
 		<div class="form-group " >
 			<label class="col-xs-2 control-label" for="qr_wxse">服务号二维码</label>
 			<div class="col-xs-8">
@@ -342,23 +272,19 @@ use \Xpmse\Utils;
 					data-progress="yes"
 					data-cropable="1"
 					data-draggable="yes"
-					data-src="<?=$rs['qr_wxse']['url']?>"
-					data-path="<?=$rs['qr_wxse']['path']?>"
+					data-src="<?=T::v('<%=qr_wxse.url%>', $rs )?>"
+					data-path="<?=T::v('<%=qr_wxse.path%>', $rs )?>"
 					></div>
 				<div class="help-block"></div>
 			</div>
 		</div> 
-	</div><!-- xpmse-images 结束 服务号二维码 (qr_wxse) -->
+	</div><!-- END 单图上传: 服务号二维码 (qr_wxse) -->
 
-				<!-- END 服务号二维码  -->
-				 
-				<!-- 安卓客户端二维码  -->
-				<!-- END标准下拉选择组件 -->
 
-<!-- 标准组图上传组件 -->
 
-	<!-- 安卓客户端二维码 (qr_android) 开始  -->
-	<div class="xpmse-images" name="qr_android">
+
+	<!-- 单图上传: 安卓客户端二维码 (qr_android) 开始  -->
+	<div class="xpmse-images  " name="qr_android">
 		<div class="form-group " >
 			<label class="col-xs-2 control-label" for="qr_android">安卓客户端二维码</label>
 			<div class="col-xs-8">
@@ -375,23 +301,19 @@ use \Xpmse\Utils;
 					data-progress="yes"
 					data-cropable="1"
 					data-draggable="yes"
-					data-src="<?=$rs['qr_android']['url']?>"
-					data-path="<?=$rs['qr_android']['path']?>"
+					data-src="<?=T::v('<%=qr_android.url%>', $rs )?>"
+					data-path="<?=T::v('<%=qr_android.path%>', $rs )?>"
 					></div>
 				<div class="help-block"></div>
 			</div>
 		</div> 
-	</div><!-- xpmse-images 结束 安卓客户端二维码 (qr_android) -->
+	</div><!-- END 单图上传: 安卓客户端二维码 (qr_android) -->
 
-				<!-- END 安卓客户端二维码  -->
-				 
-				<!-- 苹果客户端二维码  -->
-				<!-- END标准下拉选择组件 -->
 
-<!-- 标准组图上传组件 -->
 
-	<!-- 苹果客户端二维码 (qr_ios) 开始  -->
-	<div class="xpmse-images" name="qr_ios">
+
+	<!-- 单图上传: 苹果客户端二维码 (qr_ios) 开始  -->
+	<div class="xpmse-images  " name="qr_ios">
 		<div class="form-group " >
 			<label class="col-xs-2 control-label" for="qr_ios">苹果客户端二维码</label>
 			<div class="col-xs-8">
@@ -408,94 +330,116 @@ use \Xpmse\Utils;
 					data-progress="yes"
 					data-cropable="1"
 					data-draggable="yes"
-					data-src="<?=$rs['qr_ios']['url']?>"
-					data-path="<?=$rs['qr_ios']['path']?>"
+					data-src="<?=T::v('<%=qr_ios.url%>', $rs )?>"
+					data-path="<?=T::v('<%=qr_ios.path%>', $rs )?>"
 					></div>
 				<div class="help-block"></div>
 			</div>
 		</div> 
-	</div><!-- xpmse-images 结束 苹果客户端二维码 (qr_ios) -->
-
-				<!-- END 苹果客户端二维码  -->
-				 
-				<!-- 状态  -->
-				<!-- END 标准选择框 -->
+	</div><!-- END 单图上传: 苹果客户端二维码 (qr_ios) -->
 
 
-<!-- 标准下拉选择组件 -->
+
  
-	<!-- 状态 (status) 开始  -->
-	<div class="form-group ">
-		<label class="col-xs-2 control-label" for="status">状态 <span class="text-danger">*</span></label>
+	<!-- 下拉选择: 状态 (status) 开始  -->
+	<div class="form-group   ">
+		<label class="col-xs-2 control-label" for="status">状态<span class="text-danger">*</span></label>
 		<div class="col-xs-8">
-			<select class="js-select2 form-control input-lg" id="status" name="status" style="width: 100%;" data-placeholder="请选择广告状态">
+			<select class="js-select2 form-control input-lg" style="width: 100%;"
+					id="status" name="status"  
+					data-placeholder="请选择广告状态" >
 				<option></option>
-				<?php $rs["status"] = is_string($rs["status"]) ? [$rs["status"]] : $rs["status"] ; ?>
-<option value="online" <?=("online" == "online" && empty($rs["status"]) || in_array("online", $rs["status"]) ) ? "selected" : ""?> > 上线</option>
-
-<option value="offline" <?=("online" == "offline" && empty($rs["status"]) || in_array("offline", $rs["status"]) ) ? "selected" : ""?> >  下线</option>
-
+				<?php $rs["status"] = is_string($rs["status"]) ? [$rs["status"]] : $rs["status"] ; if (empty($rs["status"])) { $rs["status"] = ["online"]; } ?>
+<option value="online" <?=in_array("online", $rs["status"]) ? "selected" : ""?> > 上线</option>
+<option value="offline" <?=in_array("offline", $rs["status"]) ? "selected" : ""?> >  下线</option>
 			</select>
 			<div class="help-block"></div>
 		</div>
-	</div><!-- 结束 状态 (status) -->
+	</div><!-- END 下拉选择: 状态 (status) -->
 
-				<!-- END 状态  -->
-								
-				<!-- 保存数据 -->
-				<div class="form-group">
-					<label class="col-xs-2 control-label" for="url"></label>
-					<div class="col-xs-9">
-						<button class="btn btn-lg btn-primary btn-minw fn-action fn-save push-20-r" type="submit">保存</button>
-						<button 
-							data-param-id="<?=$rs['site_id']?>"
-							class="btn btn-lg btn-primary btn-minw fn-action fn-saved-only fn-duplicate push-50-r" type="button">复制</button>
+				<!--  提交按钮 -->
+				<div class="block block-quickpanel sidebar-mini">
+					<div class="block-quickpanel-content" >
+						<div class="form-group">
 
-						<button 
-							confirm-title="请确认删除站点配置 "
-				            confirm-content="您确定删除站点配置 <strong><?=$rs['position']?>(<?=$rs['site_id']?> )</strong>"
-				            confirm-dismiss = "取消"
-				            confirm-submit= "确定"
-				            data-param-site_id="<?=$rs['site_id']?>" 
-				            confirm-action="<?=App::NR('siteconf','remove')?>"
-				            event-before="
-								function( btn, modal ) {
-									$('button', modal)
-										.addClass('disabled')
-										.attr('disabled', 'disabled');
-								}
-							"
+							<!-- 功能组 -->
+							<div class="col-xs-2 push-20-t text-left">
+								<a href="<?=App::R('siteconf', 'index')?>"
+									class="btn btn-lg btn-primary font-w300 btn-minw push-20-l user-action fn-back" >
+									<i class="fa fa-angle-double-left push-5-r"></i> 站点配置列表 
+								</a>
+							</div>
+							<div class="col-xs-8 push-20-t text-center">
+								<button  
+									type="submit" 
+									class="btn btn-lg btn-primary font-w300 btn-minw  push-20-r fn-action fn-save  ">
+										<i class="fa fa-save push-5-r"></i> 保存
+								</button>
 
-							event-done="
-								function( data, btn, modal) {
-									$('button', modal)
-										.removeClass('disabled')
-										.removeAttr('disabled');
-								}
-							"
-					        event-success="
-								function(btn, modal) {
-									success('站点配置删除成功');
-									setTimeout(function(){
-										window.location = '<?=App::R('siteconf','index')?>';
-									}, 1000);
-								}
-							"
+								<button  
+									type="button" 
+									data-param-id="<?=$rs['site_id']?>"
+									class="btn btn-lg btn-primary font-w300 btn-minw  push-50-r fn-action fn-saved-only fn-duplicate  ">
+										<i class="fa fa-files-o push-5-r"></i> 复制
+								</button>
 
-							event-error="
-								function( data, btn, modal) {
-									failure( '站点配置删除失败 ('+ data['message'] + ')');
-									return true;
-								}
-							"
+								<button 
+									type="button"
+									class="btn btn-lg btn-danger btn-minw ajax-confirm fn-action fn-saved-only fn-remove"
+									confirm-title="请确认删除站点配置 "
+						            confirm-content="您确定删除站点配置 <strong><?=$rs['name=site_slug']?>(<?=$rs['site_id']?> )</strong>"
+						            confirm-dismiss = "取消"
+						            confirm-submit= "确定"
+						            confirm-action="<?=App::NR('siteconf','remove')?>"
+						            event-before="
+										function( btn, modal ) {
+											$('button', modal)
+												.addClass('disabled')
+												.attr('disabled', 'disabled');
+										}
+									"
+									event-done="
+										function( data, btn, modal) {
+											$('button', modal)
+												.removeClass('disabled')
+												.removeAttr('disabled');
+										}
+									"
+							        event-success="
+										function(btn, modal) {
+											success('站点配置删除成功');
+											setTimeout(function(){
+												window.location = '<?=App::R('siteconf','index')?>';
+											}, 1000);
+										}
+									"
+									event-error="
+										function( data, btn, modal) {
+											failure( '站点配置删除失败 ('+ data['message'] + ')');
+											return true;
+										}
+									"
 
-						class="btn btn-lg btn-danger btn-minw ajax-confirm fn-action fn-saved-only fn-remove" type="button">删除</button>
+									data-param-site_id="<?=$rs['site_id']?>" 
+	
+									 >
+										<i class="fa fa-minus-circle push-5-r"></i> 删除
+								</button>
+
+							</div>
+						</div>
+						<div class="bg-primary text-white text-center bottom-line"></div>	
 					</div>
-				</div><!-- END 保存数据 -->
+				</div> <!-- END 提交按钮 -->
+
 			</form>
-		</div>
-	</div>
-</div>
+		</div> <!-- END block-content form -->
+	</div> <!-- END block block-bordered -->
+</div><!-- END content -->
+
+
+
+
 
 <script type="text/javascript">
 function pending( message ) {
@@ -594,8 +538,11 @@ function save( form, validation ) {
 
 
 $(function(){
+
+	// 设定高度
+	$('.siteconf-content').css('minHeight', $(document).outerHeight() );
 	
-	App.initHelpers(['datepicker','select2', 'masked-inputs','tags-inputs',  'ajax-confirm', 'slimscroll', 'file-uploader', 'image-crop']);
+	App.initHelpers(['datepicker','select2', 'js-draggable-items', 'masked-inputs','tags-inputs',  'ajax-confirm', 'slimscroll', 'file-uploader', 'image-crop']);
 
 	// 表单验证
 	$('.siteconf-form').validate({
@@ -638,6 +585,10 @@ $(function(){
 	if ( $('input[name="site_id"]').val() == '' || $('input[name="site_id"]').val() == undefined ) {
 		$('.fn-saved-only').addClass('hidden');
 	}
+
+// 自定义代码
+
+
 })
 	
 </script>
