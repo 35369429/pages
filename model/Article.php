@@ -198,6 +198,7 @@ class Article extends Model {
 				   ->leftJoin("article_tag as at", 'at.article_id', "=", "article.article_id")
 				   ->leftJoin("tag as t", "t.tag_id", "=", "at.tag_id")
 			;
+		$qb->where('article.status', '=', 'published');
 
 		$select_defaults = [
 			"article.article_id", "article.title", "article.summary", 
