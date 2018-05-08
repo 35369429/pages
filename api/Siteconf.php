@@ -4,7 +4,7 @@
  * 站点配置数据接口 
  *
  * 程序作者: XpmSE机器人
- * 最后修改: 2018-05-06 21:14:39
+ * 最后修改: 2018-05-08 21:38:17
  * 程序母版: /data/stor/private/templates/xpmsns/model/code/api/Name.php
  */
 namespace Xpmsns\Pages\Api;
@@ -32,12 +32,12 @@ class Siteconf extends Api {
 	/**
 	 * 查询一条站点配置记录
 	 * @param  array $query GET 参数
-	 *               $query['select']  读取字段, 默认 [*]
+	 *               $query['select']  读取字段, 默认 ["site.site_id","site.site_slug","site.position","site.site_name","site.site_intro","site.site_homepage","site.site_downloadpage","site.site_logo","site.site_no","site.company","site.address","site.tel","site.qr_wxapp","site.qr_wxpub","site.qr_wxse","site.qr_android","site.qr_ios","site.status","site.created_at","site.updated_at"]
 	 * 				 $query['site_id']  按查询 (多条用 "," 分割)
 	 * 				 $query['site_slug']  按查询 (多条用 "," 分割)
      *
 	 * @param  array $data  POST 参数
-	 *               $data['select']  返回字段, 默认 [*]
+	 *               $data['select']  返回字段, 默认 ["site.site_id","site.site_slug","site.position","site.site_name","site.site_intro","site.site_homepage","site.site_downloadpage","site.site_logo","site.site_no","site.company","site.address","site.tel","site.qr_wxapp","site.qr_wxpub","site.qr_wxse","site.qr_android","site.qr_ios","site.status","site.created_at","site.updated_at"]
 	 * 				 $data['site_id']  按查询 (多条用 "," 分割)
 	 * 				 $data['site_slug']  按查询 (多条用 "," 分割)
 	 *
@@ -71,7 +71,7 @@ class Siteconf extends Api {
 		$data = array_merge( $query, $data );
 
 		// 读取字段
-		$select = empty($data['select']) ? [*] : $data['select'];
+		$select = empty($data['select']) ? ["site.site_id","site.site_slug","site.position","site.site_name","site.site_intro","site.site_homepage","site.site_downloadpage","site.site_logo","site.site_no","site.company","site.address","site.tel","site.qr_wxapp","site.qr_wxpub","site.qr_wxse","site.qr_android","site.qr_ios","site.status","site.created_at","site.updated_at"] : $data['select'];
 		if ( is_string($select) ) {
 			$select = explode(',', $select);
 		}
