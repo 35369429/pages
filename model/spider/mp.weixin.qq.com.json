@@ -8,9 +8,9 @@
 		"cover":".rich_media_content  img|data-src:@image[0]",
 		"thumbs":".rich_media_content img|data-src:@image{4}",
 		"images":".rich_media_content img|data-src:@image",
-		"title":"title",
-		"author":"#post-user",
-		"publish_date": "#post-date",
+		"title":".rich_media_title",
+		"author":"#profileBt",
+		"publish_date": "#publish_time",
 		"delta":".rich_media_content:delta",
 		"content":".rich_media_content:html"
 	}

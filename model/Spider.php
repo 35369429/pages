@@ -82,6 +82,10 @@ class Spider {
 	 */
 	private function parseField( $node, $type, $attr ) {
 
+		if ( $node->count() == 0 && $type != 'image' ) {
+			return "";
+		}
+
 		$readability = new Readability(new Configuration());
 
 		switch ($type) {
@@ -123,7 +127,7 @@ class Spider {
 				// } catch (ParseException $e) {
 				// 	// echo sprintf('Error processing text: %s', $e->getMessage);
 				// }
-				var_dump($html);
+				// var_dump($html);
 
 				$this->delta_render->loadByHTML($html);
 				$val = $this->delta_render->delta();
@@ -181,11 +185,8 @@ class Spider {
 		$html = str_replace('section', 'div', $html);
 		$dom = new Dom;
 		$dom->loadStr($html, []);
-
-		// echo "<pre>";
 		$data = [];
 		foreach ($rule as $key => $ru ) {
-
 
 			$type = 'text'; $attr = null; 
 			$params = explode(':', $ru);
@@ -216,7 +217,7 @@ class Spider {
 				}
 
 
-				// 读取指定下表 @sometype{1,5}
+				// 读取指定下标 @sometype{1,5}
 				if ( preg_match("/\{([0-9]+),([0-9]+)\}[ ]*$/", $type, $match) ) {
 					
 					if ( $match[2] >= $to ) {
@@ -258,7 +259,6 @@ class Spider {
 				$data[$key] = $this->parseField( $node, $type, $attr );
 			}
 		}
-
 
 		return $data;
 	}
