@@ -1448,12 +1448,6 @@ class Article extends Model {
 	}
 
 
-	
-	function genId() {
-		return uniqid();
-	}
-
-
 	/**
 	 * 添加文章
 	 * @param  [type] $data [description]

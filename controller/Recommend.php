@@ -19,6 +19,21 @@ class RecommendController extends \Xpmse\Loader\Controller {
 	function __construct() {
 	}
 
+	function tryit() {
+		$inst = new \Xpmsns\Pages\Model\Recommend;
+		$ids = [];
+			
+		// var_dump( Utils::uniqid(16) );  return;
+		for( $i=0; $i<1000000; $i++) {
+			$id = $inst->genId();
+			array_push( $ids, $id );
+		}
+
+		$ids = array_unique($ids);
+
+		echo count( $ids );
+	}
+
 	/**
 	 * 推荐列表检索
 	 */
