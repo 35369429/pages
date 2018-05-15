@@ -1,12 +1,13 @@
 {
 	"cname":"用户注册页",
 	"data": {
-		"images":[
-			"{{__STOR__::/__PROJECT_NAME/assets/user}}/images/signup_01.jpg",
-			"{{__STOR__::/__PROJECT_NAME/assets/user}}/images/signup_02.jpg",
-			"{{__STOR__::/__PROJECT_NAME/assets/user}}/images/signup_03.jpg",
-			"{{__STOR__::/__PROJECT_NAME/assets/user}}/images/signup_04.jpg"
-		],
+		"site":{
+			"api":"/xpmsns/pages/siteconf/get",
+			"query":{
+				"site_slug":"global",
+				"select":"*"
+			}
+		},
 		"option":{
 			"api":"/xpmsns/user/user/option",
 			"query":{}

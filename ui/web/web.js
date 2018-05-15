@@ -31,7 +31,11 @@ Web({
 	 */
 	fixTooltip: function(){
 		let margin = 32;
-		let left =  $('.container').offset().left +  $('.container').width()  +  margin;
+		let left = 0;
+		try {
+			left =  $('.container').offset().left +  $('.container').width()  +  margin;
+		} catch(e) {};
+
 		$('.float-tooltip').css('right', '0px');
 		$('.float-tooltip').css('left', left + 'px');
 		$('.float-tooltip').hide();
@@ -42,7 +46,6 @@ Web({
 	onError:function( error ) {
 		console.log( 'Error=', error, SERVICE_URL );
 	},
-
 
 	/**
 	 * 轮播广告代码
