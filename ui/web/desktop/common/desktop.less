@@ -15,6 +15,25 @@ a{
 	text-decoration: none;
 }
 
+.h1, .h2, .h3, .h4, .h5, .h6, h1, h2, h3, h4, h5, h6 {
+	color: @textDark;
+}
+
+body {
+	color: @text;
+}
+
+/**
+ * 工具样式
+ */
+.push-15-r {
+	margin-right: 15px;
+}
+
+.push-20-r {
+	margin-right: 20px;
+}
+
 
 /**
  * 重载 Bootstrap 样式
@@ -47,17 +66,69 @@ a{
 }
 
 
-
-/**
- * 重载 Bootstrap Form 样式
- */
-
 .text-wechat {
-	color:@wechatBrand;
+	color:@wechatBrand !important;
 }
 
 .text-wechat:hover {
-	color: @wechatBrandHover;
+	color: @wechatBrandHover !important;
+};
+
+
+/**
+ * 重载 Bootstrap 表单样式
+ */
+
+.form-control.input-lg {
+	height: 46px;
+}
+
+.form-control, .input-group-addon {
+	border-radius: 0px;
+	border: 1px solid @greyMuted;
+	color: @text;
+	box-shadow: none;
+	-webkit-box-shadow: none;
+}
+
+.form-control:focus {
+	border-color: @primary;
+	box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px @primaryShadow;
+	-webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px @primaryShadow;
+}
+
+.input-group-addon.input-lg {
+	border-radius: 0px;
+}
+
+.input-group-addon.input-lg.image {
+	padding:0px;
+}
+
+.btn-lg {
+	border-radius: 0px;
+}
+
+.btn-primary {
+	background-color: @primary;
+	border-color: @borderPrimary;
+}
+.btn-primary.active.focus, .btn-primary.active:focus, .btn-primary.active:hover, .btn-primary:active.focus, .btn-primary:active:focus, .btn-primary:active:hover, .open>.dropdown-toggle.btn-primary.focus, .open>.dropdown-toggle.btn-primary:focus, .open>.dropdown-toggle.btn-primary:hover {
+	background-color: @primaryHover;
+	border-color: @borderPrimaryHover;
+}
+.btn-primary:hover, .btn-primary:active, .btn-primary:focus {
+	background-color: @primaryHover;
+	border-color: @borderPrimaryHover;
+};
+
+
+.form-group a {
+	color: @formLink;
+}
+
+.form-group a:hover {
+	color: @formLinkHover;
 };
 
 

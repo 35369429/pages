@@ -51,8 +51,8 @@
 				<input 
 				name="_vcode"
 				type="text" class="form-control input-lg" placeholder="图形验证码">
-				<span class="input-group-addon image vcode">
-					<img src="/_api/xpmsns/user/user/vcode?width=200&height=44&size=20">
+				<span class="input-group-addon input-lg image vcode">
+					<img src="/_api/xpmsns/user/user/vcode?width=150&height=44&size=20">
 				</span>
 			</div>
 			<span id="helpBlock" class="help-block"></span>
@@ -77,7 +77,7 @@
 
 		<div class="form-group text-left" >
 
-			<a href="/user/signin/wechat" class="wechat text-wechat" mp:if="{{option.user_wechat_on == 1}}"  > 
+			<a href="/user/signin/wechat" class="wechat text-wechat push-15-r" mp:if="{{option.user_wechat_on == 1}}"  > 
 				<i class="fab fa-weixin"></i> 微信登录
 			</a>
 
