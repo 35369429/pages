@@ -18,7 +18,7 @@ class SetupController extends \Xpmse\Loader\Controller {
 			'\\Xpmsns\\Pages\\Model\\Adv',
 			'\\Xpmsns\\Pages\\Model\\Links',
 			'\\Xpmsns\\Pages\\Model\\Siteconf',
-			'\\Xpmsns\\Pages\\Model\\Recommend'  // 推荐
+			'\\Xpmsns\\Pages\\Model\\Recommend'
 		];
 	}
 

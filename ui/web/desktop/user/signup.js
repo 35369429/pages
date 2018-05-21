@@ -339,7 +339,7 @@ Page({
 	 * @return {[type]} [description]
 	 */
 	changeVcode: function(){
-		var api = '/_api/xpmsns/user/user/vcode?width=200&height=44&size=20&t=' + Date.parse(new Date()); 
+		var api = '/_api/xpmsns/user/user/vcode?width=150&height=44&size=20&t=' + Date.parse(new Date()); 
 		$('.image.vcode img').attr('src', api);
 	},
 

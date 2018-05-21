@@ -6,7 +6,7 @@
 		</div>
 	</header>
 	
-	<div class="form signup" mp:if="{{option.user_mobile_signup_on == 1}}">
+	<div class="form signup-form" mp:if="{{option.user_mobile_signup_on == 1}}">
 		<div class="form-header">
 			<h3>欢迎加入{{site.site_name}}!</h3>
 			<p>加入{{site.site_name}}, 您可以订阅、点赞、打赏、评论、收藏文章！</p>
