@@ -15,7 +15,7 @@ Page({
 
 
 		// 提交表单
-		$('.signup-form .signin').click(function(){
+		$('.signin-form .signin').click(function(){
 			that.submit();
 		});
 
@@ -118,7 +118,7 @@ Page({
 	 * @return
 	 */
 	alert: function( message ) {
-		$('.signup-form .alert-danger')
+		$('.signin-form .alert-danger')
 			.removeClass('hidden')
 			.children('.message')
 			.html( message );
@@ -126,7 +126,7 @@ Page({
 
 
 	success: function( message ) {
-		$('.signup-form .alert-success')
+		$('.signin-form .alert-success')
 			.removeClass('hidden')
 			.children('.message')
 			.html( message );
@@ -138,7 +138,7 @@ Page({
 	 * @return {[type]} [description]
 	 */
 	cleanAlert: function(){
-		$('.signup-form .alert').addClass('hidden');
+		$('.signin-form .alert').addClass('hidden');
 	},
 
 	/**
@@ -146,7 +146,7 @@ Page({
 	 * @return {[type]} [description]
 	 */
 	lockAction: function(){
-		$('.signup-form .action').addClass('disabled').attr('disabled');
+		$('.signin-form .action').addClass('disabled').attr('disabled');
 	},
 
 	/**
@@ -154,7 +154,7 @@ Page({
 	 * @return {[type]} [description]
 	 */
 	unlockAction: function(){
-		$('.signup-form .action').removeClass('disabled').removeAttr('disabled');
+		$('.signin-form .action').removeClass('disabled').removeAttr('disabled');
 	},
 
 
@@ -168,7 +168,7 @@ Page({
 		var data = {};
 		for( var i in fields ) {
 			var field = fields[i];
-			data[field]=$('.signup-form [name="'+field+'"]').val();
+			data[field]=$('.signin-form [name="'+field+'"]').val();
 		}
 		return data;
 	},
@@ -185,7 +185,7 @@ Page({
 		silents = silents || {};
 
 		var getGroup = function( field ) {
-			var el = $('.signup-form [name="'+field+'"]');
+			var el = $('.signin-form [name="'+field+'"]');
 			var group = el.parent();
 			if ( group.hasClass('input-group') ){
 				group = group.parent();
