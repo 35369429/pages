@@ -8,6 +8,10 @@
 				"select":"*"
 			}
 		},
+		"user": {
+			"api": "/xpmsns/user/user/getUserInfo",
+			"query":{}
+		},
 		"categories":{
 			"api":"/xpmsns/pages/category/search",
 			"query":{

@@ -8,6 +8,7 @@
 		"/desktop/user/signin",
 		"/desktop/user/signin_wechat",
 		"/desktop/user/bind_mobile",
+		"/desktop/user/signout",
 		"/desktop/home/index",
 		"/desktop/user/index",
 		"/mobile/article/index",

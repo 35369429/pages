@@ -22,9 +22,12 @@
 			</li>
 		</ul>
 		<ul class="tb-list right">
+			<li mp:if="{{user.user_id}}" >
+				{{user.nickname}}  <a href="/user/signout"> 退出 </a> 
+			</li>
 			<li><a href="/article"> 首页 </a></li>
-			<li><a href="/user/signup"> 注册 </a></li>
-			<li><a href="/user/signin/mobile"> 登录 </a></li>
+			<li mp:if="{{user.user_id === null}}" ><a href="/user/signup"> 注册 </a></li>
+			<li mp:if="{{user.user_id === null}}" ><a href="/user/signin/mobile"> 登录 </a></li>
 			<li><a href="/landing/mp"> 内容平台</a></li>
 			<li><a href="https://www.xpmsns.com/"> 联系购买 </a></li>
 		</ul>

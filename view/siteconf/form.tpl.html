@@ -71,6 +71,19 @@ use \Xpmse\T;
 		</div>
 	</div><!-- END 单行文本: 网站名称 (site_name) -->
 
+	<!-- 单行文本: Slogen (site_slogen) 开始  -->
+	<div class="form-group   ">
+		<label class="col-xs-2 control-label" for="site_slogen">Slogen</label>
+		<div class="col-xs-8">
+			<input class="form-control input-lg"  
+				type="text" 
+				id="site_slogen" name="site_slogen" 
+				placeholder="请填写网站名称"  
+				value="<?=T::v('<%=site_slogen | e(\'html\')%>', $rs )?>" /> 
+			<div class="help-block"></div>
+		</div>
+	</div><!-- END 单行文本: Slogen (site_slogen) -->
+
 
 
 

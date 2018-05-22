@@ -4,11 +4,11 @@
  * 站点配置数据模型
  *
  * 程序作者: XpmSE机器人
- * 最后修改: 2018-05-08 21:38:18
+ * 最后修改: 2018-05-22 17:01:56
  * 程序母版: /data/stor/private/templates/xpmsns/model/code/model/Name.php
  */
 namespace Xpmsns\Pages\Model;
-                              
+                               
 use \Xpmse\Excp;
 use \Xpmse\Model;
 use \Xpmse\Utils;
@@ -63,6 +63,8 @@ class Siteconf extends Model {
 		$this->putColumn( 'position', $this->type("string", ["length"=>128, "index"=>true, "null"=>true]));
 		// 网站名称
 		$this->putColumn( 'site_name', $this->type("string", ["length"=>128, "index"=>true, "null"=>true]));
+		// 网站Slogen
+		$this->putColumn( 'site_slogen', $this->type("string", ["length"=>400, "null"=>true]));
 		// 网站简介
 		$this->putColumn( 'site_intro', $this->type("string", ["length"=>400, "null"=>true]));
 		// 官网地址
@@ -176,6 +178,7 @@ class Siteconf extends Model {
 	 *          	  $rs["site_slug"],  // 配制别名 
 	 *          	  $rs["position"],  // 呈现位置 
 	 *          	  $rs["site_name"],  // 网站名称 
+	 *          	  $rs["site_slogen"],  // 网站Slogen 
 	 *          	  $rs["site_intro"],  // 网站简介 
 	 *          	  $rs["site_homepage"],  // 官网地址 
 	 *          	  $rs["site_downloadpage"],  // 应用下载地址 
@@ -294,6 +297,7 @@ class Siteconf extends Model {
 	 *          	  $rs["site_slug"],  // 配制别名 
 	 *          	  $rs["position"],  // 呈现位置 
 	 *          	  $rs["site_name"],  // 网站名称 
+	 *          	  $rs["site_slogen"],  // 网站Slogen 
 	 *          	  $rs["site_intro"],  // 网站简介 
 	 *          	  $rs["site_homepage"],  // 官网地址 
 	 *          	  $rs["site_downloadpage"],  // 应用下载地址 
@@ -670,6 +674,7 @@ class Siteconf extends Model {
 	 *               	["site_slug"],  // 配制别名 
 	 *               	["position"],  // 呈现位置 
 	 *               	["site_name"],  // 网站名称 
+	 *               	["site_slogen"],  // 网站Slogen 
 	 *               	["site_intro"],  // 网站简介 
 	 *               	["site_homepage"],  // 官网地址 
 	 *               	["site_downloadpage"],  // 应用下载地址 
@@ -804,6 +809,7 @@ class Siteconf extends Model {
 			"site_slug",  // 配制别名
 			"position",  // 呈现位置
 			"site_name",  // 网站名称
+			"site_slogen",  // 网站Slogen
 			"site_intro",  // 网站简介
 			"site_homepage",  // 官网地址
 			"site_downloadpage",  // 应用下载地址

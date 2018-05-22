@@ -33,7 +33,7 @@
 		</div>
 		
 		<!-- 绑定手机号码 -->
-		<input type="hidden" name="backurl" value="" />
+		<input type="hidden" name="backurl" value="/home/index" />
 
 		<hr />
 
