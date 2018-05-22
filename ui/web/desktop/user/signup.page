@@ -75,6 +75,8 @@
 			<button class="btn btn-primary btn-lg btn-block signup action" type="button">立即注册</button>
 		</div>
 
+		<hr />
+
 		<div class="form-group text-left push-30-t" >
 
 			<a href="/user/signin/wechat" class="wechat text-wechat push-15-r" mp:if="{{option.user_wechat_on == 1}}"  > 
