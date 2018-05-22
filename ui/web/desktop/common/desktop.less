@@ -226,6 +226,73 @@ header {
 	}
 }
 
+
+header .crumb {
+
+	height:58px;
+	background: @white;
+	box-shadow: 0px 2px 2px @grey;
+	margin-bottom: 15px;
+	.container {
+		padding-top: 2px;
+	}
+	.logo {
+		width: 160px;
+		height:40px;
+		margin-bottom:10px;
+		float: left;
+		img { display: inline-block; width:160px; height:40px; }
+
+	}
+	
+	ul {
+		
+		float: left;
+		padding-left: 10px;
+
+		li {
+			float: left;
+			color: @textGrey;
+			font-weight:400;
+			font-size:18px;
+			height: 40px;
+			line-height:40px;
+			display: inline-block;
+			margin-right: .5em;
+
+			a {
+				color: @text;
+				text-decoration: none;
+			}
+
+			a:hover {
+				filter:alpha(opacity=80);
+		    	-moz-opacity:0.8;  
+		    	-khtml-opacity: 0.8;  
+				opacity: 0.8; 
+			}
+
+			span {
+				cursor: default;
+			}
+		}
+
+		li:after {
+			content:"\f105";
+			font-family: 'FontAwesome';
+		    font-style: normal;
+		    font-weight: normal;
+		    font-size: 18px;
+		    padding-left:.5em;
+		}
+
+		li:last-child:after {
+			content: "";
+		}
+	}
+}
+
+
 /**
  * 类目导航
  */

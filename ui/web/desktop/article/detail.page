@@ -1,49 +1,6 @@
 <include src="__WEB_ROOT__/desktop/common/head.page"  />
-<header>
-	<div class="topbar">
-		<ul class="tb-list left">
-			<li><a href="#"> 下载APP </a></li>
-			<li>
-				<a  href="#" 
-					data-html="true"
-					data-toggle="popover" 
-				 	data-placement="bottom"
-					data-container="body" 
-					data-content="<img width='150' onclick=$('[data-toggle=popover]').popover('hide') src='{{__STOR__::/__PROJECT_NAME/desktop/assets}}/images/qr-wxapp-index.jpg' />"  > 
-					小程序 <span class="m-left-5"><i class="fa fa-angle-down"></i> </span></a>
-			</li>
-			<li>
-				<a  href="#" 
-					data-html="true"
-					data-toggle="popover" 
-				 	data-placement="bottom"
-					data-container="body" 
-					data-content="<img width='150' onclick=$('[data-toggle=popover]').popover('hide') src='{{__STOR__::/__PROJECT_NAME/desktop/assets}}/images/qr-m-index.png' />"  > 
-					手机版 <span class="m-left-5"><i class="fa fa-angle-down"></i> </span></a>
-			</li>
-		</ul>
-		<ul class="tb-list right">
-			<li><a href="#"> 联系购买 </a></li>
-			<li><a href="#"> 产品官网 </a></li>
-		</ul>
-	</div>
-	<div class="clear"></div>
+<include src="__WEB_ROOT__/desktop/common/header.page"  />
 
-	<div class="crumb">
-		<div class="container">
-			<div class="logo">
-				<a href="/article"><img src="{{site.site_logo.url}}" alt=""  class="title_block"></a>
-			</div>
-			<ul>
-				<li><a href="/article">首页</a></li>
-				<li><a href="/article/list/{{article.category_last.category_id}}">{{article.category_last.name}}</a></li>
-				<li>正文</li>
-			</ul>
-			<div class="clear"></div>
-		</div> <!-- END  container -->
-	</div> <!-- END crumb -->
-
-</header>
 
 
 <div class="container"><div class="row">

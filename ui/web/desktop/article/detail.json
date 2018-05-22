@@ -42,6 +42,11 @@
 		],
 		"hot": "{{recommend.hot.data}}",
 		"crumb":"{{article.category.0}}",
+		"crumbs":[
+			{"name":"首页", "link":"/"},
+			{"name":"{{article.category_last.name}}", "link":"/article/list/{{article.category_last.category_id}}"},
+			{"name":"正文",  "link":"" }
+		],
 		"page":{
 			"title":"{{article.title}}"
 		},
@@ -60,3 +65,4 @@
 		"wxapp": "/article/detail"
 	}
 }
+

@@ -54,6 +54,8 @@
 		}
 	},
 	"entries":[
+		{"method":"GET", "router":"/", "ttl":0},
+		{"method":"GET", "router":"/index", "ttl":0},
 		{"method":"GET", "router":"/article", "ttl":0}
 	],
 	
