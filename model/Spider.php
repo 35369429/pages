@@ -170,7 +170,7 @@ class Spider {
 		}
 
 		if ( empty($rule) ) {
-			throw new Excp("未找到与地址匹配的采集规则", 404, ['url'=>$url,'config'=>$c]);
+			throw new Excp("未找到与地址匹配的采集规则", 404, ['url'=>$url,'config'=>$c,'path'=>$path]);
 		}
 
 		// return ['uri'=>$uri, 'rule'=>$rule, 'path'=>$path];

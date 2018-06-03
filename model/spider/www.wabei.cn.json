@@ -1,0 +1,18 @@
+{	
+	"find":{
+		"/^\\/p\\/[0-9]+\\/[0-9]+\\.html$/":"detail"
+	},
+	"index": {},
+	"detail": {
+		"origin_url": "{url}",
+		"origin":".subject .attr .source",
+		"cover":".subject .subject-content img|src:@image[0]",
+		"thumbs":".subject .subject-content img|src:@image{4}",
+		"images":".subject .subject-content img|src:@image",
+		"title":".subject h1",
+		"author":".subject .attr .author",
+		"publish_date": ".subject .attr .time",
+		"delta":".subject .subject-content:delta",
+		"content":".subject .subject-content:html"
+	}
+}

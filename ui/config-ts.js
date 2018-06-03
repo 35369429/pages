@@ -2,11 +2,11 @@ config = {
 	mina:{
 		target: false,
 		priority:0,
-		server:"http://www.hcit360.com",
-		domain:"www.hcit360.com",
+		server:"http://ts.xpmsns.com",
+		domain:"ts.xpmsns.com",
 		project:"default",
-		appid:'152744030091631',
-		secret:'56f07a1328d4d8eeeaae3b76b05b7384'
+		appid:'152803443596750',
+		secret:'c89a414c45436830cb455c5ae0345ba5'
 	},
 	wxapp:{
 		"cli":"/Applications/wechatwebdevtools.app/Contents/Resources/app.nw/bin/cli",
