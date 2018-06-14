@@ -49,8 +49,7 @@ class Recommend extends Api {
 		} else if ( array_key_exists('recommend_id', $data) && !empty($data['recommend_id']) ) {
 			return $inst->getArticles( $data['recommend_id'], $keywords, $now, $page, $perpage);
 		}	
-		echo "<pre>";
-		var_dump()
+
 
 		throw new Excp('错误的查询参数', 402, ['query'=>$query, 'data'=>$data]);
 	}
