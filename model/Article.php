@@ -400,11 +400,6 @@ class Article extends Model {
 		foreach ($order as $field => $order ) {
 			$qb->orderBy( $field, $order );
 		}
-
-		echo "<pre>";
-		var_dump($select);
-		echo "</pre>";
-
 		$qb->select( $select );
 		$data = $qb->get()->toArray();
 
@@ -415,10 +410,6 @@ class Article extends Model {
 			$map[$rs['article_id']] = $rs;
 			
 		}
-
-		echo "<pre>";
-		var_dump($map);
-		echo "</pre>";
 
 
 
