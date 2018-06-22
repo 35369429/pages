@@ -401,13 +401,23 @@ class Article extends Model {
 			$qb->orderBy( $field, $order );
 		}
 		$qb->select( $select );
-		$data = $qb->get()->toArray(); 
+		$data = $qb->get()->toArray();
+
+
+		echo "<pre>";
+		var_dump($data);
+		echo "</pre>";
+
+
 		$map = [];
 		foreach ($data as & $rs ) {
 			$this->format($rs);
 			$map[$rs['article_id']] = $rs;
 			
 		}
+
+
+
 		return $map;
 	}
 
