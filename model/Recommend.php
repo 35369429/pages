@@ -1041,13 +1041,7 @@ class Recommend extends Model {
 				}
 			}
 		}
-
-
-		echo "<pre>";
-		var_dump($select);
-		echo "</pre>";
-
-
+		
 		// filter 查询字段
 		foreach ($inwhereSelect as & $iws ) {
 			if ( is_array($iws) ) {

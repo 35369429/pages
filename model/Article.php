@@ -381,7 +381,7 @@ class Article extends Model {
 	 * + getInByArticleId 方法
 	 * @return [type] [description]
 	 */
-	function getInByArticleId( $article_ids, $select='article.article_id, article.title,article.images', $order=["article.created_at"=>"asc"] ) {
+	function getInByArticleId( $article_ids, $select='article.article_id, article.title', $order=["article.created_at"=>"asc"] ) {
 
 		$article_ids = is_array($article_ids) ? $article_ids  : [];
 
@@ -401,18 +401,13 @@ class Article extends Model {
 			$qb->orderBy( $field, $order );
 		}
 		$qb->select( $select );
-		$data = $qb->get()->toArray();
-
-
+		$data = $qb->get()->toArray(); 
 		$map = [];
 		foreach ($data as & $rs ) {
 			$this->format($rs);
 			$map[$rs['article_id']] = $rs;
 			
 		}
-
-
-
 		return $map;
 	}
 
