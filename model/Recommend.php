@@ -1004,9 +1004,6 @@ class Recommend extends Model {
 			$recommends['query'] = $query;
 		}
 
-		echo "<pre>";
-		var_dump($recommends);
-		echo "</pre>";
 
 		return $recommends;
 	}
