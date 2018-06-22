@@ -331,7 +331,33 @@ class Recommend extends Api {
 		$data['select'] = $select;
 
 		$inst = new \Xpmsns\Pages\Model\Recommend;
-		return $inst->search( $data );
+
+		$data = $inst->search( $data );
+
+		
+		
+
+		// if (!empty($data["article"])){
+
+
+		// 	foreach ($data['data'] as $key => $value){
+
+
+		// 		if (!empty($value["articles"])) {
+
+		// 			foreach ($value["articles"] as $k => $v){
+						
+		// 				$data['data'][$key]["articles"][$k]= $data["article"][$v];
+
+		// 			}
+
+		// 		}
+
+		// 	}
+		
+		// }
+
+		return $data;
 	}
 
 
