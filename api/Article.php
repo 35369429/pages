@@ -80,6 +80,14 @@ class Article extends Api {
 			$data['hot'] = $this->search($query);
 		}
 
+		// 行业干货
+		if ( in_array('dry', $section) ) {
+			$query['param'] = '行业干货';
+			$query['perpage'] = 10;
+			$query['page'] = 1;
+			$data['dry'] = $this->search($query);
+		}
+		
 		return $data;
 	}
 
