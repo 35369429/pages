@@ -334,28 +334,29 @@ class Recommend extends Api {
 
 		$data = $inst->search( $data );
 
-	
+		
+		
 
-		if (!empty($data["article"])){
-
-
-			foreach ($data['data'] as $key => $value){
+		// if (!empty($data["article"])){
 
 
-				if (!empty($value["articles"])) {
+		// 	foreach ($data['data'] as $key => $value){
 
-					foreach ($value["articles"] as $k => $v){
+
+		// 		if (!empty($value["articles"])) {
+
+		// 			foreach ($value["articles"] as $k => $v){
 						
-						$data['data'][$key]["articles"][$k]= $data["article"][$v];
+		// 				$data['data'][$key]["articles"][$k]= $data["article"][$v];
 
-					}
+		// 			}
 
-				}
+		// 		}
 
-			}
+		// 	}
 		
-		}
-		
+		// }
+
 		return $data;
 	}
 
