@@ -411,6 +411,10 @@ class Article extends Model {
 			
 		}
 
+		echo "<pre>";
+		var_dump($map);
+		echo "</pre>";
+
 
 
 		return $map;
