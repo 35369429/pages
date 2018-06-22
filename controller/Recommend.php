@@ -4,7 +4,7 @@
  * 推荐控制器
  *
  * 程序作者: XpmSE机器人
- * 最后修改: 2018-05-06 23:36:39
+ * 最后修改: 2018-06-22 11:09:38
  * 程序母版: /data/stor/private/templates/xpmsns/model/code/controller/Name.php
  */
 
@@ -17,21 +17,6 @@ class RecommendController extends \Xpmse\Loader\Controller {
 
 
 	function __construct() {
-	}
-
-	function tryit() {
-		$inst = new \Xpmsns\Pages\Model\Recommend;
-		$ids = [];
-			
-		// var_dump( Utils::uniqid(16) );  return;
-		for( $i=0; $i<1000000; $i++) {
-			$id = $inst->genId();
-			array_push( $ids, $id );
-		}
-
-		$ids = array_unique($ids);
-
-		echo count( $ids );
 	}
 
 	/**

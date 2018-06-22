@@ -4,7 +4,7 @@
  * 推荐数据模型
  *
  * 程序作者: XpmSE机器人
- * 最后修改: 2018-05-06 23:36:39
+ * 最后修改: 2018-06-22 11:09:38
  * 程序母版: /data/stor/private/templates/xpmsns/model/code/model/Name.php
  */
 namespace Xpmsns\Pages\Model;
@@ -153,6 +153,16 @@ class Recommend extends Model {
 		$this->putColumn( 'period', $this->type("string", ["length"=>100, "index"=>true, "null"=>true]));
 		// 摘要图片
 		$this->putColumn( 'images', $this->type("text", ["json"=>true, "null"=>true]));
+		// PC端模板
+		$this->putColumn( 'tpl_pc', $this->type("text", ["null"=>true]));
+		// 手机端模板
+		$this->putColumn( 'tpl_h5', $this->type("text", ["null"=>true]));
+		// 小程序模板
+		$this->putColumn( 'tpl_wxapp', $this->type("text", ["null"=>true]));
+		// 安卓模板
+		$this->putColumn( 'tpl_android', $this->type("text", ["null"=>true]));
+		// iOS模板
+		$this->putColumn( 'tpl_ios', $this->type("text", ["null"=>true]));
 		// 关键词
 		$this->putColumn( 'keywords', $this->type("text", ["null"=>true]));
 		// 相关栏目
