@@ -53,7 +53,7 @@ class Article extends Api {
 	 */
 	protected function recommend( $query ) {
 		
-		$section =  !empty($query['section']) ? explode(',',$query['section']) : ['hot', 'focus', 'articles'];
+		$section =  !empty($query['section']) ? explode(',',$query['section']) : ['hot', 'focus', 'articles','dry'];
 		$data = [];
 
 		$query['order'] = 'publish_time desc';
