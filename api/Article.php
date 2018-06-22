@@ -83,7 +83,7 @@ class Article extends Api {
 		// 行业干货
 		if ( in_array('dry', $section) ) {
 			$query['param'] = '行业干货';
-			$query['perpage'] =5;
+			$query['perpage'] =6;
 			$query['page'] = 1;
 			$data['dry'] = $this->search($query);
 		}
