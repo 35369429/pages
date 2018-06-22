@@ -988,13 +988,6 @@ class Recommend extends Model {
  		// 读取 inWhere article 数据
 		if ( !empty($inwhereSelect["article"]) && method_exists("\\Xpmsns\\Pages\\Model\\Article", 'getInByArticleId') ) {
 			$article_ids = array_unique($article_ids);
-
-
-			echo "<pre>";
-			var_dump($inwhereSelect["article"]);
-			echo "</pre>";
-
-
 			$selectFields = $inwhereSelect["article"];
 			$recommends["article"] = (new \Xpmsns\Pages\Model\Article)->getInByArticleId($article_ids, $selectFields);
 		}
@@ -1010,7 +1003,6 @@ class Recommend extends Model {
 			$recommends['_sql'] = $qb->getSql();
 			$recommends['query'] = $query;
 		}
-
 
 		return $recommends;
 	}
@@ -1049,6 +1041,12 @@ class Recommend extends Model {
 				}
 			}
 		}
+
+
+		echo "<pre>";
+		var_dump($select);
+		echo "</pre>";
+
 
 		// filter 查询字段
 		foreach ($inwhereSelect as & $iws ) {
