@@ -1,8 +1,8 @@
 {
 	"org": "xpmsns",
 	"name": "pages",
-	"version": "1.1.1",
-	"cname": "XpmSNS-头条",
+	"version": "1.2.1",
+	"cname": "简墨",
 	"image": {
 		"color":"/static/icons/app-color.svg",
 		"dark":"/static/icons/app-dark.svg",
@@ -16,7 +16,7 @@
 	"homepage": "https://www.xpmsns.com",
 	"menu":[{
 		"slug":"xpmsns/pages/group",
-		"group":"头条"
+		"group":"简墨"
 	},{
 		"slug":"xpmsns/pages/audit/index",
 		"name":"审核",
@@ -38,6 +38,17 @@
 		"icontype": "img",
 		"linktype":"i",
 		"link":"{article,index}",
+		"permission": "boss,admin,manager,user",
+		"order":9999
+	},{
+		"slug":"xpmsns/pages/event/index",
+		"name":"活动",
+		"icon":{
+			"default":"/static/icons/event.svg"
+		},
+		"icontype": "img",
+		"linktype":"i",
+		"link":"{event,index}",
 		"permission": "boss,admin,manager,user",
 		"order":9999
 	},{

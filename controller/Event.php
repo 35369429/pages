@@ -1,0 +1,240 @@
+<?php
+/**
+ * Class EventController
+ * 活动控制器
+ *
+ * 程序作者: XpmSE机器人
+ * 最后修改: 2018-06-24 13:55:00
+ * 程序母版: /data/stor/private/templates/xpmsns/model/code/controller/Name.php
+ */
+
+use \Xpmse\Loader\App;
+use \Xpmse\Excp;
+use \Xpmse\Utils;
+use \Xpmse\Media;
+
+class EventController extends \Xpmse\Loader\Controller {
+
+
+	function __construct() {
+	}
+
+	/**
+	 * 活动列表检索
+	 */
+	function index() {	
+
+		$search  = $query = $_GET;
+		$inst = new \Xpmsns\Pages\Model\Event;
+		if ( !empty($search['order']) ) {
+			$order = $search['order'];
+			unset( $search['order'] );
+			$search[$order] = 1;
+		}
+
+		$response = $inst->search($search);
+		$data = [
+			'_TITLE' => "活动列表检索",
+			'query' => $query,
+			'response' => $response
+		];
+
+		if ( $_GET['debug'] == 1 ) {
+			Utils::out($data);
+			return;
+		}
+
+		App::render($data,'event','search.index');
+
+		return [
+			'js' => [
+		 			"js/plugins/select2/select2.full.min.js",
+		 			"js/plugins/select2/i18n/zh-CN.js",
+		 			"js/plugins/jquery-validation/jquery.validate.min.js",
+		 			"js/plugins/dropzonejs/dropzone.min.js",
+		 			"js/plugins/cropper/cropper.min.js",
+		 			'js/plugins/masked-inputs/jquery.maskedinput.min.js',
+		 			'js/plugins/jquery-tags-input/jquery.tagsinput.min.js',
+		    		'js/plugins/jquery-ui/jquery-ui.min.js',
+	        		'js/plugins/bootstrap-datepicker/bootstrap-datepicker.min.js',
+				],
+			'css'=>[
+	 			"js/plugins/select2/select2.min.css",
+	 			"js/plugins/select2/select2-bootstrap.min.css"
+	 		],
+			'crumb' => [
+	            "活动" => APP::R('event','index'),
+	            "活动管理" =>'',
+	        ]
+		];
+	}
+
+
+	/**
+	 * 活动详情表单
+	 */
+	function detail() {
+
+		$event_id = trim($_GET['event_id']);
+		$action_name = '新建活动';
+		$inst = new \Xpmsns\Pages\Model\Event;
+		
+		if ( !empty($event_id) ) {
+			$rs = $inst->getByEventId($event_id);
+			if ( !empty($rs) ) {
+				$action_name =  $rs['name'];
+			}
+		}
+
+		$data = [
+			'action_name' =>  $action_name,
+			'event_id'=>$event_id,
+			'rs' => $rs
+		];
+
+		if ( $_GET['debug'] == 1 ) {
+			Utils::out($data);
+			return;
+		}
+
+
+		App::render($data,'event','form');
+
+		return [
+			'js' => [
+		 			"js/plugins/select2/select2.full.min.js",
+		 			"js/plugins/select2/i18n/zh-CN.js",
+		 			"js/plugins/dropzonejs/dropzone.min.js",
+		 			"js/plugins/cropper/cropper.min.js",
+		 			"js/plugins/jquery-tags-input/jquery.tagsinput.min.js",
+		 			"js/plugins/bootstrap-datepicker/bootstrap-datepicker.min.js",
+		 			'js/plugins/masked-inputs/jquery.maskedinput.min.js',
+		 			"js/plugins/jquery-validation/jquery.validate.min.js",
+		    		"js/plugins/jquery-ui/jquery-ui.min.js",
+		    		"js/plugins/summernote/summernote.min.js",
+		    		"js/plugins/summernote/lang/summernote-zh-CN.js",
+				],
+			'css'=>[
+				"js/plugins/bootstrap-datepicker/bootstrap-datepicker3.min.css",
+	 			"js/plugins/select2/select2.min.css",
+	 			"js/plugins/select2/select2-bootstrap.min.css",
+	 			"js/plugins/jquery-tags-input/jquery.tagsinput.min.css",
+	 			"js/plugins/summernote/summernote.css",
+	 			"js/plugins/summernote/summernote-bs3.min.css"
+	 		],
+
+			'crumb' => [
+	            "活动" => APP::R('event','index'),
+	            "活动管理" =>APP::R('event','index'),
+	            "$action_name" => ''
+	        ],
+	        'active'=> [
+	 			'slug'=>'xpmsns/pages/event/index'
+	 		]
+		];
+
+	}
+
+
+
+	/**
+	 * 保存活动
+	 * @return
+	 */
+	function save() {
+		$data = $_POST;
+		$inst = new \Xpmsns\Pages\Model\Event;
+		$rs = $inst->saveByEventId( $data );
+		echo json_encode($rs);
+	}
+
+	/**
+	 * 删除活动
+	 * @return [type] [description]
+	 */
+	function remove(){
+		$event_id = $_POST['event_id'];
+		$inst = new \Xpmsns\Pages\Model\Event;
+		$event_ids =$inst->remove( $event_id, "event_id" );
+		echo json_encode(['message'=>"删除成功", 'extra'=>['$event_ids'=>$event_ids]]);
+	}
+
+	/**
+	 * 复制活动
+	 * @return
+	 */
+	function duplicate(){
+		$event_id = $_GET['event_id'];
+		$inst = new \Xpmsns\Pages\Model\Event;
+		$rs = $inst->getByEventId( $event_id );
+		$action_name =  $rs['name'] . ' 副本';
+
+		// 删除唯一索引字段
+		unset($rs['event_id']);
+		unset($rs['slug']);
+
+		// 复制图片
+		if ( is_array($rs['theme']) &&  !empty($rs['theme']['local'])) {
+			$rs['theme'] = $inst->uploadTheme( $event_id, $rs['theme']['local'], true);
+		}
+		if ( is_array($rs['images'])) {
+
+			$resp = [];
+			foreach ($rs['images'] as $idx=>$fs ) {
+
+				if ( empty($fs['local']) ) {
+					continue;
+				}
+				$resp[] = $inst->uploadImagesByEventId( $event_id, $fs['local'], $idx, true);
+			}
+
+			$rs['images'] = $resp;
+		}
+
+
+		$data = [
+			'action_name' =>  $action_name,
+			'event_id'=>$event_id,
+			'rs' => $rs
+		];
+
+		if ( $_GET['debug'] == 1 ) {
+			Utils::out($data);
+			return;
+		}
+
+		
+		App::render($data,'event','form');
+
+		return [
+			'js' => [
+		 			"js/plugins/select2/select2.full.min.js",
+		 			"js/plugins/dropzonejs/dropzone.min.js",
+		 			"js/plugins/cropper/cropper.min.js",
+		 			"js/plugins/jquery-tags-input/jquery.tagsinput.min.js",
+		 			"js/plugins/bootstrap-datepicker/bootstrap-datepicker.min.js",
+		 			'js/plugins/masked-inputs/jquery.maskedinput.min.js',
+		 			"js/plugins/jquery-validation/jquery.validate.min.js",
+		    		"js/plugins/jquery-ui/jquery-ui.min.js"
+				],
+			'css'=>[
+				"js/plugins/bootstrap-datepicker/bootstrap-datepicker3.min.css",
+	 			"js/plugins/select2/select2.min.css",
+	 			"js/plugins/select2/select2-bootstrap.min.css",
+	 			"js/plugins/jquery-tags-input/jquery.tagsinput.min.css"
+	 		],
+
+			'crumb' => [
+	            "活动" => APP::R('event','index'),
+	            "活动管理" =>APP::R('event','index'),
+	            "$action_name" => ''
+	        ],
+	        'active'=> [
+	 			'slug'=>'xpmsns/pages/event/index'
+	 		]
+		];
+	}
+
+
+
+}
