@@ -4,11 +4,11 @@
  * 推荐数据模型
  *
  * 程序作者: XpmSE机器人
- * 最后修改: 2018-06-22 11:09:38
+ * 最后修改: 2018-06-24 11:35:33
  * 程序母版: /data/stor/private/templates/xpmsns/model/code/model/Name.php
  */
 namespace Xpmsns\Pages\Model;
-                     
+                        
 use \Xpmse\Excp;
 use \Xpmse\Model;
 use \Xpmse\Utils;
@@ -145,6 +145,10 @@ class Recommend extends Model {
 		$this->putColumn( 'recommend_id', $this->type("string", ["length"=>128, "unique"=>true, "null"=>true]));
 		// 主题
 		$this->putColumn( 'title', $this->type("string", ["length"=>100, "index"=>true, "null"=>true]));
+		// 简介
+		$this->putColumn( 'summary', $this->type("string", ["length"=>200, "null"=>true]));
+		// 图标
+		$this->putColumn( 'icon', $this->type("string", ["length"=>200, "null"=>true]));
 		// 别名
 		$this->putColumn( 'slug', $this->type("string", ["length"=>100, "unique"=>true, "null"=>true]));
 		// 方式
@@ -182,6 +186,12 @@ class Recommend extends Model {
 	 * @return
 	 */
 	public function format( & $rs ) {
+
+		// 格式化: 图标
+		// 返回值: {"url":"访问地址...", "path":"文件路径...", "origin":"原始文件访问地址..." }
+		if ( array_key_exists('icon', $rs ) ) {
+			$rs["icon"] = empty($rs["icon"]) ? [] : $this->media->get( $rs["icon"] );
+		}
 
 		// 格式化: 摘要图片
 		// 返回值: [{"url":"访问地址...", "path":"文件路径...", "origin":"原始文件访问地址..." }]
@@ -315,6 +325,8 @@ class Recommend extends Model {
 	 * @return array $rs 结果集 
 	 *          	  $rs["recommend_id"],  // 推荐ID 
 	 *          	  $rs["title"],  // 主题 
+	 *          	  $rs["summary"],  // 简介 
+	 *          	  $rs["icon"],  // 图标 
 	 *          	  $rs["slug"],  // 别名 
 	 *          	  $rs["type"],  // 方式 
 	 *          	  $rs["period"],  // 周期 
@@ -523,6 +535,8 @@ class Recommend extends Model {
 	 * @return array $rs 结果集 
 	 *          	  $rs["recommend_id"],  // 推荐ID 
 	 *          	  $rs["title"],  // 主题 
+	 *          	  $rs["summary"],  // 简介 
+	 *          	  $rs["icon"],  // 图标 
 	 *          	  $rs["slug"],  // 别名 
 	 *          	  $rs["type"],  // 方式 
 	 *          	  $rs["period"],  // 周期 
@@ -716,6 +730,22 @@ class Recommend extends Model {
 	}
 
 	/**
+	 * 根据推荐ID上传图标。
+	 * @param string $recommend_id 推荐ID
+	 * @param string $file_path 文件路径
+	 * @param mix $index 如果是数组，替换当前 index
+	 * @return array 已上传文件信息 {"url":"访问地址...", "path":"文件路径...", "origin":"原始文件访问地址..." }
+	 */
+	public function uploadIconByRecommendId($recommend_id, $file_path, $upload_only=false ) {
+
+		$fs =  $this->media->uploadFile( $file_path );
+		if ( $upload_only !== true ) {
+			$this->updateBy('recommend_id', ["recommend_id"=>$recommend_id, "icon"=>$fs['path']]);
+		}
+		return $fs;
+	}
+
+	/**
 	 * 根据推荐ID上传摘要图片。
 	 * @param string $recommend_id 推荐ID
 	 * @param string $file_path 文件路径
@@ -737,6 +767,22 @@ class Recommend extends Model {
 			$this->updateBy('recommend_id', ["recommend_id"=>$recommend_id, "images"=>$paths] );
 		}
 
+		return $fs;
+	}
+
+	/**
+	 * 根据别名上传图标。
+	 * @param string $slug 别名
+	 * @param string $file_path 文件路径
+	 * @param mix $index 如果是数组，替换当前 index
+	 * @return array 已上传文件信息 {"url":"访问地址...", "path":"文件路径...", "origin":"原始文件访问地址..." }
+	 */
+	public function uploadIconBySlug($slug, $file_path, $upload_only=false ) {
+
+		$fs =  $this->media->uploadFile( $file_path );
+		if ( $upload_only !== true ) {
+			$this->updateBy('slug', ["slug"=>$slug, "icon"=>$fs['path']]);
+		}
 		return $fs;
 	}
 
@@ -854,6 +900,8 @@ class Recommend extends Model {
 	 * @return array 推荐记录集 {"total":100, "page":1, "perpage":20, data:[{"key":"val"}...], "from":1, "to":1, "prev":false, "next":1, "curr":10, "last":20}
 	 *               	["recommend_id"],  // 推荐ID 
 	 *               	["title"],  // 主题 
+	 *               	["summary"],  // 简介 
+	 *               	["icon"],  // 图标 
 	 *               	["slug"],  // 别名 
 	 *               	["type"],  // 方式 
 	 *               	["period"],  // 周期 
@@ -1051,7 +1099,7 @@ class Recommend extends Model {
 				}
 			}
 		}
-		
+
 		// filter 查询字段
 		foreach ($inwhereSelect as & $iws ) {
 			if ( is_array($iws) ) {
@@ -1071,6 +1119,8 @@ class Recommend extends Model {
 		return [
 			"recommend_id",  // 推荐ID
 			"title",  // 主题
+			"summary",  // 简介
+			"icon",  // 图标
 			"slug",  // 别名
 			"type",  // 方式
 			"period",  // 周期

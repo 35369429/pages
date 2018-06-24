@@ -4,7 +4,7 @@
  * 推荐控制器
  *
  * 程序作者: XpmSE机器人
- * 最后修改: 2018-06-22 11:09:38
+ * 最后修改: 2018-06-24 11:35:32
  * 程序母版: /data/stor/private/templates/xpmsns/model/code/controller/Name.php
  */
 
@@ -174,6 +174,9 @@ class RecommendController extends \Xpmse\Loader\Controller {
 		unset($rs['slug']);
 
 		// 复制图片
+		if ( is_array($rs['icon']) &&  !empty($rs['icon']['local'])) {
+			$rs['icon'] = $inst->uploadIcon( $recommend_id, $rs['icon']['local'], true);
+		}
 		if ( is_array($rs['images'])) {
 
 			$resp = [];

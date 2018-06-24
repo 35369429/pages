@@ -4,11 +4,11 @@
  * 推荐数据接口 
  *
  * 程序作者: XpmSE机器人
- * 最后修改: 2018-06-22 11:09:37
+ * 最后修改: 2018-06-24 11:35:32
  * 程序母版: /data/stor/private/templates/xpmsns/model/code/api/Name.php
  */
 namespace Xpmsns\Pages\Api;
-                     
+                        
 
 use \Xpmse\Loader\App;
 use \Xpmse\Excp;
@@ -63,6 +63,8 @@ class Recommend extends Api {
 	 * @return array 推荐记录 Key Value 结构数据 
 	 *               	["recommend_id"],  // 推荐ID 
 	 *               	["title"],  // 主题 
+	 *               	["summary"],  // 简介 
+	 *               	["icon"],  // 图标 
 	 *               	["slug"],  // 别名 
 	 *               	["type"],  // 方式 
 	 *               	["period"],  // 周期 
@@ -177,6 +179,8 @@ class Recommend extends Api {
 	 * @param  array $data  POST 参数新增的字段记录 
 	 *               $data['recommend_id'] 推荐ID
 	 *               $data['title'] 主题
+	 *               $data['summary'] 简介
+	 *               $data['icon'] 图标
 	 *               $data['slug'] 别名
 	 *               $data['type'] 方式
 	 *               $data['period'] 周期
@@ -219,7 +223,7 @@ class Recommend extends Api {
 
 
 
-	
+
 	/**
 	 * 根据条件检索推荐记录
 	 * @param  array $query GET 参数
@@ -250,6 +254,8 @@ class Recommend extends Api {
 	 *               data:[{"key":"val"}...] 字段
 	 *               	["recommend_id"],  // 推荐ID 
 	 *               	["title"],  // 主题 
+	 *               	["summary"],  // 简介 
+	 *               	["icon"],  // 图标 
 	 *               	["slug"],  // 别名 
 	 *               	["type"],  // 方式 
 	 *               	["period"],  // 周期 
@@ -331,33 +337,7 @@ class Recommend extends Api {
 		$data['select'] = $select;
 
 		$inst = new \Xpmsns\Pages\Model\Recommend;
-
-		$data = $inst->search( $data );
-
-		
-		
-
-		// if (!empty($data["article"])){
-
-
-		// 	foreach ($data['data'] as $key => $value){
-
-
-		// 		if (!empty($value["articles"])) {
-
-		// 			foreach ($value["articles"] as $k => $v){
-						
-		// 				$data['data'][$key]["articles"][$k]= $data["article"][$v];
-
-		// 			}
-
-		// 		}
-
-		// 	}
-		
-		// }
-
-		return $data;
+		return $inst->search( $data );
 	}
 
 

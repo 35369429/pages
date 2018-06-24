@@ -32,6 +32,19 @@ use \Xpmse\T;
 				<!-- 隐藏域 -->
 				<input type="hidden" name="recommend_id" value="<?=$rs['recommend_id']?>" >
 	
+	<!-- 单行文本: 别名 (slug) 开始  -->
+	<div class="form-group   ">
+		<label class="col-xs-2 control-label" for="slug">别名<span class="text-danger">*</span></label>
+		<div class="col-xs-8">
+			<input class="form-control input-lg"  
+				type="text" 
+				id="slug" name="slug" 
+				placeholder="请填写推荐别名"  
+				value="<?=T::v('<%=slug | e(\'html\')%>', $rs )?>" /> 
+			<div class="help-block"></div>
+		</div>
+	</div><!-- END 单行文本: 别名 (slug) -->
+
 	<!-- 单行文本: 主题 (title) 开始  -->
 	<div class="form-group   ">
 		<label class="col-xs-2 control-label" for="title">主题<span class="text-danger">*</span></label>
@@ -45,18 +58,49 @@ use \Xpmse\T;
 		</div>
 	</div><!-- END 单行文本: 主题 (title) -->
 
-	<!-- 单行文本: 别名 (slug) 开始  -->
+
+
+
+	<!-- 文本域: 简介 (summary) 开始  -->
 	<div class="form-group   ">
-		<label class="col-xs-2 control-label" for="slug">别名<span class="text-danger">*</span></label>
+		<label class="col-xs-2 control-label" for="summary">简介<span class="text-danger">*</span></label>
 		<div class="col-xs-8">
-			<input class="form-control input-lg"  
+			<textarea class="form-control input-lg"  
 				type="text" 
-				id="slug" name="slug" 
-				placeholder="请填写推荐别名"  
-				value="<?=T::v('<%=slug | e(\'html\')%>', $rs )?>" /> 
+				id="summary" name="summary" rows="4"
+				placeholder="请填写推荐简介"><?=T::v('<%=summary  | e(\'html\')%>', $rs )?></textarea> 
 			<div class="help-block"></div>
 		</div>
-	</div><!-- END 单行文本: 别名 (slug) -->
+	</div><!-- END 文本域: 简介 (summary) -->
+
+
+
+
+	<!-- 单图上传: 图标 (icon) 开始  -->
+	<div class="xpmse-images  " name="icon">
+		<div class="form-group " >
+			<label class="col-xs-2 control-label" for="icon">图标</label>
+			<div class="col-xs-8">
+		   		<div name="icon" class="file-uploader rounded rounded-4 push-10-t"
+					data-api='/_a/mina/uploader/upload?type=image'
+					data-title='请上传图标'
+					data-previews=""
+					data-width="200"
+					data-height="200"
+					data-icon="fa fa-image" 
+					data-placeholder="请上传图标" 
+					data-allow-types="image/png,image/jpg,image/jpeg,image/gif"
+					data-maxsize="20"
+					data-progress="yes"
+					data-cropable="yes"
+					data-draggable="yes"
+					data-src="<?=T::v('<%=icon.url%>', $rs )?>"
+					data-path="<?=T::v('<%=icon.path%>', $rs )?>"
+					></div>
+				<div class="help-block"></div>
+			</div>
+		</div> 
+	</div><!-- END 单图上传: 图标 (icon) -->
 
 
 
