@@ -4,11 +4,11 @@
  * 活动数据接口 
  *
  * 程序作者: XpmSE机器人
- * 最后修改: 2018-06-24 15:54:17
+ * 最后修改: 2018-06-24 16:01:59
  * 程序母版: /data/stor/private/templates/xpmsns/model/code/api/Name.php
  */
 namespace Xpmsns\Pages\Api;
-                                   
+                                    
 
 use \Xpmse\Loader\App;
 use \Xpmse\Excp;
@@ -32,12 +32,12 @@ class Event extends Api {
 	/**
 	 * 查询一条活动记录
 	 * @param  array $query GET 参数
-	 *               $query['select']  读取字段, 默认 ["event.event_id","event.slug","event.name","event.categories","event.tags","event.summary","event.theme","event.images","event.begin","event.end","event.area","event.prov","event.city","event.town","event.location","event.price","event.hosts","event.organizers","event.sponsors","event.medias","event.speakers","event.content","event.created_at","event.updated_at","c.category_id","c.name","c.param"]
+	 *               $query['select']  读取字段, 默认 ["event.event_id","event.slug","event.name","event.link","event.categories","event.tags","event.summary","event.theme","event.images","event.begin","event.end","event.area","event.prov","event.city","event.town","event.location","event.price","event.hosts","event.organizers","event.sponsors","event.medias","event.speakers","event.content","event.created_at","event.updated_at","c.category_id","c.name","c.param"]
 	 * 				 $query['event_id']  按查询 (多条用 "," 分割)
 	 * 				 $query['slug']  按查询 (多条用 "," 分割)
      *
 	 * @param  array $data  POST 参数
-	 *               $data['select']  返回字段, 默认 ["event.event_id","event.slug","event.name","event.categories","event.tags","event.summary","event.theme","event.images","event.begin","event.end","event.area","event.prov","event.city","event.town","event.location","event.price","event.hosts","event.organizers","event.sponsors","event.medias","event.speakers","event.content","event.created_at","event.updated_at","c.category_id","c.name","c.param"]
+	 *               $data['select']  返回字段, 默认 ["event.event_id","event.slug","event.name","event.link","event.categories","event.tags","event.summary","event.theme","event.images","event.begin","event.end","event.area","event.prov","event.city","event.town","event.location","event.price","event.hosts","event.organizers","event.sponsors","event.medias","event.speakers","event.content","event.created_at","event.updated_at","c.category_id","c.name","c.param"]
 	 * 				 $data['event_id']  按查询 (多条用 "," 分割)
 	 * 				 $data['slug']  按查询 (多条用 "," 分割)
 	 *
@@ -45,6 +45,7 @@ class Event extends Api {
 	 *               	["event_id"],  // 活动ID 
 	 *               	["slug"],  // 活动别名 
 	 *               	["name"],  // 活动主题 
+	 *               	["link"],  // 外部链接 
 	 *               	["categories"],  // 类型 
 	*               	["_map_category"][$categories[n]]["category_id"], // category.category_id
 	 *               	["tags"],  // 标签 
@@ -91,7 +92,7 @@ class Event extends Api {
 		$data = array_merge( $query, $data );
 
 		// 读取字段
-		$select = empty($data['select']) ? ["event.event_id","event.slug","event.name","event.categories","event.tags","event.summary","event.theme","event.images","event.begin","event.end","event.area","event.prov","event.city","event.town","event.location","event.price","event.hosts","event.organizers","event.sponsors","event.medias","event.speakers","event.content","event.created_at","event.updated_at","c.category_id","c.name","c.param"] : $data['select'];
+		$select = empty($data['select']) ? ["event.event_id","event.slug","event.name","event.link","event.categories","event.tags","event.summary","event.theme","event.images","event.begin","event.end","event.area","event.prov","event.city","event.town","event.location","event.price","event.hosts","event.organizers","event.sponsors","event.medias","event.speakers","event.content","event.created_at","event.updated_at","c.category_id","c.name","c.param"] : $data['select'];
 		if ( is_string($select) ) {
 			$select = explode(',', $select);
 		}
@@ -132,6 +133,7 @@ class Event extends Api {
 	 *               $data['event_id'] 活动ID
 	 *               $data['slug'] 活动别名
 	 *               $data['name'] 活动主题
+	 *               $data['link'] 外部链接
 	 *               $data['categories'] 类型
 	 *               $data['tags'] 标签
 	 *               $data['summary'] 活动简介
@@ -186,6 +188,7 @@ class Event extends Api {
 	 *               $data['event_id'] 活动ID
 	 *               $data['slug'] 活动别名
 	 *               $data['name'] 活动主题
+	 *               $data['link'] 外部链接
 	 *               $data['categories'] 类型
 	 *               $data['tags'] 标签
 	 *               $data['summary'] 活动简介
@@ -276,7 +279,7 @@ class Event extends Api {
 	/**
 	 * 根据条件检索活动记录
 	 * @param  array $query GET 参数
-	 *         	      $query['select'] 选取字段，默认选择 ["event.event_id","event.slug","event.name","event.categories","event.tags","event.summary","event.theme","event.images","event.begin","event.end","event.area","event.prov","event.city","event.town","event.location","event.price","event.hosts","event.organizers","event.sponsors","event.medias","event.speakers","event.created_at","event.updated_at","c.category_id","c.slug","c.name","c.param"]
+	 *         	      $query['select'] 选取字段，默认选择 ["event.event_id","event.slug","event.name","event.link","event.categories","event.tags","event.summary","event.theme","event.images","event.begin","event.end","event.area","event.prov","event.city","event.town","event.location","event.price","event.hosts","event.organizers","event.sponsors","event.medias","event.speakers","event.created_at","event.updated_at","c.category_id","c.slug","c.name","c.param"]
 	 *         	      $query['page'] 页码，默认为 1
 	 *         	      $query['perpage'] 每页显示记录数，默认为 20
 	 *			      $query["keywords"] 按关键词查询
@@ -295,7 +298,7 @@ class Event extends Api {
 	 *			      $query["orderby_updated_at_desc"]  按 DESC 排序
      *
 	 * @param  array $data  POST 参数
-	 *         	      $data['select'] 选取字段，默认选择 ["name=event_id","name=slug","name=name","name=categories","name=tags","name=summary","name=theme","name=images","name=begin","name=end","name=area","name=prov","name=city","name=town","name=location","name=price","name=hosts","name=organizers","name=sponsors","name=medias","name=speakers","name=created_at","name=updated_at","model=%5CXpmsns%5CPages%5CModel%5CCategory&name=category_id&table=category&prefix=xpmsns_pages_&alias=c&type=inWhere","model=%5CXpmsns%5CPages%5CModel%5CCategory&name=slug&table=category&prefix=xpmsns_pages_&alias=c&type=inWhere","model=%5CXpmsns%5CPages%5CModel%5CCategory&name=name&table=category&prefix=xpmsns_pages_&alias=c&type=inWhere","model=%5CXpmsns%5CPages%5CModel%5CCategory&name=param&table=category&prefix=xpmsns_pages_&alias=c&type=inWhere"]
+	 *         	      $data['select'] 选取字段，默认选择 ["name=event_id","name=slug","name=name","name=link","name=categories","name=tags","name=summary","name=theme","name=images","name=begin","name=end","name=area","name=prov","name=city","name=town","name=location","name=price","name=hosts","name=organizers","name=sponsors","name=medias","name=speakers","name=created_at","name=updated_at","model=%5CXpmsns%5CPages%5CModel%5CCategory&name=category_id&table=category&prefix=xpmsns_pages_&alias=c&type=inWhere","model=%5CXpmsns%5CPages%5CModel%5CCategory&name=slug&table=category&prefix=xpmsns_pages_&alias=c&type=inWhere","model=%5CXpmsns%5CPages%5CModel%5CCategory&name=name&table=category&prefix=xpmsns_pages_&alias=c&type=inWhere","model=%5CXpmsns%5CPages%5CModel%5CCategory&name=param&table=category&prefix=xpmsns_pages_&alias=c&type=inWhere"]
 	 *         	      $data['page'] 页码，默认为 1
 	 *         	      $data['perpage'] 每页显示记录数，默认为 20
 	 *			      $data["keywords"] 按关键词查询
@@ -318,6 +321,7 @@ class Event extends Api {
 	 *               	["event_id"],  // 活动ID 
 	 *               	["slug"],  // 活动别名 
 	 *               	["name"],  // 活动主题 
+	 *               	["link"],  // 外部链接 
 	 *               	["categories"],  // 类型 
 	*               	["category"][$categories[n]]["category_id"], // category.category_id
 	 *               	["tags"],  // 标签 
@@ -364,7 +368,7 @@ class Event extends Api {
 		$data = array_merge( $query, $data );
 
 		// 读取字段
-		$select = empty($data['select']) ? ["event.event_id","event.slug","event.name","event.categories","event.tags","event.summary","event.theme","event.images","event.begin","event.end","event.area","event.prov","event.city","event.town","event.location","event.price","event.hosts","event.organizers","event.sponsors","event.medias","event.speakers","event.created_at","event.updated_at","c.category_id","c.slug","c.name","c.param"] : $data['select'];
+		$select = empty($data['select']) ? ["event.event_id","event.slug","event.name","event.link","event.categories","event.tags","event.summary","event.theme","event.images","event.begin","event.end","event.area","event.prov","event.city","event.town","event.location","event.price","event.hosts","event.organizers","event.sponsors","event.medias","event.speakers","event.created_at","event.updated_at","c.category_id","c.slug","c.name","c.param"] : $data['select'];
 		if ( is_string($select) ) {
 			$select = explode(',', $select);
 		}

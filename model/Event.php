@@ -4,11 +4,11 @@
  * 活动数据模型
  *
  * 程序作者: XpmSE机器人
- * 最后修改: 2018-06-24 15:54:18
+ * 最后修改: 2018-06-24 16:02:00
  * 程序母版: /data/stor/private/templates/xpmsns/model/code/model/Name.php
  */
 namespace Xpmsns\Pages\Model;
-                                   
+                                    
 use \Xpmse\Excp;
 use \Xpmse\Model;
 use \Xpmse\Utils;
@@ -61,6 +61,8 @@ class Event extends Model {
 		$this->putColumn( 'slug', $this->type("string", ["length"=>128, "unique"=>true, "null"=>true]));
 		// 活动主题
 		$this->putColumn( 'name', $this->type("string", ["length"=>200, "index"=>true, "null"=>false]));
+		// 外部链接
+		$this->putColumn( 'link', $this->type("string", ["length"=>200, "null"=>true]));
 		// 类型
 		$this->putColumn( 'categories', $this->type("text", ["json"=>true, "null"=>true]));
 		// 标签
@@ -259,6 +261,7 @@ class Event extends Model {
 	 *          	  $rs["event_id"],  // 活动ID 
 	 *          	  $rs["slug"],  // 活动别名 
 	 *          	  $rs["name"],  // 活动主题 
+	 *          	  $rs["link"],  // 外部链接 
 	 *          	  $rs["categories"],  // 类型 
 	 *                $rs["_map_category"][$categories[n]]["category_id"], // category.category_id
 	 *          	  $rs["tags"],  // 标签 
@@ -413,6 +416,7 @@ class Event extends Model {
 	 *          	  $rs["event_id"],  // 活动ID 
 	 *          	  $rs["slug"],  // 活动别名 
 	 *          	  $rs["name"],  // 活动主题 
+	 *          	  $rs["link"],  // 外部链接 
 	 *          	  $rs["categories"],  // 类型 
 	 *                $rs["_map_category"][$categories[n]]["category_id"], // category.category_id
 	 *          	  $rs["tags"],  // 标签 
@@ -980,6 +984,7 @@ class Event extends Model {
 	 *               	["event_id"],  // 活动ID 
 	 *               	["slug"],  // 活动别名 
 	 *               	["name"],  // 活动主题 
+	 *               	["link"],  // 外部链接 
 	 *               	["categories"],  // 类型 
 	 *               	["category"][$categories[n]]["category_id"], // category.category_id
 	 *               	["tags"],  // 标签 
@@ -1187,6 +1192,7 @@ class Event extends Model {
 			"event_id",  // 活动ID
 			"slug",  // 活动别名
 			"name",  // 活动主题
+			"link",  // 外部链接
 			"categories",  // 类型
 			"tags",  // 标签
 			"summary",  // 活动简介
