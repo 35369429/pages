@@ -53,7 +53,7 @@ class Article extends Api {
 	 */
 	protected function recommend( $query ) {
 		
-		$section =  !empty($query['section']) ? explode(',',$query['section']) : ['hot', 'focus', 'articles'];
+		$section =  !empty($query['section']) ? explode(',',$query['section']) : ['hot', 'focus', 'articles','dry'];
 		$data = [];
 
 		$query['order'] = 'publish_time desc';
@@ -80,6 +80,14 @@ class Article extends Api {
 			$data['hot'] = $this->search($query);
 		}
 
+		// 行业干货
+		if ( in_array('dry', $section) ) {
+			$query['param'] = '行业干货';
+			$query['perpage'] =6;
+			$query['page'] = 1;
+			$data['dry'] = $this->search($query);
+		}
+		
 		return $data;
 	}
 
