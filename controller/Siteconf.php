@@ -4,7 +4,7 @@
  * 站点配置控制器
  *
  * 程序作者: XpmSE机器人
- * 最后修改: 2018-06-24 11:29:11
+ * 最后修改: 2018-06-24 12:32:16
  * 程序母版: /data/stor/private/templates/xpmsns/model/code/controller/Name.php
  */
 
@@ -174,6 +174,9 @@ class SiteconfController extends \Xpmse\Loader\Controller {
 		unset($rs['site_slug']);
 
 		// 复制图片
+		if ( is_array($rs['icon']) &&  !empty($rs['icon']['local'])) {
+			$rs['icon'] = $inst->uploadIcon( $site_id, $rs['icon']['local'], true);
+		}
 		if ( is_array($rs['site_logo']) &&  !empty($rs['site_logo']['local'])) {
 			$rs['site_logo'] = $inst->uploadSitelogo( $site_id, $rs['site_logo']['local'], true);
 		}

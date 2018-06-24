@@ -4,11 +4,11 @@
  * 站点配置数据模型
  *
  * 程序作者: XpmSE机器人
- * 最后修改: 2018-06-24 11:29:11
+ * 最后修改: 2018-06-24 12:32:16
  * 程序母版: /data/stor/private/templates/xpmsns/model/code/model/Name.php
  */
 namespace Xpmsns\Pages\Model;
-                                        
+                                          
 use \Xpmse\Excp;
 use \Xpmse\Model;
 use \Xpmse\Utils;
@@ -65,6 +65,8 @@ class Siteconf extends Model {
 		$this->putColumn( 'site_name', $this->type("string", ["length"=>128, "index"=>true, "null"=>true]));
 		// 网站Slogen
 		$this->putColumn( 'site_slogen', $this->type("string", ["length"=>400, "null"=>true]));
+		// 网站图标
+		$this->putColumn( 'icon', $this->type("string", ["length"=>200, "null"=>true]));
 		// 网站简介
 		$this->putColumn( 'site_intro', $this->type("string", ["length"=>400, "null"=>true]));
 		// 官网地址
@@ -124,6 +126,12 @@ class Siteconf extends Model {
 	 * @return
 	 */
 	public function format( & $rs ) {
+
+		// 格式化: 网站图标
+		// 返回值: {"url":"访问地址...", "path":"文件路径...", "origin":"原始文件访问地址..." }
+		if ( array_key_exists('icon', $rs ) ) {
+			$rs["icon"] = empty($rs["icon"]) ? [] : $this->media->get( $rs["icon"] );
+		}
 
 		// 格式化: 网站LOGO
 		// 返回值: {"url":"访问地址...", "path":"文件路径...", "origin":"原始文件访问地址..." }
@@ -197,6 +205,7 @@ class Siteconf extends Model {
 	 *          	  $rs["position"],  // 呈现位置 
 	 *          	  $rs["site_name"],  // 网站名称 
 	 *          	  $rs["site_slogen"],  // 网站Slogen 
+	 *          	  $rs["icon"],  // 网站图标 
 	 *          	  $rs["site_intro"],  // 网站简介 
 	 *          	  $rs["site_homepage"],  // 官网地址 
 	 *          	  $rs["site_downloadpage"],  // 应用下载地址 
@@ -325,6 +334,7 @@ class Siteconf extends Model {
 	 *          	  $rs["position"],  // 呈现位置 
 	 *          	  $rs["site_name"],  // 网站名称 
 	 *          	  $rs["site_slogen"],  // 网站Slogen 
+	 *          	  $rs["icon"],  // 网站图标 
 	 *          	  $rs["site_intro"],  // 网站简介 
 	 *          	  $rs["site_homepage"],  // 官网地址 
 	 *          	  $rs["site_downloadpage"],  // 应用下载地址 
@@ -445,6 +455,22 @@ class Siteconf extends Model {
 	}
 
 	/**
+	 * 根据配制ID上传网站图标。
+	 * @param string $site_id 配制ID
+	 * @param string $file_path 文件路径
+	 * @param mix $index 如果是数组，替换当前 index
+	 * @return array 已上传文件信息 {"url":"访问地址...", "path":"文件路径...", "origin":"原始文件访问地址..." }
+	 */
+	public function uploadIconBySiteId($site_id, $file_path, $upload_only=false ) {
+
+		$fs =  $this->media->uploadFile( $file_path );
+		if ( $upload_only !== true ) {
+			$this->updateBy('site_id', ["site_id"=>$site_id, "icon"=>$fs['path']]);
+		}
+		return $fs;
+	}
+
+	/**
 	 * 根据配制ID上传网站LOGO。
 	 * @param string $site_id 配制ID
 	 * @param string $file_path 文件路径
@@ -536,6 +562,22 @@ class Siteconf extends Model {
 		$fs =  $this->media->uploadFile( $file_path );
 		if ( $upload_only !== true ) {
 			$this->updateBy('site_id', ["site_id"=>$site_id, "qr_ios"=>$fs['path']]);
+		}
+		return $fs;
+	}
+
+	/**
+	 * 根据配制别名上传网站图标。
+	 * @param string $site_slug 配制别名
+	 * @param string $file_path 文件路径
+	 * @param mix $index 如果是数组，替换当前 index
+	 * @return array 已上传文件信息 {"url":"访问地址...", "path":"文件路径...", "origin":"原始文件访问地址..." }
+	 */
+	public function uploadIconBySiteSlug($site_slug, $file_path, $upload_only=false ) {
+
+		$fs =  $this->media->uploadFile( $file_path );
+		if ( $upload_only !== true ) {
+			$this->updateBy('site_slug', ["site_slug"=>$site_slug, "icon"=>$fs['path']]);
 		}
 		return $fs;
 	}
@@ -711,6 +753,7 @@ class Siteconf extends Model {
 	 *               	["position"],  // 呈现位置 
 	 *               	["site_name"],  // 网站名称 
 	 *               	["site_slogen"],  // 网站Slogen 
+	 *               	["icon"],  // 网站图标 
 	 *               	["site_intro"],  // 网站简介 
 	 *               	["site_homepage"],  // 官网地址 
 	 *               	["site_downloadpage"],  // 应用下载地址 
@@ -855,6 +898,7 @@ class Siteconf extends Model {
 			"position",  // 呈现位置
 			"site_name",  // 网站名称
 			"site_slogen",  // 网站Slogen
+			"icon",  // 网站图标
 			"site_intro",  // 网站简介
 			"site_homepage",  // 官网地址
 			"site_downloadpage",  // 应用下载地址

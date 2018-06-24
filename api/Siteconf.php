@@ -4,11 +4,11 @@
  * 站点配置数据接口 
  *
  * 程序作者: XpmSE机器人
- * 最后修改: 2018-06-24 11:29:10
+ * 最后修改: 2018-06-24 12:32:15
  * 程序母版: /data/stor/private/templates/xpmsns/model/code/api/Name.php
  */
 namespace Xpmsns\Pages\Api;
-                                        
+                                          
 
 use \Xpmse\Loader\App;
 use \Xpmse\Excp;
@@ -47,6 +47,7 @@ class Siteconf extends Api {
 	 *               	["position"],  // 呈现位置 
 	 *               	["site_name"],  // 网站名称 
 	 *               	["site_slogen"],  // 网站Slogen 
+	 *               	["icon"],  // 网站图标 
 	 *               	["site_intro"],  // 网站简介 
 	 *               	["site_homepage"],  // 官网地址 
 	 *               	["site_downloadpage"],  // 应用下载地址 
@@ -124,6 +125,7 @@ class Siteconf extends Api {
 	 *               $data['position'] 呈现位置
 	 *               $data['site_name'] 网站名称
 	 *               $data['site_slogen'] 网站Slogen
+	 *               $data['icon'] 网站图标
 	 *               $data['site_intro'] 网站简介
 	 *               $data['site_homepage'] 官网地址
 	 *               $data['site_downloadpage'] 应用下载地址
@@ -181,6 +183,7 @@ class Siteconf extends Api {
 	 *               $data['position'] 呈现位置
 	 *               $data['site_name'] 网站名称
 	 *               $data['site_slogen'] 网站Slogen
+	 *               $data['icon'] 网站图标
 	 *               $data['site_intro'] 网站简介
 	 *               $data['site_homepage'] 官网地址
 	 *               $data['site_downloadpage'] 应用下载地址
@@ -307,6 +310,7 @@ class Siteconf extends Api {
 	 *               	["position"],  // 呈现位置 
 	 *               	["site_name"],  // 网站名称 
 	 *               	["site_slogen"],  // 网站Slogen 
+	 *               	["icon"],  // 网站图标 
 	 *               	["site_intro"],  // 网站简介 
 	 *               	["site_homepage"],  // 官网地址 
 	 *               	["site_downloadpage"],  // 应用下载地址 
