@@ -178,7 +178,7 @@ use \Xpmse\T;
 									<?php $v=null; $v=T::s("{{name}}", $rs ); echo empty($v) ? T::s("", $rs ) : $v; ?>
 								</td>
 								<td class="font-w300">
-									<?php $v=null; $v=T::s("{{categories}}", $rs ); echo empty($v) ? T::s("", $rs ) : $v; ?>
+									<?php $rs["_map_category"]= &$response["category"]; $v=null; $v=T::s("{% for idx in categories %} {{_map_category[idx].name}} {% endfor %}", $rs ); echo empty($v) ? T::s("", $rs ) : $v; ?>
 								</td>
 								<td class="font-w300">
 									<div style="line-height: 84px;display: inline-block; max-width:260px;word-wrap:break-word;" > 

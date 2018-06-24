@@ -4,7 +4,7 @@
  * 活动数据模型
  *
  * 程序作者: XpmSE机器人
- * 最后修改: 2018-06-24 16:02:37
+ * 最后修改: 2018-06-24 16:16:19
  * 程序母版: /data/stor/private/templates/xpmsns/model/code/model/Name.php
  */
 namespace Xpmsns\Pages\Model;
@@ -347,7 +347,7 @@ class Event extends Model {
 	 * @param array   $select       选取字段，默认选取所有
 	 * @return array 活动记录MAP {"event_id1":{"key":"value",...}...}
 	 */
-	public function getInByEventId($event_ids, $select=["event.event_id","event.slug","event.name","event.categories","event.theme","event.images","event.begin","event.end","event.status"], $order=["event.created_at"=>"desc"] ) {
+	public function getInByEventId($event_ids, $select=["event.event_id","event.slug","event.name","c.name","event.theme","event.images","event.begin","event.end","event.status"], $order=["event.created_at"=>"desc"] ) {
 		
 		if ( is_string($select) ) {
 			$select = explode(',', $select);
@@ -502,7 +502,7 @@ class Event extends Model {
 	 * @param array   $select       选取字段，默认选取所有
 	 * @return array 活动记录MAP {"slug1":{"key":"value",...}...}
 	 */
-	public function getInBySlug($slugs, $select=["event.event_id","event.slug","event.name","event.categories","event.theme","event.images","event.begin","event.end","event.status"], $order=["event.created_at"=>"desc"] ) {
+	public function getInBySlug($slugs, $select=["event.event_id","event.slug","event.name","c.name","event.theme","event.images","event.begin","event.end","event.status"], $order=["event.created_at"=>"desc"] ) {
 		
 		if ( is_string($select) ) {
 			$select = explode(',', $select);
@@ -917,7 +917,7 @@ class Event extends Model {
 	 * @param array   $order   排序方式 ["field"=>"asc", "field2"=>"desc"...]
 	 * @return array 活动记录数组 [{"key":"value",...}...]
 	 */
-	public function top( $limit=100, $select=["event.event_id","event.slug","event.name","event.categories","event.theme","event.images","event.begin","event.end","event.status"], $order=["event.created_at"=>"desc"] ) {
+	public function top( $limit=100, $select=["event.event_id","event.slug","event.name","c.name","event.theme","event.images","event.begin","event.end","event.status"], $order=["event.created_at"=>"desc"] ) {
 
 		if ( is_string($select) ) {
 			$select = explode(',', $select);
@@ -962,7 +962,7 @@ class Event extends Model {
 	/**
 	 * 按条件检索活动记录
 	 * @param  array  $query
-	 *         	      $query['select'] 选取字段，默认选择 ["event.event_id","event.slug","event.name","event.categories","event.theme","event.images","event.begin","event.end","event.status"]
+	 *         	      $query['select'] 选取字段，默认选择 ["event.event_id","event.slug","event.name","c.name","event.theme","event.images","event.begin","event.end","event.status"]
 	 *         	      $query['page'] 页码，默认为 1
 	 *         	      $query['perpage'] 每页显示记录数，默认为 20
 	 *			      $query["keywords"] 按关键词查询
@@ -1026,7 +1026,7 @@ class Event extends Model {
 	 */
 	public function search( $query = [] ) {
 
-		$select = empty($query['select']) ? ["event.event_id","event.slug","event.name","event.categories","event.theme","event.images","event.begin","event.end","event.status"] : $query['select'];
+		$select = empty($query['select']) ? ["event.event_id","event.slug","event.name","c.name","event.theme","event.images","event.begin","event.end","event.status"] : $query['select'];
 		if ( is_string($select) ) {
 			$select = explode(',', $select);
 		}
