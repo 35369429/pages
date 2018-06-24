@@ -4,11 +4,11 @@
  * 站点配置数据接口 
  *
  * 程序作者: XpmSE机器人
- * 最后修改: 2018-05-22 17:01:56
+ * 最后修改: 2018-06-24 11:29:10
  * 程序母版: /data/stor/private/templates/xpmsns/model/code/api/Name.php
  */
 namespace Xpmsns\Pages\Api;
-                               
+                                        
 
 use \Xpmse\Loader\App;
 use \Xpmse\Excp;
@@ -55,9 +55,18 @@ class Siteconf extends Api {
 	 *               	["company"],  // 公司名称 
 	 *               	["address"],  // 公司地址 
 	 *               	["tel"],  // 客服电话 
+	 *               	["qq"],  // 客服QQ 
+	 *               	["email"],  // 客服邮箱 
+	 *               	["se_time"],  //  服务时间 
+	 *               	["contact_name"],  // 合作联系人 
+	 *               	["contact_email"],  // 合作邮箱 
+	 *               	["contact_tel"],  // 合作电话 
+	 *               	["contact_qq"],  // 合作QQ 
 	 *               	["qr_wxapp"],  // 小程序二维码 
 	 *               	["qr_wxpub"],  // 订阅号二维码 
+	 *               	["name_wxpub"],  // 订阅号名称 
 	 *               	["qr_wxse"],  // 服务号二维码 
+	 *               	["name_wxse"],  // 服务号名称 
 	 *               	["qr_android"],  // 安卓应用二维码 
 	 *               	["qr_ios"],  // 苹果应用二维码 
 	 *               	["status"],  // 状态 
@@ -123,9 +132,18 @@ class Siteconf extends Api {
 	 *               $data['company'] 公司名称
 	 *               $data['address'] 公司地址
 	 *               $data['tel'] 客服电话
+	 *               $data['qq'] 客服QQ
+	 *               $data['email'] 客服邮箱
+	 *               $data['se_time']  服务时间
+	 *               $data['contact_name'] 合作联系人
+	 *               $data['contact_email'] 合作邮箱
+	 *               $data['contact_tel'] 合作电话
+	 *               $data['contact_qq'] 合作QQ
 	 *               $data['qr_wxapp'] 小程序二维码
 	 *               $data['qr_wxpub'] 订阅号二维码
+	 *               $data['name_wxpub'] 订阅号名称
 	 *               $data['qr_wxse'] 服务号二维码
+	 *               $data['name_wxse'] 服务号名称
 	 *               $data['qr_android'] 安卓应用二维码
 	 *               $data['qr_ios'] 苹果应用二维码
 	 *               $data['status'] 状态
@@ -171,9 +189,18 @@ class Siteconf extends Api {
 	 *               $data['company'] 公司名称
 	 *               $data['address'] 公司地址
 	 *               $data['tel'] 客服电话
+	 *               $data['qq'] 客服QQ
+	 *               $data['email'] 客服邮箱
+	 *               $data['se_time']  服务时间
+	 *               $data['contact_name'] 合作联系人
+	 *               $data['contact_email'] 合作邮箱
+	 *               $data['contact_tel'] 合作电话
+	 *               $data['contact_qq'] 合作QQ
 	 *               $data['qr_wxapp'] 小程序二维码
 	 *               $data['qr_wxpub'] 订阅号二维码
+	 *               $data['name_wxpub'] 订阅号名称
 	 *               $data['qr_wxse'] 服务号二维码
+	 *               $data['name_wxse'] 服务号名称
 	 *               $data['qr_android'] 安卓应用二维码
 	 *               $data['qr_ios'] 苹果应用二维码
 	 *               $data['status'] 状态
@@ -288,9 +315,18 @@ class Siteconf extends Api {
 	 *               	["company"],  // 公司名称 
 	 *               	["address"],  // 公司地址 
 	 *               	["tel"],  // 客服电话 
+	 *               	["qq"],  // 客服QQ 
+	 *               	["email"],  // 客服邮箱 
+	 *               	["se_time"],  //  服务时间 
+	 *               	["contact_name"],  // 合作联系人 
+	 *               	["contact_email"],  // 合作邮箱 
+	 *               	["contact_tel"],  // 合作电话 
+	 *               	["contact_qq"],  // 合作QQ 
 	 *               	["qr_wxapp"],  // 小程序二维码 
 	 *               	["qr_wxpub"],  // 订阅号二维码 
+	 *               	["name_wxpub"],  // 订阅号名称 
 	 *               	["qr_wxse"],  // 服务号二维码 
+	 *               	["name_wxse"],  // 服务号名称 
 	 *               	["qr_android"],  // 安卓应用二维码 
 	 *               	["qr_ios"],  // 苹果应用二维码 
 	 *               	["status"],  // 状态 

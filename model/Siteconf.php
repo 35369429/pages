@@ -4,11 +4,11 @@
  * 站点配置数据模型
  *
  * 程序作者: XpmSE机器人
- * 最后修改: 2018-05-22 17:01:56
+ * 最后修改: 2018-06-24 11:29:11
  * 程序母版: /data/stor/private/templates/xpmsns/model/code/model/Name.php
  */
 namespace Xpmsns\Pages\Model;
-                               
+                                        
 use \Xpmse\Excp;
 use \Xpmse\Model;
 use \Xpmse\Utils;
@@ -81,12 +81,30 @@ class Siteconf extends Model {
 		$this->putColumn( 'address', $this->type("string", ["length"=>400, "null"=>true]));
 		// 客服电话
 		$this->putColumn( 'tel', $this->type("string", ["length"=>200, "null"=>true]));
+		// 客服QQ
+		$this->putColumn( 'qq', $this->type("string", ["length"=>200, "null"=>true]));
+		// 客服邮箱
+		$this->putColumn( 'email', $this->type("string", ["length"=>200, "null"=>true]));
+		//  服务时间
+		$this->putColumn( 'se_time', $this->type("string", ["length"=>200, "null"=>true]));
+		// 合作联系人
+		$this->putColumn( 'contact_name', $this->type("string", ["length"=>200, "null"=>true]));
+		// 合作邮箱
+		$this->putColumn( 'contact_email', $this->type("string", ["length"=>200, "null"=>true]));
+		// 合作电话
+		$this->putColumn( 'contact_tel', $this->type("string", ["length"=>200, "null"=>true]));
+		// 合作QQ
+		$this->putColumn( 'contact_qq', $this->type("string", ["length"=>200, "null"=>true]));
 		// 小程序二维码
 		$this->putColumn( 'qr_wxapp', $this->type("string", ["length"=>200, "null"=>true]));
 		// 订阅号二维码
 		$this->putColumn( 'qr_wxpub', $this->type("string", ["length"=>200, "null"=>true]));
+		// 订阅号名称
+		$this->putColumn( 'name_wxpub', $this->type("string", ["length"=>200, "null"=>true]));
 		// 服务号二维码
 		$this->putColumn( 'qr_wxse', $this->type("string", ["length"=>200, "null"=>true]));
+		// 服务号名称
+		$this->putColumn( 'name_wxse', $this->type("string", ["length"=>200, "null"=>true]));
 		// 安卓应用二维码
 		$this->putColumn( 'qr_android', $this->type("string", ["length"=>200, "null"=>true]));
 		// 苹果应用二维码
@@ -187,9 +205,18 @@ class Siteconf extends Model {
 	 *          	  $rs["company"],  // 公司名称 
 	 *          	  $rs["address"],  // 公司地址 
 	 *          	  $rs["tel"],  // 客服电话 
+	 *          	  $rs["qq"],  // 客服QQ 
+	 *          	  $rs["email"],  // 客服邮箱 
+	 *          	  $rs["se_time"],  //  服务时间 
+	 *          	  $rs["contact_name"],  // 合作联系人 
+	 *          	  $rs["contact_email"],  // 合作邮箱 
+	 *          	  $rs["contact_tel"],  // 合作电话 
+	 *          	  $rs["contact_qq"],  // 合作QQ 
 	 *          	  $rs["qr_wxapp"],  // 小程序二维码 
 	 *          	  $rs["qr_wxpub"],  // 订阅号二维码 
+	 *          	  $rs["name_wxpub"],  // 订阅号名称 
 	 *          	  $rs["qr_wxse"],  // 服务号二维码 
+	 *          	  $rs["name_wxse"],  // 服务号名称 
 	 *          	  $rs["qr_android"],  // 安卓应用二维码 
 	 *          	  $rs["qr_ios"],  // 苹果应用二维码 
 	 *          	  $rs["status"],  // 状态 
@@ -306,9 +333,18 @@ class Siteconf extends Model {
 	 *          	  $rs["company"],  // 公司名称 
 	 *          	  $rs["address"],  // 公司地址 
 	 *          	  $rs["tel"],  // 客服电话 
+	 *          	  $rs["qq"],  // 客服QQ 
+	 *          	  $rs["email"],  // 客服邮箱 
+	 *          	  $rs["se_time"],  //  服务时间 
+	 *          	  $rs["contact_name"],  // 合作联系人 
+	 *          	  $rs["contact_email"],  // 合作邮箱 
+	 *          	  $rs["contact_tel"],  // 合作电话 
+	 *          	  $rs["contact_qq"],  // 合作QQ 
 	 *          	  $rs["qr_wxapp"],  // 小程序二维码 
 	 *          	  $rs["qr_wxpub"],  // 订阅号二维码 
+	 *          	  $rs["name_wxpub"],  // 订阅号名称 
 	 *          	  $rs["qr_wxse"],  // 服务号二维码 
+	 *          	  $rs["name_wxse"],  // 服务号名称 
 	 *          	  $rs["qr_android"],  // 安卓应用二维码 
 	 *          	  $rs["qr_ios"],  // 苹果应用二维码 
 	 *          	  $rs["status"],  // 状态 
@@ -683,9 +719,18 @@ class Siteconf extends Model {
 	 *               	["company"],  // 公司名称 
 	 *               	["address"],  // 公司地址 
 	 *               	["tel"],  // 客服电话 
+	 *               	["qq"],  // 客服QQ 
+	 *               	["email"],  // 客服邮箱 
+	 *               	["se_time"],  //  服务时间 
+	 *               	["contact_name"],  // 合作联系人 
+	 *               	["contact_email"],  // 合作邮箱 
+	 *               	["contact_tel"],  // 合作电话 
+	 *               	["contact_qq"],  // 合作QQ 
 	 *               	["qr_wxapp"],  // 小程序二维码 
 	 *               	["qr_wxpub"],  // 订阅号二维码 
+	 *               	["name_wxpub"],  // 订阅号名称 
 	 *               	["qr_wxse"],  // 服务号二维码 
+	 *               	["name_wxse"],  // 服务号名称 
 	 *               	["qr_android"],  // 安卓应用二维码 
 	 *               	["qr_ios"],  // 苹果应用二维码 
 	 *               	["status"],  // 状态 
@@ -818,9 +863,18 @@ class Siteconf extends Model {
 			"company",  // 公司名称
 			"address",  // 公司地址
 			"tel",  // 客服电话
+			"qq",  // 客服QQ
+			"email",  // 客服邮箱
+			"se_time",  //  服务时间
+			"contact_name",  // 合作联系人
+			"contact_email",  // 合作邮箱
+			"contact_tel",  // 合作电话
+			"contact_qq",  // 合作QQ
 			"qr_wxapp",  // 小程序二维码
 			"qr_wxpub",  // 订阅号二维码
+			"name_wxpub",  // 订阅号名称
 			"qr_wxse",  // 服务号二维码
+			"name_wxse",  // 服务号名称
 			"qr_android",  // 安卓应用二维码
 			"qr_ios",  // 苹果应用二维码
 			"status",  // 状态
