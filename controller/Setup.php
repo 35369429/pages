@@ -73,6 +73,8 @@ class SetupController extends \Xpmse\Loader\Controller {
 		$rec->saveBySlug(["title"=>"最新文章","slug"=>"latest", "orderby"=>"publish_time", "period"=>"unlimited", "type"=>"auto"]);
 		$rec->saveBySlug(["title"=>"最热文章","slug"=>"hotnews", "orderby"=>"publish_time", "period"=>"unlimited",   "type"=>"auto"]);
 		$rec->saveBySlug(["title"=>"焦点文章","slug"=>"focus", "orderby"=>"publish_time", "period"=>"unlimited",  "type"=>"auto"]);
+		$rec->saveBySlug(["title"=>"今日主题","slug"=>"topic", "orderby"=>"publish_time", "period"=>"unlimited",  "type"=>"auto"]);
+		$rec->saveBySlug(["title"=>"新闻快讯","slug"=>"quicknews", "orderby"=>"publish_time", "period"=>"unlimited",  "type"=>"auto"]);
 
 		// 正文相关推荐
 		$rec->saveBySlug(["title"=>"正文页相关推荐","slug"=>"detail", "orderby"=>"publish_time",  "period"=>"unlimited",  "type"=>"auto"]);
@@ -89,6 +91,12 @@ class SetupController extends \Xpmse\Loader\Controller {
 		$rec->saveBySlug(["title"=>"侧边第一块内容区","slug"=>"sidebar_section_1", "orderby"=>"publish_time", "period"=>"7days",  "type"=>"auto"]);
 		$rec->saveBySlug(["title"=>"侧边第二块内容区","slug"=>"sidebar_section_2", "orderby"=>"publish_time", "period"=>"7days",  "type"=>"auto"]);
 		$rec->saveBySlug(["title"=>"侧边第三块内容区","slug"=>"sidebar_section_3", "orderby"=>"publish_time", "period"=>"7days",  "type"=>"auto"]);
+
+		// 底部帮助推荐
+		$rec->saveBySlug(["title"=>"帮助中心","slug"=>"_help", "orderby"=>"publish_time",  "period"=>"unlimited",  "type"=>"auto"]);
+		$rec->saveBySlug(["title"=>"关于我们","slug"=>"_about", "orderby"=>"publish_time",  "period"=>"unlimited",  "type"=>"auto"]);
+		$rec->saveBySlug(["title"=>"常见问题","slug"=>"_faq", "orderby"=>"publish_time",  "period"=>"unlimited",  "type"=>"auto"]);
+		
 	}
 
 
