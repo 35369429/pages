@@ -4,7 +4,7 @@
  * 活动数据接口 
  *
  * 程序作者: XpmSE机器人
- * 最后修改: 2018-06-24 16:01:59
+ * 最后修改: 2018-06-24 16:02:35
  * 程序母版: /data/stor/private/templates/xpmsns/model/code/api/Name.php
  */
 namespace Xpmsns\Pages\Api;

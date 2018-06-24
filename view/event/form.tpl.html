@@ -91,7 +91,7 @@ use \Xpmse\T;
 					data-param-default=""
 					data-ajax-url="/_a/mina/helper/select2?method=get"
 					data-preload-url="/_a/mina/helper/select2?method=get&preload=<?=T::v('<%=categories | join(\',\')%>', $rs )?>"
-					data-placeholder="请选择活动类型"  >
+					data-placeholder="请选择活动类型"  multiple data-select2-multiple=1  >
 				<option></option>
 			</select>
 			<div class="help-block"></div>
