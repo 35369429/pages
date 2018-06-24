@@ -82,7 +82,7 @@ class Siteconf extends Api {
 		$data = array_merge( $query, $data );
 
 		// 读取字段
-		$select = empty($data['select']) ? ["site.site_id","site.site_slug","site.position","site.site_name","site.site_slogen","site.site_intro","site.site_homepage","site.site_downloadpage","site.site_logo","site.site_no","site.company","site.address","site.tel","site.qr_wxapp","site.qr_wxpub","site.qr_wxse","site.qr_android","site.qr_ios","site.status","site.created_at","site.updated_at","site.icon","site.se_time","site.email","site.qq","site.tel","site.address","site.site_no","site.name_wxpub"] : $data['select'];
+		$select = empty($data['select']) ? ["site.site_id","site.site_slug","site.position","site.site_name","site.site_slogen","site.site_intro","site.site_homepage","site.site_downloadpage","site.site_logo","site.site_no","site.company","site.address","site.tel","site.qr_wxapp","site.qr_wxpub","site.qr_wxse","site.qr_android","site.qr_ios","site.status","site.created_at","site.updated_at","site.icon","site.se_time","site.email","site.qq","site.tel","site.address","site.site_no","site.name_wxpub","site.contact_qq"] : $data['select'];
 		if ( is_string($select) ) {
 			$select = explode(',', $select);
 		}
