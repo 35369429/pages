@@ -4,11 +4,11 @@
  * 活动数据接口 
  *
  * 程序作者: XpmSE机器人
- * 最后修改: 2018-06-24 13:54:59
+ * 最后修改: 2018-06-24 15:54:17
  * 程序母版: /data/stor/private/templates/xpmsns/model/code/api/Name.php
  */
 namespace Xpmsns\Pages\Api;
-                              
+                                   
 
 use \Xpmse\Loader\App;
 use \Xpmse\Excp;

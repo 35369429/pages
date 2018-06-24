@@ -86,7 +86,32 @@ use \Xpmse\T;
 		 
 	</div><!-- END 下拉选择(动态数据): 类型 (categories) -->
 
-<!-- tag-input: tags 空值-->
+
+
+
+	<!-- 单行标签文本: 标签 (tags) 开始  -->
+	<div class="form-group   ">
+		<label class="col-xs-2 control-label" for="tags">标签</label>
+		<div class="col-xs-8">
+			<input class="form-control input-lg"  
+				type="text" 
+				id="tags" name="tags" 
+				placeholder="请添加标签"  
+				value="<?=T::v('<%=tags | e(\'html\')%>', $rs )?>" /> 
+			<div class="help-block"></div>
+		</div>
+
+		<script type="text/javascript">
+			var options = {
+				height: '42px',
+				width: '100%',
+				defaultText: '添加',
+				removeWithBackspace: true,
+				delimiter: [',']
+			}
+			$('input[name=tags').tagsInput(options);
+		</script>
+	</div><!-- END 单行标签文本: 标签 (tags) -->
 
 
 
@@ -186,9 +211,117 @@ use \Xpmse\T;
 		});
 	</script><!-- END 多图上传: 活动海报 (images) -->
 
-<!-- date-input: begin 空值-->
 
-<!-- date-input: end 空值-->
+
+
+
+	<!-- 单行时间日期: 开始时间 (begin) 开始  -->
+	<div class="form-group   ">
+		<label class="col-xs-2 control-label" for="begin__date">开始时间</label>
+		<div class="col-xs-4">
+			<input 
+				 name="begin__date" id="begin__date"
+				 class="js-datepicker form-control  input-lg" type="text" 
+				 data-date-format="yyyy年mm月dd日" 
+				 placeholder="请选择日期时间 "
+				 value="<?=T::v('<%=begin | toDate%>', $rs )?>"  />
+
+			<div class="help-block"></div>
+		</div>
+		<div class="col-xs-4">
+			<input 
+				name="begin__time" id="begin__time"
+				class="js-masked-time form-control  input-lg"  type="text" 
+				placeholder="请输入时间"
+				value="<?=T::v('<%=begin | toTime%>', $rs )?>" /> 
+		</div>
+		<input name="begin" id="begin" type="hidden" value="<?=T::v('<%=begin | toDateTime%>', $rs )?>" />
+
+		<script type="text/javascript">
+		$(function(){
+
+			function begin_change() {
+				var tm = $('input[name=begin__time').val();
+					tm = tm.replace('@ ', '');
+					tm = tm.replace('时', ':');
+					tm = tm.replace('分', ':');
+					tm = tm = tm + '00';
+
+				var dt = $('input[name=begin__date]').val();
+					dt = dt.replace('年', '-');
+					dt = dt.replace('月', '-');
+					dt = dt.replace('日', '');
+
+				var datetime = dt + ' ' + tm;
+				$('input[name=begin]').val( datetime );
+			}
+
+			$('input[name=begin__date]').on("change", function( e ){
+				begin_change();
+			});
+			$('input[name=begin__time').on("change", function( e ){
+				begin_change();
+			});
+		});
+		</script>
+
+	</div><!-- END 单行时间日期: 开始时间 (begin) -->
+
+
+
+
+
+	<!-- 单行时间日期: 结束时间 (end) 开始  -->
+	<div class="form-group   ">
+		<label class="col-xs-2 control-label" for="end__date">结束时间</label>
+		<div class="col-xs-4">
+			<input 
+				 name="end__date" id="end__date"
+				 class="js-datepicker form-control  input-lg" type="text" 
+				 data-date-format="yyyy年mm月dd日" 
+				 placeholder="请选择日期时间 "
+				 value="<?=T::v('<%=end | toDate%>', $rs )?>"  />
+
+			<div class="help-block"></div>
+		</div>
+		<div class="col-xs-4">
+			<input 
+				name="end__time" id="end__time"
+				class="js-masked-time form-control  input-lg"  type="text" 
+				placeholder="请输入时间"
+				value="<?=T::v('<%=end | toTime%>', $rs )?>" /> 
+		</div>
+		<input name="end" id="end" type="hidden" value="<?=T::v('<%=end | toDateTime%>', $rs )?>" />
+
+		<script type="text/javascript">
+		$(function(){
+
+			function end_change() {
+				var tm = $('input[name=end__time').val();
+					tm = tm.replace('@ ', '');
+					tm = tm.replace('时', ':');
+					tm = tm.replace('分', ':');
+					tm = tm = tm + '00';
+
+				var dt = $('input[name=end__date]').val();
+					dt = dt.replace('年', '-');
+					dt = dt.replace('月', '-');
+					dt = dt.replace('日', '');
+
+				var datetime = dt + ' ' + tm;
+				$('input[name=end]').val( datetime );
+			}
+
+			$('input[name=end__date]').on("change", function( e ){
+				end_change();
+			});
+			$('input[name=end__time').on("change", function( e ){
+				end_change();
+			});
+		});
+		</script>
+
+	</div><!-- END 单行时间日期: 结束时间 (end) -->
 
 	<!-- 单行文本: 国家/地区 (area) 开始  -->
 	<div class="form-group   ">
@@ -304,13 +437,21 @@ use \Xpmse\T;
 							class="form-control input-lg"  
 							type="text" 
 							data-name="title" 
-							placeholder="请输入图片标题"
+							placeholder="请输入标题"
 							value="<?=T::v('<%=title | e(\'html\')%>', $img )?>" /> 
+					</div>
+					<div class="col-xs-12 push-10-t">
+						<input 
+							class="form-control input-lg"  
+							type="text" 
+							data-name="link" 
+							placeholder="请输入链接地址"
+							value="<?=T::v('<%=link | e(\'html\')%>', $img )?>" />
 					</div>
 					<div class="col-xs-12 push-10-t">
 						<textarea class="form-control input-lg"  
 							data-name="summary" rows="4"
-							placeholder="请输入图片介绍"><?=T::v('<%=summary | e(\'html\')%>', $img )?></textarea> 
+							placeholder="请输入介绍"><?=T::v('<%=summary | e(\'html\')%>', $img )?></textarea> 
 					</div>
 				</div>
 				<div class="col-xs-2 push-10-t">
@@ -378,13 +519,21 @@ use \Xpmse\T;
 							class="form-control input-lg"  
 							type="text" 
 							data-name="title" 
-							placeholder="请输入图片标题"
+							placeholder="请输入标题"
 							value="<?=T::v('<%=title | e(\'html\')%>', $img )?>" /> 
+					</div>
+					<div class="col-xs-12 push-10-t">
+						<input 
+							class="form-control input-lg"  
+							type="text" 
+							data-name="link" 
+							placeholder="请输入链接地址"
+							value="<?=T::v('<%=link | e(\'html\')%>', $img )?>" />
 					</div>
 					<div class="col-xs-12 push-10-t">
 						<textarea class="form-control input-lg"  
 							data-name="summary" rows="4"
-							placeholder="请输入图片介绍"><?=T::v('<%=summary | e(\'html\')%>', $img )?></textarea> 
+							placeholder="请输入介绍"><?=T::v('<%=summary | e(\'html\')%>', $img )?></textarea> 
 					</div>
 				</div>
 				<div class="col-xs-2 push-10-t">
@@ -452,13 +601,21 @@ use \Xpmse\T;
 							class="form-control input-lg"  
 							type="text" 
 							data-name="title" 
-							placeholder="请输入图片标题"
+							placeholder="请输入标题"
 							value="<?=T::v('<%=title | e(\'html\')%>', $img )?>" /> 
+					</div>
+					<div class="col-xs-12 push-10-t">
+						<input 
+							class="form-control input-lg"  
+							type="text" 
+							data-name="link" 
+							placeholder="请输入链接地址"
+							value="<?=T::v('<%=link | e(\'html\')%>', $img )?>" />
 					</div>
 					<div class="col-xs-12 push-10-t">
 						<textarea class="form-control input-lg"  
 							data-name="summary" rows="4"
-							placeholder="请输入图片介绍"><?=T::v('<%=summary | e(\'html\')%>', $img )?></textarea> 
+							placeholder="请输入介绍"><?=T::v('<%=summary | e(\'html\')%>', $img )?></textarea> 
 					</div>
 				</div>
 				<div class="col-xs-2 push-10-t">
@@ -526,13 +683,21 @@ use \Xpmse\T;
 							class="form-control input-lg"  
 							type="text" 
 							data-name="title" 
-							placeholder="请输入图片标题"
+							placeholder="请输入标题"
 							value="<?=T::v('<%=title | e(\'html\')%>', $img )?>" /> 
+					</div>
+					<div class="col-xs-12 push-10-t">
+						<input 
+							class="form-control input-lg"  
+							type="text" 
+							data-name="link" 
+							placeholder="请输入链接地址"
+							value="<?=T::v('<%=link | e(\'html\')%>', $img )?>" />
 					</div>
 					<div class="col-xs-12 push-10-t">
 						<textarea class="form-control input-lg"  
 							data-name="summary" rows="4"
-							placeholder="请输入图片介绍"><?=T::v('<%=summary | e(\'html\')%>', $img )?></textarea> 
+							placeholder="请输入介绍"><?=T::v('<%=summary | e(\'html\')%>', $img )?></textarea> 
 					</div>
 				</div>
 				<div class="col-xs-2 push-10-t">
@@ -600,13 +765,21 @@ use \Xpmse\T;
 							class="form-control input-lg"  
 							type="text" 
 							data-name="title" 
-							placeholder="请输入图片标题"
+							placeholder="请输入标题"
 							value="<?=T::v('<%=title | e(\'html\')%>', $img )?>" /> 
+					</div>
+					<div class="col-xs-12 push-10-t">
+						<input 
+							class="form-control input-lg"  
+							type="text" 
+							data-name="link" 
+							placeholder="请输入链接地址"
+							value="<?=T::v('<%=link | e(\'html\')%>', $img )?>" />
 					</div>
 					<div class="col-xs-12 push-10-t">
 						<textarea class="form-control input-lg"  
 							data-name="summary" rows="4"
-							placeholder="请输入图片介绍"><?=T::v('<%=summary | e(\'html\')%>', $img )?></textarea> 
+							placeholder="请输入介绍"><?=T::v('<%=summary | e(\'html\')%>', $img )?></textarea> 
 					</div>
 				</div>
 				<div class="col-xs-2 push-10-t">
@@ -692,10 +865,11 @@ use \Xpmse\T;
 					id="status" name="status"  
 					data-placeholder="请填写活动介绍" >
 				<option></option>
-				<?php $rs["status"] = is_string($rs["status"]) ? [$rs["status"]] : $rs["status"] ; if (empty($rs["status"])) { $rs["status"] = ["open"]; } ?>
-<option value="接受报名" <?=in_array("接受报名", $rs["status"]) ? "selected" : ""?> > open</option>
-<option value="报名截止" <?=in_array("报名截止", $rs["status"]) ? "selected" : ""?> > close</option>
-<option value="活动关闭" <?=in_array("活动关闭", $rs["status"]) ? "selected" : ""?> > off</option>
+				<?php $rs["status"] = is_string($rs["status"]) ? [$rs["status"]] : $rs["status"] ; if (empty($rs["status"])) { $rs["status"] = ["draft"]; } ?>
+<option value="draft" <?=in_array("draft", $rs["status"]) ? "selected" : ""?> > 草稿</option>
+<option value="open" <?=in_array("open", $rs["status"]) ? "selected" : ""?> > 报名中</option>
+<option value="close" <?=in_array("close", $rs["status"]) ? "selected" : ""?> > 报名截止</option>
+<option value="off" <?=in_array("off", $rs["status"]) ? "selected" : ""?> > 活动关闭</option>
 			</select>
 			<div class="help-block"></div>
 		</div>

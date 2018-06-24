@@ -104,6 +104,7 @@ use \Xpmse\T;
 							<div class="btn-group pull-right push-20-l" role="group">  
 								<button class="btn btn-default btn-xs dropdown-toggle" type="button" data-toggle="dropdown" >
 									<i class="glyphicon glyphicon-list-alt"></i> 
+									<?=($query['status'] == 'draft') ? '草稿' : '' ?>
 									<?=($query['status'] == 'open') ? '报名中' : '' ?>
 									<?=($query['status'] == 'close') ? '报名截止' : '' ?>
 									<?=($query['status'] == 'off') ? '活动关闭' : '' ?>
@@ -116,6 +117,11 @@ use \Xpmse\T;
 									<li>
 										<a href="javascript:search('status','')">
 										   全部
+										</a>
+									</li>
+									<li >
+										<a href="javascript:search('status','draft')">
+										   草稿
 										</a>
 									</li>
 									<li >
@@ -154,6 +160,7 @@ use \Xpmse\T;
 								<th class="font-w300"> 活动海报 </th>
 								<th class="font-w300"> 开始时间 </th>
 								<th class="font-w300"> 结束时间 </th>
+								<th class="font-w300"> 活动状态 </th>
 							</tr>
 						</thead>
 
@@ -192,10 +199,13 @@ use \Xpmse\T;
 									</div>
 								</td>
 								<td class="font-w300">
-									<?php $v=null; $v=T::s("{{begin}}", $rs ); echo empty($v) ? T::s("", $rs ) : $v; ?>
+									<?php $v=null; $v=T::s("{{begin|toDate('Y年m月d日')}}  @{{begin|toTime('h时i分')}}", $rs ); echo empty($v) ? T::s("", $rs ) : $v; ?>
 								</td>
 								<td class="font-w300">
-									<?php $v=null; $v=T::s("{{end}}", $rs ); echo empty($v) ? T::s("", $rs ) : $v; ?>
+									<?php $v=null; $v=T::s("{{end|toDate('Y年m月d日')}}  @{{end|toTime('h时i分')}}", $rs ); echo empty($v) ? T::s("", $rs ) : $v; ?>
+								</td>
+								<td class="font-w300">
+									<span class="text-<?=$rs['_status']['style']?>"><?=$rs['_status']['name'] ? $rs['_status']['name']  : $rs['status'] ?></span>
 								</td>
 							</tr>
 							<?php endforeach;?>
@@ -203,7 +213,7 @@ use \Xpmse\T;
 						</tbody>
 
 						<tfoot>
-							<tr><td colspan="8"> <nav class="pull-right">
+							<tr><td colspan="9"> <nav class="pull-right">
 
 								<ul class="pagination">
 									<?php if ($response['prev'] !== false): ?>

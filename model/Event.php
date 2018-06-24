@@ -4,11 +4,11 @@
  * 活动数据模型
  *
  * 程序作者: XpmSE机器人
- * 最后修改: 2018-06-24 13:55:00
+ * 最后修改: 2018-06-24 15:54:18
  * 程序母版: /data/stor/private/templates/xpmsns/model/code/model/Name.php
  */
 namespace Xpmsns\Pages\Model;
-                              
+                                   
 use \Xpmse\Excp;
 use \Xpmse\Model;
 use \Xpmse\Utils;
@@ -64,7 +64,7 @@ class Event extends Model {
 		// 类型
 		$this->putColumn( 'categories', $this->type("text", ["json"=>true, "null"=>true]));
 		// 标签
-		$this->putColumn( 'tags', $this->type("text", ["json"=>true, "null"=>true]));
+		$this->putColumn( 'tags', $this->type("text", ["null"=>true]));
 		// 活动简介
 		$this->putColumn( 'summary', $this->type("string", ["length"=>200, "null"=>true]));
 		// 主题图
@@ -135,25 +135,110 @@ class Event extends Model {
 			}
 		}
 
+		// 格式化: 主办方
+		// 返回值: [{"url":"访问地址...", "path":"文件路径...", "origin":"原始文件访问地址..." }]
+		if ( array_key_exists('hosts', $rs ) ) {
+			$rs["hosts"] = !is_array($rs["hosts"]) ? [] : $rs["hosts"];
+			foreach ($rs["hosts"] as & $file ) {
+				if ( is_array($file) && !empty($file['path']) ) {
+					$fs = $this->media->get( $file['path'] );
+					$file = array_merge( $file, $fs );
+				} else if ( is_string($file) ) {
+					$file =empty($file) ? [] : $this->media->get( $file );
+				} else {
+					$file = [];
+				}
+			}
+		}
+
+		// 格式化: 承办方/组织者
+		// 返回值: [{"url":"访问地址...", "path":"文件路径...", "origin":"原始文件访问地址..." }]
+		if ( array_key_exists('organizers', $rs ) ) {
+			$rs["organizers"] = !is_array($rs["organizers"]) ? [] : $rs["organizers"];
+			foreach ($rs["organizers"] as & $file ) {
+				if ( is_array($file) && !empty($file['path']) ) {
+					$fs = $this->media->get( $file['path'] );
+					$file = array_merge( $file, $fs );
+				} else if ( is_string($file) ) {
+					$file =empty($file) ? [] : $this->media->get( $file );
+				} else {
+					$file = [];
+				}
+			}
+		}
+
+		// 格式化: 赞助商
+		// 返回值: [{"url":"访问地址...", "path":"文件路径...", "origin":"原始文件访问地址..." }]
+		if ( array_key_exists('sponsors', $rs ) ) {
+			$rs["sponsors"] = !is_array($rs["sponsors"]) ? [] : $rs["sponsors"];
+			foreach ($rs["sponsors"] as & $file ) {
+				if ( is_array($file) && !empty($file['path']) ) {
+					$fs = $this->media->get( $file['path'] );
+					$file = array_merge( $file, $fs );
+				} else if ( is_string($file) ) {
+					$file =empty($file) ? [] : $this->media->get( $file );
+				} else {
+					$file = [];
+				}
+			}
+		}
+
+		// 格式化: 合作媒体
+		// 返回值: [{"url":"访问地址...", "path":"文件路径...", "origin":"原始文件访问地址..." }]
+		if ( array_key_exists('medias', $rs ) ) {
+			$rs["medias"] = !is_array($rs["medias"]) ? [] : $rs["medias"];
+			foreach ($rs["medias"] as & $file ) {
+				if ( is_array($file) && !empty($file['path']) ) {
+					$fs = $this->media->get( $file['path'] );
+					$file = array_merge( $file, $fs );
+				} else if ( is_string($file) ) {
+					$file =empty($file) ? [] : $this->media->get( $file );
+				} else {
+					$file = [];
+				}
+			}
+		}
+
+		// 格式化: 嘉宾
+		// 返回值: [{"url":"访问地址...", "path":"文件路径...", "origin":"原始文件访问地址..." }]
+		if ( array_key_exists('speakers', $rs ) ) {
+			$rs["speakers"] = !is_array($rs["speakers"]) ? [] : $rs["speakers"];
+			foreach ($rs["speakers"] as & $file ) {
+				if ( is_array($file) && !empty($file['path']) ) {
+					$fs = $this->media->get( $file['path'] );
+					$file = array_merge( $file, $fs );
+				} else if ( is_string($file) ) {
+					$file =empty($file) ? [] : $this->media->get( $file );
+				} else {
+					$file = [];
+				}
+			}
+		}
+
 
 		// 格式化: 活动状态
 		// 返回值: "_status_types" 所有状态表述, "_status_name" 状态名称,  "_status" 当前状态表述, "status" 当前状态数值
 		if ( array_key_exists('status', $rs ) && !empty($rs['status']) ) {
 			$rs["_status_types"] = [
+		  		"draft" => [
+		  			"value" => "draft",
+		  			"name" => "草稿",
+		  			"style" => "danger"
+		  		],
 		  		"open" => [
 		  			"value" => "open",
 		  			"name" => "报名中",
-		  			"style" => "primary"
+		  			"style" => "success"
 		  		],
 		  		"close" => [
 		  			"value" => "close",
 		  			"name" => "报名截止",
-		  			"style" => "danger"
+		  			"style" => "default"
 		  		],
 		  		"off" => [
 		  			"value" => "off",
 		  			"name" => "活动关闭",
-		  			"style" => "danger"
+		  			"style" => "default"
 		  		],
 			];
 			$rs["_status_name"] = "status";
@@ -259,7 +344,7 @@ class Event extends Model {
 	 * @param array   $select       选取字段，默认选取所有
 	 * @return array 活动记录MAP {"event_id1":{"key":"value",...}...}
 	 */
-	public function getInByEventId($event_ids, $select=["event.event_id","event.slug","event.name","event.categories","event.theme","event.images","event.begin","event.end"], $order=["event.created_at"=>"desc"] ) {
+	public function getInByEventId($event_ids, $select=["event.event_id","event.slug","event.name","event.categories","event.theme","event.images","event.begin","event.end","event.status"], $order=["event.created_at"=>"desc"] ) {
 		
 		if ( is_string($select) ) {
 			$select = explode(',', $select);
@@ -413,7 +498,7 @@ class Event extends Model {
 	 * @param array   $select       选取字段，默认选取所有
 	 * @return array 活动记录MAP {"slug1":{"key":"value",...}...}
 	 */
-	public function getInBySlug($slugs, $select=["event.event_id","event.slug","event.name","event.categories","event.theme","event.images","event.begin","event.end"], $order=["event.created_at"=>"desc"] ) {
+	public function getInBySlug($slugs, $select=["event.event_id","event.slug","event.name","event.categories","event.theme","event.images","event.begin","event.end","event.status"], $order=["event.created_at"=>"desc"] ) {
 		
 		if ( is_string($select) ) {
 			$select = explode(',', $select);
@@ -517,6 +602,131 @@ class Event extends Model {
 	}
 
 	/**
+	 * 根据活动ID上传主办方。
+	 * @param string $event_id 活动ID
+	 * @param string $file_path 文件路径
+	 * @param mix $index 如果是数组，替换当前 index
+	 * @return array 已上传文件信息 {"url":"访问地址...", "path":"文件路径...", "origin":"原始文件访问地址..." }
+	 */
+	public function uploadHostsByEventId($event_id, $file_path, $index=null, $upload_only=false ) {
+
+		$rs = $this->getBy('event_id', $event_id, ["hosts"]);
+		$paths = empty($rs["hosts"]) ? [] : $rs["hosts"];
+		$fs = $this->media->uploadFile( $file_path );
+		if ( $index === null ) {
+			array_push($paths, $fs['path']);
+		} else {
+			$paths[$index] = $fs['path'];
+		}
+
+		if ( $upload_only !== true ) {
+			$this->updateBy('event_id', ["event_id"=>$event_id, "hosts"=>$paths] );
+		}
+
+		return $fs;
+	}
+
+	/**
+	 * 根据活动ID上传承办方/组织者。
+	 * @param string $event_id 活动ID
+	 * @param string $file_path 文件路径
+	 * @param mix $index 如果是数组，替换当前 index
+	 * @return array 已上传文件信息 {"url":"访问地址...", "path":"文件路径...", "origin":"原始文件访问地址..." }
+	 */
+	public function uploadOrganizersByEventId($event_id, $file_path, $index=null, $upload_only=false ) {
+
+		$rs = $this->getBy('event_id', $event_id, ["organizers"]);
+		$paths = empty($rs["organizers"]) ? [] : $rs["organizers"];
+		$fs = $this->media->uploadFile( $file_path );
+		if ( $index === null ) {
+			array_push($paths, $fs['path']);
+		} else {
+			$paths[$index] = $fs['path'];
+		}
+
+		if ( $upload_only !== true ) {
+			$this->updateBy('event_id', ["event_id"=>$event_id, "organizers"=>$paths] );
+		}
+
+		return $fs;
+	}
+
+	/**
+	 * 根据活动ID上传赞助商。
+	 * @param string $event_id 活动ID
+	 * @param string $file_path 文件路径
+	 * @param mix $index 如果是数组，替换当前 index
+	 * @return array 已上传文件信息 {"url":"访问地址...", "path":"文件路径...", "origin":"原始文件访问地址..." }
+	 */
+	public function uploadSponsorsByEventId($event_id, $file_path, $index=null, $upload_only=false ) {
+
+		$rs = $this->getBy('event_id', $event_id, ["sponsors"]);
+		$paths = empty($rs["sponsors"]) ? [] : $rs["sponsors"];
+		$fs = $this->media->uploadFile( $file_path );
+		if ( $index === null ) {
+			array_push($paths, $fs['path']);
+		} else {
+			$paths[$index] = $fs['path'];
+		}
+
+		if ( $upload_only !== true ) {
+			$this->updateBy('event_id', ["event_id"=>$event_id, "sponsors"=>$paths] );
+		}
+
+		return $fs;
+	}
+
+	/**
+	 * 根据活动ID上传合作媒体。
+	 * @param string $event_id 活动ID
+	 * @param string $file_path 文件路径
+	 * @param mix $index 如果是数组，替换当前 index
+	 * @return array 已上传文件信息 {"url":"访问地址...", "path":"文件路径...", "origin":"原始文件访问地址..." }
+	 */
+	public function uploadMediasByEventId($event_id, $file_path, $index=null, $upload_only=false ) {
+
+		$rs = $this->getBy('event_id', $event_id, ["medias"]);
+		$paths = empty($rs["medias"]) ? [] : $rs["medias"];
+		$fs = $this->media->uploadFile( $file_path );
+		if ( $index === null ) {
+			array_push($paths, $fs['path']);
+		} else {
+			$paths[$index] = $fs['path'];
+		}
+
+		if ( $upload_only !== true ) {
+			$this->updateBy('event_id', ["event_id"=>$event_id, "medias"=>$paths] );
+		}
+
+		return $fs;
+	}
+
+	/**
+	 * 根据活动ID上传嘉宾。
+	 * @param string $event_id 活动ID
+	 * @param string $file_path 文件路径
+	 * @param mix $index 如果是数组，替换当前 index
+	 * @return array 已上传文件信息 {"url":"访问地址...", "path":"文件路径...", "origin":"原始文件访问地址..." }
+	 */
+	public function uploadSpeakersByEventId($event_id, $file_path, $index=null, $upload_only=false ) {
+
+		$rs = $this->getBy('event_id', $event_id, ["speakers"]);
+		$paths = empty($rs["speakers"]) ? [] : $rs["speakers"];
+		$fs = $this->media->uploadFile( $file_path );
+		if ( $index === null ) {
+			array_push($paths, $fs['path']);
+		} else {
+			$paths[$index] = $fs['path'];
+		}
+
+		if ( $upload_only !== true ) {
+			$this->updateBy('event_id', ["event_id"=>$event_id, "speakers"=>$paths] );
+		}
+
+		return $fs;
+	}
+
+	/**
 	 * 根据活动别名上传主题图。
 	 * @param string $slug 活动别名
 	 * @param string $file_path 文件路径
@@ -557,6 +767,131 @@ class Event extends Model {
 		return $fs;
 	}
 
+	/**
+	 * 根据活动别名上传主办方。
+	 * @param string $slug 活动别名
+	 * @param string $file_path 文件路径
+	 * @param mix $index 如果是数组，替换当前 index
+	 * @return array 已上传文件信息 {"url":"访问地址...", "path":"文件路径...", "origin":"原始文件访问地址..." }
+	 */
+	public function uploadHostsBySlug($slug, $file_path, $index=null, $upload_only=false ) {
+
+		$rs = $this->getBy('slug', $slug, ["hosts"]);
+		$paths = empty($rs["hosts"]) ? [] : $rs["hosts"];
+		$fs = $this->media->uploadFile( $file_path );
+		if ( $index === null ) {
+			array_push($paths, $fs['path']);
+		} else {
+			$paths[$index] = $fs['path'];
+		}
+
+		if ( $upload_only !== true ) {
+			$this->updateBy('slug', ["slug"=>$slug, "hosts"=>$paths] );
+		}
+
+		return $fs;
+	}
+
+	/**
+	 * 根据活动别名上传承办方/组织者。
+	 * @param string $slug 活动别名
+	 * @param string $file_path 文件路径
+	 * @param mix $index 如果是数组，替换当前 index
+	 * @return array 已上传文件信息 {"url":"访问地址...", "path":"文件路径...", "origin":"原始文件访问地址..." }
+	 */
+	public function uploadOrganizersBySlug($slug, $file_path, $index=null, $upload_only=false ) {
+
+		$rs = $this->getBy('slug', $slug, ["organizers"]);
+		$paths = empty($rs["organizers"]) ? [] : $rs["organizers"];
+		$fs = $this->media->uploadFile( $file_path );
+		if ( $index === null ) {
+			array_push($paths, $fs['path']);
+		} else {
+			$paths[$index] = $fs['path'];
+		}
+
+		if ( $upload_only !== true ) {
+			$this->updateBy('slug', ["slug"=>$slug, "organizers"=>$paths] );
+		}
+
+		return $fs;
+	}
+
+	/**
+	 * 根据活动别名上传赞助商。
+	 * @param string $slug 活动别名
+	 * @param string $file_path 文件路径
+	 * @param mix $index 如果是数组，替换当前 index
+	 * @return array 已上传文件信息 {"url":"访问地址...", "path":"文件路径...", "origin":"原始文件访问地址..." }
+	 */
+	public function uploadSponsorsBySlug($slug, $file_path, $index=null, $upload_only=false ) {
+
+		$rs = $this->getBy('slug', $slug, ["sponsors"]);
+		$paths = empty($rs["sponsors"]) ? [] : $rs["sponsors"];
+		$fs = $this->media->uploadFile( $file_path );
+		if ( $index === null ) {
+			array_push($paths, $fs['path']);
+		} else {
+			$paths[$index] = $fs['path'];
+		}
+
+		if ( $upload_only !== true ) {
+			$this->updateBy('slug', ["slug"=>$slug, "sponsors"=>$paths] );
+		}
+
+		return $fs;
+	}
+
+	/**
+	 * 根据活动别名上传合作媒体。
+	 * @param string $slug 活动别名
+	 * @param string $file_path 文件路径
+	 * @param mix $index 如果是数组，替换当前 index
+	 * @return array 已上传文件信息 {"url":"访问地址...", "path":"文件路径...", "origin":"原始文件访问地址..." }
+	 */
+	public function uploadMediasBySlug($slug, $file_path, $index=null, $upload_only=false ) {
+
+		$rs = $this->getBy('slug', $slug, ["medias"]);
+		$paths = empty($rs["medias"]) ? [] : $rs["medias"];
+		$fs = $this->media->uploadFile( $file_path );
+		if ( $index === null ) {
+			array_push($paths, $fs['path']);
+		} else {
+			$paths[$index] = $fs['path'];
+		}
+
+		if ( $upload_only !== true ) {
+			$this->updateBy('slug', ["slug"=>$slug, "medias"=>$paths] );
+		}
+
+		return $fs;
+	}
+
+	/**
+	 * 根据活动别名上传嘉宾。
+	 * @param string $slug 活动别名
+	 * @param string $file_path 文件路径
+	 * @param mix $index 如果是数组，替换当前 index
+	 * @return array 已上传文件信息 {"url":"访问地址...", "path":"文件路径...", "origin":"原始文件访问地址..." }
+	 */
+	public function uploadSpeakersBySlug($slug, $file_path, $index=null, $upload_only=false ) {
+
+		$rs = $this->getBy('slug', $slug, ["speakers"]);
+		$paths = empty($rs["speakers"]) ? [] : $rs["speakers"];
+		$fs = $this->media->uploadFile( $file_path );
+		if ( $index === null ) {
+			array_push($paths, $fs['path']);
+		} else {
+			$paths[$index] = $fs['path'];
+		}
+
+		if ( $upload_only !== true ) {
+			$this->updateBy('slug', ["slug"=>$slug, "speakers"=>$paths] );
+		}
+
+		return $fs;
+	}
+
 
 	/**
 	 * 添加活动记录
@@ -578,7 +913,7 @@ class Event extends Model {
 	 * @param array   $order   排序方式 ["field"=>"asc", "field2"=>"desc"...]
 	 * @return array 活动记录数组 [{"key":"value",...}...]
 	 */
-	public function top( $limit=100, $select=["event.event_id","event.slug","event.name","event.categories","event.theme","event.images","event.begin","event.end"], $order=["event.created_at"=>"desc"] ) {
+	public function top( $limit=100, $select=["event.event_id","event.slug","event.name","event.categories","event.theme","event.images","event.begin","event.end","event.status"], $order=["event.created_at"=>"desc"] ) {
 
 		if ( is_string($select) ) {
 			$select = explode(',', $select);
@@ -623,7 +958,7 @@ class Event extends Model {
 	/**
 	 * 按条件检索活动记录
 	 * @param  array  $query
-	 *         	      $query['select'] 选取字段，默认选择 ["event.event_id","event.slug","event.name","event.categories","event.theme","event.images","event.begin","event.end"]
+	 *         	      $query['select'] 选取字段，默认选择 ["event.event_id","event.slug","event.name","event.categories","event.theme","event.images","event.begin","event.end","event.status"]
 	 *         	      $query['page'] 页码，默认为 1
 	 *         	      $query['perpage'] 每页显示记录数，默认为 20
 	 *			      $query["keywords"] 按关键词查询
@@ -686,7 +1021,7 @@ class Event extends Model {
 	 */
 	public function search( $query = [] ) {
 
-		$select = empty($query['select']) ? ["event.event_id","event.slug","event.name","event.categories","event.theme","event.images","event.begin","event.end"] : $query['select'];
+		$select = empty($query['select']) ? ["event.event_id","event.slug","event.name","event.categories","event.theme","event.images","event.begin","event.end","event.status"] : $query['select'];
 		if ( is_string($select) ) {
 			$select = explode(',', $select);
 		}

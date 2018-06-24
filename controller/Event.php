@@ -4,7 +4,7 @@
  * 活动控制器
  *
  * 程序作者: XpmSE机器人
- * 最后修改: 2018-06-24 13:55:00
+ * 最后修改: 2018-06-24 15:54:18
  * 程序母版: /data/stor/private/templates/xpmsns/model/code/controller/Name.php
  */
 
@@ -189,6 +189,76 @@ class EventController extends \Xpmse\Loader\Controller {
 			}
 
 			$rs['images'] = $resp;
+		}
+
+		if ( is_array($rs['hosts'])) {
+
+			$resp = [];
+			foreach ($rs['hosts'] as $idx=>$fs ) {
+
+				if ( empty($fs['local']) ) {
+					continue;
+				}
+				$resp[] = $inst->uploadHostsByEventId( $event_id, $fs['local'], $idx, true);
+			}
+
+			$rs['hosts'] = $resp;
+		}
+
+		if ( is_array($rs['organizers'])) {
+
+			$resp = [];
+			foreach ($rs['organizers'] as $idx=>$fs ) {
+
+				if ( empty($fs['local']) ) {
+					continue;
+				}
+				$resp[] = $inst->uploadOrganizersByEventId( $event_id, $fs['local'], $idx, true);
+			}
+
+			$rs['organizers'] = $resp;
+		}
+
+		if ( is_array($rs['sponsors'])) {
+
+			$resp = [];
+			foreach ($rs['sponsors'] as $idx=>$fs ) {
+
+				if ( empty($fs['local']) ) {
+					continue;
+				}
+				$resp[] = $inst->uploadSponsorsByEventId( $event_id, $fs['local'], $idx, true);
+			}
+
+			$rs['sponsors'] = $resp;
+		}
+
+		if ( is_array($rs['medias'])) {
+
+			$resp = [];
+			foreach ($rs['medias'] as $idx=>$fs ) {
+
+				if ( empty($fs['local']) ) {
+					continue;
+				}
+				$resp[] = $inst->uploadMediasByEventId( $event_id, $fs['local'], $idx, true);
+			}
+
+			$rs['medias'] = $resp;
+		}
+
+		if ( is_array($rs['speakers'])) {
+
+			$resp = [];
+			foreach ($rs['speakers'] as $idx=>$fs ) {
+
+				if ( empty($fs['local']) ) {
+					continue;
+				}
+				$resp[] = $inst->uploadSpeakersByEventId( $event_id, $fs['local'], $idx, true);
+			}
+
+			$rs['speakers'] = $resp;
 		}
 
 
