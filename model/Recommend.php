@@ -165,225 +165,245 @@ function getContentsBy( $type,  $recommend_id,  $keywords=[], $page=1, $perpage=
 			throw new Excp( "推荐数据不存在", 404, ['recommend_id'=>$recommend_id] );
 		}
 
+
 		// 静态关联
 		if ( $recommend['type'] == 'static' )  {
-			
-			// 提取选定文章信息
-			return $recommend;
-		}
+			$recommend['contents']['data'] = [];
+
+			switch ($recommend['ctype']) {
+				case 'article':
+					$ids = $recommend['articles'];
+					break;
+				case 'album':
+					$ids  = $recommend['albums'];
+					break;
+				case 'event':
+					$ids = $recommend['events'];
+					break;
+				// case 'all': // 使用搜索引擎来实现，先分开查询
+					// break;
+				default:
+					$ids = $recommend['articles'];
+					break;
+			}
+
+			$recommend['contents']['total'] = count($ids);
+		
+		// 智能关联
+		} else { 
+			// 根据类型选取内容
+			switch ($recommend['ctype']) {
+				case 'article':
+					$qb =  Utils::getTab("xpmsns_pages_article as content", "{none}")->query()->where('status','=', 'published');
+					$keywordFields = ["content.keywords", "content.title"];
+					$qb->select('content.article_id as id');
+					break;
+				case 'album':
+					$qb =  Utils::getTab("xpmsns_pages_album as content", "{none}")->query()->where('status','=', 'on');;
+					$keywordFields = ["content.tags","content.title"];
+					$qb->select('content.album_id as id');
+					break;
+				case 'event':
+					$qb =  Utils::getTab("xpmsns_pages_event as content", "{none}")->query()->where('status', '<>', 'draft');
+					$keywordFields = ["content.tags","content.name"];
+					$qb->select('content.event_id as id');
+					break;
+				// case 'all': // 使用搜索引擎来实现，先分开查询
+					// break;
+				default:
+					$qb =  Utils::getTab("xpmsns_pages_article as content", "{none}")->query();
+					$keywordFields = ["content.keywords", "content.title"];
+					$qb->select('content.article_id as id');
+					break;
+			}
 
 
-		// 根据类型选取内容
-		switch ($recommend['ctype']) {
-			case 'article':
-				$qb =  Utils::getTab("xpmsns_pages_article as content", "{none}")->query()->where('status','=', 'published');
-				$keywordFields = ["content.keywords", "content.title"];
-				$qb->select('content.article_id as id');
-				break;
-			case 'album':
-				$qb =  Utils::getTab("xpmsns_pages_album as content", "{none}")->query()->where('status','=', 'on');;
-				$keywordFields = ["content.tags","content.title"];
-				$qb->select('content.album_id as id');
-				break;
-			case 'event':
-				$qb =  Utils::getTab("xpmsns_pages_event as content", "{none}")->query()->where('status', '<>', 'draft');
-				$keywordFields = ["content.tags","content.name"];
-				$qb->select('content.event_id as id');
-				break;
-			// case 'all': // 使用搜索引擎来实现，先分开查询
-				// break;
-			default:
-				$qb =  Utils::getTab("xpmsns_pages_article as content", "{none}")->query();
-				$keywordFields = ["content.keywords", "content.title"];
-				$qb->select('content.article_id as id');
-				break;
-		}
+
+	        // 排序条件
+			switch ($recommend['orderby']) {
+				case 'publish_time': 
+					$query['order'] =  "publish_time desc";
+					break;
+				case 'view_cnt':
+					$query['order'] =  "view_cnt desc";
+					break;
+				case 'like_cnt':
+					$query['order'] =  "like_cnt desc";
+					break;
+				case 'dislike_cnt':
+					$query['order'] =  "dislike_cnt desc";
+					break;
+				case 'comment_cnt':
+					$query['order'] =  "comment_cnt desc";
+					break;
+				default:
+					$query['order'] =  "publish_time desc";
+					break;
+			}
+
+			// 查询条件
+			if ( !empty($now) ) {
+	          $query['now'] = $now;
+	        }
+
+			if ( !empty($recommend['period']) ) {
+				$query['period'] = $recommend['period'];
+			}
+
+			// 按分类提取数据
+			if ( !empty($recommend['categories']) ) {
+				$query['category_ids'] = $recommend['categories'];
+			}
+
+			$recommend['keywords'] = str_replace("\r", "", $recommend['keywords']);
+			$recommend['keywords'] = str_replace("\n", "", $recommend['keywords']);
+			$recommend['keywords'] = explode(',', trim($recommend['keywords']) );
+			$keywords = is_string($keywords) ? explode(',',$keywords) : $keywords;
+			$keywords = array_merge( $recommend['keywords'], $keywords );
+
+			// 按关键词提取数据
+			$query['keywords'] =$keywords;
+
+			// 按分类提取数据
+			if ( !empty($recommend['categories']) ) {
+				$query['category_ids'] = $recommend['categories'];
+			}
 
 
+			if ( $recommend['thumb_only'] ) {
+				$query['thumb_only'] = 1;
+			}
 
-        // 排序条件
-		switch ($recommend['orderby']) {
-			case 'publish_time': 
-				$query['order'] =  "publish_time desc";
-				break;
-			case 'view_cnt':
-				$query['order'] =  "view_cnt desc";
-				break;
-			case 'like_cnt':
-				$query['order'] =  "like_cnt desc";
-				break;
-			case 'dislike_cnt':
-				$query['order'] =  "dislike_cnt desc";
-				break;
-			case 'comment_cnt':
-				$query['order'] =  "comment_cnt desc";
-				break;
-			default:
-				$query['order'] =  "publish_time desc";
-				break;
-		}
-
-		// 查询条件
-		if ( !empty($now) ) {
-          $query['now'] = $now;
-        }
-
-		if ( !empty($recommend['period']) ) {
-			$query['period'] = $recommend['period'];
-		}
-
-		// 按分类提取数据
-		if ( !empty($recommend['categories']) ) {
-			$query['category_ids'] = $recommend['categories'];
-		}
-
-		$recommend['keywords'] = str_replace("\r", "", $recommend['keywords']);
-		$recommend['keywords'] = str_replace("\n", "", $recommend['keywords']);
-		$recommend['keywords'] = explode(',', trim($recommend['keywords']) );
-		$keywords = is_string($keywords) ? explode(',',$keywords) : $keywords;
-		$keywords = array_merge( $recommend['keywords'], $keywords );
-
-		// 按关键词提取数据
-		$query['keywords'] =$keywords;
-
-		// 按分类提取数据
-		if ( !empty($recommend['categories']) ) {
-			$query['category_ids'] = $recommend['categories'];
-		}
+			// 必须包含主题图片
+			if ( $query['thumb_only'] ) {
+				$qb->whereNotNull('content.cover');
+			}
 
 
-		if ( $recommend['thumb_only'] ) {
-			$query['thumb_only'] = 1;
-		}
+			// 按分类ID查找
+			if ( array_key_exists('category_ids', $query)  && !empty($query['category_ids']) ) {
+				$cids = is_string($query['category_ids']) ? explode(',', $query['category_ids']) : $query['category_ids'];
+				if ( !empty($cids) ) {
+					if ( $recommend['ctype'] == 'article' || $recommend['ctype'] == 'all' ) {
+						$qb->leftJoin("xpmsns_pages_article_category as ac", "ac.article_id", "=", "content.article_id");
+						$qb->whereIn('ac.category_id', $cids );	
+					}else {
+						$qb->where(function ( $qb ) use($cids) {
+							foreach( $cids as $cid ) {
+								$qb->orWhere('categories', "like", "%{$cid}%");  // 名称符合关键词
+							}
+						});
+					}
+				}
+			}
 
-		// 必须包含主题图片
-		if ( $query['thumb_only'] ) {
-			$qb->whereNotNull('content.cover');
-		}
+			// 按关键词词组查找 ( 非搜索 )
+			if ( array_key_exists('keywords', $query) && !empty($query['keywords']) ) {
 
+				// 过滤空值
+				$keywords = $query['keywords'];
+				foreach( $keywords as $idx=>$key ) {
+					$keywords[$idx] = trim($key);
+					if  ( empty($keywords[$idx]) ) {
+						unset($keywords[$idx]);
+					}
+				}
 
-		// 按分类ID查找
-		if ( array_key_exists('category_ids', $query)  && !empty($query['category_ids']) ) {
-			$cids = is_string($query['category_ids']) ? explode(',', $query['category_ids']) : $query['category_ids'];
-			if ( !empty($cids) ) {
-				if ( $recommend['ctype'] == 'article' || $recommend['ctype'] == 'all' ) {
-					$qb->leftJoin("xpmsns_pages_article_category as ac", "ac.article_id", "=", "content.article_id");
-					$qb->whereIn('ac.category_id', $cids );	
-				}else {
-					$qb->where(function ( $qb ) use($cids) {
-						foreach( $cids as $cid ) {
-							$qb->orWhere('categories', "like", "%{$cid}%");  // 名称符合关键词
+				if ( !empty($keywords) ) {
+					$qb->where(function ( $qb ) use($keywords, $keywordFields) {
+						foreach( $keywords as $idx=>$keyword ) {
+							foreach ($keywordFields as $keywordField) {
+								$qb->orWhere($keywordField, "like", "%{$keyword}%");  // 名称符合关键词
+							}
 						}
 					});
 				}
 			}
-		}
 
-		// 按关键词词组查找 ( 非搜索 )
-		if ( array_key_exists('keywords', $query) && !empty($query['keywords']) ) {
 
-			// 过滤空值
-			$keywords = $query['keywords'];
-			foreach( $keywords as $idx=>$key ) {
-				$keywords[$idx] = trim($key);
-				if  ( empty($keywords[$idx]) ) {
-					unset($keywords[$idx]);
+			// 按时间范围
+			if ( array_key_exists('period', $query) && !empty($query['period']) ) {
+				$now = empty($query['now']) ? date('Y-m-d H:i:s') : date('Y-m-d H:i:s', strtotime($query['now']) );
+				$now_t = strtotime( $now );
+
+				switch ($query['period']) {
+
+					case '24hours':  // 24小时
+						$from = date('Y-m-d H:i:s', strtotime("-24 hours",$now_t));
+						$qb->where('publish_time' , '<=', $now );
+						$qb->where('publish_time' , '>=', $from );
+						break;
+
+					case 'daily' : // 当天
+						$from = date('Y-m-d 00:00:00', $now_t);
+						$end = date('Y-m-d 23:59:59', $now_t);
+						$qb->where('publish_time' , '<=', $end );
+						$qb->where('publish_time' , '>=', $from );
+						break;
+
+					case '7days': // 7天
+						$end = date('Y-m-d 00:00:00', $now_t);
+						$end_t = strtotime($end);
+						$from = date('Y-m-d 23:59:59',  strtotime("-7 days",$end_t));
+						$qb->where('publish_time' , '<=', $end );
+						$qb->where('publish_time' , '>=', $from );
+						break;
+
+					case 'weekly': // 本周
+						$from = date('Y-m-d 00:00:00', strtotime('-1 Monday',$now_t));
+						$from_t = strtotime($from);
+						$end = date('Y-m-d 23:59:59',  strtotime("+1 Weeks",$from_t));
+						$qb->where('publish_time' , '<=', $end );
+						$qb->where('publish_time' , '>=', $from );
+						break;
+
+					case '30days': // 30天
+						$end = date('Y-m-d 00:00:00', $now_t);
+						$end_t = strtotime($end);
+						$from = date('Y-m-d 23:59:59',  strtotime("-30 days",$end_t));
+						$qb->where('publish_time' , '<=', $end );
+						$qb->where('publish_time' , '>=', $from );
+						break;
+
+					case 'monthly': // 本月
+						$from = date('Y-m-01 00:00:00', $now_t);
+						$from_t = strtotime($from);
+						$end = date('Y-m-d 23:59:59',  strtotime("+1 Month",$from_t));
+						$qb->where('publish_time' , '<=', $end );
+						$qb->where('publish_time' , '>=', $from );
+						break;
+
+					case 'yearly':  // 今年
+						$from = date('Y-01-01 00:00:00', $now_t);
+						$end = date('Y-12-31 23:59:59',  $now_t);
+						$qb->where('publish_time' , '<=', $end );
+						$qb->where('publish_time' , '>=', $from );
+						break;
+
+					default: // 无限
+						# code...
+						break;
 				}
 			}
 
-			if ( !empty($keywords) ) {
-				$qb->where(function ( $qb ) use($keywords, $keywordFields) {
-					foreach( $keywords as $idx=>$keyword ) {
-						foreach ($keywordFields as $keywordField) {
-							$qb->orWhere($keywordField, "like", "%{$keyword}%");  // 名称符合关键词
-						}
-					}
-				});
+
+
+			// 查询文章列表
+			$resp = $qb->distinct()->pgArray( $perpage, ['content._id'], 'page', $page );
+			if ( $_GET['debug'] == 1 ) {
+				$recommend['_sql'] = $qb->getSql();
+				$recommend['_query'] = $query; 
 			}
-		}
 
+			$recommend['contents'] = $resp;
 
-		// 按时间范围
-		if ( array_key_exists('period', $query) && !empty($query['period']) ) {
-			$now = empty($query['now']) ? date('Y-m-d H:i:s') : date('Y-m-d H:i:s', strtotime($query['now']) );
-			$now_t = strtotime( $now );
-
-			switch ($query['period']) {
-
-				case '24hours':  // 24小时
-					$from = date('Y-m-d H:i:s', strtotime("-24 hours",$now_t));
-					$qb->where('publish_time' , '<=', $now );
-					$qb->where('publish_time' , '>=', $from );
-					break;
-
-				case 'daily' : // 当天
-					$from = date('Y-m-d 00:00:00', $now_t);
-					$end = date('Y-m-d 23:59:59', $now_t);
-					$qb->where('publish_time' , '<=', $end );
-					$qb->where('publish_time' , '>=', $from );
-					break;
-
-				case '7days': // 7天
-					$end = date('Y-m-d 00:00:00', $now_t);
-					$end_t = strtotime($end);
-					$from = date('Y-m-d 23:59:59',  strtotime("-7 days",$end_t));
-					$qb->where('publish_time' , '<=', $end );
-					$qb->where('publish_time' , '>=', $from );
-					break;
-
-				case 'weekly': // 本周
-					$from = date('Y-m-d 00:00:00', strtotime('-1 Monday',$now_t));
-					$from_t = strtotime($from);
-					$end = date('Y-m-d 23:59:59',  strtotime("+1 Weeks",$from_t));
-					$qb->where('publish_time' , '<=', $end );
-					$qb->where('publish_time' , '>=', $from );
-					break;
-
-				case '30days': // 30天
-					$end = date('Y-m-d 00:00:00', $now_t);
-					$end_t = strtotime($end);
-					$from = date('Y-m-d 23:59:59',  strtotime("-30 days",$end_t));
-					$qb->where('publish_time' , '<=', $end );
-					$qb->where('publish_time' , '>=', $from );
-					break;
-
-				case 'monthly': // 本月
-					$from = date('Y-m-01 00:00:00', $now_t);
-					$from_t = strtotime($from);
-					$end = date('Y-m-d 23:59:59',  strtotime("+1 Month",$from_t));
-					$qb->where('publish_time' , '<=', $end );
-					$qb->where('publish_time' , '>=', $from );
-					break;
-
-				case 'yearly':  // 今年
-					$from = date('Y-01-01 00:00:00', $now_t);
-					$end = date('Y-12-31 23:59:59',  $now_t);
-					$qb->where('publish_time' , '<=', $end );
-					$qb->where('publish_time' , '>=', $from );
-					break;
-
-				default: // 无限
-					# code...
-					break;
+			if ( empty($resp['data']) ) {
+				return $recommend;
 			}
+
+			$ids = array_column($resp['data'], 'id');
+
 		}
-
-
-
-		// 查询文章列表
-		$resp = $qb->distinct()->pgArray( $perpage, ['content._id'], 'page', $page );
-		if ( $_GET['debug'] == 1 ) {
-			$recommend['_sql'] = $qb->getSql();
-			$recommend['_query'] = $query; 
-		}
-
-		$recommend['contents'] = $resp;
-
-		if ( empty($resp['data']) ) {
-			return $recommend;
-		}
-
-		$ids = array_column($resp['data'], 'id');
 
 		// 根据类型选取内容
 		switch ($recommend['ctype']) {
