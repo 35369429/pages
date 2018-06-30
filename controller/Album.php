@@ -4,7 +4,7 @@
  * 图集控制器
  *
  * 程序作者: XpmSE机器人
- * 最后修改: 2018-06-30 15:59:33
+ * 最后修改: 2018-06-30 18:22:37
  * 程序母版: /data/stor/private/templates/xpmsns/model/code/controller/Name.php
  */
 

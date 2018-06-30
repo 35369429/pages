@@ -130,6 +130,48 @@ use \Xpmse\T;
 								</ul>
 							</div> <!-- END 推荐方式过滤 -->
 
+							<!-- 内容类型过滤 -->
+							<div class="btn-group pull-right push-20-l" role="group">  
+								<button class="btn btn-default btn-xs dropdown-toggle" type="button" data-toggle="dropdown" >
+									<i class="glyphicon glyphicon-list-alt"></i> 
+									<?=($query['ctype'] == 'auto') ? '混合' : '' ?>
+									<?=($query['ctype'] == 'article') ? '图文' : '' ?>
+									<?=($query['ctype'] == 'album') ? '图集' : '' ?>
+									<?=($query['ctype'] == 'event') ? '活动' : '' ?>
+									<?=(empty($query['ctype'])) ? '内容类型' : '' ?>
+									<span class="caret"></span> 
+								</button>
+
+								<ul class="dropdown-menu dropdown-menu-right"  style="min-width: 87px;">
+									<li class="dropdown-header">内容类型</li>
+									<li>
+										<a href="javascript:search('ctype','')">
+										   全部
+										</a>
+									</li>
+									<li >
+										<a href="javascript:search('ctype','auto')">
+										   混合
+										</a>
+									</li>
+									<li >
+										<a href="javascript:search('ctype','article')">
+										   图文
+										</a>
+									</li>
+									<li >
+										<a href="javascript:search('ctype','album')">
+										   图集
+										</a>
+									</li>
+									<li >
+										<a href="javascript:search('ctype','event')">
+										   活动
+										</a>
+									</li>
+								</ul>
+							</div> <!-- END 内容类型过滤 -->
+
 							<!-- 统计周期过滤 -->
 							<div class="btn-group pull-right push-20-l" role="group">  
 								<button class="btn btn-default btn-xs dropdown-toggle" type="button" data-toggle="dropdown" >
@@ -209,11 +251,11 @@ use \Xpmse\T;
 								<th class="font-w300"> 别名 </th>
 								<th class="font-w300"> 主题 </th>
 								<th class="font-w300"> 推荐方式 </th>
+								<th class="font-w300"> 内容类型 </th>
 								<th class="font-w300"> 统计周期 </th>
 								<th class="font-w300"> 文章排序 </th>
 								<th class="font-w300"> 关键词 </th>
 								<th class="font-w300"> 创建时间 </th>
-								<th class="font-w300"> 操作 </th>
 							</tr>
 						</thead>
 
@@ -231,6 +273,9 @@ use \Xpmse\T;
 									<span class="text-<?=$rs['_type']['style']?>"><?=$rs['_type']['name'] ? $rs['_type']['name']  : $rs['type'] ?></span>
 								</td>
 								<td class="font-w300">
+									<span class="text-<?=$rs['_ctype']['style']?>"><?=$rs['_ctype']['name'] ? $rs['_ctype']['name']  : $rs['ctype'] ?></span>
+								</td>
+								<td class="font-w300">
 									<span class="text-<?=$rs['_period']['style']?>"><?=$rs['_period']['name'] ? $rs['_period']['name']  : $rs['period'] ?></span>
 								</td>
 								<td class="font-w300">
@@ -241,9 +286,6 @@ use \Xpmse\T;
 								</td>
 								<td class="font-w300">
 									<?php $v=null; $v=T::s("{{ updated_at ? updated_at : created_at }}", $rs ); echo empty($v) ? T::s("", $rs ) : $v; ?>
-								</td>
-								<td class="font-w300">
-									<?=T::s("<button class=\"btn btn-xs btn-primary fn-action fn-quote\" >引用</button>", $rs );?>
 								</td>
 							</tr>
 							<?php endforeach;?>

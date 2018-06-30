@@ -4,7 +4,7 @@
  * 图集数据模型
  *
  * 程序作者: XpmSE机器人
- * 最后修改: 2018-06-30 15:59:33
+ * 最后修改: 2018-06-30 18:22:37
  * 程序母版: /data/stor/private/templates/xpmsns/model/code/model/Name.php
  */
 namespace Xpmsns\Pages\Model;
@@ -241,7 +241,8 @@ class Album extends Model {
 
 		// 创建查询构造器
 		$qb = Utils::getTab("xpmsns_pages_album as album", "{none}")->query();
- 		
+ 		$qb->whereIn('album.album_id', $album_ids);
+		
 		// 排序
 		foreach ($order as $field => $order ) {
 			$qb->orderBy( $field, $order );
@@ -385,7 +386,8 @@ class Album extends Model {
 
 		// 创建查询构造器
 		$qb = Utils::getTab("xpmsns_pages_album as album", "{none}")->query();
- 		
+ 		$qb->whereIn('album.slug', $slugs);
+		
 		// 排序
 		foreach ($order as $field => $order ) {
 			$qb->orderBy( $field, $order );

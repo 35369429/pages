@@ -4,11 +4,11 @@
  * 活动数据接口 
  *
  * 程序作者: XpmSE机器人
- * 最后修改: 2018-06-24 16:16:17
+ * 最后修改: 2018-06-30 18:24:16
  * 程序母版: /data/stor/private/templates/xpmsns/model/code/api/Name.php
  */
 namespace Xpmsns\Pages\Api;
-                                    
+                                     
 
 use \Xpmse\Loader\App;
 use \Xpmse\Excp;
@@ -46,8 +46,9 @@ class Event extends Api {
 	 *               	["slug"],  // 活动别名 
 	 *               	["name"],  // 活动主题 
 	 *               	["link"],  // 外部链接 
-	 *               	["categories"],  // 类型 
+	 *               	["categories"],  // 栏目 
 	*               	["_map_category"][$categories[n]]["category_id"], // category.category_id
+	 *               	["type"],  // 类型 
 	 *               	["tags"],  // 标签 
 	 *               	["summary"],  // 活动简介 
 	 *               	["theme"],  // 主题图 
@@ -134,7 +135,8 @@ class Event extends Api {
 	 *               $data['slug'] 活动别名
 	 *               $data['name'] 活动主题
 	 *               $data['link'] 外部链接
-	 *               $data['categories'] 类型
+	 *               $data['categories'] 栏目
+	 *               $data['type'] 类型
 	 *               $data['tags'] 标签
 	 *               $data['summary'] 活动简介
 	 *               $data['theme'] 主题图
@@ -189,7 +191,8 @@ class Event extends Api {
 	 *               $data['slug'] 活动别名
 	 *               $data['name'] 活动主题
 	 *               $data['link'] 外部链接
-	 *               $data['categories'] 类型
+	 *               $data['categories'] 栏目
+	 *               $data['type'] 类型
 	 *               $data['tags'] 标签
 	 *               $data['summary'] 活动简介
 	 *               $data['theme'] 主题图
@@ -322,8 +325,9 @@ class Event extends Api {
 	 *               	["slug"],  // 活动别名 
 	 *               	["name"],  // 活动主题 
 	 *               	["link"],  // 外部链接 
-	 *               	["categories"],  // 类型 
+	 *               	["categories"],  // 栏目 
 	*               	["category"][$categories[n]]["category_id"], // category.category_id
+	 *               	["type"],  // 类型 
 	 *               	["tags"],  // 标签 
 	 *               	["summary"],  // 活动简介 
 	 *               	["theme"],  // 主题图 

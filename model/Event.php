@@ -4,11 +4,11 @@
  * 活动数据模型
  *
  * 程序作者: XpmSE机器人
- * 最后修改: 2018-06-24 16:16:19
+ * 最后修改: 2018-06-30 18:24:17
  * 程序母版: /data/stor/private/templates/xpmsns/model/code/model/Name.php
  */
 namespace Xpmsns\Pages\Model;
-                                    
+                                     
 use \Xpmse\Excp;
 use \Xpmse\Model;
 use \Xpmse\Utils;
@@ -63,8 +63,10 @@ class Event extends Model {
 		$this->putColumn( 'name', $this->type("string", ["length"=>200, "index"=>true, "null"=>false]));
 		// 外部链接
 		$this->putColumn( 'link', $this->type("string", ["length"=>200, "null"=>true]));
-		// 类型
+		// 栏目
 		$this->putColumn( 'categories', $this->type("text", ["json"=>true, "null"=>true]));
+		// 类型
+		$this->putColumn( 'type', $this->type("text", ["json"=>true, "null"=>true]));
 		// 标签
 		$this->putColumn( 'tags', $this->type("text", ["null"=>true]));
 		// 活动简介
@@ -262,8 +264,9 @@ class Event extends Model {
 	 *          	  $rs["slug"],  // 活动别名 
 	 *          	  $rs["name"],  // 活动主题 
 	 *          	  $rs["link"],  // 外部链接 
-	 *          	  $rs["categories"],  // 类型 
+	 *          	  $rs["categories"],  // 栏目 
 	 *                $rs["_map_category"][$categories[n]]["category_id"], // category.category_id
+	 *          	  $rs["type"],  // 类型 
 	 *          	  $rs["tags"],  // 标签 
 	 *          	  $rs["summary"],  // 活动简介 
 	 *          	  $rs["theme"],  // 主题图 
@@ -359,7 +362,8 @@ class Event extends Model {
 
 		// 创建查询构造器
 		$qb = Utils::getTab("xpmsns_pages_event as event", "{none}")->query();
- 		
+ 		$qb->whereIn('event.event_id', $event_ids);
+		
 		// 排序
 		foreach ($order as $field => $order ) {
 			$qb->orderBy( $field, $order );
@@ -417,8 +421,9 @@ class Event extends Model {
 	 *          	  $rs["slug"],  // 活动别名 
 	 *          	  $rs["name"],  // 活动主题 
 	 *          	  $rs["link"],  // 外部链接 
-	 *          	  $rs["categories"],  // 类型 
+	 *          	  $rs["categories"],  // 栏目 
 	 *                $rs["_map_category"][$categories[n]]["category_id"], // category.category_id
+	 *          	  $rs["type"],  // 类型 
 	 *          	  $rs["tags"],  // 标签 
 	 *          	  $rs["summary"],  // 活动简介 
 	 *          	  $rs["theme"],  // 主题图 
@@ -514,7 +519,8 @@ class Event extends Model {
 
 		// 创建查询构造器
 		$qb = Utils::getTab("xpmsns_pages_event as event", "{none}")->query();
- 		
+ 		$qb->whereIn('event.slug', $slugs);
+		
 		// 排序
 		foreach ($order as $field => $order ) {
 			$qb->orderBy( $field, $order );
@@ -985,8 +991,9 @@ class Event extends Model {
 	 *               	["slug"],  // 活动别名 
 	 *               	["name"],  // 活动主题 
 	 *               	["link"],  // 外部链接 
-	 *               	["categories"],  // 类型 
+	 *               	["categories"],  // 栏目 
 	 *               	["category"][$categories[n]]["category_id"], // category.category_id
+	 *               	["type"],  // 类型 
 	 *               	["tags"],  // 标签 
 	 *               	["summary"],  // 活动简介 
 	 *               	["theme"],  // 主题图 
@@ -1193,7 +1200,8 @@ class Event extends Model {
 			"slug",  // 活动别名
 			"name",  // 活动主题
 			"link",  // 外部链接
-			"categories",  // 类型
+			"categories",  // 栏目
+			"type",  // 类型
 			"tags",  // 标签
 			"summary",  // 活动简介
 			"theme",  // 主题图

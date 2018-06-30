@@ -121,6 +121,12 @@ use \Xpmse\T;
 		</div>
 	</div><!-- END 下拉选择: 推荐方式 (type) -->
 
+<!-- radio: ctype 空值-->
+
+<!-- radio: thumb_only 空值-->
+
+<!-- radio: video_only 空值-->
+
 
 
  
@@ -239,6 +245,62 @@ use \Xpmse\T;
 
 
 
+ 
+	<!-- 下拉选择(动态数据): 指定活动 (events) 开始  -->
+	<div class="form-group   ">
+		<label class="col-xs-2 control-label" for="events">指定活动</label>
+		<div class="col-xs-8"> 
+			<select class="js-select2 form-control input-lg" style="width: 100%;" 
+					id="events" name="events" 
+					data-language="zh-CN"
+					data-param-cancelable="0"
+					data-param-cancel="取消选择"
+					data-param-model="\Xpmsns\Pages\Model\Event"
+					data-param-table="event"
+					data-param-fields="event_id,name"
+					data-param-style="{{name}}({{event_id}})"
+					data-param-option="event_id"
+					data-param-default=""
+					data-ajax-url="/_a/mina/helper/select2?method=get"
+					data-preload-url="/_a/mina/helper/select2?method=get&preload=<?=T::v('<%=events | join(\',\')%>', $rs )?>"
+					data-placeholder="请选择活动"  multiple data-select2-multiple=1  >
+				<option></option>
+			</select>
+			<div class="help-block"></div>
+		</div>
+		 
+	</div><!-- END 下拉选择(动态数据): 指定活动 (events) -->
+
+
+
+ 
+	<!-- 下拉选择(动态数据): 指定图集 (albums) 开始  -->
+	<div class="form-group   ">
+		<label class="col-xs-2 control-label" for="albums">指定图集</label>
+		<div class="col-xs-8"> 
+			<select class="js-select2 form-control input-lg" style="width: 100%;" 
+					id="albums" name="albums" 
+					data-language="zh-CN"
+					data-param-cancelable="0"
+					data-param-cancel="取消选择"
+					data-param-model="\Xpmsns\Pages\Model\Album"
+					data-param-table="album"
+					data-param-fields="album_id,title"
+					data-param-style="{{title}}({{album_id}})"
+					data-param-option="album_id"
+					data-param-default=""
+					data-ajax-url="/_a/mina/helper/select2?method=get"
+					data-preload-url="/_a/mina/helper/select2?method=get&preload=<?=T::v('<%=albums | join(\',\')%>', $rs )?>"
+					data-placeholder="请选择图集"  multiple data-select2-multiple=1  >
+				<option></option>
+			</select>
+			<div class="help-block"></div>
+		</div>
+		 
+	</div><!-- END 下拉选择(动态数据): 指定图集 (albums) -->
+
+
+
 
 	<!-- 多图片组上传: 摘要图片 (images) 开始  -->
 	<div class="xpmse-image-groups-content    draggable-column">
@@ -273,13 +335,21 @@ use \Xpmse\T;
 							class="form-control input-lg"  
 							type="text" 
 							data-name="title" 
-							placeholder="请输入图片标题"
+							placeholder="请输入标题"
 							value="<?=T::v('<%=title | e(\'html\')%>', $img )?>" /> 
+					</div>
+					<div class="col-xs-12 push-10-t">
+						<input 
+							class="form-control input-lg"  
+							type="text" 
+							data-name="link" 
+							placeholder="请输入链接地址"
+							value="<?=T::v('<%=link | e(\'html\')%>', $img )?>" />
 					</div>
 					<div class="col-xs-12 push-10-t">
 						<textarea class="form-control input-lg"  
 							data-name="summary" rows="4"
-							placeholder="请输入图片介绍"><?=T::v('<%=summary | e(\'html\')%>', $img )?></textarea> 
+							placeholder="请输入介绍"><?=T::v('<%=summary | e(\'html\')%>', $img )?></textarea> 
 					</div>
 				</div>
 				<div class="col-xs-2 push-10-t">

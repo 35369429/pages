@@ -74,9 +74,9 @@ use \Xpmse\T;
 
 
  
-	<!-- 下拉选择(动态数据): 类型 (categories) 开始  -->
+	<!-- 下拉选择(动态数据): 栏目 (categories) 开始  -->
 	<div class="form-group   ">
-		<label class="col-xs-2 control-label" for="categories">类型</label>
+		<label class="col-xs-2 control-label" for="categories">栏目</label>
 		<div class="col-xs-8"> 
 			<select class="js-select2 form-control input-lg" style="width: 100%;" 
 					id="categories" name="categories" 
@@ -91,13 +91,13 @@ use \Xpmse\T;
 					data-param-default=""
 					data-ajax-url="/_a/mina/helper/select2?method=get"
 					data-preload-url="/_a/mina/helper/select2?method=get&preload=<?=T::v('<%=categories | join(\',\')%>', $rs )?>"
-					data-placeholder="请选择活动类型"  multiple data-select2-multiple=1  >
+					data-placeholder="请选择活动栏目"  multiple data-select2-multiple=1  >
 				<option></option>
 			</select>
 			<div class="help-block"></div>
 		</div>
 		 
-	</div><!-- END 下拉选择(动态数据): 类型 (categories) -->
+	</div><!-- END 下拉选择(动态数据): 栏目 (categories) -->
 
 
 
