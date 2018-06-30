@@ -4,7 +4,7 @@
  * 推荐数据模型
  *
  * 程序作者: XpmSE机器人
- * 最后修改: 2018-06-30 17:53:53
+ * 最后修改: 2018-06-30 20:23:48
  * 程序母版: /data/stor/private/templates/xpmsns/model/code/model/Name.php
  */
 namespace Xpmsns\Pages\Model;
@@ -243,8 +243,8 @@ class Recommend extends Model {
 		// 返回值: "_ctype_types" 所有状态表述, "_ctype_name" 状态名称,  "_ctype" 当前状态表述, "ctype" 当前状态数值
 		if ( array_key_exists('ctype', $rs ) && !empty($rs['ctype']) ) {
 			$rs["_ctype_types"] = [
-		  		"auto" => [
-		  			"value" => "auto",
+		  		"all" => [
+		  			"value" => "all",
 		  			"name" => "混合",
 		  			"style" => "danger"
 		  		],
@@ -574,7 +574,8 @@ class Recommend extends Model {
 
 		// 创建查询构造器
 		$qb = Utils::getTab("xpmsns_pages_recommend as recommend", "{none}")->query();
-    		
+    		$qb->whereIn('recommend.recommend_id', $recommend_ids);
+		
 		// 排序
 		foreach ($order as $field => $order ) {
 			$qb->orderBy( $field, $order );
@@ -857,7 +858,8 @@ class Recommend extends Model {
 
 		// 创建查询构造器
 		$qb = Utils::getTab("xpmsns_pages_recommend as recommend", "{none}")->query();
-    		
+    		$qb->whereIn('recommend.slug', $slugs);
+		
 		// 排序
 		foreach ($order as $field => $order ) {
 			$qb->orderBy( $field, $order );

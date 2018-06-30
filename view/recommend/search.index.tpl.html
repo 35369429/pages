@@ -134,7 +134,7 @@ use \Xpmse\T;
 							<div class="btn-group pull-right push-20-l" role="group">  
 								<button class="btn btn-default btn-xs dropdown-toggle" type="button" data-toggle="dropdown" >
 									<i class="glyphicon glyphicon-list-alt"></i> 
-									<?=($query['ctype'] == 'auto') ? '混合' : '' ?>
+									<?=($query['ctype'] == 'all') ? '混合' : '' ?>
 									<?=($query['ctype'] == 'article') ? '图文' : '' ?>
 									<?=($query['ctype'] == 'album') ? '图集' : '' ?>
 									<?=($query['ctype'] == 'event') ? '活动' : '' ?>
@@ -150,7 +150,7 @@ use \Xpmse\T;
 										</a>
 									</li>
 									<li >
-										<a href="javascript:search('ctype','auto')">
+										<a href="javascript:search('ctype','all')">
 										   混合
 										</a>
 									</li>
