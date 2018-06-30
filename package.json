@@ -41,6 +41,17 @@
 		"permission": "boss,admin,manager,user",
 		"order":9999
 	},{
+		"slug":"xpmsns/pages/album/index",
+		"name":"图集",
+		"icon":{
+			"default":"/static/icons/album.svg"
+		},
+		"icontype": "img",
+		"linktype":"i",
+		"link":"{album,index}",
+		"permission": "boss,admin,manager,user",
+		"order":9999
+	},{
 		"slug":"xpmsns/pages/event/index",
 		"name":"活动",
 		"icon":{
