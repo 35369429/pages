@@ -4,7 +4,7 @@
  * 活动控制器
  *
  * 程序作者: XpmSE机器人
- * 最后修改: 2018-06-30 18:24:17
+ * 最后修改: 2018-06-30 23:28:41
  * 程序母版: /data/stor/private/templates/xpmsns/model/code/controller/Name.php
  */
 
@@ -174,8 +174,8 @@ class EventController extends \Xpmse\Loader\Controller {
 		unset($rs['slug']);
 
 		// 复制图片
-		if ( is_array($rs['theme']) &&  !empty($rs['theme']['local'])) {
-			$rs['theme'] = $inst->uploadTheme( $event_id, $rs['theme']['local'], true);
+		if ( is_array($rs['cover']) &&  !empty($rs['cover']['local'])) {
+			$rs['cover'] = $inst->uploadCover( $event_id, $rs['cover']['local'], true);
 		}
 		if ( is_array($rs['images'])) {
 

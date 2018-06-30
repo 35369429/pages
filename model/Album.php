@@ -4,11 +4,11 @@
  * 图集数据模型
  *
  * 程序作者: XpmSE机器人
- * 最后修改: 2018-06-30 18:22:37
+ * 最后修改: 2018-06-30 22:58:55
  * 程序母版: /data/stor/private/templates/xpmsns/model/code/model/Name.php
  */
 namespace Xpmsns\Pages\Model;
-                    
+                         
 use \Xpmse\Excp;
 use \Xpmse\Model;
 use \Xpmse\Utils;
@@ -77,8 +77,18 @@ class Album extends Model {
 		$this->putColumn( 'summary', $this->type("string", ["length"=>200, "null"=>true]));
 		// 图片列表
 		$this->putColumn( 'images', $this->type("text", ["json"=>true, "null"=>true]));
-		// 主题图
-		$this->putColumn( 'theme', $this->type("string", ["length"=>200, "null"=>true]));
+		// 封面
+		$this->putColumn( 'cover', $this->type("string", ["length"=>200, "index"=>true, "null"=>true]));
+		// 发布时间
+		$this->putColumn( 'publish_time', $this->type("timestamp", ["index"=>true, "null"=>true]));
+		// 浏览量
+		$this->putColumn( 'view_cnt', $this->type("bigInteger", ["length"=>20, "index"=>true, "null"=>true]));
+		// 赞赏量
+		$this->putColumn( 'like_cnt', $this->type("bigInteger", ["length"=>20, "index"=>true, "null"=>true]));
+		// 讨厌量
+		$this->putColumn( 'dislike_cnt', $this->type("bigInteger", ["length"=>20, "index"=>true, "null"=>true]));
+		// 评论数据量
+		$this->putColumn( 'comment_cnt', $this->type("bigInteger", ["length"=>20, "index"=>true, "null"=>true]));
 		// 图集状态
 		$this->putColumn( 'status', $this->type("string", ["length"=>200, "index"=>true, "default"=>"draft", "null"=>true]));
 
@@ -109,10 +119,10 @@ class Album extends Model {
 			}
 		}
 
-		// 格式化: 主题图
+		// 格式化: 封面
 		// 返回值: {"url":"访问地址...", "path":"文件路径...", "origin":"原始文件访问地址..." }
-		if ( array_key_exists('theme', $rs ) ) {
-			$rs["theme"] = empty($rs["theme"]) ? [] : $this->media->get( $rs["theme"] );
+		if ( array_key_exists('cover', $rs ) ) {
+			$rs["cover"] = empty($rs["cover"]) ? [] : $this->media->get( $rs["cover"] );
 		}
 
 
@@ -163,7 +173,12 @@ class Album extends Model {
 	 *          	  $rs["tags"],  // 标签 
 	 *          	  $rs["summary"],  // 图集简介 
 	 *          	  $rs["images"],  // 图片列表 
-	 *          	  $rs["theme"],  // 主题图 
+	 *          	  $rs["cover"],  // 封面 
+	 *          	  $rs["publish_time"],  // 发布时间 
+	 *          	  $rs["view_cnt"],  // 浏览量 
+	 *          	  $rs["like_cnt"],  // 赞赏量 
+	 *          	  $rs["dislike_cnt"],  // 讨厌量 
+	 *          	  $rs["comment_cnt"],  // 评论数据量 
 	 *          	  $rs["status"],  // 图集状态 
 	 *          	  $rs["created_at"],  // 创建时间 
 	 *          	  $rs["updated_at"],  // 更新时间 
@@ -229,7 +244,7 @@ class Album extends Model {
 	 * @param array   $select       选取字段，默认选取所有
 	 * @return array 图集记录MAP {"album_id1":{"key":"value",...}...}
 	 */
-	public function getInByAlbumId($album_ids, $select=["album.album_id","album.slug","album.title","c.name","album.origin","album.author","album.theme","album.images","album.status","album.created_at","album.updated_at"], $order=["album.created_at"=>"desc"] ) {
+	public function getInByAlbumId($album_ids, $select=["album.album_id","album.slug","album.title","c.name","album.origin","album.author","album.cover","album.images","album.status","album.publish_time","album.created_at","album.updated_at"], $order=["album.created_at"=>"desc"] ) {
 		
 		if ( is_string($select) ) {
 			$select = explode(',', $select);
@@ -308,7 +323,12 @@ class Album extends Model {
 	 *          	  $rs["tags"],  // 标签 
 	 *          	  $rs["summary"],  // 图集简介 
 	 *          	  $rs["images"],  // 图片列表 
-	 *          	  $rs["theme"],  // 主题图 
+	 *          	  $rs["cover"],  // 封面 
+	 *          	  $rs["publish_time"],  // 发布时间 
+	 *          	  $rs["view_cnt"],  // 浏览量 
+	 *          	  $rs["like_cnt"],  // 赞赏量 
+	 *          	  $rs["dislike_cnt"],  // 讨厌量 
+	 *          	  $rs["comment_cnt"],  // 评论数据量 
 	 *          	  $rs["status"],  // 图集状态 
 	 *          	  $rs["created_at"],  // 创建时间 
 	 *          	  $rs["updated_at"],  // 更新时间 
@@ -374,7 +394,7 @@ class Album extends Model {
 	 * @param array   $select       选取字段，默认选取所有
 	 * @return array 图集记录MAP {"slug1":{"key":"value",...}...}
 	 */
-	public function getInBySlug($slugs, $select=["album.album_id","album.slug","album.title","c.name","album.origin","album.author","album.theme","album.images","album.status","album.created_at","album.updated_at"], $order=["album.created_at"=>"desc"] ) {
+	public function getInBySlug($slugs, $select=["album.album_id","album.slug","album.title","c.name","album.origin","album.author","album.cover","album.images","album.status","album.publish_time","album.created_at","album.updated_at"], $order=["album.created_at"=>"desc"] ) {
 		
 		if ( is_string($select) ) {
 			$select = explode(',', $select);
@@ -463,17 +483,17 @@ class Album extends Model {
 	}
 
 	/**
-	 * 根据图集ID上传主题图。
+	 * 根据图集ID上传封面。
 	 * @param string $album_id 图集ID
 	 * @param string $file_path 文件路径
 	 * @param mix $index 如果是数组，替换当前 index
 	 * @return array 已上传文件信息 {"url":"访问地址...", "path":"文件路径...", "origin":"原始文件访问地址..." }
 	 */
-	public function uploadThemeByAlbumId($album_id, $file_path, $upload_only=false ) {
+	public function uploadCoverByAlbumId($album_id, $file_path, $upload_only=false ) {
 
 		$fs =  $this->media->uploadFile( $file_path );
 		if ( $upload_only !== true ) {
-			$this->updateBy('album_id', ["album_id"=>$album_id, "theme"=>$fs['path']]);
+			$this->updateBy('album_id', ["album_id"=>$album_id, "cover"=>$fs['path']]);
 		}
 		return $fs;
 	}
@@ -504,17 +524,17 @@ class Album extends Model {
 	}
 
 	/**
-	 * 根据图集别名上传主题图。
+	 * 根据图集别名上传封面。
 	 * @param string $slug 图集别名
 	 * @param string $file_path 文件路径
 	 * @param mix $index 如果是数组，替换当前 index
 	 * @return array 已上传文件信息 {"url":"访问地址...", "path":"文件路径...", "origin":"原始文件访问地址..." }
 	 */
-	public function uploadThemeBySlug($slug, $file_path, $upload_only=false ) {
+	public function uploadCoverBySlug($slug, $file_path, $upload_only=false ) {
 
 		$fs =  $this->media->uploadFile( $file_path );
 		if ( $upload_only !== true ) {
-			$this->updateBy('slug', ["slug"=>$slug, "theme"=>$fs['path']]);
+			$this->updateBy('slug', ["slug"=>$slug, "cover"=>$fs['path']]);
 		}
 		return $fs;
 	}
@@ -540,7 +560,7 @@ class Album extends Model {
 	 * @param array   $order   排序方式 ["field"=>"asc", "field2"=>"desc"...]
 	 * @return array 图集记录数组 [{"key":"value",...}...]
 	 */
-	public function top( $limit=100, $select=["album.album_id","album.slug","album.title","c.name","album.origin","album.author","album.theme","album.images","album.status","album.created_at","album.updated_at"], $order=["album.created_at"=>"desc"] ) {
+	public function top( $limit=100, $select=["album.album_id","album.slug","album.title","c.name","album.origin","album.author","album.cover","album.images","album.status","album.publish_time","album.created_at","album.updated_at"], $order=["album.created_at"=>"desc"] ) {
 
 		if ( is_string($select) ) {
 			$select = explode(',', $select);
@@ -585,7 +605,7 @@ class Album extends Model {
 	/**
 	 * 按条件检索图集记录
 	 * @param  array  $query
-	 *         	      $query['select'] 选取字段，默认选择 ["album.album_id","album.slug","album.title","c.name","album.origin","album.author","album.theme","album.images","album.status","album.created_at","album.updated_at"]
+	 *         	      $query['select'] 选取字段，默认选择 ["album.album_id","album.slug","album.title","c.name","album.origin","album.author","album.cover","album.images","album.status","album.publish_time","album.created_at","album.updated_at"]
 	 *         	      $query['page'] 页码，默认为 1
 	 *         	      $query['perpage'] 每页显示记录数，默认为 20
 	 *			      $query["keywords"] 按关键词查询
@@ -609,7 +629,12 @@ class Album extends Model {
 	 *               	["tags"],  // 标签 
 	 *               	["summary"],  // 图集简介 
 	 *               	["images"],  // 图片列表 
-	 *               	["theme"],  // 主题图 
+	 *               	["cover"],  // 封面 
+	 *               	["publish_time"],  // 发布时间 
+	 *               	["view_cnt"],  // 浏览量 
+	 *               	["like_cnt"],  // 赞赏量 
+	 *               	["dislike_cnt"],  // 讨厌量 
+	 *               	["comment_cnt"],  // 评论数据量 
 	 *               	["status"],  // 图集状态 
 	 *               	["created_at"],  // 创建时间 
 	 *               	["updated_at"],  // 更新时间 
@@ -631,7 +656,7 @@ class Album extends Model {
 	 */
 	public function search( $query = [] ) {
 
-		$select = empty($query['select']) ? ["album.album_id","album.slug","album.title","c.name","album.origin","album.author","album.theme","album.images","album.status","album.created_at","album.updated_at"] : $query['select'];
+		$select = empty($query['select']) ? ["album.album_id","album.slug","album.title","c.name","album.origin","album.author","album.cover","album.images","album.status","album.publish_time","album.created_at","album.updated_at"] : $query['select'];
 		if ( is_string($select) ) {
 			$select = explode(',', $select);
 		}
@@ -760,7 +785,12 @@ class Album extends Model {
 			"tags",  // 标签
 			"summary",  // 图集简介
 			"images",  // 图片列表
-			"theme",  // 主题图
+			"cover",  // 封面
+			"publish_time",  // 发布时间
+			"view_cnt",  // 浏览量
+			"like_cnt",  // 赞赏量
+			"dislike_cnt",  // 讨厌量
+			"comment_cnt",  // 评论数据量
 			"status",  // 图集状态
 			"created_at",  // 创建时间
 			"updated_at",  // 更新时间

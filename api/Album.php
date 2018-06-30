@@ -4,11 +4,11 @@
  * 图集数据接口 
  *
  * 程序作者: XpmSE机器人
- * 最后修改: 2018-06-30 18:22:36
+ * 最后修改: 2018-06-30 22:58:54
  * 程序母版: /data/stor/private/templates/xpmsns/model/code/api/Name.php
  */
 namespace Xpmsns\Pages\Api;
-                    
+                         
 
 use \Xpmse\Loader\App;
 use \Xpmse\Excp;
@@ -32,12 +32,12 @@ class Album extends Api {
 	/**
 	 * 查询一条图集记录
 	 * @param  array $query GET 参数
-	 *               $query['select']  读取字段, 默认 ["album.album_id","album.slug","album.title","album.author","album.origin","album.origin_url","album.link","album.categories","album.tags","album.summary","album.images","album.theme","album.created_at","album.updated_at","c.category_id","c.name","c.param"]
+	 *               $query['select']  读取字段, 默认 ["album.album_id","album.slug","album.title","album.author","album.origin","album.origin_url","album.link","album.categories","album.tags","album.summary","album.images","album.cover","album.publish_time","album.view_cnt","album.like_cnt","album.dislike_cnt","album.comment_cnt","album.created_at","album.updated_at","c.category_id","c.name","c.param"]
 	 * 				 $query['album_id']  按查询 (多条用 "," 分割)
 	 * 				 $query['slug']  按查询 (多条用 "," 分割)
      *
 	 * @param  array $data  POST 参数
-	 *               $data['select']  返回字段, 默认 ["album.album_id","album.slug","album.title","album.author","album.origin","album.origin_url","album.link","album.categories","album.tags","album.summary","album.images","album.theme","album.created_at","album.updated_at","c.category_id","c.name","c.param"]
+	 *               $data['select']  返回字段, 默认 ["album.album_id","album.slug","album.title","album.author","album.origin","album.origin_url","album.link","album.categories","album.tags","album.summary","album.images","album.cover","album.publish_time","album.view_cnt","album.like_cnt","album.dislike_cnt","album.comment_cnt","album.created_at","album.updated_at","c.category_id","c.name","c.param"]
 	 * 				 $data['album_id']  按查询 (多条用 "," 分割)
 	 * 				 $data['slug']  按查询 (多条用 "," 分割)
 	 *
@@ -54,7 +54,12 @@ class Album extends Api {
 	 *               	["tags"],  // 标签 
 	 *               	["summary"],  // 图集简介 
 	 *               	["images"],  // 图片列表 
-	 *               	["theme"],  // 主题图 
+	 *               	["cover"],  // 封面 
+	 *               	["publish_time"],  // 发布时间 
+	 *               	["view_cnt"],  // 浏览量 
+	 *               	["like_cnt"],  // 赞赏量 
+	 *               	["dislike_cnt"],  // 讨厌量 
+	 *               	["comment_cnt"],  // 评论数据量 
 	 *               	["status"],  // 图集状态 
 	 *               	["created_at"],  // 创建时间 
 	 *               	["updated_at"],  // 更新时间 
@@ -81,7 +86,7 @@ class Album extends Api {
 		$data = array_merge( $query, $data );
 
 		// 读取字段
-		$select = empty($data['select']) ? ["album.album_id","album.slug","album.title","album.author","album.origin","album.origin_url","album.link","album.categories","album.tags","album.summary","album.images","album.theme","album.created_at","album.updated_at","c.category_id","c.name","c.param"] : $data['select'];
+		$select = empty($data['select']) ? ["album.album_id","album.slug","album.title","album.author","album.origin","album.origin_url","album.link","album.categories","album.tags","album.summary","album.images","album.cover","album.publish_time","album.view_cnt","album.like_cnt","album.dislike_cnt","album.comment_cnt","album.created_at","album.updated_at","c.category_id","c.name","c.param"] : $data['select'];
 		if ( is_string($select) ) {
 			$select = explode(',', $select);
 		}
@@ -130,7 +135,12 @@ class Album extends Api {
 	 *               $data['tags'] 标签
 	 *               $data['summary'] 图集简介
 	 *               $data['images'] 图片列表
-	 *               $data['theme'] 主题图
+	 *               $data['cover'] 封面
+	 *               $data['publish_time'] 发布时间
+	 *               $data['view_cnt'] 浏览量
+	 *               $data['like_cnt'] 赞赏量
+	 *               $data['dislike_cnt'] 讨厌量
+	 *               $data['comment_cnt'] 评论数据量
 	 *               $data['status'] 图集状态
 	 *
 	 * @return array 新增的图集记录  @see get()
@@ -165,7 +175,12 @@ class Album extends Api {
 	 *               $data['tags'] 标签
 	 *               $data['summary'] 图集简介
 	 *               $data['images'] 图片列表
-	 *               $data['theme'] 主题图
+	 *               $data['cover'] 封面
+	 *               $data['publish_time'] 发布时间
+	 *               $data['view_cnt'] 浏览量
+	 *               $data['like_cnt'] 赞赏量
+	 *               $data['dislike_cnt'] 讨厌量
+	 *               $data['comment_cnt'] 评论数据量
 	 *               $data['status'] 图集状态
 	 *
 	 * @return array 更新的图集记录 @see get()
@@ -237,7 +252,7 @@ class Album extends Api {
 	/**
 	 * 根据条件检索图集记录
 	 * @param  array $query GET 参数
-	 *         	      $query['select'] 选取字段，默认选择 ["album.album_id","album.slug","album.title","album.author","album.origin","album.origin_url","album.link","album.categories","album.tags","album.summary","album.images","album.theme","album.created_at","album.updated_at","c.category_id","c.slug","c.name","c.param"]
+	 *         	      $query['select'] 选取字段，默认选择 ["album.album_id","album.slug","album.title","album.author","album.origin","album.origin_url","album.link","album.categories","album.tags","album.summary","album.images","album.cover","album.publish_time","album.view_cnt","album.like_cnt","album.dislike_cnt","album.comment_cnt","album.created_at","album.updated_at","c.category_id","c.slug","c.name","c.param"]
 	 *         	      $query['page'] 页码，默认为 1
 	 *         	      $query['perpage'] 每页显示记录数，默认为 20
 	 *			      $query["keywords"] 按关键词查询
@@ -249,7 +264,7 @@ class Album extends Api {
 	 *			      $query["orderby_updated_at_desc"]  按 DESC 排序
      *
 	 * @param  array $data  POST 参数
-	 *         	      $data['select'] 选取字段，默认选择 ["name=album_id","name=slug","name=title","name=author","name=origin","name=origin_url","name=link","name=categories","name=tags","name=summary","name=images","name=theme","name=created_at","name=updated_at","model=%5CXpmsns%5CPages%5CModel%5CCategory&name=category_id&table=category&prefix=xpmsns_pages_&alias=c&type=inWhere","model=%5CXpmsns%5CPages%5CModel%5CCategory&name=slug&table=category&prefix=xpmsns_pages_&alias=c&type=inWhere","model=%5CXpmsns%5CPages%5CModel%5CCategory&name=name&table=category&prefix=xpmsns_pages_&alias=c&type=inWhere","model=%5CXpmsns%5CPages%5CModel%5CCategory&name=param&table=category&prefix=xpmsns_pages_&alias=c&type=inWhere"]
+	 *         	      $data['select'] 选取字段，默认选择 ["name=album_id","name=slug","name=title","name=author","name=origin","name=origin_url","name=link","name=categories","name=tags","name=summary","name=images","name=cover","name=publish_time","name=view_cnt","name=like_cnt","name=dislike_cnt","name=comment_cnt","name=created_at","name=updated_at","model=%5CXpmsns%5CPages%5CModel%5CCategory&name=category_id&table=category&prefix=xpmsns_pages_&alias=c&type=inWhere","model=%5CXpmsns%5CPages%5CModel%5CCategory&name=slug&table=category&prefix=xpmsns_pages_&alias=c&type=inWhere","model=%5CXpmsns%5CPages%5CModel%5CCategory&name=name&table=category&prefix=xpmsns_pages_&alias=c&type=inWhere","model=%5CXpmsns%5CPages%5CModel%5CCategory&name=param&table=category&prefix=xpmsns_pages_&alias=c&type=inWhere"]
 	 *         	      $data['page'] 页码，默认为 1
 	 *         	      $data['perpage'] 每页显示记录数，默认为 20
 	 *			      $data["keywords"] 按关键词查询
@@ -274,7 +289,12 @@ class Album extends Api {
 	 *               	["tags"],  // 标签 
 	 *               	["summary"],  // 图集简介 
 	 *               	["images"],  // 图片列表 
-	 *               	["theme"],  // 主题图 
+	 *               	["cover"],  // 封面 
+	 *               	["publish_time"],  // 发布时间 
+	 *               	["view_cnt"],  // 浏览量 
+	 *               	["like_cnt"],  // 赞赏量 
+	 *               	["dislike_cnt"],  // 讨厌量 
+	 *               	["comment_cnt"],  // 评论数据量 
 	 *               	["status"],  // 图集状态 
 	 *               	["created_at"],  // 创建时间 
 	 *               	["updated_at"],  // 更新时间 
@@ -301,7 +321,7 @@ class Album extends Api {
 		$data = array_merge( $query, $data );
 
 		// 读取字段
-		$select = empty($data['select']) ? ["album.album_id","album.slug","album.title","album.author","album.origin","album.origin_url","album.link","album.categories","album.tags","album.summary","album.images","album.theme","album.created_at","album.updated_at","c.category_id","c.slug","c.name","c.param"] : $data['select'];
+		$select = empty($data['select']) ? ["album.album_id","album.slug","album.title","album.author","album.origin","album.origin_url","album.link","album.categories","album.tags","album.summary","album.images","album.cover","album.publish_time","album.view_cnt","album.like_cnt","album.dislike_cnt","album.comment_cnt","album.created_at","album.updated_at","c.category_id","c.slug","c.name","c.param"] : $data['select'];
 		if ( is_string($select) ) {
 			$select = explode(',', $select);
 		}

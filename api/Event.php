@@ -4,11 +4,11 @@
  * 活动数据接口 
  *
  * 程序作者: XpmSE机器人
- * 最后修改: 2018-06-30 18:24:16
+ * 最后修改: 2018-06-30 23:28:40
  * 程序母版: /data/stor/private/templates/xpmsns/model/code/api/Name.php
  */
 namespace Xpmsns\Pages\Api;
-                                     
+                                          
 
 use \Xpmse\Loader\App;
 use \Xpmse\Excp;
@@ -32,12 +32,12 @@ class Event extends Api {
 	/**
 	 * 查询一条活动记录
 	 * @param  array $query GET 参数
-	 *               $query['select']  读取字段, 默认 ["event.event_id","event.slug","event.name","event.link","event.categories","event.tags","event.summary","event.theme","event.images","event.begin","event.end","event.area","event.prov","event.city","event.town","event.location","event.price","event.hosts","event.organizers","event.sponsors","event.medias","event.speakers","event.content","event.created_at","event.updated_at","c.category_id","c.name","c.param"]
+	 *               $query['select']  读取字段, 默认 ["event.event_id","event.slug","event.name","event.link","event.categories","event.type","event.tags","event.summary","event.cover","event.images","event.begin","event.end","event.area","event.prov","event.city","event.town","event.location","event.price","event.hosts","event.organizers","event.sponsors","event.medias","event.speakers","event.content","event.publish_time","event.view_cnt","event.like_cnt","event.dislike_cnt","event.comment_cnt","event.status","event.created_at","event.updated_at","c.category_id","c.name","c.param"]
 	 * 				 $query['event_id']  按查询 (多条用 "," 分割)
 	 * 				 $query['slug']  按查询 (多条用 "," 分割)
      *
 	 * @param  array $data  POST 参数
-	 *               $data['select']  返回字段, 默认 ["event.event_id","event.slug","event.name","event.link","event.categories","event.tags","event.summary","event.theme","event.images","event.begin","event.end","event.area","event.prov","event.city","event.town","event.location","event.price","event.hosts","event.organizers","event.sponsors","event.medias","event.speakers","event.content","event.created_at","event.updated_at","c.category_id","c.name","c.param"]
+	 *               $data['select']  返回字段, 默认 ["event.event_id","event.slug","event.name","event.link","event.categories","event.type","event.tags","event.summary","event.cover","event.images","event.begin","event.end","event.area","event.prov","event.city","event.town","event.location","event.price","event.hosts","event.organizers","event.sponsors","event.medias","event.speakers","event.content","event.publish_time","event.view_cnt","event.like_cnt","event.dislike_cnt","event.comment_cnt","event.status","event.created_at","event.updated_at","c.category_id","c.name","c.param"]
 	 * 				 $data['event_id']  按查询 (多条用 "," 分割)
 	 * 				 $data['slug']  按查询 (多条用 "," 分割)
 	 *
@@ -51,7 +51,7 @@ class Event extends Api {
 	 *               	["type"],  // 类型 
 	 *               	["tags"],  // 标签 
 	 *               	["summary"],  // 活动简介 
-	 *               	["theme"],  // 主题图 
+	 *               	["cover"],  // 封面 
 	 *               	["images"],  // 活动海报 
 	 *               	["begin"],  // 开始时间 
 	 *               	["end"],  // 结束时间 
@@ -67,6 +67,11 @@ class Event extends Api {
 	 *               	["medias"],  // 合作媒体 
 	 *               	["speakers"],  // 嘉宾 
 	 *               	["content"],  // 活动介绍 
+	 *               	["publish_time"],  // 发布时间 
+	 *               	["view_cnt"],  // 浏览量 
+	 *               	["like_cnt"],  // 点赞量 
+	 *               	["dislike_cnt"],  // 讨厌量 
+	 *               	["comment_cnt"],  // 评论量 
 	 *               	["status"],  // 活动状态 
 	 *               	["created_at"],  // 创建时间 
 	 *               	["updated_at"],  // 更新时间 
@@ -93,7 +98,7 @@ class Event extends Api {
 		$data = array_merge( $query, $data );
 
 		// 读取字段
-		$select = empty($data['select']) ? ["event.event_id","event.slug","event.name","event.link","event.categories","event.tags","event.summary","event.theme","event.images","event.begin","event.end","event.area","event.prov","event.city","event.town","event.location","event.price","event.hosts","event.organizers","event.sponsors","event.medias","event.speakers","event.content","event.created_at","event.updated_at","c.category_id","c.name","c.param"] : $data['select'];
+		$select = empty($data['select']) ? ["event.event_id","event.slug","event.name","event.link","event.categories","event.type","event.tags","event.summary","event.cover","event.images","event.begin","event.end","event.area","event.prov","event.city","event.town","event.location","event.price","event.hosts","event.organizers","event.sponsors","event.medias","event.speakers","event.content","event.publish_time","event.view_cnt","event.like_cnt","event.dislike_cnt","event.comment_cnt","event.status","event.created_at","event.updated_at","c.category_id","c.name","c.param"] : $data['select'];
 		if ( is_string($select) ) {
 			$select = explode(',', $select);
 		}
@@ -139,7 +144,7 @@ class Event extends Api {
 	 *               $data['type'] 类型
 	 *               $data['tags'] 标签
 	 *               $data['summary'] 活动简介
-	 *               $data['theme'] 主题图
+	 *               $data['cover'] 封面
 	 *               $data['images'] 活动海报
 	 *               $data['begin'] 开始时间
 	 *               $data['end'] 结束时间
@@ -155,6 +160,11 @@ class Event extends Api {
 	 *               $data['medias'] 合作媒体
 	 *               $data['speakers'] 嘉宾
 	 *               $data['content'] 活动介绍
+	 *               $data['publish_time'] 发布时间
+	 *               $data['view_cnt'] 浏览量
+	 *               $data['like_cnt'] 点赞量
+	 *               $data['dislike_cnt'] 讨厌量
+	 *               $data['comment_cnt'] 评论量
 	 *               $data['status'] 活动状态
 	 *
 	 * @return array 新增的活动记录  @see get()
@@ -195,7 +205,7 @@ class Event extends Api {
 	 *               $data['type'] 类型
 	 *               $data['tags'] 标签
 	 *               $data['summary'] 活动简介
-	 *               $data['theme'] 主题图
+	 *               $data['cover'] 封面
 	 *               $data['images'] 活动海报
 	 *               $data['begin'] 开始时间
 	 *               $data['end'] 结束时间
@@ -211,6 +221,11 @@ class Event extends Api {
 	 *               $data['medias'] 合作媒体
 	 *               $data['speakers'] 嘉宾
 	 *               $data['content'] 活动介绍
+	 *               $data['publish_time'] 发布时间
+	 *               $data['view_cnt'] 浏览量
+	 *               $data['like_cnt'] 点赞量
+	 *               $data['dislike_cnt'] 讨厌量
+	 *               $data['comment_cnt'] 评论量
 	 *               $data['status'] 活动状态
 	 *
 	 * @return array 更新的活动记录 @see get()
@@ -282,7 +297,7 @@ class Event extends Api {
 	/**
 	 * 根据条件检索活动记录
 	 * @param  array $query GET 参数
-	 *         	      $query['select'] 选取字段，默认选择 ["event.event_id","event.slug","event.name","event.link","event.categories","event.tags","event.summary","event.theme","event.images","event.begin","event.end","event.area","event.prov","event.city","event.town","event.location","event.price","event.hosts","event.organizers","event.sponsors","event.medias","event.speakers","event.created_at","event.updated_at","c.category_id","c.slug","c.name","c.param"]
+	 *         	      $query['select'] 选取字段，默认选择 ["event.event_id","event.slug","event.name","event.link","event.categories","event.type","event.tags","event.summary","event.cover","event.images","event.begin","event.end","event.area","event.prov","event.city","event.town","event.location","event.price","event.hosts","event.organizers","event.sponsors","event.medias","event.speakers","event.publish_time","event.view_cnt","event.like_cnt","event.dislike_cnt","event.comment_cnt","event.created_at","event.updated_at","c.category_id","c.slug","c.name","c.param"]
 	 *         	      $query['page'] 页码，默认为 1
 	 *         	      $query['perpage'] 每页显示记录数，默认为 20
 	 *			      $query["keywords"] 按关键词查询
@@ -301,7 +316,7 @@ class Event extends Api {
 	 *			      $query["orderby_updated_at_desc"]  按 DESC 排序
      *
 	 * @param  array $data  POST 参数
-	 *         	      $data['select'] 选取字段，默认选择 ["name=event_id","name=slug","name=name","name=link","name=categories","name=tags","name=summary","name=theme","name=images","name=begin","name=end","name=area","name=prov","name=city","name=town","name=location","name=price","name=hosts","name=organizers","name=sponsors","name=medias","name=speakers","name=created_at","name=updated_at","model=%5CXpmsns%5CPages%5CModel%5CCategory&name=category_id&table=category&prefix=xpmsns_pages_&alias=c&type=inWhere","model=%5CXpmsns%5CPages%5CModel%5CCategory&name=slug&table=category&prefix=xpmsns_pages_&alias=c&type=inWhere","model=%5CXpmsns%5CPages%5CModel%5CCategory&name=name&table=category&prefix=xpmsns_pages_&alias=c&type=inWhere","model=%5CXpmsns%5CPages%5CModel%5CCategory&name=param&table=category&prefix=xpmsns_pages_&alias=c&type=inWhere"]
+	 *         	      $data['select'] 选取字段，默认选择 ["name=event_id","name=slug","name=name","name=link","name=categories","name=type","name=tags","name=summary","name=cover","name=images","name=begin","name=end","name=area","name=prov","name=city","name=town","name=location","name=price","name=hosts","name=organizers","name=sponsors","name=medias","name=speakers","name=publish_time","name=view_cnt","name=like_cnt","name=dislike_cnt","name=comment_cnt","name=created_at","name=updated_at","model=%5CXpmsns%5CPages%5CModel%5CCategory&name=category_id&table=category&prefix=xpmsns_pages_&alias=c&type=inWhere","model=%5CXpmsns%5CPages%5CModel%5CCategory&name=slug&table=category&prefix=xpmsns_pages_&alias=c&type=inWhere","model=%5CXpmsns%5CPages%5CModel%5CCategory&name=name&table=category&prefix=xpmsns_pages_&alias=c&type=inWhere","model=%5CXpmsns%5CPages%5CModel%5CCategory&name=param&table=category&prefix=xpmsns_pages_&alias=c&type=inWhere"]
 	 *         	      $data['page'] 页码，默认为 1
 	 *         	      $data['perpage'] 每页显示记录数，默认为 20
 	 *			      $data["keywords"] 按关键词查询
@@ -330,7 +345,7 @@ class Event extends Api {
 	 *               	["type"],  // 类型 
 	 *               	["tags"],  // 标签 
 	 *               	["summary"],  // 活动简介 
-	 *               	["theme"],  // 主题图 
+	 *               	["cover"],  // 封面 
 	 *               	["images"],  // 活动海报 
 	 *               	["begin"],  // 开始时间 
 	 *               	["end"],  // 结束时间 
@@ -346,6 +361,11 @@ class Event extends Api {
 	 *               	["medias"],  // 合作媒体 
 	 *               	["speakers"],  // 嘉宾 
 	 *               	["content"],  // 活动介绍 
+	 *               	["publish_time"],  // 发布时间 
+	 *               	["view_cnt"],  // 浏览量 
+	 *               	["like_cnt"],  // 点赞量 
+	 *               	["dislike_cnt"],  // 讨厌量 
+	 *               	["comment_cnt"],  // 评论量 
 	 *               	["status"],  // 活动状态 
 	 *               	["created_at"],  // 创建时间 
 	 *               	["updated_at"],  // 更新时间 
@@ -372,7 +392,7 @@ class Event extends Api {
 		$data = array_merge( $query, $data );
 
 		// 读取字段
-		$select = empty($data['select']) ? ["event.event_id","event.slug","event.name","event.link","event.categories","event.tags","event.summary","event.theme","event.images","event.begin","event.end","event.area","event.prov","event.city","event.town","event.location","event.price","event.hosts","event.organizers","event.sponsors","event.medias","event.speakers","event.created_at","event.updated_at","c.category_id","c.slug","c.name","c.param"] : $data['select'];
+		$select = empty($data['select']) ? ["event.event_id","event.slug","event.name","event.link","event.categories","event.type","event.tags","event.summary","event.cover","event.images","event.begin","event.end","event.area","event.prov","event.city","event.town","event.location","event.price","event.hosts","event.organizers","event.sponsors","event.medias","event.speakers","event.publish_time","event.view_cnt","event.like_cnt","event.dislike_cnt","event.comment_cnt","event.created_at","event.updated_at","c.category_id","c.slug","c.name","c.param"] : $data['select'];
 		if ( is_string($select) ) {
 			$select = explode(',', $select);
 		}

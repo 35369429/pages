@@ -4,7 +4,7 @@
  * 图集控制器
  *
  * 程序作者: XpmSE机器人
- * 最后修改: 2018-06-30 18:22:37
+ * 最后修改: 2018-06-30 22:58:55
  * 程序母版: /data/stor/private/templates/xpmsns/model/code/controller/Name.php
  */
 
@@ -188,8 +188,8 @@ class AlbumController extends \Xpmse\Loader\Controller {
 			$rs['images'] = $resp;
 		}
 
-		if ( is_array($rs['theme']) &&  !empty($rs['theme']['local'])) {
-			$rs['theme'] = $inst->uploadTheme( $album_id, $rs['theme']['local'], true);
+		if ( is_array($rs['cover']) &&  !empty($rs['cover']['local'])) {
+			$rs['cover'] = $inst->uploadCover( $album_id, $rs['cover']['local'], true);
 		}
 
 		$data = [

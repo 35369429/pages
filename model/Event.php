@@ -4,11 +4,11 @@
  * 活动数据模型
  *
  * 程序作者: XpmSE机器人
- * 最后修改: 2018-06-30 18:24:17
+ * 最后修改: 2018-06-30 23:28:42
  * 程序母版: /data/stor/private/templates/xpmsns/model/code/model/Name.php
  */
 namespace Xpmsns\Pages\Model;
-                                     
+                                          
 use \Xpmse\Excp;
 use \Xpmse\Model;
 use \Xpmse\Utils;
@@ -71,8 +71,8 @@ class Event extends Model {
 		$this->putColumn( 'tags', $this->type("text", ["null"=>true]));
 		// 活动简介
 		$this->putColumn( 'summary', $this->type("string", ["length"=>200, "null"=>true]));
-		// 主题图
-		$this->putColumn( 'theme', $this->type("string", ["length"=>200, "null"=>true]));
+		// 封面
+		$this->putColumn( 'cover', $this->type("string", ["length"=>200, "index"=>true, "null"=>true]));
 		// 活动海报
 		$this->putColumn( 'images', $this->type("text", ["json"=>true, "null"=>true]));
 		// 开始时间
@@ -103,6 +103,16 @@ class Event extends Model {
 		$this->putColumn( 'speakers', $this->type("text", ["json"=>true, "null"=>true]));
 		// 活动介绍
 		$this->putColumn( 'content', $this->type("longText", ["null"=>true]));
+		// 发布时间
+		$this->putColumn( 'publish_time', $this->type("timestamp", ["index"=>true, "null"=>true]));
+		// 浏览量
+		$this->putColumn( 'view_cnt', $this->type("bigInteger", ["length"=>20, "index"=>true, "null"=>true]));
+		// 点赞量
+		$this->putColumn( 'like_cnt', $this->type("bigInteger", ["length"=>20, "index"=>true, "null"=>true]));
+		// 讨厌量
+		$this->putColumn( 'dislike_cnt', $this->type("bigInteger", ["length"=>20, "index"=>true, "null"=>true]));
+		// 评论量
+		$this->putColumn( 'comment_cnt', $this->type("bigInteger", ["length"=>20, "index"=>true, "null"=>true]));
 		// 活动状态
 		$this->putColumn( 'status', $this->type("string", ["length"=>200, "index"=>true, "default"=>"open", "null"=>true]));
 
@@ -117,10 +127,10 @@ class Event extends Model {
 	 */
 	public function format( & $rs ) {
 
-		// 格式化: 主题图
+		// 格式化: 封面
 		// 返回值: {"url":"访问地址...", "path":"文件路径...", "origin":"原始文件访问地址..." }
-		if ( array_key_exists('theme', $rs ) ) {
-			$rs["theme"] = empty($rs["theme"]) ? [] : $this->media->get( $rs["theme"] );
+		if ( array_key_exists('cover', $rs ) ) {
+			$rs["cover"] = empty($rs["cover"]) ? [] : $this->media->get( $rs["cover"] );
 		}
 
 		// 格式化: 活动海报
@@ -269,7 +279,7 @@ class Event extends Model {
 	 *          	  $rs["type"],  // 类型 
 	 *          	  $rs["tags"],  // 标签 
 	 *          	  $rs["summary"],  // 活动简介 
-	 *          	  $rs["theme"],  // 主题图 
+	 *          	  $rs["cover"],  // 封面 
 	 *          	  $rs["images"],  // 活动海报 
 	 *          	  $rs["begin"],  // 开始时间 
 	 *          	  $rs["end"],  // 结束时间 
@@ -285,6 +295,11 @@ class Event extends Model {
 	 *          	  $rs["medias"],  // 合作媒体 
 	 *          	  $rs["speakers"],  // 嘉宾 
 	 *          	  $rs["content"],  // 活动介绍 
+	 *          	  $rs["publish_time"],  // 发布时间 
+	 *          	  $rs["view_cnt"],  // 浏览量 
+	 *          	  $rs["like_cnt"],  // 点赞量 
+	 *          	  $rs["dislike_cnt"],  // 讨厌量 
+	 *          	  $rs["comment_cnt"],  // 评论量 
 	 *          	  $rs["status"],  // 活动状态 
 	 *          	  $rs["created_at"],  // 创建时间 
 	 *          	  $rs["updated_at"],  // 更新时间 
@@ -350,7 +365,7 @@ class Event extends Model {
 	 * @param array   $select       选取字段，默认选取所有
 	 * @return array 活动记录MAP {"event_id1":{"key":"value",...}...}
 	 */
-	public function getInByEventId($event_ids, $select=["event.event_id","event.slug","event.name","c.name","event.theme","event.images","event.begin","event.end","event.status"], $order=["event.created_at"=>"desc"] ) {
+	public function getInByEventId($event_ids, $select=["event.event_id","event.slug","event.name","c.name","event.cover","event.images","event.publish_time","event.begin","event.end","event.status"], $order=["event.created_at"=>"desc"] ) {
 		
 		if ( is_string($select) ) {
 			$select = explode(',', $select);
@@ -426,7 +441,7 @@ class Event extends Model {
 	 *          	  $rs["type"],  // 类型 
 	 *          	  $rs["tags"],  // 标签 
 	 *          	  $rs["summary"],  // 活动简介 
-	 *          	  $rs["theme"],  // 主题图 
+	 *          	  $rs["cover"],  // 封面 
 	 *          	  $rs["images"],  // 活动海报 
 	 *          	  $rs["begin"],  // 开始时间 
 	 *          	  $rs["end"],  // 结束时间 
@@ -442,6 +457,11 @@ class Event extends Model {
 	 *          	  $rs["medias"],  // 合作媒体 
 	 *          	  $rs["speakers"],  // 嘉宾 
 	 *          	  $rs["content"],  // 活动介绍 
+	 *          	  $rs["publish_time"],  // 发布时间 
+	 *          	  $rs["view_cnt"],  // 浏览量 
+	 *          	  $rs["like_cnt"],  // 点赞量 
+	 *          	  $rs["dislike_cnt"],  // 讨厌量 
+	 *          	  $rs["comment_cnt"],  // 评论量 
 	 *          	  $rs["status"],  // 活动状态 
 	 *          	  $rs["created_at"],  // 创建时间 
 	 *          	  $rs["updated_at"],  // 更新时间 
@@ -507,7 +527,7 @@ class Event extends Model {
 	 * @param array   $select       选取字段，默认选取所有
 	 * @return array 活动记录MAP {"slug1":{"key":"value",...}...}
 	 */
-	public function getInBySlug($slugs, $select=["event.event_id","event.slug","event.name","c.name","event.theme","event.images","event.begin","event.end","event.status"], $order=["event.created_at"=>"desc"] ) {
+	public function getInBySlug($slugs, $select=["event.event_id","event.slug","event.name","c.name","event.cover","event.images","event.publish_time","event.begin","event.end","event.status"], $order=["event.created_at"=>"desc"] ) {
 		
 		if ( is_string($select) ) {
 			$select = explode(',', $select);
@@ -571,17 +591,17 @@ class Event extends Model {
 	}
 
 	/**
-	 * 根据活动ID上传主题图。
+	 * 根据活动ID上传封面。
 	 * @param string $event_id 活动ID
 	 * @param string $file_path 文件路径
 	 * @param mix $index 如果是数组，替换当前 index
 	 * @return array 已上传文件信息 {"url":"访问地址...", "path":"文件路径...", "origin":"原始文件访问地址..." }
 	 */
-	public function uploadThemeByEventId($event_id, $file_path, $upload_only=false ) {
+	public function uploadCoverByEventId($event_id, $file_path, $upload_only=false ) {
 
 		$fs =  $this->media->uploadFile( $file_path );
 		if ( $upload_only !== true ) {
-			$this->updateBy('event_id', ["event_id"=>$event_id, "theme"=>$fs['path']]);
+			$this->updateBy('event_id', ["event_id"=>$event_id, "cover"=>$fs['path']]);
 		}
 		return $fs;
 	}
@@ -737,17 +757,17 @@ class Event extends Model {
 	}
 
 	/**
-	 * 根据活动别名上传主题图。
+	 * 根据活动别名上传封面。
 	 * @param string $slug 活动别名
 	 * @param string $file_path 文件路径
 	 * @param mix $index 如果是数组，替换当前 index
 	 * @return array 已上传文件信息 {"url":"访问地址...", "path":"文件路径...", "origin":"原始文件访问地址..." }
 	 */
-	public function uploadThemeBySlug($slug, $file_path, $upload_only=false ) {
+	public function uploadCoverBySlug($slug, $file_path, $upload_only=false ) {
 
 		$fs =  $this->media->uploadFile( $file_path );
 		if ( $upload_only !== true ) {
-			$this->updateBy('slug', ["slug"=>$slug, "theme"=>$fs['path']]);
+			$this->updateBy('slug', ["slug"=>$slug, "cover"=>$fs['path']]);
 		}
 		return $fs;
 	}
@@ -923,7 +943,7 @@ class Event extends Model {
 	 * @param array   $order   排序方式 ["field"=>"asc", "field2"=>"desc"...]
 	 * @return array 活动记录数组 [{"key":"value",...}...]
 	 */
-	public function top( $limit=100, $select=["event.event_id","event.slug","event.name","c.name","event.theme","event.images","event.begin","event.end","event.status"], $order=["event.created_at"=>"desc"] ) {
+	public function top( $limit=100, $select=["event.event_id","event.slug","event.name","c.name","event.cover","event.images","event.publish_time","event.begin","event.end","event.status"], $order=["event.created_at"=>"desc"] ) {
 
 		if ( is_string($select) ) {
 			$select = explode(',', $select);
@@ -968,7 +988,7 @@ class Event extends Model {
 	/**
 	 * 按条件检索活动记录
 	 * @param  array  $query
-	 *         	      $query['select'] 选取字段，默认选择 ["event.event_id","event.slug","event.name","c.name","event.theme","event.images","event.begin","event.end","event.status"]
+	 *         	      $query['select'] 选取字段，默认选择 ["event.event_id","event.slug","event.name","c.name","event.cover","event.images","event.publish_time","event.begin","event.end","event.status"]
 	 *         	      $query['page'] 页码，默认为 1
 	 *         	      $query['perpage'] 每页显示记录数，默认为 20
 	 *			      $query["keywords"] 按关键词查询
@@ -996,7 +1016,7 @@ class Event extends Model {
 	 *               	["type"],  // 类型 
 	 *               	["tags"],  // 标签 
 	 *               	["summary"],  // 活动简介 
-	 *               	["theme"],  // 主题图 
+	 *               	["cover"],  // 封面 
 	 *               	["images"],  // 活动海报 
 	 *               	["begin"],  // 开始时间 
 	 *               	["end"],  // 结束时间 
@@ -1012,6 +1032,11 @@ class Event extends Model {
 	 *               	["medias"],  // 合作媒体 
 	 *               	["speakers"],  // 嘉宾 
 	 *               	["content"],  // 活动介绍 
+	 *               	["publish_time"],  // 发布时间 
+	 *               	["view_cnt"],  // 浏览量 
+	 *               	["like_cnt"],  // 点赞量 
+	 *               	["dislike_cnt"],  // 讨厌量 
+	 *               	["comment_cnt"],  // 评论量 
 	 *               	["status"],  // 活动状态 
 	 *               	["created_at"],  // 创建时间 
 	 *               	["updated_at"],  // 更新时间 
@@ -1033,7 +1058,7 @@ class Event extends Model {
 	 */
 	public function search( $query = [] ) {
 
-		$select = empty($query['select']) ? ["event.event_id","event.slug","event.name","c.name","event.theme","event.images","event.begin","event.end","event.status"] : $query['select'];
+		$select = empty($query['select']) ? ["event.event_id","event.slug","event.name","c.name","event.cover","event.images","event.publish_time","event.begin","event.end","event.status"] : $query['select'];
 		if ( is_string($select) ) {
 			$select = explode(',', $select);
 		}
@@ -1204,7 +1229,7 @@ class Event extends Model {
 			"type",  // 类型
 			"tags",  // 标签
 			"summary",  // 活动简介
-			"theme",  // 主题图
+			"cover",  // 封面
 			"images",  // 活动海报
 			"begin",  // 开始时间
 			"end",  // 结束时间
@@ -1220,6 +1245,11 @@ class Event extends Model {
 			"medias",  // 合作媒体
 			"speakers",  // 嘉宾
 			"content",  // 活动介绍
+			"publish_time",  // 发布时间
+			"view_cnt",  // 浏览量
+			"like_cnt",  // 点赞量
+			"dislike_cnt",  // 讨厌量
+			"comment_cnt",  // 评论量
 			"status",  // 活动状态
 			"created_at",  // 创建时间
 			"updated_at",  // 更新时间

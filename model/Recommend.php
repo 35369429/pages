@@ -181,12 +181,12 @@ function getContentsBy( $type,  $recommend_id,  $keywords=[], $page=1, $perpage=
 				$qb->select('content.article_id as id');
 				break;
 			case 'album':
-				$qb =  Utils::getTab("xpmsns_pages_album as content", "{none}")->query();
+				$qb =  Utils::getTab("xpmsns_pages_album as content", "{none}")->query()->where('status','=', 'on');;
 				$keywordFields = ["content.tags","content.title"];
 				$qb->select('content.album_id as id');
 				break;
 			case 'event':
-				$qb =  Utils::getTab("xpmsns_pages_event as content", "{none}")->query();
+				$qb =  Utils::getTab("xpmsns_pages_event as content", "{none}")->query()->where('status', '<>', 'draft');
 				$keywordFields = ["content.tags","content.name"];
 				$qb->select('content.event_id as id');
 				break;
@@ -258,9 +258,7 @@ function getContentsBy( $type,  $recommend_id,  $keywords=[], $page=1, $perpage=
 
 		// 必须包含主题图片
 		if ( $query['thumb_only'] ) {
-			if ( $recommend['ctype'] == 'article' || $recommend['ctype'] == 'all' ) {
-				$qb->whereNotNull('content.cover');
-			}
+			$qb->whereNotNull('content.cover');
 		}
 
 
@@ -390,18 +388,32 @@ function getContentsBy( $type,  $recommend_id,  $keywords=[], $page=1, $perpage=
 		// 根据类型选取内容
 		switch ($recommend['ctype']) {
 			case 'article':
-				
+				$recommend['contents']['data'] = (new \Xpmsns\Pages\Model\Article)->getInByArticleId( $ids, [
+					'title', 'cover', 'article_id', 'images', 'thumbs', 'videos', 'author', 'origin', 'origin_url','summary','status', 'publish_time',
+					'view_cnt','like_cnt','dislike_cnt','comment_cnt',
+				]);
 				break;
 			case 'album':
-			
+				$recommend['contents']['data'] = (new \Xpmsns\Pages\Model\Album)->getInByAlbumId( $ids, [
+					'title', 'cover', 'album_id', 'images','link', 'tags', 'author', 'origin', 'origin_url','summary','status', 'publish_time',
+					'view_cnt','like_cnt','dislike_cnt','comment_cnt',
+					'c.name'
+				]);
+
 				break;
 			case 'event':
+				$recommend['contents']['data'] = (new \Xpmsns\Pages\Model\Event)->getInByEventId( $ids, [
+					'name', 'cover', 'event_id', 'images','link', 'tags','summary','status', 'publish_time',
+					'view_cnt','like_cnt','dislike_cnt','comment_cnt',
+					'c.name'
+				]);
 				
 				break;
 			default:
 				
 				$recommend['contents']['data'] = (new \Xpmsns\Pages\Model\Article)->getInByArticleId( $ids, [
-					'title', 'cover', 'article_id', 'images', 'thumbs', 'videos', 'author', 'origin', 'origin_url','summary','status', 'publish_time'
+					'title', 'cover', 'article_id', 'images', 'thumbs', 'videos', 'author', 'origin', 'origin_url','summary','status', 'publish_time',
+					'view_cnt','like_cnt','dislike_cnt','comment_cnt'
 				]);
 
 				break;

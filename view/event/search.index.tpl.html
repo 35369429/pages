@@ -156,8 +156,9 @@ use \Xpmse\T;
 								<th class="font-w300"> 活动别名 </th>
 								<th class="font-w300"> 活动主题 </th>
 								<th class="font-w300"> 栏目 </th>
-								<th class="font-w300"> 主题图 </th>
+								<th class="font-w300"> 封面 </th>
 								<th class="font-w300"> 活动海报 </th>
+								<th class="font-w300"> 发布时间 </th>
 								<th class="font-w300"> 开始时间 </th>
 								<th class="font-w300"> 结束时间 </th>
 								<th class="font-w300"> 活动状态 </th>
@@ -182,8 +183,8 @@ use \Xpmse\T;
 								</td>
 								<td class="font-w300">
 									<div style="line-height: 84px;display: inline-block; max-width:260px;word-wrap:break-word;" > 
-										<?php if ( !empty($rs["theme"]['url']) ) : ?>
-										<img src="<?=$rs["theme"]['url']?>" height="64" style="max-width:260px;"/> 
+										<?php if ( !empty($rs["cover"]['url']) ) : ?>
+										<img src="<?=$rs["cover"]['url']?>" height="64" style="max-width:260px;"/> 
 										<?php endif;?>
 									</div>
 								</td>
@@ -197,6 +198,9 @@ use \Xpmse\T;
 										if ($idx > 1) { break;} // 最多显示3张图
 										endforeach ; ?> 
 									</div>
+								</td>
+								<td class="font-w300">
+									<?php $v=null; $v=T::s("{{publish_time|toDate('Y年m月d日')}}  @{{publish_time|toTime('h时i分')}}", $rs ); echo empty($v) ? T::s("", $rs ) : $v; ?>
 								</td>
 								<td class="font-w300">
 									<?php $v=null; $v=T::s("{{begin|toDate('Y年m月d日')}}  @{{begin|toTime('h时i分')}}", $rs ); echo empty($v) ? T::s("", $rs ) : $v; ?>
@@ -213,7 +217,7 @@ use \Xpmse\T;
 						</tbody>
 
 						<tfoot>
-							<tr><td colspan="9"> <nav class="pull-right">
+							<tr><td colspan="10"> <nav class="pull-right">
 
 								<ul class="pagination">
 									<?php if ($response['prev'] !== false): ?>

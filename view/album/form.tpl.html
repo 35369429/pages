@@ -265,12 +265,12 @@ use \Xpmse\T;
 
 
 
-	<!-- 单图上传: 主题图 (theme) 开始  -->
-	<div class="xpmse-images  " name="theme">
+	<!-- 单图上传: 封面 (cover) 开始  -->
+	<div class="xpmse-images  " name="cover">
 		<div class="form-group " >
-			<label class="col-xs-2 control-label" for="theme">主题图</label>
+			<label class="col-xs-2 control-label" for="cover">封面</label>
 			<div class="col-xs-8">
-		   		<div name="theme" class="file-uploader rounded rounded-4 push-10-t"
+		   		<div name="cover" class="file-uploader rounded rounded-4 push-10-t"
 					data-api='/_a/mina/uploader/upload?type=image'
 					data-title='请上传主题图'
 					data-previews=""
@@ -283,13 +283,70 @@ use \Xpmse\T;
 					data-progress="yes"
 					data-cropable="1"
 					data-draggable="yes"
-					data-src="<?=T::v('<%=theme.url%>', $rs )?>"
-					data-path="<?=T::v('<%=theme.path%>', $rs )?>"
+					data-src="<?=T::v('<%=cover.url%>', $rs )?>"
+					data-path="<?=T::v('<%=cover.path%>', $rs )?>"
 					></div>
 				<div class="help-block"></div>
 			</div>
 		</div> 
-	</div><!-- END 单图上传: 主题图 (theme) -->
+	</div><!-- END 单图上传: 封面 (cover) -->
+
+
+
+
+
+	<!-- 单行时间日期: 发布时间 (publish_time) 开始  -->
+	<div class="form-group   ">
+		<label class="col-xs-2 control-label" for="publish_time__date">发布时间</label>
+		<div class="col-xs-4">
+			<input 
+				 name="publish_time__date" id="publish_time__date"
+				 class="js-datepicker form-control  input-lg" type="text" 
+				 data-date-format="yyyy年mm月dd日" 
+				 placeholder="图集发布时间 "
+				 value="<?=T::v('<%=publish_time | toDate%>', $rs )?>"  />
+
+			<div class="help-block"></div>
+		</div>
+		<div class="col-xs-4">
+			<input 
+				name="publish_time__time" id="publish_time__time"
+				class="js-masked-time form-control  input-lg"  type="text" 
+				placeholder="请输入时间"
+				value="<?=T::v('<%=publish_time | toTime%>', $rs )?>" /> 
+		</div>
+		<input name="publish_time" id="publish_time" type="hidden" value="<?=T::v('<%=publish_time | toDateTime%>', $rs )?>" />
+
+		<script type="text/javascript">
+		$(function(){
+
+			function publish_time_change() {
+				var tm = $('input[name=publish_time__time').val();
+					tm = tm.replace('@ ', '');
+					tm = tm.replace('时', ':');
+					tm = tm.replace('分', ':');
+					tm = tm = tm + '00';
+
+				var dt = $('input[name=publish_time__date]').val();
+					dt = dt.replace('年', '-');
+					dt = dt.replace('月', '-');
+					dt = dt.replace('日', '');
+
+				var datetime = dt + ' ' + tm;
+				$('input[name=publish_time]').val( datetime );
+			}
+
+			$('input[name=publish_time__date]').on("change", function( e ){
+				publish_time_change();
+			});
+			$('input[name=publish_time__time').on("change", function( e ){
+				publish_time_change();
+			});
+		});
+		</script>
+
+	</div><!-- END 单行时间日期: 发布时间 (publish_time) -->
+
 
 
 
