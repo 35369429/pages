@@ -4,7 +4,7 @@
  * 推荐数据模型
  *
  * 程序作者: XpmSE机器人
- * 最后修改: 2018-06-30 20:23:48
+ * 最后修改: 2018-06-30 22:44:59
  * 程序母版: /data/stor/private/templates/xpmsns/model/code/model/Name.php
  */
 namespace Xpmsns\Pages\Model;
@@ -133,6 +133,281 @@ class Recommend extends Model {
 	 */
 	function getArticlesBySlug(  $recommend_id,  $keywords=[], $now=null, $page=1, $perpage=20 ) {
 		return $this->getArticlesBy('slug', $recommend_id,  $keywords, $now, $page, $perpage );
+	}
+	/**
+	 * 自定义函数 按别名选取推荐内容
+	 */
+function getContentsBySlug(  $recommend_id,  $keywords=[],  $page=1, $perpage=20, $now=null ) {
+		return $this->getContentsBy('slug', $recommend_id,  $keywords,  $page, $perpage,$now );
+	}
+	/**
+	 * 自定义函数 按推荐ID选取推荐内容
+	 */
+function getContents(  $recommend_id,  $keywords=[],  $page=1, $perpage=20, $now=null ) {
+		return $this->getContentsBy('recommendId', $recommend_id, $keywords,  $page, $perpage,$now );
+	}
+	/**
+	 * 自定义函数 按Type选取推荐内容
+	 */
+function getContentsBy( $type,  $recommend_id,  $keywords=[], $page=1, $perpage=20, $now=null) {
+		$select = [
+					'recommend.title', 'recommend.type', 'recommend.ctype', 'recommend.keywords', "recommend.period", 
+					'recommend.thumb_only', 'recommend.video_only',
+					"orderby", 'articles', 'albums', 'events', 'categories'
+				];
+		$method = "getBy{$type}";
+		if ( !method_exists( $this, $method) ) {
+			throw new Excp( "推荐数据查询方法不存在", 404, ['method'=>$method] );
+		}
+      	$recommend = $this->$method( $recommend_id ,  $select );
+		
+		if ( empty($recommend) ) {
+			throw new Excp( "推荐数据不存在", 404, ['recommend_id'=>$recommend_id] );
+		}
+
+		// 静态关联
+		if ( $recommend['type'] == 'static' )  {
+			
+			// 提取选定文章信息
+			return $recommend;
+		}
+
+
+		// 根据类型选取内容
+		switch ($recommend['ctype']) {
+			case 'article':
+				$qb =  Utils::getTab("xpmsns_pages_article as content", "{none}")->query()->where('status','=', 'published');
+				$keywordFields = ["content.keywords", "content.title"];
+				$qb->select('content.article_id as id');
+				break;
+			case 'album':
+				$qb =  Utils::getTab("xpmsns_pages_album as content", "{none}")->query();
+				$keywordFields = ["content.tags","content.title"];
+				$qb->select('content.album_id as id');
+				break;
+			case 'event':
+				$qb =  Utils::getTab("xpmsns_pages_event as content", "{none}")->query();
+				$keywordFields = ["content.tags","content.name"];
+				$qb->select('content.event_id as id');
+				break;
+			// case 'all': // 使用搜索引擎来实现，先分开查询
+				// break;
+			default:
+				$qb =  Utils::getTab("xpmsns_pages_article as content", "{none}")->query();
+				$keywordFields = ["content.keywords", "content.title"];
+				$qb->select('content.article_id as id');
+				break;
+		}
+
+
+
+        // 排序条件
+		switch ($recommend['orderby']) {
+			case 'publish_time': 
+				$query['order'] =  "publish_time desc";
+				break;
+			case 'view_cnt':
+				$query['order'] =  "view_cnt desc";
+				break;
+			case 'like_cnt':
+				$query['order'] =  "like_cnt desc";
+				break;
+			case 'dislike_cnt':
+				$query['order'] =  "dislike_cnt desc";
+				break;
+			case 'comment_cnt':
+				$query['order'] =  "comment_cnt desc";
+				break;
+			default:
+				$query['order'] =  "publish_time desc";
+				break;
+		}
+
+		// 查询条件
+		if ( !empty($now) ) {
+          $query['now'] = $now;
+        }
+
+		if ( !empty($recommend['period']) ) {
+			$query['period'] = $recommend['period'];
+		}
+
+		// 按分类提取数据
+		if ( !empty($recommend['categories']) ) {
+			$query['category_ids'] = $recommend['categories'];
+		}
+
+		$recommend['keywords'] = str_replace("\r", "", $recommend['keywords']);
+		$recommend['keywords'] = str_replace("\n", "", $recommend['keywords']);
+		$recommend['keywords'] = explode(',', trim($recommend['keywords']) );
+		$keywords = is_string($keywords) ? explode(',',$keywords) : $keywords;
+		$keywords = array_merge( $recommend['keywords'], $keywords );
+
+		// 按关键词提取数据
+		$query['keywords'] =$keywords;
+
+		// 按分类提取数据
+		if ( !empty($recommend['categories']) ) {
+			$query['category_ids'] = $recommend['categories'];
+		}
+
+
+		if ( $recommend['thumb_only'] ) {
+			$query['thumb_only'] = 1;
+		}
+
+		// 必须包含主题图片
+		if ( $query['thumb_only'] ) {
+			if ( $recommend['ctype'] == 'article' || $recommend['ctype'] == 'all' ) {
+				$qb->whereNotNull('content.cover');
+			}
+		}
+
+
+		// 按分类ID查找
+		if ( array_key_exists('category_ids', $query)  && !empty($query['category_ids']) ) {
+			$cids = is_string($query['category_ids']) ? explode(',', $query['category_ids']) : $query['category_ids'];
+			if ( !empty($cids) ) {
+				if ( $recommend['ctype'] == 'article' || $recommend['ctype'] == 'all' ) {
+					$qb->leftJoin("xpmsns_pages_article_category as ac", "ac.article_id", "=", "content.article_id");
+					$qb->whereIn('ac.category_id', $cids );	
+				}else {
+					$qb->where(function ( $qb ) use($cids) {
+						foreach( $cids as $cid ) {
+							$qb->orWhere('categories', "like", "%{$cid}%");  // 名称符合关键词
+						}
+					});
+				}
+			}
+		}
+
+		// 按关键词词组查找 ( 非搜索 )
+		if ( array_key_exists('keywords', $query) && !empty($query['keywords']) ) {
+
+			// 过滤空值
+			$keywords = $query['keywords'];
+			foreach( $keywords as $idx=>$key ) {
+				$keywords[$idx] = trim($key);
+				if  ( empty($keywords[$idx]) ) {
+					unset($keywords[$idx]);
+				}
+			}
+
+			if ( !empty($keywords) ) {
+				$qb->where(function ( $qb ) use($keywords, $keywordFields) {
+					foreach( $keywords as $idx=>$keyword ) {
+						foreach ($keywordFields as $keywordField) {
+							$qb->orWhere($keywordField, "like", "%{$keyword}%");  // 名称符合关键词
+						}
+					}
+				});
+			}
+		}
+
+
+		// 按时间范围
+		if ( array_key_exists('period', $query) && !empty($query['period']) ) {
+			$now = empty($query['now']) ? date('Y-m-d H:i:s') : date('Y-m-d H:i:s', strtotime($query['now']) );
+			$now_t = strtotime( $now );
+
+			switch ($query['period']) {
+
+				case '24hours':  // 24小时
+					$from = date('Y-m-d H:i:s', strtotime("-24 hours",$now_t));
+					$qb->where('publish_time' , '<=', $now );
+					$qb->where('publish_time' , '>=', $from );
+					break;
+
+				case 'daily' : // 当天
+					$from = date('Y-m-d 00:00:00', $now_t);
+					$end = date('Y-m-d 23:59:59', $now_t);
+					$qb->where('publish_time' , '<=', $end );
+					$qb->where('publish_time' , '>=', $from );
+					break;
+
+				case '7days': // 7天
+					$end = date('Y-m-d 00:00:00', $now_t);
+					$end_t = strtotime($end);
+					$from = date('Y-m-d 23:59:59',  strtotime("-7 days",$end_t));
+					$qb->where('publish_time' , '<=', $end );
+					$qb->where('publish_time' , '>=', $from );
+					break;
+
+				case 'weekly': // 本周
+					$from = date('Y-m-d 00:00:00', strtotime('-1 Monday',$now_t));
+					$from_t = strtotime($from);
+					$end = date('Y-m-d 23:59:59',  strtotime("+1 Weeks",$from_t));
+					$qb->where('publish_time' , '<=', $end );
+					$qb->where('publish_time' , '>=', $from );
+					break;
+
+				case '30days': // 30天
+					$end = date('Y-m-d 00:00:00', $now_t);
+					$end_t = strtotime($end);
+					$from = date('Y-m-d 23:59:59',  strtotime("-30 days",$end_t));
+					$qb->where('publish_time' , '<=', $end );
+					$qb->where('publish_time' , '>=', $from );
+					break;
+
+				case 'monthly': // 本月
+					$from = date('Y-m-01 00:00:00', $now_t);
+					$from_t = strtotime($from);
+					$end = date('Y-m-d 23:59:59',  strtotime("+1 Month",$from_t));
+					$qb->where('publish_time' , '<=', $end );
+					$qb->where('publish_time' , '>=', $from );
+					break;
+
+				case 'yearly':  // 今年
+					$from = date('Y-01-01 00:00:00', $now_t);
+					$end = date('Y-12-31 23:59:59',  $now_t);
+					$qb->where('publish_time' , '<=', $end );
+					$qb->where('publish_time' , '>=', $from );
+					break;
+
+				default: // 无限
+					# code...
+					break;
+			}
+		}
+
+
+
+		// 查询文章列表
+		$resp = $qb->distinct()->pgArray( $perpage, ['content._id'], 'page', $page );
+		if ( $_GET['debug'] == 1 ) {
+			$recommend['_sql'] = $qb->getSql();
+			$recommend['_query'] = $query; 
+		}
+
+		$recommend['contents'] = $resp;
+
+		if ( empty($resp['data']) ) {
+			return $recommend;
+		}
+
+		$ids = array_column($resp['data'], 'id');
+
+		// 根据类型选取内容
+		switch ($recommend['ctype']) {
+			case 'article':
+				
+				break;
+			case 'album':
+			
+				break;
+			case 'event':
+				
+				break;
+			default:
+				
+				$recommend['contents']['data'] = (new \Xpmsns\Pages\Model\Article)->getInByArticleId( $ids, [
+					'title', 'cover', 'article_id', 'images', 'thumbs', 'videos', 'author', 'origin', 'origin_url','summary','status', 'publish_time'
+				]);
+
+				break;
+		}
+
+		return $recommend;
 	}
 
 	/**
