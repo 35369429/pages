@@ -45,7 +45,7 @@
 | /desktop/event/list | 活动栏目列表页  | `/event/list/{cid:.+}.html`  | 栏目ID| 手机浏览器: `/mobile/event/list` <br/> 微信浏览器: `/mobile/event/list` <br/> 微信小程序: `/event/list` |  图集栏目列表页 |
 | /desktop/event/recommend | 活动推荐列表页  | `/event/recommend/{rid:.+}.html` | 推荐别名  |手机浏览器: `/mobile/event/recommend` <br/> 微信浏览器: `/mobile/event/recommend` <br/> 微信小程序: `/event/recommend` | 活动推荐列表页 |
 | /desktop/event/detail | 活动详情页 | `/event/{id:[0-9a-zA-Z]+}.html`  | 文章ID  |手机浏览器: `/mobile/event/detail` <br/> 微信浏览器: `/mobile/event/detail` <br/> 微信小程序: `/event/detail` | 活动详情页 |
-| /desktop/article/special | 专题页  | `/article/special/{sid:.+}.html`  | 专题别名  |手机浏览器: `/mobile/article/special` <br/> 微信浏览器: `/mobile/article/special` <br/> 微信小程序: `/article/special` | 专题列表页 |
+| /desktop/article/special | 专题页  | `/article/special/{sid:.+}.html`  | 专题别名  |手机浏览器: `/mobile/article/special` <br/> 微信浏览器: `/mobile/article/special` <br/> 微信小程序: `/article/special` | 专题页 |
 
 
 **通用文件清单**
