@@ -36,16 +36,16 @@
 | 简墨页面 | 页面名称 | 页面路由 | 路由参数 | 兼容页面 | 页面简介 |
 | --- | --- |  --- | --- | --- | --- |
 | /desktop/article/index | 首页 | `/` <br/> `/index.html` <br/> `/article.html`  | |手机浏览器: `/mobile/article/index` <br/> 微信浏览器: `/mobile/article/index` <br/> 微信小程序: `/article` | 网站首页 |
-| /desktop/article/list | 图文栏目列表页  | /article/list/{cid:.+}.html  | 栏目ID| 手机浏览器: `/mobile/article/list` <br/> 微信浏览器: `/mobile/article/list` <br/> 微信小程序: `/article/list` | 栏目列表页 |
-| /desktop/article/recommend | 图文推荐列表页  | /article/recommend/{rid:.+}.html | 推荐别名  |手机浏览器: `/mobile/article/recommend` <br/> 微信浏览器: `/mobile/article/recommend` <br/> 微信小程序: `/article/recommend` | 图文推荐列表页 |
-| /desktop/article/detail | 图文详情页 | /article/{id:[0-9a-zA-Z]+}.html  | 文章ID  |手机浏览器: `/mobile/article/detail` <br/> 微信浏览器: `/mobile/article/detail` <br/> 微信小程序: `/article/detail` | 图文详情页 |
-| /desktop/album/list | 图集栏目列表页  | /album/list/{cid:.+}.html  | 栏目ID| 手机浏览器: `/mobile/album/list` <br/> 微信浏览器: `/mobile/album/list` <br/> 微信小程序: `/album/list` |  图集栏目列表页 |
-| /desktop/album/recommend | 图集推荐列表页  | /album/recommend/{rid:.+}.html | 推荐别名  |手机浏览器: `/mobile/album/recommend` <br/> 微信浏览器: `/mobile/album/recommend` <br/> 微信小程序: `/album/recommend` | 图集推荐列表页 |
-| /desktop/album/detail | 图集详情页 | /album/{id:[0-9a-zA-Z]+}.html  | 文章ID  |手机浏览器: `/mobile/album/detail` <br/> 微信浏览器: `/mobile/album/detail` <br/> 微信小程序: `/album/detail` | 图集详情页 |
-| /desktop/event/list | 活动栏目列表页  | /event/list/{cid:.+}.html  | 栏目ID| 手机浏览器: `/mobile/event/list` <br/> 微信浏览器: `/mobile/event/list` <br/> 微信小程序: `/event/list` |  图集栏目列表页 |
-| /desktop/event/recommend | 活动推荐列表页  | /event/recommend/{rid:.+}.html | 推荐别名  |手机浏览器: `/mobile/event/recommend` <br/> 微信浏览器: `/mobile/event/recommend` <br/> 微信小程序: `/event/recommend` | 活动推荐列表页 |
-| /desktop/event/detail | 活动详情页 | /event/{id:[0-9a-zA-Z]+}.html  | 文章ID  |手机浏览器: `/mobile/event/detail` <br/> 微信浏览器: `/mobile/event/detail` <br/> 微信小程序: `/event/detail` | 活动详情页 |
-| /desktop/article/special | 专题页  | /article/special/{sid:.+}.html  | 专题别名  |手机浏览器: `/mobile/article/special` <br/> 微信浏览器: `/mobile/article/special` <br/> 微信小程序: `/article/special` | 专题列表页 |
+| /desktop/article/list | 图文栏目列表页  | `/article/list/{cid:.+}.html`  | 栏目ID| 手机浏览器: `/mobile/article/list` <br/> 微信浏览器: `/mobile/article/list` <br/> 微信小程序: `/article/list` | 栏目列表页 |
+| /desktop/article/recommend | 图文推荐列表页  | `/article/recommend/{rid:.+}.html` | 推荐别名  |手机浏览器: `/mobile/article/recommend` <br/> 微信浏览器: `/mobile/article/recommend` <br/> 微信小程序: `/article/recommend` | 图文推荐列表页 |
+| /desktop/article/detail | 图文详情页 | `/article/{id:[0-9a-zA-Z]+}.html`  | 文章ID  |手机浏览器: `/mobile/article/detail` <br/> 微信浏览器: `/mobile/article/detail` <br/> 微信小程序: `/article/detail` | 图文详情页 |
+| /desktop/album/list | 图集栏目列表页  | `/album/list/{cid:.+}.html`  | 栏目ID| 手机浏览器: `/mobile/album/list` <br/> 微信浏览器: `/mobile/album/list` <br/> 微信小程序: `/album/list` |  图集栏目列表页 |
+| /desktop/album/recommend | 图集推荐列表页  | `/album/recommend/{rid:.+}.html` | 推荐别名  |手机浏览器: `/mobile/album/recommend` <br/> 微信浏览器: `/mobile/album/recommend` <br/> 微信小程序: `/album/recommend` | 图集推荐列表页 |
+| /desktop/album/detail | 图集详情页 | `/album/{id:[0-9a-zA-Z]+}.html`  | 文章ID  |手机浏览器: `/mobile/album/detail` <br/> 微信浏览器: `/mobile/album/detail` <br/> 微信小程序: `/album/detail` | 图集详情页 |
+| /desktop/event/list | 活动栏目列表页  | `/event/list/{cid:.+}.html`  | 栏目ID| 手机浏览器: `/mobile/event/list` <br/> 微信浏览器: `/mobile/event/list` <br/> 微信小程序: `/event/list` |  图集栏目列表页 |
+| /desktop/event/recommend | 活动推荐列表页  | `/event/recommend/{rid:.+}.html` | 推荐别名  |手机浏览器: `/mobile/event/recommend` <br/> 微信浏览器: `/mobile/event/recommend` <br/> 微信小程序: `/event/recommend` | 活动推荐列表页 |
+| /desktop/event/detail | 活动详情页 | `/event/{id:[0-9a-zA-Z]+}.html`  | 文章ID  |手机浏览器: `/mobile/event/detail` <br/> 微信浏览器: `/mobile/event/detail` <br/> 微信小程序: `/event/detail` | 活动详情页 |
+| /desktop/article/special | 专题页  | `/article/special/{sid:.+}.html`  | 专题别名  |手机浏览器: `/mobile/article/special` <br/> 微信浏览器: `/mobile/article/special` <br/> 微信小程序: `/article/special` | 专题列表页 |
 
 
 **通用文件清单**
