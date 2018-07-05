@@ -4,7 +4,7 @@
  * 推荐数据模型
  *
  * 程序作者: XpmSE机器人
- * 最后修改: 2018-07-02 20:59:06
+ * 最后修改: 2018-07-05 10:58:52
  * 程序母版: /data/stor/private/templates/xpmsns/model/code/model/Name.php
  */
 namespace Xpmsns\Pages\Model;
@@ -149,7 +149,7 @@ function getContents(  $recommend_id,  $keywords=[],  $page=1, $perpage=20, $now
 	/**
 	 * 自定义函数 按Type选取推荐内容
 	 */
-	function getContentsBy( $type,  $recommend_id,  $keywords=[], $page=1, $perpage=20, $now=null) {
+function getContentsBy( $type,  $recommend_id,  $keywords=[], $page=1, $perpage=20, $now=null) {
 		$select = [
 					'recommend.title', 'recommend.type', 'recommend.ctype', 'recommend.keywords', "recommend.period", 
 					'recommend.thumb_only', 'recommend.video_only',
@@ -342,9 +342,9 @@ function getContents(  $recommend_id,  $keywords=[],  $page=1, $perpage=20, $now
 						break;
 
 					case '7days': // 7天
-						$end = date('Y-m-d 00:00:00', $now_t);
+						$end = date('Y-m-d H:i:s', $now_t);
 						$end_t = strtotime($end);
-						$from = date('Y-m-d 23:59:59',  strtotime("-7 days",$end_t));
+						$from = date('Y-m-d H:i:s',  strtotime("-7 days",$end_t));
 						$qb->where('publish_time' , '<=', $end );
 						$qb->where('publish_time' , '>=', $from );
 						break;
@@ -352,15 +352,15 @@ function getContents(  $recommend_id,  $keywords=[],  $page=1, $perpage=20, $now
 					case 'weekly': // 本周
 						$from = date('Y-m-d 00:00:00', strtotime('-1 Monday',$now_t));
 						$from_t = strtotime($from);
-						$end = date('Y-m-d 23:59:59',  strtotime("+1 Weeks",$from_t));
+						$end = date('Y-m-d 00:00:00',  strtotime("+1 Weeks",$from_t));
 						$qb->where('publish_time' , '<=', $end );
 						$qb->where('publish_time' , '>=', $from );
 						break;
 
 					case '30days': // 30天
-						$end = date('Y-m-d 00:00:00', $now_t);
+						$end = date('Y-m-d H:i:s', $now_t);
 						$end_t = strtotime($end);
-						$from = date('Y-m-d 23:59:59',  strtotime("-30 days",$end_t));
+						$from = date('Y-m-d H:i:s',  strtotime("-30 days",$end_t));
 						$qb->where('publish_time' , '<=', $end );
 						$qb->where('publish_time' , '>=', $from );
 						break;
@@ -368,7 +368,7 @@ function getContents(  $recommend_id,  $keywords=[],  $page=1, $perpage=20, $now
 					case 'monthly': // 本月
 						$from = date('Y-m-01 00:00:00', $now_t);
 						$from_t = strtotime($from);
-						$end = date('Y-m-d 23:59:59',  strtotime("+1 Month",$from_t));
+						$end = date('Y-m-d 00:00:00',  strtotime("+1 Month",$from_t));
 						$qb->where('publish_time' , '<=', $end );
 						$qb->where('publish_time' , '>=', $from );
 						break;
@@ -386,6 +386,13 @@ function getContents(  $recommend_id,  $keywords=[],  $page=1, $perpage=20, $now
 				}
 			}
 
+
+			// 排序: 
+			if ( array_key_exists('order', $query) && !empty($query['order'])  ) {
+				$order = explode(' ', $query['order']);
+				$order[1] = !empty($order[1]) ? $order[1] : 'asc';
+				$qb->orderBy($order[0], $order[1] );
+			}
 
 
 			// 查询文章列表
