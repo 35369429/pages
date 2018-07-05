@@ -4,7 +4,7 @@
  * 推荐数据模型
  *
  * 程序作者: XpmSE机器人
- * 最后修改: 2018-07-05 10:58:52
+ * 最后修改: 2018-07-05 14:26:48
  * 程序母版: /data/stor/private/templates/xpmsns/model/code/model/Name.php
  */
 namespace Xpmsns\Pages\Model;
@@ -49,7 +49,7 @@ class Recommend extends Model {
 	 */
 	function getArticlesBy( $type,  $recommend_id,  $keywords=[], $now=null, $page=1, $perpage=20 ) {
 	
-		$select = ['recommend.title', 'recommend.type', 'recommend.keywords', "recommend.period", "orderby", 'articles', 'categories'];
+		$select = ['recommend.title','recommend.summary',  'recommend.type', 'recommend.keywords', "recommend.period", "orderby", 'articles', 'categories'];
 		$method = "getBy{$type}";
 		if ( !method_exists( $this, $method) ) {
 			throw new Excp( "推荐数据查询方法不存在", 404, ['method'=>$method] );
@@ -151,7 +151,7 @@ function getContents(  $recommend_id,  $keywords=[],  $page=1, $perpage=20, $now
 	 */
 function getContentsBy( $type,  $recommend_id,  $keywords=[], $page=1, $perpage=20, $now=null) {
 		$select = [
-					'recommend.title', 'recommend.type', 'recommend.ctype', 'recommend.keywords', "recommend.period", 
+					'recommend.title', 'recommend.summary', 'recommend.type', 'recommend.ctype', 'recommend.keywords', "recommend.period", 
 					'recommend.thumb_only', 'recommend.video_only',
 					"orderby", 'articles', 'albums', 'events', 'categories'
 				];
