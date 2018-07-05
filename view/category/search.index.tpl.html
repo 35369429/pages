@@ -163,9 +163,10 @@ use \Xpmse\Utils as Utils;
 								<th class="font-w300" style="width:5%;max-width:120px;"> 编号</th>
 								<th class="font-w300" style="width:5%;"> 优先级 </th>
 								<th class="font-w300" style="width:15%;">名称</th>
-								<th class="font-w300" style="width:12%;">参数</th>
+								<th class="font-w300" style="width:9%;">参数</th>
 								<th class="font-w300" style="width:10%;">项目</th>
-								<th class="font-w300" style="width:10%;">是否隐藏</th>
+								<th class="font-w300" style="width:5%;">导航</th>
+								<th class="font-w300" style="width:5%;">隐藏</th>
 								<th class="font-w300" style="width:10%;">
 								<?php if ( $query['order'] == 'created_at desc' ) :?>
 									添加时间
@@ -192,12 +193,12 @@ use \Xpmse\Utils as Utils;
 								<i class="fa fa-angle-right"></i>
 
 							</td>
-								<td><?=$rs['priority'] ? $rs['priority'] : ''?></td>
+								<td><?=$rs['priority'] ? $rs['priority'] : '0'?></td>
 								<td><?=$rs['name']?></td>
 								<td><?=$rs['param']?></td>
 									<td><?=$rs['project']?$rs['project']:'default'?></td>
+									<td><?=$rs['isnav']?'是':'否'?></td>
 									<td><?=$rs['hidden']?'隐藏':'显示'?></td>
-
 									<td> 
 									<?php if ( $query['order'] == 'created_at desc' ) :?>
 										<?=$rs['created_at']?> 
@@ -239,6 +240,7 @@ use \Xpmse\Utils as Utils;
 									</td>
 									<td><?=$rs['param']?></td>
 									<td><?=$rs['project']?$rs['project']:'default'?></td>
+									<td><?=$rs['isnav']?'是':'否'?></td>
 									<td><?=$rs['hidden']?'隐藏':'显示'?></td>
 
 									<td> 

@@ -143,6 +143,7 @@ class Category extends Api {
 		$this->qb( $qb, 'fullname', 'fullname', $query, ["and", "or", "in"] );
 		$this->qb( $qb, 'parent_id', 'parentId', $query, ["and", "or", "in"] );
 		$this->qb( $qb, 'hidden', 'hidden', $query );
+		$this->qb( $qb, 'isnav', 'isnav', $query );
 		$this->qb( $qb, 'status', 'status', $query );
 		$this->qb( $qb, 'param', 'param', $query, ['and', 'or'], 'like');
 
@@ -163,7 +164,7 @@ class Category extends Api {
 		$qb->select( $select );
 		$result = $qb ->paginate($query['perpage'],['category_id'], 'page', $query['page'] );
 		$resultData = $result->toArray();
-		
+			
 
 		// 处理结果集
 		$data = $resultData['data'];
@@ -230,7 +231,7 @@ class Category extends Api {
 		$select = is_array($select) ? $select : explode(',', $select);
 
 		// 验证 Select 参数
-		$allowFields = ["*","category_id","project","page","name","fullname","parent_id","priority","hidden","param","status"];
+		$allowFields = ["*","category_id","project","page","name","fullname","parent_id","priority","hidden","isnav","param","status"];
 
 		foreach ($select as $idx => $field) {
 			if ( !in_array($field, $allowFields)){

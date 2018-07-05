@@ -40,10 +40,12 @@ class Category extends Model {
 				 ->putColumn( 'wechat_offset', $this->type('integer', ['default'=>"0"]) )      // 同步文章的 Offset
 				 ->putColumn( 'name', $this->type('string',  ['length'=>128]) )  // 类型名称
 				 ->putColumn( 'fullname', $this->type('string',  ['length'=>256]) )  // 类型全名
+				 ->putColumn( 'link', $this->type('string',  ['length'=>200]) )  // 自定义链接
 				 ->putColumn( 'root_id', $this->type('string', ["index"=>1] )) //  根ID 
 				 ->putColumn( 'parent_id', $this->type('string', ["index"=>1] )) // 父类 ID 
 				 ->putColumn( 'priority', $this->type('integer', ['index'=>1, 'default'=>"0"]) ) // 优先级排序
 				 ->putColumn( 'hidden', $this->type('boolean', ['index'=>1, 'default'=>"0"]) )   // 是否隐藏
+				 ->putColumn( 'isnav', $this->type('boolean', ['index'=>1, 'default'=>"1"]) )   // 是否是导航
 				 ->putColumn( 'param', $this->type('string',     ['length'=>128, 'index'=>1]) )  // 自定义参数
 				 ->putColumn( 'status', $this->type('string', ['length'=>10,'index'=>1, 'default'=>'on']) )  // 类型状态 on/off
 		;
@@ -223,6 +225,11 @@ class Category extends Model {
 			});
 		} else {
 			$qb->whereNull('parent_id');
+		}
+
+		// 是否为导航
+		if ( array_key_exists('isnav', $query) &&  $query['isnav'] == "1" ){
+			$qb->where("isnav", "=", "1");
 		}
 
 
