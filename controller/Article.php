@@ -441,6 +441,11 @@ class ArticleController extends \Xpmse\Loader\Controller {
 			'options' => $options['map']
 		];
 
+		if ( $_GET['debug'] == 1 ) {
+			Utils::out( $data );
+			return;
+		}
+
 		App::render($data, 'article', 'editor' );
 		
 		return [

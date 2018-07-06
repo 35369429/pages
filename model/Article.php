@@ -666,7 +666,9 @@ class Article extends Model {
 			$data['category'] = explode(',', $data['category']);
 		}
 
-		if ( isset($data['publish_date']) ) {
+
+		// 处理时间
+		if ( !empty($data['publish_date']) ) {
 
 			if ( empty($data['publish_time']) ) {
 				$data['publish_time'] = date('H:i:s');
@@ -677,7 +679,7 @@ class Article extends Model {
 			$data['publish_time'] = str_replace('分', ':', $data['publish_time']);
 			$data['publish_time'] = $data['publish_date'] . ' ' . $data['publish_time'];
 
-		} else {
+		} else if ( empty($data['publish_date']) ) {
 			// $data['publish_date'] = date('Y-m-d');
 			$data['publish_time'] = date('Y-m-d H:i:s');
 		}
