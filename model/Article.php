@@ -480,7 +480,6 @@ class Article extends Model {
 			$from = $perpage * $i + $offset;
 			$resp = $wechat->searchMedia($from, $perpage, 'news');
 			foreach ($resp['item'] as $item ) {
-				print_r( $item );
 				foreach ($item['content']['news_item'] as $idx=>$media ) {
 					$this->importWechatMedia($c, $item['media_id'], $media, $idx );
 				}
@@ -684,7 +683,11 @@ class Article extends Model {
 			if ( !in_array($ext, ['png', 'jpg', 'gif', 'peg']) ) {
 				$ext = 'png';
 			}
-			$rs = $this->media->uploadImage($rs['cover']['path'], $ext, false);
+			try {
+				$rs = $this->media->uploadImage($rs['cover']['path'], $ext, false);
+			} catch( Excp $e ) {
+				 $rs['path'] = '';	
+			}
 			$updateData['cover'] = $rs['path'];
 		} else if ( !empty($rs['cover']) && substr($rs['cover']['path'],0,1) != '/' ) {
 			$updateData['cover'] = '';

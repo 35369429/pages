@@ -123,8 +123,8 @@ class ImportController extends \Xpmse\Loader\Controller {
 
 			// 创建导入任务
 			$t = new Task;
-			if ( $t->isRunning('导入WordPress数据数据', 'xpmsns/pages') ) {
-				throw new Excp('导入WordPress数据数据，任务尚未完成', 400, [] );	
+			if ( $t->isRunning('导入WordPress数据', 'xpmsns/pages') ) {
+				throw new Excp('导入WordPress数据，任务尚未完成', 400, [] );	
 			}
 
 			$task_id = $t->run('导入WordPress数据数据', [

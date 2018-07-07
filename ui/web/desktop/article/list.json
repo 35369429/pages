@@ -14,7 +14,7 @@
 				"select":"category_id,name",
 				"order":"priority asc",
 				"children":false,
-				"param":"isnav=true"
+				"isnav":1
 			}
 		},
 		"articles":{
