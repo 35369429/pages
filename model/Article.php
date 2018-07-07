@@ -628,7 +628,7 @@ class Article extends Model {
 			throw new Excp("文章不存在( {$article_id})", 404, ['article_id'=>$article_id, $status=>$status] );
 		}
 
-		$delta = $rs['delta'];
+		$delta = !is_array($rs['delta']) ? ["ops"=>[]] : $rs['delta'];
 		$images = $rs['images'];
 		$new_images = []; $new_images_map =[];
 
@@ -686,6 +686,8 @@ class Article extends Model {
 			}
 			$rs = $this->media->uploadImage($rs['cover']['path'], $ext, false);
 			$updateData['cover'] = $rs['path'];
+		} else if ( !empty($rs['cover']) && substr($rs['cover']['path'],0,1) != '/' ) {
+			$updateData['cover'] = '';
 		}
 
 		return $this->save( $updateData );

@@ -159,7 +159,7 @@ class ImportController extends \Xpmse\Loader\Controller {
 		if ( $type == 'wordpress' ) {
 			$this->wordpress($file );	
 		}
-		@unlink( $file );
+		// @unlink( $file );
 		echo json_encode(['code'=>0, 'message'=>'数据导入完毕']);
 		return;
 	}
@@ -173,18 +173,25 @@ class ImportController extends \Xpmse\Loader\Controller {
 		$wp_data = json_decode( json_encode($xml_data), true);
 
 
+		// 检查版本
 		if ( $wp_data["@attributes"]['version'] != '2.0' ) {
 			throw new Excp('不支持的数据版本', 402, ['version'=>$wp_data["@attributes"]['version']]);
 		}
 
-		
 		// 导入Site 
 		$site = $this->wpSite( $wp_data['channel']);
 
-		// 导入 authors
+
+		// 导入作者
+		if ( array_key_exists('wp_author_id', $wp_data['channel']['wp_author']) ) {
+			$wp_data['channel']['wp_author']  = [$wp_data['channel']['wp_author']];
+		}
 		$au = $this->wpAuthor( $wp_data['channel']['wp_author'] );
 
 		// 导入内容
+		if ( array_key_exists('title', $wp_data['channel']['item']) ) {
+			$wp_data['channel']['item']  = [$wp_data['channel']['item']];
+		}
 		$this->wpItem( $wp_data['channel']['item'], $au, $site );
 
 	}
@@ -202,16 +209,19 @@ class ImportController extends \Xpmse\Loader\Controller {
 	}
 
 	// 导入 WordPress 作者
-	private function wpAuthor( & $author ){
+	private function wpAuthor( $author ){
+
 		$u = new \Xpmse\User;
 		$map = [];
 		foreach ($author as $au ) {
+
 			$rs = [
 				"mobile" =>(string)(12000000000 + intval($au['wp_author_id'])),
 				"email"  => $au['wp_author_email'],
 				"name" =>$au['wp_author_display_name'],
 				"password" => $au['wp_author_login'] . $au['wp_author_id']
 			];
+
 			$map[$au['wp_author_id']] = $this->saveUser( $u, $rs );
 		}
 
@@ -258,10 +268,11 @@ class ImportController extends \Xpmse\Loader\Controller {
 			$rs['update_time'] = $it['wp_post_date'];
 			$rs['status'] = 'pending';
 			$rs['outer_id'] = md5('wp_' . $st['site_homepage']) . '_' . $it['wp_post_id'];
-			$rs['videos'][0] = $postmeta['td_post_video']['td_last_video'];
+			$rs['videos'][0] = $postmeta['td_post_video']['td_video'];
 			$rs['view_cnt'] = $postmeta['post_views_count'];
 			$rs['category_names'] = $it['category'];
 			$rs['user'] = $author['userid'];
+			// $it['_mk'] = $postmeta;
 			$this->saveArticle($art, $rs );
 		}
 	}
@@ -290,9 +301,13 @@ class ImportController extends \Xpmse\Loader\Controller {
 	}
 
 
-	private function saveArticle( & $art,  $rs ) {
+	private function saveArticle( & $art,  $rs , $it = null) {
+		// if ($rs['title'] != '戊戌年庆贺吕祖圣诞祈福法会吕祖朝科北京白云观') {
+		// 	return;
+		// }
 
-		
+		// echo "{$rs['title']}... ";
+
 		$videos  = $rs['videos'];
 		$art->contentToDelta( $rs );
 
@@ -313,6 +328,15 @@ class ImportController extends \Xpmse\Loader\Controller {
 		try {
 			$rs = $art->downloadImages($rs['article_id'], 'published');
 		} catch( Excp $e  ){ echo $e->getMessage(); }
+
+		// echo " article_id={$rs['article_id']} ";
+		// echo " videos=".count($rs['videos']);
+		// echo " delta=" .count($rs['delta']['ops']);
+		// echo " content=" .strlen(json_encode($rs['content'])) ;
+
+		// echo "  \n";
+		// 
+		return $rs;
 
 	}
 
