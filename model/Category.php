@@ -38,8 +38,8 @@ class Category extends Model {
 				 ->putColumn( 'page', $this->type('string',     ['length'=>128, 'index'=>1]) )  // 正文(默认)页面
 				 ->putColumn( 'wechat', $this->type('string', ['index'=>1, "length"=>64]) )      // 绑定公众号
 				 ->putColumn( 'wechat_offset', $this->type('integer', ['default'=>"0"]) )      // 同步文章的 Offset
-				 ->putColumn( 'name', $this->type('string',  ['length'=>128]) )  // 类型名称
-				 ->putColumn( 'fullname', $this->type('string',  ['length'=>256]) )  // 类型全名
+				 ->putColumn( 'name', $this->type('string',  ['length'=>64, 'index'=>1]) )  // 类型名称
+				 ->putColumn( 'fullname', $this->type('string',  ['length'=>128,'unique'=>1]) )  // 类型全名
 				 ->putColumn( 'link', $this->type('string',  ['length'=>200]) )  // 自定义链接
 				 ->putColumn( 'root_id', $this->type('string', ["index"=>1] )) //  根ID 
 				 ->putColumn( 'parent_id', $this->type('string', ["index"=>1] )) // 父类 ID 
@@ -56,9 +56,9 @@ class Category extends Model {
 	}
 
 
-	function genId() {
-		return uniqid();
-	}
+	// function genId() {
+	// 	return uniqid();
+	// }
 
 
 	function getInByCategoryId( $ids, $select = ['*'] ) {
@@ -161,7 +161,11 @@ class Category extends Model {
 
 		// 创建分类
 		if ( empty($data['category_id'])  ) {
-			return $this->create($data);
+			try { $rs = $this->create($data); } catch( Excp $e ) {
+				if ( !empty($data['fullname']) ) {
+					$data = $this->updateBy('fullname', $data);
+				}
+			}
 		}
 
 		// 更新分类

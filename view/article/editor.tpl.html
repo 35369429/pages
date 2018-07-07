@@ -169,7 +169,7 @@
 							<a href="#" onclick="$('input[name=title]').focus();" class="pull-right">返回文章标题</a>
 							<div class="row">
 								<div class="col-xs-6 remove-padding preview border" >
-									<?php if (!empty($article['cover'])) :?>
+									<?php if (!empty($article['cover']['url'])) :?>
 									<img name="cover" src="<?=$article['cover']['url']?>" >
 									<?php endif; ?>
 								</div>
