@@ -357,7 +357,10 @@ use \Xpmse\Utils as Utils;
 									</li>
 									<?php endif;?>
 
-									<?php for( $i=1; $i<=$articles['last']; $i++) :?>
+									<?php 
+									$end=$articles['curr']+6;
+									if($end>$articles['last']){$end=$articles['last'];} 
+									 for( $i=$articles['curr']; $i<=$end; $i++) :?>
 									<li class="<?=($i==$articles['curr'])? 'active': ''?>" >
 										<a href="javascript:search('page', '<?=$i?>' )"><?=$i?></a>
 									</li>
