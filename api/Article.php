@@ -355,6 +355,7 @@ class Article extends Api {
 
 		}
 		$resp['arr'] = $arr;
+		
 		return $resp;
 	}
 
