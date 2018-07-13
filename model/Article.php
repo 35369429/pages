@@ -480,7 +480,6 @@ class Article extends Model {
 			$from = $perpage * $i + $offset;
 			$resp = $wechat->searchMedia($from, $perpage, 'news');
 			foreach ($resp['item'] as $item ) {
-				print_r( $item );
 				foreach ($item['content']['news_item'] as $idx=>$media ) {
 					$this->importWechatMedia($c, $item['media_id'], $media, $idx );
 				}
@@ -582,6 +581,44 @@ class Article extends Model {
 	}
 
 
+	/**
+	 * HtmlToDelta
+	 * @param  [type] $rs [description]
+	 * @return [type]     [description]
+	 */
+	function contentToDelta( & $rs ) {
+		$rs['content'] = empty($rs['content']) ? "" : $rs['content'];
+		$this->delta_render->loadByHTML($rs['content']);
+		$delta = $this->delta_render->delta();
+		$images =  $this->delta_render->images();
+		$videos =  $this->delta_render->videos();
+		$rs['delta'] = $delta;
+		$rs['images'] = $images;
+		$rs['videos'] = $videos;
+	}
+
+	/**
+	 * 插入视频
+	 * @param  string $url
+	 * @return
+	 */
+	function insertVideo( $url, & $rs ) {
+
+		try { $v = $this->media->saveVideoUrl( $url ); } catch( Excp $e ) { return ;}
+		$rs['delta'] = !is_array($rs['delta']) ?  [] : $rs['delta'];
+		$rs['delta']['ops'] = !is_array( $rs['delta']['ops']) ? [] :  $rs['delta']['ops'];
+		$vdelta[0]['insert'] = "\n";
+		$vdelta[1]['insert']['cvideo'] = $v;
+		$vdelta[2]['insert'] = "\n";
+		$rs['delta']['ops'] = array_merge($vdelta, $rs['delta']['ops']);
+
+		$this->delta_render->load($rs['delta']);
+		$rs['videos'] =  $this->delta_render->videos();
+		$rs['content'] = $this->delta_render->html();
+	}
+
+
+
 	function downloadImages( $article_id, $status=null ) {
 
 		$rs = $this->load($article_id);
@@ -590,7 +627,7 @@ class Article extends Model {
 			throw new Excp("文章不存在( {$article_id})", 404, ['article_id'=>$article_id, $status=>$status] );
 		}
 
-		$delta = $rs['delta'];
+		$delta = !is_array($rs['delta']) ? ["ops"=>[]] : $rs['delta'];
 		$images = $rs['images'];
 		$new_images = []; $new_images_map =[];
 
@@ -641,9 +678,19 @@ class Article extends Model {
 		}
 
 		// 替换 Cover 图片
-		if ( !empty($rs['cover']) ) {
-			$rs = $this->media->uploadImage($rs['cover'], null, false);
+		if ( !empty($rs['cover'])  && substr($rs['cover']['path'],0,4) == 'http' ) {
+			$ext = $this->media->getExt($rs['cover']['path'] );
+			if ( !in_array($ext, ['png', 'jpg', 'gif', 'peg']) ) {
+				$ext = 'png';
+			}
+			try {
+				$rs = $this->media->uploadImage($rs['cover']['path'], $ext, false);
+			} catch( Excp $e ) {
+				 $rs['path'] = '';	
+			}
 			$updateData['cover'] = $rs['path'];
+		} else if ( !empty($rs['cover']) && substr($rs['cover']['path'],0,1) != '/' ) {
+			$updateData['cover'] = '';
 		}
 
 		return $this->save( $updateData );
@@ -661,11 +708,16 @@ class Article extends Model {
 			$data['tag'] = explode(',', $data['tag']);
 		}
 
+		// 按栏目名称设定栏目
+		if (array_key_exists('category_names',$data)){
+			$cates = $this->saveCategoryByName($data['category_names']);
+			$data['category'] = array_column($cates, 'category_id');
+		}
 
+		// 按栏目ID 设定栏目
 		if ( is_string($data['category'])) {
 			$data['category'] = explode(',', $data['category']);
 		}
-
 
 		// 处理时间
 		if ( !empty($data['publish_date']) ) {
@@ -685,6 +737,47 @@ class Article extends Model {
 		}
 
 
+		if ( !empty($data['delta']) ) {
+			
+			$this->delta_render->load($data['delta']);
+
+			// 生成文章正文
+			$data['content'] = $this->delta_render->html();
+
+			// 获取图片信息
+			$data['images'] = $this->delta_render->images();
+
+			// 获取图形信息
+			$data['videos'] = $this->delta_render->videos();
+
+			// 生成小程序正文
+			$data['ap_content'] = $this->delta_render->wxapp();
+		}
+
+
+
+		// 处理摘要
+		if ( empty($data['summary']) && !empty($data['content']) ) {
+			$content = strip_tags($data['content']);
+			$data['summary'] = mb_substr( trim($content), 0, 54);
+		}
+
+		// SEO TITLE
+		if ( empty( $data['seo_title']) ) {
+			 $data['seo_title'] = $data['title'];
+		}
+
+		// SEO SUMMARY
+		if ( empty( $data['seo_summary']) ) {
+			 $data['seo_summary'] = $data['summary'];
+		}
+
+		// SEO keywords
+		if ( empty( $data['seo_keywords']) ) {
+			 $data['seo_keywords'] = $data['keywords'];
+		}
+
+
 		// 添加文章
 		if ( empty($data['article_id']) ) {
 		
@@ -694,7 +787,12 @@ class Article extends Model {
 				$data['create_time'] = date('Y-m-d H:i:s');
 			}
 
-			$data = $this->create( $data );
+			try { $data = $this->create( $data ); } catch( Excp $e ){
+				if  ( !empty($data['outer_id']) ) {
+					$data = $this->saveBy( 'outer_id', $data );	
+				}
+			}
+
 			unset($data['created_at']);
 			unset($data['deleted_at']);
 			unset($data['updated_at']);
@@ -712,23 +810,8 @@ class Article extends Model {
 		}
 
 
-
 		// 保存到草稿表
 		$article_id = $data['article_id'];
-
-		if ( !empty($data['delta']) ) {
-			
-			$this->delta_render->load($data['delta']);
-
-			// 生成文章正文
-			$data['content'] = $this->delta_render->html();
-
-			// 获取图片信息
-			$data['images'] = $this->delta_render->images();
-
-			// 生成小程序正文
-			$data['ap_content'] = $this->delta_render->wxapp();
-		}
 
 		$data['history'] = $this->article_draft->getLine("WHERE article_id=?", ['*'], [$article_id]);
 		if ( is_array($data['history']) && !is_null($data['history']['history'])) {
@@ -739,8 +822,13 @@ class Article extends Model {
 		$data['preview'] = $this->previewLinks( $article_id, $data['category']);
 
 
+		// 历史记录
 		if ( empty($data['history'])) {
-			$draft = $this->article_draft->create( $data ); 
+			try { $draft = $this->article_draft->create( $data ); } catch( Excp $e ){
+				if  ( !empty($data['outer_id']) ) {
+					$draft = $this->article_draft->saveBy( 'outer_id', $data );	
+				}
+			}
 		} else {
 			$draft = $this->article_draft->updateBy( 'article_id', $data ); 
 		}
@@ -898,6 +986,13 @@ class Article extends Model {
 			$u = $this->media->get($article['cover']);
 			$article['cover'] = $u;
 
+		} else {
+			$url = $article['cover'];
+			$article['cover'] = [];
+			if ( !empty($url) ) {
+				$article['cover']['url'] = $url;
+				$article['cover']['path'] = $url;
+			}
 		}
 		$article['home'] = $this->host;
 		return $article;
@@ -1603,6 +1698,27 @@ class Article extends Model {
 	}
 
 
+	function saveCategoryByName( $category_names ) {
+		$c = new Category;
+		if ( is_array($field) ) {
+			$args = $field;
+		} else {
+			$args = func_get_args();
+			array_shift($args);
+		}
+
+		$cates = [];
+		$category_names = is_string($category_names) ? explode(',', $category_names): $category_names;
+
+		foreach ($category_names as $cname ) {
+			$cates[] = $c->save([
+				'name'=>$cname, 
+				'fullname'=>$cname
+			]);
+		}
+
+		return $cates;
+	}
 
 
 	/**
