@@ -234,7 +234,7 @@ class Article extends Api {
 			;
 
 		// echo $qb->getSql();
-
+			
 		// 设定查询条件
 		$this->qb( $qb, 'c.name', 'category', $query, ["and", "or", "in"] );
 		$this->qb( $qb, 'c.category_id', 'categoryId', $query, ["and", "or", "in"] );
@@ -335,19 +335,27 @@ class Article extends Api {
 			// $resp['data'][$idx] = $rs;
 		}
 
+
+
+
+
+
+
+
 		$arr  =  [];
 		if(!empty($resp['last'])){
-			for ($i=1; $i <= $resp['last']; $i++) { 
-				$arr[$i]  = $i;
+			$end=$resp['curr']+6;
+			if($end>$resp['last']){
+				$end=$resp['last'];
 			}
+
+			for ($i=$resp['curr']; $i <=$end; $i++) { 
+				$arr[]  = $i;
+			}
+
 		}
-
 		$resp['arr'] = $arr;
-
-
-
 		return $resp;
-
 	}
 
 

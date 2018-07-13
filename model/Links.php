@@ -45,12 +45,11 @@ class Links extends Model {
 
 	}
 	
-
 	/**
 	 * 创建数据表
 	 * @return $this
 	 */
-	function __schema() {
+	function __schema(){
 
 		// 友链ID
 		$this->putColumn( 'links_id', $this->type("string", ["length"=>128, "unique"=>true, "null"=>false]));
