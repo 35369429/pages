@@ -336,35 +336,17 @@ class Article extends Api {
 		}
 
 
-
-
-
-
-
-
 		$arr  =  [];
 		if(!empty($resp['last'])){
-			$end=$resp['curr']+6;
-			if($end>$resp['last']){
-				$end=$resp['last'];
+			for ($i=1; $i <= $resp['last']; $i++) { 
+				$arr[$i]  = $i;
 			}
-<<<<<<< HEAD
 		}
 
 		$resp['arr'] = $arr;
-
 		$resp['end'] = $resultData['end'];
 		$resp['frontend'] = $resultData['frontend'];
 		$resp['frontstart'] = $resultData['frontstart'];
-=======
-
-			for ($i=$resp['curr']; $i <=$end; $i++) { 
-				$arr[]  = $i;
-			}
->>>>>>> dedf51c97b019c24fae7f6b5ad47179f89665211
-
-		}
-		$resp['arr'] = $arr;
 		
 		return $resp;
 	}
