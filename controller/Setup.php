@@ -18,7 +18,9 @@ class SetupController extends \Xpmse\Loader\Controller {
 			'\\Xpmsns\\Pages\\Model\\Adv',
 			'\\Xpmsns\\Pages\\Model\\Links',
 			'\\Xpmsns\\Pages\\Model\\Siteconf',
-			'\\Xpmsns\\Pages\\Model\\Recommend'
+			'\\Xpmsns\\Pages\\Model\\Recommend',
+			'\\Xpmsns\\Pages\\Model\\Event',
+			'\\Xpmsns\\Pages\\Model\\Album'
 		];
 	}
 
@@ -58,19 +60,58 @@ class SetupController extends \Xpmse\Loader\Controller {
 
 
 		// 添加默认推荐项
-		$rec = new \Xpmsns\Pages\Model\Recommend;
-		$rec->saveBySlug(["title"=>"本周热文","slug"=>"weekly_hotnews", "orderby"=>"view_cnt", "period"=>'weekly', "type"=>"auto"]);
-		$rec->saveBySlug(["title"=>"本周热评","slug"=>"weekly_hotreviews", "orderby"=>"comment_cnt", "period"=>'weekly', "type"=>"auto"]);
-		$rec->saveBySlug(["title"=>"本周热文","slug"=>"7days_hotnews", "orderby"=>"view_cnt", "period"=>'7days', "type"=>"auto"]);
-		$rec->saveBySlug(["title"=>"本周热评","slug"=>"7days_hotreviews", "orderby"=>"comment_cnt", "period"=>'7days', "type"=>"auto"]);
-		$rec->saveBySlug(["title"=>"今日热文","slug"=>"daily_hotnews", "orderby"=>"view_cnt", "period"=>'daily', "type"=>"auto"]);
-		$rec->saveBySlug(["title"=>"今日热评","slug"=>"daily_hotreviews", "orderby"=>"comment_cnt", "period"=>'daily', "type"=>"auto"]);
-		$rec->saveBySlug(["title"=>"24小时热文","slug"=>"24hours_hotnews", "orderby"=>"view_cnt", "period"=>'24hours', "type"=>"auto"]);
-		$rec->saveBySlug(["title"=>"24小时热评","slug"=>"24hours_hotreviews", "orderby"=>"comment_cnt", "period"=>'24hours', "type"=>"auto"]);
-		$rec->saveBySlug(["title"=>"最新文章","slug"=>"latest", "orderby"=>"publish_time", "period"=>"unlimited", "type"=>"auto"]);
-		$rec->saveBySlug(["title"=>"最热文章","slug"=>"hotnews", "orderby"=>"publish_time", "period"=>"unlimited",   "type"=>"auto"]);
-		$rec->saveBySlug(["title"=>"正文页相关推荐","slug"=>"detail", "orderby"=>"publish_time",  "period"=>"unlimited",  "type"=>"auto"]);
+		$recommends = [
+			["title"=>"本周热文","slug"=>"weekly_hotnews", "orderby"=>"view_cnt", "period"=>'weekly', "type"=>"auto"],
+			["title"=>"本周热评","slug"=>"weekly_hotreviews", "orderby"=>"comment_cnt", "period"=>'weekly', "type"=>"auto"],
+			["title"=>"本周更新","slug"=>"weekly_news", "orderby"=>"publish_time", "period"=>'weekly', "type"=>"auto"],
+			["title"=>"7日更新","slug"=>"7days_news", "orderby"=>"publish_time", "period"=>'7days', "type"=>"auto"],
+			["title"=>"7日热文","slug"=>"7days_hotnews", "orderby"=>"view_cnt", "period"=>'7days', "type"=>"auto"],
+			["title"=>"7日热评","slug"=>"7days_hotreviews", "orderby"=>"comment_cnt", "period"=>'7days', "type"=>"auto"],
+			["title"=>"今日热文","slug"=>"daily_hotnews", "orderby"=>"view_cnt", "period"=>'daily', "type"=>"auto"],
+			["title"=>"今日热评","slug"=>"daily_hotreviews", "orderby"=>"comment_cnt", "period"=>'daily', "type"=>"auto"],
+			["title"=>"24小时热文","slug"=>"24hours_hotnews", "orderby"=>"view_cnt", "period"=>'24hours', "type"=>"auto"],
+			["title"=>"24小时热评","slug"=>"24hours_hotreviews", "orderby"=>"comment_cnt", "period"=>'24hours', "type"=>"auto"],
+			["title"=>"最新文章","slug"=>"latest", "orderby"=>"publish_time", "period"=>"unlimited", "type"=>"auto"],
+			["title"=>"最热文章","slug"=>"hotnews", "orderby"=>"publish_time", "period"=>"unlimited",   "type"=>"auto"],
+			["title"=>"焦点文章","slug"=>"focus", "orderby"=>"publish_time", "period"=>"unlimited",  "type"=>"auto"],
+			["title"=>"今日主题","slug"=>"topic", "orderby"=>"publish_time", "period"=>"unlimited",  "type"=>"auto"],
+			["title"=>"新闻快讯","slug"=>"quicknews", "orderby"=>"publish_time", "period"=>"unlimited",  "type"=>"auto"],
 
+			// 正文相关推荐
+			["title"=>"正文页相关推荐","slug"=>"detail", "orderby"=>"publish_time",  "period"=>"unlimited",  "type"=>"auto"],
+
+			// 首页相关推荐
+			["title"=>"首页第一块内容区","slug"=>"section_1", "orderby"=>"publish_time", "period"=>"7days",  "type"=>"auto"],
+			["title"=>"首页第二块内容区","slug"=>"section_2", "orderby"=>"publish_time", "period"=>"7days",  "type"=>"auto"],
+			["title"=>"首页第三块内容区","slug"=>"section_3", "orderby"=>"publish_time", "period"=>"7days",  "type"=>"auto"],
+			["title"=>"首页第四块内容区","slug"=>"section_4", "orderby"=>"publish_time", "period"=>"7days",  "type"=>"auto"],
+			["title"=>"首页第五块内容区","slug"=>"section_5", "orderby"=>"publish_time", "period"=>"7days",  "type"=>"auto"],
+			["title"=>"首页第六块内容区","slug"=>"section_6", "orderby"=>"publish_time", "period"=>"7days",  "type"=>"auto"],
+
+			// 侧边相关推荐
+			["title"=>"侧边第一块内容区","slug"=>"sidebar_section_1", "orderby"=>"publish_time", "period"=>"7days",  "type"=>"auto"],
+			["title"=>"侧边第二块内容区","slug"=>"sidebar_section_2", "orderby"=>"publish_time", "period"=>"7days",  "type"=>"auto"],
+			["title"=>"侧边第三块内容区","slug"=>"sidebar_section_3", "orderby"=>"publish_time", "period"=>"7days",  "type"=>"auto"],
+
+			// 底部帮助推荐
+			["title"=>"帮助中心","slug"=>"_help", "orderby"=>"publish_time",  "period"=>"unlimited",  "type"=>"auto"],
+			["title"=>"关于我们","slug"=>"_about", "orderby"=>"publish_time",  "period"=>"unlimited",  "type"=>"auto"],
+			["title"=>"常见问题","slug"=>"_faq", "orderby"=>"publish_time",  "period"=>"unlimited",  "type"=>"auto"]
+		];
+		$rec = new \Xpmsns\Pages\Model\Recommend;
+		foreach ($recommends as $r ) {
+			try {
+				$rec->create($r);
+			} catch( Excp $e ){
+				// 1062
+				// echo $e->getCode();
+				// Duplicate entry ....
+				// echo $e->getMessage();
+				// unset( $r['title'] );
+				// $rec->saveBySlug($r);
+			}
+		}
+		
 	}
 
 

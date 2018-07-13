@@ -1,10 +1,10 @@
 <?php
 /**
- * Class RecommendController
- * 推荐控制器
+ * Class EventController
+ * 活动控制器
  *
  * 程序作者: XpmSE机器人
- * 最后修改: 2018-07-05 14:26:48
+ * 最后修改: 2018-06-30 23:28:41
  * 程序母版: /data/stor/private/templates/xpmsns/model/code/controller/Name.php
  */
 
@@ -13,19 +13,19 @@ use \Xpmse\Excp;
 use \Xpmse\Utils;
 use \Xpmse\Media;
 
-class RecommendController extends \Xpmse\Loader\Controller {
+class EventController extends \Xpmse\Loader\Controller {
 
 
 	function __construct() {
 	}
 
 	/**
-	 * 推荐列表检索
+	 * 活动列表检索
 	 */
 	function index() {	
 
 		$search  = $query = $_GET;
-		$inst = new \Xpmsns\Pages\Model\Recommend;
+		$inst = new \Xpmsns\Pages\Model\Event;
 		if ( !empty($search['order']) ) {
 			$order = $search['order'];
 			unset( $search['order'] );
@@ -34,7 +34,7 @@ class RecommendController extends \Xpmse\Loader\Controller {
 
 		$response = $inst->search($search);
 		$data = [
-			'_TITLE' => "推荐列表检索",
+			'_TITLE' => "活动列表检索",
 			'query' => $query,
 			'response' => $response
 		];
@@ -44,7 +44,7 @@ class RecommendController extends \Xpmse\Loader\Controller {
 			return;
 		}
 
-		App::render($data,'recommend','search.index');
+		App::render($data,'event','search.index');
 
 		return [
 			'js' => [
@@ -63,32 +63,32 @@ class RecommendController extends \Xpmse\Loader\Controller {
 	 			"js/plugins/select2/select2-bootstrap.min.css"
 	 		],
 			'crumb' => [
-	            "推荐" => APP::R('recommend','index'),
-	            "推荐管理" =>'',
+	            "活动" => APP::R('event','index'),
+	            "活动管理" =>'',
 	        ]
 		];
 	}
 
 
 	/**
-	 * 推荐详情表单
+	 * 活动详情表单
 	 */
 	function detail() {
 
-		$recommend_id = trim($_GET['recommend_id']);
-		$action_name = '新建推荐';
-		$inst = new \Xpmsns\Pages\Model\Recommend;
+		$event_id = trim($_GET['event_id']);
+		$action_name = '新建活动';
+		$inst = new \Xpmsns\Pages\Model\Event;
 		
-		if ( !empty($recommend_id) ) {
-			$rs = $inst->getByRecommendId($recommend_id);
+		if ( !empty($event_id) ) {
+			$rs = $inst->getByEventId($event_id);
 			if ( !empty($rs) ) {
-				$action_name =  $rs['title'];
+				$action_name =  $rs['name'];
 			}
 		}
 
 		$data = [
 			'action_name' =>  $action_name,
-			'recommend_id'=>$recommend_id,
+			'event_id'=>$event_id,
 			'rs' => $rs
 		];
 
@@ -98,7 +98,7 @@ class RecommendController extends \Xpmse\Loader\Controller {
 		}
 
 
-		App::render($data,'recommend','form');
+		App::render($data,'event','form');
 
 		return [
 			'js' => [
@@ -124,12 +124,12 @@ class RecommendController extends \Xpmse\Loader\Controller {
 	 		],
 
 			'crumb' => [
-	            "推荐" => APP::R('recommend','index'),
-	            "推荐管理" =>APP::R('recommend','index'),
+	            "活动" => APP::R('event','index'),
+	            "活动管理" =>APP::R('event','index'),
 	            "$action_name" => ''
 	        ],
 	        'active'=> [
-	 			'slug'=>'xpmsns/pages/recommend/index'
+	 			'slug'=>'xpmsns/pages/event/index'
 	 		]
 		];
 
@@ -138,44 +138,44 @@ class RecommendController extends \Xpmse\Loader\Controller {
 
 
 	/**
-	 * 保存推荐
+	 * 保存活动
 	 * @return
 	 */
 	function save() {
 		$data = $_POST;
-		$inst = new \Xpmsns\Pages\Model\Recommend;
-		$rs = $inst->saveByRecommendId( $data );
+		$inst = new \Xpmsns\Pages\Model\Event;
+		$rs = $inst->saveByEventId( $data );
 		echo json_encode($rs);
 	}
 
 	/**
-	 * 删除推荐
+	 * 删除活动
 	 * @return [type] [description]
 	 */
 	function remove(){
-		$recommend_id = $_POST['recommend_id'];
-		$inst = new \Xpmsns\Pages\Model\Recommend;
-		$recommend_ids =$inst->remove( $recommend_id, "recommend_id" );
-		echo json_encode(['message'=>"删除成功", 'extra'=>['$recommend_ids'=>$recommend_ids]]);
+		$event_id = $_POST['event_id'];
+		$inst = new \Xpmsns\Pages\Model\Event;
+		$event_ids =$inst->remove( $event_id, "event_id" );
+		echo json_encode(['message'=>"删除成功", 'extra'=>['$event_ids'=>$event_ids]]);
 	}
 
 	/**
-	 * 复制推荐
+	 * 复制活动
 	 * @return
 	 */
 	function duplicate(){
-		$recommend_id = $_GET['recommend_id'];
-		$inst = new \Xpmsns\Pages\Model\Recommend;
-		$rs = $inst->getByRecommendId( $recommend_id );
-		$action_name =  $rs['title'] . ' 副本';
+		$event_id = $_GET['event_id'];
+		$inst = new \Xpmsns\Pages\Model\Event;
+		$rs = $inst->getByEventId( $event_id );
+		$action_name =  $rs['name'] . ' 副本';
 
 		// 删除唯一索引字段
-		unset($rs['recommend_id']);
+		unset($rs['event_id']);
 		unset($rs['slug']);
 
 		// 复制图片
-		if ( is_array($rs['icon']) &&  !empty($rs['icon']['local'])) {
-			$rs['icon'] = $inst->uploadIcon( $recommend_id, $rs['icon']['local'], true);
+		if ( is_array($rs['cover']) &&  !empty($rs['cover']['local'])) {
+			$rs['cover'] = $inst->uploadCover( $event_id, $rs['cover']['local'], true);
 		}
 		if ( is_array($rs['images'])) {
 
@@ -185,16 +185,86 @@ class RecommendController extends \Xpmse\Loader\Controller {
 				if ( empty($fs['local']) ) {
 					continue;
 				}
-				$resp[] = $inst->uploadImagesByRecommendId( $recommend_id, $fs['local'], $idx, true);
+				$resp[] = $inst->uploadImagesByEventId( $event_id, $fs['local'], $idx, true);
 			}
 
 			$rs['images'] = $resp;
 		}
 
+		if ( is_array($rs['hosts'])) {
+
+			$resp = [];
+			foreach ($rs['hosts'] as $idx=>$fs ) {
+
+				if ( empty($fs['local']) ) {
+					continue;
+				}
+				$resp[] = $inst->uploadHostsByEventId( $event_id, $fs['local'], $idx, true);
+			}
+
+			$rs['hosts'] = $resp;
+		}
+
+		if ( is_array($rs['organizers'])) {
+
+			$resp = [];
+			foreach ($rs['organizers'] as $idx=>$fs ) {
+
+				if ( empty($fs['local']) ) {
+					continue;
+				}
+				$resp[] = $inst->uploadOrganizersByEventId( $event_id, $fs['local'], $idx, true);
+			}
+
+			$rs['organizers'] = $resp;
+		}
+
+		if ( is_array($rs['sponsors'])) {
+
+			$resp = [];
+			foreach ($rs['sponsors'] as $idx=>$fs ) {
+
+				if ( empty($fs['local']) ) {
+					continue;
+				}
+				$resp[] = $inst->uploadSponsorsByEventId( $event_id, $fs['local'], $idx, true);
+			}
+
+			$rs['sponsors'] = $resp;
+		}
+
+		if ( is_array($rs['medias'])) {
+
+			$resp = [];
+			foreach ($rs['medias'] as $idx=>$fs ) {
+
+				if ( empty($fs['local']) ) {
+					continue;
+				}
+				$resp[] = $inst->uploadMediasByEventId( $event_id, $fs['local'], $idx, true);
+			}
+
+			$rs['medias'] = $resp;
+		}
+
+		if ( is_array($rs['speakers'])) {
+
+			$resp = [];
+			foreach ($rs['speakers'] as $idx=>$fs ) {
+
+				if ( empty($fs['local']) ) {
+					continue;
+				}
+				$resp[] = $inst->uploadSpeakersByEventId( $event_id, $fs['local'], $idx, true);
+			}
+
+			$rs['speakers'] = $resp;
+		}
+
 
 		$data = [
 			'action_name' =>  $action_name,
-			'recommend_id'=>$recommend_id,
+			'event_id'=>$event_id,
 			'rs' => $rs
 		];
 
@@ -204,7 +274,7 @@ class RecommendController extends \Xpmse\Loader\Controller {
 		}
 
 		
-		App::render($data,'recommend','form');
+		App::render($data,'event','form');
 
 		return [
 			'js' => [
@@ -225,12 +295,12 @@ class RecommendController extends \Xpmse\Loader\Controller {
 	 		],
 
 			'crumb' => [
-	            "推荐" => APP::R('recommend','index'),
-	            "推荐管理" =>APP::R('recommend','index'),
+	            "活动" => APP::R('event','index'),
+	            "活动管理" =>APP::R('event','index'),
 	            "$action_name" => ''
 	        ],
 	        'active'=> [
-	 			'slug'=>'xpmsns/pages/recommend/index'
+	 			'slug'=>'xpmsns/pages/event/index'
 	 		]
 		];
 	}

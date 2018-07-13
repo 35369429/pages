@@ -283,9 +283,10 @@ use \Xpmse\Utils as Utils;
 						<thead>
 							<tr>
 								<th class="text-center" style="width:5%;max-width:120px;"> 编号</th>
-								<th class="font-w300" style="width:30%;">标题</th>
-								<th class="font-w300" style="width:15%;">分类</th>
+								<th class="font-w300" style="width:25%;">标题</th>
+								<th class="font-w300" style="width:10%;">分类</th>
 								<th class="font-w300" style="width:5%;">作者</th>
+								<th class="font-w300" style="width:10%;">发布日期</th>
 								<th class="font-w300" style="width:10%;">
 
 								<?php if ( $query['order'] == 'create_time desc' ) :?>
@@ -332,6 +333,7 @@ use \Xpmse\Utils as Utils;
 								</td>
 								<td> <?=$category?></td>
 								<td> <?=$rs['author']?> </td>
+								<td> <?= !empty($rs['publish_date']) ? date('Y年m月d日', strtotime($rs['publish_date'])) : ''?> </td>
 								<td> 
 								<?php if ( $query['order'] == 'create_time desc' ) :?>
 									<?=$rs['create_time']?> 
@@ -346,7 +348,7 @@ use \Xpmse\Utils as Utils;
 						</tbody>
 
 						<tfoot>
-							<tr><td colspan="6"> <nav class="pull-right">
+							<tr><td colspan="7"> <nav class="pull-right">
 
 								<ul class="pagination">
 									<?php if ($articles['prev'] !== false): ?>

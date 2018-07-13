@@ -81,6 +81,9 @@ class ArticleController extends \Xpmse\Loader\Controller {
 	}
 
 
+	
+
+
 	/**
 	 * 采集模块
 	 * @return [type] [description]
@@ -440,6 +443,11 @@ class ArticleController extends \Xpmse\Loader\Controller {
 			'cates' => $cates,
 			'options' => $options['map']
 		];
+
+		if ( $_GET['debug'] == 1 ) {
+			Utils::out( $data );
+			return;
+		}
 
 		App::render($data, 'article', 'editor' );
 		

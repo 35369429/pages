@@ -1,0 +1,605 @@
+<?php 
+use \Xpmse\Loader\App; 
+use \Xpmse\Utils;
+use \Xpmse\T;
+?>
+<style type="text/css">
+	.form {
+		padding-top: 60px;
+		padding-bottom: 60px;
+	}
+</style>
+
+
+<!-- Page Content -->
+<div class="content"> 
+	<div class="block block-bordered " >
+		<div class="block-header remove-margin" >
+
+			<h3 class="block-title" >
+				<a href="<?=App::R('album', 'index')?>" class="text-default">
+                    <i class="fa fa-arrow-circle-o-left"></i> 
+                    图集列表 
+                </a> / <?=$action_name?> 
+			</h3>
+			
+		</div> <!-- END block-header -->
+
+		<div class="block-content form album-content js-draggable-items" >
+
+			<form class="form-horizontal album-form form-lg" action= '<?=App::NR("album", "save");?>' >
+
+				<!-- 隐藏域 -->
+				<input type="hidden" name="album_id" value="<?=$rs['album_id']?>" >
+	
+	<!-- 单行文本: 主题 (title) 开始  -->
+	<div class="form-group   ">
+		<label class="col-xs-2 control-label" for="title">主题</label>
+		<div class="col-xs-8">
+			<input class="form-control input-lg"  
+				type="text" 
+				id="title" name="title" 
+				placeholder="请填写图集主题"  
+				value="<?=T::v('<%=title | e(\'html\')%>', $rs )?>" /> 
+			<div class="help-block"></div>
+		</div>
+	</div><!-- END 单行文本: 主题 (title) -->
+
+	<!-- 单行文本: 别名 (slug) 开始  -->
+	<div class="form-group   ">
+		<label class="col-xs-2 control-label" for="slug">别名</label>
+		<div class="col-xs-8">
+			<input class="form-control input-lg"  
+				type="text" 
+				id="slug" name="slug" 
+				placeholder="请填写图集别名"  
+				value="<?=T::v('<%=slug | e(\'html\')%>', $rs )?>" /> 
+			<div class="help-block"></div>
+		</div>
+	</div><!-- END 单行文本: 别名 (slug) -->
+
+	<!-- 单行文本: 作者 (author) 开始  -->
+	<div class="form-group   ">
+		<label class="col-xs-2 control-label" for="author">作者</label>
+		<div class="col-xs-8">
+			<input class="form-control input-lg"  
+				type="text" 
+				id="author" name="author" 
+				placeholder="请填写图集作者"  
+				value="<?=T::v('<%=author | e(\'html\')%>', $rs )?>" /> 
+			<div class="help-block"></div>
+		</div>
+	</div><!-- END 单行文本: 作者 (author) -->
+
+	<!-- 单行文本: 来源 (origin) 开始  -->
+	<div class="form-group   ">
+		<label class="col-xs-2 control-label" for="origin">来源</label>
+		<div class="col-xs-8">
+			<input class="form-control input-lg"  
+				type="text" 
+				id="origin" name="origin" 
+				placeholder="请填写图集来源"  
+				value="<?=T::v('<%=origin | e(\'html\')%>', $rs )?>" /> 
+			<div class="help-block"></div>
+		</div>
+	</div><!-- END 单行文本: 来源 (origin) -->
+
+	<!-- 单行文本: 来源地址 (origin_url) 开始  -->
+	<div class="form-group   ">
+		<label class="col-xs-2 control-label" for="origin_url">来源地址</label>
+		<div class="col-xs-8">
+			<input class="form-control input-lg"  
+				type="text" 
+				id="origin_url" name="origin_url" 
+				placeholder="请填写图集来源地址"  
+				value="<?=T::v('<%=origin_url | e(\'html\')%>', $rs )?>" /> 
+			<div class="help-block"></div>
+		</div>
+	</div><!-- END 单行文本: 来源地址 (origin_url) -->
+
+	<!-- 单行文本: 外部链接 (link) 开始  -->
+	<div class="form-group   ">
+		<label class="col-xs-2 control-label" for="link">外部链接</label>
+		<div class="col-xs-8">
+			<input class="form-control input-lg"  
+				type="text" 
+				id="link" name="link" 
+				placeholder="请填写外部链接"  
+				value="<?=T::v('<%=link | e(\'html\')%>', $rs )?>" /> 
+			<div class="help-block"></div>
+		</div>
+	</div><!-- END 单行文本: 外部链接 (link) -->
+
+
+
+ 
+	<!-- 下拉选择(动态数据): 栏目 (categories) 开始  -->
+	<div class="form-group   ">
+		<label class="col-xs-2 control-label" for="categories">栏目</label>
+		<div class="col-xs-8"> 
+			<select class="js-select2 form-control input-lg" style="width: 100%;" 
+					id="categories" name="categories" 
+					data-language="zh-CN"
+					data-param-cancelable="0"
+					data-param-cancel="取消选择"
+					data-param-model="\Xpmsns\Pages\Model\Category"
+					data-param-table="category"
+					data-param-fields="category_id,name"
+					data-param-style="{{name}} ({{category_id}})"
+					data-param-option="category_id"
+					data-param-default=""
+					data-ajax-url="/_a/mina/helper/select2?method=get"
+					data-preload-url="/_a/mina/helper/select2?method=get&preload=<?=T::v('<%=categories | join(\',\')%>', $rs )?>"
+					data-placeholder="请选择图集栏目"  multiple data-select2-multiple=1  >
+				<option></option>
+			</select>
+			<div class="help-block"></div>
+		</div>
+		 
+	</div><!-- END 下拉选择(动态数据): 栏目 (categories) -->
+
+
+
+
+	<!-- 单行标签文本: 标签 (tags) 开始  -->
+	<div class="form-group   ">
+		<label class="col-xs-2 control-label" for="tags">标签</label>
+		<div class="col-xs-8">
+			<input class="form-control input-lg"  
+				type="text" 
+				id="tags" name="tags" 
+				placeholder="请添加标签"  
+				value="<?=T::v('<%=tags | e(\'html\')%>', $rs )?>" /> 
+			<div class="help-block"></div>
+		</div>
+
+		<script type="text/javascript">
+			var options = {
+				height: '42px',
+				width: '100%',
+				defaultText: '添加',
+				removeWithBackspace: true,
+				delimiter: [',']
+			}
+			$('input[name=tags').tagsInput(options);
+		</script>
+	</div><!-- END 单行标签文本: 标签 (tags) -->
+
+
+
+
+	<!-- 文本域: 简介 (summary) 开始  -->
+	<div class="form-group   ">
+		<label class="col-xs-2 control-label" for="summary">简介</label>
+		<div class="col-xs-8">
+			<textarea class="form-control input-lg"  
+				type="text" 
+				id="summary" name="summary" rows=""
+				placeholder="请填写图集简介"><?=T::v('<%=summary  | e(\'html\')%>', $rs )?></textarea> 
+			<div class="help-block"></div>
+		</div>
+	</div><!-- END 文本域: 简介 (summary) -->
+
+
+
+
+	<!-- 多图片组上传: 图片 (images) 开始  -->
+	<div class="xpmse-image-groups-content    draggable-column">
+
+		<?php if(count($rs['images']) < 1): ?><?php $steps = 1 -  count($rs['images']); for( $i=0; $i<$steps; $i++){ $rs['images'][] = [];} ?><?php endif ?><?php foreach ( $rs['images'] as $img ): ?> 
+		<div class="xpmse-image-groups draggable-item" data-nested="images" data-multiple="1">
+			<div class="form-group " >
+				<label class="col-xs-2 control-label draggable-handler" for="images">图片</label>
+				<div class="col-xs-4" style="width:248px;" >
+			   		<div name="images" class="file-uploader rounded rounded-4"
+						data-api='/_a/mina/uploader/upload?type=image'
+						data-title=''
+						data-previews=""
+						data-width="228"
+						data-height="152"
+						data-icon="fa fa-image" 
+						data-placeholder="请添加图片" 
+						data-allow-types="image/png,image/jpg,image/jpeg,image/gif"
+						data-maxsize="20"
+						data-progress="yes"
+						data-cropable="yes"
+						data-draggable="yes"
+						data-src="<?=T::v('<%=url%>', $img )?>"
+						data-path="<?=T::v('<%=path%>', $img )?>"
+						data-nested-value="1"
+						></div>
+					<div class="help-block"></div>
+				</div>
+				<div class="col-xs-4">
+					<div class="col-xs-12">
+						<input 
+							class="form-control input-lg"  
+							type="text" 
+							data-name="title" 
+							placeholder="请输入标题"
+							value="<?=T::v('<%=title | e(\'html\')%>', $img )?>" /> 
+					</div>
+					<div class="col-xs-12 push-10-t">
+						<input 
+							class="form-control input-lg"  
+							type="text" 
+							data-name="link" 
+							placeholder="请输入链接地址"
+							value="<?=T::v('<%=link | e(\'html\')%>', $img )?>" />
+					</div>
+					<div class="col-xs-12 push-10-t">
+						<textarea class="form-control input-lg"  
+							data-name="summary" rows="4"
+							placeholder="请输入介绍"><?=T::v('<%=summary | e(\'html\')%>', $img )?></textarea> 
+					</div>
+				</div>
+				<div class="col-xs-2 push-10-t">
+					<a href="javascript:void(0);" data-action="add"    class="text-success push-20-r"> <i class="fa fa-plus font-s20"></i> </a> 
+					<a href="javascript:void(0);" data-action="remove" class="text-danger"> <i class="fa fa-minus font-s20"></i> </a> 
+				</div>
+			</div> 
+		</div>
+		<?php endforeach; ?> 
+
+		<script type="text/javascript">
+			$('.xpmse-image-groups[data-nested="images"]').Multipliable({
+				added: function( elm ) {
+					App.initHelper('file-uploader', {handler: $(elm).find('.file-uploader')} );
+				},
+				removed: function(){},
+				html: function( elm ){ 
+					var html = $(elm).clone();
+					var resp = $(html);
+					resp.find('.file-uploader').html('');
+					resp.find('.file-uploader').attr('data-src', '');
+					resp.find('.file-uploader').attr('data-path', '');
+					resp.find('input[type=hidden]').remove();
+					resp.find('input').val('');
+					resp.find('textarea').val('');
+					return resp;
+				}
+			});
+		</script>
+	</div><!-- END 多图片组上传: 图片 (images) -->
+
+
+
+
+	<!-- 单图上传: 封面 (cover) 开始  -->
+	<div class="xpmse-images  " name="cover">
+		<div class="form-group " >
+			<label class="col-xs-2 control-label" for="cover">封面</label>
+			<div class="col-xs-8">
+		   		<div name="cover" class="file-uploader rounded rounded-4 push-10-t"
+					data-api='/_a/mina/uploader/upload?type=image'
+					data-title='请上传主题图'
+					data-previews=""
+					data-width="280"
+					data-height="176"
+					data-icon="fa fa-image" 
+					data-placeholder="请上传主题图" 
+					data-allow-types="image/png,image/jpg,image/jpeg,image/gif"
+					data-maxsize="20"
+					data-progress="yes"
+					data-cropable="1"
+					data-draggable="yes"
+					data-src="<?=T::v('<%=cover.url%>', $rs )?>"
+					data-path="<?=T::v('<%=cover.path%>', $rs )?>"
+					></div>
+				<div class="help-block"></div>
+			</div>
+		</div> 
+	</div><!-- END 单图上传: 封面 (cover) -->
+
+
+
+
+
+	<!-- 单行时间日期: 发布时间 (publish_time) 开始  -->
+	<div class="form-group   ">
+		<label class="col-xs-2 control-label" for="publish_time__date">发布时间</label>
+		<div class="col-xs-4">
+			<input 
+				 name="publish_time__date" id="publish_time__date"
+				 class="js-datepicker form-control  input-lg" type="text" 
+				 data-date-format="yyyy年mm月dd日" 
+				 placeholder="图集发布时间 "
+				 value="<?=T::v('<%=publish_time | toDate%>', $rs )?>"  />
+
+			<div class="help-block"></div>
+		</div>
+		<div class="col-xs-4">
+			<input 
+				name="publish_time__time" id="publish_time__time"
+				class="js-masked-time form-control  input-lg"  type="text" 
+				placeholder="请输入时间"
+				value="<?=T::v('<%=publish_time | toTime%>', $rs )?>" /> 
+		</div>
+		<input name="publish_time" id="publish_time" type="hidden" value="<?=T::v('<%=publish_time | toDateTime%>', $rs )?>" />
+
+		<script type="text/javascript">
+		$(function(){
+
+			function publish_time_change() {
+				var tm = $('input[name=publish_time__time').val();
+					tm = tm.replace('@ ', '');
+					tm = tm.replace('时', ':');
+					tm = tm.replace('分', ':');
+					tm = tm = tm + '00';
+
+				var dt = $('input[name=publish_time__date]').val();
+					dt = dt.replace('年', '-');
+					dt = dt.replace('月', '-');
+					dt = dt.replace('日', '');
+
+				var datetime = dt + ' ' + tm;
+				$('input[name=publish_time]').val( datetime );
+			}
+
+			$('input[name=publish_time__date]').on("change", function( e ){
+				publish_time_change();
+			});
+			$('input[name=publish_time__time').on("change", function( e ){
+				publish_time_change();
+			});
+		});
+		</script>
+
+	</div><!-- END 单行时间日期: 发布时间 (publish_time) -->
+
+
+
+
+ 
+	<!-- 下拉选择: 图集状态 (status) 开始  -->
+	<div class="form-group   ">
+		<label class="col-xs-2 control-label" for="status">图集状态</label>
+		<div class="col-xs-8">
+			<select class="js-select2 form-control input-lg" style="width: 100%;"
+					id="status" name="status"  
+					data-placeholder="请选择图集状态 " >
+				<option></option>
+				<?php $rs["status"] = is_string($rs["status"]) ? [$rs["status"]] : $rs["status"] ; if (empty($rs["status"])) { $rs["status"] = ["draft"]; } ?>
+<option value="draft" <?=in_array("draft", $rs["status"]) ? "selected" : ""?> > 草稿</option>
+<option value="on" <?=in_array("on", $rs["status"]) ? "selected" : ""?> > 正常</option>
+<option value="off" <?=in_array("off", $rs["status"]) ? "selected" : ""?> > 关闭</option>
+			</select>
+			<div class="help-block"></div>
+		</div>
+	</div><!-- END 下拉选择: 图集状态 (status) -->
+
+				<!--  提交按钮 -->
+				<div class="block block-quickpanel sidebar-mini">
+					<div class="block-quickpanel-content" >
+						<div class="form-group">
+
+							<!-- 功能组 -->
+							<div class="col-xs-2 push-20-t text-left">
+								<a href="<?=App::R('album', 'index')?>"
+									class="btn btn-lg btn-primary font-w300 btn-minw push-20-l user-action fn-back" >
+									<i class="fa fa-angle-double-left push-5-r"></i> 图集列表 
+								</a>
+							</div>
+							<div class="col-xs-8 push-20-t text-center">
+								<button  
+									type="submit" 
+									class="btn btn-lg btn-primary font-w300 btn-minw  push-20-r fn-action fn-save  ">
+										<i class="fa fa-save push-5-r"></i> 保存
+								</button>
+
+								<button  
+									type="button" 
+									data-param-id="<?=$rs['album_id']?>"
+									class="btn btn-lg btn-primary font-w300 btn-minw  push-50-r fn-action fn-saved-only fn-duplicate  ">
+										<i class="fa fa-files-o push-5-r"></i> 复制
+								</button>
+
+								<button 
+									type="button"
+									class="btn btn-lg btn-danger btn-minw ajax-confirm fn-action fn-saved-only fn-remove"
+									confirm-title="请确认删除图集 "
+						            confirm-content="您确定删除图集 <strong><?=$rs['name=title']?>(<?=$rs['album_id']?> )</strong>"
+						            confirm-dismiss = "取消"
+						            confirm-submit= "确定"
+						            confirm-action="<?=App::NR('album','remove')?>"
+						            event-before="
+										function( btn, modal ) {
+											$('button', modal)
+												.addClass('disabled')
+												.attr('disabled', 'disabled');
+										}
+									"
+									event-done="
+										function( data, btn, modal) {
+											$('button', modal)
+												.removeClass('disabled')
+												.removeAttr('disabled');
+										}
+									"
+							        event-success="
+										function(btn, modal) {
+											success('图集删除成功');
+											setTimeout(function(){
+												window.location = '<?=App::R('album','index')?>';
+											}, 1000);
+										}
+									"
+									event-error="
+										function( data, btn, modal) {
+											failure( '图集删除失败 ('+ data['message'] + ')');
+											return true;
+										}
+									"
+
+									data-param-album_id="<?=$rs['album_id']?>" 
+	
+									 >
+										<i class="fa fa-minus-circle push-5-r"></i> 删除
+								</button>
+
+							</div>
+						</div>
+						<div class="bg-primary text-white text-center bottom-line"></div>	
+					</div>
+				</div> <!-- END 提交按钮 -->
+
+			</form>
+		</div> <!-- END block-content form -->
+	</div> <!-- END block block-bordered -->
+</div><!-- END content -->
+
+
+
+
+
+<script type="text/javascript">
+function pending( message ) {
+	$('.fn-action')
+		.addClass('disabled')
+		.attr('disabled', 'disabled');
+	App.loading({message:message}).show();
+}
+
+
+function success( message ) {
+	App.notify( message );
+}
+
+function failure( message,  validation ) {
+	validation = validation  || null;
+	message = message || null;
+
+	if ( typeof message == 'object' ) {
+		validation.showErrors(message);
+		return;
+	}
+
+	if ( message != null ) {
+		App.notify( message, 'fa fa-times', 'danger' );
+	}
+}
+
+function done() {
+	App.loading().hide();
+	$('.fn-action')
+		.removeClass('disabled')
+		.removeAttr('disabled');
+}
+
+
+/**
+ * 保存表单
+ */
+function save( form, validation ) {
+
+	var api =$(form).attr("action");
+
+	try {
+		var data = $(form).serializeData(true);
+	} catch( e  ){
+		console.log( e );
+		return ;
+	}
+
+	pending('保存中, 请稍候...');
+	// POST 数据
+	jQuery.post( api, data, function( data, textStatus, xhr) {
+
+		done();
+
+		if ( typeof data['code'] == 'string' ) {
+			data['code'] = parseInt(data['code']);
+		}
+
+		// 返回数据异常
+		if ( typeof data['code'] == 'number' && data['code'] !== 0 ) {
+
+			if ( typeof data['extra'] == 'object' && typeof data['extra']['errors'] == 'object'  ) {
+				failure( data['extra']['errors'], validation );
+				return;
+			}
+
+			var message = data['message'] || "未知错误";
+			failure( message );
+			return;
+		}
+
+		if ( typeof  data['album_id'] == 'undefined' ) {
+			var message = data['message'] || "未知错误";
+			failure( message );
+			return;
+		}
+		
+
+		// 更新ID
+		$('input[name=album_id]').val( data['album_id'] );
+		$('.fn-saved-only').removeClass('hidden');
+		$('.fn-saved-only').attr('data-param-id', data['album_id']);
+
+		// 保存成功
+		success('保存成功');
+
+	}, 'json')
+
+	.error(function( xhr, status, message) {
+		failure("保存失败, 网络错误 ( " + xhr.status + ' ' + message+" )");
+		console.log( status, xhr.status, ' message=', message );
+	});
+}
+
+
+$(function(){
+
+	// 设定高度
+	$('.album-content').css('minHeight', $(document).outerHeight() );
+	
+	App.initHelpers(['datepicker','select2', 'js-draggable-items', 'masked-inputs','tags-inputs',  'ajax-confirm', 'slimscroll', 'file-uploader', 'image-crop']);
+
+	// 表单验证
+	$('.album-form').validate({
+		errorClass: 'help-block animated fadeInDown',
+		errorElement: 'div',
+		errorPlacement: function(error, e) {				
+			jQuery(e).parents('.form-group .col-xs-8').append(error);
+		},
+		highlight: function(e) {
+			jQuery(e).closest('.form-group .col-xs-8').parent().removeClass('has-error').addClass('has-error');
+			jQuery(e).closest('.help-block').remove();
+		},
+		unhighlight:function(e){
+			jQuery(e).closest('.form-group .col-xs-8').parent().removeClass('has-error');
+			jQuery(e).closest('.help-block .col-xs-8').remove();
+		},
+		success: function(e) {
+			jQuery(e).closest('.form-group .col-xs-8').parent().removeClass('has-error');
+			jQuery(e).closest('.help-block').remove();
+		},
+
+		submitHandler: function(form) {
+			save( form, this);
+			return false;
+		},
+
+		rules: {},
+		messages: {}
+
+	});
+
+
+	$('.fn-duplicate').click(function(){
+		var api = "<?=App::R('album','duplicate', ['album_id'=>''])?>";
+		var id = $(this).attr('data-param-id');
+		var url = api + id;
+		window.location = url;
+	})
+
+	if ( $('input[name="album_id"]').val() == '' || $('input[name="album_id"]').val() == undefined ) {
+		$('.fn-saved-only').addClass('hidden');
+	}
+
+// 自定义代码
+
+
+})
+	
+</script>

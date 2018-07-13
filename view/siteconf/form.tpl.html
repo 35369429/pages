@@ -87,6 +87,35 @@ use \Xpmse\T;
 
 
 
+	<!-- 单图上传: 图标 (icon) 开始  -->
+	<div class="xpmse-images  " name="icon">
+		<div class="form-group " >
+			<label class="col-xs-2 control-label" for="icon">图标</label>
+			<div class="col-xs-8">
+		   		<div name="icon" class="file-uploader rounded rounded-4 push-10-t"
+					data-api='/_a/mina/uploader/upload?type=image'
+					data-title='请上传网站图标'
+					data-previews=""
+					data-width="192"
+					data-height="192"
+					data-icon="fa fa-image" 
+					data-placeholder="请上传网站图标" 
+					data-allow-types="image/png,image/jpg,image/jpeg,image/gif"
+					data-maxsize="20"
+					data-progress="yes"
+					data-cropable="yes"
+					data-draggable="yes"
+					data-src="<?=T::v('<%=icon.url%>', $rs )?>"
+					data-path="<?=T::v('<%=icon.path%>', $rs )?>"
+					></div>
+				<div class="help-block"></div>
+			</div>
+		</div> 
+	</div><!-- END 单图上传: 图标 (icon) -->
+
+
+
+
 	<!-- 单图上传: 网站LOGO (site_logo) 开始  -->
 	<div class="xpmse-images  " name="site_logo">
 		<div class="form-group " >
@@ -206,6 +235,97 @@ use \Xpmse\T;
 		</div>
 	</div><!-- END 单行文本: 客服电话 (tel) -->
 
+	<!-- 单行文本: 客服QQ (qq) 开始  -->
+	<div class="form-group   ">
+		<label class="col-xs-2 control-label" for="qq">客服QQ</label>
+		<div class="col-xs-8">
+			<input class="form-control input-lg"  
+				type="text" 
+				id="qq" name="qq" 
+				placeholder="请填写客服QQ"  
+				value="<?=T::v('<%=qq | e(\'html\')%>', $rs )?>" /> 
+			<div class="help-block"></div>
+		</div>
+	</div><!-- END 单行文本: 客服QQ (qq) -->
+
+	<!-- 单行文本: 客服邮箱 (email) 开始  -->
+	<div class="form-group   ">
+		<label class="col-xs-2 control-label" for="email">客服邮箱</label>
+		<div class="col-xs-8">
+			<input class="form-control input-lg"  
+				type="text" 
+				id="email" name="email" 
+				placeholder="请填写客服邮箱"  
+				value="<?=T::v('<%=email | e(\'html\')%>', $rs )?>" /> 
+			<div class="help-block"></div>
+		</div>
+	</div><!-- END 单行文本: 客服邮箱 (email) -->
+
+	<!-- 单行文本: 客服服务时间 (se_time) 开始  -->
+	<div class="form-group   ">
+		<label class="col-xs-2 control-label" for="se_time">客服服务时间</label>
+		<div class="col-xs-8">
+			<input class="form-control input-lg"  
+				type="text" 
+				id="se_time" name="se_time" 
+				placeholder="请填写客服服务时间"  
+				value="<?=T::v('<%=se_time | e(\'html\')%>', $rs )?>" /> 
+			<div class="help-block"></div>
+		</div>
+	</div><!-- END 单行文本: 客服服务时间 (se_time) -->
+
+	<!-- 单行文本: 合作联系人 (contact_name) 开始  -->
+	<div class="form-group   ">
+		<label class="col-xs-2 control-label" for="contact_name">合作联系人</label>
+		<div class="col-xs-8">
+			<input class="form-control input-lg"  
+				type="text" 
+				id="contact_name" name="contact_name" 
+				placeholder="请填写合作联系人"  
+				value="<?=T::v('<%=contact_name | e(\'html\')%>', $rs )?>" /> 
+			<div class="help-block"></div>
+		</div>
+	</div><!-- END 单行文本: 合作联系人 (contact_name) -->
+
+	<!-- 单行文本: 合作邮箱 (contact_email) 开始  -->
+	<div class="form-group   ">
+		<label class="col-xs-2 control-label" for="contact_email">合作邮箱</label>
+		<div class="col-xs-8">
+			<input class="form-control input-lg"  
+				type="text" 
+				id="contact_email" name="contact_email" 
+				placeholder="请填写合作联系邮箱"  
+				value="<?=T::v('<%=contact_email | e(\'html\')%>', $rs )?>" /> 
+			<div class="help-block"></div>
+		</div>
+	</div><!-- END 单行文本: 合作邮箱 (contact_email) -->
+
+	<!-- 单行文本: 合作电话 (contact_tel) 开始  -->
+	<div class="form-group   ">
+		<label class="col-xs-2 control-label" for="contact_tel">合作电话</label>
+		<div class="col-xs-8">
+			<input class="form-control input-lg"  
+				type="text" 
+				id="contact_tel" name="contact_tel" 
+				placeholder="请填写合作联系电话"  
+				value="<?=T::v('<%=contact_tel | e(\'html\')%>', $rs )?>" /> 
+			<div class="help-block"></div>
+		</div>
+	</div><!-- END 单行文本: 合作电话 (contact_tel) -->
+
+	<!-- 单行文本: 合作QQ (contact_qq) 开始  -->
+	<div class="form-group   ">
+		<label class="col-xs-2 control-label" for="contact_qq">合作QQ</label>
+		<div class="col-xs-8">
+			<input class="form-control input-lg"  
+				type="text" 
+				id="contact_qq" name="contact_qq" 
+				placeholder="请填写合作联系QQ"  
+				value="<?=T::v('<%=contact_qq | e(\'html\')%>', $rs )?>" /> 
+			<div class="help-block"></div>
+		</div>
+	</div><!-- END 单行文本: 合作QQ (contact_qq) -->
+
 
 
 
@@ -264,6 +384,19 @@ use \Xpmse\T;
 		</div> 
 	</div><!-- END 单图上传: 订阅号二维码 (qr_wxpub) -->
 
+	<!-- 单行文本: 订阅号名称 (name_wxpub) 开始  -->
+	<div class="form-group   ">
+		<label class="col-xs-2 control-label" for="name_wxpub">订阅号名称</label>
+		<div class="col-xs-8">
+			<input class="form-control input-lg"  
+				type="text" 
+				id="name_wxpub" name="name_wxpub" 
+				placeholder="请填写订阅号名称"  
+				value="<?=T::v('<%=name_wxpub | e(\'html\')%>', $rs )?>" /> 
+			<div class="help-block"></div>
+		</div>
+	</div><!-- END 单行文本: 订阅号名称 (name_wxpub) -->
+
 
 
 
@@ -292,6 +425,19 @@ use \Xpmse\T;
 			</div>
 		</div> 
 	</div><!-- END 单图上传: 服务号二维码 (qr_wxse) -->
+
+	<!-- 单行文本: 服务号名称 (name_wxse) 开始  -->
+	<div class="form-group   ">
+		<label class="col-xs-2 control-label" for="name_wxse">服务号名称</label>
+		<div class="col-xs-8">
+			<input class="form-control input-lg"  
+				type="text" 
+				id="name_wxse" name="name_wxse" 
+				placeholder="请填写服务号名称"  
+				value="<?=T::v('<%=name_wxse | e(\'html\')%>', $rs )?>" /> 
+			<div class="help-block"></div>
+		</div>
+	</div><!-- END 单行文本: 服务号名称 (name_wxse) -->
 
 
 

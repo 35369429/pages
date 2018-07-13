@@ -169,7 +169,7 @@
 							<a href="#" onclick="$('input[name=title]').focus();" class="pull-right">返回文章标题</a>
 							<div class="row">
 								<div class="col-xs-6 remove-padding preview border" >
-									<?php if (!empty($article['cover'])) :?>
+									<?php if (!empty($article['cover']['url'])) :?>
 									<img name="cover" src="<?=$article['cover']['url']?>" >
 									<?php endif; ?>
 								</div>
@@ -358,15 +358,15 @@
 										</div>
 									</div><!-- END form-group 参数 -->
 
-
 									<div class="form-group">
 										<div class="form-material">
 											<div 
 												name="publish_date" 
 												class="js-datepicker" 
-												value="<?=empty($article['publish_date'])?date('m/d/Y'):$article['publish_date']?>">
+												data-format="mm/dd/yyyy"
+												value="<?=empty($article['publish_date'])?date('m/d/Y'):$article['publish_date']?>" >
 											</div>
-											<label for="material-text"  class="font-s14 font-w300">发布日期</label>
+											<label for="material-text"  class="font-s14 font-w300">发布日期 <?=$article['publish_date']?></label>
 										</div>
 									</div><!-- END form-group 发布日期 -->
 

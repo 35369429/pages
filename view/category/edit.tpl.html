@@ -141,7 +141,16 @@
 							<?php endforeach; ?>
 						</select>
 					</div>
+
 				</div> <!-- END 选择栏目 -->
+
+					<!-- 自定义链接 -->
+					<div class="form-group">
+						<label class="col-xs-2 control-label" for="link">自定义链接:</label>
+						<div class="col-xs-9">
+							<input class="form-control input-lg"  type="text" name="link" value="<?=$ca['link']?>" placeholder="如需自定义链接地址，请填写在这里">
+						</div>
+					</div> <!-- END 自定义链接 -->
 
 				
 				<!-- 优先级 -->
@@ -163,12 +172,22 @@
 					</div>
 				</div><!-- 类型状态 -->
 
+				<!-- 作为导航 -->
+				<div class="form-group">
+					<label class="col-xs-2 control-label" for="isnav"></label>
+					<div class="col-xs-9">
+						<label class="css-input css-checkbox css-checkbox-primary" >
+                       		<input name="isnav" value="1" data-uncheck-value="0" type="checkbox" <?=($ca['isnav'] == "1" ) ? 'checked' : '' ?> ><span></span> 作为导航
+                        </label>
+					</div>
+				</div><!-- END 作为导航 -->
+
 				<!-- 是否隐藏 -->
 				<div class="form-group">
 					<label class="col-xs-2 control-label" for="hidden"></label>
 					<div class="col-xs-9">
 						<label class="css-input css-checkbox css-checkbox-primary" >
-                       		<input name="hidden" value="1" type="checkbox" <?=($ca['hidden'] == 1) ? 'checked' : '' ?> ><span></span> 隐藏栏目
+                       		<input name="hidden" value="1"  data-uncheck-value="0" type="checkbox" <?=($ca['hidden'] == 1) ? 'checked' : '' ?> ><span></span> 隐藏栏目
                         </label>
 					</div>
 				</div><!-- END 是否隐藏 -->
