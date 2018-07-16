@@ -344,9 +344,9 @@ class Article extends Api {
 		}
 
 		$resp['arr'] = $arr;
-		$resp['end'] = $resultData['end'];
-		$resp['frontend'] = $resultData['frontend'];
-		$resp['frontstart'] = $resultData['frontstart'];
+		// $resp['end'] = $resultData['end'];
+		// $resp['frontend'] = $resultData['frontend'];
+		// $resp['frontstart'] = $resultData['frontstart'];
 		
 		return $resp;
 	}

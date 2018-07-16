@@ -361,11 +361,11 @@ use \Xpmse\Utils as Utils;
 
 
 									<?php for( $i=$articles['frontstart']; $i<=$articles['frontend']; $i++) :?>
-									<li class="<?=($i==$articles['curr'])? 'active': ''?>" >
+									<!-- <li class="<?=($i==$articles['curr'])? 'active': ''?>" >
 										<a href="javascript:search('page', '<?=$i?>' )"><?=$i?></a>
-									</li>
+									</li> -->
 									<?php endfor; ?>
-									<?php for( $i=$articles['curr']; $i<=$articles['end']; $i++) :?>
+									<?php for( $i=1; $i<=$articles['last']; $i++) :?>
 									<li class="<?=($i==$articles['curr'])? 'active': ''?>" >
 										<a href="javascript:search('page', '<?=$i?>' )"><?=$i?></a>
 									</li>
