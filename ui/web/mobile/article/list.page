@@ -20,9 +20,9 @@
 </div>
 
 <div class="xpmsns">
-	<div><img src="{{__STOR__::/__PROJECT_NAME/mobile/assets}}/icons/xpmsns.svg"  mode="aspectFit" /></div>
-	<div>本页采用XpmSNS发布</div>
+	<div><img src="{{site.site_logo.url}}"  mode="aspectFit" style="width:150px;" /></div>
 </div>
+
 
 
 <script type="text/javascript" mp:if="{{__var.__browser == 'wechat' }}">

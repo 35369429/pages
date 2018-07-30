@@ -1,6 +1,6 @@
 <header>
 	<div class="titleBar">
-		<span>XpmSNS/{{current.name}}</span>
+		<span>{{site.site_name}}/{{current.name}}</span>
 	</div>
 	<nav>
 		<a href="#"><img src="{{__STOR__::/__PROJECT_NAME/mobile/assets}}/icons/show_menu.svg" /></a>

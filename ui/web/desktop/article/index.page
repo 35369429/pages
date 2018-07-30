@@ -28,19 +28,19 @@
 	<div class="col-xs-7">
 
 		<!-- 焦点图 -->
-		<section class="focus">
+		<section class="focus" mp:if="{{focus.contents.total > 0}}">
 			<div class="slide">
 				<ul class="items">
-					<li data-id="{{rs.article_id}}" mp:for="{{focus}}" mp:for-from="0" mp:for-to="7"  mp:for-index="{{idx}}"  mp:for-item="{{rs}}">
+					<li data-id="{{rs.article_id}}" mp:for="{{focus.contents.data}}" mp:for-from="0" mp:for-to="7"  mp:for-index="{{idx}}"  mp:for-item="{{rs}}">
 						
-						<a href="/article/{{rs.article_id}}" ><img src="{{rs.thumbs.1.url}}"></a>
+						<a href="/article/{{rs.article_id}}" ><img src="{{rs.cover.url}}"></a>
 						<h5>{{rs.title}}</h5>
 					</li>
 				</ul>
 				<ul class="tags" >
 					<li data-id="{{rs.article_id}}" class="{{ (idx == 0) ? 'active'}}" 
-						mp:for="{{focus}}" mp:for-from="0" mp:for-to="7"  mp:for-index="{{idx}}"  mp:for-item="{{rs}}" > 
-						{{rs.category_last.name}}
+						mp:for="{{focus.contents.data}}" mp:for-from="0" mp:for-to="7"  mp:for-index="{{idx}}"  mp:for-item="{{rs}}" > 
+						{{rs.title}}
 					</li>
 				</ul>
 			</div>

@@ -1,6 +1,22 @@
 {
 	"cname":"默认正文页-手机版",
 	"data": {
+		"categories":{
+			"api":"/xpmsns/pages/category/search",
+			"query":{
+				"select":"category_id,name",
+				"order":"priority asc",
+				"children":false,
+				"isnav":1
+			}
+		},
+		"site":{
+			"api":"/xpmsns/pages/siteconf/get",
+			"query":{
+				"site_slug":"global",
+				"select":"*"
+			}
+		},
 		"article":{
 			"api":"/xpmsns/pages/article/get",
 			"query":{

@@ -6,7 +6,7 @@
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="description" content="{{seo.description}}" />
 	<meta name="keywords" content="{{seo.keywords}}" />
-	<link href="{{__STOR__::/__PROJECT_NAME/desktop/assets}}/images/favicon_16.ico" rel="shortcut icon" type="image/x-icon" />
+	<link href="{{site.icon.url}}" rel="shortcut icon" type="image/x-icon" />
 
 	<title>{{page.title}}-{{site.site_name}}</title>
 	<link href="{{__STOR__::/__PROJECT_NAME/desktop/assets}}/css/bootstrap.min.css" rel="stylesheet" type="text/css" />

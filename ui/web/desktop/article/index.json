@@ -10,14 +10,6 @@
 				"isnav":1
 			}
 		},
-		"advs": {
-			"api":"/xpmsns/pages/adv/search",
-			"query":{
-				"pnos":"A-T-001,A-R-001,A-R-002,A-M-001,A-M-002",
-				"status":"online",
-				"perpage":"200"
-			}
-		},
 		"site":{
 			"api":"/xpmsns/pages/siteconf/get",
 			"query":{
@@ -35,14 +27,12 @@
 				"page":"{{__get.page}}"
 			}
 		},
-		"recommend": {
-			"api":"/xpmsns/pages/article/recommend",
+		"focus": {
+			"api":"/xpmsns/pages/recommend/getContents",
 			"query":{
-				"section":"hot,focus"
+				"slug":"focus"
 			}
 		},
-		"hot": "{{recommend.hot.data}}",
-		"focus": "{{recommend.focus.data}}",
 		"page":{
 			"title":"{{current.name}}",
 			"logo":"{{site.site_logo}}"

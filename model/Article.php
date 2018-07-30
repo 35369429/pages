@@ -402,9 +402,29 @@ class Article extends Model {
 		}
 		$qb->select( $select );
 		$data = $qb->get()->toArray(); 
+
+
+		// 分类
+		$qbc = Utils::getTab('xpmsns_pages_article_category as ac', "{none}")->query();
+        $qbc->leftJoin('xpmsns_pages_category as c' , 'ac.category_id', '=', 'c.category_id');
+        $qbc->whereIn('ac.article_id', $article_ids);
+        $datac = $qbc->select('ac.article_id', 'c.category_id', 'c.slug', 'c.name', 'c.fullname')->get()->toArray();
+        $cates = [];
+        foreach ($datac as $c ) {
+        	$id  = $c['article_id'];
+        	if ( empty($cates[$id])) {
+        		$cates[$id] = [$c];
+        	} else {
+        		array_push( $cates[$id], $c );
+        	}
+        }
+
+
 		$map = [];
 		foreach ($data as & $rs ) {
 			$this->format($rs);
+			// 增加分类
+			$rs['category'] = empty($cates[$rs['article_id']]) ?  [] : $cates[$rs['article_id']];
 			$map[$rs['article_id']] = $rs;
 			
 		}
