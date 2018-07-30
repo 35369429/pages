@@ -269,8 +269,8 @@ class Article extends Api {
 		// echo "\n" . $qb->getSQL() . "\n";
 
 
-		$result = $qb ->paginate($query['perpage'],['article.article_id'], 'page', $query['page'] );
-		$resultData = $result->toArray();
+		$resultData = $qb ->pgArray($query['perpage'],['article.article_id'], 'page', $query['page'] );
+		// $resultData = $result->toArray();
 		
 
 		// 处理结果集
@@ -336,25 +336,17 @@ class Article extends Api {
 		}
 
 
-
-
-
-
-
-
 		$arr  =  [];
 		if(!empty($resp['last'])){
-			$end=$resp['curr']+6;
-			if($end>$resp['last']){
-				$end=$resp['last'];
+			for ($i=1; $i <= $resp['last']; $i++) { 
+				$arr[$i]  = $i;
 			}
-
-			for ($i=$resp['curr']; $i <=$end; $i++) { 
-				$arr[]  = $i;
-			}
-
 		}
+
 		$resp['arr'] = $arr;
+		$resp['end'] = $resultData['end'];
+		$resp['frontend'] = $resultData['frontend'];
+		$resp['frontstart'] = $resultData['frontstart'];
 		
 		return $resp;
 	}
