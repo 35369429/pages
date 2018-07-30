@@ -167,6 +167,7 @@ class Category extends Model {
 			 } catch( Excp $e ) {
 				if ( !empty($data['fullname']) ) {
 					$data = $this->updateBy('fullname', $data);
+					$data['category_id'] = $rs['category_id'];
 				}
 			}
 		}
