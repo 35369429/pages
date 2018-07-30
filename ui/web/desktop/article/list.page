@@ -51,14 +51,6 @@
 	<!-- 右侧推荐内容区 -->
 	<div class="col-xs-3">
 		
-		<!-- 阿里妈妈 广告 -->
-		<section class="alimama block block-full">
-			<div class="block-content">
-				<a href="https://s.click.taobao.com/Wc5q6Uw" target="_blank">
-					<img width="100%" src="{{__STOR__::/__PROJECT_NAME/desktop/assets}}/images/aliyun-a-320x427.jpg">
-				</a>
-			</div>
-		</section> <!-- END 阿里妈妈广告 -->
 		
 		<!-- 24小时热文 -->
 		<section class="hot block">

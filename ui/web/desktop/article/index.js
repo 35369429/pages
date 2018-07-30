@@ -9,7 +9,7 @@ Page({
 
 	init: function(){
 	 	this.slide();
-	 	web.advPlay('.A-R-001');
+	 	// web.advPlay('.A-R-001');
 	},
 
 	/**
