@@ -23,24 +23,12 @@
 				"articleId":"{{__var.id}}"
 			}
 		},
-		"recommend": {
-			"api":"/xpmsns/pages/article/recommend",
+		"hot": {
+			"api":"/xpmsns/pages/recommend/getContents",
 			"query":{
-				"section":"hot"
+				"slug":"24hours_hotnews"
 			}
 		},
-		"advs": [{
-				"image":"{{__STOR__::/__PROJECT_NAME/desktop/assets}}/images/aliyun-a-320x427.jpg",
-				"link":"https://s.click.taobao.com/t?e=m%3D2%26s%3Dhoxv%2FgDMwLwcQipKwQzePCperVdZeJviEViQ0P1Vf2kguMN8XjClAiXf1vKdgZdQvI5DWFYHmxXiIpTKtwc9j3TQ485k9SezlChjoNCSihyXCewRplqrABVF%2BG%2F2LD3qKIUZKvQyk4%2FkxFiXT%2FI5kdv2ej9RFznDI7hRLPtBsnnfiZ1OxkhRwDBkcElHipW7P37PZ5d3Efk3VTMPr8ftLkWbo0ZyKcLixiXvDf8DaRs%3D"
-			},{
-				"image":"{{__STOR__::/__PROJECT_NAME/desktop/assets}}/images/aliyun-b-320x427.jpg",
-				"link":"https://s.click.taobao.com/t?e=m%3D2%26s%3D3R8qIgmfL8kcQipKwQzePCperVdZeJviEViQ0P1Vf2kguMN8XjClAiXf1vKdgZdQfb8WuKZvbQziIpTKtwc9j3TQ485k9SezlChjoNCSihyXCewRplqrABVF%2BG%2F2LD3qKIUZKvQyk4%2FkxFiXT%2FI5kdv2ej9RFznDI7hRLPtBsnnfiZ1OxkhRwDBkcElHipW7oVEPwGLBv10I8N6H4TM8K0Wbo0ZyKcLixiXvDf8DaRs%3D"
-			},{
-				"image":"{{__STOR__::/__PROJECT_NAME/desktop/assets}}/images/aliyun-c-320x427.jpg",
-				"link":"https://s.click.taobao.com/t?e=m%3D2%26s%3Dj5M924%2BedkkcQipKwQzePCperVdZeJviEViQ0P1Vf2kguMN8XjClAiXf1vKdgZdQ9%2FAHEBIhN%2BPiIpTKtwc9j3TQ485k9SezlChjoNCSihyXCewRplqrABVF%2BG%2F2LD3qKIUZKvQyk4%2FkxFiXT%2FI5kdv2ej9RFznDI7hRLPtBsnnfiZ1OxkhRwDBkcElHipW7P37PZ5d3EfkhhwnYyXLnHpDoUWJTlJsdRZujRnIpwuLGJe8N%2FwNpGw%3D%3D"
-			}
-		],
-		"hot": "{{recommend.hot.data}}",
 		"crumb":"{{article.category.0}}",
 		"crumbs":[
 			{"name":"首页", "link":"/"},

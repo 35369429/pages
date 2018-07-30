@@ -47,7 +47,7 @@
 		<section class="hot block">
 			<div class="block-title">24小时热文</div>
 			<div class="block-content"  >
-				<div class="item-1" mp:for="{{hot}}" mp:for-from="0" mp:for-to="6"  mp:for-index="{{idx}}"  mp:for-item="{{rs}}">
+				<div class="item-1" mp:for="{{hot.contents.data}}" mp:for-from="0" mp:for-to="6"  mp:for-index="{{idx}}"  mp:for-item="{{rs}}">
 					<div class="image">
 						<a href="/article/{{rs.article_id}}">
 							<img

@@ -33,6 +33,12 @@
 				"slug":"focus"
 			}
 		},
+		"hot": {
+			"api":"/xpmsns/pages/recommend/getContents",
+			"query":{
+				"slug":"24hours_hotnews"
+			}
+		},
 		"page":{
 			"title":"{{current.name}}",
 			"logo":"{{site.site_logo}}"
