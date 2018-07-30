@@ -163,13 +163,12 @@ class Category extends Model {
 		if ( empty($data['category_id'])  ) {
 			try { 
 				$rs = $this->create($data); 
-				$data['category_id'] = $rs['category_id'];
 			 } catch( Excp $e ) {
 				if ( !empty($data['fullname']) ) {
-					$data = $this->updateBy('fullname', $data);
-					$data['category_id'] = $rs['category_id'];
+					$rs = $this->updateBy('fullname', $data);
 				}
 			}
+			$data['category_id'] = $rs['category_id'];
 		}
 
 		// 更新分类
