@@ -408,7 +408,7 @@ class Article extends Model {
 		$qbc = Utils::getTab('xpmsns_pages_article_category as ac', "{none}")->query();
         $qbc->leftJoin('xpmsns_pages_category as c' , 'ac.category_id', '=', 'c.category_id');
         $qbc->whereIn('ac.article_id', $article_ids);
-        $datac = $qbc->select('ac.article_id', 'c.category_id', 'c.slug', 'c.name', 'c.fullname')->get()->toArray();
+        $datac = $qbc->select('ac.article_id', 'c.category_id', 'c.slug', 'c.name', 'c.fullname', 'c.project', 'c.page', 'c.parent_id', 'c.isnav', 'c.param','c.priority')->get()->toArray();
         $cates = [];
         foreach ($datac as $c ) {
         	$id  = $c['article_id'];
@@ -425,6 +425,7 @@ class Article extends Model {
 			$this->format($rs);
 			// 增加分类
 			$rs['category'] = empty($cates[$rs['article_id']]) ?  [] : $cates[$rs['article_id']];
+			$rs['category_last'] = last($rs['category']);
 			$map[$rs['article_id']] = $rs;
 			
 		}
