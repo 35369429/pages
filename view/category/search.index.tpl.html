@@ -162,10 +162,12 @@ use \Xpmse\Utils as Utils;
 							<tr>
 								<th class="font-w300" style="width:5%;max-width:120px;"> 编号</th>
 								<th class="font-w300" style="width:5%;"> 优先级 </th>
-								<th class="font-w300" style="width:15%;">名称</th>
+								<th class="font-w300" style="width:10%;">名称</th>
 								<th class="font-w300" style="width:9%;">参数</th>
-								<th class="font-w300" style="width:10%;">项目</th>
+								<th class="font-w300" style="width:5%;">项目</th>
 								<th class="font-w300" style="width:5%;">导航</th>
+								<th class="font-w300" style="width:5%;">二级导航</th>
+								<th class="font-w300" style="width:5%;">高亮显示</th>
 								<th class="font-w300" style="width:5%;">隐藏</th>
 								<th class="font-w300" style="width:10%;">
 								<?php if ( $query['order'] == 'created_at desc' ) :?>
@@ -198,6 +200,8 @@ use \Xpmse\Utils as Utils;
 								<td><?=$rs['param']?></td>
 									<td><?=$rs['project']?$rs['project']:'default'?></td>
 									<td><?=$rs['isnav']?'是':'否'?></td>
+									<td><?=$rs['issubnav']?'是':'否'?></td>
+									<td><?=$rs['highlight']?'是':'否'?></td>
 									<td><?=$rs['hidden']?'隐藏':'显示'?></td>
 									<td> 
 									<?php if ( $query['order'] == 'created_at desc' ) :?>
@@ -241,6 +245,8 @@ use \Xpmse\Utils as Utils;
 									<td><?=$rs['param']?></td>
 									<td><?=$rs['project']?$rs['project']:'default'?></td>
 									<td><?=$rs['isnav']?'是':'否'?></td>
+									<td><?=$rs['issubnav']?'是':'否'?></td>
+									<td><?=$rs['highlight']?'是':'否'?></td>
 									<td><?=$rs['hidden']?'隐藏':'显示'?></td>
 
 									<td> 
@@ -275,7 +281,7 @@ use \Xpmse\Utils as Utils;
 						<?php endforeach;?>
 
 						<tfoot>
-							<tr><td colspan="10"> <nav class="pull-right">
+							<tr><td colspan="12"> <nav class="pull-right">
 
 								<ul class="pagination">
 									<?php if ($cates['prev'] !== false): ?>
