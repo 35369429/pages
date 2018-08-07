@@ -34,7 +34,8 @@ class Category extends Api {
 		     	'status', 'orStatus',
 		     	'praram','orParam',
 		     	'order',
-		     	'page','perpage'
+		     	'page','perpage',
+		     	"highlight", "isnav", "issubnav"
 		     ]);
 	}
 
@@ -79,7 +80,7 @@ class Category extends Api {
 		$select = is_array($select) ? $select : explode(',', $select);
 
 		// 验证 Select 参数
-		$allowFields = ["*","category_id","project","page","name","fullname","parent_id","priority","hidden","param","status"];
+		$allowFields = ["*","category_id","project","page","name","fullname","parent_id","priority","hidden","param","status", "isnav", "issubnav", "highlight"];
 
 
 		if ( !empty($query['slug']) ) {
