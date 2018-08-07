@@ -4,7 +4,7 @@
  * 推荐数据模型
  *
  * 程序作者: XpmSE机器人
- * 最后修改: 2018-08-08 01:51:53
+ * 最后修改: 2018-08-08 03:08:18
  * 程序母版: /data/stor/private/templates/xpmsns/model/code/model/Name.php
  */
 namespace Xpmsns\Pages\Model;
@@ -1433,6 +1433,7 @@ function getContentsBy( $type,  $recommend_id,  $keywords=[], $page=1, $perpage=
 	 *         	      $query['perpage'] 每页显示记录数，默认为 20
 	 *			      $query["keyword"] 按关键词查询
 	 *			      $query["recommend_id"] 按推荐ID查询 ( = )
+	 *			      $query["slug"] 按推荐别名查询 ( IN )
 	 *			      $query["type"] 按推荐方式查询 ( = )
 	 *			      $query["period"] 按统计周期查询 ( = )
 	 *			      $query["title"] 按主题查询 ( LIKE )
@@ -1590,6 +1591,14 @@ function getContentsBy( $type,  $recommend_id,  $keywords=[], $page=1, $perpage=
 		// 按推荐ID查询 (=)  
 		if ( array_key_exists("recommend_id", $query) &&!empty($query['recommend_id']) ) {
 			$qb->where("recommend.recommend_id", '=', "{$query['recommend_id']}" );
+		}
+		  
+		// 按推荐别名查询 (IN)  
+		if ( array_key_exists("slug", $query) &&!empty($query['slug']) ) {
+			if ( is_string($query['slug']) ) {
+				$query['slug'] = explode(',', $query['slug']);
+			}
+			$qb->whereIn("recommend.slug",  $query['slug'] );
 		}
 		  
 		// 按推荐方式查询 (=)  

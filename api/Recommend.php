@@ -4,7 +4,7 @@
  * 推荐数据接口 
  *
  * 程序作者: XpmSE机器人
- * 最后修改: 2018-08-08 01:51:52
+ * 最后修改: 2018-08-08 03:08:16
  * 程序母版: /data/stor/private/templates/xpmsns/model/code/api/Name.php
  */
 namespace Xpmsns\Pages\Api;
@@ -320,6 +320,7 @@ class Recommend extends Api {
 	 *         	      $query['perpage'] 每页显示记录数，默认为 20
 	 *			      $query["keyword"] 按关键词查询
 	 *			      $query["recommend_id"] 按推荐ID查询 ( AND = )
+	 *			      $query["slug"] 按别名查询 ( AND IN )
 	 *			      $query["type"] 按方式查询 ( AND = )
 	 *			      $query["period"] 按周期查询 ( AND = )
 	 *			      $query["title"] 按主题查询 ( AND LIKE )
@@ -335,6 +336,7 @@ class Recommend extends Api {
 	 *         	      $data['perpage'] 每页显示记录数，默认为 20
 	 *			      $data["keyword"] 按关键词查询
 	 *			      $data["recommend_id"] 按推荐ID查询 ( AND = )
+	 *			      $data["slug"] 按别名查询 ( AND IN )
 	 *			      $data["type"] 按方式查询 ( AND = )
 	 *			      $data["period"] 按周期查询 ( AND = )
 	 *			      $data["title"] 按主题查询 ( AND LIKE )
