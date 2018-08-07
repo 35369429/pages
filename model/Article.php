@@ -964,6 +964,7 @@ class Article extends Model {
 
 		if ( isset($article['publish_time']) ) {
 			$time = strtotime($article['publish_time']);
+			$article['publish_datetime'] = date('Y-m-d H:i:s', $time);
 			$article['publish_time'] = null;
 			if ( $time > 0 ) {
 				$article['publish_time'] = date('@ H时i分', $time);
