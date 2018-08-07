@@ -80,7 +80,7 @@ class Category extends Api {
 		$select = is_array($select) ? $select : explode(',', $select);
 
 		// 验证 Select 参数
-		$allowFields = ["*","category_id","project","page","name","fullname","parent_id","priority","hidden","param","status", "isnav", "issubnav", "highlight","link"];
+		$allowFields = ["*","category_id","project","page","name","fullname","parent_id","priority","hidden","param","status", "isnav", "issubnav", "highlight","link", "slug"];
 
 
 		if ( !empty($query['slug']) ) {
