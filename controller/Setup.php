@@ -81,17 +81,18 @@ class SetupController extends \Xpmse\Loader\Controller {
 			["title"=>"正文页相关推荐","slug"=>"detail", "orderby"=>"publish_time",  "period"=>"unlimited",  "type"=>"auto"],
 
 			// 首页相关推荐
-			["title"=>"首页第一块内容区","slug"=>"section_1", "orderby"=>"publish_time", "period"=>"7days",  "type"=>"auto"],
-			["title"=>"首页第二块内容区","slug"=>"section_2", "orderby"=>"publish_time", "period"=>"7days",  "type"=>"auto"],
-			["title"=>"首页第三块内容区","slug"=>"section_3", "orderby"=>"publish_time", "period"=>"7days",  "type"=>"auto"],
-			["title"=>"首页第四块内容区","slug"=>"section_4", "orderby"=>"publish_time", "period"=>"7days",  "type"=>"auto"],
-			["title"=>"首页第五块内容区","slug"=>"section_5", "orderby"=>"publish_time", "period"=>"7days",  "type"=>"auto"],
-			["title"=>"首页第六块内容区","slug"=>"section_6", "orderby"=>"publish_time", "period"=>"7days",  "type"=>"auto"],
+			["title"=>"首页S1","slug"=>"section_1", "orderby"=>"publish_time", "period"=>"7days",  "type"=>"auto"],
+			["title"=>"首页S2","slug"=>"section_2", "orderby"=>"publish_time", "period"=>"7days",  "type"=>"auto"],
+			["title"=>"首页S3","slug"=>"section_3", "orderby"=>"publish_time", "period"=>"7days",  "type"=>"auto"],
+			["title"=>"首页S4","slug"=>"section_4", "orderby"=>"publish_time", "period"=>"7days",  "type"=>"auto"],
+			["title"=>"首页S5","slug"=>"section_5", "orderby"=>"publish_time", "period"=>"7days",  "type"=>"auto"],
+			["title"=>"首页S6","slug"=>"section_6", "orderby"=>"publish_time", "period"=>"7days",  "type"=>"auto"],
 
 			// 侧边相关推荐
-			["title"=>"侧边第一块内容区","slug"=>"sidebar_section_1", "orderby"=>"publish_time", "period"=>"7days",  "type"=>"auto"],
-			["title"=>"侧边第二块内容区","slug"=>"sidebar_section_2", "orderby"=>"publish_time", "period"=>"7days",  "type"=>"auto"],
-			["title"=>"侧边第三块内容区","slug"=>"sidebar_section_3", "orderby"=>"publish_time", "period"=>"7days",  "type"=>"auto"],
+			["title"=>"侧边S1","slug"=>"sidebar_section_1", "orderby"=>"publish_time", "period"=>"7days",  "type"=>"auto"],
+			["title"=>"侧边S2","slug"=>"sidebar_section_2", "orderby"=>"publish_time", "period"=>"7days",  "type"=>"auto"],
+			["title"=>"侧边S3","slug"=>"sidebar_section_3", "orderby"=>"publish_time", "period"=>"7days",  "type"=>"auto"],
+			["title"=>"侧边S4","slug"=>"sidebar_section_4", "orderby"=>"publish_time", "period"=>"7days",  "type"=>"auto"],
 
 			// 底部帮助推荐
 			["title"=>"帮助中心","slug"=>"_help", "orderby"=>"publish_time",  "period"=>"unlimited",  "type"=>"auto"],
