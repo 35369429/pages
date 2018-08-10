@@ -28,7 +28,7 @@ class Category extends Api {
 		     	'name','orName','inName',
 		     	'fullname','orFullname','inFullname',
 		     	'categoryId','orcategoryId','incategoryId',
-		     	'parentId','orParentId','inParentId',
+		     	'parentId','orParentId','inParentId','noParentId',
 		     	'children',
 		     	'hidden', 'orHidden',
 		     	'status', 'orStatus',
@@ -119,7 +119,7 @@ class Category extends Api {
 
 		// 是否包含子类
 		$query['children'] = isset($query['children']) ? $query['children'] : true;
-		$query['parentId'] = isset($query['parentId']) ? $query['parentId'] : null;
+		$query['parentId'] = array_key_exists('parentId', $query) ? $query['parentId'] : null;
 
 
 		// Order 默认参数
@@ -149,6 +149,10 @@ class Category extends Api {
 		$this->qb( $qb, 'issubnav', 'issubnav', $query );
 		$this->qb( $qb, 'status', 'status', $query );
 		$this->qb( $qb, 'param', 'param', $query, ['and', 'or'], 'like');
+
+		if ( array_key_exists('noParentId', $query) ){
+			$qb->whereNull('parent_id');
+		}
 
 		// 处理排序
 		foreach ($orderList as $order) {
@@ -189,9 +193,11 @@ class Category extends Api {
 			return $resp;
 		}
 	
-
+		// +  Map
+		$resp['map'] = [];
 		foreach ($data as $idx=>$rs ) {
 
+			$resp['map'][$rs['category_id']] = $rs;
 			unset($resp['data'][$idx]['_cid']);
 
 			if ( $query['children'] ) {
