@@ -387,6 +387,20 @@ class Category extends Model {
 	}
 
 
+	/**
+	 * 读取分类以及所有子分类ID
+	 * @param  [type] $category_id [description]
+	 * @return [type]              [description]
+	 */
+	function getCids( $category_id ){
+		$cids = [$category_id];
+		$this->each( function( $data, $depth ) use( & $cids ) {
+			array_push( $cids, $data['category_id']);
+		}, $category_id );
+
+		return $cids;
+	}
+
 
 	/**
 	 * 遍历分类

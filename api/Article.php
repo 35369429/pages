@@ -185,6 +185,24 @@ class Article extends Api {
 		$select[] = 'article.article_id as _aid';
 
 
+		// 按子类查询
+		if ( !empty($query['subcateId']) ) {
+			$query['categoryId'] = $query['subcateId'];
+		}
+
+		// 按分类查询 ( 包含子分类 )
+		if ( !empty($query['categoryId']) ) {
+
+			$c = new \Xpmsns\Pages\Model\Category;
+			$cids = [];
+
+			$cids = $c->getCids( $query['categoryId']);
+			if ( count($cids) > 1 ) {
+				unset(  $query['categoryId'] );
+				$query['inCategoryId'] = join(",", $cids);
+			}
+		}
+
 		// if ( !empty($query['c']) ) {
 		// 	if ( is_numeric($query['c']) ) {
 		// 		$query['categoryId'] = intval($query['c']);
@@ -208,6 +226,8 @@ class Article extends Api {
 				$query['inCategory'] = trim($query['inC']);
 			}
 		}
+
+
 
 		// Utils::out($query);
 
@@ -249,6 +269,7 @@ class Article extends Api {
 		$this->qb( $qb, 'article.update_time', 'update_time', $query, ['and', 'or'], '>=' );
 		$this->qb( $qb, 'article.update_time', 'endUpdate_time', $query, ['and', 'or'], '<=' );
 
+
 		// 处理排序
 		foreach ($orderList as $order) {
 			$order = trim($order);
@@ -264,14 +285,16 @@ class Article extends Api {
 			$qb->orderBy('article.'.$orderArr[0],$orderArr[1]);
 		}
 		
+		
+		// echo $qb->getSql();
+
+
 		// 查询数据
 		$qb->select( $select )->distinct();
-		// echo "\n" . $qb->getSQL() . "\n";
-
-
-		$resultData = $qb ->pgArray($query['perpage'],['article.article_id'], 'page', $query['page'] );
+		$resultData = $qb->pgArray($query['perpage'],['article.article_id'], 'page', $query['page'] );
 		// $resultData = $result->toArray();
 		
+
 
 		// 处理结果集
 		$data = $resultData['data'];
