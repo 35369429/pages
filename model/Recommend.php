@@ -4,7 +4,7 @@
  * 推荐数据模型
  *
  * 程序作者: XpmSE机器人
- * 最后修改: 2018-08-14 02:00:34
+ * 最后修改: 2018-08-14 02:20:54
  * 程序母版: /data/stor/private/templates/xpmsns/model/code/model/Name.php
  */
 namespace Xpmsns\Pages\Model;
@@ -284,7 +284,8 @@ function getContentsBy( $type,  $recommend_id,  $keywords=[], $page=1, $perpage=
 			// 按分类ID查找
 			if ( array_key_exists('category_ids', $query)  && !empty($query['category_ids']) ) {
 				$cids = is_string($query['category_ids']) ? explode(',', $query['category_ids']) : $query['category_ids'];
-				if ( !empty($cids) ) {
+				$cids = array_filter($cids);
+              	if ( !empty($cids) ) {
 					if ( $recommend['ctype'] == 'article' || $recommend['ctype'] == 'all' ) {
 						$qb->leftJoin("xpmsns_pages_article_category as ac", "ac.article_id", "=", "content.article_id");
 						$qb->whereIn('ac.category_id', $cids );	
