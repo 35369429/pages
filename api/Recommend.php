@@ -4,11 +4,11 @@
  * 推荐数据接口 
  *
  * 程序作者: XpmSE机器人
- * 最后修改: 2018-08-14 02:20:52
+ * 最后修改: 2018-08-14 02:29:00
  * 程序母版: /data/stor/private/templates/xpmsns/model/code/api/Name.php
  */
 namespace Xpmsns\Pages\Api;
-                                
+                                 
 
 use \Xpmse\Loader\App;
 use \Xpmse\Excp;
@@ -82,12 +82,12 @@ class Recommend extends Api {
 	/**
 	 * 查询一条推荐记录
 	 * @param  array $query GET 参数
-	 *               $query['select']  读取字段, 默认 ["recommend.recommend_id","recommend.title","recommend.slug","recommend.pos","recommend.style","recommend.type","recommend.period","recommend.images","recommend.tpl_pc","recommend.tpl_h5","recommend.tpl_wxapp","recommend.tpl_android","recommend.tpl_ios","recommend.keywords","recommend.orderby","recommend.created_at","recommend.updated_at","a.article_id","a.title","evt.event_id","evt.name","al.album_id","al.title","c.category_id","c.name"]
+	 *               $query['select']  读取字段, 默认 ["recommend.recommend_id","recommend.title","recommend.slug","recommend.pos","recommend.style","recommend.type","recommend.period","recommend.images","recommend.tpl_pc","recommend.tpl_h5","recommend.tpl_wxapp","recommend.tpl_android","recommend.tpl_ios","recommend.keywords","recommend.orderby","recommend.status","recommend.created_at","recommend.updated_at","a.article_id","a.title","evt.event_id","evt.name","al.album_id","al.title","c.category_id","c.name"]
 	 * 				 $query['recommend_id']  按查询 (多条用 "," 分割)
 	 * 				 $query['slug']  按查询 (多条用 "," 分割)
      *
 	 * @param  array $data  POST 参数
-	 *               $data['select']  返回字段, 默认 ["recommend.recommend_id","recommend.title","recommend.slug","recommend.pos","recommend.style","recommend.type","recommend.period","recommend.images","recommend.tpl_pc","recommend.tpl_h5","recommend.tpl_wxapp","recommend.tpl_android","recommend.tpl_ios","recommend.keywords","recommend.orderby","recommend.created_at","recommend.updated_at","a.article_id","a.title","evt.event_id","evt.name","al.album_id","al.title","c.category_id","c.name"]
+	 *               $data['select']  返回字段, 默认 ["recommend.recommend_id","recommend.title","recommend.slug","recommend.pos","recommend.style","recommend.type","recommend.period","recommend.images","recommend.tpl_pc","recommend.tpl_h5","recommend.tpl_wxapp","recommend.tpl_android","recommend.tpl_ios","recommend.keywords","recommend.orderby","recommend.status","recommend.created_at","recommend.updated_at","a.article_id","a.title","evt.event_id","evt.name","al.album_id","al.title","c.category_id","c.name"]
 	 * 				 $data['recommend_id']  按查询 (多条用 "," 分割)
 	 * 				 $data['slug']  按查询 (多条用 "," 分割)
 	 *
@@ -122,6 +122,7 @@ class Recommend extends Api {
 	 *               	["albums"],  // 相关图集 
 	*               	["_map_album"][$albums[n]]["album_id"], // album.album_id
 	 *               	["orderby"],  // 排序方式 
+	 *               	["status"],  // 状态 
 	 *               	["created_at"],  // 创建时间 
 	 *               	["updated_at"],  // 更新时间 
 	*               	["_map_article"][$articles[n]]["created_at"], // article.created_at
@@ -259,7 +260,7 @@ class Recommend extends Api {
 		$data = array_merge( $query, $data );
 
 		// 读取字段
-		$select = empty($data['select']) ? ["recommend.recommend_id","recommend.title","recommend.slug","recommend.pos","recommend.style","recommend.type","recommend.period","recommend.images","recommend.tpl_pc","recommend.tpl_h5","recommend.tpl_wxapp","recommend.tpl_android","recommend.tpl_ios","recommend.keywords","recommend.orderby","recommend.created_at","recommend.updated_at","a.article_id","a.title","evt.event_id","evt.name","al.album_id","al.title","c.category_id","c.name"] : $data['select'];
+		$select = empty($data['select']) ? ["recommend.recommend_id","recommend.title","recommend.slug","recommend.pos","recommend.style","recommend.type","recommend.period","recommend.images","recommend.tpl_pc","recommend.tpl_h5","recommend.tpl_wxapp","recommend.tpl_android","recommend.tpl_ios","recommend.keywords","recommend.orderby","recommend.status","recommend.created_at","recommend.updated_at","a.article_id","a.title","evt.event_id","evt.name","al.album_id","al.title","c.category_id","c.name"] : $data['select'];
 		if ( is_string($select) ) {
 			$select = explode(',', $select);
 		}
@@ -322,6 +323,7 @@ class Recommend extends Api {
 	 *               $data['events'] 相关活动
 	 *               $data['albums'] 相关图集
 	 *               $data['orderby'] 排序方式
+	 *               $data['status'] 状态
 	 *
 	 * @return array 新增的推荐记录  @see get()
 	 */
@@ -358,7 +360,7 @@ class Recommend extends Api {
 	/**
 	 * 根据条件检索推荐记录
 	 * @param  array $query GET 参数
-	 *         	      $query['select'] 选取字段，默认选择 ["recommend.recommend_id","recommend.title","recommend.pos","recommend.style","recommend.type","recommend.images","recommend.keywords","recommend.orderby","recommend.created_at","recommend.updated_at","a.article_id","a.title","evt.event_id","evt.name","al.album_id","al.title","c.category_id","c.name"]
+	 *         	      $query['select'] 选取字段，默认选择 ["recommend.recommend_id","recommend.title","recommend.pos","recommend.type","recommend.images","recommend.keywords","recommend.orderby","recommend.status","recommend.created_at","recommend.updated_at","a.article_id","a.title","evt.event_id","evt.name","al.album_id","al.title","c.category_id","c.name"]
 	 *         	      $query['page'] 页码，默认为 1
 	 *         	      $query['perpage'] 每页显示记录数，默认为 20
 	 *			      $query["keyword"] 按关键词查询
@@ -371,11 +373,12 @@ class Recommend extends Api {
 	 *			      $query["ctype"] 按内容类型查询 ( AND = )
 	 *			      $query["thumb_only"] 按必须包含主题图片查询 ( AND = )
 	 *			      $query["video_only"] 按必须包含视频查询 ( AND = )
+	 *			      $query["status"] 按状态查询 ( AND = )
 	 *			      $query["orderby_created_at_asc"]  按创建时间 ASC 排序
 	 *			      $query["orderby_updated_at_asc"]  按更新时间 ASC 排序
      *
 	 * @param  array $data  POST 参数
-	 *         	      $data['select'] 选取字段，默认选择 ["name=recommend_id","name=title","name=pos","name=style","name=type","name=images","name=keywords","name=orderby","name=created_at","name=updated_at","model=%5CXpmsns%5CPages%5CModel%5CArticle&name=article_id&table=article&prefix=xpmsns_pages_&alias=a&type=inWhere","model=%5CXpmsns%5CPages%5CModel%5CArticle&name=title&table=article&prefix=xpmsns_pages_&alias=a&type=inWhere","model=%5CXpmsns%5CPages%5CModel%5CEvent&name=event_id&table=event&prefix=xpmsns_pages_&alias=evt&type=inWhere","model=%5CXpmsns%5CPages%5CModel%5CEvent&name=name&table=event&prefix=xpmsns_pages_&alias=evt&type=inWhere","model=%5CXpmsns%5CPages%5CModel%5CAlbum&name=album_id&table=album&prefix=xpmsns_pages_&alias=al&type=inWhere","model=%5CXpmsns%5CPages%5CModel%5CAlbum&name=title&table=album&prefix=xpmsns_pages_&alias=al&type=inWhere","model=%5CXpmsns%5CPages%5CModel%5CCategory&name=category_id&table=category&prefix=xpmsns_pages_&alias=c&type=inWhere","model=%5CXpmsns%5CPages%5CModel%5CCategory&name=name&table=category&prefix=xpmsns_pages_&alias=c&type=inWhere"]
+	 *         	      $data['select'] 选取字段，默认选择 ["name=recommend_id","name=title","name=pos","name=type","name=images","name=keywords","name=orderby","name=status","name=created_at","name=updated_at","model=%5CXpmsns%5CPages%5CModel%5CArticle&name=article_id&table=article&prefix=xpmsns_pages_&alias=a&type=inWhere","model=%5CXpmsns%5CPages%5CModel%5CArticle&name=title&table=article&prefix=xpmsns_pages_&alias=a&type=inWhere","model=%5CXpmsns%5CPages%5CModel%5CEvent&name=event_id&table=event&prefix=xpmsns_pages_&alias=evt&type=inWhere","model=%5CXpmsns%5CPages%5CModel%5CEvent&name=name&table=event&prefix=xpmsns_pages_&alias=evt&type=inWhere","model=%5CXpmsns%5CPages%5CModel%5CAlbum&name=album_id&table=album&prefix=xpmsns_pages_&alias=al&type=inWhere","model=%5CXpmsns%5CPages%5CModel%5CAlbum&name=title&table=album&prefix=xpmsns_pages_&alias=al&type=inWhere","model=%5CXpmsns%5CPages%5CModel%5CCategory&name=category_id&table=category&prefix=xpmsns_pages_&alias=c&type=inWhere","model=%5CXpmsns%5CPages%5CModel%5CCategory&name=name&table=category&prefix=xpmsns_pages_&alias=c&type=inWhere"]
 	 *         	      $data['page'] 页码，默认为 1
 	 *         	      $data['perpage'] 每页显示记录数，默认为 20
 	 *			      $data["keyword"] 按关键词查询
@@ -388,6 +391,7 @@ class Recommend extends Api {
 	 *			      $data["ctype"] 按内容类型查询 ( AND = )
 	 *			      $data["thumb_only"] 按必须包含主题图片查询 ( AND = )
 	 *			      $data["video_only"] 按必须包含视频查询 ( AND = )
+	 *			      $data["status"] 按状态查询 ( AND = )
 	 *			      $data["orderby_created_at_asc"]  按创建时间 ASC 排序
 	 *			      $data["orderby_updated_at_asc"]  按更新时间 ASC 排序
 	 *
@@ -423,6 +427,7 @@ class Recommend extends Api {
 	 *               	["albums"],  // 相关图集 
 	*               	["album"][$albums[n]]["album_id"], // album.album_id
 	 *               	["orderby"],  // 排序方式 
+	 *               	["status"],  // 状态 
 	 *               	["created_at"],  // 创建时间 
 	 *               	["updated_at"],  // 更新时间 
 	*               	["article"][$articles[n]]["created_at"], // article.created_at
@@ -560,7 +565,7 @@ class Recommend extends Api {
 		$data = array_merge( $query, $data );
 
 		// 读取字段
-		$select = empty($data['select']) ? ["recommend.recommend_id","recommend.title","recommend.pos","recommend.style","recommend.type","recommend.images","recommend.keywords","recommend.orderby","recommend.created_at","recommend.updated_at","a.article_id","a.title","evt.event_id","evt.name","al.album_id","al.title","c.category_id","c.name"] : $data['select'];
+		$select = empty($data['select']) ? ["recommend.recommend_id","recommend.title","recommend.pos","recommend.type","recommend.images","recommend.keywords","recommend.orderby","recommend.status","recommend.created_at","recommend.updated_at","a.article_id","a.title","evt.event_id","evt.name","al.album_id","al.title","c.category_id","c.name"] : $data['select'];
 		if ( is_string($select) ) {
 			$select = explode(',', $select);
 		}

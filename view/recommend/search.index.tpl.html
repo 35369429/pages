@@ -238,6 +238,36 @@ use \Xpmse\T;
 								</ul>
 							</div> <!-- END 统计周期过滤 -->
 
+							<!-- 状态过滤 -->
+							<div class="btn-group pull-right push-20-l" role="group">  
+								<button class="btn btn-default btn-xs dropdown-toggle" type="button" data-toggle="dropdown" >
+									<i class="glyphicon glyphicon-list-alt"></i> 
+									<?=($query['status'] == 'on') ? '开启' : '' ?>
+									<?=($query['status'] == 'off') ? '关闭' : '' ?>
+									<?=(empty($query['status'])) ? '状态' : '' ?>
+									<span class="caret"></span> 
+								</button>
+
+								<ul class="dropdown-menu dropdown-menu-right"  style="min-width: 87px;">
+									<li class="dropdown-header">状态</li>
+									<li>
+										<a href="javascript:search('status','')">
+										   全部
+										</a>
+									</li>
+									<li >
+										<a href="javascript:search('status','on')">
+										   开启
+										</a>
+									</li>
+									<li >
+										<a href="javascript:search('status','off')">
+										   关闭
+										</a>
+									</li>
+								</ul>
+							</div> <!-- END 状态过滤 -->
+
 
 						</div><!-- END col-xs-7 -->
 
@@ -256,6 +286,7 @@ use \Xpmse\T;
 								<th class="font-w300"> 文章排序 </th>
 								<th class="font-w300"> 关键词 </th>
 								<th class="font-w300"> 创建时间 </th>
+								<th class="font-w300"> 状态 </th>
 							</tr>
 						</thead>
 
@@ -287,13 +318,16 @@ use \Xpmse\T;
 								<td class="font-w300">
 									<?php $v=null; $v=T::s("{{ updated_at ? updated_at : created_at }}", $rs ); echo empty($v) ? T::s("", $rs ) : $v; ?>
 								</td>
+								<td class="font-w300">
+									<span class="text-<?=$rs['_status']['style']?>"><?=$rs['_status']['name'] ? $rs['_status']['name']  : $rs['status'] ?></span>
+								</td>
 							</tr>
 							<?php endforeach;?>
 
 						</tbody>
 
 						<tfoot>
-							<tr><td colspan="8"> <nav class="pull-right">
+							<tr><td colspan="9"> <nav class="pull-right">
 
 								<ul class="pagination">
 									<?php if ($response['prev'] !== false): ?>

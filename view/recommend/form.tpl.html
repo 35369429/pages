@@ -464,6 +464,24 @@ use \Xpmse\T;
 		</script>
 	</div><!-- END 多图片组上传: 摘要图片 (images) -->
 
+
+ 
+	<!-- 下拉选择: 状态 (status) 开始  -->
+	<div class="form-group   ">
+		<label class="col-xs-2 control-label" for="status">状态</label>
+		<div class="col-xs-8">
+			<select class="js-select2 form-control input-lg" style="width: 100%;"
+					id="status" name="status"  
+					data-placeholder="" >
+				<option></option>
+				<?php $rs["status"] = is_string($rs["status"]) ? [$rs["status"]] : $rs["status"] ; if (empty($rs["status"])) { $rs["status"] = ["on"]; } ?>
+<option value="on" <?=in_array("on", $rs["status"]) ? "selected" : ""?> > 开启</option>
+<option value="off" <?=in_array("off", $rs["status"]) ? "selected" : ""?> > 关闭</option>
+			</select>
+			<div class="help-block"></div>
+		</div>
+	</div><!-- END 下拉选择: 状态 (status) -->
+
 				<!--  提交按钮 -->
 				<div class="block block-quickpanel sidebar-mini">
 					<div class="block-quickpanel-content" >

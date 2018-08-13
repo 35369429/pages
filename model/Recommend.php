@@ -4,11 +4,11 @@
  * 推荐数据模型
  *
  * 程序作者: XpmSE机器人
- * 最后修改: 2018-08-14 02:20:54
+ * 最后修改: 2018-08-14 02:29:02
  * 程序母版: /data/stor/private/templates/xpmsns/model/code/model/Name.php
  */
 namespace Xpmsns\Pages\Model;
-                                
+                                 
 use \Xpmse\Excp;
 use \Xpmse\Model;
 use \Xpmse\Utils;
@@ -152,7 +152,7 @@ function getContents(  $recommend_id,  $keywords=[],  $page=1, $perpage=20, $now
 	 */
 function getContentsBy( $type,  $recommend_id,  $keywords=[], $page=1, $perpage=20, $now=null) {
 		$select = [
-					'recommend.title', 'recommend.summary', 'recommend.type', 'recommend.ctype', 'recommend.keywords', "recommend.period", 
+					'recommend.title', 'recommend.summary', 'recommend.type', 'recommend.ctype', 'recommend.keywords', "recommend.period", "recommend.pos","recommend.style","recommend.status",
 					'recommend.thumb_only', 'recommend.video_only',
 					"orderby", 'articles', 'albums', 'events', 'categories'
 				];
@@ -509,6 +509,8 @@ function getContentsBy( $type,  $recommend_id,  $keywords=[], $page=1, $perpage=
 		$this->putColumn( 'albums', $this->type("text", ["json"=>true, "null"=>true]));
 		// 排序方式
 		$this->putColumn( 'orderby', $this->type("string", ["length"=>128, "index"=>true, "null"=>true]));
+		// 状态
+		$this->putColumn( 'status', $this->type("string", ["length"=>10, "index"=>true, "default"=>"on", "null"=>true]));
 
 		return $this;
 	}
@@ -675,6 +677,25 @@ function getContentsBy( $type,  $recommend_id,  $keywords=[], $page=1, $perpage=
 			$rs["_orderby"] = $rs["_orderby_types"][$rs["orderby"]];
 		}
 
+		// 格式化: 状态
+		// 返回值: "_status_types" 所有状态表述, "_status_name" 状态名称,  "_status" 当前状态表述, "status" 当前状态数值
+		if ( array_key_exists('status', $rs ) && !empty($rs['status']) ) {
+			$rs["_status_types"] = [
+		  		"on" => [
+		  			"value" => "on",
+		  			"name" => "开启",
+		  			"style" => "primary"
+		  		],
+		  		"off" => [
+		  			"value" => "off",
+		  			"name" => "关闭",
+		  			"style" => "danger"
+		  		],
+			];
+			$rs["_status_name"] = "status";
+			$rs["_status"] = $rs["_status_types"][$rs["status"]];
+		}
+
  
 		// <在这里添加更多数据格式化逻辑>
 		
@@ -716,6 +737,7 @@ function getContentsBy( $type,  $recommend_id,  $keywords=[], $page=1, $perpage=
 	 *          	  $rs["albums"],  // 相关图集 
 	 *                $rs["_map_album"][$albums[n]]["album_id"], // album.album_id
 	 *          	  $rs["orderby"],  // 排序方式 
+	 *          	  $rs["status"],  // 状态 
 	 *          	  $rs["created_at"],  // 创建时间 
 	 *          	  $rs["updated_at"],  // 更新时间 
 	 *                $rs["_map_article"][$articles[n]]["created_at"], // article.created_at
@@ -922,7 +944,7 @@ function getContentsBy( $type,  $recommend_id,  $keywords=[], $page=1, $perpage=
 	 * @param array   $select       选取字段，默认选取所有
 	 * @return array 推荐记录MAP {"recommend_id1":{"key":"value",...}...}
 	 */
-	public function getIn($recommend_ids, $select=["recommend.slug","recommend.title","recommend.type","recommend.ctype","recommend.period","recommend.orderby","recommend.keywords","recommend.created_at","recommend.updated_at"], $order=["recommend.created_at"=>"asc"] ) {
+	public function getIn($recommend_ids, $select=["recommend.slug","recommend.title","recommend.type","recommend.ctype","recommend.period","recommend.orderby","recommend.keywords","recommend.created_at","recommend.updated_at","recommend.status"], $order=["recommend.created_at"=>"asc"] ) {
 		return $this->getInByRecommendId( $recommend_ids, $select, $order);
 	}
 	
@@ -934,7 +956,7 @@ function getContentsBy( $type,  $recommend_id,  $keywords=[], $page=1, $perpage=
 	 * @param array   $select       选取字段，默认选取所有
 	 * @return array 推荐记录MAP {"recommend_id1":{"key":"value",...}...}
 	 */
-	public function getInByRecommendId($recommend_ids, $select=["recommend.slug","recommend.title","recommend.type","recommend.ctype","recommend.period","recommend.orderby","recommend.keywords","recommend.created_at","recommend.updated_at"], $order=["recommend.created_at"=>"asc"] ) {
+	public function getInByRecommendId($recommend_ids, $select=["recommend.slug","recommend.title","recommend.type","recommend.ctype","recommend.period","recommend.orderby","recommend.keywords","recommend.created_at","recommend.updated_at","recommend.status"], $order=["recommend.created_at"=>"asc"] ) {
 		
 		if ( is_string($select) ) {
 			$select = explode(',', $select);
@@ -1067,6 +1089,7 @@ function getContentsBy( $type,  $recommend_id,  $keywords=[], $page=1, $perpage=
 	 *          	  $rs["albums"],  // 相关图集 
 	 *                $rs["_map_album"][$albums[n]]["album_id"], // album.album_id
 	 *          	  $rs["orderby"],  // 排序方式 
+	 *          	  $rs["status"],  // 状态 
 	 *          	  $rs["created_at"],  // 创建时间 
 	 *          	  $rs["updated_at"],  // 更新时间 
 	 *                $rs["_map_article"][$articles[n]]["created_at"], // article.created_at
@@ -1275,7 +1298,7 @@ function getContentsBy( $type,  $recommend_id,  $keywords=[], $page=1, $perpage=
 	 * @param array   $select       选取字段，默认选取所有
 	 * @return array 推荐记录MAP {"slug1":{"key":"value",...}...}
 	 */
-	public function getInBySlug($slugs, $select=["recommend.slug","recommend.title","recommend.type","recommend.ctype","recommend.period","recommend.orderby","recommend.keywords","recommend.created_at","recommend.updated_at"], $order=["recommend.created_at"=>"asc"] ) {
+	public function getInBySlug($slugs, $select=["recommend.slug","recommend.title","recommend.type","recommend.ctype","recommend.period","recommend.orderby","recommend.keywords","recommend.created_at","recommend.updated_at","recommend.status"], $order=["recommend.created_at"=>"asc"] ) {
 		
 		if ( is_string($select) ) {
 			$select = explode(',', $select);
@@ -1477,7 +1500,7 @@ function getContentsBy( $type,  $recommend_id,  $keywords=[], $page=1, $perpage=
 	 * @param array   $order   排序方式 ["field"=>"asc", "field2"=>"desc"...]
 	 * @return array 推荐记录数组 [{"key":"value",...}...]
 	 */
-	public function top( $limit=100, $select=["recommend.slug","recommend.title","recommend.type","recommend.ctype","recommend.period","recommend.orderby","recommend.keywords","recommend.created_at","recommend.updated_at"], $order=["recommend.created_at"=>"asc"] ) {
+	public function top( $limit=100, $select=["recommend.slug","recommend.title","recommend.type","recommend.ctype","recommend.period","recommend.orderby","recommend.keywords","recommend.created_at","recommend.updated_at","recommend.status"], $order=["recommend.created_at"=>"asc"] ) {
 
 		if ( is_string($select) ) {
 			$select = explode(',', $select);
@@ -1558,7 +1581,7 @@ function getContentsBy( $type,  $recommend_id,  $keywords=[], $page=1, $perpage=
 	/**
 	 * 按条件检索推荐记录
 	 * @param  array  $query
-	 *         	      $query['select'] 选取字段，默认选择 ["recommend.slug","recommend.title","recommend.type","recommend.ctype","recommend.period","recommend.orderby","recommend.keywords","recommend.created_at","recommend.updated_at"]
+	 *         	      $query['select'] 选取字段，默认选择 ["recommend.slug","recommend.title","recommend.type","recommend.ctype","recommend.period","recommend.orderby","recommend.keywords","recommend.created_at","recommend.updated_at","recommend.status"]
 	 *         	      $query['page'] 页码，默认为 1
 	 *         	      $query['perpage'] 每页显示记录数，默认为 20
 	 *			      $query["keyword"] 按关键词查询
@@ -1571,6 +1594,7 @@ function getContentsBy( $type,  $recommend_id,  $keywords=[], $page=1, $perpage=
 	 *			      $query["ctype"] 按内容类型查询 ( = )
 	 *			      $query["thumb_only"] 按必须有主题图片查询 ( = )
 	 *			      $query["video_only"] 按必须有视频内容查询 ( = )
+	 *			      $query["status"] 按状态查询 ( = )
 	 *			      $query["orderby_created_at_asc"]  按创建时间 ASC 排序
 	 *			      $query["orderby_updated_at_asc"]  按更新时间 ASC 排序
 	 *           
@@ -1605,6 +1629,7 @@ function getContentsBy( $type,  $recommend_id,  $keywords=[], $page=1, $perpage=
 	 *               	["albums"],  // 相关图集 
 	 *               	["album"][$albums[n]]["album_id"], // album.album_id
 	 *               	["orderby"],  // 排序方式 
+	 *               	["status"],  // 状态 
 	 *               	["created_at"],  // 创建时间 
 	 *               	["updated_at"],  // 更新时间 
 	 *               	["article"][$articles[n]]["created_at"], // article.created_at
@@ -1737,7 +1762,7 @@ function getContentsBy( $type,  $recommend_id,  $keywords=[], $page=1, $perpage=
 	 */
 	public function search( $query = [] ) {
 
-		$select = empty($query['select']) ? ["recommend.slug","recommend.title","recommend.type","recommend.ctype","recommend.period","recommend.orderby","recommend.keywords","recommend.created_at","recommend.updated_at"] : $query['select'];
+		$select = empty($query['select']) ? ["recommend.slug","recommend.title","recommend.type","recommend.ctype","recommend.period","recommend.orderby","recommend.keywords","recommend.created_at","recommend.updated_at","recommend.status"] : $query['select'];
 		if ( is_string($select) ) {
 			$select = explode(',', $select);
 		}
@@ -1805,6 +1830,11 @@ function getContentsBy( $type,  $recommend_id,  $keywords=[], $page=1, $perpage=
 		// 按必须有视频内容查询 (=)  
 		if ( array_key_exists("video_only", $query) &&!empty($query['video_only']) ) {
 			$qb->where("recommend.video_only", '=', "{$query['video_only']}" );
+		}
+		  
+		// 按状态查询 (=)  
+		if ( array_key_exists("status", $query) &&!empty($query['status']) ) {
+			$qb->where("recommend.status", '=', "{$query['status']}" );
 		}
 		  
 
@@ -1999,6 +2029,7 @@ function getContentsBy( $type,  $recommend_id,  $keywords=[], $page=1, $perpage=
 			"events",  // 相关活动
 			"albums",  // 相关图集
 			"orderby",  // 排序方式
+			"status",  // 状态
 			"created_at",  // 创建时间
 			"updated_at",  // 更新时间
 		];
