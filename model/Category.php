@@ -211,6 +211,25 @@ class Category extends Model {
 		return $rs;
 	}
 
+	function select2( $query = [] ) {
+
+		$resp = [ "total"=>0, "data"=>[]];
+		$map = [];
+
+		$this->each( function( $cate, $depth ) use( & $resp, & $map ) {
+			$map[$cate['category_id']] = $cate;
+			$resp['total'] = $resp['total'] + 1;
+
+			if ( !empty($cate['parent_id']) ) {
+				$parent = $map[$cate['parent_id']];
+				$cate['name'] = $parent['name'] . "::" .$cate['name'];
+			}
+
+			array_push($resp['data'], $cate);
+		});
+
+		return $resp;
+	}
 
 	/**
 	 * 分类查询

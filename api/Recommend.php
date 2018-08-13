@@ -4,11 +4,11 @@
  * 推荐数据接口 
  *
  * 程序作者: XpmSE机器人
- * 最后修改: 2018-08-08 03:08:16
+ * 最后修改: 2018-08-14 01:28:03
  * 程序母版: /data/stor/private/templates/xpmsns/model/code/api/Name.php
  */
 namespace Xpmsns\Pages\Api;
-                             
+                               
 
 use \Xpmse\Loader\App;
 use \Xpmse\Excp;
@@ -82,12 +82,12 @@ class Recommend extends Api {
 	/**
 	 * 查询一条推荐记录
 	 * @param  array $query GET 参数
-	 *               $query['select']  读取字段, 默认 ["recommend.recommend_id","recommend.title","recommend.slug","recommend.type","recommend.period","recommend.images","recommend.tpl_pc","recommend.tpl_h5","recommend.tpl_wxapp","recommend.tpl_android","recommend.tpl_ios","recommend.keywords","recommend.orderby","recommend.created_at","recommend.updated_at","a.article_id","a.title","evt.event_id","evt.name","al.album_id","al.title","c.category_id","c.name"]
+	 *               $query['select']  读取字段, 默认 ["recommend.recommend_id","recommend.title","recommend.slug","recommend.pos","recommend.type","recommend.period","recommend.images","recommend.tpl_pc","recommend.tpl_h5","recommend.tpl_wxapp","recommend.tpl_android","recommend.tpl_ios","recommend.keywords","recommend.orderby","recommend.created_at","recommend.updated_at","a.article_id","a.title","evt.event_id","evt.name","al.album_id","al.title","c.category_id","c.name"]
 	 * 				 $query['recommend_id']  按查询 (多条用 "," 分割)
 	 * 				 $query['slug']  按查询 (多条用 "," 分割)
      *
 	 * @param  array $data  POST 参数
-	 *               $data['select']  返回字段, 默认 ["recommend.recommend_id","recommend.title","recommend.slug","recommend.type","recommend.period","recommend.images","recommend.tpl_pc","recommend.tpl_h5","recommend.tpl_wxapp","recommend.tpl_android","recommend.tpl_ios","recommend.keywords","recommend.orderby","recommend.created_at","recommend.updated_at","a.article_id","a.title","evt.event_id","evt.name","al.album_id","al.title","c.category_id","c.name"]
+	 *               $data['select']  返回字段, 默认 ["recommend.recommend_id","recommend.title","recommend.slug","recommend.pos","recommend.type","recommend.period","recommend.images","recommend.tpl_pc","recommend.tpl_h5","recommend.tpl_wxapp","recommend.tpl_android","recommend.tpl_ios","recommend.keywords","recommend.orderby","recommend.created_at","recommend.updated_at","a.article_id","a.title","evt.event_id","evt.name","al.album_id","al.title","c.category_id","c.name"]
 	 * 				 $data['recommend_id']  按查询 (多条用 "," 分割)
 	 * 				 $data['slug']  按查询 (多条用 "," 分割)
 	 *
@@ -97,6 +97,7 @@ class Recommend extends Api {
 	 *               	["summary"],  // 简介 
 	 *               	["icon"],  // 图标 
 	 *               	["slug"],  // 别名 
+	 *               	["pos"],  // 呈现位置 
 	 *               	["type"],  // 方式 
 	 *               	["ctype"],  // 内容类型 
 	 *               	["thumb_only"],  // 必须包含主题图片 
@@ -113,6 +114,8 @@ class Recommend extends Api {
 	*               	["_map_category"][$categories[n]]["category_id"], // category.category_id
 	 *               	["articles"],  // 相关文章 
 	*               	["_map_article"][$articles[n]]["article_id"], // article.article_id
+	 *               	["exclude_articles"],  // 排除文章 
+	*               	["_map_article"][$exclude_articles[n]]["article_id"], // article.article_id
 	 *               	["events"],  // 相关活动 
 	*               	["_map_event"][$events[n]]["event_id"], // event.event_id
 	 *               	["albums"],  // 相关图集 
@@ -156,6 +159,42 @@ class Recommend extends Api {
 	*               	["_map_article"][$articles[n]]["like_cnt"], // article.like_cnt
 	*               	["_map_article"][$articles[n]]["dislike_cnt"], // article.dislike_cnt
 	*               	["_map_article"][$articles[n]]["comment_cnt"], // article.comment_cnt
+	*               	["_map_article"][$exclude_articles[n]]["created_at"], // article.created_at
+	*               	["_map_article"][$exclude_articles[n]]["updated_at"], // article.updated_at
+	*               	["_map_article"][$exclude_articles[n]]["outer_id"], // article.outer_id
+	*               	["_map_article"][$exclude_articles[n]]["cover"], // article.cover
+	*               	["_map_article"][$exclude_articles[n]]["thumbs"], // article.thumbs
+	*               	["_map_article"][$exclude_articles[n]]["images"], // article.images
+	*               	["_map_article"][$exclude_articles[n]]["videos"], // article.videos
+	*               	["_map_article"][$exclude_articles[n]]["audios"], // article.audios
+	*               	["_map_article"][$exclude_articles[n]]["title"], // article.title
+	*               	["_map_article"][$exclude_articles[n]]["author"], // article.author
+	*               	["_map_article"][$exclude_articles[n]]["origin"], // article.origin
+	*               	["_map_article"][$exclude_articles[n]]["origin_url"], // article.origin_url
+	*               	["_map_article"][$exclude_articles[n]]["summary"], // article.summary
+	*               	["_map_article"][$exclude_articles[n]]["seo_title"], // article.seo_title
+	*               	["_map_article"][$exclude_articles[n]]["seo_keywords"], // article.seo_keywords
+	*               	["_map_article"][$exclude_articles[n]]["seo_summary"], // article.seo_summary
+	*               	["_map_article"][$exclude_articles[n]]["publish_time"], // article.publish_time
+	*               	["_map_article"][$exclude_articles[n]]["update_time"], // article.update_time
+	*               	["_map_article"][$exclude_articles[n]]["create_time"], // article.create_time
+	*               	["_map_article"][$exclude_articles[n]]["baidulink_time"], // article.baidulink_time
+	*               	["_map_article"][$exclude_articles[n]]["sync"], // article.sync
+	*               	["_map_article"][$exclude_articles[n]]["content"], // article.content
+	*               	["_map_article"][$exclude_articles[n]]["ap_content"], // article.ap_content
+	*               	["_map_article"][$exclude_articles[n]]["delta"], // article.delta
+	*               	["_map_article"][$exclude_articles[n]]["param"], // article.param
+	*               	["_map_article"][$exclude_articles[n]]["stick"], // article.stick
+	*               	["_map_article"][$exclude_articles[n]]["preview"], // article.preview
+	*               	["_map_article"][$exclude_articles[n]]["links"], // article.links
+	*               	["_map_article"][$exclude_articles[n]]["user"], // article.user
+	*               	["_map_article"][$exclude_articles[n]]["policies"], // article.policies
+	*               	["_map_article"][$exclude_articles[n]]["status"], // article.status
+	*               	["_map_article"][$exclude_articles[n]]["keywords"], // article.keywords
+	*               	["_map_article"][$exclude_articles[n]]["view_cnt"], // article.view_cnt
+	*               	["_map_article"][$exclude_articles[n]]["like_cnt"], // article.like_cnt
+	*               	["_map_article"][$exclude_articles[n]]["dislike_cnt"], // article.dislike_cnt
+	*               	["_map_article"][$exclude_articles[n]]["comment_cnt"], // article.comment_cnt
 	*               	["_map_event"][$events[n]]["created_at"], // event.created_at
 	*               	["_map_event"][$events[n]]["updated_at"], // event.updated_at
 	*               	["_map_event"][$events[n]]["slug"], // event.slug
@@ -219,7 +258,7 @@ class Recommend extends Api {
 		$data = array_merge( $query, $data );
 
 		// 读取字段
-		$select = empty($data['select']) ? ["recommend.recommend_id","recommend.title","recommend.slug","recommend.type","recommend.period","recommend.images","recommend.tpl_pc","recommend.tpl_h5","recommend.tpl_wxapp","recommend.tpl_android","recommend.tpl_ios","recommend.keywords","recommend.orderby","recommend.created_at","recommend.updated_at","a.article_id","a.title","evt.event_id","evt.name","al.album_id","al.title","c.category_id","c.name"] : $data['select'];
+		$select = empty($data['select']) ? ["recommend.recommend_id","recommend.title","recommend.slug","recommend.pos","recommend.type","recommend.period","recommend.images","recommend.tpl_pc","recommend.tpl_h5","recommend.tpl_wxapp","recommend.tpl_android","recommend.tpl_ios","recommend.keywords","recommend.orderby","recommend.created_at","recommend.updated_at","a.article_id","a.title","evt.event_id","evt.name","al.album_id","al.title","c.category_id","c.name"] : $data['select'];
 		if ( is_string($select) ) {
 			$select = explode(',', $select);
 		}
@@ -262,6 +301,7 @@ class Recommend extends Api {
 	 *               $data['summary'] 简介
 	 *               $data['icon'] 图标
 	 *               $data['slug'] 别名
+	 *               $data['pos'] 呈现位置
 	 *               $data['type'] 方式
 	 *               $data['ctype'] 内容类型
 	 *               $data['thumb_only'] 必须包含主题图片
@@ -276,6 +316,7 @@ class Recommend extends Api {
 	 *               $data['keywords'] 关键词
 	 *               $data['categories'] 相关栏目
 	 *               $data['articles'] 相关文章
+	 *               $data['exclude_articles'] 排除文章
 	 *               $data['events'] 相关活动
 	 *               $data['albums'] 相关图集
 	 *               $data['orderby'] 排序方式
@@ -315,12 +356,13 @@ class Recommend extends Api {
 	/**
 	 * 根据条件检索推荐记录
 	 * @param  array $query GET 参数
-	 *         	      $query['select'] 选取字段，默认选择 ["recommend.recommend_id","recommend.title","recommend.type","recommend.images","recommend.keywords","recommend.orderby","recommend.created_at","recommend.updated_at","a.article_id","a.title","evt.event_id","evt.name","al.album_id","al.title","c.category_id","c.name"]
+	 *         	      $query['select'] 选取字段，默认选择 ["recommend.recommend_id","recommend.title","recommend.pos","recommend.type","recommend.images","recommend.keywords","recommend.orderby","recommend.created_at","recommend.updated_at","a.article_id","a.title","evt.event_id","evt.name","al.album_id","al.title","c.category_id","c.name"]
 	 *         	      $query['page'] 页码，默认为 1
 	 *         	      $query['perpage'] 每页显示记录数，默认为 20
 	 *			      $query["keyword"] 按关键词查询
 	 *			      $query["recommend_id"] 按推荐ID查询 ( AND = )
 	 *			      $query["slug"] 按别名查询 ( AND IN )
+	 *			      $query["pos"] 按呈现位置查询 ( AND = )
 	 *			      $query["type"] 按方式查询 ( AND = )
 	 *			      $query["period"] 按周期查询 ( AND = )
 	 *			      $query["title"] 按主题查询 ( AND LIKE )
@@ -331,12 +373,13 @@ class Recommend extends Api {
 	 *			      $query["orderby_updated_at_asc"]  按更新时间 ASC 排序
      *
 	 * @param  array $data  POST 参数
-	 *         	      $data['select'] 选取字段，默认选择 ["name=recommend_id","name=title","name=type","name=images","name=keywords","name=orderby","name=created_at","name=updated_at","model=%5CXpmsns%5CPages%5CModel%5CArticle&name=article_id&table=article&prefix=xpmsns_pages_&alias=a&type=inWhere","model=%5CXpmsns%5CPages%5CModel%5CArticle&name=title&table=article&prefix=xpmsns_pages_&alias=a&type=inWhere","model=%5CXpmsns%5CPages%5CModel%5CEvent&name=event_id&table=event&prefix=xpmsns_pages_&alias=evt&type=inWhere","model=%5CXpmsns%5CPages%5CModel%5CEvent&name=name&table=event&prefix=xpmsns_pages_&alias=evt&type=inWhere","model=%5CXpmsns%5CPages%5CModel%5CAlbum&name=album_id&table=album&prefix=xpmsns_pages_&alias=al&type=inWhere","model=%5CXpmsns%5CPages%5CModel%5CAlbum&name=title&table=album&prefix=xpmsns_pages_&alias=al&type=inWhere","model=%5CXpmsns%5CPages%5CModel%5CCategory&name=category_id&table=category&prefix=xpmsns_pages_&alias=c&type=inWhere","model=%5CXpmsns%5CPages%5CModel%5CCategory&name=name&table=category&prefix=xpmsns_pages_&alias=c&type=inWhere"]
+	 *         	      $data['select'] 选取字段，默认选择 ["name=recommend_id","name=title","name=pos","name=type","name=images","name=keywords","name=orderby","name=created_at","name=updated_at","model=%5CXpmsns%5CPages%5CModel%5CArticle&name=article_id&table=article&prefix=xpmsns_pages_&alias=a&type=inWhere","model=%5CXpmsns%5CPages%5CModel%5CArticle&name=title&table=article&prefix=xpmsns_pages_&alias=a&type=inWhere","model=%5CXpmsns%5CPages%5CModel%5CEvent&name=event_id&table=event&prefix=xpmsns_pages_&alias=evt&type=inWhere","model=%5CXpmsns%5CPages%5CModel%5CEvent&name=name&table=event&prefix=xpmsns_pages_&alias=evt&type=inWhere","model=%5CXpmsns%5CPages%5CModel%5CAlbum&name=album_id&table=album&prefix=xpmsns_pages_&alias=al&type=inWhere","model=%5CXpmsns%5CPages%5CModel%5CAlbum&name=title&table=album&prefix=xpmsns_pages_&alias=al&type=inWhere","model=%5CXpmsns%5CPages%5CModel%5CCategory&name=category_id&table=category&prefix=xpmsns_pages_&alias=c&type=inWhere","model=%5CXpmsns%5CPages%5CModel%5CCategory&name=name&table=category&prefix=xpmsns_pages_&alias=c&type=inWhere"]
 	 *         	      $data['page'] 页码，默认为 1
 	 *         	      $data['perpage'] 每页显示记录数，默认为 20
 	 *			      $data["keyword"] 按关键词查询
 	 *			      $data["recommend_id"] 按推荐ID查询 ( AND = )
 	 *			      $data["slug"] 按别名查询 ( AND IN )
+	 *			      $data["pos"] 按呈现位置查询 ( AND = )
 	 *			      $data["type"] 按方式查询 ( AND = )
 	 *			      $data["period"] 按周期查询 ( AND = )
 	 *			      $data["title"] 按主题查询 ( AND LIKE )
@@ -353,6 +396,7 @@ class Recommend extends Api {
 	 *               	["summary"],  // 简介 
 	 *               	["icon"],  // 图标 
 	 *               	["slug"],  // 别名 
+	 *               	["pos"],  // 呈现位置 
 	 *               	["type"],  // 方式 
 	 *               	["ctype"],  // 内容类型 
 	 *               	["thumb_only"],  // 必须包含主题图片 
@@ -369,6 +413,8 @@ class Recommend extends Api {
 	*               	["category"][$categories[n]]["category_id"], // category.category_id
 	 *               	["articles"],  // 相关文章 
 	*               	["article"][$articles[n]]["article_id"], // article.article_id
+	 *               	["exclude_articles"],  // 排除文章 
+	*               	["article"][$exclude_articles[n]]["article_id"], // article.article_id
 	 *               	["events"],  // 相关活动 
 	*               	["event"][$events[n]]["event_id"], // event.event_id
 	 *               	["albums"],  // 相关图集 
@@ -412,6 +458,42 @@ class Recommend extends Api {
 	*               	["article"][$articles[n]]["like_cnt"], // article.like_cnt
 	*               	["article"][$articles[n]]["dislike_cnt"], // article.dislike_cnt
 	*               	["article"][$articles[n]]["comment_cnt"], // article.comment_cnt
+	*               	["article"][$exclude_articles[n]]["created_at"], // article.created_at
+	*               	["article"][$exclude_articles[n]]["updated_at"], // article.updated_at
+	*               	["article"][$exclude_articles[n]]["outer_id"], // article.outer_id
+	*               	["article"][$exclude_articles[n]]["cover"], // article.cover
+	*               	["article"][$exclude_articles[n]]["thumbs"], // article.thumbs
+	*               	["article"][$exclude_articles[n]]["images"], // article.images
+	*               	["article"][$exclude_articles[n]]["videos"], // article.videos
+	*               	["article"][$exclude_articles[n]]["audios"], // article.audios
+	*               	["article"][$exclude_articles[n]]["title"], // article.title
+	*               	["article"][$exclude_articles[n]]["author"], // article.author
+	*               	["article"][$exclude_articles[n]]["origin"], // article.origin
+	*               	["article"][$exclude_articles[n]]["origin_url"], // article.origin_url
+	*               	["article"][$exclude_articles[n]]["summary"], // article.summary
+	*               	["article"][$exclude_articles[n]]["seo_title"], // article.seo_title
+	*               	["article"][$exclude_articles[n]]["seo_keywords"], // article.seo_keywords
+	*               	["article"][$exclude_articles[n]]["seo_summary"], // article.seo_summary
+	*               	["article"][$exclude_articles[n]]["publish_time"], // article.publish_time
+	*               	["article"][$exclude_articles[n]]["update_time"], // article.update_time
+	*               	["article"][$exclude_articles[n]]["create_time"], // article.create_time
+	*               	["article"][$exclude_articles[n]]["baidulink_time"], // article.baidulink_time
+	*               	["article"][$exclude_articles[n]]["sync"], // article.sync
+	*               	["article"][$exclude_articles[n]]["content"], // article.content
+	*               	["article"][$exclude_articles[n]]["ap_content"], // article.ap_content
+	*               	["article"][$exclude_articles[n]]["delta"], // article.delta
+	*               	["article"][$exclude_articles[n]]["param"], // article.param
+	*               	["article"][$exclude_articles[n]]["stick"], // article.stick
+	*               	["article"][$exclude_articles[n]]["preview"], // article.preview
+	*               	["article"][$exclude_articles[n]]["links"], // article.links
+	*               	["article"][$exclude_articles[n]]["user"], // article.user
+	*               	["article"][$exclude_articles[n]]["policies"], // article.policies
+	*               	["article"][$exclude_articles[n]]["status"], // article.status
+	*               	["article"][$exclude_articles[n]]["keywords"], // article.keywords
+	*               	["article"][$exclude_articles[n]]["view_cnt"], // article.view_cnt
+	*               	["article"][$exclude_articles[n]]["like_cnt"], // article.like_cnt
+	*               	["article"][$exclude_articles[n]]["dislike_cnt"], // article.dislike_cnt
+	*               	["article"][$exclude_articles[n]]["comment_cnt"], // article.comment_cnt
 	*               	["event"][$events[n]]["created_at"], // event.created_at
 	*               	["event"][$events[n]]["updated_at"], // event.updated_at
 	*               	["event"][$events[n]]["slug"], // event.slug
@@ -475,7 +557,7 @@ class Recommend extends Api {
 		$data = array_merge( $query, $data );
 
 		// 读取字段
-		$select = empty($data['select']) ? ["recommend.recommend_id","recommend.title","recommend.type","recommend.images","recommend.keywords","recommend.orderby","recommend.created_at","recommend.updated_at","a.article_id","a.title","evt.event_id","evt.name","al.album_id","al.title","c.category_id","c.name"] : $data['select'];
+		$select = empty($data['select']) ? ["recommend.recommend_id","recommend.title","recommend.pos","recommend.type","recommend.images","recommend.keywords","recommend.orderby","recommend.created_at","recommend.updated_at","a.article_id","a.title","evt.event_id","evt.name","al.album_id","al.title","c.category_id","c.name"] : $data['select'];
 		if ( is_string($select) ) {
 			$select = explode(',', $select);
 		}

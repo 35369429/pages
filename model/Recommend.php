@@ -4,11 +4,11 @@
  * 推荐数据模型
  *
  * 程序作者: XpmSE机器人
- * 最后修改: 2018-08-08 03:08:18
+ * 最后修改: 2018-08-14 01:28:05
  * 程序母版: /data/stor/private/templates/xpmsns/model/code/model/Name.php
  */
 namespace Xpmsns\Pages\Model;
-                             
+                               
 use \Xpmse\Excp;
 use \Xpmse\Model;
 use \Xpmse\Utils;
@@ -468,6 +468,8 @@ function getContentsBy( $type,  $recommend_id,  $keywords=[], $page=1, $perpage=
 		$this->putColumn( 'icon', $this->type("string", ["length"=>200, "null"=>true]));
 		// 别名
 		$this->putColumn( 'slug', $this->type("string", ["length"=>100, "unique"=>true, "null"=>true]));
+		// 呈现位置
+		$this->putColumn( 'pos', $this->type("string", ["length"=>200, "index"=>true, "null"=>true]));
 		// 方式
 		$this->putColumn( 'type', $this->type("string", ["length"=>20, "index"=>true, "default"=>"auto", "null"=>true]));
 		// 内容类型
@@ -496,6 +498,8 @@ function getContentsBy( $type,  $recommend_id,  $keywords=[], $page=1, $perpage=
 		$this->putColumn( 'categories', $this->type("text", ["json"=>true, "null"=>true]));
 		// 相关文章
 		$this->putColumn( 'articles', $this->type("text", ["json"=>true, "null"=>true]));
+		// 排除文章
+		$this->putColumn( 'exclude_articles', $this->type("text", ["json"=>true, "null"=>true]));
 		// 相关活动
 		$this->putColumn( 'events', $this->type("text", ["json"=>true, "null"=>true]));
 		// 相关图集
@@ -684,6 +688,7 @@ function getContentsBy( $type,  $recommend_id,  $keywords=[], $page=1, $perpage=
 	 *          	  $rs["summary"],  // 简介 
 	 *          	  $rs["icon"],  // 图标 
 	 *          	  $rs["slug"],  // 别名 
+	 *          	  $rs["pos"],  // 呈现位置 
 	 *          	  $rs["type"],  // 方式 
 	 *          	  $rs["ctype"],  // 内容类型 
 	 *          	  $rs["thumb_only"],  // 必须包含主题图片 
@@ -700,6 +705,8 @@ function getContentsBy( $type,  $recommend_id,  $keywords=[], $page=1, $perpage=
 	 *                $rs["_map_category"][$categories[n]]["category_id"], // category.category_id
 	 *          	  $rs["articles"],  // 相关文章 
 	 *                $rs["_map_article"][$articles[n]]["article_id"], // article.article_id
+	 *          	  $rs["exclude_articles"],  // 排除文章 
+	 *                $rs["_map_article"][$exclude_articles[n]]["article_id"], // article.article_id
 	 *          	  $rs["events"],  // 相关活动 
 	 *                $rs["_map_event"][$events[n]]["event_id"], // event.event_id
 	 *          	  $rs["albums"],  // 相关图集 
@@ -743,6 +750,42 @@ function getContentsBy( $type,  $recommend_id,  $keywords=[], $page=1, $perpage=
 	 *                $rs["_map_article"][$articles[n]]["like_cnt"], // article.like_cnt
 	 *                $rs["_map_article"][$articles[n]]["dislike_cnt"], // article.dislike_cnt
 	 *                $rs["_map_article"][$articles[n]]["comment_cnt"], // article.comment_cnt
+	 *                $rs["_map_article"][$exclude_articles[n]]["created_at"], // article.created_at
+	 *                $rs["_map_article"][$exclude_articles[n]]["updated_at"], // article.updated_at
+	 *                $rs["_map_article"][$exclude_articles[n]]["outer_id"], // article.outer_id
+	 *                $rs["_map_article"][$exclude_articles[n]]["cover"], // article.cover
+	 *                $rs["_map_article"][$exclude_articles[n]]["thumbs"], // article.thumbs
+	 *                $rs["_map_article"][$exclude_articles[n]]["images"], // article.images
+	 *                $rs["_map_article"][$exclude_articles[n]]["videos"], // article.videos
+	 *                $rs["_map_article"][$exclude_articles[n]]["audios"], // article.audios
+	 *                $rs["_map_article"][$exclude_articles[n]]["title"], // article.title
+	 *                $rs["_map_article"][$exclude_articles[n]]["author"], // article.author
+	 *                $rs["_map_article"][$exclude_articles[n]]["origin"], // article.origin
+	 *                $rs["_map_article"][$exclude_articles[n]]["origin_url"], // article.origin_url
+	 *                $rs["_map_article"][$exclude_articles[n]]["summary"], // article.summary
+	 *                $rs["_map_article"][$exclude_articles[n]]["seo_title"], // article.seo_title
+	 *                $rs["_map_article"][$exclude_articles[n]]["seo_keywords"], // article.seo_keywords
+	 *                $rs["_map_article"][$exclude_articles[n]]["seo_summary"], // article.seo_summary
+	 *                $rs["_map_article"][$exclude_articles[n]]["publish_time"], // article.publish_time
+	 *                $rs["_map_article"][$exclude_articles[n]]["update_time"], // article.update_time
+	 *                $rs["_map_article"][$exclude_articles[n]]["create_time"], // article.create_time
+	 *                $rs["_map_article"][$exclude_articles[n]]["baidulink_time"], // article.baidulink_time
+	 *                $rs["_map_article"][$exclude_articles[n]]["sync"], // article.sync
+	 *                $rs["_map_article"][$exclude_articles[n]]["content"], // article.content
+	 *                $rs["_map_article"][$exclude_articles[n]]["ap_content"], // article.ap_content
+	 *                $rs["_map_article"][$exclude_articles[n]]["delta"], // article.delta
+	 *                $rs["_map_article"][$exclude_articles[n]]["param"], // article.param
+	 *                $rs["_map_article"][$exclude_articles[n]]["stick"], // article.stick
+	 *                $rs["_map_article"][$exclude_articles[n]]["preview"], // article.preview
+	 *                $rs["_map_article"][$exclude_articles[n]]["links"], // article.links
+	 *                $rs["_map_article"][$exclude_articles[n]]["user"], // article.user
+	 *                $rs["_map_article"][$exclude_articles[n]]["policies"], // article.policies
+	 *                $rs["_map_article"][$exclude_articles[n]]["status"], // article.status
+	 *                $rs["_map_article"][$exclude_articles[n]]["keywords"], // article.keywords
+	 *                $rs["_map_article"][$exclude_articles[n]]["view_cnt"], // article.view_cnt
+	 *                $rs["_map_article"][$exclude_articles[n]]["like_cnt"], // article.like_cnt
+	 *                $rs["_map_article"][$exclude_articles[n]]["dislike_cnt"], // article.dislike_cnt
+	 *                $rs["_map_article"][$exclude_articles[n]]["comment_cnt"], // article.comment_cnt
 	 *                $rs["_map_event"][$events[n]]["created_at"], // event.created_at
 	 *                $rs["_map_event"][$events[n]]["updated_at"], // event.updated_at
 	 *                $rs["_map_event"][$events[n]]["slug"], // event.slug
@@ -812,7 +855,7 @@ function getContentsBy( $type,  $recommend_id,  $keywords=[], $page=1, $perpage=
 
 		// 创建查询构造器
 		$qb = Utils::getTab("xpmsns_pages_recommend as recommend", "{none}")->query();
-    		$qb->where('recommend_id', '=', $recommend_id );
+     		$qb->where('recommend_id', '=', $recommend_id );
 		$qb->limit( 1 );
 		$qb->select($select);
 		$rows = $qb->get()->toArray();
@@ -825,6 +868,8 @@ function getContentsBy( $type,  $recommend_id,  $keywords=[], $page=1, $perpage=
 
  		$article_ids = []; // 读取 inWhere article 数据
 		$article_ids = array_merge($article_ids, is_array($rs["articles"]) ? $rs["articles"] : [$rs["articles"]]);
+ 		$article_ids = []; // 读取 inWhere article 数据
+		$article_ids = array_merge($article_ids, is_array($rs["exclude_articles"]) ? $rs["exclude_articles"] : [$rs["exclude_articles"]]);
  		$event_ids = []; // 读取 inWhere event 数据
 		$event_ids = array_merge($event_ids, is_array($rs["events"]) ? $rs["events"] : [$rs["events"]]);
  		$album_ids = []; // 读取 inWhere album 数据
@@ -832,6 +877,12 @@ function getContentsBy( $type,  $recommend_id,  $keywords=[], $page=1, $perpage=
  		$category_ids = []; // 读取 inWhere category 数据
 		$category_ids = array_merge($category_ids, is_array($rs["categories"]) ? $rs["categories"] : [$rs["categories"]]);
 
+ 		// 读取 inWhere article 数据
+		if ( !empty($inwhereSelect["article"]) && method_exists("\\Xpmsns\\Pages\\Model\\Article", 'getInByArticleId') ) {
+			$article_ids = array_unique($article_ids);
+			$selectFields = $inwhereSelect["article"];
+			$rs["_map_article"] = (new \Xpmsns\Pages\Model\Article)->getInByArticleId($article_ids, $selectFields);
+		}
  		// 读取 inWhere article 数据
 		if ( !empty($inwhereSelect["article"]) && method_exists("\\Xpmsns\\Pages\\Model\\Article", 'getInByArticleId') ) {
 			$article_ids = array_unique($article_ids);
@@ -891,7 +942,7 @@ function getContentsBy( $type,  $recommend_id,  $keywords=[], $page=1, $perpage=
 
 		// 创建查询构造器
 		$qb = Utils::getTab("xpmsns_pages_recommend as recommend", "{none}")->query();
-    		$qb->whereIn('recommend.recommend_id', $recommend_ids);
+     		$qb->whereIn('recommend.recommend_id', $recommend_ids);
 		
 		// 排序
 		foreach ($order as $field => $order ) {
@@ -903,6 +954,7 @@ function getContentsBy( $type,  $recommend_id,  $keywords=[], $page=1, $perpage=
 		$map = [];
 
  		$article_ids = []; // 读取 inWhere article 数据
+ 		$article_ids = []; // 读取 inWhere article 数据
  		$event_ids = []; // 读取 inWhere event 数据
  		$album_ids = []; // 读取 inWhere album 数据
  		$category_ids = []; // 读取 inWhere category 数据
@@ -912,6 +964,8 @@ function getContentsBy( $type,  $recommend_id,  $keywords=[], $page=1, $perpage=
 			
  			// for inWhere article
 			$article_ids = array_merge($article_ids, is_array($rs["articles"]) ? $rs["articles"] : [$rs["articles"]]);
+ 			// for inWhere article
+			$article_ids = array_merge($article_ids, is_array($rs["exclude_articles"]) ? $rs["exclude_articles"] : [$rs["exclude_articles"]]);
  			// for inWhere event
 			$event_ids = array_merge($event_ids, is_array($rs["events"]) ? $rs["events"] : [$rs["events"]]);
  			// for inWhere album
@@ -920,6 +974,12 @@ function getContentsBy( $type,  $recommend_id,  $keywords=[], $page=1, $perpage=
 			$category_ids = array_merge($category_ids, is_array($rs["categories"]) ? $rs["categories"] : [$rs["categories"]]);
 		}
 
+ 		// 读取 inWhere article 数据
+		if ( !empty($inwhereSelect["article"]) && method_exists("\\Xpmsns\\Pages\\Model\\Article", 'getInByArticleId') ) {
+			$article_ids = array_unique($article_ids);
+			$selectFields = $inwhereSelect["article"];
+			$map["_map_article"] = (new \Xpmsns\Pages\Model\Article)->getInByArticleId($article_ids, $selectFields);
+		}
  		// 读取 inWhere article 数据
 		if ( !empty($inwhereSelect["article"]) && method_exists("\\Xpmsns\\Pages\\Model\\Article", 'getInByArticleId') ) {
 			$article_ids = array_unique($article_ids);
@@ -978,6 +1038,7 @@ function getContentsBy( $type,  $recommend_id,  $keywords=[], $page=1, $perpage=
 	 *          	  $rs["summary"],  // 简介 
 	 *          	  $rs["icon"],  // 图标 
 	 *          	  $rs["slug"],  // 别名 
+	 *          	  $rs["pos"],  // 呈现位置 
 	 *          	  $rs["type"],  // 方式 
 	 *          	  $rs["ctype"],  // 内容类型 
 	 *          	  $rs["thumb_only"],  // 必须包含主题图片 
@@ -994,6 +1055,8 @@ function getContentsBy( $type,  $recommend_id,  $keywords=[], $page=1, $perpage=
 	 *                $rs["_map_category"][$categories[n]]["category_id"], // category.category_id
 	 *          	  $rs["articles"],  // 相关文章 
 	 *                $rs["_map_article"][$articles[n]]["article_id"], // article.article_id
+	 *          	  $rs["exclude_articles"],  // 排除文章 
+	 *                $rs["_map_article"][$exclude_articles[n]]["article_id"], // article.article_id
 	 *          	  $rs["events"],  // 相关活动 
 	 *                $rs["_map_event"][$events[n]]["event_id"], // event.event_id
 	 *          	  $rs["albums"],  // 相关图集 
@@ -1037,6 +1100,42 @@ function getContentsBy( $type,  $recommend_id,  $keywords=[], $page=1, $perpage=
 	 *                $rs["_map_article"][$articles[n]]["like_cnt"], // article.like_cnt
 	 *                $rs["_map_article"][$articles[n]]["dislike_cnt"], // article.dislike_cnt
 	 *                $rs["_map_article"][$articles[n]]["comment_cnt"], // article.comment_cnt
+	 *                $rs["_map_article"][$exclude_articles[n]]["created_at"], // article.created_at
+	 *                $rs["_map_article"][$exclude_articles[n]]["updated_at"], // article.updated_at
+	 *                $rs["_map_article"][$exclude_articles[n]]["outer_id"], // article.outer_id
+	 *                $rs["_map_article"][$exclude_articles[n]]["cover"], // article.cover
+	 *                $rs["_map_article"][$exclude_articles[n]]["thumbs"], // article.thumbs
+	 *                $rs["_map_article"][$exclude_articles[n]]["images"], // article.images
+	 *                $rs["_map_article"][$exclude_articles[n]]["videos"], // article.videos
+	 *                $rs["_map_article"][$exclude_articles[n]]["audios"], // article.audios
+	 *                $rs["_map_article"][$exclude_articles[n]]["title"], // article.title
+	 *                $rs["_map_article"][$exclude_articles[n]]["author"], // article.author
+	 *                $rs["_map_article"][$exclude_articles[n]]["origin"], // article.origin
+	 *                $rs["_map_article"][$exclude_articles[n]]["origin_url"], // article.origin_url
+	 *                $rs["_map_article"][$exclude_articles[n]]["summary"], // article.summary
+	 *                $rs["_map_article"][$exclude_articles[n]]["seo_title"], // article.seo_title
+	 *                $rs["_map_article"][$exclude_articles[n]]["seo_keywords"], // article.seo_keywords
+	 *                $rs["_map_article"][$exclude_articles[n]]["seo_summary"], // article.seo_summary
+	 *                $rs["_map_article"][$exclude_articles[n]]["publish_time"], // article.publish_time
+	 *                $rs["_map_article"][$exclude_articles[n]]["update_time"], // article.update_time
+	 *                $rs["_map_article"][$exclude_articles[n]]["create_time"], // article.create_time
+	 *                $rs["_map_article"][$exclude_articles[n]]["baidulink_time"], // article.baidulink_time
+	 *                $rs["_map_article"][$exclude_articles[n]]["sync"], // article.sync
+	 *                $rs["_map_article"][$exclude_articles[n]]["content"], // article.content
+	 *                $rs["_map_article"][$exclude_articles[n]]["ap_content"], // article.ap_content
+	 *                $rs["_map_article"][$exclude_articles[n]]["delta"], // article.delta
+	 *                $rs["_map_article"][$exclude_articles[n]]["param"], // article.param
+	 *                $rs["_map_article"][$exclude_articles[n]]["stick"], // article.stick
+	 *                $rs["_map_article"][$exclude_articles[n]]["preview"], // article.preview
+	 *                $rs["_map_article"][$exclude_articles[n]]["links"], // article.links
+	 *                $rs["_map_article"][$exclude_articles[n]]["user"], // article.user
+	 *                $rs["_map_article"][$exclude_articles[n]]["policies"], // article.policies
+	 *                $rs["_map_article"][$exclude_articles[n]]["status"], // article.status
+	 *                $rs["_map_article"][$exclude_articles[n]]["keywords"], // article.keywords
+	 *                $rs["_map_article"][$exclude_articles[n]]["view_cnt"], // article.view_cnt
+	 *                $rs["_map_article"][$exclude_articles[n]]["like_cnt"], // article.like_cnt
+	 *                $rs["_map_article"][$exclude_articles[n]]["dislike_cnt"], // article.dislike_cnt
+	 *                $rs["_map_article"][$exclude_articles[n]]["comment_cnt"], // article.comment_cnt
 	 *                $rs["_map_event"][$events[n]]["created_at"], // event.created_at
 	 *                $rs["_map_event"][$events[n]]["updated_at"], // event.updated_at
 	 *                $rs["_map_event"][$events[n]]["slug"], // event.slug
@@ -1106,7 +1205,7 @@ function getContentsBy( $type,  $recommend_id,  $keywords=[], $page=1, $perpage=
 
 		// 创建查询构造器
 		$qb = Utils::getTab("xpmsns_pages_recommend as recommend", "{none}")->query();
-    		$qb->where('slug', '=', $slug );
+     		$qb->where('slug', '=', $slug );
 		$qb->limit( 1 );
 		$qb->select($select);
 		$rows = $qb->get()->toArray();
@@ -1119,6 +1218,8 @@ function getContentsBy( $type,  $recommend_id,  $keywords=[], $page=1, $perpage=
 
  		$article_ids = []; // 读取 inWhere article 数据
 		$article_ids = array_merge($article_ids, is_array($rs["articles"]) ? $rs["articles"] : [$rs["articles"]]);
+ 		$article_ids = []; // 读取 inWhere article 数据
+		$article_ids = array_merge($article_ids, is_array($rs["exclude_articles"]) ? $rs["exclude_articles"] : [$rs["exclude_articles"]]);
  		$event_ids = []; // 读取 inWhere event 数据
 		$event_ids = array_merge($event_ids, is_array($rs["events"]) ? $rs["events"] : [$rs["events"]]);
  		$album_ids = []; // 读取 inWhere album 数据
@@ -1126,6 +1227,12 @@ function getContentsBy( $type,  $recommend_id,  $keywords=[], $page=1, $perpage=
  		$category_ids = []; // 读取 inWhere category 数据
 		$category_ids = array_merge($category_ids, is_array($rs["categories"]) ? $rs["categories"] : [$rs["categories"]]);
 
+ 		// 读取 inWhere article 数据
+		if ( !empty($inwhereSelect["article"]) && method_exists("\\Xpmsns\\Pages\\Model\\Article", 'getInByArticleId') ) {
+			$article_ids = array_unique($article_ids);
+			$selectFields = $inwhereSelect["article"];
+			$rs["_map_article"] = (new \Xpmsns\Pages\Model\Article)->getInByArticleId($article_ids, $selectFields);
+		}
  		// 读取 inWhere article 数据
 		if ( !empty($inwhereSelect["article"]) && method_exists("\\Xpmsns\\Pages\\Model\\Article", 'getInByArticleId') ) {
 			$article_ids = array_unique($article_ids);
@@ -1175,7 +1282,7 @@ function getContentsBy( $type,  $recommend_id,  $keywords=[], $page=1, $perpage=
 
 		// 创建查询构造器
 		$qb = Utils::getTab("xpmsns_pages_recommend as recommend", "{none}")->query();
-    		$qb->whereIn('recommend.slug', $slugs);
+     		$qb->whereIn('recommend.slug', $slugs);
 		
 		// 排序
 		foreach ($order as $field => $order ) {
@@ -1187,6 +1294,7 @@ function getContentsBy( $type,  $recommend_id,  $keywords=[], $page=1, $perpage=
 		$map = [];
 
  		$article_ids = []; // 读取 inWhere article 数据
+ 		$article_ids = []; // 读取 inWhere article 数据
  		$event_ids = []; // 读取 inWhere event 数据
  		$album_ids = []; // 读取 inWhere album 数据
  		$category_ids = []; // 读取 inWhere category 数据
@@ -1196,6 +1304,8 @@ function getContentsBy( $type,  $recommend_id,  $keywords=[], $page=1, $perpage=
 			
  			// for inWhere article
 			$article_ids = array_merge($article_ids, is_array($rs["articles"]) ? $rs["articles"] : [$rs["articles"]]);
+ 			// for inWhere article
+			$article_ids = array_merge($article_ids, is_array($rs["exclude_articles"]) ? $rs["exclude_articles"] : [$rs["exclude_articles"]]);
  			// for inWhere event
 			$event_ids = array_merge($event_ids, is_array($rs["events"]) ? $rs["events"] : [$rs["events"]]);
  			// for inWhere album
@@ -1204,6 +1314,12 @@ function getContentsBy( $type,  $recommend_id,  $keywords=[], $page=1, $perpage=
 			$category_ids = array_merge($category_ids, is_array($rs["categories"]) ? $rs["categories"] : [$rs["categories"]]);
 		}
 
+ 		// 读取 inWhere article 数据
+		if ( !empty($inwhereSelect["article"]) && method_exists("\\Xpmsns\\Pages\\Model\\Article", 'getInByArticleId') ) {
+			$article_ids = array_unique($article_ids);
+			$selectFields = $inwhereSelect["article"];
+			$map["_map_article"] = (new \Xpmsns\Pages\Model\Article)->getInByArticleId($article_ids, $selectFields);
+		}
  		// 读取 inWhere article 数据
 		if ( !empty($inwhereSelect["article"]) && method_exists("\\Xpmsns\\Pages\\Model\\Article", 'getInByArticleId') ) {
 			$article_ids = array_unique($article_ids);
@@ -1368,7 +1484,7 @@ function getContentsBy( $type,  $recommend_id,  $keywords=[], $page=1, $perpage=
 
 		// 创建查询构造器
 		$qb = Utils::getTab("xpmsns_pages_recommend as recommend", "{none}")->query();
-    
+     
 
 		foreach ($order as $field => $order ) {
 			$qb->orderBy( $field, $order );
@@ -1379,6 +1495,7 @@ function getContentsBy( $type,  $recommend_id,  $keywords=[], $page=1, $perpage=
 
 
  		$article_ids = []; // 读取 inWhere article 数据
+ 		$article_ids = []; // 读取 inWhere article 数据
  		$event_ids = []; // 读取 inWhere event 数据
  		$album_ids = []; // 读取 inWhere album 数据
  		$category_ids = []; // 读取 inWhere category 数据
@@ -1387,6 +1504,8 @@ function getContentsBy( $type,  $recommend_id,  $keywords=[], $page=1, $perpage=
 			
  			// for inWhere article
 			$article_ids = array_merge($article_ids, is_array($rs["articles"]) ? $rs["articles"] : [$rs["articles"]]);
+ 			// for inWhere article
+			$article_ids = array_merge($article_ids, is_array($rs["exclude_articles"]) ? $rs["exclude_articles"] : [$rs["exclude_articles"]]);
  			// for inWhere event
 			$event_ids = array_merge($event_ids, is_array($rs["events"]) ? $rs["events"] : [$rs["events"]]);
  			// for inWhere album
@@ -1395,6 +1514,12 @@ function getContentsBy( $type,  $recommend_id,  $keywords=[], $page=1, $perpage=
 			$category_ids = array_merge($category_ids, is_array($rs["categories"]) ? $rs["categories"] : [$rs["categories"]]);
 		}
 
+ 		// 读取 inWhere article 数据
+		if ( !empty($inwhereSelect["article"]) && method_exists("\\Xpmsns\\Pages\\Model\\Article", 'getInByArticleId') ) {
+			$article_ids = array_unique($article_ids);
+			$selectFields = $inwhereSelect["article"];
+			$data["_map_article"] = (new \Xpmsns\Pages\Model\Article)->getInByArticleId($article_ids, $selectFields);
+		}
  		// 读取 inWhere article 数据
 		if ( !empty($inwhereSelect["article"]) && method_exists("\\Xpmsns\\Pages\\Model\\Article", 'getInByArticleId') ) {
 			$article_ids = array_unique($article_ids);
@@ -1434,6 +1559,7 @@ function getContentsBy( $type,  $recommend_id,  $keywords=[], $page=1, $perpage=
 	 *			      $query["keyword"] 按关键词查询
 	 *			      $query["recommend_id"] 按推荐ID查询 ( = )
 	 *			      $query["slug"] 按推荐别名查询 ( IN )
+	 *			      $query["pos"] 按位置代码查询 ( = )
 	 *			      $query["type"] 按推荐方式查询 ( = )
 	 *			      $query["period"] 按统计周期查询 ( = )
 	 *			      $query["title"] 按主题查询 ( LIKE )
@@ -1449,6 +1575,7 @@ function getContentsBy( $type,  $recommend_id,  $keywords=[], $page=1, $perpage=
 	 *               	["summary"],  // 简介 
 	 *               	["icon"],  // 图标 
 	 *               	["slug"],  // 别名 
+	 *               	["pos"],  // 呈现位置 
 	 *               	["type"],  // 方式 
 	 *               	["ctype"],  // 内容类型 
 	 *               	["thumb_only"],  // 必须包含主题图片 
@@ -1465,6 +1592,8 @@ function getContentsBy( $type,  $recommend_id,  $keywords=[], $page=1, $perpage=
 	 *               	["category"][$categories[n]]["category_id"], // category.category_id
 	 *               	["articles"],  // 相关文章 
 	 *               	["article"][$articles[n]]["article_id"], // article.article_id
+	 *               	["exclude_articles"],  // 排除文章 
+	 *               	["article"][$exclude_articles[n]]["article_id"], // article.article_id
 	 *               	["events"],  // 相关活动 
 	 *               	["event"][$events[n]]["event_id"], // event.event_id
 	 *               	["albums"],  // 相关图集 
@@ -1508,6 +1637,42 @@ function getContentsBy( $type,  $recommend_id,  $keywords=[], $page=1, $perpage=
 	 *               	["article"][$articles[n]]["like_cnt"], // article.like_cnt
 	 *               	["article"][$articles[n]]["dislike_cnt"], // article.dislike_cnt
 	 *               	["article"][$articles[n]]["comment_cnt"], // article.comment_cnt
+	 *               	["article"][$exclude_articles[n]]["created_at"], // article.created_at
+	 *               	["article"][$exclude_articles[n]]["updated_at"], // article.updated_at
+	 *               	["article"][$exclude_articles[n]]["outer_id"], // article.outer_id
+	 *               	["article"][$exclude_articles[n]]["cover"], // article.cover
+	 *               	["article"][$exclude_articles[n]]["thumbs"], // article.thumbs
+	 *               	["article"][$exclude_articles[n]]["images"], // article.images
+	 *               	["article"][$exclude_articles[n]]["videos"], // article.videos
+	 *               	["article"][$exclude_articles[n]]["audios"], // article.audios
+	 *               	["article"][$exclude_articles[n]]["title"], // article.title
+	 *               	["article"][$exclude_articles[n]]["author"], // article.author
+	 *               	["article"][$exclude_articles[n]]["origin"], // article.origin
+	 *               	["article"][$exclude_articles[n]]["origin_url"], // article.origin_url
+	 *               	["article"][$exclude_articles[n]]["summary"], // article.summary
+	 *               	["article"][$exclude_articles[n]]["seo_title"], // article.seo_title
+	 *               	["article"][$exclude_articles[n]]["seo_keywords"], // article.seo_keywords
+	 *               	["article"][$exclude_articles[n]]["seo_summary"], // article.seo_summary
+	 *               	["article"][$exclude_articles[n]]["publish_time"], // article.publish_time
+	 *               	["article"][$exclude_articles[n]]["update_time"], // article.update_time
+	 *               	["article"][$exclude_articles[n]]["create_time"], // article.create_time
+	 *               	["article"][$exclude_articles[n]]["baidulink_time"], // article.baidulink_time
+	 *               	["article"][$exclude_articles[n]]["sync"], // article.sync
+	 *               	["article"][$exclude_articles[n]]["content"], // article.content
+	 *               	["article"][$exclude_articles[n]]["ap_content"], // article.ap_content
+	 *               	["article"][$exclude_articles[n]]["delta"], // article.delta
+	 *               	["article"][$exclude_articles[n]]["param"], // article.param
+	 *               	["article"][$exclude_articles[n]]["stick"], // article.stick
+	 *               	["article"][$exclude_articles[n]]["preview"], // article.preview
+	 *               	["article"][$exclude_articles[n]]["links"], // article.links
+	 *               	["article"][$exclude_articles[n]]["user"], // article.user
+	 *               	["article"][$exclude_articles[n]]["policies"], // article.policies
+	 *               	["article"][$exclude_articles[n]]["status"], // article.status
+	 *               	["article"][$exclude_articles[n]]["keywords"], // article.keywords
+	 *               	["article"][$exclude_articles[n]]["view_cnt"], // article.view_cnt
+	 *               	["article"][$exclude_articles[n]]["like_cnt"], // article.like_cnt
+	 *               	["article"][$exclude_articles[n]]["dislike_cnt"], // article.dislike_cnt
+	 *               	["article"][$exclude_articles[n]]["comment_cnt"], // article.comment_cnt
 	 *               	["event"][$events[n]]["created_at"], // event.created_at
 	 *               	["event"][$events[n]]["updated_at"], // event.updated_at
 	 *               	["event"][$events[n]]["slug"], // event.slug
@@ -1577,7 +1742,7 @@ function getContentsBy( $type,  $recommend_id,  $keywords=[], $page=1, $perpage=
 
 		// 创建查询构造器
 		$qb = Utils::getTab("xpmsns_pages_recommend as recommend", "{none}")->query();
-    
+     
 		// 按关键词查找
 		if ( array_key_exists("keyword", $query) && !empty($query["keyword"]) ) {
 			$qb->where(function ( $qb ) use($query) {
@@ -1599,6 +1764,11 @@ function getContentsBy( $type,  $recommend_id,  $keywords=[], $page=1, $perpage=
 				$query['slug'] = explode(',', $query['slug']);
 			}
 			$qb->whereIn("recommend.slug",  $query['slug'] );
+		}
+		  
+		// 按位置代码查询 (=)  
+		if ( array_key_exists("pos", $query) &&!empty($query['pos']) ) {
+			$qb->where("recommend.pos", '=', "{$query['pos']}" );
 		}
 		  
 		// 按推荐方式查询 (=)  
@@ -1651,6 +1821,7 @@ function getContentsBy( $type,  $recommend_id,  $keywords=[], $page=1, $perpage=
 		$recommends = $qb->select( $select )->pgArray($perpage, ['recommend._id'], 'page', $page);
 
  		$article_ids = []; // 读取 inWhere article 数据
+ 		$article_ids = []; // 读取 inWhere article 数据
  		$event_ids = []; // 读取 inWhere event 数据
  		$album_ids = []; // 读取 inWhere album 数据
  		$category_ids = []; // 读取 inWhere category 数据
@@ -1659,6 +1830,8 @@ function getContentsBy( $type,  $recommend_id,  $keywords=[], $page=1, $perpage=
 			
  			// for inWhere article
 			$article_ids = array_merge($article_ids, is_array($rs["articles"]) ? $rs["articles"] : [$rs["articles"]]);
+ 			// for inWhere article
+			$article_ids = array_merge($article_ids, is_array($rs["exclude_articles"]) ? $rs["exclude_articles"] : [$rs["exclude_articles"]]);
  			// for inWhere event
 			$event_ids = array_merge($event_ids, is_array($rs["events"]) ? $rs["events"] : [$rs["events"]]);
  			// for inWhere album
@@ -1667,6 +1840,12 @@ function getContentsBy( $type,  $recommend_id,  $keywords=[], $page=1, $perpage=
 			$category_ids = array_merge($category_ids, is_array($rs["categories"]) ? $rs["categories"] : [$rs["categories"]]);
 		}
 
+ 		// 读取 inWhere article 数据
+		if ( !empty($inwhereSelect["article"]) && method_exists("\\Xpmsns\\Pages\\Model\\Article", 'getInByArticleId') ) {
+			$article_ids = array_unique($article_ids);
+			$selectFields = $inwhereSelect["article"];
+			$recommends["article"] = (new \Xpmsns\Pages\Model\Article)->getInByArticleId($article_ids, $selectFields);
+		}
  		// 读取 inWhere article 数据
 		if ( !empty($inwhereSelect["article"]) && method_exists("\\Xpmsns\\Pages\\Model\\Article", 'getInByArticleId') ) {
 			$article_ids = array_unique($article_ids);
@@ -1720,6 +1899,18 @@ function getContentsBy( $type,  $recommend_id,  $keywords=[], $page=1, $perpage=
 				if ( trim($fd) != "*" ) {
 					unset($select[$idx]);
 					array_push($linkSelect, "recommend.articles");
+				}
+			}
+			
+			// 连接不包含文章 (article as ea )
+			if ( strpos( $fd, "ea." ) === 0 || strpos("article.", $fd ) === 0  || trim($fd) == "*" ) {
+				$arr = explode( ".", $fd );
+				$arr[1]  = !empty($arr[1]) ? $arr[1] : "*";
+				$inwhereSelect["article"][] = trim($arr[1]);
+				$inwhereSelect["article"][] = "article_id";
+				if ( trim($fd) != "*" ) {
+					unset($select[$idx]);
+					array_push($linkSelect, "recommend.exclude_articles");
 				}
 			}
 			
@@ -1782,6 +1973,7 @@ function getContentsBy( $type,  $recommend_id,  $keywords=[], $page=1, $perpage=
 			"summary",  // 简介
 			"icon",  // 图标
 			"slug",  // 别名
+			"pos",  // 呈现位置
 			"type",  // 方式
 			"ctype",  // 内容类型
 			"thumb_only",  // 必须包含主题图片
@@ -1796,6 +1988,7 @@ function getContentsBy( $type,  $recommend_id,  $keywords=[], $page=1, $perpage=
 			"keywords",  // 关键词
 			"categories",  // 相关栏目
 			"articles",  // 相关文章
+			"exclude_articles",  // 排除文章
 			"events",  // 相关活动
 			"albums",  // 相关图集
 			"orderby",  // 排序方式
