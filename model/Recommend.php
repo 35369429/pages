@@ -4,7 +4,7 @@
  * 推荐数据模型
  *
  * 程序作者: XpmSE机器人
- * 最后修改: 2018-08-14 02:29:02
+ * 最后修改: 2018-08-14 03:01:00
  * 程序母版: /data/stor/private/templates/xpmsns/model/code/model/Name.php
  */
 namespace Xpmsns\Pages\Model;
@@ -448,7 +448,11 @@ function getContentsBy( $type,  $recommend_id,  $keywords=[], $page=1, $perpage=
 				break;
 		}
       	if ( is_array($recommend['contents']['data']) ){
-			$recommend['contents']['data'] = array_values($recommend['contents']['data']);
+			$data = [];
+			foreach ($ids as $id ) {
+				$data[] = $recommend['contents']['data'][$id];
+			}
+			$recommend['contents']['data'] = $data;
         }
 		return $recommend;
 	}
