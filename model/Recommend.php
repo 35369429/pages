@@ -4,11 +4,11 @@
  * 推荐数据模型
  *
  * 程序作者: XpmSE机器人
- * 最后修改: 2018-08-14 01:28:05
+ * 最后修改: 2018-08-14 02:00:34
  * 程序母版: /data/stor/private/templates/xpmsns/model/code/model/Name.php
  */
 namespace Xpmsns\Pages\Model;
-                               
+                                
 use \Xpmse\Excp;
 use \Xpmse\Model;
 use \Xpmse\Utils;
@@ -470,6 +470,8 @@ function getContentsBy( $type,  $recommend_id,  $keywords=[], $page=1, $perpage=
 		$this->putColumn( 'slug', $this->type("string", ["length"=>100, "unique"=>true, "null"=>true]));
 		// 呈现位置
 		$this->putColumn( 'pos', $this->type("string", ["length"=>200, "index"=>true, "null"=>true]));
+		// 样式代码
+		$this->putColumn( 'style', $this->type("string", ["length"=>200, "index"=>true, "null"=>true]));
 		// 方式
 		$this->putColumn( 'type', $this->type("string", ["length"=>20, "index"=>true, "default"=>"auto", "null"=>true]));
 		// 内容类型
@@ -689,6 +691,7 @@ function getContentsBy( $type,  $recommend_id,  $keywords=[], $page=1, $perpage=
 	 *          	  $rs["icon"],  // 图标 
 	 *          	  $rs["slug"],  // 别名 
 	 *          	  $rs["pos"],  // 呈现位置 
+	 *          	  $rs["style"],  // 样式代码 
 	 *          	  $rs["type"],  // 方式 
 	 *          	  $rs["ctype"],  // 内容类型 
 	 *          	  $rs["thumb_only"],  // 必须包含主题图片 
@@ -1039,6 +1042,7 @@ function getContentsBy( $type,  $recommend_id,  $keywords=[], $page=1, $perpage=
 	 *          	  $rs["icon"],  // 图标 
 	 *          	  $rs["slug"],  // 别名 
 	 *          	  $rs["pos"],  // 呈现位置 
+	 *          	  $rs["style"],  // 样式代码 
 	 *          	  $rs["type"],  // 方式 
 	 *          	  $rs["ctype"],  // 内容类型 
 	 *          	  $rs["thumb_only"],  // 必须包含主题图片 
@@ -1576,6 +1580,7 @@ function getContentsBy( $type,  $recommend_id,  $keywords=[], $page=1, $perpage=
 	 *               	["icon"],  // 图标 
 	 *               	["slug"],  // 别名 
 	 *               	["pos"],  // 呈现位置 
+	 *               	["style"],  // 样式代码 
 	 *               	["type"],  // 方式 
 	 *               	["ctype"],  // 内容类型 
 	 *               	["thumb_only"],  // 必须包含主题图片 
@@ -1974,6 +1979,7 @@ function getContentsBy( $type,  $recommend_id,  $keywords=[], $page=1, $perpage=
 			"icon",  // 图标
 			"slug",  // 别名
 			"pos",  // 呈现位置
+			"style",  // 样式代码
 			"type",  // 方式
 			"ctype",  // 内容类型
 			"thumb_only",  // 必须包含主题图片
