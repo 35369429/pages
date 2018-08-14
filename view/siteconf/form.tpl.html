@@ -116,6 +116,64 @@ use \Xpmse\T;
 
 
 
+	<!-- 单图上传: 浅色图标 (icon_light) 开始  -->
+	<div class="xpmse-images  " name="icon_light">
+		<div class="form-group " >
+			<label class="col-xs-2 control-label" for="icon_light">浅色图标</label>
+			<div class="col-xs-8">
+		   		<div name="icon_light" class="file-uploader rounded rounded-4 push-10-t"
+					data-api='/_a/mina/uploader/upload?type=image'
+					data-title='请上传浅色网站图标'
+					data-previews=""
+					data-width="192"
+					data-height="192"
+					data-icon="fa fa-image" 
+					data-placeholder="请上传浅色网站图标" 
+					data-allow-types="image/png,image/jpg,image/jpeg,image/gif"
+					data-maxsize="20"
+					data-progress="yes"
+					data-cropable="yes"
+					data-draggable="yes"
+					data-src="<?=T::v('<%=icon_light.url%>', $rs )?>"
+					data-path="<?=T::v('<%=icon_light.path%>', $rs )?>"
+					></div>
+				<div class="help-block"></div>
+			</div>
+		</div> 
+	</div><!-- END 单图上传: 浅色图标 (icon_light) -->
+
+
+
+
+	<!-- 单图上传: 深色图标 (icon_dark) 开始  -->
+	<div class="xpmse-images  " name="icon_dark">
+		<div class="form-group " >
+			<label class="col-xs-2 control-label" for="icon_dark">深色图标</label>
+			<div class="col-xs-8">
+		   		<div name="icon_dark" class="file-uploader rounded rounded-4 push-10-t"
+					data-api='/_a/mina/uploader/upload?type=image'
+					data-title='请上传深色网站图标'
+					data-previews=""
+					data-width="192"
+					data-height="192"
+					data-icon="fa fa-image" 
+					data-placeholder="请上传深色网站图标" 
+					data-allow-types="image/png,image/jpg,image/jpeg,image/gif"
+					data-maxsize="20"
+					data-progress="yes"
+					data-cropable="yes"
+					data-draggable="yes"
+					data-src="<?=T::v('<%=icon_dark.url%>', $rs )?>"
+					data-path="<?=T::v('<%=icon_dark.path%>', $rs )?>"
+					></div>
+				<div class="help-block"></div>
+			</div>
+		</div> 
+	</div><!-- END 单图上传: 深色图标 (icon_dark) -->
+
+
+
+
 	<!-- 单图上传: 网站LOGO (site_logo) 开始  -->
 	<div class="xpmse-images  " name="site_logo">
 		<div class="form-group " >
@@ -126,7 +184,7 @@ use \Xpmse\T;
 					data-title='请上传网站LOGO'
 					data-previews=""
 					data-width="300"
-					data-height="75"
+					data-height="100"
 					data-icon="fa fa-image" 
 					data-placeholder="请上传网站LOGO" 
 					data-allow-types=".png"
@@ -141,6 +199,64 @@ use \Xpmse\T;
 			</div>
 		</div> 
 	</div><!-- END 单图上传: 网站LOGO (site_logo) -->
+
+
+
+
+	<!-- 单图上传: 浅色LOGO (site_logo_light) 开始  -->
+	<div class="xpmse-images  " name="site_logo_light">
+		<div class="form-group " >
+			<label class="col-xs-2 control-label" for="site_logo_light">浅色LOGO</label>
+			<div class="col-xs-8">
+		   		<div name="site_logo_light" class="file-uploader rounded rounded-4 push-10-t"
+					data-api='/_a/mina/uploader/upload?type=image'
+					data-title='请上传浅色LOGO'
+					data-previews=""
+					data-width="300"
+					data-height="100"
+					data-icon="fa fa-image" 
+					data-placeholder="请上传浅色LOGO" 
+					data-allow-types=".png"
+					data-maxsize="20"
+					data-progress="yes"
+					data-cropable="yes"
+					data-draggable="yes"
+					data-src="<?=T::v('<%=site_logo_light.url%>', $rs )?>"
+					data-path="<?=T::v('<%=site_logo_light.path%>', $rs )?>"
+					></div>
+				<div class="help-block"></div>
+			</div>
+		</div> 
+	</div><!-- END 单图上传: 浅色LOGO (site_logo_light) -->
+
+
+
+
+	<!-- 单图上传: 深色LOGO (site_logo_dark) 开始  -->
+	<div class="xpmse-images  " name="site_logo_dark">
+		<div class="form-group " >
+			<label class="col-xs-2 control-label" for="site_logo_dark">深色LOGO</label>
+			<div class="col-xs-8">
+		   		<div name="site_logo_dark" class="file-uploader rounded rounded-4 push-10-t"
+					data-api='/_a/mina/uploader/upload?type=image'
+					data-title='请上传深色LOGO'
+					data-previews=""
+					data-width="300"
+					data-height="100"
+					data-icon="fa fa-image" 
+					data-placeholder="请上传深色LOGO" 
+					data-allow-types=".png"
+					data-maxsize="20"
+					data-progress="yes"
+					data-cropable="yes"
+					data-draggable="yes"
+					data-src="<?=T::v('<%=site_logo_dark.url%>', $rs )?>"
+					data-path="<?=T::v('<%=site_logo_dark.path%>', $rs )?>"
+					></div>
+				<div class="help-block"></div>
+			</div>
+		</div> 
+	</div><!-- END 单图上传: 深色LOGO (site_logo_dark) -->
 
 
 
@@ -496,7 +612,6 @@ use \Xpmse\T;
 			</div>
 		</div> 
 	</div><!-- END 单图上传: 苹果客户端二维码 (qr_ios) -->
-
 
 
  

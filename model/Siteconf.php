@@ -4,14 +4,15 @@
  * 站点配置数据模型
  *
  * 程序作者: XpmSE机器人
- * 最后修改: 2018-06-24 12:32:16
+ * 最后修改: 2018-08-14 21:41:58
  * 程序母版: /data/stor/private/templates/xpmsns/model/code/model/Name.php
  */
 namespace Xpmsns\Pages\Model;
-                                          
+                                                  
 use \Xpmse\Excp;
 use \Xpmse\Model;
 use \Xpmse\Utils;
+use \Xpmse\Conf;
 use \Xpmse\Media;
 use \Xpmse\Loader\App as App;
 
@@ -67,6 +68,10 @@ class Siteconf extends Model {
 		$this->putColumn( 'site_slogen', $this->type("string", ["length"=>400, "null"=>true]));
 		// 网站图标
 		$this->putColumn( 'icon', $this->type("string", ["length"=>200, "null"=>true]));
+		// 浅色图标
+		$this->putColumn( 'icon_light', $this->type("string", ["length"=>200, "null"=>true]));
+		// 深色图标
+		$this->putColumn( 'icon_dark', $this->type("string", ["length"=>200, "null"=>true]));
 		// 网站简介
 		$this->putColumn( 'site_intro', $this->type("string", ["length"=>400, "null"=>true]));
 		// 官网地址
@@ -75,6 +80,10 @@ class Siteconf extends Model {
 		$this->putColumn( 'site_downloadpage', $this->type("string", ["length"=>200, "null"=>true]));
 		// 网站LOGO
 		$this->putColumn( 'site_logo', $this->type("string", ["length"=>200, "null"=>true]));
+		// 浅色LOGO
+		$this->putColumn( 'site_logo_light', $this->type("string", ["length"=>200, "null"=>true]));
+		// 深色LOGO
+		$this->putColumn( 'site_logo_dark', $this->type("string", ["length"=>200, "null"=>true]));
 		// 网站备案号
 		$this->putColumn( 'site_no', $this->type("string", ["length"=>200, "index"=>true, "null"=>true]));
 		// 公司名称
@@ -133,10 +142,34 @@ class Siteconf extends Model {
 			$rs["icon"] = empty($rs["icon"]) ? [] : $this->media->get( $rs["icon"] );
 		}
 
+		// 格式化: 浅色图标
+		// 返回值: {"url":"访问地址...", "path":"文件路径...", "origin":"原始文件访问地址..." }
+		if ( array_key_exists('icon_light', $rs ) ) {
+			$rs["icon_light"] = empty($rs["icon_light"]) ? [] : $this->media->get( $rs["icon_light"] );
+		}
+
+		// 格式化: 深色图标
+		// 返回值: {"url":"访问地址...", "path":"文件路径...", "origin":"原始文件访问地址..." }
+		if ( array_key_exists('icon_dark', $rs ) ) {
+			$rs["icon_dark"] = empty($rs["icon_dark"]) ? [] : $this->media->get( $rs["icon_dark"] );
+		}
+
 		// 格式化: 网站LOGO
 		// 返回值: {"url":"访问地址...", "path":"文件路径...", "origin":"原始文件访问地址..." }
 		if ( array_key_exists('site_logo', $rs ) ) {
 			$rs["site_logo"] = empty($rs["site_logo"]) ? [] : $this->media->get( $rs["site_logo"] );
+		}
+
+		// 格式化: 浅色LOGO
+		// 返回值: {"url":"访问地址...", "path":"文件路径...", "origin":"原始文件访问地址..." }
+		if ( array_key_exists('site_logo_light', $rs ) ) {
+			$rs["site_logo_light"] = empty($rs["site_logo_light"]) ? [] : $this->media->get( $rs["site_logo_light"] );
+		}
+
+		// 格式化: 深色LOGO
+		// 返回值: {"url":"访问地址...", "path":"文件路径...", "origin":"原始文件访问地址..." }
+		if ( array_key_exists('site_logo_dark', $rs ) ) {
+			$rs["site_logo_dark"] = empty($rs["site_logo_dark"]) ? [] : $this->media->get( $rs["site_logo_dark"] );
 		}
 
 		// 格式化: 小程序二维码
@@ -206,10 +239,14 @@ class Siteconf extends Model {
 	 *          	  $rs["site_name"],  // 网站名称 
 	 *          	  $rs["site_slogen"],  // 网站Slogen 
 	 *          	  $rs["icon"],  // 网站图标 
+	 *          	  $rs["icon_light"],  // 浅色图标 
+	 *          	  $rs["icon_dark"],  // 深色图标 
 	 *          	  $rs["site_intro"],  // 网站简介 
 	 *          	  $rs["site_homepage"],  // 官网地址 
 	 *          	  $rs["site_downloadpage"],  // 应用下载地址 
 	 *          	  $rs["site_logo"],  // 网站LOGO 
+	 *          	  $rs["site_logo_light"],  // 浅色LOGO 
+	 *          	  $rs["site_logo_dark"],  // 深色LOGO 
 	 *          	  $rs["site_no"],  // 网站备案号 
 	 *          	  $rs["company"],  // 公司名称 
 	 *          	  $rs["address"],  // 公司地址 
@@ -335,10 +372,14 @@ class Siteconf extends Model {
 	 *          	  $rs["site_name"],  // 网站名称 
 	 *          	  $rs["site_slogen"],  // 网站Slogen 
 	 *          	  $rs["icon"],  // 网站图标 
+	 *          	  $rs["icon_light"],  // 浅色图标 
+	 *          	  $rs["icon_dark"],  // 深色图标 
 	 *          	  $rs["site_intro"],  // 网站简介 
 	 *          	  $rs["site_homepage"],  // 官网地址 
 	 *          	  $rs["site_downloadpage"],  // 应用下载地址 
 	 *          	  $rs["site_logo"],  // 网站LOGO 
+	 *          	  $rs["site_logo_light"],  // 浅色LOGO 
+	 *          	  $rs["site_logo_dark"],  // 深色LOGO 
 	 *          	  $rs["site_no"],  // 网站备案号 
 	 *          	  $rs["company"],  // 公司名称 
 	 *          	  $rs["address"],  // 公司地址 
@@ -471,6 +512,38 @@ class Siteconf extends Model {
 	}
 
 	/**
+	 * 根据配制ID上传浅色图标。
+	 * @param string $site_id 配制ID
+	 * @param string $file_path 文件路径
+	 * @param mix $index 如果是数组，替换当前 index
+	 * @return array 已上传文件信息 {"url":"访问地址...", "path":"文件路径...", "origin":"原始文件访问地址..." }
+	 */
+	public function uploadIconlightBySiteId($site_id, $file_path, $upload_only=false ) {
+
+		$fs =  $this->media->uploadFile( $file_path );
+		if ( $upload_only !== true ) {
+			$this->updateBy('site_id', ["site_id"=>$site_id, "icon_light"=>$fs['path']]);
+		}
+		return $fs;
+	}
+
+	/**
+	 * 根据配制ID上传深色图标。
+	 * @param string $site_id 配制ID
+	 * @param string $file_path 文件路径
+	 * @param mix $index 如果是数组，替换当前 index
+	 * @return array 已上传文件信息 {"url":"访问地址...", "path":"文件路径...", "origin":"原始文件访问地址..." }
+	 */
+	public function uploadIcondarkBySiteId($site_id, $file_path, $upload_only=false ) {
+
+		$fs =  $this->media->uploadFile( $file_path );
+		if ( $upload_only !== true ) {
+			$this->updateBy('site_id', ["site_id"=>$site_id, "icon_dark"=>$fs['path']]);
+		}
+		return $fs;
+	}
+
+	/**
 	 * 根据配制ID上传网站LOGO。
 	 * @param string $site_id 配制ID
 	 * @param string $file_path 文件路径
@@ -482,6 +555,38 @@ class Siteconf extends Model {
 		$fs =  $this->media->uploadFile( $file_path );
 		if ( $upload_only !== true ) {
 			$this->updateBy('site_id', ["site_id"=>$site_id, "site_logo"=>$fs['path']]);
+		}
+		return $fs;
+	}
+
+	/**
+	 * 根据配制ID上传浅色LOGO。
+	 * @param string $site_id 配制ID
+	 * @param string $file_path 文件路径
+	 * @param mix $index 如果是数组，替换当前 index
+	 * @return array 已上传文件信息 {"url":"访问地址...", "path":"文件路径...", "origin":"原始文件访问地址..." }
+	 */
+	public function uploadSitelogolightBySiteId($site_id, $file_path, $upload_only=false ) {
+
+		$fs =  $this->media->uploadFile( $file_path );
+		if ( $upload_only !== true ) {
+			$this->updateBy('site_id', ["site_id"=>$site_id, "site_logo_light"=>$fs['path']]);
+		}
+		return $fs;
+	}
+
+	/**
+	 * 根据配制ID上传深色LOGO。
+	 * @param string $site_id 配制ID
+	 * @param string $file_path 文件路径
+	 * @param mix $index 如果是数组，替换当前 index
+	 * @return array 已上传文件信息 {"url":"访问地址...", "path":"文件路径...", "origin":"原始文件访问地址..." }
+	 */
+	public function uploadSitelogodarkBySiteId($site_id, $file_path, $upload_only=false ) {
+
+		$fs =  $this->media->uploadFile( $file_path );
+		if ( $upload_only !== true ) {
+			$this->updateBy('site_id', ["site_id"=>$site_id, "site_logo_dark"=>$fs['path']]);
 		}
 		return $fs;
 	}
@@ -583,6 +688,38 @@ class Siteconf extends Model {
 	}
 
 	/**
+	 * 根据配制别名上传浅色图标。
+	 * @param string $site_slug 配制别名
+	 * @param string $file_path 文件路径
+	 * @param mix $index 如果是数组，替换当前 index
+	 * @return array 已上传文件信息 {"url":"访问地址...", "path":"文件路径...", "origin":"原始文件访问地址..." }
+	 */
+	public function uploadIconlightBySiteSlug($site_slug, $file_path, $upload_only=false ) {
+
+		$fs =  $this->media->uploadFile( $file_path );
+		if ( $upload_only !== true ) {
+			$this->updateBy('site_slug', ["site_slug"=>$site_slug, "icon_light"=>$fs['path']]);
+		}
+		return $fs;
+	}
+
+	/**
+	 * 根据配制别名上传深色图标。
+	 * @param string $site_slug 配制别名
+	 * @param string $file_path 文件路径
+	 * @param mix $index 如果是数组，替换当前 index
+	 * @return array 已上传文件信息 {"url":"访问地址...", "path":"文件路径...", "origin":"原始文件访问地址..." }
+	 */
+	public function uploadIcondarkBySiteSlug($site_slug, $file_path, $upload_only=false ) {
+
+		$fs =  $this->media->uploadFile( $file_path );
+		if ( $upload_only !== true ) {
+			$this->updateBy('site_slug', ["site_slug"=>$site_slug, "icon_dark"=>$fs['path']]);
+		}
+		return $fs;
+	}
+
+	/**
 	 * 根据配制别名上传网站LOGO。
 	 * @param string $site_slug 配制别名
 	 * @param string $file_path 文件路径
@@ -594,6 +731,38 @@ class Siteconf extends Model {
 		$fs =  $this->media->uploadFile( $file_path );
 		if ( $upload_only !== true ) {
 			$this->updateBy('site_slug', ["site_slug"=>$site_slug, "site_logo"=>$fs['path']]);
+		}
+		return $fs;
+	}
+
+	/**
+	 * 根据配制别名上传浅色LOGO。
+	 * @param string $site_slug 配制别名
+	 * @param string $file_path 文件路径
+	 * @param mix $index 如果是数组，替换当前 index
+	 * @return array 已上传文件信息 {"url":"访问地址...", "path":"文件路径...", "origin":"原始文件访问地址..." }
+	 */
+	public function uploadSitelogolightBySiteSlug($site_slug, $file_path, $upload_only=false ) {
+
+		$fs =  $this->media->uploadFile( $file_path );
+		if ( $upload_only !== true ) {
+			$this->updateBy('site_slug', ["site_slug"=>$site_slug, "site_logo_light"=>$fs['path']]);
+		}
+		return $fs;
+	}
+
+	/**
+	 * 根据配制别名上传深色LOGO。
+	 * @param string $site_slug 配制别名
+	 * @param string $file_path 文件路径
+	 * @param mix $index 如果是数组，替换当前 index
+	 * @return array 已上传文件信息 {"url":"访问地址...", "path":"文件路径...", "origin":"原始文件访问地址..." }
+	 */
+	public function uploadSitelogodarkBySiteSlug($site_slug, $file_path, $upload_only=false ) {
+
+		$fs =  $this->media->uploadFile( $file_path );
+		if ( $upload_only !== true ) {
+			$this->updateBy('site_slug', ["site_slug"=>$site_slug, "site_logo_dark"=>$fs['path']]);
 		}
 		return $fs;
 	}
@@ -754,10 +923,14 @@ class Siteconf extends Model {
 	 *               	["site_name"],  // 网站名称 
 	 *               	["site_slogen"],  // 网站Slogen 
 	 *               	["icon"],  // 网站图标 
+	 *               	["icon_light"],  // 浅色图标 
+	 *               	["icon_dark"],  // 深色图标 
 	 *               	["site_intro"],  // 网站简介 
 	 *               	["site_homepage"],  // 官网地址 
 	 *               	["site_downloadpage"],  // 应用下载地址 
 	 *               	["site_logo"],  // 网站LOGO 
+	 *               	["site_logo_light"],  // 浅色LOGO 
+	 *               	["site_logo_dark"],  // 深色LOGO 
 	 *               	["site_no"],  // 网站备案号 
 	 *               	["company"],  // 公司名称 
 	 *               	["address"],  // 公司地址 
@@ -899,10 +1072,14 @@ class Siteconf extends Model {
 			"site_name",  // 网站名称
 			"site_slogen",  // 网站Slogen
 			"icon",  // 网站图标
+			"icon_light",  // 浅色图标
+			"icon_dark",  // 深色图标
 			"site_intro",  // 网站简介
 			"site_homepage",  // 官网地址
 			"site_downloadpage",  // 应用下载地址
 			"site_logo",  // 网站LOGO
+			"site_logo_light",  // 浅色LOGO
+			"site_logo_dark",  // 深色LOGO
 			"site_no",  // 网站备案号
 			"company",  // 公司名称
 			"address",  // 公司地址

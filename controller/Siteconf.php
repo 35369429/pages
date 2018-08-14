@@ -4,7 +4,7 @@
  * 站点配置控制器
  *
  * 程序作者: XpmSE机器人
- * 最后修改: 2018-06-24 12:32:16
+ * 最后修改: 2018-08-14 21:41:57
  * 程序母版: /data/stor/private/templates/xpmsns/model/code/controller/Name.php
  */
 
@@ -177,8 +177,20 @@ class SiteconfController extends \Xpmse\Loader\Controller {
 		if ( is_array($rs['icon']) &&  !empty($rs['icon']['local'])) {
 			$rs['icon'] = $inst->uploadIcon( $site_id, $rs['icon']['local'], true);
 		}
+		if ( is_array($rs['icon_light']) &&  !empty($rs['icon_light']['local'])) {
+			$rs['icon_light'] = $inst->uploadIconlight( $site_id, $rs['icon_light']['local'], true);
+		}
+		if ( is_array($rs['icon_dark']) &&  !empty($rs['icon_dark']['local'])) {
+			$rs['icon_dark'] = $inst->uploadIcondark( $site_id, $rs['icon_dark']['local'], true);
+		}
 		if ( is_array($rs['site_logo']) &&  !empty($rs['site_logo']['local'])) {
 			$rs['site_logo'] = $inst->uploadSitelogo( $site_id, $rs['site_logo']['local'], true);
+		}
+		if ( is_array($rs['site_logo_light']) &&  !empty($rs['site_logo_light']['local'])) {
+			$rs['site_logo_light'] = $inst->uploadSitelogolight( $site_id, $rs['site_logo_light']['local'], true);
+		}
+		if ( is_array($rs['site_logo_dark']) &&  !empty($rs['site_logo_dark']['local'])) {
+			$rs['site_logo_dark'] = $inst->uploadSitelogodark( $site_id, $rs['site_logo_dark']['local'], true);
 		}
 		if ( is_array($rs['qr_wxapp']) &&  !empty($rs['qr_wxapp']['local'])) {
 			$rs['qr_wxapp'] = $inst->uploadQrwxapp( $site_id, $rs['qr_wxapp']['local'], true);
