@@ -162,11 +162,11 @@ use \Xpmse\Utils as Utils;
 							<tr>
 								<th class="font-w300" style="width:5%;max-width:120px;"> 编号</th>
 								<th class="font-w300" style="width:5%;"> 优先级 </th>
-								<th class="font-w300" style="width:10%;">名称</th>
-								<th class="font-w300" style="width:9%;">参数</th>
+								<th class="font-w300" style="width:14%;">名称</th>
 								<th class="font-w300" style="width:5%;">项目</th>
 								<th class="font-w300" style="width:5%;">导航</th>
-								<th class="font-w300" style="width:5%;">二级导航</th>
+								<th class="font-w300" style="width:5%;">尾部导航</th>
+								<th class="font-w300" style="width:5%;">新开窗口</th>
 								<th class="font-w300" style="width:5%;">高亮显示</th>
 								<th class="font-w300" style="width:5%;">隐藏</th>
 								<th class="font-w300" style="width:10%;">
@@ -197,22 +197,23 @@ use \Xpmse\Utils as Utils;
 							</td>
 								<td><?=$rs['priority'] ? $rs['priority'] : '0'?></td>
 								<td><?=$rs['name']?></td>
-								<td><?=$rs['param']?></td>
-									<td><?=$rs['project']?$rs['project']:'default'?></td>
-									<td><?=$rs['isnav']?'是':'否'?></td>
-									<td><?=$rs['issubnav']?'是':'否'?></td>
-									<td><?=$rs['highlight']?'是':'否'?></td>
-									<td><?=$rs['hidden']?'隐藏':'显示'?></td>
-									<td> 
-									<?php if ( $query['order'] == 'created_at desc' ) :?>
-										<?=$rs['created_at']?> 
-									<?php elseif ( $query['order'] == 'updated_at desc' ) :?>
-										<?=$rs['updated_at']?> 
-									<?php else : ?>
-										<?=$rs['created_at']?> 
-									<?php endif;?>
+								
+								<td><?=$rs['project']?$rs['project']:'default'?></td>
+								<td><?=$rs['isnav']?'是':'否'?></td>
+								<td><?=$rs['isfootnav']?'是':'否'?></td>
+								<td><?=$rs['isblank']?'是':'否'?></td>
+								<td><?=$rs['highlight']?'是':'否'?></td>
+								<td><?=$rs['hidden']?'隐藏':'显示'?></td>
+								<td> 
+								<?php if ( $query['order'] == 'created_at desc' ) :?>
+									<?=$rs['created_at']?> 
+								<?php elseif ( $query['order'] == 'updated_at desc' ) :?>
+									<?=$rs['updated_at']?> 
+								<?php else : ?>
+									<?=$rs['created_at']?> 
+								<?php endif;?>
 
-									</td>
+								</td>
 
 								<td> <span class="<?=$s['class']?>"><?=$s['name']?></span></td>
 								<td>
@@ -242,10 +243,10 @@ use \Xpmse\Utils as Utils;
 											<span class="name"> <?=$name?> </span>
 										<?php endforeach;?>
 									</td>
-									<td><?=$rs['param']?></td>
 									<td><?=$rs['project']?$rs['project']:'default'?></td>
 									<td><?=$rs['isnav']?'是':'否'?></td>
-									<td><?=$rs['issubnav']?'是':'否'?></td>
+									<td><?=$rs['isfootnav']?'是':'否'?></td>
+									<td><?=$rs['isblank']?'是':'否'?></td>
 									<td><?=$rs['highlight']?'是':'否'?></td>
 									<td><?=$rs['hidden']?'隐藏':'显示'?></td>
 
@@ -272,7 +273,7 @@ use \Xpmse\Utils as Utils;
 
 							<tr>
 								<td colspan="2"></td>
-								<td colspan="7"> 
+								<td colspan="11"> 
 									<a href='<?=App::R("category", "edit",["parent_id"=>$rs["category_id"]])?>'> <i class="fa fa-plus"></i> 添加子栏目 </a>
 								</td>
 							</tr>
@@ -281,7 +282,7 @@ use \Xpmse\Utils as Utils;
 						<?php endforeach;?>
 
 						<tfoot>
-							<tr><td colspan="12"> <nav class="pull-right">
+							<tr><td colspan="13"> <nav class="pull-right">
 
 								<ul class="pagination">
 									<?php if ($cates['prev'] !== false): ?>

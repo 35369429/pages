@@ -46,7 +46,8 @@ class Category extends Model {
 				 ->putColumn( 'priority', $this->type('integer', ['index'=>1, 'default'=>"0"]) ) // 优先级排序
 				 ->putColumn( 'hidden', $this->type('boolean', ['index'=>1, 'default'=>"0"]) )   // 是否隐藏
 				 ->putColumn( 'isnav', $this->type('boolean', ['index'=>1, 'default'=>"1"]) )   // 是否是导航
-				 ->putColumn( 'issubnav', $this->type('boolean', ['index'=>1, 'default'=>"0"]) )   // 是否是二级导航
+				 ->putColumn( 'isfootnav', $this->type('boolean', ['index'=>1, 'default'=>"0"]) )   // 是否是尾部导航
+				 ->putColumn( 'isblank', $this->type('boolean', ['index'=>1, 'default'=>"0"]) )    // 是否新开链接
 				 ->putColumn( 'highlight', $this->type('boolean', ['index'=>1, 'default'=>"0"]) )   // 是否高亮显示
 				 ->putColumn( 'param', $this->type('string',     ['length'=>128, 'index'=>1]) )  // 自定义参数
 				 ->putColumn( 'status', $this->type('string', ['length'=>10,'index'=>1, 'default'=>'on']) )  // 类型状态 on/off
@@ -260,9 +261,14 @@ class Category extends Model {
 			$qb->where("isnav", "=", "1");
 		}
 
-		// 是否为二级导航
-		if ( array_key_exists('issubnav', $query) &&  $query['issubnav'] == "1" ){
-			$qb->where("issubnav", "=", "1");
+		// 是否为尾部导航
+		if ( array_key_exists('isfootnav', $query) &&  $query['isfootnav'] == "1" ){
+			$qb->where("isfootnav", "=", "1");
+		}
+
+		// 是否新开链接
+		if ( array_key_exists('isblank', $query) &&  $query['isblank'] == "1" ){
+			$qb->where("isblank", "=", "1");
 		}
 
 		// 是否高亮显示

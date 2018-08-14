@@ -182,15 +182,25 @@
 					</div>
 				</div><!-- END 作为导航 -->
 
-				<!-- 作为二级导航 -->
+				<!-- 作为尾部导航 -->
 				<div class="form-group">
-					<label class="col-xs-2 control-label" for="issubnav"></label>
+					<label class="col-xs-2 control-label" for="isfootnav"></label>
 					<div class="col-xs-9">
 						<label class="css-input css-checkbox css-checkbox-primary" >
-                       		<input name="issubnav" value="1" data-uncheck-value="0" type="checkbox" <?=($ca['issubnav'] == "1" ) ? 'checked' : '' ?> ><span></span> 作为二级导航
+                       		<input name="isfootnav" value="1" data-uncheck-value="0" type="checkbox" <?=($ca['isfootnav'] == "1" ) ? 'checked' : '' ?> ><span></span> 作为尾部导航
                         </label>
 					</div>
-				</div><!-- END 作为二级导航 -->
+				</div><!-- END 作为尾部导航 -->
+
+				<!-- 新开窗口 -->
+				<div class="form-group">
+					<label class="col-xs-2 control-label" for="isblank"></label>
+					<div class="col-xs-9">
+						<label class="css-input css-checkbox css-checkbox-primary" >
+                       		<input name="isblank" value="1" data-uncheck-value="0" type="checkbox" <?=($ca['isblank'] == "1" ) ? 'checked' : '' ?> ><span></span> 新开窗口
+                        </label>
+					</div>
+				</div><!-- END 新开窗口 -->
 
 				<!-- 高亮显示 -->
 				<div class="form-group">

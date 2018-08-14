@@ -35,7 +35,7 @@ class Category extends Api {
 		     	'praram','orParam',
 		     	'order',
 		     	'page','perpage',
-		     	"highlight", "isnav", "issubnav"
+		     	"highlight", "isnav", "isfootnav", "isblank"
 		     ]);
 	}
 
@@ -80,7 +80,7 @@ class Category extends Api {
 		$select = is_array($select) ? $select : explode(',', $select);
 
 		// 验证 Select 参数
-		$allowFields = ["*","category_id","project","page","name","fullname","parent_id","priority","hidden","param","status", "isnav", "issubnav", "highlight","link", "slug"];
+		$allowFields = ["*","category_id","project","page","name","fullname","parent_id","priority","hidden","param","status", "isnav", "isfootnav", "isblank", "highlight","link", "slug"];
 
 
 		if ( !empty($query['slug']) ) {
@@ -146,7 +146,8 @@ class Category extends Api {
 		$this->qb( $qb, 'hidden', 'hidden', $query );
 		$this->qb( $qb, 'isnav', 'isnav', $query );
 		$this->qb( $qb, 'highlight', 'highlight', $query );
-		$this->qb( $qb, 'issubnav', 'issubnav', $query );
+		$this->qb( $qb, 'isblank', 'isblank', $query );
+		$this->qb( $qb, 'isfootnav', 'isfootnav', $query );
 		$this->qb( $qb, 'status', 'status', $query );
 		$this->qb( $qb, 'param', 'param', $query, ['and', 'or'], 'like');
 
@@ -240,7 +241,7 @@ class Category extends Api {
 		$select = is_array($select) ? $select : explode(',', $select);
 
 		// 验证 Select 参数
-		$allowFields = ["*","category_id","project","page","name","fullname","parent_id","priority","hidden","isnav","issubnav","highlight","param","status"];
+		$allowFields = ["*","category_id","project","page","name","fullname","parent_id","priority","hidden","isnav","isfootnav", "isblank","highlight","param","status"];
 
 		foreach ($select as $idx => $field) {
 			if ( !in_array($field, $allowFields)){
