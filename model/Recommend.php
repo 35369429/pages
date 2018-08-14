@@ -4,7 +4,7 @@
  * 推荐数据模型
  *
  * 程序作者: XpmSE机器人
- * 最后修改: 2018-08-14 23:06:11
+ * 最后修改: 2018-08-14 23:11:09
  * 程序母版: /data/stor/private/templates/xpmsns/model/code/model/Name.php
  */
 namespace Xpmsns\Pages\Model;
@@ -280,7 +280,17 @@ function getContentsBy( $type,  $recommend_id,  $keywords=[], $page=1, $perpage=
 				$qb->whereNotNull('content.cover');
 				$qb->where('content.cover', '<>', "");
 			}
+          
+          	if ( $recommend['video_only']) {
+				$query['video_only'] = 1;
+			}
 
+			// 必须包含视频
+			if ( $query['video_only'] ) {
+				$qb->whereNotNull('content.videos');
+				$qb->where('content.videos', '<>', "");
+				$qb->where('content.videos', '<>', "[]");
+			}
 
 			// 按分类ID查找
 			if ( array_key_exists('category_ids', $query)  && !empty($query['category_ids']) ) {
