@@ -46,8 +46,21 @@ class SetupController extends \Xpmse\Loader\Controller {
 
 
 		// 添加默认分类
+		
+		$categories = [
+			["slug"=>"default", "name"=>"资讯", "fullname"=>"资讯", "isnav"=>1 ],
+			["slug"=>"video", "name"=>"视频", "fullname"=>"视频", "isnav"=>1, "link"=>"DB::RAW(CONCAT('/video/list/',`category_id`, '.html'))"]
+		];
 		$cate = new \Xpmsns\Pages\Model\Category;
-		$cate->saveBySlug(["name"=>"默认","fullname"=>"默认", "slug"=>"default"]);
+		foreach ($categories as $c ) {
+			$rs = $cate->getBy('slug', $c['slug']);
+			if ( !empty($rs) ) {
+				continue;
+			}
+			try {
+				$cate->saveBySlug($c);
+			} catch( Excp $e ){}
+		}
 
 		// 添加默认配置项
 		$site = new \Xpmsns\Pages\Model\Siteconf;
@@ -57,7 +70,6 @@ class SetupController extends \Xpmse\Loader\Controller {
 		$site->saveBySiteSlug(["site_slug"=>'wxapp', 'position'=>"微信小程序"]);
 		$site->saveBySiteSlug(["site_slug"=>'android', 'position'=>"安卓客户端"]);
 		$site->saveBySiteSlug(["site_slug"=>'ios', 'position'=>"iOS客户端"]);
-
 
 		// 添加默认推荐项
 		$recommends = [
@@ -73,7 +85,8 @@ class SetupController extends \Xpmse\Loader\Controller {
 			["title"=>"24小时热评","slug"=>"24hours_hotreviews", "orderby"=>"comment_cnt", "period"=>'24hours', "type"=>"auto"],
 			["title"=>"最新文章","slug"=>"latest", "pos"=>"index_sidebar", "orderby"=>"publish_time", "period"=>"unlimited", "type"=>"auto"],
 			["title"=>"最热文章","slug"=>"hotnews", "orderby"=>"publish_time", "period"=>"unlimited",   "type"=>"auto"],
-			["title"=>"焦点文章","slug"=>"focus", "pos"=>"index_focus", "orderby"=>"publish_time", "period"=>"unlimited",  "type"=>"auto"],
+			["title"=>"焦点文章","slug"=>"focus", "pos"=>"index_focus",  "thumb_only"=>1, "orderby"=>"publish_time", "period"=>"unlimited",  "type"=>"auto"],
+			["title"=>"焦点视频","slug"=>"video_focus", "pos"=>"video_focus", "thumb_only"=>1, "video_only"=>1, "orderby"=>"publish_time", "period"=>"unlimited",  "type"=>"auto"],
 			["title"=>"今日主题","slug"=>"topic", "orderby"=>"publish_time", "period"=>"unlimited",  "type"=>"auto"],
 			["title"=>"新闻快讯","slug"=>"quicknews", "orderby"=>"publish_time", "period"=>"unlimited",  "type"=>"auto"],
 
@@ -81,18 +94,22 @@ class SetupController extends \Xpmse\Loader\Controller {
 			["title"=>"正文页相关推荐","slug"=>"detail", "pos"=>"detail_sidebar", "orderby"=>"publish_time",  "period"=>"unlimited",  "type"=>"auto"],
 
 			// 首页相关推荐
-			["title"=>"首页S1","slug"=>"section_1","pos"=>"index", "orderby"=>"publish_time", "period"=>"7days",  "type"=>"auto"],
-			["title"=>"首页S2","slug"=>"section_2","pos"=>"index", "orderby"=>"publish_time", "period"=>"7days",  "type"=>"auto"],
-			["title"=>"首页S3","slug"=>"section_3","pos"=>"index", "orderby"=>"publish_time", "period"=>"7days",  "type"=>"auto"],
-			["title"=>"首页S4","slug"=>"section_4","pos"=>"index", "orderby"=>"publish_time", "period"=>"7days",  "type"=>"auto"],
-			["title"=>"首页S5","slug"=>"section_5","pos"=>"index", "orderby"=>"publish_time", "period"=>"7days",  "type"=>"auto"],
-			["title"=>"首页S6","slug"=>"section_6","pos"=>"index", "orderby"=>"publish_time", "period"=>"7days",  "type"=>"auto"],
+			["title"=>"首页S1","slug"=>"section_1","pos"=>"index", "orderby"=>"publish_time", "period"=>"unlimited",  "type"=>"auto"],
+			["title"=>"首页S2","slug"=>"section_2","pos"=>"index", "orderby"=>"publish_time", "period"=>"unlimited",  "type"=>"auto"],
+			["title"=>"首页S3","slug"=>"section_3","pos"=>"index", "orderby"=>"publish_time", "period"=>"unlimited",  "type"=>"auto"],
+			["title"=>"首页S4","slug"=>"section_4","pos"=>"index", "orderby"=>"publish_time", "period"=>"unlimited",  "type"=>"auto"],
+			["title"=>"首页S5","slug"=>"section_5","pos"=>"index", "orderby"=>"publish_time", "period"=>"unlimited",  "type"=>"auto"],
+			["title"=>"首页S6","slug"=>"section_6","pos"=>"index", "orderby"=>"publish_time", "period"=>"unlimited",  "type"=>"auto"],
+
+			// 视频相关推荐
+			["title"=>"视频S1","slug"=>"video_s1","pos"=>"video", "thumb_only"=>1, "video_only"=>1,  "orderby"=>"publish_time", "period"=>"unlimited",  "type"=>"auto"],
+			["title"=>"视频S2","slug"=>"video_s1","pos"=>"video", "thumb_only"=>1, "video_only"=>1,  "orderby"=>"publish_time", "period"=>"unlimited",  "type"=>"auto"],
 
 			// 侧边相关推荐
-			["title"=>"侧边S1","slug"=>"sidebar_section_1", "pos"=>"index_sidebar", "orderby"=>"publish_time", "period"=>"7days",  "type"=>"auto"],
-			["title"=>"侧边S2","slug"=>"sidebar_section_2", "pos"=>"index_sidebar", "orderby"=>"publish_time", "period"=>"7days",  "type"=>"auto"],
-			["title"=>"侧边S3","slug"=>"sidebar_section_3", "pos"=>"index_sidebar", "orderby"=>"publish_time", "period"=>"7days",  "type"=>"auto"],
-			["title"=>"侧边S4","slug"=>"sidebar_section_4", "pos"=>"index_sidebar", "orderby"=>"publish_time", "period"=>"7days",  "type"=>"auto"],
+			["title"=>"侧边S1","slug"=>"sidebar_section_1", "pos"=>"index_sidebar", "orderby"=>"publish_time", "period"=>"unlimited",  "type"=>"auto"],
+			["title"=>"侧边S2","slug"=>"sidebar_section_2", "pos"=>"index_sidebar", "orderby"=>"publish_time", "period"=>"unlimited",  "type"=>"auto"],
+			["title"=>"侧边S3","slug"=>"sidebar_section_3", "pos"=>"index_sidebar", "orderby"=>"publish_time", "period"=>"unlimited",  "type"=>"auto"],
+			["title"=>"侧边S4","slug"=>"sidebar_section_4", "pos"=>"index_sidebar", "orderby"=>"publish_time", "period"=>"unlimited",  "type"=>"auto"],
 
 			// 底部帮助推荐
 			["title"=>"帮助中心","slug"=>"_help", "orderby"=>"publish_time",  "period"=>"unlimited",  "type"=>"auto"],
