@@ -957,7 +957,13 @@ class Article extends Model {
 
 			$render = new \Mina\Delta\Render;
 			$article['ap_content'] = $render->loadByHTML($article["content"])->wxapp();
-			$article["images"] = $render->images();
+				
+			// === 解析媒体数据 
+			$mdUtils = new \Mina\Delta\Utils;
+			$html = $mdUtils->load($article['delta'])->convert()->render();
+			$article["images"] = $mdUtils->images();
+			$article["videos"] = $mdUtils->videos();
+			$article["files"] = $mdUtils->files();
 			
 		}
 
