@@ -68,7 +68,7 @@ use \Xpmse\T;
 			<select class="js-select2 form-control input-lg" style="width: 100%;" 
 					id="category_id" name="category_id" 
 					data-language="zh-CN"
-					data-param-cancelable="0"
+					data-param-cancelable="1"
 					data-param-cancel="取消选择"
 					data-param-model="\Xpmsns\Pages\Model\Category"
 					data-param-table="category"
@@ -83,6 +83,19 @@ use \Xpmse\T;
 			</select>
 			<div class="help-block"></div>
 		</div>
+		 
+		<script type="text/javascript">
+		$(function(){
+			// 取消选择
+			$('select[name=category_id]').on("select2:select", function( e ){
+				var data = e.params.data || {};
+				id = data.id || '';
+				if ( '__cancel' ==  data.id ) {
+					$(this).select2("val", "");
+				}
+			});
+		});
+		</script>
 		 
 	</div><!-- END 下拉选择(动态数据): 所属栏目 (category_id) -->
 

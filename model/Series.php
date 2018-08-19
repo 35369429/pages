@@ -4,7 +4,7 @@
  * 系列数据模型
  *
  * 程序作者: XpmSE机器人
- * 最后修改: 2018-08-19 18:26:52
+ * 最后修改: 2018-08-19 18:52:21
  * 程序母版: /data/stor/private/templates/xpmsns/model/code/model/Name.php
  */
 namespace Xpmsns\Pages\Model;
@@ -123,12 +123,18 @@ class Series extends Model {
 	 *                $rs["c_wechat_offset"], // category.wechat_offset
 	 *                $rs["c_name"], // category.name
 	 *                $rs["c_fullname"], // category.fullname
+	 *                $rs["c_link"], // category.link
 	 *                $rs["c_root_id"], // category.root_id
 	 *                $rs["c_parent_id"], // category.parent_id
 	 *                $rs["c_priority"], // category.priority
 	 *                $rs["c_hidden"], // category.hidden
+	 *                $rs["c_isnav"], // category.isnav
 	 *                $rs["c_param"], // category.param
 	 *                $rs["c_status"], // category.status
+	 *                $rs["c_issubnav"], // category.issubnav
+	 *                $rs["c_highlight"], // category.highlight
+	 *                $rs["c_isfootnav"], // category.isfootnav
+	 *                $rs["c_isblank"], // category.isblank
 	 */
 	public function getBySeriesId( $series_id, $select=['*']) {
 		
@@ -248,12 +254,18 @@ class Series extends Model {
 	 *                $rs["c_wechat_offset"], // category.wechat_offset
 	 *                $rs["c_name"], // category.name
 	 *                $rs["c_fullname"], // category.fullname
+	 *                $rs["c_link"], // category.link
 	 *                $rs["c_root_id"], // category.root_id
 	 *                $rs["c_parent_id"], // category.parent_id
 	 *                $rs["c_priority"], // category.priority
 	 *                $rs["c_hidden"], // category.hidden
+	 *                $rs["c_isnav"], // category.isnav
 	 *                $rs["c_param"], // category.param
 	 *                $rs["c_status"], // category.status
+	 *                $rs["c_issubnav"], // category.issubnav
+	 *                $rs["c_highlight"], // category.highlight
+	 *                $rs["c_isfootnav"], // category.isfootnav
+	 *                $rs["c_isblank"], // category.isblank
 	 */
 	public function getBySlug( $slug, $select=['*']) {
 		
@@ -442,12 +454,18 @@ class Series extends Model {
 	 *               	["c_wechat_offset"], // category.wechat_offset
 	 *               	["c_name"], // category.name
 	 *               	["c_fullname"], // category.fullname
+	 *               	["c_link"], // category.link
 	 *               	["c_root_id"], // category.root_id
 	 *               	["c_parent_id"], // category.parent_id
 	 *               	["c_priority"], // category.priority
 	 *               	["c_hidden"], // category.hidden
+	 *               	["c_isnav"], // category.isnav
 	 *               	["c_param"], // category.param
 	 *               	["c_status"], // category.status
+	 *               	["c_issubnav"], // category.issubnav
+	 *               	["c_highlight"], // category.highlight
+	 *               	["c_isfootnav"], // category.isfootnav
+	 *               	["c_isblank"], // category.isblank
 	 */
 	public function search( $query = [] ) {
 
@@ -555,6 +573,12 @@ class Series extends Model {
 		// 过滤 inWhere 查询字段
 		$inwhereSelect = []; $linkSelect = [];
 		foreach ($select as $idx=>$fd ) {
+			
+			// 添加本表前缀
+			if ( !strpos( $fd, ".")  ) {
+				$select[$idx] = "series." .$select[$idx];
+				continue;
+			}
 			
 			//  连接栏目 (category as c )
 			if ( trim($fd) == "category.*" || trim($fd) == "c.*"  || trim($fd) == "*" ) {

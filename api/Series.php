@@ -4,7 +4,7 @@
  * 系列数据接口 
  *
  * 程序作者: XpmSE机器人
- * 最后修改: 2018-08-19 18:26:51
+ * 最后修改: 2018-08-19 18:52:20
  * 程序母版: /data/stor/private/templates/xpmsns/model/code/api/Name.php
  */
 namespace Xpmsns\Pages\Api;
@@ -65,12 +65,18 @@ class Series extends Api {
 	*               	["c_wechat_offset"], // category.wechat_offset
 	*               	["c_name"], // category.name
 	*               	["c_fullname"], // category.fullname
+	*               	["c_link"], // category.link
 	*               	["c_root_id"], // category.root_id
 	*               	["c_parent_id"], // category.parent_id
 	*               	["c_priority"], // category.priority
 	*               	["c_hidden"], // category.hidden
+	*               	["c_isnav"], // category.isnav
 	*               	["c_param"], // category.param
 	*               	["c_status"], // category.status
+	*               	["c_issubnav"], // category.issubnav
+	*               	["c_highlight"], // category.highlight
+	*               	["c_isfootnav"], // category.isfootnav
+	*               	["c_isblank"], // category.isblank
 	*/
 	protected function get( $query, $data ) {
 
@@ -290,12 +296,18 @@ class Series extends Api {
 	*               	["c_wechat_offset"], // category.wechat_offset
 	*               	["c_name"], // category.name
 	*               	["c_fullname"], // category.fullname
+	*               	["c_link"], // category.link
 	*               	["c_root_id"], // category.root_id
 	*               	["c_parent_id"], // category.parent_id
 	*               	["c_priority"], // category.priority
 	*               	["c_hidden"], // category.hidden
+	*               	["c_isnav"], // category.isnav
 	*               	["c_param"], // category.param
 	*               	["c_status"], // category.status
+	*               	["c_issubnav"], // category.issubnav
+	*               	["c_highlight"], // category.highlight
+	*               	["c_isfootnav"], // category.isfootnav
+	*               	["c_isblank"], // category.isblank
 	 */
 	protected function search( $query, $data ) {
 
