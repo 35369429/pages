@@ -29,7 +29,7 @@ define('STATUS_PENDING', 'PENDING');   // 同步中（数据尚未准备好）
 define('DEFAULT_PROJECT_NAME', 'default');  // 默认项目名称
 define('DEFAULT_PAGE_SLUG', '/article/detail');  // 默认页面地址
 define('DEFAULT_PAGE_SLUG_V2', '/desktop/article/detail');  // 默认页面地址V2
-
+define('DEFAULT_PAGE_SLUG_VIDEO', '/desktop/video/detail');  // 视频类默认地址
 
 /**
  * 文章数据模型
@@ -1094,7 +1094,7 @@ class Article extends Model {
 
 
 	/**
-	 * 生成物料
+	 * 生成物料 (废弃)
 	 * @param  [type] $article [description]
 	 * @return [type]             [description]
 	 */
@@ -1284,11 +1284,21 @@ class Article extends Model {
 		$default_home = Utils::getHomeLink();
 		$uri = parse_url( $default_home);
 		$default_project = Utils::getTab('project')->getVar('name', "WHERE `default`=1 LIMIT 1");
+		$video =  $this->article_draft->getVar('videos', "WHERE `article_id`=? LIMIT 1", [$article_id]);
+
 		if ( empty($default_project) ) {
 			$default_project = DEFAULT_PROJECT_NAME;
 		}
-		$pages = [$default_project . DEFAULT_PAGE_SLUG, $default_project . DEFAULT_PAGE_SLUG_V2 ];
 
+		$pages = [
+			$default_project . DEFAULT_PAGE_SLUG, 
+			$default_project . DEFAULT_PAGE_SLUG_V2
+		];
+
+		// 视频正文页
+		if ( count($video)  > 0 ) {
+			array_push( $pages, $default_project . DEFAULT_PAGE_SLUG_VIDEO );
+		}
 
 		if( $category === null ) {
 			$category =  $this->getCategories( $article_id, 'category.category_id' );
@@ -1310,9 +1320,7 @@ class Article extends Model {
 				$pages = array_unique($pages);
 
 			}
-
 		}
-
 
 		// 读取页面详细信息
 		$pages = $this->page->query()
@@ -1324,7 +1332,8 @@ class Article extends Model {
 						)
 						->get()
 						->toArray();
-		
+
+
 		$page_slugs = []; $page_slugs_map = [];  $proto = $uri['scheme'] . "://";
 		foreach ($pages as $idx=>$pg ) {
 
@@ -1357,6 +1366,8 @@ class Article extends Model {
 
 		// 获取适配链接
 		$entry_maps = $this->getEntries( $article_id, $page_slugs );
+
+
 		foreach ($pages as $idx=>$pg ) {
 
 			$page = $page_slugs_map[$pg['slug']];
@@ -1364,17 +1375,17 @@ class Article extends Model {
 
 			$desktop = $pages[$idx]['links']['desktop'];
 			if( is_string($desktop) ) {
-				$pages[$idx]['links']['desktop'] = $home.$entry_maps[$desktop]['latest'];
+				$pages[$idx]['links']['desktop'] = $home.$entry_maps[$desktop]['first'];
 			}
 
 			$mobile = $pages[$idx]['links']['mobile'];
 			if( is_string($mobile) ) {
-				$pages[$idx]['links']['mobile'] = $home.$entry_maps[$mobile]['latest'];
+				$pages[$idx]['links']['mobile'] = $home.$entry_maps[$mobile]['first'];
 			}
 
 			$wechat = $pages[$idx]['links']['wechat'];
 			if( is_string($wechat) ) {
-				$pages[$idx]['links']['wechat'] = $home.$entry_maps[$wechat]['latest'];
+				$pages[$idx]['links']['wechat'] = $home.$entry_maps[$wechat]['first'];
 			}
 		}
 
@@ -1406,12 +1417,12 @@ class Article extends Model {
 			$entries = $rs['entries'];
 			foreach ($entries as $idx=>$entry ) {
 				if ( $entry['method'] != 'GET') continue;
-
-				$entry['router'] = str_replace('{id:[0-9a-zA-Z]+}', $article_id,  $entry['router']);
-				$entry['router'] = str_replace('{article_id:[0-9a-zA-Z]+}', $article_id,  $entry['router']);
+				$entry['router'] = preg_replace('/\{(.+)\}/', $article_id,  $entry['router']);
 				$resp[$slug]['entries'][$idx] = $entry['router'];
-				$resp[$slug]['latest'] = $entry['router'];
 			}
+
+			$resp[$slug]['first'] = current($resp[$slug]['entries'] );
+			$resp[$slug]['latest'] = end($resp[$slug]['entries'] );
 		}
 
 		return $resp;
