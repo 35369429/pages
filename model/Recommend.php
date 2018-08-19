@@ -4,11 +4,11 @@
  * 推荐数据模型
  *
  * 程序作者: XpmSE机器人
- * 最后修改: 2018-08-14 23:11:09
+ * 最后修改: 2018-08-19 17:04:53
  * 程序母版: /data/stor/private/templates/xpmsns/model/code/model/Name.php
  */
 namespace Xpmsns\Pages\Model;
-                                 
+                                   
 use \Xpmse\Excp;
 use \Xpmse\Model;
 use \Xpmse\Utils;
@@ -496,6 +496,8 @@ function getContentsBy( $type,  $recommend_id,  $keywords=[], $page=1, $perpage=
 		$this->putColumn( 'thumb_only', $this->type("integer", ["length"=>1, "index"=>true, "null"=>true]));
 		// 必须包含视频
 		$this->putColumn( 'video_only', $this->type("integer", ["length"=>1, "index"=>true, "null"=>true]));
+		// 根据用户喜好推荐
+		$this->putColumn( 'bigdata_engine', $this->type("integer", ["length"=>1, "index"=>true, "null"=>true]));
 		// 周期
 		$this->putColumn( 'period', $this->type("string", ["length"=>100, "index"=>true, "null"=>true]));
 		// 摘要图片
@@ -512,6 +514,8 @@ function getContentsBy( $type,  $recommend_id,  $keywords=[], $page=1, $perpage=
 		$this->putColumn( 'tpl_ios', $this->type("text", ["null"=>true]));
 		// 关键词
 		$this->putColumn( 'keywords', $this->type("text", ["null"=>true]));
+		// 系列
+		$this->putColumn( 'series', $this->type("text", ["null"=>true]));
 		// 相关栏目
 		$this->putColumn( 'categories', $this->type("text", ["json"=>true, "null"=>true]));
 		// 相关文章
@@ -733,6 +737,7 @@ function getContentsBy( $type,  $recommend_id,  $keywords=[], $page=1, $perpage=
 	 *          	  $rs["ctype"],  // 内容类型 
 	 *          	  $rs["thumb_only"],  // 必须包含主题图片 
 	 *          	  $rs["video_only"],  // 必须包含视频 
+	 *          	  $rs["bigdata_engine"],  // 根据用户喜好推荐 
 	 *          	  $rs["period"],  // 周期 
 	 *          	  $rs["images"],  // 摘要图片 
 	 *          	  $rs["tpl_pc"],  // PC端模板 
@@ -741,6 +746,7 @@ function getContentsBy( $type,  $recommend_id,  $keywords=[], $page=1, $perpage=
 	 *          	  $rs["tpl_android"],  // 安卓模板 
 	 *          	  $rs["tpl_ios"],  // iOS模板 
 	 *          	  $rs["keywords"],  // 关键词 
+	 *          	  $rs["series"],  // 系列 
 	 *          	  $rs["categories"],  // 相关栏目 
 	 *                $rs["_map_category"][$categories[n]]["category_id"], // category.category_id
 	 *          	  $rs["articles"],  // 相关文章 
@@ -1085,6 +1091,7 @@ function getContentsBy( $type,  $recommend_id,  $keywords=[], $page=1, $perpage=
 	 *          	  $rs["ctype"],  // 内容类型 
 	 *          	  $rs["thumb_only"],  // 必须包含主题图片 
 	 *          	  $rs["video_only"],  // 必须包含视频 
+	 *          	  $rs["bigdata_engine"],  // 根据用户喜好推荐 
 	 *          	  $rs["period"],  // 周期 
 	 *          	  $rs["images"],  // 摘要图片 
 	 *          	  $rs["tpl_pc"],  // PC端模板 
@@ -1093,6 +1100,7 @@ function getContentsBy( $type,  $recommend_id,  $keywords=[], $page=1, $perpage=
 	 *          	  $rs["tpl_android"],  // 安卓模板 
 	 *          	  $rs["tpl_ios"],  // iOS模板 
 	 *          	  $rs["keywords"],  // 关键词 
+	 *          	  $rs["series"],  // 系列 
 	 *          	  $rs["categories"],  // 相关栏目 
 	 *                $rs["_map_category"][$categories[n]]["category_id"], // category.category_id
 	 *          	  $rs["articles"],  // 相关文章 
@@ -1608,6 +1616,7 @@ function getContentsBy( $type,  $recommend_id,  $keywords=[], $page=1, $perpage=
 	 *			      $query["title"] 按主题查询 ( LIKE )
 	 *			      $query["ctype"] 按内容类型查询 ( = )
 	 *			      $query["thumb_only"] 按必须有主题图片查询 ( = )
+	 *			      $query["bigdata_engine"] 按喜好推荐查询 ( = )
 	 *			      $query["video_only"] 按必须有视频内容查询 ( = )
 	 *			      $query["status"] 按状态查询 ( = )
 	 *			      $query["orderby_created_at_asc"]  按创建时间 ASC 排序
@@ -1625,6 +1634,7 @@ function getContentsBy( $type,  $recommend_id,  $keywords=[], $page=1, $perpage=
 	 *               	["ctype"],  // 内容类型 
 	 *               	["thumb_only"],  // 必须包含主题图片 
 	 *               	["video_only"],  // 必须包含视频 
+	 *               	["bigdata_engine"],  // 根据用户喜好推荐 
 	 *               	["period"],  // 周期 
 	 *               	["images"],  // 摘要图片 
 	 *               	["tpl_pc"],  // PC端模板 
@@ -1633,6 +1643,7 @@ function getContentsBy( $type,  $recommend_id,  $keywords=[], $page=1, $perpage=
 	 *               	["tpl_android"],  // 安卓模板 
 	 *               	["tpl_ios"],  // iOS模板 
 	 *               	["keywords"],  // 关键词 
+	 *               	["series"],  // 系列 
 	 *               	["categories"],  // 相关栏目 
 	 *               	["category"][$categories[n]]["category_id"], // category.category_id
 	 *               	["articles"],  // 相关文章 
@@ -1842,6 +1853,11 @@ function getContentsBy( $type,  $recommend_id,  $keywords=[], $page=1, $perpage=
 			$qb->where("recommend.thumb_only", '=', "{$query['thumb_only']}" );
 		}
 		  
+		// 按喜好推荐查询 (=)  
+		if ( array_key_exists("bigdata_engine", $query) &&!empty($query['bigdata_engine']) ) {
+			$qb->where("recommend.bigdata_engine", '=', "{$query['bigdata_engine']}" );
+		}
+		  
 		// 按必须有视频内容查询 (=)  
 		if ( array_key_exists("video_only", $query) &&!empty($query['video_only']) ) {
 			$qb->where("recommend.video_only", '=', "{$query['video_only']}" );
@@ -2030,6 +2046,7 @@ function getContentsBy( $type,  $recommend_id,  $keywords=[], $page=1, $perpage=
 			"ctype",  // 内容类型
 			"thumb_only",  // 必须包含主题图片
 			"video_only",  // 必须包含视频
+			"bigdata_engine",  // 根据用户喜好推荐
 			"period",  // 周期
 			"images",  // 摘要图片
 			"tpl_pc",  // PC端模板
@@ -2038,6 +2055,7 @@ function getContentsBy( $type,  $recommend_id,  $keywords=[], $page=1, $perpage=
 			"tpl_android",  // 安卓模板
 			"tpl_ios",  // iOS模板
 			"keywords",  // 关键词
+			"series",  // 系列
 			"categories",  // 相关栏目
 			"articles",  // 相关文章
 			"exclude_articles",  // 排除文章
