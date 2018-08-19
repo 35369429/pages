@@ -288,51 +288,35 @@
 								<div class="block-content">
 									<div class="form-group">
 										<div class="form-material">
-											
-											<select name="category" 
-												class="js-select2 form-control"  style="width: 100%;"
-												data-placeholder="请选择..." 
-												multiple >
-
-												<?php foreach ($cates['data'] as $rs) : ?>
-												<optgroup label="<?=$rs['name']?>" value="<?=$rs['category_id']?>"  >
-												
-													<!-- 一级分类 -->
-													<option 
-														value="<?=$rs['category_id']?>"   
-														<?=(in_array($rs['category_id'],$article['category'])) ? 'selected':''?>
-													>
-														<?=$rs['name']?>	
-													</option><!-- END 一级分类 -->
-													
-													<!-- 一级分类子分类 -->
-													<?php
-													$namer =[]; $rootname = $rs['name'];
-													$category->walk($rs['sub']['tree'], function($rs, $depth) use( & $namer, $rootname, $article){
-													if ( $depth == 1 ) {
-														$namer = [];
-													}
-													array_push($namer, $rs['name']);
-													?>
-													<option 
-														value="<?=$rs['category_id']?>"   
-														<?=(in_array($rs['category_id'],$article['category'])) ? 'selected':''?>
-													>
-														<?=$rootname?>
-														<?php foreach( $namer as $name ) : ?>
-															::
-															<?=$name?>
-														<?php endforeach;?>
-													</option><!-- END 一级分类子分类 -->	
-													<?php
-													});
-													?>
-												</optgroup>
-												<?php endforeach; ?>
+											<select class="js-select2 form-control" style="width: 100%;" 
+													id="category" name="category" 
+													data-language="zh-CN"
+													data-param-cancelable="1"
+													data-param-cancel="取消选择"
+													data-param-model="\Xpmsns\Pages\Model\Category"
+													data-param-table="category"
+													data-param-fields="category_id,name"
+													data-param-style="{{name}}({{category_id}})"
+													data-param-option="category_id"
+													data-param-default=""
+													data-ajax-url="/_a/mina/helper/select2?method=get"
+													data-preload-url="/_a/mina/helper/select2?method=get&preload=<?=T::v('<%=category | join(\',\')%>', $article )?>"
+													data-placeholder="请选择..."  multiple data-select2-multiple=1  >
+												<option></option>
 											</select>
-
 											<label for="category"  class="font-s14 font-w300">分类</label>
-											
+											<script type="text/javascript">
+											$(function(){
+												// 取消选择
+												$('select[name=category]').on("select2:select", function( e ){
+													var data = e.params.data || {};
+													id = data.id || '';
+													if ( '__cancel' ==  data.id ) {
+														$(this).select2("val", "");
+													}
+												});
+											});
+											</script>
 										</div>
 									</div> <!-- END form-group  分类 -->
 
@@ -796,7 +780,7 @@ $(function() {
 
 	// 存盘按钮功能
 	var savefn = function(event) {
-		
+
 		if ( savelock ){ return  false; }
 
 		$editor.save('<?=App::NR("article", "save")?>', {}, function( resp, status, xhr) {

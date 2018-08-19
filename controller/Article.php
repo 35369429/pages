@@ -432,15 +432,15 @@ class ArticleController extends \Xpmse\Loader\Controller {
 		}
 
 
-		$cate = new \Xpmsns\pages\Model\Category;
-		$wechats = $cate->wechat();
-		$cates = $cate->search(["perpage"=>100]);
+		// $cate = new \Xpmsns\pages\Model\Category;
+		// $wechats = $cate->wechat();
+		// $cates = $cate->search(["perpage"=>100]);
 
 		$data = [
 			'article' => $article,
-			'wechats' => $wechats,
-			'category' => $cate,
-			'cates' => $cates,
+			// 'wechats' => $wechats,
+			// 'category' => $cate,
+			// 'cates' => $cates,
 			'options' => $options['map']
 		];
 
