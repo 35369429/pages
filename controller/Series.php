@@ -1,31 +1,30 @@
 <?php
 /**
- * Class RecommendController
- * 推荐控制器
+ * Class SeriesController
+ * 系列控制器
  *
  * 程序作者: XpmSE机器人
- * 最后修改: 2018-08-19 17:39:38
+ * 最后修改: 2018-08-19 18:26:52
  * 程序母版: /data/stor/private/templates/xpmsns/model/code/controller/Name.php
  */
 
 use \Xpmse\Loader\App;
 use \Xpmse\Excp;
 use \Xpmse\Utils;
-use \Xpmse\Media;
 
-class RecommendController extends \Xpmse\Loader\Controller {
+class SeriesController extends \Xpmse\Loader\Controller {
 
 
 	function __construct() {
 	}
 
 	/**
-	 * 推荐列表检索
+	 * 系列列表检索
 	 */
 	function index() {	
 
 		$search  = $query = $_GET;
-		$inst = new \Xpmsns\Pages\Model\Recommend;
+		$inst = new \Xpmsns\Pages\Model\Series;
 		if ( !empty($search['order']) ) {
 			$order = $search['order'];
 			unset( $search['order'] );
@@ -34,7 +33,7 @@ class RecommendController extends \Xpmse\Loader\Controller {
 
 		$response = $inst->search($search);
 		$data = [
-			'_TITLE' => "推荐列表检索",
+			'_TITLE' => "系列列表检索",
 			'query' => $query,
 			'response' => $response
 		];
@@ -44,7 +43,7 @@ class RecommendController extends \Xpmse\Loader\Controller {
 			return;
 		}
 
-		App::render($data,'recommend','search.index');
+		App::render($data,'series','search.index');
 
 		return [
 			'js' => [
@@ -63,32 +62,32 @@ class RecommendController extends \Xpmse\Loader\Controller {
 	 			"js/plugins/select2/select2-bootstrap.min.css"
 	 		],
 			'crumb' => [
-	            "推荐" => APP::R('recommend','index'),
-	            "推荐管理" =>'',
+	            "系列" => APP::R('series','index'),
+	            "系列管理" =>'',
 	        ]
 		];
 	}
 
 
 	/**
-	 * 推荐详情表单
+	 * 系列详情表单
 	 */
 	function detail() {
 
-		$recommend_id = trim($_GET['recommend_id']);
-		$action_name = '新建推荐';
-		$inst = new \Xpmsns\Pages\Model\Recommend;
+		$series_id = trim($_GET['series_id']);
+		$action_name = '新建系列';
+		$inst = new \Xpmsns\Pages\Model\Series;
 		
-		if ( !empty($recommend_id) ) {
-			$rs = $inst->getByRecommendId($recommend_id);
+		if ( !empty($series_id) ) {
+			$rs = $inst->getBySeriesId($series_id);
 			if ( !empty($rs) ) {
-				$action_name =  $rs['title'];
+				$action_name =  $rs['name'];
 			}
 		}
 
 		$data = [
 			'action_name' =>  $action_name,
-			'recommend_id'=>$recommend_id,
+			'series_id'=>$series_id,
 			'rs' => $rs
 		];
 
@@ -98,7 +97,7 @@ class RecommendController extends \Xpmse\Loader\Controller {
 		}
 
 
-		App::render($data,'recommend','form');
+		App::render($data,'series','form');
 
 		return [
 			'js' => [
@@ -124,12 +123,12 @@ class RecommendController extends \Xpmse\Loader\Controller {
 	 		],
 
 			'crumb' => [
-	            "推荐" => APP::R('recommend','index'),
-	            "推荐管理" =>APP::R('recommend','index'),
+	            "系列" => APP::R('series','index'),
+	            "系列管理" =>APP::R('series','index'),
 	            "$action_name" => ''
 	        ],
 	        'active'=> [
-	 			'slug'=>'xpmsns/pages/recommend/index'
+	 			'slug'=>'xpmsns/pages/series/index'
 	 		]
 		];
 
@@ -138,63 +137,46 @@ class RecommendController extends \Xpmse\Loader\Controller {
 
 
 	/**
-	 * 保存推荐
+	 * 保存系列
 	 * @return
 	 */
 	function save() {
 		$data = $_POST;
-		$inst = new \Xpmsns\Pages\Model\Recommend;
-		$rs = $inst->saveByRecommendId( $data );
+		$inst = new \Xpmsns\Pages\Model\Series;
+		$rs = $inst->saveBySeriesId( $data );
 		echo json_encode($rs);
 	}
 
 	/**
-	 * 删除推荐
+	 * 删除系列
 	 * @return [type] [description]
 	 */
 	function remove(){
-		$recommend_id = $_POST['recommend_id'];
-		$inst = new \Xpmsns\Pages\Model\Recommend;
-		$recommend_ids =$inst->remove( $recommend_id, "recommend_id" );
-		echo json_encode(['message'=>"删除成功", 'extra'=>['$recommend_ids'=>$recommend_ids]]);
+		$series_id = $_POST['series_id'];
+		$inst = new \Xpmsns\Pages\Model\Series;
+		$series_ids =$inst->remove( $series_id, "series_id" );
+		echo json_encode(['message'=>"删除成功", 'extra'=>['$series_ids'=>$series_ids]]);
 	}
 
 	/**
-	 * 复制推荐
+	 * 复制系列
 	 * @return
 	 */
 	function duplicate(){
-		$recommend_id = $_GET['recommend_id'];
-		$inst = new \Xpmsns\Pages\Model\Recommend;
-		$rs = $inst->getByRecommendId( $recommend_id );
-		$action_name =  $rs['title'] . ' 副本';
+		$series_id = $_GET['series_id'];
+		$inst = new \Xpmsns\Pages\Model\Series;
+		$rs = $inst->getBySeriesId( $series_id );
+		$action_name =  $rs['name'] . ' 副本';
 
 		// 删除唯一索引字段
-		unset($rs['recommend_id']);
+		unset($rs['series_id']);
 		unset($rs['slug']);
 
 		// 复制图片
-		if ( is_array($rs['icon']) &&  !empty($rs['icon']['local'])) {
-			$rs['icon'] = $inst->uploadIcon( $recommend_id, $rs['icon']['local'], true);
-		}
-		if ( is_array($rs['images'])) {
-
-			$resp = [];
-			foreach ($rs['images'] as $idx=>$fs ) {
-
-				if ( empty($fs['local']) ) {
-					continue;
-				}
-				$resp[] = $inst->uploadImagesByRecommendId( $recommend_id, $fs['local'], $idx, true);
-			}
-
-			$rs['images'] = $resp;
-		}
-
 
 		$data = [
 			'action_name' =>  $action_name,
-			'recommend_id'=>$recommend_id,
+			'series_id'=>$series_id,
 			'rs' => $rs
 		];
 
@@ -204,7 +186,7 @@ class RecommendController extends \Xpmse\Loader\Controller {
 		}
 
 		
-		App::render($data,'recommend','form');
+		App::render($data,'series','form');
 
 		return [
 			'js' => [
@@ -225,12 +207,12 @@ class RecommendController extends \Xpmse\Loader\Controller {
 	 		],
 
 			'crumb' => [
-	            "推荐" => APP::R('recommend','index'),
-	            "推荐管理" =>APP::R('recommend','index'),
+	            "系列" => APP::R('series','index'),
+	            "系列管理" =>APP::R('series','index'),
 	            "$action_name" => ''
 	        ],
 	        'active'=> [
-	 			'slug'=>'xpmsns/pages/recommend/index'
+	 			'slug'=>'xpmsns/pages/series/index'
 	 		]
 		];
 	}

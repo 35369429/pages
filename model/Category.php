@@ -54,6 +54,30 @@ class Category extends Model {
 		;
 	}
 
+
+	/**
+	 * 返回所有字段
+	 * @return array 字段清单
+	 */
+	public static function getFields() {
+		return [
+			"category_id",  // 类型ID
+			"name",  // 类型名称
+			"slug",  // 类型别名
+			"project",  // 所属项目
+			"page",  // 正文(默认)页面
+			"link",  // 排序方式
+			"parent_id",  // 参数
+			"root_id", 
+			"isnav",  
+			"isfootnav", 
+			"isblank", 
+			"highlight", 
+			"status"
+		];
+	}
+
+
 	function __clear() {
 		$this->dropTable();
 	}
@@ -522,6 +546,9 @@ class Category extends Model {
 
 		return $parents;
 	}
+
+
+
 
 
 	

@@ -20,7 +20,8 @@ class SetupController extends \Xpmse\Loader\Controller {
 			'\\Xpmsns\\Pages\\Model\\Siteconf',
 			'\\Xpmsns\\Pages\\Model\\Recommend',
 			'\\Xpmsns\\Pages\\Model\\Event',
-			'\\Xpmsns\\Pages\\Model\\Album'
+			'\\Xpmsns\\Pages\\Model\\Album',
+			'\\Xpmsns\\Pages\\Model\\Series'
 		];
 	}
 

@@ -20,7 +20,6 @@
 	},{
 		"slug":"xpmsns/pages/audit/index",
 		"name":"审核",
-		"index": true,
 		"icon":{
 			"default":"/static/icons/audit.svg"
 		},
@@ -32,6 +31,7 @@
 	},{
 		"slug":"xpmsns/pages/article/index",
 		"name":"图文",
+		"index": true,
 		"icon":{
 			"default":"/static/icons/article.svg"
 		},
@@ -74,9 +74,20 @@
 		"permission": "boss,admin,manager,user",
 		"order":9999
 	},{ 
+		"slug":"xpmsns/pages/series/index",  
+		"name":"系列",
+		"index": false,
+		"icon":{
+			"default":"/static/icons/series.svg" 
+		},
+		"icontype": "img",
+		"linktype":"i",
+		"link":"{series,index}",
+		"permission": "boss,admin,manager,user",
+		"order":9999
+	},{
 		"slug":"xpmsns/pages/recommend/index",  
 		"name":"推荐",
-		"index": true,
 		"icon":{
 			"default":"/static/icons/recommend.svg" 
 		},
