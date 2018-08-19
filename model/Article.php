@@ -111,6 +111,7 @@ class Article extends Model {
 			'stick'=> ['integer', ['index'=>1, 'default'=>"0"]],  // 置顶状态
 			'preview' => ['longText', ['json'=>true]], // 预览链接
 			'links' => ['longText', ['json'=>true]], // 访问链接
+			'series' => ['string', ['json'=>true, 'length'=>400, 'index'=>1]], // 所属系列
 			'user' => ['string', ['length'=>128,'index'=>1]], // 最后编辑用户ID
 			'policies' => ['string', ['json'=>true]], // 文章权限预留字段
 			'status'=> ['string', ['length'=>40,'index'=>1, 'default'=>ARTICLE_UNPUBLISHED]],  // 文章状态 unpublished/published/pending

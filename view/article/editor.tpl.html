@@ -1,5 +1,6 @@
 <?php
 	use \Xpmse\Loader\App as App;
+	use \Xpmse\T;
 ?>
 <script type="text/javascript">
 	DEBUG_ON = true;
@@ -333,7 +334,7 @@
 											<label for="category"  class="font-s14 font-w300">分类</label>
 											
 										</div>
-									</div> <!-- END form-group 分类 -->
+									</div> <!-- END form-group  分类 -->
 
 									<div class="form-group">
 										<div class="form-material">
@@ -345,6 +346,41 @@
 											<label for="material-text" class="font-s14 font-w300">标签</label>
 										</div>
 									</div><!-- END form-group 标签 -->
+
+									<div class="form-group">
+										<div class="form-material">
+											<select class="js-select2 form-control" style="width: 100%;" 
+													name="series" 
+													data-language="zh-CN"
+													data-param-cancelable="1"
+													data-param-cancel="取消选择"
+													data-param-model="\Xpmsns\Pages\Model\Series"
+													data-param-table="series"
+													data-param-fields="series_id,name"
+													data-param-style="{{name}}"
+													data-param-option="series_id"
+													data-param-default=""
+													data-ajax-url="/_a/mina/helper/select2?method=get"
+													data-preload-url="/_a/mina/helper/select2?method=get&preload=<?=T::v('<%=series | join(\',\')%>', $article )?>"
+													data-placeholder="请选择..." multiple data-select2-multiple=1  >
+												<option></option>
+											</select>
+											<label for="series"  class="font-s14 font-w300">系列</label>
+											<script type="text/javascript">
+											$(function(){
+												// 取消选择
+												$('select[name=series]').on("select2:select", function( e ){
+													var data = e.params.data || {};
+													id = data.id || '';
+													if ( '__cancel' ==  data.id ) {
+														$(this).select2("val", "");
+													}
+												});
+											});
+											</script>
+											
+										</div>
+									</div> <!-- END form-group  系列 -->
 
 
 									<div class="form-group">
@@ -760,6 +796,7 @@ $(function() {
 
 	// 存盘按钮功能
 	var savefn = function(event) {
+		
 		if ( savelock ){ return  false; }
 
 		$editor.save('<?=App::NR("article", "save")?>', {}, function( resp, status, xhr) {
