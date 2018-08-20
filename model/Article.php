@@ -1033,6 +1033,11 @@ class Article extends Model {
 			}
 		}
 
+
+		if ( array_key_exists('series', $article)  && is_array($article['series']) && count($article['series']) > 0) {
+			$article['series_param'] = implode(',', $article['series']);
+		}
+
 		if (!empty($article['cover']) && substr( $article['cover'],0,4) != 'http') {
 			
 			$article['cover'] = str_replace('/static-file/media', '', $article['cover']); // 兼容旧版

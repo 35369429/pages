@@ -94,7 +94,6 @@ class SetupController extends \Xpmse\Loader\Controller {
 			["title"=>"最新文章","slug"=>"latest", "pos"=>"index_sidebar", "orderby"=>"publish_time", "period"=>"unlimited", "type"=>"auto"],
 			["title"=>"最热文章","slug"=>"hotnews", "orderby"=>"publish_time", "period"=>"unlimited",   "type"=>"auto"],
 			["title"=>"焦点文章","slug"=>"focus", "pos"=>"index_focus",  "thumb_only"=>1, "orderby"=>"publish_time", "period"=>"unlimited",  "type"=>"auto"],
-			["title"=>"焦点视频","slug"=>"video_focus", "pos"=>"video_focus", "thumb_only"=>1, "video_only"=>1, "orderby"=>"publish_time", "period"=>"unlimited",  "type"=>"auto"],
 			["title"=>"今日主题","slug"=>"topic", "orderby"=>"publish_time", "period"=>"unlimited",  "type"=>"auto"],
 			["title"=>"新闻快讯","slug"=>"quicknews", "orderby"=>"publish_time", "period"=>"unlimited",  "type"=>"auto"],
 
@@ -110,8 +109,12 @@ class SetupController extends \Xpmse\Loader\Controller {
 			["title"=>"首页S6","slug"=>"section_6","pos"=>"index", "orderby"=>"publish_time", "period"=>"unlimited",  "type"=>"auto"],
 
 			// 视频相关推荐
+			["title"=>"焦点视频","slug"=>"video_focus", "pos"=>"video_focus", "thumb_only"=>1, "video_only"=>1, "orderby"=>"publish_time", "period"=>"unlimited",  "type"=>"auto"],
 			["title"=>"视频S1","slug"=>"video_s1","pos"=>"video", "thumb_only"=>1, "video_only"=>1,  "orderby"=>"publish_time", "period"=>"unlimited",  "type"=>"auto"],
 			["title"=>"视频S2","slug"=>"video_s1","pos"=>"video", "thumb_only"=>1, "video_only"=>1,  "orderby"=>"publish_time", "period"=>"unlimited",  "type"=>"auto"],
+			["title"=>"视频详情系列(优选)","slug"=>"video_series","pos"=>"video_detail", "thumb_only"=>1, "video_only"=>1,  "orderby"=>"publish_time", "period"=>"unlimited",  "type"=>"auto"],
+			["title"=>"视频详情最新(次选)","slug"=>"video_latest","pos"=>"video_detail", "thumb_only"=>1, "video_only"=>1,  "orderby"=>"publish_time", "period"=>"unlimited",  "type"=>"auto"],
+			["title"=>"相关视频","slug"=>"video_relation","pos"=>"video_detail", "thumb_only"=>1, "video_only"=>1,  "orderby"=>"publish_time", "period"=>"unlimited",  "type"=>"auto"],
 
 			// 侧边相关推荐
 			["title"=>"侧边S1","slug"=>"sidebar_section_1", "pos"=>"index_sidebar", "orderby"=>"publish_time", "period"=>"unlimited",  "type"=>"auto"],

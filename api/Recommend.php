@@ -4,7 +4,7 @@
  * 推荐数据接口 
  *
  * 程序作者: XpmSE机器人
- * 最后修改: 2018-08-20 14:02:28
+ * 最后修改: 2018-08-21 02:41:05
  * 程序母版: /data/stor/private/templates/xpmsns/model/code/api/Name.php
  */
 namespace Xpmsns\Pages\Api;
@@ -57,22 +57,25 @@ class Recommend extends Api {
 
 		$inst = new \Xpmsns\Pages\Model\Recommend;
 		$keywords = !empty($data['keywords']) ?  explode(',',$data['keywords']) : []; 
+        $series = !empty($data['series']) ?  explode(',',$data['series']) : [];
 		$page = !empty($data['page']) ?  $data['page'] : 1; 
 		$perpage = !empty($data['perpage']) ?  $data['perpage'] : 20; 
       	$now = !empty($data['now']) ?  $data['now'] : null; 
-         
+        if ( array_key_exists('series', $data) && empty($series) ) {
+        	$series = ['not null'];
+        }
 
 		if ( array_key_exists('slug', $data) && !empty($data['slug']) ) {
-			return $inst->getContentsBySlug( $data['slug'], $keywords,$page, $perpage, $now);
+			return $inst->getContentsBySlug( $data['slug'], $keywords,$series, $page, $perpage, $now);
 		} else if ( array_key_exists('recommend_id', $data) && !empty($data['recommend_id']) ) {
-			return $inst->getContents( $data['recommend_id'], $keywords, $page, $perpage, $now);
+			return $inst->getContents( $data['recommend_id'], $keywords, $series,$page, $perpage, $now);
 		}
          
         if ( array_key_exists('slugs', $data) && !empty($data['slugs']) ) {
 			$data['slugs'] = explode(',', $data['slugs']);
 			$contents = [];
 			foreach ($data['slugs'] as $slug) {
-				$contents[$slug] = $inst->getContentsBySlug( trim($slug), $keywords, $page, $perpage, $now); 
+				$contents[$slug] = $inst->getContentsBySlug( trim($slug), $keywords,$series, $page, $perpage, $now); 
 			}
 			return $contents;
 		}

@@ -4,7 +4,7 @@
  * 推荐数据模型
  *
  * 程序作者: XpmSE机器人
- * 最后修改: 2018-08-20 14:02:31
+ * 最后修改: 2018-08-21 02:41:08
  * 程序母版: /data/stor/private/templates/xpmsns/model/code/model/Name.php
  */
 namespace Xpmsns\Pages\Model;
@@ -138,19 +138,19 @@ class Recommend extends Model {
 	/**
 	 * 自定义函数 按别名选取推荐内容
 	 */
-function getContentsBySlug(  $recommend_id,  $keywords=[],  $page=1, $perpage=20, $now=null ) {
-		return $this->getContentsBy('slug', $recommend_id,  $keywords,  $page, $perpage,$now );
+function getContentsBySlug(  $recommend_id,  $keywords=[],  $series=[], $page=1, $perpage=20, $now=null ) {
+		return $this->getContentsBy('slug', $recommend_id,  $keywords,  $series, $page, $perpage,$now );
 	}
 	/**
 	 * 自定义函数 按推荐ID选取推荐内容
 	 */
-function getContents(  $recommend_id,  $keywords=[],  $page=1, $perpage=20, $now=null ) {
-		return $this->getContentsBy('recommendId', $recommend_id, $keywords,  $page, $perpage,$now );
+function getContents(  $recommend_id,  $keywords=[],  $series=[], $page=1, $perpage=20, $now=null ) {
+		return $this->getContentsBy('recommendId', $recommend_id, $keywords, $series, $page, $perpage,$now );
 	}
 	/**
 	 * 自定义函数 按Type选取推荐内容
 	 */
-function getContentsBy( $type,  $recommend_id,  $keywords=[], $page=1, $perpage=20, $now=null) {
+function getContentsBy( $type,  $recommend_id,  $keywords=[], $series=[], $page=1, $perpage=20, $now=null) {
 		$select = [
 					'recommend.title', 'recommend.summary', 'recommend.type', 'recommend.ctype', 'recommend.keywords', "recommend.period", "recommend.pos","recommend.style","recommend.status",
 					'recommend.thumb_only', 'recommend.video_only',
@@ -260,25 +260,22 @@ function getContentsBy( $type,  $recommend_id,  $keywords=[], $page=1, $perpage=
 				$query['category_ids'] = $recommend['categories'];
 			}
 
+			// 按关键词提取数据
 			$recommend['keywords'] = str_replace("\r", "", $recommend['keywords']);
 			$recommend['keywords'] = str_replace("\n", "", $recommend['keywords']);
 			$recommend['keywords'] = explode(',', trim($recommend['keywords']) );
 			$keywords = is_string($keywords) ? explode(',',$keywords) : $keywords;
 			$keywords = array_merge( $recommend['keywords'], $keywords );
-
-			// 按关键词提取数据
+			$keywords = array_filter($keywords);
 			$query['keywords'] =$keywords;
 
-			// 按分类提取数据
-			if ( !empty($recommend['categories']) ) {
-				$query['category_ids'] = $recommend['categories'];
-			}
+			// 按系列提取数据
+			$series = is_string($series) ? explode(',',$series) : $series;
+			$series = array_merge( $recommend['series'], $series );
+			$series = array_filter( $series);
+			$query['series'] = $series;
           
-            // 按系列提取数据
-			if ( !empty($recommend['series']) ) {
-				$query['series'] = $recommend['series'];
-			}
-
+         
 			if ( $recommend['thumb_only'] ) {
 				$query['thumb_only'] = 1;
 			}
