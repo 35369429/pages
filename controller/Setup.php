@@ -34,7 +34,7 @@ class SetupController extends \Xpmse\Loader\Controller {
 
 		// 注册配置
 		$option = new \Xpmse\Option('xpmsns/pages');
-		$ratio = $option->get("article/image/ratio");
+		$ratio = $option->get("article/image/ratio"); // 图文主题图片比例配置
 		if ( $ratio == null ) {
 			$option->register("图文主题图片比例配置", "article/image/ratio", [
 				"cover"=>["width"=>900,"height"=>500, "ratio"=>"9:5"], 
@@ -45,9 +45,16 @@ class SetupController extends \Xpmse\Loader\Controller {
 			]);
 		}
 
+		$nplapi = $option->get("article/npl/api"); // 自然语言处理引擎
+		if ( $nplapi == null ) {
+			$option->register("自然语言处理引擎", "article/npl/api", [
+				"engine"=>"baidu", 
+				"config"=>["appid"=>null,"apikey"=>null, "secretkey"=>null]
+			]);
+		}
+
 
 		// 添加默认分类
-		
 		$categories = [
 			["slug"=>"default", "name"=>"资讯", "fullname"=>"资讯", "isnav"=>1 ],
 			["slug"=>"video", "name"=>"视频", "fullname"=>"视频", "isnav"=>1, "link"=>"DB::RAW(CONCAT('/video/list/',`category_id`, '.html'))"]

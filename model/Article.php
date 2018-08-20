@@ -11,6 +11,7 @@ use \Xpmse\Model as Model;
 use \Xpmse\Utils as Utils;
 use \Xpmse\Wechat as Wechat;
 use \Xpmse\Media as Media;
+use \Xpmse\Nlp as NPL;
 use \Mina\Delta\Render as Render;
 use \Xpmse\Task as Task;
 use \Exception as Exception;
@@ -39,6 +40,8 @@ class Article extends Model {
 	public $article_category;
 	public $article_tag;
 	public $article_draft;
+	private $option = null;
+	private $npl = null;
 
 
 	/**
@@ -55,7 +58,8 @@ class Article extends Model {
 		$this->article_tag = Utils::getTab('article_tag', "xpmsns_pages_");    // 标签关联表
 		$this->article_draft = Utils::getTab('article_draft', "xpmsns_pages_");  // 文章草稿箱
 		$this->page = Utils::getTab('page', 'core_');  // 页面表
-		$this->host = Utils::getHome();  // 页面跟地址
+		$this->host = Utils::getHome();  // 页面根地址
+		$this->option = new \Xpmse\Option('xpmsns/pages');
 
 		// $root = Conf::G("storage/local/bucket/public/root");
 		// $options = [
@@ -115,6 +119,7 @@ class Article extends Model {
 			'user' => ['string', ['length'=>128,'index'=>1]], // 最后编辑用户ID
 			'policies' => ['string', ['json'=>true]], // 文章权限预留字段
 			'status'=> ['string', ['length'=>40,'index'=>1, 'default'=>ARTICLE_UNPUBLISHED]],  // 文章状态 unpublished/published/pending
+			'keywords' => ['string',['length'=>600, 'index'=>1]],  // 提取关键词
 		];
 
 		$struct_draft_only = [
@@ -124,9 +129,7 @@ class Article extends Model {
 			'tag'=>['longText', ['json'=>true] ]   // 标签映射信息 ( 仅用于草稿信息 )
 		];
 
-
 		$article_only = [
-			'keywords' => ['string',['length'=>600, 'index'=>1]],  // 提取关键词
 			'view_cnt' => ['bigInteger', ['index'=>1, 'default'=>0]], // 浏览量
 			'like_cnt' => ['bigInteger', ['index'=>1, 'default'=>0]],  // 点赞(喜欢)数量 
 			'dislike_cnt' => ['bigInteger', ['index'=>1, 'default'=>0]],  // 讨厌 (不喜欢)数量 
@@ -676,7 +679,6 @@ class Article extends Model {
 				];
 			} catch( Excp $e ){}
 
-			
 		}
 
 		// 替换图片
@@ -778,28 +780,6 @@ class Article extends Model {
 
 
 
-		// 处理摘要
-		if ( empty($data['summary']) && !empty($data['content']) ) {
-			$content = strip_tags($data['content']);
-			$data['summary'] = mb_substr( trim($content), 0, 54);
-		}
-
-		// SEO TITLE
-		if ( empty( $data['seo_title']) ) {
-			 $data['seo_title'] = $data['title'];
-		}
-
-		// SEO SUMMARY
-		if ( empty( $data['seo_summary']) ) {
-			 $data['seo_summary'] = $data['summary'];
-		}
-
-		// SEO keywords
-		if ( empty( $data['seo_keywords']) ) {
-			 $data['seo_keywords'] = $data['keywords'];
-		}
-
-
 		// 添加文章
 		if ( empty($data['article_id']) ) {
 		
@@ -858,6 +838,7 @@ class Article extends Model {
 		
 		// 发布文章
 		if ( $data['status'] == ARTICLE_PUBLISHED ) {
+
 			return $this->published( $article_id );
 		}
 
@@ -1075,21 +1056,51 @@ class Article extends Model {
 		if ( !empty($draft) ) {
 			$draft['draft_status'] = DRAFT_APPLIED;
 			$draft['links'] = $this->links( $article_id ); // 生成链接地址
+			$this->autoFill($draft);
 			$draft = $this->article_draft->updateBy('article_id', $draft);
 		
 		} else {  // 更新文章状态 （ 这个逻辑应该优化 )
 			$draft = $this->getLine("WHERE article_id=?", ['*'], [$article_id]);
+			$this->autoFill($draft);
 			$draft['links'] = $this->links( $article_id ); // 生成链接地址
 		}
 
 		$draft['status'] = ARTICLE_PUBLISHED; // 文章ID 更新为已发布
-		$rs =  $this->updateBy('article_id', $draft );
-
-		// 生成物料
-		// $this->makeMaterials( $rs );
-		return $rs;
+		return $this->updateBy('article_id', $draft );
 	}
 
+
+	/**
+	 * 自动tian'cho
+	 * @param  [type] $data [description]
+	 * @return [type]       [description]
+	 */
+	function autoFill( & $data ) {
+		// 提取摘要
+		if ( empty(trim($data['summary'])) && !empty($data['content']) ) {
+			$data['summary'] = $this->summary( $data['content']);
+		}
+
+		// 提取关键词
+		if ( empty(trim($data['keywords'])) && !empty($data['title']) ) {
+			$data['keywords'] = $this->keywords( $data['title'], $data['content'] );
+		}
+
+		// SEO TITLE
+		if ( empty( $data['seo_title']) ) {
+			 $data['seo_title'] = $data['title'];
+		}
+
+		// SEO SUMMARY
+		if ( empty( $data['seo_summary']) ) {
+			 $data['seo_summary'] = $data['summary'];
+		}
+
+		// SEO keywords
+		if ( empty( $data['seo_keywords']) ) {
+			 $data['seo_keywords'] = $data['keywords'];
+		}
+	}
 
 
 
@@ -1839,6 +1850,83 @@ class Article extends Model {
 	}
 
 
+	/**
+	 * 根据标题和内容分析关键词
+	 * @param  [type] $title   [description]
+	 * @param  [type] $content [description]
+	 * @return [type]          [description]
+	 */
+	function keywords( $title, $content ) {
+
+		// 自然语言处理引擎
+		if ( $this->npl == null ) {
+			$nplapi = $this->option->get("article/npl/api");			
+			if ( $nplapi == null || empty($nplapi['config']['appid']) ) {
+				return null;
+			}
+			$this->npl = new NPL( $nplapi['config'], $nplapi['engine'] );
+		}
+
+		$content = trim(strip_tags($content));
+		$resp = $this->npl->keyword( $title, $content );
+		if ( isset($resp['error_code']) ) {
+			return null;
+		}
+
+		if ( empty($resp['items']) ) {
+			return $this->keywordsByLexer( $title  );
+		}
+		$keywords = array_column($resp['items'], 'tag');
+		return implode(',', $keywords);
+	}
+
+	function keywordsByLexer( $title ) {
+		
+		if ( $this->npl == null ) {
+			$nplapi = $this->option->get("article/npl/api");			
+			if ( $nplapi == null || empty($nplapi['config']['appid']) ) {
+				return null;
+			}
+			$this->npl = new NPL( $nplapi['config'], $nplapi['engine'] );
+		}
+
+		$resp = $this->npl->lexer( $title );
+		
+		if( empty($resp['items']) || !is_array($resp['items']) ) {
+			return null;
+		}
+
+
+		// 只保留名词 
+		// "n"=>"普通名词","f"=>"方位名词	","s"=>"处所名词","t"=>"时间名词",
+		// "nr"=>"人名	","ns"=>"地名","nt"=>"机构团体名","nw"=>"作品名",
+		// "nz"=>"其他专名"
+		$allowpos = ['n', 'f', 's', 't', 'nr', 'ns', 'nt', 'nw', 'nz'];
+		$keywords = [];
+		foreach ($resp['items'] as $it ) {
+			if ( in_array($it['pos'], $allowpos) ) {
+				array_push($keywords, $it['item']);
+			}
+		}
+
+		return implode(',', $keywords);
+	}
+
+
+
+	/**
+	 * 根据内容分析摘要
+	 * @param  [type] $content [description]
+	 * @return [type]          [description]
+	 */
+	function summary( $content ) {
+		$content = trim(strip_tags($content));
+		$content = str_replace('。', '.', $content);
+		$arrs = explode('.', $content);
+		$summary = current($arrs);
+		$summary = mb_substr(trim($summary), 0, 54, 'UTF-8');
+		return $summary;
+	}
 
 	function __clear() {
 		Utils::getTab('article_category', "xpmsns_pages_")->dropTable();
