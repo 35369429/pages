@@ -4,7 +4,7 @@
  * 推荐数据模型
  *
  * 程序作者: XpmSE机器人
- * 最后修改: 2018-08-21 02:41:08
+ * 最后修改: 2018-08-21 03:10:35
  * 程序母版: /data/stor/private/templates/xpmsns/model/code/model/Name.php
  */
 namespace Xpmsns\Pages\Model;
@@ -138,23 +138,23 @@ class Recommend extends Model {
 	/**
 	 * 自定义函数 按别名选取推荐内容
 	 */
-function getContentsBySlug(  $recommend_id,  $keywords=[],  $series=[], $page=1, $perpage=20, $now=null ) {
-		return $this->getContentsBy('slug', $recommend_id,  $keywords,  $series, $page, $perpage,$now );
+function getContentsBySlug(  $recommend_id,  $keywords=[],  $series=[], $exclude_articles=[], $page=1, $perpage=20, $now=null ) {
+		return $this->getContentsBy('slug', $recommend_id,  $keywords,  $series, $exclude_articles, $page, $perpage,$now );
 	}
 	/**
 	 * 自定义函数 按推荐ID选取推荐内容
 	 */
-function getContents(  $recommend_id,  $keywords=[],  $series=[], $page=1, $perpage=20, $now=null ) {
-		return $this->getContentsBy('recommendId', $recommend_id, $keywords, $series, $page, $perpage,$now );
+function getContents(  $recommend_id,  $keywords=[],  $series=[],  $exclude_articles=[],  $page=1, $perpage=20, $now=null ) {
+		return $this->getContentsBy('recommendId', $recommend_id, $keywords, $series, $exclude_articles, $page, $perpage,$now );
 	}
 	/**
 	 * 自定义函数 按Type选取推荐内容
 	 */
-function getContentsBy( $type,  $recommend_id,  $keywords=[], $series=[], $page=1, $perpage=20, $now=null) {
+function getContentsBy( $type,  $recommend_id,  $keywords=[], $series=[], $exclude_articles=[],  $page=1, $perpage=20, $now=null) {
 		$select = [
 					'recommend.title', 'recommend.summary', 'recommend.type', 'recommend.ctype', 'recommend.keywords', "recommend.period", "recommend.pos","recommend.style","recommend.status",
 					'recommend.thumb_only', 'recommend.video_only',
-          			'recommend.series',
+          			'recommend.series','recommend.exclude_articles',
 					"orderby", 'articles', 'albums', 'events', 'categories'
 				];
 		$method = "getBy{$type}";
@@ -271,10 +271,17 @@ function getContentsBy( $type,  $recommend_id,  $keywords=[], $series=[], $page=
 
 			// 按系列提取数据
 			$series = is_string($series) ? explode(',',$series) : $series;
+          	$recommend['series'] = is_array($recommend['series']) ? $recommend['series'] : [];
 			$series = array_merge( $recommend['series'], $series );
 			$series = array_filter( $series);
 			$query['series'] = $series;
-          
+          	
+          	// 排除文章数据
+			$exclude_articles = is_string($exclude_articles) ? explode(',',$exclude_articles) : $exclude_articles;
+          	$recommend['exclude_articles'] = is_array($recommend['exclude_articles']) ? $recommend['exclude_articles'] : [];
+			$exclude_articles = array_merge( $recommend['exclude_articles'], $exclude_articles );
+			$exclude_articles = array_filter( $exclude_articles);
+			$query['exclude_articles'] = $exclude_articles;
          
 			if ( $recommend['thumb_only'] ) {
 				$query['thumb_only'] = 1;
@@ -325,6 +332,15 @@ function getContentsBy( $type,  $recommend_id,  $keywords=[], $series=[], $page=
 							$qb->orWhere('series', "like", "%{$sid}%");  // 名称符合关键词
 						}
 					});
+				}
+			}
+          
+            // 排除文章数据
+			if ( array_key_exists('exclude_articles', $query)  && !empty($query['exclude_articles']) ) {
+				$exids = is_string($query['exclude_articles']) ? explode(',', $query['exclude_articles']) : $query['exclude_articles'];
+				$exids = array_filter($exids);
+              	if ( !empty($exids) ) {
+					$qb->whereNotIn('content.article_id', $exids);
 				}
 			}
 
