@@ -949,6 +949,49 @@ class Article extends Model {
 			
 		}
 
+		// 提取关键字
+		if ( array_key_exists('keywords', $article) && 
+			 array_key_exists('title', $article) && 
+			 array_key_exists('status', $article) && 
+			 array_key_exists('article_id', $article) && 
+			 empty($article['keywords']) ) {
+			$article['keywords'] = $this->keywords($article['title'], $article['content'] );
+			$this->save([
+				'article_id' => $article['article_id'],
+				'keywords' => $article['keywords'],
+				'status' => $article['status']
+			]);
+		}
+
+		// 提取SEO关键字
+		if ( array_key_exists('seo_keywords', $article) && 
+			 array_key_exists('title', $article) && 
+			 array_key_exists('status', $article) && 
+			 array_key_exists('article_id', $article) && 
+			 empty($article['seo_keywords']) ) {
+			$article['seo_keywords'] = $this->keywords($article['title'], $article['content'] );
+			$this->save([
+				'article_id' => $article['article_id'],
+				'seo_keywords' => $article['seo_keywords'],
+				'status' => $article['status']
+			]);
+		}
+
+		// 提取摘要
+		if ( array_key_exists('summary', $article) && 
+			 array_key_exists('content', $article) && 
+			 !empty( $article['content']) && 
+			 empty($article['summary']) ) {
+			 $article['summary'] = $this->summary($article['content']);
+		}
+
+		// 提取SEO摘要
+		if ( array_key_exists('seo_summary', $article) && 
+			 array_key_exists('content', $article) && 
+			 !empty( $article['content']) && 
+			 empty($article['seo_summary']) ) {
+			 $article['seo_summary'] = $this->summary($article['content']);
+		}
 
 		if ( isset($article['publish_time']) ) {
 			$time = strtotime($article['publish_time']);
@@ -1292,7 +1335,7 @@ class Article extends Model {
 	 */
 	function links( $article_id,  $category = null ) {
 		// $default_home = Utils::getHome( $_SERVER['HTTP_TUANDUIMAO_LOCATION']);
-		$default_home = Utils::getHomeLink();
+		$default_home = Utils::getHome();
 		$uri = parse_url( $default_home);
 		$default_project = Utils::getTab('project')->getVar('name', "WHERE `default`=1 LIMIT 1");
 		$video =  $this->article_draft->getVar('videos', "WHERE `article_id`=? LIMIT 1", [$article_id]);
