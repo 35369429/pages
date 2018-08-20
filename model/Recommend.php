@@ -4,7 +4,7 @@
  * 推荐数据模型
  *
  * 程序作者: XpmSE机器人
- * 最后修改: 2018-08-19 18:50:44
+ * 最后修改: 2018-08-20 14:02:31
  * 程序母版: /data/stor/private/templates/xpmsns/model/code/model/Name.php
  */
 namespace Xpmsns\Pages\Model;
@@ -154,6 +154,7 @@ function getContentsBy( $type,  $recommend_id,  $keywords=[], $page=1, $perpage=
 		$select = [
 					'recommend.title', 'recommend.summary', 'recommend.type', 'recommend.ctype', 'recommend.keywords', "recommend.period", "recommend.pos","recommend.style","recommend.status",
 					'recommend.thumb_only', 'recommend.video_only',
+          			'recommend.series',
 					"orderby", 'articles', 'albums', 'events', 'categories'
 				];
 		$method = "getBy{$type}";
@@ -225,6 +226,9 @@ function getContentsBy( $type,  $recommend_id,  $keywords=[], $page=1, $perpage=
 				case 'publish_time': 
 					$query['order'] =  "publish_time desc";
 					break;
+               	case 'publish_time_asc': 
+					$query['order'] =  "publish_time asc";
+					break;
 				case 'view_cnt':
 					$query['order'] =  "view_cnt desc";
 					break;
@@ -269,7 +273,11 @@ function getContentsBy( $type,  $recommend_id,  $keywords=[], $page=1, $perpage=
 			if ( !empty($recommend['categories']) ) {
 				$query['category_ids'] = $recommend['categories'];
 			}
-
+          
+            // 按系列提取数据
+			if ( !empty($recommend['series']) ) {
+				$query['series'] = $recommend['series'];
+			}
 
 			if ( $recommend['thumb_only'] ) {
 				$query['thumb_only'] = 1;
@@ -307,6 +315,19 @@ function getContentsBy( $type,  $recommend_id,  $keywords=[], $page=1, $perpage=
 							}
 						});
 					}
+				}
+			}
+          
+          	// 按系列查询数据
+			if ( array_key_exists('series', $query)  && !empty($query['series']) ) {
+				$sids = is_string($query['series']) ? explode(',', $query['series']) : $query['series'];
+				$sids = array_filter($sids);
+              	if ( !empty($sids) ) {
+					$qb->where(function ( $qb ) use($sids) {
+						foreach( $sids as $sid ) {
+							$qb->orWhere('series', "like", "%{$sid}%");  // 名称符合关键词
+						}
+					});
 				}
 			}
 
@@ -431,6 +452,7 @@ function getContentsBy( $type,  $recommend_id,  $keywords=[], $page=1, $perpage=
 				$recommend['contents']['data'] = (new \Xpmsns\Pages\Model\Article)->getInByArticleId( $ids, [
 					'title', 'cover', 'article_id', 'images', 'thumbs', 'videos', 'author', 'origin', 'origin_url','summary','status', 'publish_time',
 					'view_cnt','like_cnt','dislike_cnt','comment_cnt',
+                  	'series'
 				]);
 				break;
 			case 'album':
@@ -668,7 +690,12 @@ function getContentsBy( $type,  $recommend_id,  $keywords=[], $page=1, $perpage=
 			$rs["_orderby_types"] = [
 		  		"publish_time" => [
 		  			"value" => "publish_time",
-		  			"name" => "最新发表",
+		  			"name" => "最新发布",
+		  			"style" => "info"
+		  		],
+		  		"publish_time_asc" => [
+		  			"value" => "publish_time_asc",
+		  			"name" => "发布顺序",
 		  			"style" => "info"
 		  		],
 		  		"view_cnt" => [
