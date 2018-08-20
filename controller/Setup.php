@@ -114,7 +114,7 @@ class SetupController extends \Xpmse\Loader\Controller {
 			["title"=>"视频S2","slug"=>"video_s1","pos"=>"video", "thumb_only"=>1, "video_only"=>1,  "orderby"=>"publish_time", "period"=>"unlimited",  "type"=>"auto"],
 			["title"=>"视频详情系列(优选)","slug"=>"video_series","pos"=>"video_detail", "thumb_only"=>1, "video_only"=>1,  "orderby"=>"publish_time", "period"=>"unlimited",  "type"=>"auto"],
 			["title"=>"视频详情最新(次选)","slug"=>"video_latest","pos"=>"video_detail", "thumb_only"=>1, "video_only"=>1,  "orderby"=>"publish_time", "period"=>"unlimited",  "type"=>"auto"],
-			["title"=>"相关视频","slug"=>"video_relation","pos"=>"video_detail", "thumb_only"=>1, "video_only"=>1,  "orderby"=>"publish_time", "period"=>"unlimited",  "type"=>"auto"],
+			["title"=>"猜你喜欢","slug"=>"video_relation","pos"=>"video_detail", "thumb_only"=>1, "video_only"=>1,  "orderby"=>"publish_time", "period"=>"unlimited",  "type"=>"auto"],
 
 			// 侧边相关推荐
 			["title"=>"侧边S1","slug"=>"sidebar_section_1", "pos"=>"index_sidebar", "orderby"=>"publish_time", "period"=>"unlimited",  "type"=>"auto"],
