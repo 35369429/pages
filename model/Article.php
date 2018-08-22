@@ -755,7 +755,7 @@ class Article extends Model {
 			$data['publish_time'] = str_replace('分', ':', $data['publish_time']);
 			$data['publish_time'] = $data['publish_date'] . ' ' . $data['publish_time'];
 
-		} else if ( empty($data['publish_date']) ) {
+		} else if ( array_key_exists('publish_date', $data ) && empty($data['publish_date']) ) {
 			// $data['publish_date'] = date('Y-m-d');
 			$data['publish_time'] = date('Y-m-d H:i:s');
 		}
