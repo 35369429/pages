@@ -140,31 +140,59 @@ use \Xpmse\T;
 
 
 
-
-	<!-- 单行标签文本: 标签 (tags) 开始  -->
+ 
+	<!-- 下拉选择(动态数据): 系列 (series) 开始  -->
 	<div class="form-group   ">
-		<label class="col-xs-2 control-label" for="tags">标签</label>
-		<div class="col-xs-8">
-			<input class="form-control input-lg"  
-				type="text" 
-				id="tags" name="tags" 
-				placeholder="请添加标签"  
-				value="<?=T::v('<%=tags | e(\'html\')%>', $rs )?>" /> 
+		<label class="col-xs-2 control-label" for="series">系列</label>
+		<div class="col-xs-8"> 
+			<select class="js-select2 form-control input-lg" style="width: 100%;" 
+					id="series" name="series" 
+					data-language="zh-CN"
+					data-param-cancelable="0"
+					data-param-cancel="取消选择"
+					data-param-model="\Xpmsns\Pages\Model\Series"
+					data-param-table="series"
+					data-param-fields="series_id,name"
+					data-param-style="{{name}} ({{series_id}})"
+					data-param-option="series_id"
+					data-param-default=""
+					data-ajax-url="/_a/mina/helper/select2?method=get"
+					data-preload-url="/_a/mina/helper/select2?method=get&preload=<?=T::v('<%=series | join(\',\')%>', $rs )?>"
+					data-placeholder="请选择所属系列"  multiple data-select2-multiple=1  >
+				<option></option>
+			</select>
 			<div class="help-block"></div>
 		</div>
+		 
+	</div><!-- END 下拉选择(动态数据): 系列 (series) -->
 
-		<script type="text/javascript">
-			var options = {
-				height: '42px',
-				width: '100%',
-				defaultText: '添加',
-				removeWithBackspace: true,
-				delimiter: [',']
-			}
-			$('input[name=tags').tagsInput(options);
-		</script>
-	</div><!-- END 单行标签文本: 标签 (tags) -->
 
+ <!-- 单行标签文本: 标签 (tags) 开始  -->
+
+<div class="form-group   ">
+
+<label class="col-xs-2 control-label" for="tags">标签</label>
+
+<div class="col-xs-8">
+<input class="form-control input-lg"  
+ type="text" 
+ id="tags" name="tags" 
+placeholder="请添加标签"  
+value="<?=T::v('<%=tags | e(\'html\')%>', $rs )?>" /> 
+<div class="help-block"></div>
+
+</div>
+ <script type="text/javascript">
+var options = {
+height: '42px',
+width: '100%',
+defaultText: '添加',
+removeWithBackspace: true,
+delimiter: [',']
+ }
+$('input[name=tags').tagsInput(options);
+</script>
+ </div><!-- END 单行标签文本: 标签 (tags) -->
 
 
 
@@ -174,7 +202,7 @@ use \Xpmse\T;
 		<div class="col-xs-8">
 			<textarea class="form-control input-lg"  
 				type="text" 
-				id="summary" name="summary" rows=""
+				id="summary" name="summary" rows="5"
 				placeholder="请填写图集简介"><?=T::v('<%=summary  | e(\'html\')%>', $rs )?></textarea> 
 			<div class="help-block"></div>
 		</div>
@@ -185,18 +213,18 @@ use \Xpmse\T;
 
 	<!-- 多图片组上传: 图片 (images) 开始  -->
 	<div class="xpmse-image-groups-content    draggable-column">
-
-		<?php if(count($rs['images']) < 1): ?><?php $steps = 1 -  count($rs['images']); for( $i=0; $i<$steps; $i++){ $rs['images'][] = [];} ?><?php endif ?><?php foreach ( $rs['images'] as $img ): ?> 
+		
+		<?php if(count($rs['images']) < 1): ?><?php $steps = 1 -  count($rs['images']); for( $i=0; $i<$steps; $i++){ $rs['images'][] = [];} ?><?php endif ?><?php if( is_array($rs['images']) && utils::array_depth($rs['images']) != 2): ?><?php foreach($rs['images'] as $idx=>$it ){ $rs['images'][$idx] = ['img'=>$it]; }?><?php endif ?><?php foreach ( $rs['images'] as $img ): ?> 
 		<div class="xpmse-image-groups draggable-item" data-nested="images" data-multiple="1">
 			<div class="form-group " >
 				<label class="col-xs-2 control-label draggable-handler" for="images">图片</label>
-				<div class="col-xs-4" style="width:248px;" >
+				<div class="col-xs-4" style="width:320px" >
 			   		<div name="images" class="file-uploader rounded rounded-4"
 						data-api='/_a/mina/uploader/upload?type=image'
 						data-title=''
 						data-previews=""
-						data-width="228"
-						data-height="152"
+						data-width="300"
+						data-height="200"
 						data-icon="fa fa-image" 
 						data-placeholder="请添加图片" 
 						data-allow-types="image/png,image/jpg,image/jpeg,image/gif"
@@ -230,10 +258,10 @@ use \Xpmse\T;
 					<div class="col-xs-12 push-10-t">
 						<textarea class="form-control input-lg"  
 							data-name="summary" rows="4"
-							placeholder="请输入介绍"><?=T::v('<%=summary | e(\'html\')%>', $img )?></textarea> 
+							placeholder="请输入图片介绍"><?=T::v('<%=summary | e(\'html\')%>', $img )?></textarea> 
 					</div>
 				</div>
-				<div class="col-xs-2 push-10-t">
+				<div class="col-xs-1 push-10-t">
 					<a href="javascript:void(0);" data-action="add"    class="text-success push-20-r"> <i class="fa fa-plus font-s20"></i> </a> 
 					<a href="javascript:void(0);" data-action="remove" class="text-danger"> <i class="fa fa-minus font-s20"></i> </a> 
 				</div>
@@ -243,6 +271,11 @@ use \Xpmse\T;
 
 		<script type="text/javascript">
 			$('.xpmse-image-groups[data-nested="images"]').Multipliable({
+				initialized: function(elm, idx) {
+					$(elm).parent('.xpmse-image-groups-content') .find('.control-label').each( function(i, el ){
+						if (i >0) { $(el).html('');}
+					});
+				},
 				added: function( elm ) {
 					App.initHelper('file-uploader', {handler: $(elm).find('.file-uploader')} );
 				},
@@ -250,6 +283,7 @@ use \Xpmse\T;
 				html: function( elm ){ 
 					var html = $(elm).clone();
 					var resp = $(html);
+					resp.find('.control-label').html('');
 					resp.find('.file-uploader').html('');
 					resp.find('.file-uploader').attr('data-src', '');
 					resp.find('.file-uploader').attr('data-path', '');
@@ -274,8 +308,8 @@ use \Xpmse\T;
 					data-api='/_a/mina/uploader/upload?type=image'
 					data-title='请上传主题图'
 					data-previews=""
-					data-width="280"
-					data-height="176"
+					data-width="300"
+					data-height="200"
 					data-icon="fa fa-image" 
 					data-placeholder="请上传主题图" 
 					data-allow-types="image/png,image/jpg,image/jpeg,image/gif"
@@ -293,80 +327,69 @@ use \Xpmse\T;
 
 
 
+<!-- 单行时间日期: 发布时间 (publish_time) 开始  -->
+<div class="form-group   ">
+<label class="col-xs-2 control-label" for="publish_time__date">发布时间</label>
+<div class="col-xs-4">
+<input 
+ name="publish_time__date" id="publish_time__date"
+
+class="js-datepicker form-control  input-lg" type="text" 
+data-date-format="yyyy年mm月dd日" 
+placeholder="图集发布时间 "
+ value="<?=T::v('<%=publish_time | toDate%>', $rs )?>"  />
+
+<div class="help-block"></div>
+</div>
+ <div class="col-xs-4">
+<input 
+name="publish_time__time" id="publish_time__time"
+class="js-masked-time form-control  input-lg"  type="text" 
+ placeholder="请输入时间"
+value="<?=T::v('<%=publish_time | toTime%>', $rs )?>" /> 
+ </div>
+<input name="publish_time" id="publish_time" type="hidden" value="<?=T::v('<%=publish_time | toDateTime%>', $rs )?>" />
+<script type="text/javascript">
+$(function(){
+function publish_time_change() {
+var tm = $('input[name=publish_time__time').val();
+ tm = tm.replace('@ ', '');
+tm = tm.replace('时', ':');
+tm = tm.replace('分', ':');
+ tm = tm = tm + '00';
+var dt = $('input[name=publish_time__date]').val();
+dt = dt.replace('年', '-');
+dt = dt.replace('月', '-');
+ dt = dt.replace('日', '');
+var datetime = dt + ' ' + tm;
+$('input[name=publish_time]').val( datetime );
+}
+$('input[name=publish_time__date]').on("change", function( e ){
+ publish_time_change();
+
+});
+
+ $('input[name=publish_time__time').on("change", function( e ){
+
+publish_time_change();
+});
+});
+
+ </script>
+</div><!-- END 单行时间日期: 发布时间 (publish_time) -->
 
 
-	<!-- 单行时间日期: 发布时间 (publish_time) 开始  -->
-	<div class="form-group   ">
-		<label class="col-xs-2 control-label" for="publish_time__date">发布时间</label>
-		<div class="col-xs-4">
-			<input 
-				 name="publish_time__date" id="publish_time__date"
-				 class="js-datepicker form-control  input-lg" type="text" 
-				 data-date-format="yyyy年mm月dd日" 
-				 placeholder="图集发布时间 "
-				 value="<?=T::v('<%=publish_time | toDate%>', $rs )?>"  />
-
-			<div class="help-block"></div>
-		</div>
-		<div class="col-xs-4">
-			<input 
-				name="publish_time__time" id="publish_time__time"
-				class="js-masked-time form-control  input-lg"  type="text" 
-				placeholder="请输入时间"
-				value="<?=T::v('<%=publish_time | toTime%>', $rs )?>" /> 
-		</div>
-		<input name="publish_time" id="publish_time" type="hidden" value="<?=T::v('<%=publish_time | toDateTime%>', $rs )?>" />
-
-		<script type="text/javascript">
-		$(function(){
-
-			function publish_time_change() {
-				var tm = $('input[name=publish_time__time').val();
-					tm = tm.replace('@ ', '');
-					tm = tm.replace('时', ':');
-					tm = tm.replace('分', ':');
-					tm = tm = tm + '00';
-
-				var dt = $('input[name=publish_time__date]').val();
-					dt = dt.replace('年', '-');
-					dt = dt.replace('月', '-');
-					dt = dt.replace('日', '');
-
-				var datetime = dt + ' ' + tm;
-				$('input[name=publish_time]').val( datetime );
-			}
-
-			$('input[name=publish_time__date]').on("change", function( e ){
-				publish_time_change();
-			});
-			$('input[name=publish_time__time').on("change", function( e ){
-				publish_time_change();
-			});
-		});
-		</script>
-
-	</div><!-- END 单行时间日期: 发布时间 (publish_time) -->
-
-
-
-
- 
-	<!-- 下拉选择: 图集状态 (status) 开始  -->
+	<!-- 单选框: 图集状态 (status) 开始  -->
 	<div class="form-group   ">
 		<label class="col-xs-2 control-label" for="status">图集状态</label>
 		<div class="col-xs-8">
-			<select class="js-select2 form-control input-lg" style="width: 100%;"
-					id="status" name="status"  
-					data-placeholder="请选择图集状态 " >
-				<option></option>
-				<?php $rs["status"] = is_string($rs["status"]) ? [$rs["status"]] : $rs["status"] ; if (empty($rs["status"])) { $rs["status"] = ["draft"]; } ?>
-<option value="draft" <?=in_array("draft", $rs["status"]) ? "selected" : ""?> > 草稿</option>
-<option value="on" <?=in_array("on", $rs["status"]) ? "selected" : ""?> > 正常</option>
-<option value="off" <?=in_array("off", $rs["status"]) ? "selected" : ""?> > 关闭</option>
-			</select>
+			<?php if (is_null($rs["status"])) { $rs["status"] = "draft"; } ?>
+<label class="css-input  css-radio css-radio-lg css-radio-primary push-10-r"><input  type="radio" name="status" data-uncheck-value="draft" value="draft" <?=("draft" == $rs["status"]) ? "checked" : ""?> > <span></span> 草稿</label>
+<label class="css-input  css-radio css-radio-lg css-radio-primary push-10-r"><input  type="radio" name="status" data-uncheck-value="published" value="published" <?=("published" == $rs["status"]) ? "checked" : ""?> > <span></span> 已发布</label>
+<label class="css-input  css-radio css-radio-lg css-radio-primary push-10-r"><input  type="radio" name="status" data-uncheck-value="closed" value="closed" <?=("closed" == $rs["status"]) ? "checked" : ""?> > <span></span> 关闭</label>
 			<div class="help-block"></div>
 		</div>
-	</div><!-- END 下拉选择: 图集状态 (status) -->
+	</div><!-- END 单选框: 图集状态 (status) 开始  -->
 
 				<!--  提交按钮 -->
 				<div class="block block-quickpanel sidebar-mini">

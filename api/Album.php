@@ -4,11 +4,11 @@
  * 图集数据接口 
  *
  * 程序作者: XpmSE机器人
- * 最后修改: 2018-06-30 22:58:54
+ * 最后修改: 2018-08-27 13:42:27
  * 程序母版: /data/stor/private/templates/xpmsns/model/code/api/Name.php
  */
 namespace Xpmsns\Pages\Api;
-                         
+                          
 
 use \Xpmse\Loader\App;
 use \Xpmse\Excp;
@@ -32,12 +32,12 @@ class Album extends Api {
 	/**
 	 * 查询一条图集记录
 	 * @param  array $query GET 参数
-	 *               $query['select']  读取字段, 默认 ["album.album_id","album.slug","album.title","album.author","album.origin","album.origin_url","album.link","album.categories","album.tags","album.summary","album.images","album.cover","album.publish_time","album.view_cnt","album.like_cnt","album.dislike_cnt","album.comment_cnt","album.created_at","album.updated_at","c.category_id","c.name","c.param"]
+	 *               $query['select']  读取字段, 默认 ["album.album_id","album.slug","album.title","album.author","album.origin","album.origin_url","album.link","album.categories","album.tags","album.summary","album.images","album.cover","album.publish_time","album.view_cnt","album.like_cnt","album.dislike_cnt","album.comment_cnt","album.created_at","album.updated_at","c.category_id","c.name","c.param","s.series_id","s.name"]
 	 * 				 $query['album_id']  按查询 (多条用 "," 分割)
 	 * 				 $query['slug']  按查询 (多条用 "," 分割)
      *
 	 * @param  array $data  POST 参数
-	 *               $data['select']  返回字段, 默认 ["album.album_id","album.slug","album.title","album.author","album.origin","album.origin_url","album.link","album.categories","album.tags","album.summary","album.images","album.cover","album.publish_time","album.view_cnt","album.like_cnt","album.dislike_cnt","album.comment_cnt","album.created_at","album.updated_at","c.category_id","c.name","c.param"]
+	 *               $data['select']  返回字段, 默认 ["album.album_id","album.slug","album.title","album.author","album.origin","album.origin_url","album.link","album.categories","album.tags","album.summary","album.images","album.cover","album.publish_time","album.view_cnt","album.like_cnt","album.dislike_cnt","album.comment_cnt","album.created_at","album.updated_at","c.category_id","c.name","c.param","s.series_id","s.name"]
 	 * 				 $data['album_id']  按查询 (多条用 "," 分割)
 	 * 				 $data['slug']  按查询 (多条用 "," 分割)
 	 *
@@ -51,6 +51,8 @@ class Album extends Api {
 	 *               	["link"],  // 外部链接 
 	 *               	["categories"],  // 类型 
 	*               	["_map_category"][$categories[n]]["category_id"], // category.category_id
+	 *               	["series"],  // 系列 
+	*               	["_map_series"][$series[n]]["series_id"], // series.series_id
 	 *               	["tags"],  // 标签 
 	 *               	["summary"],  // 图集简介 
 	 *               	["images"],  // 图片列表 
@@ -72,12 +74,27 @@ class Album extends Api {
 	*               	["_map_category"][$categories[n]]["wechat_offset"], // category.wechat_offset
 	*               	["_map_category"][$categories[n]]["name"], // category.name
 	*               	["_map_category"][$categories[n]]["fullname"], // category.fullname
+	*               	["_map_category"][$categories[n]]["link"], // category.link
 	*               	["_map_category"][$categories[n]]["root_id"], // category.root_id
 	*               	["_map_category"][$categories[n]]["parent_id"], // category.parent_id
 	*               	["_map_category"][$categories[n]]["priority"], // category.priority
 	*               	["_map_category"][$categories[n]]["hidden"], // category.hidden
+	*               	["_map_category"][$categories[n]]["isnav"], // category.isnav
 	*               	["_map_category"][$categories[n]]["param"], // category.param
 	*               	["_map_category"][$categories[n]]["status"], // category.status
+	*               	["_map_category"][$categories[n]]["issubnav"], // category.issubnav
+	*               	["_map_category"][$categories[n]]["highlight"], // category.highlight
+	*               	["_map_category"][$categories[n]]["isfootnav"], // category.isfootnav
+	*               	["_map_category"][$categories[n]]["isblank"], // category.isblank
+	*               	["_map_series"][$series[n]]["created_at"], // series.created_at
+	*               	["_map_series"][$series[n]]["updated_at"], // series.updated_at
+	*               	["_map_series"][$series[n]]["name"], // series.name
+	*               	["_map_series"][$series[n]]["slug"], // series.slug
+	*               	["_map_series"][$series[n]]["category_id"], // series.category_id
+	*               	["_map_series"][$series[n]]["summary"], // series.summary
+	*               	["_map_series"][$series[n]]["orderby"], // series.orderby
+	*               	["_map_series"][$series[n]]["param"], // series.param
+	*               	["_map_series"][$series[n]]["status"], // series.status
 	*/
 	protected function get( $query, $data ) {
 
@@ -86,7 +103,7 @@ class Album extends Api {
 		$data = array_merge( $query, $data );
 
 		// 读取字段
-		$select = empty($data['select']) ? ["album.album_id","album.slug","album.title","album.author","album.origin","album.origin_url","album.link","album.categories","album.tags","album.summary","album.images","album.cover","album.publish_time","album.view_cnt","album.like_cnt","album.dislike_cnt","album.comment_cnt","album.created_at","album.updated_at","c.category_id","c.name","c.param"] : $data['select'];
+		$select = empty($data['select']) ? ["album.album_id","album.slug","album.title","album.author","album.origin","album.origin_url","album.link","album.categories","album.tags","album.summary","album.images","album.cover","album.publish_time","album.view_cnt","album.like_cnt","album.dislike_cnt","album.comment_cnt","album.created_at","album.updated_at","c.category_id","c.name","c.param","s.series_id","s.name"] : $data['select'];
 		if ( is_string($select) ) {
 			$select = explode(',', $select);
 		}
@@ -132,6 +149,7 @@ class Album extends Api {
 	 *               $data['origin_url'] 来源地址
 	 *               $data['link'] 外部链接
 	 *               $data['categories'] 类型
+	 *               $data['series'] 系列
 	 *               $data['tags'] 标签
 	 *               $data['summary'] 图集简介
 	 *               $data['images'] 图片列表
@@ -172,6 +190,7 @@ class Album extends Api {
 	 *               $data['origin_url'] 来源地址
 	 *               $data['link'] 外部链接
 	 *               $data['categories'] 类型
+	 *               $data['series'] 系列
 	 *               $data['tags'] 标签
 	 *               $data['summary'] 图集简介
 	 *               $data['images'] 图片列表
@@ -252,7 +271,7 @@ class Album extends Api {
 	/**
 	 * 根据条件检索图集记录
 	 * @param  array $query GET 参数
-	 *         	      $query['select'] 选取字段，默认选择 ["album.album_id","album.slug","album.title","album.author","album.origin","album.origin_url","album.link","album.categories","album.tags","album.summary","album.images","album.cover","album.publish_time","album.view_cnt","album.like_cnt","album.dislike_cnt","album.comment_cnt","album.created_at","album.updated_at","c.category_id","c.slug","c.name","c.param"]
+	 *         	      $query['select'] 选取字段，默认选择 ["album.album_id","album.slug","album.title","album.author","album.origin","album.origin_url","album.link","album.categories","album.tags","album.summary","album.images","album.cover","album.publish_time","album.view_cnt","album.like_cnt","album.dislike_cnt","album.comment_cnt","album.created_at","album.updated_at","c.category_id","c.slug","c.name","c.param","s.series_id","s.name"]
 	 *         	      $query['page'] 页码，默认为 1
 	 *         	      $query['perpage'] 每页显示记录数，默认为 20
 	 *			      $query["keywords"] 按关键词查询
@@ -260,11 +279,13 @@ class Album extends Api {
 	 *			      $query["slug"] 按图集别名查询 ( AND = )
 	 *			      $query["status"] 按图集状态查询 ( AND = )
 	 *			      $query["title"] 按图集主题查询 ( AND LIKE )
+	 *			      $query["series"] 按系列查询 ( AND LIKE )
+	 *			      $query["categories"] 按类型查询 ( AND LIKE )
 	 *			      $query["orderby_created_at_desc"]  按 DESC 排序
 	 *			      $query["orderby_updated_at_desc"]  按 DESC 排序
      *
 	 * @param  array $data  POST 参数
-	 *         	      $data['select'] 选取字段，默认选择 ["name=album_id","name=slug","name=title","name=author","name=origin","name=origin_url","name=link","name=categories","name=tags","name=summary","name=images","name=cover","name=publish_time","name=view_cnt","name=like_cnt","name=dislike_cnt","name=comment_cnt","name=created_at","name=updated_at","model=%5CXpmsns%5CPages%5CModel%5CCategory&name=category_id&table=category&prefix=xpmsns_pages_&alias=c&type=inWhere","model=%5CXpmsns%5CPages%5CModel%5CCategory&name=slug&table=category&prefix=xpmsns_pages_&alias=c&type=inWhere","model=%5CXpmsns%5CPages%5CModel%5CCategory&name=name&table=category&prefix=xpmsns_pages_&alias=c&type=inWhere","model=%5CXpmsns%5CPages%5CModel%5CCategory&name=param&table=category&prefix=xpmsns_pages_&alias=c&type=inWhere"]
+	 *         	      $data['select'] 选取字段，默认选择 ["name=album_id","name=slug","name=title","name=author","name=origin","name=origin_url","name=link","name=categories","name=tags","name=summary","name=images","name=cover","name=publish_time","name=view_cnt","name=like_cnt","name=dislike_cnt","name=comment_cnt","name=created_at","name=updated_at","model=%5CXpmsns%5CPages%5CModel%5CCategory&name=category_id&table=category&prefix=xpmsns_pages_&alias=c&type=inWhere","model=%5CXpmsns%5CPages%5CModel%5CCategory&name=slug&table=category&prefix=xpmsns_pages_&alias=c&type=inWhere","model=%5CXpmsns%5CPages%5CModel%5CCategory&name=name&table=category&prefix=xpmsns_pages_&alias=c&type=inWhere","model=%5CXpmsns%5CPages%5CModel%5CCategory&name=param&table=category&prefix=xpmsns_pages_&alias=c&type=inWhere","model=%5CXpmsns%5CPages%5CModel%5CSeries&name=series_id&table=series&prefix=xpmsns_pages_&alias=s&type=inWhere","model=%5CXpmsns%5CPages%5CModel%5CSeries&name=name&table=series&prefix=xpmsns_pages_&alias=s&type=inWhere"]
 	 *         	      $data['page'] 页码，默认为 1
 	 *         	      $data['perpage'] 每页显示记录数，默认为 20
 	 *			      $data["keywords"] 按关键词查询
@@ -272,6 +293,8 @@ class Album extends Api {
 	 *			      $data["slug"] 按图集别名查询 ( AND = )
 	 *			      $data["status"] 按图集状态查询 ( AND = )
 	 *			      $data["title"] 按图集主题查询 ( AND LIKE )
+	 *			      $data["series"] 按系列查询 ( AND LIKE )
+	 *			      $data["categories"] 按类型查询 ( AND LIKE )
 	 *			      $data["orderby_created_at_desc"]  按 DESC 排序
 	 *			      $data["orderby_updated_at_desc"]  按 DESC 排序
 	 *
@@ -286,6 +309,8 @@ class Album extends Api {
 	 *               	["link"],  // 外部链接 
 	 *               	["categories"],  // 类型 
 	*               	["category"][$categories[n]]["category_id"], // category.category_id
+	 *               	["series"],  // 系列 
+	*               	["series"][$series[n]]["series_id"], // series.series_id
 	 *               	["tags"],  // 标签 
 	 *               	["summary"],  // 图集简介 
 	 *               	["images"],  // 图片列表 
@@ -307,12 +332,27 @@ class Album extends Api {
 	*               	["category"][$categories[n]]["wechat_offset"], // category.wechat_offset
 	*               	["category"][$categories[n]]["name"], // category.name
 	*               	["category"][$categories[n]]["fullname"], // category.fullname
+	*               	["category"][$categories[n]]["link"], // category.link
 	*               	["category"][$categories[n]]["root_id"], // category.root_id
 	*               	["category"][$categories[n]]["parent_id"], // category.parent_id
 	*               	["category"][$categories[n]]["priority"], // category.priority
 	*               	["category"][$categories[n]]["hidden"], // category.hidden
+	*               	["category"][$categories[n]]["isnav"], // category.isnav
 	*               	["category"][$categories[n]]["param"], // category.param
 	*               	["category"][$categories[n]]["status"], // category.status
+	*               	["category"][$categories[n]]["issubnav"], // category.issubnav
+	*               	["category"][$categories[n]]["highlight"], // category.highlight
+	*               	["category"][$categories[n]]["isfootnav"], // category.isfootnav
+	*               	["category"][$categories[n]]["isblank"], // category.isblank
+	*               	["series"][$series[n]]["created_at"], // series.created_at
+	*               	["series"][$series[n]]["updated_at"], // series.updated_at
+	*               	["series"][$series[n]]["name"], // series.name
+	*               	["series"][$series[n]]["slug"], // series.slug
+	*               	["series"][$series[n]]["category_id"], // series.category_id
+	*               	["series"][$series[n]]["summary"], // series.summary
+	*               	["series"][$series[n]]["orderby"], // series.orderby
+	*               	["series"][$series[n]]["param"], // series.param
+	*               	["series"][$series[n]]["status"], // series.status
 	 */
 	protected function search( $query, $data ) {
 
@@ -321,7 +361,7 @@ class Album extends Api {
 		$data = array_merge( $query, $data );
 
 		// 读取字段
-		$select = empty($data['select']) ? ["album.album_id","album.slug","album.title","album.author","album.origin","album.origin_url","album.link","album.categories","album.tags","album.summary","album.images","album.cover","album.publish_time","album.view_cnt","album.like_cnt","album.dislike_cnt","album.comment_cnt","album.created_at","album.updated_at","c.category_id","c.slug","c.name","c.param"] : $data['select'];
+		$select = empty($data['select']) ? ["album.album_id","album.slug","album.title","album.author","album.origin","album.origin_url","album.link","album.categories","album.tags","album.summary","album.images","album.cover","album.publish_time","album.view_cnt","album.like_cnt","album.dislike_cnt","album.comment_cnt","album.created_at","album.updated_at","c.category_id","c.slug","c.name","c.param","s.series_id","s.name"] : $data['select'];
 		if ( is_string($select) ) {
 			$select = explode(',', $select);
 		}

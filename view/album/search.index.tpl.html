@@ -100,19 +100,19 @@ use \Xpmse\T;
 								</ul>
 							</div> <!-- END 结果集排序 -->
 						
-							<!-- 活动状态过滤 -->
+							<!-- 图集状态过滤 -->
 							<div class="btn-group pull-right push-20-l" role="group">  
 								<button class="btn btn-default btn-xs dropdown-toggle" type="button" data-toggle="dropdown" >
 									<i class="glyphicon glyphicon-list-alt"></i> 
 									<?=($query['status'] == 'draft') ? '草稿' : '' ?>
-									<?=($query['status'] == 'on') ? '正常' : '' ?>
-									<?=($query['status'] == 'off') ? '关闭' : '' ?>
-									<?=(empty($query['status'])) ? '活动状态' : '' ?>
+									<?=($query['status'] == 'published') ? '已发布' : '' ?>
+									<?=($query['status'] == 'closed') ? '关闭' : '' ?>
+									<?=(empty($query['status'])) ? '图集状态' : '' ?>
 									<span class="caret"></span> 
 								</button>
 
 								<ul class="dropdown-menu dropdown-menu-right"  style="min-width: 87px;">
-									<li class="dropdown-header">活动状态</li>
+									<li class="dropdown-header">图集状态</li>
 									<li>
 										<a href="javascript:search('status','')">
 										   全部
@@ -124,17 +124,17 @@ use \Xpmse\T;
 										</a>
 									</li>
 									<li >
-										<a href="javascript:search('status','on')">
-										   正常
+										<a href="javascript:search('status','published')">
+										   已发布
 										</a>
 									</li>
 									<li >
-										<a href="javascript:search('status','off')">
+										<a href="javascript:search('status','closed')">
 										   关闭
 										</a>
 									</li>
 								</ul>
-							</div> <!-- END 活动状态过滤 -->
+							</div> <!-- END 图集状态过滤 -->
 
 
 						</div><!-- END col-xs-7 -->
@@ -147,14 +147,13 @@ use \Xpmse\T;
 						<thead>
 							<tr>
 								<th class="font-w300"> 图集ID </th>
-								<th class="font-w300"> 图集别名 </th>
-								<th class="font-w300"> 图集主题 </th>
+								<th class="font-w300"> 别名 </th>
+								<th class="font-w300"> 主题 </th>
 								<th class="font-w300"> 栏目 </th>
-								<th class="font-w300"> 来源 </th>
+								<th class="font-w300"> 系列 </th>
 								<th class="font-w300"> 作者 </th>
 								<th class="font-w300"> 封面 </th>
-								<th class="font-w300"> 图片列表 </th>
-								<th class="font-w300"> 图集状态 </th>
+								<th class="font-w300"> 状态 </th>
 								<th class="font-w300"> 发布时间 </th>
 								<th class="font-w300"> 更新时间 </th>
 							</tr>
@@ -177,7 +176,7 @@ use \Xpmse\T;
 									<?php $rs["_map_category"]= &$response["category"]; $v=null; $v=T::s("{% for idx in categories %} {{_map_category[idx].name}} {% endfor %}", $rs ); echo empty($v) ? T::s("", $rs ) : $v; ?>
 								</td>
 								<td class="font-w300">
-									<?php $v=null; $v=T::s("{{origin}}", $rs ); echo empty($v) ? T::s("", $rs ) : $v; ?>
+									<?php $rs["_map_series"]= &$response["series"]; $v=null; $v=T::s("{% for idx in series %} {{_map_series[idx].name}} {% endfor %}", $rs ); echo empty($v) ? T::s("", $rs ) : $v; ?>
 								</td>
 								<td class="font-w300">
 									<?php $v=null; $v=T::s("{{author}}", $rs ); echo empty($v) ? T::s("", $rs ) : $v; ?>
@@ -187,17 +186,6 @@ use \Xpmse\T;
 										<?php if ( !empty($rs["cover"]['url']) ) : ?>
 										<img src="<?=$rs["cover"]['url']?>" height="64" style="max-width:260px;"/> 
 										<?php endif;?>
-									</div>
-								</td>
-								<td class="font-w300">
-									<div style="line-height: 84px;display: inline-block; max-width:260px;word-wrap:break-word;" > 
-									<?php foreach( $rs["images"] as $idx=>$img ): 
-										if (!empty($img['url'])) : ?>
-										<img src="<?=$img['url']?>" height="64" style="max-width:260px;" class="push-5-r" /> 
-									<?php 
-										endif; 
-										if ($idx > 1) { break;} // 最多显示3张图
-										endforeach ; ?> 
 									</div>
 								</td>
 								<td class="font-w300">
@@ -215,7 +203,7 @@ use \Xpmse\T;
 						</tbody>
 
 						<tfoot>
-							<tr><td colspan="11"> <nav class="pull-right">
+							<tr><td colspan="10"> <nav class="pull-right">
 
 								<ul class="pagination">
 									<?php if ($response['prev'] !== false): ?>

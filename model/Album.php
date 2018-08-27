@@ -4,14 +4,15 @@
  * 图集数据模型
  *
  * 程序作者: XpmSE机器人
- * 最后修改: 2018-06-30 22:58:55
+ * 最后修改: 2018-08-27 13:42:28
  * 程序母版: /data/stor/private/templates/xpmsns/model/code/model/Name.php
  */
 namespace Xpmsns\Pages\Model;
-                         
+                          
 use \Xpmse\Excp;
 use \Xpmse\Model;
 use \Xpmse\Utils;
+use \Xpmse\Conf;
 use \Xpmse\Media;
 use \Xpmse\Loader\App as App;
 
@@ -70,9 +71,11 @@ class Album extends Model {
 		// 外部链接
 		$this->putColumn( 'link', $this->type("string", ["length"=>200, "null"=>true]));
 		// 类型
-		$this->putColumn( 'categories', $this->type("text", ["json"=>true, "null"=>true]));
+		$this->putColumn( 'categories', $this->type("string", ["length"=>400, "index"=>true, "json"=>true, "null"=>true]));
+		// 系列
+		$this->putColumn( 'series', $this->type("string", ["length"=>400, "index"=>true, "json"=>true, "null"=>true]));
 		// 标签
-		$this->putColumn( 'tags', $this->type("text", ["null"=>true]));
+		$this->putColumn( 'tags', $this->type("string", ["length"=>400, "index"=>true, "null"=>true]));
 		// 图集简介
 		$this->putColumn( 'summary', $this->type("string", ["length"=>200, "null"=>true]));
 		// 图片列表
@@ -135,15 +138,15 @@ class Album extends Model {
 		  			"name" => "草稿",
 		  			"style" => "danger"
 		  		],
-		  		"on" => [
-		  			"value" => "on",
-		  			"name" => "正常",
+		  		"published" => [
+		  			"value" => "published",
+		  			"name" => "已发布",
 		  			"style" => "success"
 		  		],
-		  		"off" => [
-		  			"value" => "off",
+		  		"closed" => [
+		  			"value" => "closed",
 		  			"name" => "关闭",
-		  			"style" => "default"
+		  			"style" => "danger"
 		  		],
 			];
 			$rs["_status_name"] = "status";
@@ -170,6 +173,8 @@ class Album extends Model {
 	 *          	  $rs["link"],  // 外部链接 
 	 *          	  $rs["categories"],  // 类型 
 	 *                $rs["_map_category"][$categories[n]]["category_id"], // category.category_id
+	 *          	  $rs["series"],  // 系列 
+	 *                $rs["_map_series"][$series[n]]["series_id"], // series.series_id
 	 *          	  $rs["tags"],  // 标签 
 	 *          	  $rs["summary"],  // 图集简介 
 	 *          	  $rs["images"],  // 图片列表 
@@ -191,12 +196,27 @@ class Album extends Model {
 	 *                $rs["_map_category"][$categories[n]]["wechat_offset"], // category.wechat_offset
 	 *                $rs["_map_category"][$categories[n]]["name"], // category.name
 	 *                $rs["_map_category"][$categories[n]]["fullname"], // category.fullname
+	 *                $rs["_map_category"][$categories[n]]["link"], // category.link
 	 *                $rs["_map_category"][$categories[n]]["root_id"], // category.root_id
 	 *                $rs["_map_category"][$categories[n]]["parent_id"], // category.parent_id
 	 *                $rs["_map_category"][$categories[n]]["priority"], // category.priority
 	 *                $rs["_map_category"][$categories[n]]["hidden"], // category.hidden
+	 *                $rs["_map_category"][$categories[n]]["isnav"], // category.isnav
 	 *                $rs["_map_category"][$categories[n]]["param"], // category.param
 	 *                $rs["_map_category"][$categories[n]]["status"], // category.status
+	 *                $rs["_map_category"][$categories[n]]["issubnav"], // category.issubnav
+	 *                $rs["_map_category"][$categories[n]]["highlight"], // category.highlight
+	 *                $rs["_map_category"][$categories[n]]["isfootnav"], // category.isfootnav
+	 *                $rs["_map_category"][$categories[n]]["isblank"], // category.isblank
+	 *                $rs["_map_series"][$series[n]]["created_at"], // series.created_at
+	 *                $rs["_map_series"][$series[n]]["updated_at"], // series.updated_at
+	 *                $rs["_map_series"][$series[n]]["name"], // series.name
+	 *                $rs["_map_series"][$series[n]]["slug"], // series.slug
+	 *                $rs["_map_series"][$series[n]]["category_id"], // series.category_id
+	 *                $rs["_map_series"][$series[n]]["summary"], // series.summary
+	 *                $rs["_map_series"][$series[n]]["orderby"], // series.orderby
+	 *                $rs["_map_series"][$series[n]]["param"], // series.param
+	 *                $rs["_map_series"][$series[n]]["status"], // series.status
 	 */
 	public function getByAlbumId( $album_id, $select=['*']) {
 		
@@ -211,7 +231,7 @@ class Album extends Model {
 
 		// 创建查询构造器
 		$qb = Utils::getTab("xpmsns_pages_album as album", "{none}")->query();
- 		$qb->where('album_id', '=', $album_id );
+  		$qb->where('album_id', '=', $album_id );
 		$qb->limit( 1 );
 		$qb->select($select);
 		$rows = $qb->get()->toArray();
@@ -224,12 +244,20 @@ class Album extends Model {
 
  		$category_ids = []; // 读取 inWhere category 数据
 		$category_ids = array_merge($category_ids, is_array($rs["categories"]) ? $rs["categories"] : [$rs["categories"]]);
+ 		$series_ids = []; // 读取 inWhere series 数据
+		$series_ids = array_merge($series_ids, is_array($rs["series"]) ? $rs["series"] : [$rs["series"]]);
 
  		// 读取 inWhere category 数据
 		if ( !empty($inwhereSelect["category"]) && method_exists("\\Xpmsns\\Pages\\Model\\Category", 'getInByCategoryId') ) {
 			$category_ids = array_unique($category_ids);
 			$selectFields = $inwhereSelect["category"];
 			$rs["_map_category"] = (new \Xpmsns\Pages\Model\Category)->getInByCategoryId($category_ids, $selectFields);
+		}
+ 		// 读取 inWhere series 数据
+		if ( !empty($inwhereSelect["series"]) && method_exists("\\Xpmsns\\Pages\\Model\\Series", 'getInBySeriesId') ) {
+			$series_ids = array_unique($series_ids);
+			$selectFields = $inwhereSelect["series"];
+			$rs["_map_series"] = (new \Xpmsns\Pages\Model\Series)->getInBySeriesId($series_ids, $selectFields);
 		}
 
 		return $rs;
@@ -244,7 +272,7 @@ class Album extends Model {
 	 * @param array   $select       选取字段，默认选取所有
 	 * @return array 图集记录MAP {"album_id1":{"key":"value",...}...}
 	 */
-	public function getInByAlbumId($album_ids, $select=["album.album_id","album.slug","album.title","c.name","album.origin","album.author","album.cover","album.images","album.status","album.publish_time","album.created_at","album.updated_at"], $order=["album.created_at"=>"desc"] ) {
+	public function getInByAlbumId($album_ids, $select=["album.album_id","album.slug","album.title","c.name","s.name","album.author","album.cover","album.status","album.publish_time","album.created_at","album.updated_at"], $order=["album.created_at"=>"desc"] ) {
 		
 		if ( is_string($select) ) {
 			$select = explode(',', $select);
@@ -256,7 +284,7 @@ class Album extends Model {
 
 		// 创建查询构造器
 		$qb = Utils::getTab("xpmsns_pages_album as album", "{none}")->query();
- 		$qb->whereIn('album.album_id', $album_ids);
+  		$qb->whereIn('album.album_id', $album_ids);
 		
 		// 排序
 		foreach ($order as $field => $order ) {
@@ -268,12 +296,15 @@ class Album extends Model {
 		$map = [];
 
  		$category_ids = []; // 读取 inWhere category 数据
+ 		$series_ids = []; // 读取 inWhere series 数据
 		foreach ($data as & $rs ) {
 			$this->format($rs);
 			$map[$rs['album_id']] = $rs;
 			
  			// for inWhere category
 			$category_ids = array_merge($category_ids, is_array($rs["categories"]) ? $rs["categories"] : [$rs["categories"]]);
+ 			// for inWhere series
+			$series_ids = array_merge($series_ids, is_array($rs["series"]) ? $rs["series"] : [$rs["series"]]);
 		}
 
  		// 读取 inWhere category 数据
@@ -281,6 +312,12 @@ class Album extends Model {
 			$category_ids = array_unique($category_ids);
 			$selectFields = $inwhereSelect["category"];
 			$map["_map_category"] = (new \Xpmsns\Pages\Model\Category)->getInByCategoryId($category_ids, $selectFields);
+		}
+ 		// 读取 inWhere series 数据
+		if ( !empty($inwhereSelect["series"]) && method_exists("\\Xpmsns\\Pages\\Model\\Series", 'getInBySeriesId') ) {
+			$series_ids = array_unique($series_ids);
+			$selectFields = $inwhereSelect["series"];
+			$map["_map_series"] = (new \Xpmsns\Pages\Model\Series)->getInBySeriesId($series_ids, $selectFields);
 		}
 
 
@@ -320,6 +357,8 @@ class Album extends Model {
 	 *          	  $rs["link"],  // 外部链接 
 	 *          	  $rs["categories"],  // 类型 
 	 *                $rs["_map_category"][$categories[n]]["category_id"], // category.category_id
+	 *          	  $rs["series"],  // 系列 
+	 *                $rs["_map_series"][$series[n]]["series_id"], // series.series_id
 	 *          	  $rs["tags"],  // 标签 
 	 *          	  $rs["summary"],  // 图集简介 
 	 *          	  $rs["images"],  // 图片列表 
@@ -341,12 +380,27 @@ class Album extends Model {
 	 *                $rs["_map_category"][$categories[n]]["wechat_offset"], // category.wechat_offset
 	 *                $rs["_map_category"][$categories[n]]["name"], // category.name
 	 *                $rs["_map_category"][$categories[n]]["fullname"], // category.fullname
+	 *                $rs["_map_category"][$categories[n]]["link"], // category.link
 	 *                $rs["_map_category"][$categories[n]]["root_id"], // category.root_id
 	 *                $rs["_map_category"][$categories[n]]["parent_id"], // category.parent_id
 	 *                $rs["_map_category"][$categories[n]]["priority"], // category.priority
 	 *                $rs["_map_category"][$categories[n]]["hidden"], // category.hidden
+	 *                $rs["_map_category"][$categories[n]]["isnav"], // category.isnav
 	 *                $rs["_map_category"][$categories[n]]["param"], // category.param
 	 *                $rs["_map_category"][$categories[n]]["status"], // category.status
+	 *                $rs["_map_category"][$categories[n]]["issubnav"], // category.issubnav
+	 *                $rs["_map_category"][$categories[n]]["highlight"], // category.highlight
+	 *                $rs["_map_category"][$categories[n]]["isfootnav"], // category.isfootnav
+	 *                $rs["_map_category"][$categories[n]]["isblank"], // category.isblank
+	 *                $rs["_map_series"][$series[n]]["created_at"], // series.created_at
+	 *                $rs["_map_series"][$series[n]]["updated_at"], // series.updated_at
+	 *                $rs["_map_series"][$series[n]]["name"], // series.name
+	 *                $rs["_map_series"][$series[n]]["slug"], // series.slug
+	 *                $rs["_map_series"][$series[n]]["category_id"], // series.category_id
+	 *                $rs["_map_series"][$series[n]]["summary"], // series.summary
+	 *                $rs["_map_series"][$series[n]]["orderby"], // series.orderby
+	 *                $rs["_map_series"][$series[n]]["param"], // series.param
+	 *                $rs["_map_series"][$series[n]]["status"], // series.status
 	 */
 	public function getBySlug( $slug, $select=['*']) {
 		
@@ -361,7 +415,7 @@ class Album extends Model {
 
 		// 创建查询构造器
 		$qb = Utils::getTab("xpmsns_pages_album as album", "{none}")->query();
- 		$qb->where('slug', '=', $slug );
+  		$qb->where('slug', '=', $slug );
 		$qb->limit( 1 );
 		$qb->select($select);
 		$rows = $qb->get()->toArray();
@@ -374,12 +428,20 @@ class Album extends Model {
 
  		$category_ids = []; // 读取 inWhere category 数据
 		$category_ids = array_merge($category_ids, is_array($rs["categories"]) ? $rs["categories"] : [$rs["categories"]]);
+ 		$series_ids = []; // 读取 inWhere series 数据
+		$series_ids = array_merge($series_ids, is_array($rs["series"]) ? $rs["series"] : [$rs["series"]]);
 
  		// 读取 inWhere category 数据
 		if ( !empty($inwhereSelect["category"]) && method_exists("\\Xpmsns\\Pages\\Model\\Category", 'getInByCategoryId') ) {
 			$category_ids = array_unique($category_ids);
 			$selectFields = $inwhereSelect["category"];
 			$rs["_map_category"] = (new \Xpmsns\Pages\Model\Category)->getInByCategoryId($category_ids, $selectFields);
+		}
+ 		// 读取 inWhere series 数据
+		if ( !empty($inwhereSelect["series"]) && method_exists("\\Xpmsns\\Pages\\Model\\Series", 'getInBySeriesId') ) {
+			$series_ids = array_unique($series_ids);
+			$selectFields = $inwhereSelect["series"];
+			$rs["_map_series"] = (new \Xpmsns\Pages\Model\Series)->getInBySeriesId($series_ids, $selectFields);
 		}
 
 		return $rs;
@@ -394,7 +456,7 @@ class Album extends Model {
 	 * @param array   $select       选取字段，默认选取所有
 	 * @return array 图集记录MAP {"slug1":{"key":"value",...}...}
 	 */
-	public function getInBySlug($slugs, $select=["album.album_id","album.slug","album.title","c.name","album.origin","album.author","album.cover","album.images","album.status","album.publish_time","album.created_at","album.updated_at"], $order=["album.created_at"=>"desc"] ) {
+	public function getInBySlug($slugs, $select=["album.album_id","album.slug","album.title","c.name","s.name","album.author","album.cover","album.status","album.publish_time","album.created_at","album.updated_at"], $order=["album.created_at"=>"desc"] ) {
 		
 		if ( is_string($select) ) {
 			$select = explode(',', $select);
@@ -406,7 +468,7 @@ class Album extends Model {
 
 		// 创建查询构造器
 		$qb = Utils::getTab("xpmsns_pages_album as album", "{none}")->query();
- 		$qb->whereIn('album.slug', $slugs);
+  		$qb->whereIn('album.slug', $slugs);
 		
 		// 排序
 		foreach ($order as $field => $order ) {
@@ -418,12 +480,15 @@ class Album extends Model {
 		$map = [];
 
  		$category_ids = []; // 读取 inWhere category 数据
+ 		$series_ids = []; // 读取 inWhere series 数据
 		foreach ($data as & $rs ) {
 			$this->format($rs);
 			$map[$rs['slug']] = $rs;
 			
  			// for inWhere category
 			$category_ids = array_merge($category_ids, is_array($rs["categories"]) ? $rs["categories"] : [$rs["categories"]]);
+ 			// for inWhere series
+			$series_ids = array_merge($series_ids, is_array($rs["series"]) ? $rs["series"] : [$rs["series"]]);
 		}
 
  		// 读取 inWhere category 数据
@@ -431,6 +496,12 @@ class Album extends Model {
 			$category_ids = array_unique($category_ids);
 			$selectFields = $inwhereSelect["category"];
 			$map["_map_category"] = (new \Xpmsns\Pages\Model\Category)->getInByCategoryId($category_ids, $selectFields);
+		}
+ 		// 读取 inWhere series 数据
+		if ( !empty($inwhereSelect["series"]) && method_exists("\\Xpmsns\\Pages\\Model\\Series", 'getInBySeriesId') ) {
+			$series_ids = array_unique($series_ids);
+			$selectFields = $inwhereSelect["series"];
+			$map["_map_series"] = (new \Xpmsns\Pages\Model\Series)->getInBySeriesId($series_ids, $selectFields);
 		}
 
 
@@ -560,7 +631,7 @@ class Album extends Model {
 	 * @param array   $order   排序方式 ["field"=>"asc", "field2"=>"desc"...]
 	 * @return array 图集记录数组 [{"key":"value",...}...]
 	 */
-	public function top( $limit=100, $select=["album.album_id","album.slug","album.title","c.name","album.origin","album.author","album.cover","album.images","album.status","album.publish_time","album.created_at","album.updated_at"], $order=["album.created_at"=>"desc"] ) {
+	public function top( $limit=100, $select=["album.album_id","album.slug","album.title","c.name","s.name","album.author","album.cover","album.status","album.publish_time","album.created_at","album.updated_at"], $order=["album.created_at"=>"desc"] ) {
 
 		if ( is_string($select) ) {
 			$select = explode(',', $select);
@@ -572,7 +643,7 @@ class Album extends Model {
 
 		// 创建查询构造器
 		$qb = Utils::getTab("xpmsns_pages_album as album", "{none}")->query();
- 
+  
 
 		foreach ($order as $field => $order ) {
 			$qb->orderBy( $field, $order );
@@ -583,11 +654,14 @@ class Album extends Model {
 
 
  		$category_ids = []; // 读取 inWhere category 数据
+ 		$series_ids = []; // 读取 inWhere series 数据
 		foreach ($data as & $rs ) {
 			$this->format($rs);
 			
  			// for inWhere category
 			$category_ids = array_merge($category_ids, is_array($rs["categories"]) ? $rs["categories"] : [$rs["categories"]]);
+ 			// for inWhere series
+			$series_ids = array_merge($series_ids, is_array($rs["series"]) ? $rs["series"] : [$rs["series"]]);
 		}
 
  		// 读取 inWhere category 数据
@@ -595,6 +669,12 @@ class Album extends Model {
 			$category_ids = array_unique($category_ids);
 			$selectFields = $inwhereSelect["category"];
 			$data["_map_category"] = (new \Xpmsns\Pages\Model\Category)->getInByCategoryId($category_ids, $selectFields);
+		}
+ 		// 读取 inWhere series 数据
+		if ( !empty($inwhereSelect["series"]) && method_exists("\\Xpmsns\\Pages\\Model\\Series", 'getInBySeriesId') ) {
+			$series_ids = array_unique($series_ids);
+			$selectFields = $inwhereSelect["series"];
+			$data["_map_series"] = (new \Xpmsns\Pages\Model\Series)->getInBySeriesId($series_ids, $selectFields);
 		}
 
 		return $data;
@@ -605,7 +685,7 @@ class Album extends Model {
 	/**
 	 * 按条件检索图集记录
 	 * @param  array  $query
-	 *         	      $query['select'] 选取字段，默认选择 ["album.album_id","album.slug","album.title","c.name","album.origin","album.author","album.cover","album.images","album.status","album.publish_time","album.created_at","album.updated_at"]
+	 *         	      $query['select'] 选取字段，默认选择 ["album.album_id","album.slug","album.title","c.name","s.name","album.author","album.cover","album.status","album.publish_time","album.created_at","album.updated_at"]
 	 *         	      $query['page'] 页码，默认为 1
 	 *         	      $query['perpage'] 每页显示记录数，默认为 20
 	 *			      $query["keywords"] 按关键词查询
@@ -613,6 +693,8 @@ class Album extends Model {
 	 *			      $query["slug"] 按图集别名查询 ( = )
 	 *			      $query["status"] 按图集状态查询 ( = )
 	 *			      $query["title"] 按图集主题查询 ( LIKE )
+	 *			      $query["series"] 按系列查询 ( LIKE )
+	 *			      $query["categories"] 按类型查询 ( LIKE )
 	 *			      $query["orderby_created_at_desc"]  按name=created_at DESC 排序
 	 *			      $query["orderby_updated_at_desc"]  按name=updated_at DESC 排序
 	 *           
@@ -626,6 +708,8 @@ class Album extends Model {
 	 *               	["link"],  // 外部链接 
 	 *               	["categories"],  // 类型 
 	 *               	["category"][$categories[n]]["category_id"], // category.category_id
+	 *               	["series"],  // 系列 
+	 *               	["series"][$series[n]]["series_id"], // series.series_id
 	 *               	["tags"],  // 标签 
 	 *               	["summary"],  // 图集简介 
 	 *               	["images"],  // 图片列表 
@@ -647,16 +731,31 @@ class Album extends Model {
 	 *               	["category"][$categories[n]]["wechat_offset"], // category.wechat_offset
 	 *               	["category"][$categories[n]]["name"], // category.name
 	 *               	["category"][$categories[n]]["fullname"], // category.fullname
+	 *               	["category"][$categories[n]]["link"], // category.link
 	 *               	["category"][$categories[n]]["root_id"], // category.root_id
 	 *               	["category"][$categories[n]]["parent_id"], // category.parent_id
 	 *               	["category"][$categories[n]]["priority"], // category.priority
 	 *               	["category"][$categories[n]]["hidden"], // category.hidden
+	 *               	["category"][$categories[n]]["isnav"], // category.isnav
 	 *               	["category"][$categories[n]]["param"], // category.param
 	 *               	["category"][$categories[n]]["status"], // category.status
+	 *               	["category"][$categories[n]]["issubnav"], // category.issubnav
+	 *               	["category"][$categories[n]]["highlight"], // category.highlight
+	 *               	["category"][$categories[n]]["isfootnav"], // category.isfootnav
+	 *               	["category"][$categories[n]]["isblank"], // category.isblank
+	 *               	["series"][$series[n]]["created_at"], // series.created_at
+	 *               	["series"][$series[n]]["updated_at"], // series.updated_at
+	 *               	["series"][$series[n]]["name"], // series.name
+	 *               	["series"][$series[n]]["slug"], // series.slug
+	 *               	["series"][$series[n]]["category_id"], // series.category_id
+	 *               	["series"][$series[n]]["summary"], // series.summary
+	 *               	["series"][$series[n]]["orderby"], // series.orderby
+	 *               	["series"][$series[n]]["param"], // series.param
+	 *               	["series"][$series[n]]["status"], // series.status
 	 */
 	public function search( $query = [] ) {
 
-		$select = empty($query['select']) ? ["album.album_id","album.slug","album.title","c.name","album.origin","album.author","album.cover","album.images","album.status","album.publish_time","album.created_at","album.updated_at"] : $query['select'];
+		$select = empty($query['select']) ? ["album.album_id","album.slug","album.title","c.name","s.name","album.author","album.cover","album.status","album.publish_time","album.created_at","album.updated_at"] : $query['select'];
 		if ( is_string($select) ) {
 			$select = explode(',', $select);
 		}
@@ -667,7 +766,7 @@ class Album extends Model {
 
 		// 创建查询构造器
 		$qb = Utils::getTab("xpmsns_pages_album as album", "{none}")->query();
- 
+  
 		// 按关键词查找
 
 
@@ -691,6 +790,16 @@ class Album extends Model {
 			$qb->where("album.title", 'like', "%{$query['title']}%" );
 		}
 		  
+		// 按系列查询 (LIKE)  
+		if ( array_key_exists("series", $query) &&!empty($query['series']) ) {
+			$qb->where("album.series", 'like', "%{$query['series']}%" );
+		}
+		  
+		// 按类型查询 (LIKE)  
+		if ( array_key_exists("categories", $query) &&!empty($query['categories']) ) {
+			$qb->where("album.categories", 'like', "%{$query['categories']}%" );
+		}
+		  
 
 		// 按name=created_at DESC 排序
 		if ( array_key_exists("orderby_created_at_desc", $query) &&!empty($query['orderby_created_at_desc']) ) {
@@ -711,11 +820,14 @@ class Album extends Model {
 		$albums = $qb->select( $select )->pgArray($perpage, ['album._id'], 'page', $page);
 
  		$category_ids = []; // 读取 inWhere category 数据
+ 		$series_ids = []; // 读取 inWhere series 数据
 		foreach ($albums['data'] as & $rs ) {
 			$this->format($rs);
 			
  			// for inWhere category
 			$category_ids = array_merge($category_ids, is_array($rs["categories"]) ? $rs["categories"] : [$rs["categories"]]);
+ 			// for inWhere series
+			$series_ids = array_merge($series_ids, is_array($rs["series"]) ? $rs["series"] : [$rs["series"]]);
 		}
 
  		// 读取 inWhere category 数据
@@ -723,6 +835,12 @@ class Album extends Model {
 			$category_ids = array_unique($category_ids);
 			$selectFields = $inwhereSelect["category"];
 			$albums["category"] = (new \Xpmsns\Pages\Model\Category)->getInByCategoryId($category_ids, $selectFields);
+		}
+ 		// 读取 inWhere series 数据
+		if ( !empty($inwhereSelect["series"]) && method_exists("\\Xpmsns\\Pages\\Model\\Series", 'getInBySeriesId') ) {
+			$series_ids = array_unique($series_ids);
+			$selectFields = $inwhereSelect["series"];
+			$albums["series"] = (new \Xpmsns\Pages\Model\Series)->getInBySeriesId($series_ids, $selectFields);
 		}
 	
 		// for Debug
@@ -744,6 +862,12 @@ class Album extends Model {
 		$inwhereSelect = []; $linkSelect = [];
 		foreach ($select as $idx=>$fd ) {
 			
+			// 添加本表前缀
+			if ( !strpos( $fd, ".")  ) {
+				$select[$idx] = "album." .$select[$idx];
+				continue;
+			}
+			
 			// 连接类型 (category as c )
 			if ( strpos( $fd, "c." ) === 0 || strpos("category.", $fd ) === 0  || trim($fd) == "*" ) {
 				$arr = explode( ".", $fd );
@@ -753,6 +877,18 @@ class Album extends Model {
 				if ( trim($fd) != "*" ) {
 					unset($select[$idx]);
 					array_push($linkSelect, "album.categories");
+				}
+			}
+			
+			// 连接系列 (series as s )
+			if ( strpos( $fd, "s." ) === 0 || strpos("series.", $fd ) === 0  || trim($fd) == "*" ) {
+				$arr = explode( ".", $fd );
+				$arr[1]  = !empty($arr[1]) ? $arr[1] : "*";
+				$inwhereSelect["series"][] = trim($arr[1]);
+				$inwhereSelect["series"][] = "series_id";
+				if ( trim($fd) != "*" ) {
+					unset($select[$idx]);
+					array_push($linkSelect, "album.series");
 				}
 			}
 		}
@@ -782,6 +918,7 @@ class Album extends Model {
 			"origin_url",  // 来源地址
 			"link",  // 外部链接
 			"categories",  // 类型
+			"series",  // 系列
 			"tags",  // 标签
 			"summary",  // 图集简介
 			"images",  // 图片列表
