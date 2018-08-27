@@ -211,6 +211,35 @@ $('input[name=tags').tagsInput(options);
 
 
 
+	<!-- 单图上传: 封面 (cover) 开始  -->
+	<div class="xpmse-images  " name="cover">
+		<div class="form-group " >
+			<label class="col-xs-2 control-label" for="cover">封面</label>
+			<div class="col-xs-8">
+		   		<div name="cover" class="file-uploader rounded rounded-4 push-10-t"
+					data-api='/_a/mina/uploader/upload?type=image'
+					data-title='请上传主题图'
+					data-previews=""
+					data-width="300"
+					data-height="200"
+					data-icon="fa fa-image" 
+					data-placeholder="请上传主题图" 
+					data-allow-types="image/png,image/jpg,image/jpeg,image/gif"
+					data-maxsize="20"
+					data-progress="yes"
+					data-cropable="1"
+					data-draggable="yes"
+					data-src="<?=T::v('<%=cover.url%>', $rs )?>"
+					data-path="<?=T::v('<%=cover.path%>', $rs )?>"
+					></div>
+				<div class="help-block"></div>
+			</div>
+		</div> 
+	</div><!-- END 单图上传: 封面 (cover) -->
+
+
+
+
 	<!-- 多图片组上传: 图片 (images) 开始  -->
 	<div class="xpmse-image-groups-content    draggable-column">
 		
@@ -295,35 +324,6 @@ $('input[name=tags').tagsInput(options);
 			});
 		</script>
 	</div><!-- END 多图片组上传: 图片 (images) -->
-
-
-
-
-	<!-- 单图上传: 封面 (cover) 开始  -->
-	<div class="xpmse-images  " name="cover">
-		<div class="form-group " >
-			<label class="col-xs-2 control-label" for="cover">封面</label>
-			<div class="col-xs-8">
-		   		<div name="cover" class="file-uploader rounded rounded-4 push-10-t"
-					data-api='/_a/mina/uploader/upload?type=image'
-					data-title='请上传主题图'
-					data-previews=""
-					data-width="300"
-					data-height="200"
-					data-icon="fa fa-image" 
-					data-placeholder="请上传主题图" 
-					data-allow-types="image/png,image/jpg,image/jpeg,image/gif"
-					data-maxsize="20"
-					data-progress="yes"
-					data-cropable="1"
-					data-draggable="yes"
-					data-src="<?=T::v('<%=cover.url%>', $rs )?>"
-					data-path="<?=T::v('<%=cover.path%>', $rs )?>"
-					></div>
-				<div class="help-block"></div>
-			</div>
-		</div> 
-	</div><!-- END 单图上传: 封面 (cover) -->
 
 
 

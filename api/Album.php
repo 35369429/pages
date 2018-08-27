@@ -4,7 +4,7 @@
  * 图集数据接口 
  *
  * 程序作者: XpmSE机器人
- * 最后修改: 2018-08-27 13:42:27
+ * 最后修改: 2018-08-27 18:27:38
  * 程序母版: /data/stor/private/templates/xpmsns/model/code/api/Name.php
  */
 namespace Xpmsns\Pages\Api;

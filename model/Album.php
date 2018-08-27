@@ -4,7 +4,7 @@
  * 图集数据模型
  *
  * 程序作者: XpmSE机器人
- * 最后修改: 2018-08-27 13:42:28
+ * 最后修改: 2018-08-27 18:27:39
  * 程序母版: /data/stor/private/templates/xpmsns/model/code/model/Name.php
  */
 namespace Xpmsns\Pages\Model;

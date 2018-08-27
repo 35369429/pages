@@ -4,7 +4,7 @@
  * 图集控制器
  *
  * 程序作者: XpmSE机器人
- * 最后修改: 2018-08-27 13:42:28
+ * 最后修改: 2018-08-27 18:27:39
  * 程序母版: /data/stor/private/templates/xpmsns/model/code/controller/Name.php
  */
 
@@ -189,7 +189,7 @@ class AlbumController extends \Xpmse\Loader\Controller {
 		}
 
 		if ( is_array($rs['cover']) &&  !empty($rs['cover']['local'])) {
-			$rs['cover'] = $inst->uploadCover( $album_id, $rs['cover']['local'], true);
+			$rs['cover'] = $inst->uploadCoverByAlbumId( $album_id, $rs['cover']['local'], true);
 		}
 
 		$data = [
