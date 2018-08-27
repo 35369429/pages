@@ -58,7 +58,7 @@ class SetupController extends \Xpmse\Loader\Controller {
 		$categories = [
 			["slug"=>"default", "name"=>"资讯", "fullname"=>"资讯", "isnav"=>1 ],
 			["slug"=>"video", "name"=>"视频", "fullname"=>"视频", "isnav"=>1, "link"=>"DB::RAW(CONCAT('/video/list/',`category_id`, '.html'))"],
-			["slug"=>"album", "name"=>"图集", "fullname"=>"图集", "isnav"=>1, "link"=>"DB::RAW(CONCAT('/album/list/',`category_id`, '.html'))"]
+			["slug"=>"album", "name"=>"图片", "fullname"=>"图片", "isnav"=>1, "link"=>"DB::RAW(CONCAT('/album/list/',`category_id`, '.html'))"]
 		];
 
 		$cate = new \Xpmsns\Pages\Model\Category;
@@ -113,7 +113,7 @@ class SetupController extends \Xpmse\Loader\Controller {
 			// 视频相关推荐
 			["title"=>"焦点视频","slug"=>"video_focus", "pos"=>"video_focus", "thumb_only"=>1, "video_only"=>1, "orderby"=>"publish_time", "period"=>"unlimited",  "type"=>"auto"],
 			["title"=>"视频S1","slug"=>"video_s1","pos"=>"video", "thumb_only"=>1, "video_only"=>1,  "orderby"=>"publish_time", "period"=>"unlimited",  "type"=>"auto"],
-			["title"=>"视频S2","slug"=>"video_s1","pos"=>"video", "thumb_only"=>1, "video_only"=>1,  "orderby"=>"publish_time", "period"=>"unlimited",  "type"=>"auto"],
+			["title"=>"视频S2","slug"=>"video_s2","pos"=>"video", "thumb_only"=>1, "video_only"=>1,  "orderby"=>"publish_time", "period"=>"unlimited",  "type"=>"auto"],
 			["title"=>"视频详情系列(优选)","slug"=>"video_series","pos"=>"video_detail", "thumb_only"=>1, "video_only"=>1,  "orderby"=>"publish_time", "period"=>"unlimited",  "type"=>"auto"],
 			["title"=>"视频详情最新(次选)","slug"=>"video_latest","pos"=>"video_detail", "thumb_only"=>1, "video_only"=>1,  "orderby"=>"publish_time", "period"=>"unlimited",  "type"=>"auto"],
 			["title"=>"猜你喜欢","slug"=>"video_relation","pos"=>"video_detail", "thumb_only"=>1, "video_only"=>1,  "orderby"=>"publish_time", "period"=>"unlimited",  "type"=>"auto"],
@@ -121,9 +121,9 @@ class SetupController extends \Xpmse\Loader\Controller {
 			// 图集相关推荐
 			["title"=>"焦点图集","slug"=>"album_focus", "pos"=>"album_focus", "ctype"=>"album","orderby"=>"publish_time", "period"=>"unlimited",  "type"=>"auto"],
 			["title"=>"图集S1","slug"=>"album_s1","pos"=>"album", "thumb_only"=>1, "ctype"=>"album",  "orderby"=>"publish_time", "period"=>"unlimited",  "type"=>"auto"],
-			["title"=>"图集S2","slug"=>"album_s1","pos"=>"album", "thumb_only"=>1, "ctype"=>"album",  "orderby"=>"publish_time", "period"=>"unlimited",  "type"=>"auto"],
-			["title"=>"视频详情系列(优选)","slug"=>"album_series","pos"=>"album_detail", "thumb_only"=>1, "ctype"=>"album",  "orderby"=>"publish_time", "period"=>"unlimited",  "type"=>"auto"],
-			["title"=>"视频详情最新(次选)","slug"=>"album_latest","pos"=>"album_detail", "thumb_only"=>1, "ctype"=>"album",  "orderby"=>"publish_time", "period"=>"unlimited",  "type"=>"auto"],
+			["title"=>"图集S2","slug"=>"album_s2","pos"=>"album", "thumb_only"=>1, "ctype"=>"album",  "orderby"=>"publish_time", "period"=>"unlimited",  "type"=>"auto"],
+			["title"=>"图集详情系列(优选)","slug"=>"album_series","pos"=>"album_detail", "thumb_only"=>1, "ctype"=>"album",  "orderby"=>"publish_time", "period"=>"unlimited",  "type"=>"auto"],
+			["title"=>"图集详情最新(次选)","slug"=>"album_latest","pos"=>"album_detail", "thumb_only"=>1, "ctype"=>"album",  "orderby"=>"publish_time", "period"=>"unlimited",  "type"=>"auto"],
 			["title"=>"猜你喜欢","slug"=>"album_relation","pos"=>"album_detail", "thumb_only"=>1, "ctype"=>"album",  "orderby"=>"publish_time", "period"=>"unlimited",  "type"=>"auto"],
 
 			// 侧边相关推荐
