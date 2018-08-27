@@ -4,7 +4,7 @@
  * 推荐数据模型
  *
  * 程序作者: XpmSE机器人
- * 最后修改: 2018-08-21 03:10:35
+ * 最后修改: 2018-08-27 20:06:55
  * 程序母版: /data/stor/private/templates/xpmsns/model/code/model/Name.php
  */
 namespace Xpmsns\Pages\Model;
@@ -201,7 +201,7 @@ function getContentsBy( $type,  $recommend_id,  $keywords=[], $series=[], $exclu
 					$qb->select('content.article_id as id');
 					break;
 				case 'album':
-					$qb =  Utils::getTab("xpmsns_pages_album as content", "{none}")->query()->where('status','=', 'on');;
+					$qb =  Utils::getTab("xpmsns_pages_album as content", "{none}")->query()->where('status','=', 'published');;
 					$keywordFields = ["content.tags","content.title"];
 					$qb->select('content.album_id as id');
 					break;
