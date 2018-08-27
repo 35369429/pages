@@ -57,8 +57,10 @@ class SetupController extends \Xpmse\Loader\Controller {
 		// 添加默认分类
 		$categories = [
 			["slug"=>"default", "name"=>"资讯", "fullname"=>"资讯", "isnav"=>1 ],
-			["slug"=>"video", "name"=>"视频", "fullname"=>"视频", "isnav"=>1, "link"=>"DB::RAW(CONCAT('/video/list/',`category_id`, '.html'))"]
+			["slug"=>"video", "name"=>"视频", "fullname"=>"视频", "isnav"=>1, "link"=>"DB::RAW(CONCAT('/video/list/',`category_id`, '.html'))"],
+			["slug"=>"album", "name"=>"图集", "fullname"=>"图集", "isnav"=>1, "link"=>"DB::RAW(CONCAT('/album/list/',`category_id`, '.html'))"]
 		];
+
 		$cate = new \Xpmsns\Pages\Model\Category;
 		foreach ($categories as $c ) {
 			$rs = $cate->getBy('slug', $c['slug']);
@@ -115,6 +117,14 @@ class SetupController extends \Xpmse\Loader\Controller {
 			["title"=>"视频详情系列(优选)","slug"=>"video_series","pos"=>"video_detail", "thumb_only"=>1, "video_only"=>1,  "orderby"=>"publish_time", "period"=>"unlimited",  "type"=>"auto"],
 			["title"=>"视频详情最新(次选)","slug"=>"video_latest","pos"=>"video_detail", "thumb_only"=>1, "video_only"=>1,  "orderby"=>"publish_time", "period"=>"unlimited",  "type"=>"auto"],
 			["title"=>"猜你喜欢","slug"=>"video_relation","pos"=>"video_detail", "thumb_only"=>1, "video_only"=>1,  "orderby"=>"publish_time", "period"=>"unlimited",  "type"=>"auto"],
+
+			// 图集相关推荐
+			["title"=>"焦点图集","slug"=>"album_focus", "pos"=>"album_focus", "ctype"=>"album","orderby"=>"publish_time", "period"=>"unlimited",  "type"=>"auto"],
+			["title"=>"图集S1","slug"=>"album_s1","pos"=>"album", "thumb_only"=>1, "ctype"=>"album",  "orderby"=>"publish_time", "period"=>"unlimited",  "type"=>"auto"],
+			["title"=>"图集S2","slug"=>"album_s1","pos"=>"album", "thumb_only"=>1, "ctype"=>"album",  "orderby"=>"publish_time", "period"=>"unlimited",  "type"=>"auto"],
+			["title"=>"视频详情系列(优选)","slug"=>"album_series","pos"=>"album_detail", "thumb_only"=>1, "ctype"=>"album",  "orderby"=>"publish_time", "period"=>"unlimited",  "type"=>"auto"],
+			["title"=>"视频详情最新(次选)","slug"=>"album_latest","pos"=>"album_detail", "thumb_only"=>1, "ctype"=>"album",  "orderby"=>"publish_time", "period"=>"unlimited",  "type"=>"auto"],
+			["title"=>"猜你喜欢","slug"=>"album_relation","pos"=>"album_detail", "thumb_only"=>1, "ctype"=>"album",  "orderby"=>"publish_time", "period"=>"unlimited",  "type"=>"auto"],
 
 			// 侧边相关推荐
 			["title"=>"侧边S1","slug"=>"sidebar_section_1", "pos"=>"index_sidebar", "orderby"=>"publish_time", "period"=>"unlimited",  "type"=>"auto"],
