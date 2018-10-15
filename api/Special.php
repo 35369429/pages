@@ -4,11 +4,11 @@
  * 专栏数据接口 
  *
  * 程序作者: XpmSE机器人
- * 最后修改: 2018-10-15 21:15:38
+ * 最后修改: 2018-10-15 21:23:18
  * 程序母版: /data/stor/private/templates/xpmsns/model/code/api/Name.php
  */
 namespace Xpmsns\Pages\Api;
-                
+                   
 
 use \Xpmse\Loader\App;
 use \Xpmse\Excp;
@@ -48,6 +48,7 @@ class Special extends Api {
 	 *               	["type"],  // 专栏类型 
 	 *               	["name"],  // 专栏名称 
 	 *               	["path"],  // 专栏地址 
+	 *               	["logo"],  // 专栏LOGO 
 	 *               	["category_ids"],  // 内容类目 
 	*               	["_map_category"][$category_ids[n]]["category_id"], // category.category_id
 	 *               	["recommend_ids"],  // 推荐内容 
@@ -198,6 +199,7 @@ class Special extends Api {
 	 *               $data['type'] 专栏类型
 	 *               $data['name'] 专栏名称
 	 *               $data['path'] 专栏地址
+	 *               $data['logo'] 专栏LOGO
 	 *               $data['category_ids'] 内容类目
 	 *               $data['recommend_ids'] 推荐内容
 	 *               $data['summary'] 简介
@@ -235,6 +237,7 @@ class Special extends Api {
 	 *               $data['type'] 专栏类型
 	 *               $data['name'] 专栏名称
 	 *               $data['path'] 专栏地址
+	 *               $data['logo'] 专栏LOGO
 	 *               $data['category_ids'] 内容类目
 	 *               $data['recommend_ids'] 推荐内容
 	 *               $data['summary'] 简介
@@ -341,6 +344,7 @@ class Special extends Api {
 	 *               	["type"],  // 专栏类型 
 	 *               	["name"],  // 专栏名称 
 	 *               	["path"],  // 专栏地址 
+	 *               	["logo"],  // 专栏LOGO 
 	 *               	["category_ids"],  // 内容类目 
 	*               	["category"][$category_ids[n]]["category_id"], // category.category_id
 	 *               	["recommend_ids"],  // 推荐内容 

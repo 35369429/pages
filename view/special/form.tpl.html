@@ -171,6 +171,35 @@ use \Xpmse\T;
 
 
 
+	<!-- 单图上传: LOGO (logo) 开始  -->
+	<div class="xpmse-images  " name="logo">
+		<div class="form-group " >
+			<label class="col-xs-2 control-label" for="logo">LOGO</label>
+			<div class="col-xs-8">
+		   		<div name="logo" class="file-uploader rounded rounded-4 push-10-t"
+					data-api='/_a/mina/uploader/upload?type=image'
+					data-title='请上传专栏LOGO'
+					data-previews=""
+					data-width="200"
+					data-height="200"
+					data-icon="fa fa-image" 
+					data-placeholder="请上传专栏LOGO" 
+					data-allow-types="image/png,image/jpg,image/jpeg,image/gif"
+					data-maxsize="20"
+					data-progress="yes"
+					data-cropable="1"
+					data-draggable="yes"
+					data-src="<?=T::v('<%=logo.url%>', $rs )?>"
+					data-path="<?=T::v('<%=logo.path%>', $rs )?>"
+					></div>
+				<div class="help-block"></div>
+			</div>
+		</div> 
+	</div><!-- END 单图上传: LOGO (logo) -->
+
+
+
+
 	<!-- 多图片组上传: 申请材料 (docs) 开始  -->
 	<div class="xpmse-image-groups-content    draggable-column">
 		

@@ -4,22 +4,33 @@
  * 专栏数据模型
  *
  * 程序作者: XpmSE机器人
- * 最后修改: 2018-10-15 21:15:40
+ * 最后修改: 2018-10-15 21:23:20
  * 程序母版: /data/stor/private/templates/xpmsns/model/code/model/Name.php
  */
 namespace Xpmsns\Pages\Model;
-                
+                   
 use \Xpmse\Excp;
 use \Xpmse\Model;
 use \Xpmse\Utils;
 use \Xpmse\Conf;
+use \Xpmse\Media;
 use \Xpmse\Loader\App as App;
 
 
 class Special extends Model {
 
 
+	/**
+	 * 公有媒体文件对象
+	 * @var \Xpmse\Meida
+	 */
+	private $media = null;
 
+	/**
+	 * 私有媒体文件对象
+	 * @var \Xpmse\Meida
+	 */
+	private $mediaPrivate = null;
 
 	/**
 	 * 专栏数据模型
@@ -30,6 +41,7 @@ class Special extends Model {
 
 		parent::__construct(array_merge(['prefix'=>'xpmsns_pages_'],$param));
 		$this->table('special'); // 数据表名称 xpmsns_pages_special
+		$this->media = new Media(['host'=>Utils::getHome()]);  // 公有媒体文件实例
 
 	}
 
@@ -54,6 +66,8 @@ class Special extends Model {
 		$this->putColumn( 'name', $this->type("string", ["length"=>128, "index"=>true, "null"=>false]));
 		// 专栏地址
 		$this->putColumn( 'path', $this->type("string", ["length"=>128, "unique"=>true, "null"=>false]));
+		// 专栏LOGO
+		$this->putColumn( 'logo', $this->type("text", ["json"=>true, "null"=>true]));
 		// 内容类目
 		$this->putColumn( 'category_ids', $this->type("text", ["json"=>true, "null"=>true]));
 		// 推荐内容
@@ -77,6 +91,38 @@ class Special extends Model {
 	 * @return
 	 */
 	public function format( & $rs ) {
+
+		// 格式化: 专栏LOGO
+		// 返回值: [{"url":"访问地址...", "path":"文件路径...", "origin":"原始文件访问地址..." }]
+		if ( array_key_exists('logo', $rs ) ) {
+			$rs["logo"] = !is_array($rs["logo"]) ? [] : $rs["logo"];
+			foreach ($rs["logo"] as & $file ) {
+				if ( is_array($file) && !empty($file['path']) ) {
+					$fs = $this->media->get( $file['path'] );
+					$file = array_merge( $file, $fs );
+				} else if ( is_string($file) ) {
+					$file =empty($file) ? [] : $this->media->get( $file );
+				} else {
+					$file = [];
+				}
+			}
+		}
+
+		// 格式化: 申请材料
+		// 返回值: [{"url":"访问地址...", "path":"文件路径...", "origin":"原始文件访问地址..." }]
+		if ( array_key_exists('docs', $rs ) ) {
+			$rs["docs"] = !is_array($rs["docs"]) ? [] : $rs["docs"];
+			foreach ($rs["docs"] as & $file ) {
+				if ( is_array($file) && !empty($file['path']) ) {
+					$fs = $this->media->get( $file['path'] );
+					$file = array_merge( $file, $fs );
+				} else if ( is_string($file) ) {
+					$file =empty($file) ? [] : $this->media->get( $file );
+				} else {
+					$file = [];
+				}
+			}
+		}
 
 
 		// 格式化: 状态
@@ -154,6 +200,7 @@ class Special extends Model {
 	 *          	  $rs["type"],  // 专栏类型 
 	 *          	  $rs["name"],  // 专栏名称 
 	 *          	  $rs["path"],  // 专栏地址 
+	 *          	  $rs["logo"],  // 专栏LOGO 
 	 *          	  $rs["category_ids"],  // 内容类目 
 	 *                $rs["_map_category"][$category_ids[n]]["category_id"], // category.category_id
 	 *          	  $rs["recommend_ids"],  // 推荐内容 
@@ -392,6 +439,7 @@ class Special extends Model {
 	 *          	  $rs["type"],  // 专栏类型 
 	 *          	  $rs["name"],  // 专栏名称 
 	 *          	  $rs["path"],  // 专栏地址 
+	 *          	  $rs["logo"],  // 专栏LOGO 
 	 *          	  $rs["category_ids"],  // 内容类目 
 	 *                $rs["_map_category"][$category_ids[n]]["category_id"], // category.category_id
 	 *          	  $rs["recommend_ids"],  // 推荐内容 
@@ -620,6 +668,106 @@ class Special extends Model {
 		return $this->getBySpecialId( $rs['special_id'], $select );
 	}
 
+	/**
+	 * 根据专栏ID上传专栏LOGO。
+	 * @param string $special_id 专栏ID
+	 * @param string $file_path 文件路径
+	 * @param mix $index 如果是数组，替换当前 index
+	 * @return array 已上传文件信息 {"url":"访问地址...", "path":"文件路径...", "origin":"原始文件访问地址..." }
+	 */
+	public function uploadLogoBySpecialId($special_id, $file_path, $index=null, $upload_only=false ) {
+
+		$rs = $this->getBy('special_id', $special_id, ["logo"]);
+		$paths = empty($rs["logo"]) ? [] : $rs["logo"];
+		$fs = $this->media->uploadFile( $file_path );
+		if ( $index === null ) {
+			array_push($paths, $fs['path']);
+		} else {
+			$paths[$index] = $fs['path'];
+		}
+
+		if ( $upload_only !== true ) {
+			$this->updateBy('special_id', ["special_id"=>$special_id, "logo"=>$paths] );
+		}
+
+		return $fs;
+	}
+
+	/**
+	 * 根据专栏ID上传申请材料。
+	 * @param string $special_id 专栏ID
+	 * @param string $file_path 文件路径
+	 * @param mix $index 如果是数组，替换当前 index
+	 * @return array 已上传文件信息 {"url":"访问地址...", "path":"文件路径...", "origin":"原始文件访问地址..." }
+	 */
+	public function uploadDocsBySpecialId($special_id, $file_path, $index=null, $upload_only=false ) {
+
+		$rs = $this->getBy('special_id', $special_id, ["docs"]);
+		$paths = empty($rs["docs"]) ? [] : $rs["docs"];
+		$fs = $this->media->uploadFile( $file_path );
+		if ( $index === null ) {
+			array_push($paths, $fs['path']);
+		} else {
+			$paths[$index] = $fs['path'];
+		}
+
+		if ( $upload_only !== true ) {
+			$this->updateBy('special_id', ["special_id"=>$special_id, "docs"=>$paths] );
+		}
+
+		return $fs;
+	}
+
+	/**
+	 * 根据专栏地址上传专栏LOGO。
+	 * @param string $path 专栏地址
+	 * @param string $file_path 文件路径
+	 * @param mix $index 如果是数组，替换当前 index
+	 * @return array 已上传文件信息 {"url":"访问地址...", "path":"文件路径...", "origin":"原始文件访问地址..." }
+	 */
+	public function uploadLogoByPath($path, $file_path, $index=null, $upload_only=false ) {
+
+		$rs = $this->getBy('path', $path, ["logo"]);
+		$paths = empty($rs["logo"]) ? [] : $rs["logo"];
+		$fs = $this->media->uploadFile( $file_path );
+		if ( $index === null ) {
+			array_push($paths, $fs['path']);
+		} else {
+			$paths[$index] = $fs['path'];
+		}
+
+		if ( $upload_only !== true ) {
+			$this->updateBy('path', ["path"=>$path, "logo"=>$paths] );
+		}
+
+		return $fs;
+	}
+
+	/**
+	 * 根据专栏地址上传申请材料。
+	 * @param string $path 专栏地址
+	 * @param string $file_path 文件路径
+	 * @param mix $index 如果是数组，替换当前 index
+	 * @return array 已上传文件信息 {"url":"访问地址...", "path":"文件路径...", "origin":"原始文件访问地址..." }
+	 */
+	public function uploadDocsByPath($path, $file_path, $index=null, $upload_only=false ) {
+
+		$rs = $this->getBy('path', $path, ["docs"]);
+		$paths = empty($rs["docs"]) ? [] : $rs["docs"];
+		$fs = $this->media->uploadFile( $file_path );
+		if ( $index === null ) {
+			array_push($paths, $fs['path']);
+		} else {
+			$paths[$index] = $fs['path'];
+		}
+
+		if ( $upload_only !== true ) {
+			$this->updateBy('path', ["path"=>$path, "docs"=>$paths] );
+		}
+
+		return $fs;
+	}
+
 
 	/**
 	 * 添加专栏记录
@@ -718,6 +866,7 @@ class Special extends Model {
 	 *               	["type"],  // 专栏类型 
 	 *               	["name"],  // 专栏名称 
 	 *               	["path"],  // 专栏地址 
+	 *               	["logo"],  // 专栏LOGO 
 	 *               	["category_ids"],  // 内容类目 
 	 *               	["category"][$category_ids[n]]["category_id"], // category.category_id
 	 *               	["recommend_ids"],  // 推荐内容 
@@ -1033,6 +1182,7 @@ class Special extends Model {
 			"type",  // 专栏类型
 			"name",  // 专栏名称
 			"path",  // 专栏地址
+			"logo",  // 专栏LOGO
 			"category_ids",  // 内容类目
 			"recommend_ids",  // 推荐内容
 			"summary",  // 简介

@@ -4,13 +4,14 @@
  * 专栏控制器
  *
  * 程序作者: XpmSE机器人
- * 最后修改: 2018-10-15 21:15:40
+ * 最后修改: 2018-10-15 21:23:20
  * 程序母版: /data/stor/private/templates/xpmsns/model/code/controller/Name.php
  */
 
 use \Xpmse\Loader\App;
 use \Xpmse\Excp;
 use \Xpmse\Utils;
+use \Xpmse\Media;
 
 class SpecialController extends \Xpmse\Loader\Controller {
 
@@ -173,6 +174,34 @@ class SpecialController extends \Xpmse\Loader\Controller {
 		unset($rs['path']);
 
 		// 复制图片
+		if ( is_array($rs['logo'])) {
+
+			$resp = [];
+			foreach ($rs['logo'] as $idx=>$fs ) {
+
+				if ( empty($fs['local']) ) {
+					continue;
+				}
+				$resp[] = $inst->uploadLogoBySpecialId( $special_id, $fs['local'], $idx, true);
+			}
+
+			$rs['logo'] = $resp;
+		}
+
+		if ( is_array($rs['docs'])) {
+
+			$resp = [];
+			foreach ($rs['docs'] as $idx=>$fs ) {
+
+				if ( empty($fs['local']) ) {
+					continue;
+				}
+				$resp[] = $inst->uploadDocsBySpecialId( $special_id, $fs['local'], $idx, true);
+			}
+
+			$rs['docs'] = $resp;
+		}
+
 
 		$data = [
 			'action_name' =>  $action_name,
