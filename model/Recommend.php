@@ -24,13 +24,13 @@ class Recommend extends Model {
 	 * 公有媒体文件对象
 	 * @var \Xpmse\Meida
 	 */
-	private $media = null;
+	protected $media = null;
 
 	/**
 	 * 私有媒体文件对象
 	 * @var \Xpmse\Meida
 	 */
-	private $mediaPrivate = null;
+	protected $mediaPrivate = null;
 
 	/**
 	 * 推荐数据模型
