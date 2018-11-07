@@ -190,6 +190,165 @@ class Article extends Model {
 	}
 
 
+	function isExists( $title, $url="", $outer_id="") {
+		$qb = $this->query();
+		$qb->where("title", "=", $title);
+
+		if ( !empty($outer_id) ) {
+			$qb->orWhere("outer_id", "=", $outer_id);
+		}
+
+		if ( !empty($url) ) {
+			$qb->orWhere("origin_url", "=", $url);
+		}
+				   
+		$rows= $qb->limit(1)->select("article_id")->get()->toArray();
+		if ( count($rows) == 0) {
+			return false;
+		}
+
+		return current($rows)["article_id"];
+	}
+
+
+	/**
+	 * 更新 Spider Data
+	 * @param  array $data spider hook 返回数值
+	 *    "content_id" 正文ID
+	 *    "source_name" 内容原名称
+	 *    "source_site" 内容源网址
+	 *    "content" 正文 HTML
+	 *    "url"     来源网站
+	 *    "pubtime" 发布时间
+	 *    "title"   标题
+	 *    "summary" 摘要
+	 *    "author"  作者
+	 *    "keywords" 关键词
+	 *    "cover"    封面图片 base64 图片 blob
+	 *    "images"   图片列表 url : base64 图片 blob
+	 *    "__params" 设定的参数表
+	 *    "__event"  Spider时间信息
+	 *
+	 * @return [type]       [description]
+	 */
+	function spiderUpdate($data) {
+
+		// 排重
+		if ( $this->isExists( $data["title"], $data["url"], $data["content_id"]) ) {
+			return ["code"=>0, "message"=>"article is existed"];
+		}
+
+		// Content 
+		
+		if ( empty($data["content"]) ) {
+			throw new Excp("未找到内容正文，取消存储", 404);
+		}
+
+		// 不解析content
+		$data["parse_content"] = "nope";
+
+		// outer id
+		$data["outer_id"] = $data["content_id"];
+
+		// publish_time
+		$publish_time = date("Y-m-d H:i:s");
+		if ( !empty($data["pubtime"]) ) {
+			if ( is_numeric($data["pubtime"])) {
+				$publish_time =date("Y-m-d H:i:s", $data["pubtime"] );	
+			} else {
+				$publish_time =date("Y-m-d H:i:s", strtotime($data["pubtime"]));
+			}			
+		}
+
+		$data["publish_time"] = $publish_time;
+
+		// cover
+		if ( !empty($data["cover"]) ) {
+			$cover_blob = base64_decode($data["cover"]);
+			$cover_name = time() . ".png";
+			if ( !empty($data["content_id"]) ) {
+				$cover_name = $data["content_id"] . ".png";
+			}
+			try {
+				$cover_info = $this->media->appendFile( $cover_name, $cover_blob, true);
+				$data["cover"] = $cover_info["path"];
+			}catch( Excp $e ) {}
+		}
+
+
+		// images 
+		if ( is_array( $data["images"]) ) {
+
+			$images = [];
+			foreach ($data["images"] as $img ) {
+				$url = $img["url"];
+				$blob = base64_decode($img["blob"]);
+				$name = time();
+				if ( !empty($data["content_id"]) ) {
+					$name = $data["content_id"];
+				}
+				$name = md5( $name . $url ) . ".png";
+				try {
+					$uri = $this->media->appendFile( $name, $blob, true);
+					$data["content"] = str_replace($url, $uri["url"], $data["content"]);
+					array_push($images, [
+						"url"=>$uri["url"], 
+						"origin"=>$uri["origin"], 
+						"path" => $uri["path"]
+					]);
+				}catch( Excp $e ) {}
+			}
+
+			$data["images"] = $images;
+		}
+
+
+		// delta 
+		$this->delta_render->loadByHTML($data["content"]);
+		$data["delta"] = $this->delta_render->delta();
+
+		// 设定来源
+		$data["origin"] = $data["source_name"];
+		$data["origin_url"] = $data["url"];
+
+
+		// 设定分类
+		if ( !empty($data["__params"]["category"]) ) {
+			$data["category"] = $data["__params"]["category"];
+		}
+		if ( !empty($data["__params"]["category_names"]) ) {
+			$data["category_names"] = $data["__params"]["category_names"];
+		}
+
+		$data['status'] = ARTICLE_PUBLISHED;
+		$this->save($data);
+		return ["code"=>0, "message"=>"saved"];
+
+		// $url = $data['url'];
+		// if ( empty($url) ) {
+		// 	throw new Excp("请提供目标网页地址", 404, ['data'=>$data]);
+		// }
+
+		// $spider = new Spider(['host'=>Utils::getHome(Utils::getLocation())]);
+		// $page = $spider->crawl($url);
+		// $data = array_merge($page, $data);
+
+		// if ( empty($data['category']) ) {
+		// 	$cate = new Category();
+		// 	$data['category'] = $cate->getVar('category_id', "WHERE slug='default' LIMIT 1");
+		// }
+
+		// if( !empty($data['publish_date']) ) {
+		// 	$time = strtotime($data['publish_date']);
+		// 	$data['publish_time'] = date('Y-m-d H:i:s', $time);
+		// 	unset($data['publish_date']);
+		// }
+
+		// if ( empty($data['status']) ) {
+		// 	$data['status'] = ARTICLE_UNPUBLISHED;
+		// }
+	}
+
 
 	/**
 	 * (已发布)文章查询
@@ -761,7 +920,7 @@ class Article extends Model {
 		}
 
 
-		if ( !empty($data['delta']) ) {
+		if ( !empty($data['delta']) && empty($data["parse_content"]) ) {
 			
 			$this->delta_render->load($data['delta']);
 

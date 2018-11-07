@@ -21,9 +21,8 @@ class Article extends Api {
 	 * 初始化
 	 * @param array $param [description]
 	 */
-	function __construct() {
-
-		parent::__construct();
+	function __construct( $option = [] ) {
+		parent::__construct( $option );
 		$this->allowMethod('get', ["PHP",'GET'])
 		     ->allowQuery('get',  ['article_id', 'select'])
 		     ->allowMethod('search', ["PHP",'GET'])
@@ -43,6 +42,16 @@ class Article extends Api {
 		     ]);
 	}
 
+	protected function spiderUpdate( $data ) {
+		
+		$appid = $_SERVER["HTTP_AUTHORIZATION_APPID"];
+		$secret = $_SERVER["HTTP_AUTHORIZATION_SECRET"];
+		$params = $this->params["__params"];
+		$this->authSecret($appid, $secret);
+
+		$article = new \Xpmsns\Pages\Model\Article;
+		return $article->spiderUpdate( $this->params );
+	}
 
 
 	/**
