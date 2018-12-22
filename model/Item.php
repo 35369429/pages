@@ -4,7 +4,7 @@
  * 单品数据模型
  *
  * 程序作者: XpmSE机器人
- * 最后修改: 2018-12-22 19:42:26
+ * 最后修改: 2018-12-22 19:43:45
  * 程序母版: /data/stor/private/templates/xpmsns/model/code/model/Name.php
  */
 namespace Xpmsns\Pages\Model;
@@ -254,7 +254,7 @@ class Item extends Model {
 	 * @param array   $select       选取字段，默认选取所有
 	 * @return array 单品记录MAP {"item_id1":{"key":"value",...}...}
 	 */
-	public function getInByItemId($item_ids, $select=["item.item_id","goods.name","item.name","item.available_sum","item.status","item.created_at","item.updated_at"], $order=["item.created_at"=>"desc"] ) {
+	public function getInByItemId($item_ids, $select=["item.item_id","goods.name","item.name","item.available_sum","item.created_at","item.updated_at","item.status"], $order=["item.created_at"=>"desc"] ) {
 		
 		if ( is_string($select) ) {
 			$select = explode(',', $select);
@@ -363,7 +363,7 @@ class Item extends Model {
 	 * @param array   $order   排序方式 ["field"=>"asc", "field2"=>"desc"...]
 	 * @return array 单品记录数组 [{"key":"value",...}...]
 	 */
-	public function top( $limit=100, $select=["item.item_id","goods.name","item.name","item.available_sum","item.status","item.created_at","item.updated_at"], $order=["item.created_at"=>"desc"] ) {
+	public function top( $limit=100, $select=["item.item_id","goods.name","item.name","item.available_sum","item.created_at","item.updated_at","item.status"], $order=["item.created_at"=>"desc"] ) {
 
 		if ( is_string($select) ) {
 			$select = explode(',', $select);
@@ -408,7 +408,7 @@ class Item extends Model {
 	/**
 	 * 按条件检索单品记录
 	 * @param  array  $query
-	 *         	      $query['select'] 选取字段，默认选择 ["item.item_id","goods.name","item.name","item.available_sum","item.status","item.created_at","item.updated_at"]
+	 *         	      $query['select'] 选取字段，默认选择 ["item.item_id","goods.name","item.name","item.available_sum","item.created_at","item.updated_at","item.status"]
 	 *         	      $query['page'] 页码，默认为 1
 	 *         	      $query['perpage'] 每页显示记录数，默认为 20
 	 *			      $query["keywords"] 按关键词查询
@@ -473,7 +473,7 @@ class Item extends Model {
 	 */
 	public function search( $query = [] ) {
 
-		$select = empty($query['select']) ? ["item.item_id","goods.name","item.name","item.available_sum","item.status","item.created_at","item.updated_at"] : $query['select'];
+		$select = empty($query['select']) ? ["item.item_id","goods.name","item.name","item.available_sum","item.created_at","item.updated_at","item.status"] : $query['select'];
 		if ( is_string($select) ) {
 			$select = explode(',', $select);
 		}

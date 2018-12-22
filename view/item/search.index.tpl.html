@@ -144,8 +144,8 @@ use \Xpmse\T;
 								<th class="font-w300"> 商品 </th>
 								<th class="font-w300"> 名称 </th>
 								<th class="font-w300"> 可售数量 </th>
-								<th class="font-w300"> 状态 </th>
 								<th class="font-w300"> 更新时间 </th>
+								<th class="font-w300"> 状态 </th>
 							</tr>
 						</thead>
 
@@ -166,10 +166,10 @@ use \Xpmse\T;
 									<?php $v=null; $v=T::s("{{available_sum}}", $rs ); echo empty($v) ? T::s("", $rs ) : $v; ?>
 								</td>
 								<td class="font-w300">
-									<span class="text-<?=$rs['_status']['style']?>"><?=$rs['_status']['name'] ? $rs['_status']['name']  : $rs['status'] ?></span>
+									<?php $v=null; $v=T::s("{{updated_at ? updated_at : created_at }}", $rs ); echo empty($v) ? T::s("", $rs ) : $v; ?>
 								</td>
 								<td class="font-w300">
-									<?php $v=null; $v=T::s("{{updated_at ? updated_at : created_at }}", $rs ); echo empty($v) ? T::s("", $rs ) : $v; ?>
+									<span class="text-<?=$rs['_status']['style']?>"><?=$rs['_status']['name'] ? $rs['_status']['name']  : $rs['status'] ?></span>
 								</td>
 							</tr>
 							<?php endforeach;?>

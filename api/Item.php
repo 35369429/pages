@@ -4,7 +4,7 @@
  * 单品数据接口 
  *
  * 程序作者: XpmSE机器人
- * 最后修改: 2018-12-22 19:42:25
+ * 最后修改: 2018-12-22 19:43:44
  * 程序母版: /data/stor/private/templates/xpmsns/model/code/api/Name.php
  */
 namespace Xpmsns\Pages\Api;
