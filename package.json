@@ -74,6 +74,17 @@
 		"permission": "boss,admin,manager,user",
 		"order":9999
 	},{
+		"slug":"xpmsns/pages/item/index",
+		"name":"单品",
+		"icon":{
+			"default":"/static/icons/item.svg"
+		},
+		"icontype": "img",
+		"linktype":"i",
+		"link":"{item,index}",
+		"permission": "boss,admin,manager,user",
+		"order":9999
+	},{
 		"slug":"xpmsns/pages/category/index",
 		"name":"栏目",
 		"icon":{
