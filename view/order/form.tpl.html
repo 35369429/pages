@@ -1,0 +1,718 @@
+<?php 
+use \Xpmse\Loader\App; 
+use \Xpmse\Utils;
+use \Xpmse\T;
+?>
+<style type="text/css">
+	.form {
+		padding-top: 60px;
+		padding-bottom: 60px;
+	}
+</style>
+
+
+<!-- Page Content -->
+<div class="content"> 
+	<div class="block block-bordered " >
+		<div class="block-header remove-margin" >
+
+			<h3 class="block-title" >
+				<a href="<?=App::R('order', 'index')?>" class="text-default">
+                    <i class="fa fa-arrow-circle-o-left"></i> 
+                    订单列表 
+                </a> / <?=$action_name?> 
+			</h3>
+			
+		</div> <!-- END block-header -->
+
+		<div class="block-content form order-content js-draggable-items" >
+
+			<form class="form-horizontal order-form form-lg" action= '<?=App::NR("order", "save");?>' >
+
+				<!-- 隐藏域 -->
+				<input type="hidden" name="order_id" value="<?=$rs['order_id']?>" >
+	
+	<!-- 单行文本: 外部ID (outer_id) 开始  -->
+	<div class="form-group   ">
+		<label class="col-xs-2 control-label" for="outer_id">外部ID</label>
+		<div class="col-xs-8">
+			<input class="form-control input-lg"  
+				type="text" 
+				id="outer_id" name="outer_id" 
+				placeholder=""  
+				value="<?=T::v('<%=outer_id | e(\'html\')%>', $rs )?>" /> 
+			<div class="help-block"></div>
+		</div>
+	</div><!-- END 单行文本: 外部ID (outer_id) -->
+
+
+
+ 
+	<!-- 下拉选择(动态数据): 商品清单 (goods_ids) 开始  -->
+	<div class="form-group   ">
+		<label class="col-xs-2 control-label" for="goods_ids">商品清单</label>
+		<div class="col-xs-8"> 
+			<select class="js-select2 form-control input-lg" style="width: 100%;" 
+					id="goods_ids" name="goods_ids" 
+					data-language="zh-CN"
+					data-param-cancelable="1"
+					data-param-cancel="取消选择"
+					data-param-model="\Xpmsns\Pages\Model\Goods"
+					data-param-table="goods"
+					data-param-fields="goods_id,name"
+					data-param-style="{{name}}({{goods_id}})"
+					data-param-option="goods_id"
+					data-param-default=""
+					data-ajax-url="/_a/mina/helper/select2?method=get"
+					data-preload-url="/_a/mina/helper/select2?method=get&preload=<?=T::v('<%=goods_ids | join(\',\')%>', $rs )?>"
+					data-placeholder=""  multiple data-select2-multiple=1  >
+				<option></option>
+			</select>
+			<div class="help-block"></div>
+		</div>
+		 
+		<script type="text/javascript">
+		$(function(){
+			// 取消选择
+			$('select[name=goods_ids]').on("select2:select", function( e ){
+				var data = e.params.data || {};
+				id = data.id || '';
+				if ( '__cancel' ==  data.id ) {
+					$(this).select2("val", "");
+				}
+			});
+		});
+		</script>
+		 
+	</div><!-- END 下拉选择(动态数据): 商品清单 (goods_ids) -->
+
+
+
+ 
+	<!-- 下拉选择(动态数据): 单品清单 (items_ids) 开始  -->
+	<div class="form-group   ">
+		<label class="col-xs-2 control-label" for="items_ids">单品清单</label>
+		<div class="col-xs-8"> 
+			<select class="js-select2 form-control input-lg" style="width: 100%;" 
+					id="items_ids" name="items_ids" 
+					data-language="zh-CN"
+					data-param-cancelable="1"
+					data-param-cancel="取消选择"
+					data-param-model="\Xpmsns\Pages\Model\Item"
+					data-param-table="item"
+					data-param-fields="item_id,name"
+					data-param-style="{{name}}({{item_id}})"
+					data-param-option="item_id"
+					data-param-default=""
+					data-ajax-url="/_a/mina/helper/select2?method=get"
+					data-preload-url="/_a/mina/helper/select2?method=get&preload=<?=T::v('<%=items_ids | join(\',\')%>', $rs )?>"
+					data-placeholder=""  multiple data-select2-multiple=1  >
+				<option></option>
+			</select>
+			<div class="help-block"></div>
+		</div>
+		 
+		<script type="text/javascript">
+		$(function(){
+			// 取消选择
+			$('select[name=items_ids]').on("select2:select", function( e ){
+				var data = e.params.data || {};
+				id = data.id || '';
+				if ( '__cancel' ==  data.id ) {
+					$(this).select2("val", "");
+				}
+			});
+		});
+		</script>
+		 
+	</div><!-- END 下拉选择(动态数据): 单品清单 (items_ids) -->
+
+	<!-- 单行文本: 订单金额 (total) 开始  -->
+	<div class="form-group   ">
+		<label class="col-xs-2 control-label" for="total">订单金额</label>
+		<div class="col-xs-8">
+			<input class="form-control input-lg"  
+				type="text" 
+				id="total" name="total" 
+				placeholder=""  
+				value="<?=T::v('<%=total | e(\'html\')%>', $rs )?>" /> 
+			<div class="help-block"></div>
+		</div>
+	</div><!-- END 单行文本: 订单金额 (total) -->
+
+	<!-- 单行文本: 运费 (freight) 开始  -->
+	<div class="form-group   ">
+		<label class="col-xs-2 control-label" for="freight">运费</label>
+		<div class="col-xs-8">
+			<input class="form-control input-lg"  
+				type="text" 
+				id="freight" name="freight" 
+				placeholder=""  
+				value="<?=T::v('<%=freight | e(\'html\')%>', $rs )?>" /> 
+			<div class="help-block"></div>
+		</div>
+	</div><!-- END 单行文本: 运费 (freight) -->
+
+	<!-- 单行文本: 实付金额 (total_cost) 开始  -->
+	<div class="form-group   ">
+		<label class="col-xs-2 control-label" for="total_cost">实付金额</label>
+		<div class="col-xs-8">
+			<input class="form-control input-lg"  
+				type="text" 
+				id="total_cost" name="total_cost" 
+				placeholder="请输入实付金额"  
+				value="<?=T::v('<%=total_cost | e(\'html\')%>', $rs )?>" /> 
+			<div class="help-block">单位: 分</div>
+		</div>
+	</div><!-- END 单行文本: 实付金额 (total_cost) -->
+
+	<!-- 单行文本: 实付运费 (freight_cost) 开始  -->
+	<div class="form-group   ">
+		<label class="col-xs-2 control-label" for="freight_cost">实付运费</label>
+		<div class="col-xs-8">
+			<input class="form-control input-lg"  
+				type="text" 
+				id="freight_cost" name="freight_cost" 
+				placeholder=""  
+				value="<?=T::v('<%=freight_cost | e(\'html\')%>', $rs )?>" /> 
+			<div class="help-block">单位: 分</div>
+		</div>
+	</div><!-- END 单行文本: 实付运费 (freight_cost) -->
+
+	<!-- 单行文本: 消费货币 (money_cost) 开始  -->
+	<div class="form-group   ">
+		<label class="col-xs-2 control-label" for="money_cost">消费货币</label>
+		<div class="col-xs-8">
+			<input class="form-control input-lg"  
+				type="text" 
+				id="money_cost" name="money_cost" 
+				placeholder="请输入消费金货币"  
+				value="<?=T::v('<%=money_cost | e(\'html\')%>', $rs )?>" /> 
+			<div class="help-block">单位: 分</div>
+		</div>
+	</div><!-- END 单行文本: 消费货币 (money_cost) -->
+
+	<!-- 单行文本: 消费积分 (coin_cost) 开始  -->
+	<div class="form-group   ">
+		<label class="col-xs-2 control-label" for="coin_cost">消费积分</label>
+		<div class="col-xs-8">
+			<input class="form-control input-lg"  
+				type="text" 
+				id="coin_cost" name="coin_cost" 
+				placeholder="请输入消费积分"  
+				value="<?=T::v('<%=coin_cost | e(\'html\')%>', $rs )?>" /> 
+			<div class="help-block">单位: 个</div>
+		</div>
+	</div><!-- END 单行文本: 消费积分 (coin_cost) -->
+
+	<!-- 单行文本: 消费代币 (bitcoin_cost) 开始  -->
+	<div class="form-group   ">
+		<label class="col-xs-2 control-label" for="bitcoin_cost">消费代币</label>
+		<div class="col-xs-8">
+			<input class="form-control input-lg"  
+				type="text" 
+				id="bitcoin_cost" name="bitcoin_cost" 
+				placeholder="请输入消费代币"  
+				value="<?=T::v('<%=bitcoin_cost | e(\'html\')%>', $rs )?>" /> 
+			<div class="help-block">单位: eth/btc</div>
+		</div>
+	</div><!-- END 单行文本: 消费代币 (bitcoin_cost) -->
+
+
+
+	<!-- 文本域: 支付明细 (payment_detail) 开始  -->
+	<div class="form-group   ">
+		<label class="col-xs-2 control-label" for="payment_detail">支付明细</label>
+		<div class="col-xs-8">
+			<textarea class="form-control input-lg"  
+				type="text" 
+				id="payment_detail" name="payment_detail" rows=""
+				placeholder=""><?=T::v('<%=payment_detail  | e(\'html\')%>', $rs )?></textarea> 
+			<div class="help-block">货币单位/代币/积分换算比例</div>
+		</div>
+	</div><!-- END 文本域: 支付明细 (payment_detail) -->
+
+
+
+ 
+	<!-- 下拉选择(动态数据): 用户 (user_id) 开始  -->
+	<div class="form-group   ">
+		<label class="col-xs-2 control-label" for="user_id">用户</label>
+		<div class="col-xs-8"> 
+			<select class="js-select2 form-control input-lg" style="width: 100%;" 
+					id="user_id" name="user_id" 
+					data-language="zh-CN"
+					data-param-cancelable="1"
+					data-param-cancel="取消选择"
+					data-param-model="\Xpmsns\User\Model\User"
+					data-param-table="user"
+					data-param-fields="user_id,name,nickname,mobile"
+					data-param-style="{{name ? name: nickname}} ( ID:{{user_id}}  手机: {{mobile}} )"
+					data-param-option="user_id"
+					data-param-default=""
+					data-ajax-url="/_a/mina/helper/select2?method=get"
+					data-preload-url="/_a/mina/helper/select2?method=get&preload=<?=T::v('<%=user_id | join(\',\')%>', $rs )?>"
+					data-placeholder=""  >
+				<option></option>
+			</select>
+			<div class="help-block"></div>
+		</div>
+		 
+		<script type="text/javascript">
+		$(function(){
+			// 取消选择
+			$('select[name=user_id]').on("select2:select", function( e ){
+				var data = e.params.data || {};
+				id = data.id || '';
+				if ( '__cancel' ==  data.id ) {
+					$(this).select2("val", "");
+				}
+			});
+		});
+		</script>
+		 
+	</div><!-- END 下拉选择(动态数据): 用户 (user_id) -->
+
+	<!-- 单行文本: 收件人 (name) 开始  -->
+	<div class="form-group   ">
+		<label class="col-xs-2 control-label" for="name">收件人</label>
+		<div class="col-xs-8">
+			<input class="form-control input-lg"  
+				type="text" 
+				id="name" name="name" 
+				placeholder="请填写收件人信息"  
+				value="<?=T::v('<%=name | e(\'html\')%>', $rs )?>" /> 
+			<div class="help-block"></div>
+		</div>
+	</div><!-- END 单行文本: 收件人 (name) -->
+
+	<!-- 单行文本: 国家地区 (area) 开始  -->
+	<div class="form-group   ">
+		<label class="col-xs-2 control-label" for="area">国家地区</label>
+		<div class="col-xs-8">
+			<input class="form-control input-lg"  
+				type="text" 
+				id="area" name="area" 
+				placeholder="请输入国家/地区"  
+				value="<?=T::v('<%=area | e(\'html\')%>', $rs )?>" /> 
+			<div class="help-block"></div>
+		</div>
+	</div><!-- END 单行文本: 国家地区 (area) -->
+
+	<!-- 单行文本: 省份 (prvn) 开始  -->
+	<div class="form-group   ">
+		<label class="col-xs-2 control-label" for="prvn">省份</label>
+		<div class="col-xs-8">
+			<input class="form-control input-lg"  
+				type="text" 
+				id="prvn" name="prvn" 
+				placeholder="请输入省份名称"  
+				value="<?=T::v('<%=prvn | e(\'html\')%>', $rs )?>" /> 
+			<div class="help-block"></div>
+		</div>
+	</div><!-- END 单行文本: 省份 (prvn) -->
+
+	<!-- 单行文本: 城市 (city) 开始  -->
+	<div class="form-group   ">
+		<label class="col-xs-2 control-label" for="city">城市</label>
+		<div class="col-xs-8">
+			<input class="form-control input-lg"  
+				type="text" 
+				id="city" name="city" 
+				placeholder="请输入城市名称"  
+				value="<?=T::v('<%=city | e(\'html\')%>', $rs )?>" /> 
+			<div class="help-block"></div>
+		</div>
+	</div><!-- END 单行文本: 城市 (city) -->
+
+	<!-- 单行文本: 区县 (town) 开始  -->
+	<div class="form-group   ">
+		<label class="col-xs-2 control-label" for="town">区县</label>
+		<div class="col-xs-8">
+			<input class="form-control input-lg"  
+				type="text" 
+				id="town" name="town" 
+				placeholder="请输入区县名称"  
+				value="<?=T::v('<%=town | e(\'html\')%>', $rs )?>" /> 
+			<div class="help-block"></div>
+		</div>
+	</div><!-- END 单行文本: 区县 (town) -->
+
+	<!-- 单行文本: 邮编 (zipcode) 开始  -->
+	<div class="form-group   ">
+		<label class="col-xs-2 control-label" for="zipcode">邮编</label>
+		<div class="col-xs-8">
+			<input class="form-control input-lg"  
+				type="text" 
+				id="zipcode" name="zipcode" 
+				placeholder="请输入邮编"  
+				value="<?=T::v('<%=zipcode | e(\'html\')%>', $rs )?>" /> 
+			<div class="help-block"></div>
+		</div>
+	</div><!-- END 单行文本: 邮编 (zipcode) -->
+
+	<!-- 单行文本: 收货地址 (address) 开始  -->
+	<div class="form-group   ">
+		<label class="col-xs-2 control-label" for="address">收货地址</label>
+		<div class="col-xs-8">
+			<input class="form-control input-lg"  
+				type="text" 
+				id="address" name="address" 
+				placeholder="请填写收货地址"  
+				value="<?=T::v('<%=address | e(\'html\')%>', $rs )?>" /> 
+			<div class="help-block"></div>
+		</div>
+	</div><!-- END 单行文本: 收货地址 (address) -->
+
+	<!-- 单行文本: 联系电话 (mobile) 开始  -->
+	<div class="form-group   ">
+		<label class="col-xs-2 control-label" for="mobile">联系电话</label>
+		<div class="col-xs-8">
+			<input class="form-control input-lg"  
+				type="text" 
+				id="mobile" name="mobile" 
+				placeholder="请填写联系电话"  
+				value="<?=T::v('<%=mobile | e(\'html\')%>', $rs )?>" /> 
+			<div class="help-block"></div>
+		</div>
+	</div><!-- END 单行文本: 联系电话 (mobile) -->
+
+
+	<!-- 单选框: 付款方式 (payment) 开始  -->
+	<div class="form-group   ">
+		<label class="col-xs-2 control-label" for="payment">付款方式</label>
+		<div class="col-xs-8">
+			<?php if (is_null($rs["payment"])) { $rs["payment"] = "wechat"; } ?>
+<label class="css-input  css-radio css-radio-lg css-radio-primary push-10-r"><input  type="radio" name="payment" data-uncheck-value="alipay" value="alipay" <?=("alipay" == $rs["payment"]) ? "checked" : ""?> > <span></span> 支付宝</label>
+<label class="css-input  css-radio css-radio-lg css-radio-primary push-10-r"><input  type="radio" name="payment" data-uncheck-value="wechat" value="wechat" <?=("wechat" == $rs["payment"]) ? "checked" : ""?> > <span></span> 微信</label>
+<label class="css-input  css-radio css-radio-lg css-radio-primary push-10-r"><input  type="radio" name="payment" data-uncheck-value="coin" value="coin" <?=("coin" == $rs["payment"]) ? "checked" : ""?> > <span></span> 积分</label>
+			<div class="help-block"></div>
+		</div>
+	</div><!-- END 单选框: 付款方式 (payment) 开始  -->
+
+	<!-- 单行文本: 快递公司 (shipping_id) 开始  -->
+	<div class="form-group   ">
+		<label class="col-xs-2 control-label" for="shipping_id">快递公司</label>
+		<div class="col-xs-8">
+			<input class="form-control input-lg"  
+				type="text" 
+				id="shipping_id" name="shipping_id" 
+				placeholder="请选择快递公司"  
+				value="<?=T::v('<%=shipping_id | e(\'html\')%>', $rs )?>" /> 
+			<div class="help-block"></div>
+		</div>
+	</div><!-- END 单行文本: 快递公司 (shipping_id) -->
+
+	<!-- 单行文本: 物流单号 (tracking_no) 开始  -->
+	<div class="form-group   ">
+		<label class="col-xs-2 control-label" for="tracking_no">物流单号</label>
+		<div class="col-xs-8">
+			<input class="form-control input-lg"  
+				type="text" 
+				id="tracking_no" name="tracking_no" 
+				placeholder="请输入物流单号"  
+				value="<?=T::v('<%=tracking_no | e(\'html\')%>', $rs )?>" /> 
+			<div class="help-block"></div>
+		</div>
+	</div><!-- END 单行文本: 物流单号 (tracking_no) -->
+
+	<!-- 单行文本: 物流成本 (freight_in) 开始  -->
+	<div class="form-group   ">
+		<label class="col-xs-2 control-label" for="freight_in">物流成本</label>
+		<div class="col-xs-8">
+			<input class="form-control input-lg"  
+				type="text" 
+				id="freight_in" name="freight_in" 
+				placeholder=""  
+				value="<?=T::v('<%=freight_in | e(\'html\')%>', $rs )?>" /> 
+			<div class="help-block"></div>
+		</div>
+	</div><!-- END 单行文本: 物流成本 (freight_in) -->
+
+
+	<!-- 单选框: 订单状态 (status) 开始  -->
+	<div class="form-group   ">
+		<label class="col-xs-2 control-label" for="status">订单状态</label>
+		<div class="col-xs-8">
+			<?php if (is_null($rs["status"])) { $rs["status"] = "wait_pay"; } ?>
+<label class="css-input  css-radio css-radio-lg css-radio-primary push-10-r"><input  type="radio" name="status" data-uncheck-value="wait_pay" value="wait_pay" <?=("wait_pay" == $rs["status"]) ? "checked" : ""?> > <span></span> 待支付</label>
+<label class="css-input  css-radio css-radio-lg css-radio-primary push-10-r"><input  type="radio" name="status" data-uncheck-value="pay_complete" value="pay_complete" <?=("pay_complete" == $rs["status"]) ? "checked" : ""?> > <span></span> 已付款</label>
+<label class="css-input  css-radio css-radio-lg css-radio-primary push-10-r"><input  type="radio" name="status" data-uncheck-value="wait_confirm" value="wait_confirm" <?=("wait_confirm" == $rs["status"]) ? "checked" : ""?> > <span></span> 待确认</label>
+<label class="css-input  css-radio css-radio-lg css-radio-primary push-10-r"><input  type="radio" name="status" data-uncheck-value="wait_shipping" value="wait_shipping" <?=("wait_shipping" == $rs["status"]) ? "checked" : ""?> > <span></span> 待发货</label>
+<label class="css-input  css-radio css-radio-lg css-radio-primary push-10-r"><input  type="radio" name="status" data-uncheck-value="shiping" value="shiping" <?=("shiping" == $rs["status"]) ? "checked" : ""?> > <span></span> 已发货</label>
+<label class="css-input  css-radio css-radio-lg css-radio-primary push-10-r"><input  type="radio" name="status" data-uncheck-value="wait_comment" value="wait_comment" <?=("wait_comment" == $rs["status"]) ? "checked" : ""?> > <span></span> 待评价</label>
+<label class="css-input  css-radio css-radio-lg css-radio-primary push-10-r"><input  type="radio" name="status" data-uncheck-value="cancel" value="cancel" <?=("cancel" == $rs["status"]) ? "checked" : ""?> > <span></span> 已取消</label>
+<label class="css-input  css-radio css-radio-lg css-radio-primary push-10-r"><input  type="radio" name="status" data-uncheck-value="apply_refund" value="apply_refund" <?=("apply_refund" == $rs["status"]) ? "checked" : ""?> > <span></span> 申请退款</label>
+<label class="css-input  css-radio css-radio-lg css-radio-primary push-10-r"><input  type="radio" name="status" data-uncheck-value="refunding" value="refunding" <?=("refunding" == $rs["status"]) ? "checked" : ""?> > <span></span> 退款中</label>
+<label class="css-input  css-radio css-radio-lg css-radio-primary push-10-r"><input  type="radio" name="status" data-uncheck-value="refund_complete" value="refund_complete" <?=("refund_complete" == $rs["status"]) ? "checked" : ""?> > <span></span> 退款完毕</label>
+<label class="css-input  css-radio css-radio-lg css-radio-primary push-10-r"><input  type="radio" name="status" data-uncheck-value="apply_exchange" value="apply_exchange" <?=("apply_exchange" == $rs["status"]) ? "checked" : ""?> > <span></span> 申请换货</label>
+<label class="css-input  css-radio css-radio-lg css-radio-primary push-10-r"><input  type="radio" name="status" data-uncheck-value="exchanging" value="exchanging" <?=("exchanging" == $rs["status"]) ? "checked" : ""?> > <span></span> 换货中</label>
+<label class="css-input  css-radio css-radio-lg css-radio-primary push-10-r"><input  type="radio" name="status" data-uncheck-value="exchange_complete" value="exchange_complete" <?=("exchange_complete" == $rs["status"]) ? "checked" : ""?> > <span></span> 换货完毕</label>
+<label class="css-input  css-radio css-radio-lg css-radio-primary push-10-r"><input  type="radio" name="status" data-uncheck-value="complete" value="complete" <?=("complete" == $rs["status"]) ? "checked" : ""?> > <span></span> 完成</label>
+			<div class="help-block"></div>
+		</div>
+	</div><!-- END 单选框: 订单状态 (status) 开始  -->
+
+
+
+	<!-- 文本域: 备注 (remark) 开始  -->
+	<div class="form-group   ">
+		<label class="col-xs-2 control-label" for="remark">备注</label>
+		<div class="col-xs-8">
+			<textarea class="form-control input-lg"  
+				type="text" 
+				id="remark" name="remark" rows="4"
+				placeholder=""><?=T::v('<%=remark  | e(\'html\')%>', $rs )?></textarea> 
+			<div class="help-block"></div>
+		</div>
+	</div><!-- END 文本域: 备注 (remark) -->
+
+
+
+	<!-- 文本域: 快照 (snapshot) 开始  -->
+	<div class="form-group   ">
+		<label class="col-xs-2 control-label" for="snapshot">快照</label>
+		<div class="col-xs-8">
+			<textarea class="form-control input-lg"  
+				type="text" 
+				id="snapshot" name="snapshot" rows="4"
+				placeholder=""><?=T::v('<%=snapshot  | e(\'html\')%>', $rs )?></textarea> 
+			<div class="help-block"></div>
+		</div>
+	</div><!-- END 文本域: 快照 (snapshot) -->
+
+				<!--  提交按钮 -->
+				<div class="block block-quickpanel sidebar-mini">
+					<div class="block-quickpanel-content" >
+						<div class="form-group">
+
+							<!-- 功能组 -->
+							<div class="col-xs-2 push-20-t text-left">
+								<a href="<?=App::R('order', 'index')?>"
+									class="btn btn-lg btn-primary font-w300 btn-minw push-20-l user-action fn-back" >
+									<i class="fa fa-angle-double-left push-5-r"></i> 订单列表 
+								</a>
+							</div>
+							<div class="col-xs-8 push-20-t text-center">
+								<button  
+									type="submit" 
+									class="btn btn-lg btn-primary font-w300 btn-minw  push-20-r fn-action fn-save  ">
+										<i class="fa fa-save push-5-r"></i> 保存
+								</button>
+
+								<button  
+									type="button" 
+									data-param-id="<?=$rs['order_id']?>"
+									class="btn btn-lg btn-primary font-w300 btn-minw  push-50-r fn-action fn-saved-only fn-duplicate  ">
+										<i class="fa fa-files-o push-5-r"></i> 复制
+								</button>
+
+								<button 
+									type="button"
+									class="btn btn-lg btn-danger btn-minw ajax-confirm fn-action fn-saved-only fn-remove"
+									confirm-title="请确认删除订单 "
+						            confirm-content="您确定删除订单 <strong><?=$rs['name=order_id']?>(<?=$rs['order_id']?> )</strong>"
+						            confirm-dismiss = "取消"
+						            confirm-submit= "确定"
+						            confirm-action="<?=App::NR('order','remove')?>"
+						            event-before="
+										function( btn, modal ) {
+											$('button', modal)
+												.addClass('disabled')
+												.attr('disabled', 'disabled');
+										}
+									"
+									event-done="
+										function( data, btn, modal) {
+											$('button', modal)
+												.removeClass('disabled')
+												.removeAttr('disabled');
+										}
+									"
+							        event-success="
+										function(btn, modal) {
+											success('订单删除成功');
+											setTimeout(function(){
+												window.location = '<?=App::R('order','index')?>';
+											}, 1000);
+										}
+									"
+									event-error="
+										function( data, btn, modal) {
+											failure( '订单删除失败 ('+ data['message'] + ')');
+											return true;
+										}
+									"
+
+									data-param-order_id="<?=$rs['order_id']?>" 
+	
+									 >
+										<i class="fa fa-minus-circle push-5-r"></i> 删除
+								</button>
+
+							</div>
+						</div>
+						<div class="bg-primary text-white text-center bottom-line"></div>	
+					</div>
+				</div> <!-- END 提交按钮 -->
+
+			</form>
+		</div> <!-- END block-content form -->
+	</div> <!-- END block block-bordered -->
+</div><!-- END content -->
+
+
+
+
+
+<script type="text/javascript">
+function pending( message ) {
+	$('.fn-action')
+		.addClass('disabled')
+		.attr('disabled', 'disabled');
+	App.loading({message:message}).show();
+}
+
+
+function success( message ) {
+	App.notify( message );
+}
+
+function failure( message,  validation ) {
+	validation = validation  || null;
+	message = message || null;
+
+	if ( typeof message == 'object' ) {
+		validation.showErrors(message);
+		return;
+	}
+
+	if ( message != null ) {
+		App.notify( message, 'fa fa-times', 'danger' );
+	}
+}
+
+function done() {
+	App.loading().hide();
+	$('.fn-action')
+		.removeClass('disabled')
+		.removeAttr('disabled');
+}
+
+
+/**
+ * 保存表单
+ */
+function save( form, validation ) {
+
+	var api =$(form).attr("action");
+
+	try {
+		var data = $(form).serializeData(true);
+	} catch( e  ){
+		console.log( e );
+		return ;
+	}
+
+	pending('保存中, 请稍候...');
+	// POST 数据
+	jQuery.post( api, data, function( data, textStatus, xhr) {
+
+		done();
+
+		if ( typeof data['code'] == 'string' ) {
+			data['code'] = parseInt(data['code']);
+		}
+
+		// 返回数据异常
+		if ( typeof data['code'] == 'number' && data['code'] !== 0 ) {
+
+			if ( typeof data['extra'] == 'object' && typeof data['extra']['errors'] == 'object'  ) {
+				failure( data['extra']['errors'], validation );
+				return;
+			}
+
+			var message = data['message'] || "未知错误";
+			failure( message );
+			return;
+		}
+
+		if ( typeof  data['order_id'] == 'undefined' ) {
+			var message = data['message'] || "未知错误";
+			failure( message );
+			return;
+		}
+		
+
+		// 更新ID
+		$('input[name=order_id]').val( data['order_id'] );
+		$('.fn-saved-only').removeClass('hidden');
+		$('.fn-saved-only').attr('data-param-id', data['order_id']);
+
+		// 保存成功
+		success('保存成功');
+
+	}, 'json')
+
+	.error(function( xhr, status, message) {
+		failure("保存失败, 网络错误 ( " + xhr.status + ' ' + message+" )");
+		console.log( status, xhr.status, ' message=', message );
+	});
+}
+
+
+$(function(){
+
+	// 设定高度
+	$('.order-content').css('minHeight', $(document).outerHeight() );
+	
+	App.initHelpers(['datepicker','select2', 'js-draggable-items', 'masked-inputs','tags-inputs',  'ajax-confirm', 'slimscroll', 'file-uploader', 'image-crop']);
+
+	// 表单验证
+	$('.order-form').validate({
+		errorClass: 'help-block animated fadeInDown',
+		errorElement: 'div',
+		errorPlacement: function(error, e) {				
+			jQuery(e).parents('.form-group .col-xs-8').append(error);
+		},
+		highlight: function(e) {
+			jQuery(e).closest('.form-group .col-xs-8').parent().removeClass('has-error').addClass('has-error');
+			jQuery(e).closest('.help-block').remove();
+		},
+		unhighlight:function(e){
+			jQuery(e).closest('.form-group .col-xs-8').parent().removeClass('has-error');
+			jQuery(e).closest('.help-block .col-xs-8').remove();
+		},
+		success: function(e) {
+			jQuery(e).closest('.form-group .col-xs-8').parent().removeClass('has-error');
+			jQuery(e).closest('.help-block').remove();
+		},
+
+		submitHandler: function(form) {
+			save( form, this);
+			return false;
+		},
+
+		rules: {},
+		messages: {}
+
+	});
+
+
+	$('.fn-duplicate').click(function(){
+		var api = "<?=App::R('order','duplicate', ['order_id'=>''])?>";
+		var id = $(this).attr('data-param-id');
+		var url = api + id;
+		window.location = url;
+	})
+
+	if ( $('input[name="order_id"]').val() == '' || $('input[name="order_id"]').val() == undefined ) {
+		$('.fn-saved-only').addClass('hidden');
+	}
+
+// 自定义代码
+
+
+})
+	
+</script>
