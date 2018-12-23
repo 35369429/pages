@@ -251,21 +251,32 @@ use \Xpmse\T;
 	</div><!-- END 单选框: 付款方式 (payment) 开始  -->
 
 
+
  
-	<!-- 下拉选择: 配送方式 (delivery) 开始  -->
+	<!-- 下拉选择(动态数据): 物流 (shipping_ids) 开始  -->
 	<div class="form-group   ">
-		<label class="col-xs-2 control-label" for="delivery">配送方式</label>
-		<div class="col-xs-8">
-			<select class="js-select2 form-control input-lg" style="width: 100%;"
-					id="delivery" name="delivery"  
-					data-placeholder="" >
+		<label class="col-xs-2 control-label" for="shipping_ids">物流</label>
+		<div class="col-xs-8"> 
+			<select class="js-select2 form-control input-lg" style="width: 100%;" 
+					id="shipping_ids" name="shipping_ids" 
+					data-language="zh-CN"
+					data-param-cancelable="0"
+					data-param-cancel="取消选择"
+					data-param-model="\Xpmsns\Pages\Model\Shipping"
+					data-param-table="shipping"
+					data-param-fields="company,name"
+					data-param-style="{{name}}({{company}})"
+					data-param-option="shipping_id"
+					data-param-default=""
+					data-ajax-url="/_a/mina/helper/select2?method=get"
+					data-preload-url="/_a/mina/helper/select2?method=get&preload=<?=T::v('<%=shipping_ids | join(\',\')%>', $rs )?>"
+					data-placeholder=""  multiple data-select2-multiple=1  >
 				<option></option>
-				<?php $rs["delivery"] = is_string($rs["delivery"]) ? [$rs["delivery"]] : $rs["delivery"] ; if (empty($rs["delivery"])) { $rs["delivery"] = ["default"]; } ?>
-<option value="default" <?=in_array("default", $rs["delivery"]) ? "selected" : ""?> > 默认</option>
 			</select>
 			<div class="help-block"></div>
 		</div>
-	</div><!-- END 下拉选择: 配送方式 (delivery) -->
+		 
+	</div><!-- END 下拉选择(动态数据): 物流 (shipping_ids) -->
 
 	<!-- 单行文本: 重量 (weight) 开始  -->
 	<div class="form-group   ">
