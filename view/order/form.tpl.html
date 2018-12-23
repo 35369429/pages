@@ -390,18 +390,33 @@ use \Xpmse\T;
 		</div>
 	</div><!-- END 单选框: 付款方式 (payment) 开始  -->
 
-	<!-- 单行文本: 快递公司 (shipping_id) 开始  -->
+
+
+ 
+	<!-- 下拉选择(动态数据): 物流 (shipping_id) 开始  -->
 	<div class="form-group   ">
-		<label class="col-xs-2 control-label" for="shipping_id">快递公司</label>
-		<div class="col-xs-8">
-			<input class="form-control input-lg"  
-				type="text" 
-				id="shipping_id" name="shipping_id" 
-				placeholder="请选择快递公司"  
-				value="<?=T::v('<%=shipping_id | e(\'html\')%>', $rs )?>" /> 
+		<label class="col-xs-2 control-label" for="shipping_id">物流</label>
+		<div class="col-xs-8"> 
+			<select class="js-select2 form-control input-lg" style="width: 100%;" 
+					id="shipping_id" name="shipping_id" 
+					data-language="zh-CN"
+					data-param-cancelable="0"
+					data-param-cancel="取消选择"
+					data-param-model="\Xpmsns\Pages\Model\Shipping"
+					data-param-table="shipping"
+					data-param-fields="company,name"
+					data-param-style="{{name}}({{company}})"
+					data-param-option="shipping_id"
+					data-param-default=""
+					data-ajax-url="/_a/mina/helper/select2?method=get"
+					data-preload-url="/_a/mina/helper/select2?method=get&preload=<?=T::v('<%=shipping_id | join(\',\')%>', $rs )?>"
+					data-placeholder="请选择快递公司"  >
+				<option></option>
+			</select>
 			<div class="help-block"></div>
 		</div>
-	</div><!-- END 单行文本: 快递公司 (shipping_id) -->
+		 
+	</div><!-- END 下拉选择(动态数据): 物流 (shipping_id) -->
 
 	<!-- 单行文本: 物流单号 (tracking_no) 开始  -->
 	<div class="form-group   ">

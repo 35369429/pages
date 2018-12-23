@@ -4,7 +4,7 @@
  * 订单数据模型
  *
  * 程序作者: XpmSE机器人
- * 最后修改: 2018-12-23 15:57:32
+ * 最后修改: 2018-12-23 23:30:09
  * 程序母版: /data/stor/private/templates/xpmsns/model/code/model/Name.php
  */
 namespace Xpmsns\Pages\Model;
@@ -88,8 +88,8 @@ class Order extends Model {
 		$this->putColumn( 'mobile', $this->type("string", ["length"=>50, "index"=>true, "null"=>true]));
 		// 付款方式
 		$this->putColumn( 'payment', $this->type("string", ["length"=>32, "index"=>true, "null"=>true]));
-		// 快递公司
-		$this->putColumn( 'shipping_id', $this->type("string", ["length"=>32, "index"=>true, "null"=>true]));
+		// 物流
+		$this->putColumn( 'shipping_id', $this->type("string", ["length"=>128, "index"=>true, "null"=>true]));
 		// 物流单号
 		$this->putColumn( 'tracking_no', $this->type("string", ["length"=>32, "index"=>true, "null"=>true]));
 		// 物流成本
@@ -228,7 +228,8 @@ class Order extends Model {
 	 *          	  $rs["address"],  // 收货地址 
 	 *          	  $rs["mobile"],  // 联系电话 
 	 *          	  $rs["payment"],  // 付款方式 
-	 *          	  $rs["shipping_id"],  // 快递公司 
+	 *          	  $rs["shipping_id"],  // 物流 
+	 *                $rs["_map_shipping"][$shipping_id[n]]["shipping_id"], // shipping.shipping_id
 	 *          	  $rs["tracking_no"],  // 物流单号 
 	 *          	  $rs["freight_in"],  // 物流成本 
 	 *          	  $rs["status"],  // 订单状态 
@@ -322,6 +323,14 @@ class Order extends Model {
 	 *                $rs["_map_item"][$items_ids[n]]["status"], // item.status
 	 *                $rs["_map_item"][$items_ids[n]]["images"], // item.images
 	 *                $rs["_map_item"][$items_ids[n]]["content"], // item.content
+	 *                $rs["_map_shipping"][$shipping_id[n]]["created_at"], // shipping.created_at
+	 *                $rs["_map_shipping"][$shipping_id[n]]["updated_at"], // shipping.updated_at
+	 *                $rs["_map_shipping"][$shipping_id[n]]["company"], // shipping.company
+	 *                $rs["_map_shipping"][$shipping_id[n]]["name"], // shipping.name
+	 *                $rs["_map_shipping"][$shipping_id[n]]["products"], // shipping.products
+	 *                $rs["_map_shipping"][$shipping_id[n]]["scope"], // shipping.scope
+	 *                $rs["_map_shipping"][$shipping_id[n]]["formula"], // shipping.formula
+	 *                $rs["_map_shipping"][$shipping_id[n]]["api"], // shipping.api
 	 */
 	public function getByOrderId( $order_id, $select=['*']) {
 		
@@ -337,7 +346,7 @@ class Order extends Model {
 		// 创建查询构造器
 		$qb = Utils::getTab("xpmsns_pages_order as order", "{none}")->query();
  		$qb->leftJoin("xpmsns_user_user as user", "user.user_id", "=", "order.user_id"); // 连接用户
-  		$qb->where('order_id', '=', $order_id );
+   		$qb->where('order_id', '=', $order_id );
 		$qb->limit( 1 );
 		$qb->select($select);
 		$rows = $qb->get()->toArray();
@@ -352,6 +361,8 @@ class Order extends Model {
 		$goods_ids = array_merge($goods_ids, is_array($rs["goods_ids"]) ? $rs["goods_ids"] : [$rs["goods_ids"]]);
  		$item_ids = []; // 读取 inWhere item 数据
 		$item_ids = array_merge($item_ids, is_array($rs["items_ids"]) ? $rs["items_ids"] : [$rs["items_ids"]]);
+ 		$shipping_ids = []; // 读取 inWhere shipping 数据
+		$shipping_ids = array_merge($shipping_ids, is_array($rs["shipping_id"]) ? $rs["shipping_id"] : [$rs["shipping_id"]]);
 
   		// 读取 inWhere goods 数据
 		if ( !empty($inwhereSelect["goods"]) && method_exists("\\Xpmsns\\Pages\\Model\\Goods", 'getInByGoodsId') ) {
@@ -364,6 +375,12 @@ class Order extends Model {
 			$item_ids = array_unique($item_ids);
 			$selectFields = $inwhereSelect["item"];
 			$rs["_map_item"] = (new \Xpmsns\Pages\Model\Item)->getInByItemId($item_ids, $selectFields);
+		}
+ 		// 读取 inWhere shipping 数据
+		if ( !empty($inwhereSelect["shipping"]) && method_exists("\\Xpmsns\\Pages\\Model\\Shipping", 'getInByShippingId') ) {
+			$shipping_ids = array_unique($shipping_ids);
+			$selectFields = $inwhereSelect["shipping"];
+			$rs["_map_shipping"] = (new \Xpmsns\Pages\Model\Shipping)->getInByShippingId($shipping_ids, $selectFields);
 		}
 
 		return $rs;
@@ -391,7 +408,7 @@ class Order extends Model {
 		// 创建查询构造器
 		$qb = Utils::getTab("xpmsns_pages_order as order", "{none}")->query();
  		$qb->leftJoin("xpmsns_user_user as user", "user.user_id", "=", "order.user_id"); // 连接用户
-  		$qb->whereIn('order.order_id', $order_ids);
+   		$qb->whereIn('order.order_id', $order_ids);
 		
 		// 排序
 		foreach ($order as $field => $order ) {
@@ -404,6 +421,7 @@ class Order extends Model {
 
   		$goods_ids = []; // 读取 inWhere goods 数据
  		$item_ids = []; // 读取 inWhere item 数据
+ 		$shipping_ids = []; // 读取 inWhere shipping 数据
 		foreach ($data as & $rs ) {
 			$this->format($rs);
 			$map[$rs['order_id']] = $rs;
@@ -412,6 +430,8 @@ class Order extends Model {
 			$goods_ids = array_merge($goods_ids, is_array($rs["goods_ids"]) ? $rs["goods_ids"] : [$rs["goods_ids"]]);
  			// for inWhere item
 			$item_ids = array_merge($item_ids, is_array($rs["items_ids"]) ? $rs["items_ids"] : [$rs["items_ids"]]);
+ 			// for inWhere shipping
+			$shipping_ids = array_merge($shipping_ids, is_array($rs["shipping_id"]) ? $rs["shipping_id"] : [$rs["shipping_id"]]);
 		}
 
   		// 读取 inWhere goods 数据
@@ -425,6 +445,12 @@ class Order extends Model {
 			$item_ids = array_unique($item_ids);
 			$selectFields = $inwhereSelect["item"];
 			$map["_map_item"] = (new \Xpmsns\Pages\Model\Item)->getInByItemId($item_ids, $selectFields);
+		}
+ 		// 读取 inWhere shipping 数据
+		if ( !empty($inwhereSelect["shipping"]) && method_exists("\\Xpmsns\\Pages\\Model\\Shipping", 'getInByShippingId') ) {
+			$shipping_ids = array_unique($shipping_ids);
+			$selectFields = $inwhereSelect["shipping"];
+			$map["_map_shipping"] = (new \Xpmsns\Pages\Model\Shipping)->getInByShippingId($shipping_ids, $selectFields);
 		}
 
 
@@ -485,7 +511,7 @@ class Order extends Model {
 		// 创建查询构造器
 		$qb = Utils::getTab("xpmsns_pages_order as order", "{none}")->query();
  		$qb->leftJoin("xpmsns_user_user as user", "user.user_id", "=", "order.user_id"); // 连接用户
-  
+   
 
 		foreach ($order as $field => $order ) {
 			$qb->orderBy( $field, $order );
@@ -497,6 +523,7 @@ class Order extends Model {
 
   		$goods_ids = []; // 读取 inWhere goods 数据
  		$item_ids = []; // 读取 inWhere item 数据
+ 		$shipping_ids = []; // 读取 inWhere shipping 数据
 		foreach ($data as & $rs ) {
 			$this->format($rs);
 			
@@ -504,6 +531,8 @@ class Order extends Model {
 			$goods_ids = array_merge($goods_ids, is_array($rs["goods_ids"]) ? $rs["goods_ids"] : [$rs["goods_ids"]]);
  			// for inWhere item
 			$item_ids = array_merge($item_ids, is_array($rs["items_ids"]) ? $rs["items_ids"] : [$rs["items_ids"]]);
+ 			// for inWhere shipping
+			$shipping_ids = array_merge($shipping_ids, is_array($rs["shipping_id"]) ? $rs["shipping_id"] : [$rs["shipping_id"]]);
 		}
 
   		// 读取 inWhere goods 数据
@@ -517,6 +546,12 @@ class Order extends Model {
 			$item_ids = array_unique($item_ids);
 			$selectFields = $inwhereSelect["item"];
 			$data["_map_item"] = (new \Xpmsns\Pages\Model\Item)->getInByItemId($item_ids, $selectFields);
+		}
+ 		// 读取 inWhere shipping 数据
+		if ( !empty($inwhereSelect["shipping"]) && method_exists("\\Xpmsns\\Pages\\Model\\Shipping", 'getInByShippingId') ) {
+			$shipping_ids = array_unique($shipping_ids);
+			$selectFields = $inwhereSelect["shipping"];
+			$data["_map_shipping"] = (new \Xpmsns\Pages\Model\Shipping)->getInByShippingId($shipping_ids, $selectFields);
 		}
 
 		return $data;
@@ -565,7 +600,8 @@ class Order extends Model {
 	 *               	["address"],  // 收货地址 
 	 *               	["mobile"],  // 联系电话 
 	 *               	["payment"],  // 付款方式 
-	 *               	["shipping_id"],  // 快递公司 
+	 *               	["shipping_id"],  // 物流 
+	 *               	["shipping"][$shipping_id[n]]["shipping_id"], // shipping.shipping_id
 	 *               	["tracking_no"],  // 物流单号 
 	 *               	["freight_in"],  // 物流成本 
 	 *               	["status"],  // 订单状态 
@@ -659,6 +695,14 @@ class Order extends Model {
 	 *               	["item"][$items_ids[n]]["status"], // item.status
 	 *               	["item"][$items_ids[n]]["images"], // item.images
 	 *               	["item"][$items_ids[n]]["content"], // item.content
+	 *               	["shipping"][$shipping_id[n]]["created_at"], // shipping.created_at
+	 *               	["shipping"][$shipping_id[n]]["updated_at"], // shipping.updated_at
+	 *               	["shipping"][$shipping_id[n]]["company"], // shipping.company
+	 *               	["shipping"][$shipping_id[n]]["name"], // shipping.name
+	 *               	["shipping"][$shipping_id[n]]["products"], // shipping.products
+	 *               	["shipping"][$shipping_id[n]]["scope"], // shipping.scope
+	 *               	["shipping"][$shipping_id[n]]["formula"], // shipping.formula
+	 *               	["shipping"][$shipping_id[n]]["api"], // shipping.api
 	 */
 	public function search( $query = [] ) {
 
@@ -674,7 +718,7 @@ class Order extends Model {
 		// 创建查询构造器
 		$qb = Utils::getTab("xpmsns_pages_order as order", "{none}")->query();
  		$qb->leftJoin("xpmsns_user_user as user", "user.user_id", "=", "order.user_id"); // 连接用户
-  
+   
 		// 按关键词查找
 		if ( array_key_exists("keyword", $query) && !empty($query["keyword"]) ) {
 			$qb->where(function ( $qb ) use($query) {
@@ -733,6 +777,7 @@ class Order extends Model {
 
   		$goods_ids = []; // 读取 inWhere goods 数据
  		$item_ids = []; // 读取 inWhere item 数据
+ 		$shipping_ids = []; // 读取 inWhere shipping 数据
 		foreach ($orders['data'] as & $rs ) {
 			$this->format($rs);
 			
@@ -740,6 +785,8 @@ class Order extends Model {
 			$goods_ids = array_merge($goods_ids, is_array($rs["goods_ids"]) ? $rs["goods_ids"] : [$rs["goods_ids"]]);
  			// for inWhere item
 			$item_ids = array_merge($item_ids, is_array($rs["items_ids"]) ? $rs["items_ids"] : [$rs["items_ids"]]);
+ 			// for inWhere shipping
+			$shipping_ids = array_merge($shipping_ids, is_array($rs["shipping_id"]) ? $rs["shipping_id"] : [$rs["shipping_id"]]);
 		}
 
   		// 读取 inWhere goods 数据
@@ -753,6 +800,12 @@ class Order extends Model {
 			$item_ids = array_unique($item_ids);
 			$selectFields = $inwhereSelect["item"];
 			$orders["item"] = (new \Xpmsns\Pages\Model\Item)->getInByItemId($item_ids, $selectFields);
+		}
+ 		// 读取 inWhere shipping 数据
+		if ( !empty($inwhereSelect["shipping"]) && method_exists("\\Xpmsns\\Pages\\Model\\Shipping", 'getInByShippingId') ) {
+			$shipping_ids = array_unique($shipping_ids);
+			$selectFields = $inwhereSelect["shipping"];
+			$orders["shipping"] = (new \Xpmsns\Pages\Model\Shipping)->getInByShippingId($shipping_ids, $selectFields);
 		}
 	
 		// for Debug
@@ -834,6 +887,18 @@ class Order extends Model {
 					array_push($linkSelect, "order.items_ids");
 				}
 			}
+			
+			// 连接物流 (shipping as shipping )
+			if ( strpos( $fd, "shipping." ) === 0 || strpos("shipping.", $fd ) === 0  || trim($fd) == "*" ) {
+				$arr = explode( ".", $fd );
+				$arr[1]  = !empty($arr[1]) ? $arr[1] : "*";
+				$inwhereSelect["shipping"][] = trim($arr[1]);
+				$inwhereSelect["shipping"][] = "shipping_id";
+				if ( trim($fd) != "*" ) {
+					unset($select[$idx]);
+					array_push($linkSelect, "order.shipping_id");
+				}
+			}
 		}
 
 		// filter 查询字段
@@ -875,7 +940,7 @@ class Order extends Model {
 			"address",  // 收货地址
 			"mobile",  // 联系电话
 			"payment",  // 付款方式
-			"shipping_id",  // 快递公司
+			"shipping_id",  // 物流
 			"tracking_no",  // 物流单号
 			"freight_in",  // 物流成本
 			"status",  // 订单状态

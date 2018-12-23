@@ -4,7 +4,7 @@
  * 订单数据接口 
  *
  * 程序作者: XpmSE机器人
- * 最后修改: 2018-12-23 15:57:30
+ * 最后修改: 2018-12-23 23:30:06
  * 程序母版: /data/stor/private/templates/xpmsns/model/code/api/Name.php
  */
 namespace Xpmsns\Pages\Api;
@@ -65,7 +65,8 @@ class Order extends Api {
 	 *               	["address"],  // 收货地址 
 	 *               	["mobile"],  // 联系电话 
 	 *               	["payment"],  // 付款方式 
-	 *               	["shipping_id"],  // 快递公司 
+	 *               	["shipping_id"],  // 物流 
+	*               	["_map_shipping"][$shipping_id[n]]["shipping_id"], // shipping.shipping_id
 	 *               	["tracking_no"],  // 物流单号 
 	 *               	["freight_in"],  // 物流成本 
 	 *               	["status"],  // 订单状态 
@@ -159,6 +160,14 @@ class Order extends Api {
 	*               	["_map_item"][$items_ids[n]]["status"], // item.status
 	*               	["_map_item"][$items_ids[n]]["images"], // item.images
 	*               	["_map_item"][$items_ids[n]]["content"], // item.content
+	*               	["_map_shipping"][$shipping_id[n]]["created_at"], // shipping.created_at
+	*               	["_map_shipping"][$shipping_id[n]]["updated_at"], // shipping.updated_at
+	*               	["_map_shipping"][$shipping_id[n]]["company"], // shipping.company
+	*               	["_map_shipping"][$shipping_id[n]]["name"], // shipping.name
+	*               	["_map_shipping"][$shipping_id[n]]["products"], // shipping.products
+	*               	["_map_shipping"][$shipping_id[n]]["scope"], // shipping.scope
+	*               	["_map_shipping"][$shipping_id[n]]["formula"], // shipping.formula
+	*               	["_map_shipping"][$shipping_id[n]]["api"], // shipping.api
 	*/
 	protected function get( $query, $data ) {
 
@@ -214,7 +223,7 @@ class Order extends Api {
 	 *               $data['address'] 收货地址
 	 *               $data['mobile'] 联系电话
 	 *               $data['payment'] 付款方式
-	 *               $data['shipping_id'] 快递公司
+	 *               $data['shipping_id'] 物流
 	 *               $data['tracking_no'] 物流单号
 	 *               $data['freight_in'] 物流成本
 	 *               $data['status'] 订单状态
@@ -272,7 +281,7 @@ class Order extends Api {
 	 *               $data['address'] 收货地址
 	 *               $data['mobile'] 联系电话
 	 *               $data['payment'] 付款方式
-	 *               $data['shipping_id'] 快递公司
+	 *               $data['shipping_id'] 物流
 	 *               $data['tracking_no'] 物流单号
 	 *               $data['freight_in'] 物流成本
 	 *               $data['status'] 订单状态
@@ -381,7 +390,8 @@ class Order extends Api {
 	 *               	["address"],  // 收货地址 
 	 *               	["mobile"],  // 联系电话 
 	 *               	["payment"],  // 付款方式 
-	 *               	["shipping_id"],  // 快递公司 
+	 *               	["shipping_id"],  // 物流 
+	*               	["shipping"][$shipping_id[n]]["shipping_id"], // shipping.shipping_id
 	 *               	["tracking_no"],  // 物流单号 
 	 *               	["freight_in"],  // 物流成本 
 	 *               	["status"],  // 订单状态 
@@ -475,6 +485,14 @@ class Order extends Api {
 	*               	["item"][$items_ids[n]]["status"], // item.status
 	*               	["item"][$items_ids[n]]["images"], // item.images
 	*               	["item"][$items_ids[n]]["content"], // item.content
+	*               	["shipping"][$shipping_id[n]]["created_at"], // shipping.created_at
+	*               	["shipping"][$shipping_id[n]]["updated_at"], // shipping.updated_at
+	*               	["shipping"][$shipping_id[n]]["company"], // shipping.company
+	*               	["shipping"][$shipping_id[n]]["name"], // shipping.name
+	*               	["shipping"][$shipping_id[n]]["products"], // shipping.products
+	*               	["shipping"][$shipping_id[n]]["scope"], // shipping.scope
+	*               	["shipping"][$shipping_id[n]]["formula"], // shipping.formula
+	*               	["shipping"][$shipping_id[n]]["api"], // shipping.api
 	 */
 	protected function search( $query, $data ) {
 
