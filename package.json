@@ -16,7 +16,7 @@
 	"homepage": "https://www.xpmsns.com",
 	"menu":[{
 		"slug":"xpmsns/pages/group",
-		"group":"简墨"
+		"group":"CMS"
 	},{
 		"slug":"xpmsns/pages/audit/index",
 		"name":"审核",
@@ -93,6 +93,17 @@
 		"icontype": "img",
 		"linktype":"i",
 		"link":"{order,index}",
+		"permission": "boss,admin,manager,user",
+		"order":9999
+	},{
+		"slug":"xpmsns/pages/shipping/index",
+		"name":"物流",
+		"icon":{
+			"default":"/static/icons/shipping.svg"
+		},
+		"icontype": "img",
+		"linktype":"i",
+		"link":"{shipping,index}",
 		"permission": "boss,admin,manager,user",
 		"order":9999
 	},{
