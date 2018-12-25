@@ -1,0 +1,1338 @@
+{
+    "name": "简墨-活动管理",
+    "data": {
+        "general": {
+            "app": "pages",
+            "org": "xpmsns",
+            "model": "_create",
+            "name": "event",
+            "cname": "活动"
+        },
+        "struct": {
+            "table": "event",
+            "fields": [
+                {
+                    "name": "event_id",
+                    "cname": "活动ID",
+                    "type": "string",
+                    "length": "128",
+                    "default": "",
+                    "unique": "1",
+                    "index": "",
+                    "nullable": "",
+                    "json": "",
+                    "auto": "1",
+                    "file": "",
+                    "private": ""
+                },
+                {
+                    "name": "slug",
+                    "cname": "活动别名",
+                    "type": "string",
+                    "length": "128",
+                    "default": "",
+                    "unique": "1",
+                    "index": "",
+                    "nullable": "",
+                    "json": "",
+                    "auto": "",
+                    "file": "",
+                    "private": ""
+                },
+                {
+                    "name": "name",
+                    "cname": "活动主题",
+                    "type": "string",
+                    "length": "200",
+                    "default": "",
+                    "unique": "",
+                    "index": "1",
+                    "nullable": "1",
+                    "json": "",
+                    "auto": "",
+                    "file": "",
+                    "private": ""
+                },
+                {
+                    "name": "link",
+                    "cname": "外部链接",
+                    "type": "string",
+                    "length": "200",
+                    "default": "",
+                    "unique": "",
+                    "index": "",
+                    "nullable": "",
+                    "json": "",
+                    "auto": "",
+                    "file": "",
+                    "private": ""
+                },
+                {
+                    "name": "categories",
+                    "cname": "栏目",
+                    "type": "text",
+                    "length": "",
+                    "default": "",
+                    "unique": "",
+                    "index": "",
+                    "nullable": "",
+                    "json": "1",
+                    "auto": "",
+                    "file": "",
+                    "private": ""
+                },
+                {
+                    "name": "type",
+                    "cname": "类型",
+                    "type": "text",
+                    "length": "",
+                    "default": "",
+                    "unique": "",
+                    "index": "",
+                    "nullable": "",
+                    "json": "1",
+                    "auto": "",
+                    "file": "",
+                    "private": ""
+                },
+                {
+                    "name": "tags",
+                    "cname": "标签",
+                    "type": "text",
+                    "length": "",
+                    "default": "",
+                    "unique": "",
+                    "index": "",
+                    "nullable": "",
+                    "json": "",
+                    "auto": "",
+                    "file": "",
+                    "private": ""
+                },
+                {
+                    "name": "summary",
+                    "cname": "活动简介",
+                    "type": "string",
+                    "length": "200",
+                    "default": "",
+                    "unique": "",
+                    "index": "",
+                    "nullable": "",
+                    "json": "",
+                    "auto": "",
+                    "file": "",
+                    "private": ""
+                },
+                {
+                    "name": "cover",
+                    "cname": "封面",
+                    "type": "string",
+                    "length": "200",
+                    "default": "",
+                    "unique": "",
+                    "index": "1",
+                    "nullable": "",
+                    "json": "",
+                    "auto": "",
+                    "file": "1",
+                    "private": ""
+                },
+                {
+                    "name": "images",
+                    "cname": "活动海报",
+                    "type": "text",
+                    "length": "",
+                    "default": "",
+                    "unique": "",
+                    "index": "",
+                    "nullable": "",
+                    "json": "1",
+                    "auto": "",
+                    "file": "1",
+                    "private": ""
+                },
+                {
+                    "name": "begin",
+                    "cname": "开始时间",
+                    "type": "timestamp",
+                    "length": "",
+                    "default": "",
+                    "unique": "",
+                    "index": "1",
+                    "nullable": "",
+                    "json": "",
+                    "auto": "",
+                    "file": "",
+                    "private": ""
+                },
+                {
+                    "name": "end",
+                    "cname": "结束时间",
+                    "type": "timestamp",
+                    "length": "",
+                    "default": "",
+                    "unique": "",
+                    "index": "1",
+                    "nullable": "",
+                    "json": "",
+                    "auto": "",
+                    "file": "",
+                    "private": ""
+                },
+                {
+                    "name": "area",
+                    "cname": "国家/地区",
+                    "type": "string",
+                    "length": "200",
+                    "default": "中国",
+                    "unique": "",
+                    "index": "1",
+                    "nullable": "",
+                    "json": "",
+                    "auto": "",
+                    "file": "",
+                    "private": ""
+                },
+                {
+                    "name": "prov",
+                    "cname": "省份",
+                    "type": "string",
+                    "length": "100",
+                    "default": "",
+                    "unique": "",
+                    "index": "1",
+                    "nullable": "",
+                    "json": "",
+                    "auto": "",
+                    "file": "",
+                    "private": ""
+                },
+                {
+                    "name": "city",
+                    "cname": "城市",
+                    "type": "string",
+                    "length": "100",
+                    "default": "",
+                    "unique": "",
+                    "index": "1",
+                    "nullable": "",
+                    "json": "",
+                    "auto": "",
+                    "file": "",
+                    "private": ""
+                },
+                {
+                    "name": "town",
+                    "cname": "区县",
+                    "type": "string",
+                    "length": "200",
+                    "default": "",
+                    "unique": "",
+                    "index": "1",
+                    "nullable": "",
+                    "json": "",
+                    "auto": "",
+                    "file": "",
+                    "private": ""
+                },
+                {
+                    "name": "location",
+                    "cname": "地点",
+                    "type": "string",
+                    "length": "200",
+                    "default": "",
+                    "unique": "",
+                    "index": "",
+                    "nullable": "",
+                    "json": "",
+                    "auto": "",
+                    "file": "",
+                    "private": ""
+                },
+                {
+                    "name": "price",
+                    "cname": "费用",
+                    "type": "integer",
+                    "length": "",
+                    "default": "0",
+                    "unique": "",
+                    "index": "1",
+                    "nullable": "",
+                    "json": "",
+                    "auto": "",
+                    "file": "",
+                    "private": ""
+                },
+                {
+                    "name": "hosts",
+                    "cname": "主办方",
+                    "type": "text",
+                    "length": "",
+                    "default": "",
+                    "unique": "",
+                    "index": "",
+                    "nullable": "",
+                    "json": "1",
+                    "auto": "",
+                    "file": "1",
+                    "private": ""
+                },
+                {
+                    "name": "organizers",
+                    "cname": "承办方/组织者",
+                    "type": "text",
+                    "length": "",
+                    "default": "",
+                    "unique": "",
+                    "index": "",
+                    "nullable": "",
+                    "json": "1",
+                    "auto": "",
+                    "file": "1",
+                    "private": ""
+                },
+                {
+                    "name": "sponsors",
+                    "cname": "赞助商",
+                    "type": "text",
+                    "length": "",
+                    "default": "",
+                    "unique": "",
+                    "index": "",
+                    "nullable": "",
+                    "json": "1",
+                    "auto": "",
+                    "file": "1",
+                    "private": ""
+                },
+                {
+                    "name": "medias",
+                    "cname": "合作媒体",
+                    "type": "text",
+                    "length": "",
+                    "default": "",
+                    "unique": "",
+                    "index": "",
+                    "nullable": "",
+                    "json": "1",
+                    "auto": "",
+                    "file": "1",
+                    "private": ""
+                },
+                {
+                    "name": "speakers",
+                    "cname": "嘉宾",
+                    "type": "text",
+                    "length": "",
+                    "default": "",
+                    "unique": "",
+                    "index": "",
+                    "nullable": "",
+                    "json": "1",
+                    "auto": "",
+                    "file": "1",
+                    "private": ""
+                },
+                {
+                    "name": "content",
+                    "cname": "活动介绍",
+                    "type": "longText",
+                    "length": "",
+                    "default": "",
+                    "unique": "",
+                    "index": "",
+                    "nullable": "",
+                    "json": "",
+                    "auto": "",
+                    "file": "",
+                    "private": ""
+                },
+                {
+                    "name": "publish_time",
+                    "cname": "发布时间",
+                    "type": "timestamp",
+                    "length": "",
+                    "default": "",
+                    "unique": "",
+                    "index": "1",
+                    "nullable": "",
+                    "json": "",
+                    "auto": "",
+                    "file": "",
+                    "private": ""
+                },
+                {
+                    "name": "view_cnt",
+                    "cname": "浏览量",
+                    "type": "bigInteger",
+                    "length": "20",
+                    "default": "",
+                    "unique": "",
+                    "index": "1",
+                    "nullable": "",
+                    "json": "",
+                    "auto": "",
+                    "file": "",
+                    "private": ""
+                },
+                {
+                    "name": "like_cnt",
+                    "cname": "点赞量",
+                    "type": "bigInteger",
+                    "length": "20",
+                    "default": "",
+                    "unique": "",
+                    "index": "1",
+                    "nullable": "",
+                    "json": "",
+                    "auto": "",
+                    "file": "",
+                    "private": ""
+                },
+                {
+                    "name": "dislike_cnt",
+                    "cname": "讨厌量",
+                    "type": "bigInteger",
+                    "length": "20",
+                    "default": "",
+                    "unique": "",
+                    "index": "1",
+                    "nullable": "",
+                    "json": "",
+                    "auto": "",
+                    "file": "",
+                    "private": ""
+                },
+                {
+                    "name": "comment_cnt",
+                    "cname": "评论量",
+                    "type": "bigInteger",
+                    "length": "20",
+                    "default": "",
+                    "unique": "",
+                    "index": "1",
+                    "nullable": "",
+                    "json": "",
+                    "auto": "",
+                    "file": "",
+                    "private": ""
+                },
+                {
+                    "name": "status",
+                    "cname": "活动状态",
+                    "type": "string",
+                    "length": "200",
+                    "default": "open",
+                    "unique": "",
+                    "index": "1",
+                    "nullable": "",
+                    "json": "",
+                    "auto": "",
+                    "file": "",
+                    "private": ""
+                }
+            ],
+            "methods": [
+                {
+                    "name": "",
+                    "cname": "",
+                    "source": ""
+                }
+            ]
+        },
+        "links": {
+            "fields": [
+                {
+                    "cname": "类型",
+                    "type": "inWhere",
+                    "model": "\\Xpmsns\\Pages\\Model\\Category",
+                    "table": "category",
+                    "prefix": "xpmsns_pages_",
+                    "field": "category_id",
+                    "on": "in",
+                    "name": "categories",
+                    "alias": "c"
+                }
+            ]
+        },
+        "detail": {
+            "index": "name=event_id",
+            "title": "name=name",
+            "columns": [
+                {
+                    "cname": "活动别名",
+                    "name": "slug",
+                    "type": "input",
+                    "placeholder": "请填写活动别名",
+                    "helper": "",
+                    "exp": "",
+                    "readonly": "",
+                    "attr": {
+                        "default": ""
+                    },
+                    "validator": [
+                        {
+                            "method": "",
+                            "value": "",
+                            "message": ""
+                        }
+                    ]
+                },
+                {
+                    "cname": "活动主题",
+                    "name": "name",
+                    "type": "input",
+                    "placeholder": "请填写活动主题",
+                    "helper": "",
+                    "exp": "",
+                    "readonly": "",
+                    "attr": {
+                        "default": ""
+                    },
+                    "validator": [
+                        {
+                            "method": "",
+                            "value": "",
+                            "message": ""
+                        }
+                    ]
+                },
+                {
+                    "cname": "外部链接",
+                    "name": "link",
+                    "type": "input",
+                    "placeholder": "请填写外部链接",
+                    "helper": "",
+                    "exp": "",
+                    "readonly": "",
+                    "attr": {
+                        "default": ""
+                    },
+                    "validator": [
+                        {
+                            "method": "",
+                            "value": "",
+                            "message": ""
+                        }
+                    ]
+                },
+                {
+                    "cname": "栏目",
+                    "name": "categories",
+                    "type": "select-remote",
+                    "placeholder": "请选择活动栏目",
+                    "helper": "",
+                    "exp": "",
+                    "readonly": "",
+                    "attr": {
+                        "table": "category",
+                        "prefix": "xpmsns_pages_",
+                        "model": "\\Xpmsns\\Pages\\Model\\Category",
+                        "fields": [
+                            "category_id",
+                            "name"
+                        ],
+                        "option": "category_id",
+                        "style": "{{name}} ({{category_id}})",
+                        "default": "",
+                        "multiple": "1",
+                        "api": "",
+                        "cancel": "",
+                        "cancelable": ""
+                    },
+                    "validator": [
+                        {
+                            "method": "",
+                            "value": "",
+                            "message": ""
+                        }
+                    ]
+                },
+                {
+                    "cname": "标签",
+                    "name": "tags",
+                    "type": "tag-input",
+                    "placeholder": "请添加标签",
+                    "helper": "",
+                    "exp": "",
+                    "readonly": "",
+                    "attr": {
+                        "default": ""
+                    },
+                    "validator": [
+                        {
+                            "method": "",
+                            "value": "",
+                            "message": ""
+                        }
+                    ]
+                },
+                {
+                    "cname": "活动简介",
+                    "name": "summary",
+                    "type": "textarea",
+                    "placeholder": "请填写活动简介",
+                    "helper": "",
+                    "exp": "",
+                    "readonly": "",
+                    "attr": {
+                        "default": "",
+                        "rows": "",
+                        "autoheight": ""
+                    },
+                    "validator": [
+                        {
+                            "method": "",
+                            "value": "",
+                            "message": ""
+                        }
+                    ]
+                },
+                {
+                    "cname": "封面",
+                    "name": "cover",
+                    "type": "image",
+                    "placeholder": "请上传封面",
+                    "helper": "",
+                    "exp": "",
+                    "readonly": "",
+                    "attr": {
+                        "width": "274",
+                        "height": "182",
+                        "allow": "",
+                        "cropable": "1"
+                    },
+                    "validator": [
+                        {
+                            "method": "",
+                            "value": "",
+                            "message": ""
+                        }
+                    ]
+                },
+                {
+                    "cname": "活动海报",
+                    "name": "images",
+                    "type": "images",
+                    "placeholder": "请上传海报图片",
+                    "helper": "",
+                    "exp": "",
+                    "readonly": "",
+                    "attr": {
+                        "width": "175",
+                        "height": "260",
+                        "allow": "",
+                        "cropable": "yes",
+                        "maxsize": "",
+                        "api": ""
+                    },
+                    "validator": [
+                        {
+                            "method": "",
+                            "value": "",
+                            "message": ""
+                        }
+                    ]
+                },
+                {
+                    "cname": "开始时间",
+                    "name": "begin",
+                    "type": "datetime-input",
+                    "placeholder": "请选择日期时间",
+                    "helper": "",
+                    "exp": "",
+                    "readonly": "",
+                    "attr": {
+                        "default": ""
+                    },
+                    "validator": [
+                        {
+                            "method": "",
+                            "value": "",
+                            "message": ""
+                        }
+                    ]
+                },
+                {
+                    "cname": "结束时间",
+                    "name": "end",
+                    "type": "datetime-input",
+                    "placeholder": "请选择日期时间",
+                    "helper": "",
+                    "exp": "",
+                    "readonly": "",
+                    "attr": {
+                        "default": ""
+                    },
+                    "validator": [
+                        {
+                            "method": "",
+                            "value": "",
+                            "message": ""
+                        }
+                    ]
+                },
+                {
+                    "cname": "国家/地区",
+                    "name": "area",
+                    "type": "input",
+                    "placeholder": "请填写国家/地区",
+                    "helper": "",
+                    "exp": "",
+                    "readonly": "",
+                    "attr": {
+                        "default": ""
+                    },
+                    "validator": [
+                        {
+                            "method": "",
+                            "value": "",
+                            "message": ""
+                        }
+                    ]
+                },
+                {
+                    "cname": "省份",
+                    "name": "prov",
+                    "type": "input",
+                    "placeholder": "请填写省份",
+                    "helper": "",
+                    "exp": "",
+                    "readonly": "",
+                    "attr": {
+                        "default": ""
+                    },
+                    "validator": [
+                        {
+                            "method": "",
+                            "value": "",
+                            "message": ""
+                        }
+                    ]
+                },
+                {
+                    "cname": "城市",
+                    "name": "city",
+                    "type": "input",
+                    "placeholder": "请填写城市",
+                    "helper": "",
+                    "exp": "",
+                    "readonly": "",
+                    "attr": {
+                        "default": ""
+                    },
+                    "validator": [
+                        {
+                            "method": "",
+                            "value": "",
+                            "message": ""
+                        }
+                    ]
+                },
+                {
+                    "cname": "区县",
+                    "name": "town",
+                    "type": "input",
+                    "placeholder": "请填写区县",
+                    "helper": "",
+                    "exp": "",
+                    "readonly": "",
+                    "attr": {
+                        "default": ""
+                    },
+                    "validator": [
+                        {
+                            "method": "",
+                            "value": "",
+                            "message": ""
+                        }
+                    ]
+                },
+                {
+                    "cname": "地点",
+                    "name": "location",
+                    "type": "input",
+                    "placeholder": "请填写具体地点",
+                    "helper": "",
+                    "exp": "",
+                    "readonly": "",
+                    "attr": {
+                        "default": ""
+                    },
+                    "validator": [
+                        {
+                            "method": "",
+                            "value": "",
+                            "message": ""
+                        }
+                    ]
+                },
+                {
+                    "cname": "费用",
+                    "name": "price",
+                    "type": "input",
+                    "placeholder": "请填写活动花费",
+                    "helper": "",
+                    "exp": "",
+                    "readonly": "",
+                    "attr": {
+                        "default": ""
+                    },
+                    "validator": [
+                        {
+                            "method": "",
+                            "value": "",
+                            "message": ""
+                        }
+                    ]
+                },
+                {
+                    "cname": "主办方",
+                    "name": "hosts",
+                    "type": "image-groups",
+                    "placeholder": "",
+                    "helper": "",
+                    "exp": "",
+                    "readonly": "",
+                    "attr": {
+                        "width": "300",
+                        "height": "300",
+                        "allow": "",
+                        "cropable": "yes",
+                        "maxsize": "",
+                        "api": ""
+                    },
+                    "validator": [
+                        {
+                            "method": "",
+                            "value": "",
+                            "message": ""
+                        }
+                    ]
+                },
+                {
+                    "cname": "承办方/组织者",
+                    "name": "organizers",
+                    "type": "image-groups",
+                    "placeholder": "",
+                    "helper": "",
+                    "exp": "",
+                    "readonly": "",
+                    "attr": {
+                        "width": "300",
+                        "height": "300",
+                        "allow": "",
+                        "cropable": "",
+                        "maxsize": "",
+                        "api": ""
+                    },
+                    "validator": [
+                        {
+                            "method": "",
+                            "value": "",
+                            "message": ""
+                        }
+                    ]
+                },
+                {
+                    "cname": "赞助商",
+                    "name": "sponsors",
+                    "type": "image-groups",
+                    "placeholder": "",
+                    "helper": "",
+                    "exp": "",
+                    "readonly": "",
+                    "attr": {
+                        "width": "300",
+                        "height": "300",
+                        "allow": "",
+                        "cropable": "",
+                        "maxsize": "",
+                        "api": ""
+                    },
+                    "validator": [
+                        {
+                            "method": "",
+                            "value": "",
+                            "message": ""
+                        }
+                    ]
+                },
+                {
+                    "cname": "合作媒体",
+                    "name": "medias",
+                    "type": "image-groups",
+                    "placeholder": "",
+                    "helper": "",
+                    "exp": "",
+                    "readonly": "",
+                    "attr": {
+                        "width": "300",
+                        "height": "300",
+                        "allow": "",
+                        "cropable": "",
+                        "maxsize": "",
+                        "api": ""
+                    },
+                    "validator": [
+                        {
+                            "method": "",
+                            "value": "",
+                            "message": ""
+                        }
+                    ]
+                },
+                {
+                    "cname": "嘉宾",
+                    "name": "speakers",
+                    "type": "image-groups",
+                    "placeholder": "",
+                    "helper": "",
+                    "exp": "",
+                    "readonly": "",
+                    "attr": {
+                        "width": "300",
+                        "height": "300",
+                        "allow": "",
+                        "cropable": "",
+                        "maxsize": "",
+                        "api": ""
+                    },
+                    "validator": [
+                        {
+                            "method": "",
+                            "value": "",
+                            "message": ""
+                        }
+                    ]
+                },
+                {
+                    "cname": "活动介绍",
+                    "name": "content",
+                    "type": "summernote",
+                    "placeholder": "请填写活动介绍",
+                    "helper": "",
+                    "exp": "",
+                    "readonly": "",
+                    "attr": {
+                        "default": "",
+                        "height": "",
+                        "maxHeight": "",
+                        "api": "",
+                        "minHeight": ""
+                    },
+                    "validator": [
+                        {
+                            "method": "",
+                            "value": "",
+                            "message": ""
+                        }
+                    ]
+                },
+                {
+                    "cname": "发布时间",
+                    "name": "publish_time",
+                    "type": "datetime-input",
+                    "placeholder": "请填写发布时间",
+                    "helper": "",
+                    "exp": "",
+                    "readonly": "",
+                    "attr": {
+                        "default": ""
+                    },
+                    "validator": [
+                        {
+                            "method": "",
+                            "value": "",
+                            "message": ""
+                        }
+                    ]
+                },
+                {
+                    "cname": "活动状态",
+                    "name": "status",
+                    "type": "select",
+                    "placeholder": "请填写活动介绍",
+                    "helper": "",
+                    "exp": "",
+                    "readonly": "",
+                    "attr": {
+                        "option": "草稿=draft,报名中=open,报名截止=close,活动关闭=off",
+                        "default": "draft"
+                    },
+                    "validator": [
+                        {
+                            "method": "",
+                            "value": "",
+                            "message": ""
+                        }
+                    ]
+                }
+            ],
+            "jscode": [
+                ""
+            ]
+        },
+        "list": {
+            "keyword_param": "keywords",
+            "keyword": [
+                "name=event_id",
+                "name=slug",
+                "name=name",
+                "name=prov",
+                "name=city",
+                "name=town"
+            ],
+            "jscode": [
+                ""
+            ],
+            "conditions": [
+                {
+                    "or": "0",
+                    "field": "name=event_id",
+                    "type": "=",
+                    "cname": "",
+                    "param": "",
+                    "default": ""
+                },
+                {
+                    "or": "0",
+                    "field": "name=slug",
+                    "type": "=",
+                    "cname": "",
+                    "param": "",
+                    "default": ""
+                },
+                {
+                    "or": "0",
+                    "field": "name=begin",
+                    "type": "=",
+                    "cname": "",
+                    "param": "",
+                    "default": ""
+                },
+                {
+                    "or": "0",
+                    "field": "name=end",
+                    "type": "=",
+                    "cname": "",
+                    "param": "",
+                    "default": ""
+                },
+                {
+                    "or": "0",
+                    "field": "name=area",
+                    "type": "=",
+                    "cname": "",
+                    "param": "",
+                    "default": ""
+                },
+                {
+                    "or": "0",
+                    "field": "name=prov",
+                    "type": "=",
+                    "cname": "",
+                    "param": "",
+                    "default": ""
+                },
+                {
+                    "or": "0",
+                    "field": "name=city",
+                    "type": "=",
+                    "cname": "",
+                    "param": "",
+                    "default": ""
+                },
+                {
+                    "or": "0",
+                    "field": "name=town",
+                    "type": "=",
+                    "cname": "",
+                    "param": "",
+                    "default": ""
+                },
+                {
+                    "or": "0",
+                    "field": "name=price",
+                    "type": ">",
+                    "cname": "",
+                    "param": "",
+                    "default": ""
+                },
+                {
+                    "or": "0",
+                    "field": "name=price",
+                    "type": "<",
+                    "cname": "",
+                    "param": "",
+                    "default": ""
+                },
+                {
+                    "or": "0",
+                    "field": "name=status",
+                    "type": "=",
+                    "cname": "",
+                    "param": "",
+                    "default": ""
+                }
+            ],
+            "orderby": [
+                {
+                    "field": "name=created_at",
+                    "type": "desc",
+                    "cname": "",
+                    "param": ""
+                },
+                {
+                    "field": "name=updated_at",
+                    "type": "desc",
+                    "cname": "",
+                    "param": ""
+                }
+            ],
+            "statusby": [
+                {
+                    "name": "name=status",
+                    "cname": "活动状态",
+                    "status": "草稿=draft|danger,报名中=open|success,报名截止=close|default,活动关闭=off|default"
+                }
+            ],
+            "columns": [
+                {
+                    "fields": [
+                        "name=event_id"
+                    ],
+                    "cname": "",
+                    "filter": "",
+                    "default": ""
+                },
+                {
+                    "fields": [
+                        "name=slug"
+                    ],
+                    "cname": "",
+                    "filter": "",
+                    "default": ""
+                },
+                {
+                    "fields": [
+                        "name=name"
+                    ],
+                    "cname": "",
+                    "filter": "",
+                    "default": ""
+                },
+                {
+                    "fields": [
+                        "model=%5CXpmsns%5CPages%5CModel%5CCategory&name=name&table=category&prefix=xpmsns_pages_&alias=c&type=inWhere"
+                    ],
+                    "cname": "栏目",
+                    "filter": "",
+                    "default": ""
+                },
+                {
+                    "fields": [
+                        "name=cover"
+                    ],
+                    "cname": "",
+                    "filter": "",
+                    "default": ""
+                },
+                {
+                    "fields": [
+                        "name=images"
+                    ],
+                    "cname": "",
+                    "filter": "",
+                    "default": ""
+                },
+                {
+                    "fields": [
+                        "name=publish_time"
+                    ],
+                    "cname": "",
+                    "filter": "{{publish_time|toDate('Y年m月d日')}}  @{{publish_time|toTime('h时i分')}}",
+                    "default": ""
+                },
+                {
+                    "fields": [
+                        "name=begin"
+                    ],
+                    "cname": "",
+                    "filter": "{{begin|toDate('Y年m月d日')}}  @{{begin|toTime('h时i分')}}",
+                    "default": ""
+                },
+                {
+                    "fields": [
+                        "name=end"
+                    ],
+                    "cname": "",
+                    "filter": "{{end|toDate('Y年m月d日')}}  @{{end|toTime('h时i分')}}",
+                    "default": ""
+                },
+                {
+                    "fields": [
+                        "name=status"
+                    ],
+                    "cname": "",
+                    "filter": "",
+                    "default": ""
+                }
+            ]
+        },
+        "api": {
+            "getstatus": "1",
+            "createstatus": "1",
+            "updatestatus": "1",
+            "deletestatus": "1",
+            "searchstatus": "1",
+            "uploadparam": "",
+            "uploadstatus": "0",
+            "getkey": [
+                "name=event_id",
+                "name=slug"
+            ],
+            "getfields": [
+                "name=event_id",
+                "name=slug",
+                "name=name",
+                "name=link",
+                "name=categories",
+                "name=type",
+                "name=tags",
+                "name=summary",
+                "name=cover",
+                "name=images",
+                "name=begin",
+                "name=end",
+                "name=area",
+                "name=prov",
+                "name=city",
+                "name=town",
+                "name=location",
+                "name=price",
+                "name=hosts",
+                "name=organizers",
+                "name=sponsors",
+                "name=medias",
+                "name=speakers",
+                "name=content",
+                "name=publish_time",
+                "name=view_cnt",
+                "name=like_cnt",
+                "name=dislike_cnt",
+                "name=comment_cnt",
+                "name=status",
+                "name=created_at",
+                "name=updated_at",
+                "model=%5CXpmsns%5CPages%5CModel%5CCategory&name=category_id&table=category&prefix=xpmsns_pages_&alias=c&type=inWhere",
+                "model=%5CXpmsns%5CPages%5CModel%5CCategory&name=name&table=category&prefix=xpmsns_pages_&alias=c&type=inWhere",
+                "model=%5CXpmsns%5CPages%5CModel%5CCategory&name=param&table=category&prefix=xpmsns_pages_&alias=c&type=inWhere"
+            ],
+            "createfields": [
+                "name=event_id",
+                "name=slug",
+                "name=name"
+            ],
+            "updatekey": [
+                "name=event_id",
+                "name=slug"
+            ],
+            "deletekey": [
+                "name=event_id",
+                "name=slug"
+            ],
+            "searchfields": [
+                "name=event_id",
+                "name=slug",
+                "name=name",
+                "name=link",
+                "name=categories",
+                "name=type",
+                "name=tags",
+                "name=summary",
+                "name=cover",
+                "name=images",
+                "name=begin",
+                "name=end",
+                "name=area",
+                "name=prov",
+                "name=city",
+                "name=town",
+                "name=location",
+                "name=price",
+                "name=hosts",
+                "name=organizers",
+                "name=sponsors",
+                "name=medias",
+                "name=speakers",
+                "name=publish_time",
+                "name=view_cnt",
+                "name=like_cnt",
+                "name=dislike_cnt",
+                "name=comment_cnt",
+                "name=created_at",
+                "name=updated_at",
+                "model=%5CXpmsns%5CPages%5CModel%5CCategory&name=category_id&table=category&prefix=xpmsns_pages_&alias=c&type=inWhere",
+                "model=%5CXpmsns%5CPages%5CModel%5CCategory&name=slug&table=category&prefix=xpmsns_pages_&alias=c&type=inWhere",
+                "model=%5CXpmsns%5CPages%5CModel%5CCategory&name=name&table=category&prefix=xpmsns_pages_&alias=c&type=inWhere",
+                "model=%5CXpmsns%5CPages%5CModel%5CCategory&name=param&table=category&prefix=xpmsns_pages_&alias=c&type=inWhere"
+            ],
+            "getauth": {
+                "sign": "",
+                "secret": "",
+                "image": ""
+            },
+            "createauth": {
+                "sign": "1",
+                "secret": "",
+                "image": ""
+            },
+            "updateauth": {
+                "sign": "1",
+                "secret": "",
+                "image": ""
+            },
+            "deleteauth": {
+                "sign": "1",
+                "secret": "",
+                "image": ""
+            },
+            "searchauth": {
+                "sign": "",
+                "secret": "",
+                "image": ""
+            },
+            "uploadauth": {
+                "sign": "",
+                "secret": "1",
+                "image": ""
+            },
+            "methods": [
+                {
+                    "name": "",
+                    "cname": "",
+                    "source": ""
+                }
+            ]
+        }
+    },
+    "process": {
+        "general": "saved",
+        "struct": "saved",
+        "links": "saved",
+        "detail": "saved",
+        "list": "saved",
+        "api": "saved"
+    },
+    "next": null,
+    "prev": null,
+    "templete": {
+        "org": "xpmsns",
+        "name": "model",
+        "slug": "xpmsns_model",
+        "cname": "XpmSE 应用数据模型母版",
+        "version": "1.0.0",
+        "summary": "生成 XpmSE 应用数据模型。涵盖资源模型CURD、API CURD和标准资源管理界面。"
+    }
+}

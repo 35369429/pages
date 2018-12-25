@@ -1,0 +1,1187 @@
+{
+    "name": "简墨-商品管理",
+    "data": {
+        "struct": {
+            "table": "goods",
+            "fields": [
+                {
+                    "name": "goods_id",
+                    "cname": "商品ID",
+                    "type": "string",
+                    "length": "128",
+                    "default": "",
+                    "unique": "1",
+                    "index": "",
+                    "nullable": "1",
+                    "json": "",
+                    "auto": "1",
+                    "file": "",
+                    "private": ""
+                },
+                {
+                    "name": "instance",
+                    "cname": "所属机构",
+                    "type": "string",
+                    "length": "64",
+                    "default": "root",
+                    "unique": "",
+                    "index": "1",
+                    "nullable": "1",
+                    "json": "",
+                    "auto": "",
+                    "file": "",
+                    "private": ""
+                },
+                {
+                    "name": "name",
+                    "cname": "名称",
+                    "type": "string",
+                    "length": "300",
+                    "default": "",
+                    "unique": "",
+                    "index": "1",
+                    "nullable": "1",
+                    "json": "",
+                    "auto": "",
+                    "file": "",
+                    "private": ""
+                },
+                {
+                    "name": "slug",
+                    "cname": "别名",
+                    "type": "string",
+                    "length": "128",
+                    "default": "",
+                    "unique": "1",
+                    "index": "",
+                    "nullable": "",
+                    "json": "",
+                    "auto": "",
+                    "file": "",
+                    "private": ""
+                },
+                {
+                    "name": "tags",
+                    "cname": "标签",
+                    "type": "string",
+                    "length": "128",
+                    "default": "",
+                    "unique": "",
+                    "index": "",
+                    "nullable": "",
+                    "json": "1",
+                    "auto": "",
+                    "file": "",
+                    "private": ""
+                },
+                {
+                    "name": "category_ids",
+                    "cname": "类目",
+                    "type": "text",
+                    "length": "",
+                    "default": "",
+                    "unique": "",
+                    "index": "",
+                    "nullable": "",
+                    "json": "1",
+                    "auto": "",
+                    "file": "",
+                    "private": ""
+                },
+                {
+                    "name": "recommend_ids",
+                    "cname": "推荐",
+                    "type": "text",
+                    "length": "",
+                    "default": "",
+                    "unique": "",
+                    "index": "",
+                    "nullable": "",
+                    "json": "1",
+                    "auto": "",
+                    "file": "",
+                    "private": ""
+                },
+                {
+                    "name": "summary",
+                    "cname": "简介",
+                    "type": "string",
+                    "length": "400",
+                    "default": "",
+                    "unique": "",
+                    "index": "",
+                    "nullable": "",
+                    "json": "",
+                    "auto": "",
+                    "file": "",
+                    "private": ""
+                },
+                {
+                    "name": "cover",
+                    "cname": "主图",
+                    "type": "string",
+                    "length": "800",
+                    "default": "",
+                    "unique": "",
+                    "index": "",
+                    "nullable": "",
+                    "json": "1",
+                    "auto": "",
+                    "file": "1",
+                    "private": ""
+                },
+                {
+                    "name": "images",
+                    "cname": "图片",
+                    "type": "text",
+                    "length": "",
+                    "default": "",
+                    "unique": "",
+                    "index": "",
+                    "nullable": "",
+                    "json": "1",
+                    "auto": "",
+                    "file": "1",
+                    "private": ""
+                },
+                {
+                    "name": "videos",
+                    "cname": "视频",
+                    "type": "text",
+                    "length": "",
+                    "default": "",
+                    "unique": "",
+                    "index": "",
+                    "nullable": "",
+                    "json": "1",
+                    "auto": "",
+                    "file": "1",
+                    "private": ""
+                },
+                {
+                    "name": "params",
+                    "cname": "参数表",
+                    "type": "text",
+                    "length": "",
+                    "default": "",
+                    "unique": "",
+                    "index": "",
+                    "nullable": "",
+                    "json": "1",
+                    "auto": "",
+                    "file": "",
+                    "private": ""
+                },
+                {
+                    "name": "content",
+                    "cname": "产品详情",
+                    "type": "longText",
+                    "length": "",
+                    "default": "",
+                    "unique": "",
+                    "index": "",
+                    "nullable": "",
+                    "json": "",
+                    "auto": "",
+                    "file": "",
+                    "private": ""
+                },
+                {
+                    "name": "content_faq",
+                    "cname": "常见问题",
+                    "type": "text",
+                    "length": "",
+                    "default": "",
+                    "unique": "",
+                    "index": "",
+                    "nullable": "",
+                    "json": "",
+                    "auto": "",
+                    "file": "",
+                    "private": ""
+                },
+                {
+                    "name": "content_serv",
+                    "cname": "售后服务",
+                    "type": "text",
+                    "length": "",
+                    "default": "",
+                    "unique": "",
+                    "index": "",
+                    "nullable": "",
+                    "json": "",
+                    "auto": "",
+                    "file": "",
+                    "private": ""
+                },
+                {
+                    "name": "sku_cnt",
+                    "cname": "SKU数量",
+                    "type": "integer",
+                    "length": "1",
+                    "default": "",
+                    "unique": "",
+                    "index": "1",
+                    "nullable": "",
+                    "json": "",
+                    "auto": "",
+                    "file": "",
+                    "private": ""
+                },
+                {
+                    "name": "sku_sum",
+                    "cname": "单品总数",
+                    "type": "integer",
+                    "length": "1",
+                    "default": "",
+                    "unique": "",
+                    "index": "1",
+                    "nullable": "",
+                    "json": "",
+                    "auto": "",
+                    "file": "",
+                    "private": ""
+                },
+                {
+                    "name": "shipped_sum",
+                    "cname": "货运装箱总数",
+                    "type": "integer",
+                    "length": "1",
+                    "default": "",
+                    "unique": "",
+                    "index": "1",
+                    "nullable": "",
+                    "json": "",
+                    "auto": "",
+                    "file": "",
+                    "private": ""
+                },
+                {
+                    "name": "available_sum",
+                    "cname": "可售总数",
+                    "type": "integer",
+                    "length": "1",
+                    "default": "",
+                    "unique": "",
+                    "index": "1",
+                    "nullable": "",
+                    "json": "",
+                    "auto": "",
+                    "file": "",
+                    "private": ""
+                },
+                {
+                    "name": "lower_price",
+                    "cname": "最低单价",
+                    "type": "integer",
+                    "length": "1",
+                    "default": "",
+                    "unique": "",
+                    "index": "1",
+                    "nullable": "",
+                    "json": "",
+                    "auto": "",
+                    "file": "",
+                    "private": ""
+                },
+                {
+                    "name": "sale_way",
+                    "cname": "销售方式",
+                    "type": "string",
+                    "length": "32",
+                    "default": "normal",
+                    "unique": "",
+                    "index": "1",
+                    "nullable": "",
+                    "json": "",
+                    "auto": "",
+                    "file": "",
+                    "private": ""
+                },
+                {
+                    "name": "opened_at",
+                    "cname": "开售时间",
+                    "type": "timestamp",
+                    "length": "",
+                    "default": "",
+                    "unique": "",
+                    "index": "1",
+                    "nullable": "",
+                    "json": "",
+                    "auto": "",
+                    "file": "",
+                    "private": ""
+                },
+                {
+                    "name": "closed_at",
+                    "cname": "结束时间",
+                    "type": "timestamp",
+                    "length": "",
+                    "default": "",
+                    "unique": "",
+                    "index": "1",
+                    "nullable": "",
+                    "json": "",
+                    "auto": "",
+                    "file": "",
+                    "private": ""
+                },
+                {
+                    "name": "pay_duration",
+                    "cname": "付款期限",
+                    "type": "integer",
+                    "length": "0",
+                    "default": "0",
+                    "unique": "",
+                    "index": "1",
+                    "nullable": "",
+                    "json": "",
+                    "auto": "",
+                    "file": "",
+                    "private": ""
+                },
+                {
+                    "name": "status",
+                    "cname": "状态",
+                    "type": "string",
+                    "length": "32",
+                    "default": "online",
+                    "unique": "",
+                    "index": "1",
+                    "nullable": "1",
+                    "json": "",
+                    "auto": "",
+                    "file": "",
+                    "private": ""
+                },
+                {
+                    "name": "events",
+                    "cname": "事件",
+                    "type": "text",
+                    "length": "",
+                    "default": "",
+                    "unique": "",
+                    "index": "",
+                    "nullable": "",
+                    "json": "1",
+                    "auto": "",
+                    "file": "",
+                    "private": ""
+                }
+            ],
+            "methods": [
+                {
+                    "name": "",
+                    "cname": "",
+                    "source": ""
+                }
+            ]
+        },
+        "links": {
+            "fields": [
+                {
+                    "cname": "栏目",
+                    "type": "inWhere",
+                    "model": "\\Xpmsns\\Pages\\Model\\Category",
+                    "table": "category",
+                    "prefix": "xpmsns_pages_",
+                    "field": "category_id",
+                    "on": "in",
+                    "name": "category_ids",
+                    "alias": "c"
+                },
+                {
+                    "cname": "推荐",
+                    "type": "inWhere",
+                    "model": "\\Xpmsns\\Pages\\Model\\Recommend",
+                    "table": "recommend",
+                    "prefix": "xpmsns_pages_",
+                    "field": "recommend_id",
+                    "on": "in",
+                    "name": "recommend_ids",
+                    "alias": "r"
+                }
+            ]
+        },
+        "api": {
+            "getstatus": "1",
+            "createfields": "name=name",
+            "createstatus": "1",
+            "updatestatus": "1",
+            "deletestatus": "1",
+            "searchstatus": "1",
+            "uploadparam": "",
+            "uploadstatus": "0",
+            "getkey": [
+                "name=goods_id",
+                "name=slug"
+            ],
+            "getfields": [
+                "name=goods_id",
+                "name=instance",
+                "name=name",
+                "name=slug",
+                "name=tags",
+                "name=summary",
+                "name=cover",
+                "name=images",
+                "name=videos",
+                "name=params",
+                "name=content",
+                "name=content_faq",
+                "name=content_serv",
+                "name=sku_cnt",
+                "name=sku_sum",
+                "name=shipped_sum",
+                "name=available_sum",
+                "name=lower_price",
+                "name=sale_way",
+                "name=opened_at",
+                "name=closed_at",
+                "name=pay_duration",
+                "name=status",
+                "name=created_at",
+                "name=updated_at",
+                "model=%5CXpmsns%5CPages%5CModel%5CCategory&name=category_id&table=category&prefix=xpmsns_pages_&alias=c&type=inWhere",
+                "model=%5CXpmsns%5CPages%5CModel%5CCategory&name=name&table=category&prefix=xpmsns_pages_&alias=c&type=inWhere",
+                "model=%5CXpmsns%5CPages%5CModel%5CRecommend&name=recommend_id&table=recommend&prefix=xpmsns_pages_&alias=r&type=inWhere"
+            ],
+            "updatekey": [
+                "name=goods_id"
+            ],
+            "deletekey": [
+                "name=goods_id"
+            ],
+            "searchfields": [
+                "name=goods_id",
+                "name=instance",
+                "name=name",
+                "name=slug",
+                "name=tags",
+                "name=summary",
+                "name=cover",
+                "name=params",
+                "name=sku_cnt",
+                "name=sku_sum",
+                "name=shipped_sum",
+                "name=available_sum",
+                "name=lower_price",
+                "name=status",
+                "name=created_at",
+                "name=updated_at",
+                "model=%5CXpmsns%5CPages%5CModel%5CCategory&name=category_id&table=category&prefix=xpmsns_pages_&alias=c&type=inWhere",
+                "model=%5CXpmsns%5CPages%5CModel%5CCategory&name=name&table=category&prefix=xpmsns_pages_&alias=c&type=inWhere"
+            ],
+            "getauth": {
+                "sign": "",
+                "secret": "",
+                "image": ""
+            },
+            "createauth": {
+                "sign": "1",
+                "secret": "1",
+                "image": ""
+            },
+            "updateauth": {
+                "sign": "1",
+                "secret": "1",
+                "image": ""
+            },
+            "deleteauth": {
+                "sign": "1",
+                "secret": "1",
+                "image": ""
+            },
+            "searchauth": {
+                "sign": "",
+                "secret": "",
+                "image": ""
+            },
+            "uploadauth": {
+                "sign": "",
+                "secret": "",
+                "image": ""
+            },
+            "methods": [
+                {
+                    "name": "",
+                    "cname": "",
+                    "source": ""
+                }
+            ]
+        },
+        "detail": {
+            "index": "name=goods_id",
+            "title": "name=name",
+            "columns": [
+                {
+                    "cname": "名称",
+                    "name": "name",
+                    "type": "input",
+                    "placeholder": "请填写商品名称",
+                    "helper": "",
+                    "exp": "",
+                    "readonly": "",
+                    "attr": {
+                        "default": ""
+                    },
+                    "validator": [
+                        {
+                            "method": "",
+                            "value": "",
+                            "message": ""
+                        }
+                    ]
+                },
+                {
+                    "cname": "别名",
+                    "name": "slug",
+                    "type": "input",
+                    "placeholder": "请填写商品别名 ( 别名必须唯一 )",
+                    "helper": "",
+                    "exp": "",
+                    "readonly": "",
+                    "attr": {
+                        "default": ""
+                    },
+                    "validator": [
+                        {
+                            "method": "",
+                            "value": "",
+                            "message": ""
+                        }
+                    ]
+                },
+                {
+                    "cname": "单价",
+                    "name": "lower_price",
+                    "type": "input",
+                    "placeholder": "请填写单价",
+                    "helper": "单位分",
+                    "exp": "",
+                    "readonly": "",
+                    "attr": {
+                        "default": ""
+                    },
+                    "validator": [
+                        {
+                            "method": "",
+                            "value": "",
+                            "message": ""
+                        }
+                    ]
+                },
+                {
+                    "cname": "标签",
+                    "name": "tags",
+                    "type": "input",
+                    "placeholder": "请填写标签, 多个用逗号分隔",
+                    "helper": "",
+                    "exp": "",
+                    "readonly": "",
+                    "attr": {
+                        "default": ""
+                    },
+                    "validator": [
+                        {
+                            "method": "",
+                            "value": "",
+                            "message": ""
+                        }
+                    ]
+                },
+                {
+                    "cname": "类目",
+                    "name": "category_ids",
+                    "type": "select-remote",
+                    "placeholder": "请选择所商品类目",
+                    "helper": "",
+                    "exp": "",
+                    "readonly": "",
+                    "attr": {
+                        "table": "category",
+                        "prefix": "xpmsns_pages_",
+                        "model": "\\Xpmsns\\Pages\\Model\\Category",
+                        "fields": [
+                            "category_id",
+                            "name"
+                        ],
+                        "option": "category_id",
+                        "style": "{{name}}({{category_id}})",
+                        "default": "",
+                        "multiple": "1",
+                        "api": "",
+                        "cancel": "",
+                        "cancelable": "1"
+                    },
+                    "validator": [
+                        {
+                            "method": "",
+                            "value": "",
+                            "message": ""
+                        }
+                    ]
+                },
+                {
+                    "cname": "内容区块 (推荐)",
+                    "name": "recommend_ids",
+                    "type": "select-remote",
+                    "placeholder": "请选择推荐",
+                    "helper": "",
+                    "exp": "",
+                    "readonly": "",
+                    "attr": {
+                        "table": "recommend",
+                        "prefix": "xpmsns_pages_",
+                        "model": "\\Xpmsns\\Pages\\Model\\Recommend",
+                        "fields": [
+                            "recommend_id",
+                            "title"
+                        ],
+                        "option": "recommend_id",
+                        "style": "{{title}}({{recommend_id}})",
+                        "default": "",
+                        "multiple": "1",
+                        "api": "",
+                        "cancel": "",
+                        "cancelable": "1"
+                    },
+                    "validator": [
+                        {
+                            "method": "",
+                            "value": "",
+                            "message": ""
+                        }
+                    ]
+                },
+                {
+                    "cname": "简介",
+                    "name": "summary",
+                    "type": "textarea",
+                    "placeholder": "请填写专栏简介",
+                    "helper": "",
+                    "exp": "",
+                    "readonly": "",
+                    "attr": {
+                        "default": "",
+                        "rows": "4",
+                        "autoheight": ""
+                    },
+                    "validator": [
+                        {
+                            "method": "",
+                            "value": "",
+                            "message": ""
+                        }
+                    ]
+                },
+                {
+                    "cname": "主图",
+                    "name": "cover",
+                    "type": "image",
+                    "placeholder": "请上传商品主图",
+                    "helper": "",
+                    "exp": "",
+                    "readonly": "",
+                    "attr": {
+                        "width": "200",
+                        "height": "200",
+                        "allow": "",
+                        "cropable": "1"
+                    },
+                    "validator": [
+                        {
+                            "method": "",
+                            "value": "",
+                            "message": ""
+                        }
+                    ]
+                },
+                {
+                    "cname": "图片",
+                    "name": "images",
+                    "type": "image-groups",
+                    "placeholder": "请上传商品图片",
+                    "helper": "",
+                    "exp": "",
+                    "readonly": "",
+                    "attr": {
+                        "width": "200",
+                        "height": "200",
+                        "allow": "",
+                        "cropable": "",
+                        "maxsize": "",
+                        "api": "",
+                        "title_cname": "",
+                        "link_cname": "",
+                        "summary_cname": ""
+                    },
+                    "validator": [
+                        {
+                            "method": "",
+                            "value": "",
+                            "message": ""
+                        }
+                    ]
+                },
+                {
+                    "cname": "视频",
+                    "name": "videos",
+                    "type": "image-groups",
+                    "placeholder": "请上传商品视频",
+                    "helper": "",
+                    "exp": "",
+                    "readonly": "",
+                    "attr": {
+                        "width": "200",
+                        "height": "200",
+                        "allow": "",
+                        "cropable": "",
+                        "maxsize": "",
+                        "api": "",
+                        "title_cname": "",
+                        "link_cname": "",
+                        "summary_cname": ""
+                    },
+                    "validator": [
+                        {
+                            "method": "",
+                            "value": "",
+                            "message": ""
+                        }
+                    ]
+                },
+                {
+                    "cname": "参数表",
+                    "name": "params",
+                    "type": "json-input",
+                    "placeholder": "",
+                    "helper": "",
+                    "exp": "",
+                    "readonly": "",
+                    "attr": {
+                        "default": "",
+                        "placeholders": "key:参数名称,value:数值范围",
+                        "format": "",
+                        "free": ""
+                    },
+                    "validator": [
+                        {
+                            "method": "",
+                            "value": "",
+                            "message": ""
+                        }
+                    ]
+                },
+                {
+                    "cname": "销售方式",
+                    "name": "sale_way",
+                    "type": "radio",
+                    "placeholder": "",
+                    "helper": "",
+                    "exp": "",
+                    "readonly": "",
+                    "attr": {
+                        "option": "标准=normal,闪购=flash,抢购=rush,团购=group,拼团=sharing,众筹=crowd,拍卖=auction,分期=repayment,1元购=draw",
+                        "default": "normal"
+                    },
+                    "validator": [
+                        {
+                            "method": "",
+                            "value": "",
+                            "message": ""
+                        }
+                    ]
+                },
+                {
+                    "cname": "付款期限",
+                    "name": "pay_duration",
+                    "type": "input",
+                    "placeholder": "请输入下单后可以等待付款时长.",
+                    "helper": "单位秒",
+                    "exp": "",
+                    "readonly": "",
+                    "attr": {
+                        "default": "3600"
+                    },
+                    "validator": [
+                        {
+                            "method": "",
+                            "value": "",
+                            "message": ""
+                        }
+                    ]
+                },
+                {
+                    "cname": "开售时间",
+                    "name": "opened_at",
+                    "type": "datetime-input",
+                    "placeholder": "请选择开售时间",
+                    "helper": "",
+                    "exp": "",
+                    "readonly": "",
+                    "attr": {
+                        "default": ""
+                    },
+                    "validator": [
+                        {
+                            "method": "",
+                            "value": "",
+                            "message": ""
+                        }
+                    ]
+                },
+                {
+                    "cname": "结束时间",
+                    "name": "closed_at",
+                    "type": "datetime-input",
+                    "placeholder": "请选择结束时间",
+                    "helper": "",
+                    "exp": "",
+                    "readonly": "",
+                    "attr": {
+                        "default": ""
+                    },
+                    "validator": [
+                        {
+                            "method": "",
+                            "value": "",
+                            "message": ""
+                        }
+                    ]
+                },
+                {
+                    "cname": "状态",
+                    "name": "status",
+                    "type": "radio",
+                    "placeholder": "",
+                    "helper": "",
+                    "exp": "",
+                    "readonly": "",
+                    "attr": {
+                        "option": "上架=online,下架=offline",
+                        "default": "online"
+                    },
+                    "validator": [
+                        {
+                            "method": "",
+                            "value": "",
+                            "message": ""
+                        }
+                    ]
+                },
+                {
+                    "cname": "产品详情",
+                    "name": "content",
+                    "type": "summernote",
+                    "placeholder": "",
+                    "helper": "",
+                    "exp": "",
+                    "readonly": "",
+                    "attr": {
+                        "default": "",
+                        "height": "",
+                        "maxHeight": "",
+                        "api": "",
+                        "minHeight": ""
+                    },
+                    "validator": [
+                        {
+                            "method": "",
+                            "value": "",
+                            "message": ""
+                        }
+                    ]
+                },
+                {
+                    "cname": "常见问题",
+                    "name": "content_faq",
+                    "type": "summernote",
+                    "placeholder": "",
+                    "helper": "",
+                    "exp": "",
+                    "readonly": "",
+                    "attr": {
+                        "default": "",
+                        "height": "",
+                        "maxHeight": "",
+                        "api": "",
+                        "minHeight": ""
+                    },
+                    "validator": [
+                        {
+                            "method": "",
+                            "value": "",
+                            "message": ""
+                        }
+                    ]
+                },
+                {
+                    "cname": "售后服务",
+                    "name": "content_serv",
+                    "type": "summernote",
+                    "placeholder": "",
+                    "helper": "",
+                    "exp": "",
+                    "readonly": "",
+                    "attr": {
+                        "default": "",
+                        "height": "",
+                        "maxHeight": "",
+                        "api": "",
+                        "minHeight": ""
+                    },
+                    "validator": [
+                        {
+                            "method": "",
+                            "value": "",
+                            "message": ""
+                        }
+                    ]
+                },
+                {
+                    "cname": "事件",
+                    "name": "events",
+                    "type": "textarea",
+                    "placeholder": "设置事件响应，请工程师填写，主要用于自动发货，对接ERP系统。",
+                    "helper": "",
+                    "exp": "",
+                    "readonly": "",
+                    "attr": {
+                        "default": "",
+                        "rows": "8",
+                        "autoheight": ""
+                    },
+                    "validator": [
+                        {
+                            "method": "",
+                            "value": "",
+                            "message": ""
+                        }
+                    ]
+                }
+            ],
+            "jscode": [
+                ""
+            ],
+            "undefined": [
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                ""
+            ]
+        },
+        "list": {
+            "keyword_param": "keyword",
+            "keyword": [
+                "name=instance",
+                "name=name",
+                "name=slug"
+            ],
+            "jscode": [
+                ""
+            ],
+            "conditions": [
+                {
+                    "or": "0",
+                    "field": "name=goods_id",
+                    "type": "=",
+                    "cname": "商品ID",
+                    "param": "",
+                    "default": ""
+                },
+                {
+                    "or": "0",
+                    "field": "name=goods_id",
+                    "type": "in",
+                    "cname": "商品IDS",
+                    "param": "",
+                    "default": ""
+                },
+                {
+                    "or": "0",
+                    "field": "name=slug",
+                    "type": "=",
+                    "cname": "别名",
+                    "param": "",
+                    "default": ""
+                },
+                {
+                    "or": "0",
+                    "field": "name=name",
+                    "type": "=",
+                    "cname": "名称",
+                    "param": "",
+                    "default": ""
+                },
+                {
+                    "or": "0",
+                    "field": "name=sku_cnt",
+                    "type": "=",
+                    "cname": "SKU",
+                    "param": "",
+                    "default": ""
+                },
+                {
+                    "or": "0",
+                    "field": "name=name",
+                    "type": "like",
+                    "cname": "名称",
+                    "param": "",
+                    "default": ""
+                },
+                {
+                    "or": "0",
+                    "field": "name=sale_way",
+                    "type": "=",
+                    "cname": "销售方式",
+                    "param": "",
+                    "default": ""
+                },
+                {
+                    "or": "0",
+                    "field": "name=status",
+                    "type": "=",
+                    "cname": "状态",
+                    "param": "",
+                    "default": ""
+                }
+            ],
+            "orderby": [
+                {
+                    "field": "name=created_at",
+                    "type": "",
+                    "cname": "创建时间",
+                    "param": ""
+                },
+                {
+                    "field": "name=updated_at",
+                    "type": "desc",
+                    "cname": "创建时间倒序",
+                    "param": ""
+                }
+            ],
+            "statusby": [
+                {
+                    "name": "name=status",
+                    "cname": "状态",
+                    "status": "开启=online|success,下架=offline|danger"
+                }
+            ],
+            "columns": [
+                {
+                    "fields": [
+                        "name=goods_id"
+                    ],
+                    "cname": "ID",
+                    "filter": "",
+                    "default": ""
+                },
+                {
+                    "fields": [
+                        "name=cover"
+                    ],
+                    "cname": "",
+                    "filter": "",
+                    "default": ""
+                },
+                {
+                    "fields": [
+                        "name=name"
+                    ],
+                    "cname": "名称",
+                    "filter": "",
+                    "default": ""
+                },
+                {
+                    "fields": [
+                        "name=slug"
+                    ],
+                    "cname": "别名",
+                    "filter": "",
+                    "default": ""
+                },
+                {
+                    "fields": [
+                        "model=%5CXpmsns%5CPages%5CModel%5CCategory&name=name&table=category&prefix=xpmsns_pages_&alias=c&type=inWhere"
+                    ],
+                    "cname": "类目",
+                    "filter": "",
+                    "default": ""
+                },
+                {
+                    "fields": [
+                        "name=lower_price"
+                    ],
+                    "cname": "单价",
+                    "filter": "{{lower_price}}起",
+                    "default": ""
+                },
+                {
+                    "fields": [
+                        "name=available_sum"
+                    ],
+                    "cname": "库存",
+                    "filter": "",
+                    "default": ""
+                },
+                {
+                    "fields": [
+                        "name=status"
+                    ],
+                    "cname": "状态",
+                    "filter": "",
+                    "default": ""
+                },
+                {
+                    "fields": [
+                        "name=created_at",
+                        "name=updated_at"
+                    ],
+                    "cname": "更新时间",
+                    "filter": "{{ updated_at ? updated_at : created_at }}",
+                    "default": ""
+                }
+            ]
+        },
+        "general": {
+            "app": "pages",
+            "org": "xpmsns",
+            "model": "_create",
+            "name": "goods",
+            "cname": "商品"
+        }
+    },
+    "process": {
+        "struct": "saved",
+        "api": "saved",
+        "general": "saved",
+        "detail": "saved",
+        "list": "saved",
+        "links": "saved"
+    },
+    "next": null,
+    "prev": null,
+    "templete": {
+        "org": "xpmsns",
+        "name": "model",
+        "slug": "xpmsns_model",
+        "cname": "XpmSE 应用数据模型母版",
+        "version": "1.0.0",
+        "summary": "生成 XpmSE 应用数据模型。涵盖资源模型CURD、API CURD和标准资源管理界面。"
+    }
+}

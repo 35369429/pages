@@ -1,0 +1,579 @@
+{
+    "name": "简墨-友链管理",
+    "data": {
+        "general": {
+            "app": "demo",
+            "org": "xpmsns",
+            "name": "links",
+            "cname": "友链"
+        },
+        "struct": {
+            "table": "links",
+            "fields": [
+                {
+                    "name": "links_id",
+                    "cname": "友链ID",
+                    "type": "string",
+                    "length": "128",
+                    "default": "",
+                    "unique": "1",
+                    "index": "",
+                    "nullable": "1",
+                    "json": "",
+                    "auto": "1",
+                    "file": "",
+                    "private": ""
+                },
+                {
+                    "name": "links_slug",
+                    "cname": "友链别名",
+                    "type": "string",
+                    "length": "128",
+                    "default": "",
+                    "unique": "1",
+                    "index": "",
+                    "nullable": "",
+                    "json": "",
+                    "auto": "",
+                    "file": "",
+                    "private": ""
+                },
+                {
+                    "name": "name",
+                    "cname": "名称",
+                    "type": "string",
+                    "length": "128",
+                    "default": "",
+                    "unique": "",
+                    "index": "1",
+                    "nullable": "",
+                    "json": "",
+                    "auto": "",
+                    "file": "",
+                    "private": ""
+                },
+                {
+                    "name": "summary",
+                    "cname": "摘要",
+                    "type": "string",
+                    "length": "600",
+                    "default": "",
+                    "unique": "",
+                    "index": "",
+                    "nullable": "",
+                    "json": "",
+                    "auto": "",
+                    "file": "",
+                    "private": ""
+                },
+                {
+                    "name": "link",
+                    "cname": "链接",
+                    "type": "string",
+                    "length": "400",
+                    "default": "",
+                    "unique": "",
+                    "index": "",
+                    "nullable": "",
+                    "json": "",
+                    "auto": "",
+                    "file": "",
+                    "private": ""
+                },
+                {
+                    "name": "logo",
+                    "cname": "LOGO",
+                    "type": "string",
+                    "length": "400",
+                    "default": "",
+                    "unique": "",
+                    "index": "",
+                    "nullable": "",
+                    "json": "",
+                    "auto": "",
+                    "file": "1",
+                    "private": ""
+                },
+                {
+                    "name": "size",
+                    "cname": "尺寸",
+                    "type": "string",
+                    "length": "400",
+                    "default": "",
+                    "unique": "",
+                    "index": "",
+                    "nullable": "",
+                    "json": "1",
+                    "auto": "",
+                    "file": "",
+                    "private": ""
+                },
+                {
+                    "name": "position",
+                    "cname": "呈现位置",
+                    "type": "string",
+                    "length": "128",
+                    "default": "",
+                    "unique": "",
+                    "index": "1",
+                    "nullable": "",
+                    "json": "",
+                    "auto": "",
+                    "file": "",
+                    "private": ""
+                },
+                {
+                    "name": "pageview",
+                    "cname": "点击量",
+                    "type": "bigInteger",
+                    "length": "",
+                    "default": "",
+                    "unique": "",
+                    "index": "1",
+                    "nullable": "",
+                    "json": "",
+                    "auto": "",
+                    "file": "",
+                    "private": ""
+                },
+                {
+                    "name": "status",
+                    "cname": "状态",
+                    "type": "string",
+                    "length": "50",
+                    "default": "online",
+                    "unique": "",
+                    "index": "1",
+                    "nullable": "",
+                    "json": "",
+                    "auto": "",
+                    "file": "",
+                    "private": ""
+                },
+                {
+                    "name": "priority",
+                    "cname": "优先级",
+                    "type": "integer",
+                    "length": "",
+                    "default": "9999",
+                    "unique": "",
+                    "index": "1",
+                    "nullable": "",
+                    "json": "",
+                    "auto": "",
+                    "file": "",
+                    "private": ""
+                },
+                {
+                    "name": "user",
+                    "cname": "操作者",
+                    "type": "string",
+                    "length": "128",
+                    "default": "",
+                    "unique": "",
+                    "index": "1",
+                    "nullable": "",
+                    "json": "",
+                    "auto": "",
+                    "file": "",
+                    "private": ""
+                }
+            ]
+        },
+        "list": {
+            "keyword_param": "keyword",
+            "conditions": [
+                {
+                    "or": "0",
+                    "field": "name",
+                    "type": "like",
+                    "param": ""
+                },
+                {
+                    "or": "0",
+                    "field": "links_slug",
+                    "type": "=",
+                    "param": ""
+                },
+                {
+                    "or": "0",
+                    "field": "position",
+                    "type": "=",
+                    "param": ""
+                },
+                {
+                    "or": "0",
+                    "field": "priority",
+                    "type": ">",
+                    "param": ""
+                },
+                {
+                    "or": "0",
+                    "field": "status",
+                    "type": "=",
+                    "param": ""
+                }
+            ],
+            "orderby": [
+                {
+                    "field": "priority",
+                    "param": "order_pri",
+                    "type": "asc"
+                }
+            ],
+            "statusby": [
+                {
+                    "name": "status",
+                    "cname": "激活状态",
+                    "status": "上线=online|success, 下线=offline|danger"
+                }
+            ],
+            "keyword": [
+                "links_id",
+                "links_slug",
+                "name",
+                "position"
+            ],
+            "columns": [
+                "links_slug",
+                "name",
+                "logo",
+                "position",
+                "link",
+                "status"
+            ]
+        },
+        "detail": {
+            "index": "links_id",
+            "title": "name",
+            "columns": [
+                {
+                    "cname": "名称",
+                    "name": "name",
+                    "type": "input",
+                    "placeholder": "请填写广告名称",
+                    "helper": "",
+                    "exp": "",
+                    "readonly": "",
+                    "attr": {
+                        "default": ""
+                    },
+                    "validator": [
+                        {
+                            "method": "required",
+                            "value": "true",
+                            "message": "请填写广告位名称"
+                        },
+                        {
+                            "method": "minlength",
+                            "value": "2",
+                            "message": "广告位名称至少2个字"
+                        },
+                        {
+                            "method": "minlength",
+                            "value": "60",
+                            "message": "广告位名称不能超过2个字"
+                        }
+                    ]
+                },
+                {
+                    "cname": "别名",
+                    "name": "links_slug",
+                    "type": "input",
+                    "placeholder": "请填写广告唯一别名",
+                    "helper": "",
+                    "exp": "",
+                    "readonly": "",
+                    "attr": {
+                        "default": ""
+                    },
+                    "validator": [
+                        {
+                            "method": "required",
+                            "value": "true",
+                            "message": "请填写广告位名称"
+                        },
+                        {
+                            "method": "minlength",
+                            "value": "2",
+                            "message": "广告位名称至少2个字"
+                        },
+                        {
+                            "method": "minlength",
+                            "value": "60",
+                            "message": "广告位名称不能超过2个字"
+                        }
+                    ]
+                },
+                {
+                    "cname": "链接",
+                    "name": "link",
+                    "type": "input",
+                    "placeholder": "请填写广告链接",
+                    "helper": "",
+                    "exp": "",
+                    "readonly": "",
+                    "attr": {
+                        "default": ""
+                    },
+                    "validator": [
+                        {
+                            "method": "required",
+                            "value": "true",
+                            "message": "请填写广告链接"
+                        },
+                        {
+                            "method": "url",
+                            "value": "true",
+                            "message": "广告链接格式不正确"
+                        }
+                    ]
+                },
+                {
+                    "cname": "尺寸",
+                    "name": "size",
+                    "type": "input",
+                    "placeholder": "填写广告广告尺寸, 例如 400X400",
+                    "helper": "广告尺寸格式为宽度X高度, 例如: 300X150",
+                    "exp": "",
+                    "readonly": "",
+                    "attr": {
+                        "default": "300X150"
+                    },
+                    "validator": [
+                        {
+                            "method": "required",
+                            "value": "true",
+                            "message": "请填写广告尺寸"
+                        }
+                    ]
+                },
+                {
+                    "cname": "LOGO",
+                    "name": "logo",
+                    "type": "image",
+                    "placeholder": "上传LOGO图片",
+                    "helper": "",
+                    "exp": "",
+                    "readonly": "",
+                    "attr": {
+                        "width": "300",
+                        "height": "100",
+                        "allow": ".jpg,.png,.gif",
+                        "cropable": "1"
+                    },
+                    "validator": [
+                        {
+                            "method": "",
+                            "value": "",
+                            "message": ""
+                        }
+                    ]
+                },
+                {
+                    "cname": "位置",
+                    "name": "position",
+                    "type": "input",
+                    "placeholder": "友链呈现位置编号, 如: A-M-001",
+                    "helper": "前端呈现检索条件",
+                    "exp": "",
+                    "readonly": "",
+                    "attr": {
+                        "default": ""
+                    },
+                    "validator": [
+                        {
+                            "method": "required",
+                            "value": "true",
+                            "message": "请填写位置编号"
+                        },
+                        {
+                            "method": "match",
+                            "value": "[0-9a-zA-Z\\-_]",
+                            "message": "编号格式应为数字、字母和下划线组成。"
+                        }
+                    ]
+                },
+                {
+                    "cname": "简介",
+                    "name": "summary",
+                    "type": "textarea",
+                    "placeholder": "请填写友链简介",
+                    "helper": "",
+                    "exp": "",
+                    "readonly": "",
+                    "attr": {
+                        "default": "",
+                        "rows": "3",
+                        "autoheight": "1"
+                    },
+                    "validator": [
+                        {
+                            "method": "minlength",
+                            "value": "10",
+                            "message": "广告文案至少2个字"
+                        },
+                        {
+                            "method": "maxlength",
+                            "value": "300",
+                            "message": "广告文案不能超过300个字"
+                        }
+                    ]
+                },
+                {
+                    "cname": "点击量",
+                    "name": "pageview",
+                    "type": "input",
+                    "placeholder": "广告点击次数",
+                    "helper": "",
+                    "exp": "",
+                    "readonly": "1",
+                    "attr": {
+                        "default": "0"
+                    },
+                    "validator": [
+                        {
+                            "method": "number",
+                            "value": "true",
+                            "message": "点击量格式不正确"
+                        }
+                    ]
+                },
+                {
+                    "cname": "优先级",
+                    "name": "priority",
+                    "type": "input",
+                    "placeholder": "优先级排序，数值越高越靠前。",
+                    "helper": "优先级排序，数值越高越靠前。",
+                    "exp": "",
+                    "readonly": "",
+                    "attr": {
+                        "default": ""
+                    },
+                    "validator": [
+                        {
+                            "method": "number",
+                            "value": "true",
+                            "message": "优先级格式不正确"
+                        }
+                    ]
+                },
+                {
+                    "cname": "状态",
+                    "name": "status",
+                    "type": "select",
+                    "placeholder": "请选择广告状态",
+                    "helper": "",
+                    "exp": "",
+                    "readonly": "",
+                    "attr": {
+                        "option": "上线=online, 下线=offline",
+                        "default": "online"
+                    },
+                    "validator": [
+                        {
+                            "method": "required",
+                            "value": "true",
+                            "message": "请选择广告状态"
+                        }
+                    ]
+                }
+            ]
+        },
+        "api": {
+            "getstatus": "1",
+            "createfields": "name",
+            "createstatus": "1",
+            "updatestatus": "1",
+            "deletestatus": "1",
+            "searchstatus": "1",
+            "uploadstatus": "1",
+            "uploadparam": "docs",
+            "getkey": [
+                "links_id",
+                "links_slug"
+            ],
+            "getfields": [
+                "links_id",
+                "links_slug",
+                "name",
+                "summary",
+                "link",
+                "logo",
+                "size",
+                "position",
+                "pageview",
+                "status",
+                "priority"
+            ],
+            "updatekey": [
+                "links_id",
+                "links_slug"
+            ],
+            "deletekey": [
+                "links_id",
+                "links_slug"
+            ],
+            "searchfields": [
+                "links_id",
+                "links_slug",
+                "name",
+                "summary",
+                "link",
+                "logo",
+                "size",
+                "position",
+                "pageview",
+                "status",
+                "priority"
+            ],
+            "getauth": {
+                "sign": "",
+                "secret": "",
+                "image": ""
+            },
+            "createauth": {
+                "sign": "",
+                "secret": "1",
+                "image": ""
+            },
+            "updateauth": {
+                "sign": "",
+                "secret": "1",
+                "image": ""
+            },
+            "deleteauth": {
+                "sign": "",
+                "secret": "1",
+                "image": ""
+            },
+            "searchauth": {
+                "sign": "",
+                "secret": "",
+                "image": ""
+            },
+            "uploadauth": {
+                "sign": "",
+                "secret": "1",
+                "image": ""
+            }
+        }
+    },
+    "process": {
+        "general": "saved",
+        "struct": "saved",
+        "list": "saved",
+        "detail": "saved",
+        "api": "saved"
+    },
+    "next": null,
+    "prev": null,
+    "templete": {
+        "org": "xpmsns",
+        "name": "model",
+        "slug": "xpmsns_model",
+        "cname": "XpmSE 应用数据模型母版",
+        "version": "1.0.0",
+        "summary": "生成 XpmSE 应用数据模型。涵盖资源模型CURD、API CURD和标准资源管理界面。"
+    }
+}

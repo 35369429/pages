@@ -1,0 +1,1413 @@
+{
+    "name": "简墨-推荐管理",
+    "data": {
+        "general": {
+            "app": "pages",
+            "org": "xpmsns",
+            "model": "_create",
+            "name": "recommend",
+            "cname": "推荐"
+        },
+        "struct": {
+            "table": "recommend",
+            "fields": [
+                {
+                    "name": "recommend_id",
+                    "cname": "推荐ID",
+                    "type": "string",
+                    "length": "128",
+                    "default": "",
+                    "unique": "1",
+                    "index": "",
+                    "nullable": "",
+                    "json": "",
+                    "auto": "1",
+                    "file": "",
+                    "private": ""
+                },
+                {
+                    "name": "title",
+                    "cname": "主题",
+                    "type": "string",
+                    "length": "100",
+                    "default": "",
+                    "unique": "",
+                    "index": "1",
+                    "nullable": "",
+                    "json": "",
+                    "auto": "",
+                    "file": "",
+                    "private": ""
+                },
+                {
+                    "name": "summary",
+                    "cname": "简介",
+                    "type": "string",
+                    "length": "200",
+                    "default": "",
+                    "unique": "",
+                    "index": "",
+                    "nullable": "",
+                    "json": "",
+                    "auto": "",
+                    "file": "",
+                    "private": ""
+                },
+                {
+                    "name": "icon",
+                    "cname": "图标",
+                    "type": "string",
+                    "length": "200",
+                    "default": "",
+                    "unique": "",
+                    "index": "",
+                    "nullable": "",
+                    "json": "",
+                    "auto": "",
+                    "file": "1",
+                    "private": ""
+                },
+                {
+                    "name": "slug",
+                    "cname": "别名",
+                    "type": "string",
+                    "length": "100",
+                    "default": "",
+                    "unique": "1",
+                    "index": "",
+                    "nullable": "",
+                    "json": "",
+                    "auto": "",
+                    "file": "",
+                    "private": ""
+                },
+                {
+                    "name": "pos",
+                    "cname": "呈现位置",
+                    "type": "string",
+                    "length": "200",
+                    "default": "",
+                    "unique": "",
+                    "index": "1",
+                    "nullable": "",
+                    "json": "",
+                    "auto": "",
+                    "file": "",
+                    "private": ""
+                },
+                {
+                    "name": "style",
+                    "cname": "样式代码",
+                    "type": "string",
+                    "length": "200",
+                    "default": "",
+                    "unique": "",
+                    "index": "1",
+                    "nullable": "",
+                    "json": "",
+                    "auto": "",
+                    "file": "",
+                    "private": ""
+                },
+                {
+                    "name": "type",
+                    "cname": "方式",
+                    "type": "string",
+                    "length": "20",
+                    "default": "auto",
+                    "unique": "",
+                    "index": "1",
+                    "nullable": "",
+                    "json": "",
+                    "auto": "",
+                    "file": "",
+                    "private": ""
+                },
+                {
+                    "name": "ctype",
+                    "cname": "内容类型",
+                    "type": "string",
+                    "length": "20",
+                    "default": "article",
+                    "unique": "",
+                    "index": "1",
+                    "nullable": "",
+                    "json": "",
+                    "auto": "",
+                    "file": "",
+                    "private": ""
+                },
+                {
+                    "name": "thumb_only",
+                    "cname": "必须包含主题图片",
+                    "type": "integer",
+                    "length": "1",
+                    "default": "0",
+                    "unique": "",
+                    "index": "1",
+                    "nullable": "",
+                    "json": "",
+                    "auto": "",
+                    "file": "",
+                    "private": ""
+                },
+                {
+                    "name": "video_only",
+                    "cname": "必须包含视频",
+                    "type": "integer",
+                    "length": "1",
+                    "default": "0",
+                    "unique": "",
+                    "index": "1",
+                    "nullable": "",
+                    "json": "",
+                    "auto": "",
+                    "file": "",
+                    "private": ""
+                },
+                {
+                    "name": "bigdata_engine",
+                    "cname": "根据用户喜好推荐",
+                    "type": "integer",
+                    "length": "1",
+                    "default": "0",
+                    "unique": "",
+                    "index": "1",
+                    "nullable": "",
+                    "json": "",
+                    "auto": "",
+                    "file": "",
+                    "private": ""
+                },
+                {
+                    "name": "period",
+                    "cname": "周期",
+                    "type": "string",
+                    "length": "100",
+                    "default": "",
+                    "unique": "",
+                    "index": "1",
+                    "nullable": "",
+                    "json": "",
+                    "auto": "",
+                    "file": "",
+                    "private": ""
+                },
+                {
+                    "name": "images",
+                    "cname": "摘要图片",
+                    "type": "text",
+                    "length": "",
+                    "default": "",
+                    "unique": "",
+                    "index": "",
+                    "nullable": "",
+                    "json": "1",
+                    "auto": "",
+                    "file": "1",
+                    "private": ""
+                },
+                {
+                    "name": "tpl_pc",
+                    "cname": "PC端模板",
+                    "type": "text",
+                    "length": "",
+                    "default": "",
+                    "unique": "",
+                    "index": "",
+                    "nullable": "",
+                    "json": "",
+                    "auto": "",
+                    "file": "",
+                    "private": ""
+                },
+                {
+                    "name": "tpl_h5",
+                    "cname": "手机端模板",
+                    "type": "text",
+                    "length": "",
+                    "default": "",
+                    "unique": "",
+                    "index": "",
+                    "nullable": "",
+                    "json": "",
+                    "auto": "",
+                    "file": "",
+                    "private": ""
+                },
+                {
+                    "name": "tpl_wxapp",
+                    "cname": "小程序模板",
+                    "type": "text",
+                    "length": "",
+                    "default": "",
+                    "unique": "",
+                    "index": "",
+                    "nullable": "",
+                    "json": "",
+                    "auto": "",
+                    "file": "",
+                    "private": ""
+                },
+                {
+                    "name": "tpl_android",
+                    "cname": "安卓模板",
+                    "type": "text",
+                    "length": "",
+                    "default": "",
+                    "unique": "",
+                    "index": "",
+                    "nullable": "",
+                    "json": "",
+                    "auto": "",
+                    "file": "",
+                    "private": ""
+                },
+                {
+                    "name": "tpl_ios",
+                    "cname": "iOS模板",
+                    "type": "text",
+                    "length": "",
+                    "default": "",
+                    "unique": "",
+                    "index": "",
+                    "nullable": "",
+                    "json": "",
+                    "auto": "",
+                    "file": "",
+                    "private": ""
+                },
+                {
+                    "name": "keywords",
+                    "cname": "关键词",
+                    "type": "text",
+                    "length": "128",
+                    "default": "",
+                    "unique": "",
+                    "index": "",
+                    "nullable": "",
+                    "json": "",
+                    "auto": "",
+                    "file": "",
+                    "private": ""
+                },
+                {
+                    "name": "series",
+                    "cname": "指定系列",
+                    "type": "text",
+                    "length": "128",
+                    "default": "",
+                    "unique": "",
+                    "index": "",
+                    "nullable": "",
+                    "json": "1",
+                    "auto": "",
+                    "file": "",
+                    "private": ""
+                },
+                {
+                    "name": "categories",
+                    "cname": "指定系列",
+                    "type": "text",
+                    "length": "",
+                    "default": "",
+                    "unique": "",
+                    "index": "",
+                    "nullable": "",
+                    "json": "1",
+                    "auto": "",
+                    "file": "",
+                    "private": ""
+                },
+                {
+                    "name": "articles",
+                    "cname": "指定文章",
+                    "type": "text",
+                    "length": "",
+                    "default": "",
+                    "unique": "",
+                    "index": "",
+                    "nullable": "",
+                    "json": "1",
+                    "auto": "",
+                    "file": "",
+                    "private": ""
+                },
+                {
+                    "name": "exclude_articles",
+                    "cname": "排除文章",
+                    "type": "text",
+                    "length": "",
+                    "default": "",
+                    "unique": "",
+                    "index": "",
+                    "nullable": "",
+                    "json": "1",
+                    "auto": "",
+                    "file": "",
+                    "private": ""
+                },
+                {
+                    "name": "events",
+                    "cname": "指定活动",
+                    "type": "text",
+                    "length": "",
+                    "default": "",
+                    "unique": "",
+                    "index": "",
+                    "nullable": "",
+                    "json": "1",
+                    "auto": "",
+                    "file": "",
+                    "private": ""
+                },
+                {
+                    "name": "albums",
+                    "cname": "指定图集",
+                    "type": "text",
+                    "length": "",
+                    "default": "",
+                    "unique": "",
+                    "index": "",
+                    "nullable": "",
+                    "json": "1",
+                    "auto": "",
+                    "file": "",
+                    "private": ""
+                },
+                {
+                    "name": "orderby",
+                    "cname": "排序方式",
+                    "type": "string",
+                    "length": "128",
+                    "default": "",
+                    "unique": "",
+                    "index": "1",
+                    "nullable": "",
+                    "json": "",
+                    "auto": "",
+                    "file": "",
+                    "private": ""
+                },
+                {
+                    "name": "status",
+                    "cname": "状态",
+                    "type": "string",
+                    "length": "10",
+                    "default": "on",
+                    "unique": "",
+                    "index": "1",
+                    "nullable": "",
+                    "json": "",
+                    "auto": "",
+                    "file": "",
+                    "private": ""
+                }
+            ],
+            "methods": [
+                {
+                    "name": "getArticlesBy",
+                    "cname": "选取推荐文章",
+                    "source": "\tfunction getArticlesBy( $type,  $recommend_id,  $keywords=[], $now=null, $page=1, $perpage=20 ) {\n\t\n\t\t$select = ['recommend.title','recommend.summary',  'recommend.type', 'recommend.keywords', \"recommend.period\", \"orderby\", 'articles', 'categories'];\n\t\t$method = \"getBy{$type}\";\n\t\tif ( !method_exists( $this, $method) ) {\n\t\t\tthrow new Excp( \"推荐数据查询方法不存在\", 404, ['method'=>$method] );\n\t\t}\n      \t$recommend = $this->$method( $recommend_id ,  $select );\n\t\t\n\t\tif ( empty($recommend) ) {\n\t\t\tthrow new Excp( \"推荐数据不存在\", 404, ['recommend_id'=>$recommend_id] );\n\t\t}\n\n\t\t$art = new Article;\n\t\t$query = [];\n      \n\t\tif ( !empty($now) ) {\n          $query['now'] = $now;\n        }\n\t\t\n\t\t// 数据排序\n\t\tswitch ($recommend['orderby']) {\n\t\t\tcase 'publish_time': \n\t\t\t\t$query['order'] =  \"publish_time desc\";\n\t\t\t\tbreak;\n\t\t\tcase 'view_cnt':\n\t\t\t\t$query['order'] =  \"view_cnt desc\";\n\t\t\t\tbreak;\n\t\t\tcase 'like_cnt':\n\t\t\t\t$query['order'] =  \"like_cnt desc\";\n\t\t\t\tbreak;\n\t\t\tcase 'dislike_cnt':\n\t\t\t\t$query['order'] =  \"dislike_cnt desc\";\n\t\t\t\tbreak;\n\t\t\tcase 'comment_cnt':\n\t\t\t\t$query['order'] =  \"comment_cnt desc\";\n\t\t\t\tbreak;\n\t\t\tdefault:\n\t\t\t\t$query['order'] =  \"publish_time desc\";\n\t\t\t\tbreak;\n\t\t}\n\n\t\tif ( !empty($recommend['period']) ) {\n\t\t\t$query['period'] = $recommend['period'];\n\t\t}\n\n\n\t\t// 自动根据关键词关联\n\t\tif ( $recommend['type'] == 'auto' ) {\n\n\t\t\t$recommend['keywords'] = str_replace(\"\\r\", \"\", $recommend['keywords']);\n\t\t\t$recommend['keywords'] = str_replace(\"\\n\", \"\", $recommend['keywords']);\n\t\t\t$recommend['keywords'] = explode(',', trim($recommend['keywords']) );\n\t\t\t$keywords = is_string($keywords) ? explode(',',$keywords) : $keywords;\n\t\t\t$keywords = array_merge( $recommend['keywords'], $keywords );\n\n\t\t\t// 按关键词提取数据\n\t\t\t$query['keywords'] =$keywords;\n\n\t\t\t// 按分类提取数据\n\t\t\tif ( !empty($recommend['categories']) ) {\n\t\t\t\t$query['category_ids'] = $recommend['categories'];\n\t\t\t}\n\n\t\t\treturn $art->search($query);\n\n\t\t// 静态关联\n\t\t} else if ( $recommend['type'] == 'static' )  {\n\t\t\t\n\t\t\t// 提取选定文章信息\n\t\t\t$query['article_ids'] = $recommend['articles'];\n\t\t\treturn $art->search($query);\n\t\t}\n\n\t}"
+                },
+                {
+                    "name": "getArticles",
+                    "cname": "按推荐ID选取推荐文章",
+                    "source": "\tfunction getArticles(  $recommend_id,  $keywords=[], $now=null, $page=1, $perpage=20 ) {\n\t\treturn $this->getArticlesBy('recommend_id', $recommend_id, $keywords, $now, $page, $perpage );\n\t}"
+                },
+                {
+                    "name": "getArticlesBySlug",
+                    "cname": "按别名选取推荐文章",
+                    "source": "\tfunction getArticlesBySlug(  $recommend_id,  $keywords=[], $now=null, $page=1, $perpage=20 ) {\n\t\treturn $this->getArticlesBy('slug', $recommend_id,  $keywords, $now, $page, $perpage );\n\t}"
+                },
+                {
+                    "name": "getContentsBySlug",
+                    "cname": "按别名选取推荐内容",
+                    "source": "function getContentsBySlug(  $recommend_id,  $keywords=[],  $series=[], $exclude_articles=[], $page=1, $perpage=20, $now=null ) {\n\t\treturn $this->getContentsBy('slug', $recommend_id,  $keywords,  $series, $exclude_articles, $page, $perpage,$now );\n\t}"
+                },
+                {
+                    "name": "getContents",
+                    "cname": "按推荐ID选取推荐内容",
+                    "source": "function getContents(  $recommend_id,  $keywords=[],  $series=[],  $exclude_articles=[],  $page=1, $perpage=20, $now=null ) {\n\t\treturn $this->getContentsBy('recommendId', $recommend_id, $keywords, $series, $exclude_articles, $page, $perpage,$now );\n\t}"
+                },
+                {
+                    "name": "getContentsBy",
+                    "cname": "按Type选取推荐内容",
+                    "source": "function getContentsBy( $type,  $recommend_id,  $keywords=[], $series=[], $exclude_articles=[],  $page=1, $perpage=20, $now=null) {\n\t\t$select = [\n\t\t\t\t\t'recommend.title', 'recommend.summary', 'recommend.type', 'recommend.ctype', 'recommend.keywords', \"recommend.period\", \"recommend.pos\",\"recommend.style\",\"recommend.status\",\n\t\t\t\t\t'recommend.thumb_only', 'recommend.video_only',\n          \t\t\t'recommend.series','recommend.exclude_articles',\n\t\t\t\t\t\"orderby\", 'articles', 'albums', 'events', 'categories'\n\t\t\t\t];\n\t\t$method = \"getBy{$type}\";\n\t\tif ( !method_exists( $this, $method) ) {\n\t\t\tthrow new Excp( \"推荐数据查询方法不存在\", 404, ['method'=>$method] );\n\t\t}\n      \t$recommend = $this->$method( $recommend_id ,  $select );\n\t\t\n\t\tif ( empty($recommend) ) {\n\t\t\tthrow new Excp( \"推荐数据不存在\", 404, ['recommend_id'=>$recommend_id] );\n\t\t}\n\n\n\t\t// 静态关联\n\t\tif ( $recommend['type'] == 'static' )  {\n\t\t\t$recommend['contents']['data'] = [];\n\n\t\t\tswitch ($recommend['ctype']) {\n\t\t\t\tcase 'article':\n\t\t\t\t\t$ids = $recommend['articles'];\n\t\t\t\t\tbreak;\n\t\t\t\tcase 'album':\n\t\t\t\t\t$ids  = $recommend['albums'];\n\t\t\t\t\tbreak;\n\t\t\t\tcase 'event':\n\t\t\t\t\t$ids = $recommend['events'];\n\t\t\t\t\tbreak;\n\t\t\t\t// case 'all': // 使用搜索引擎来实现，先分开查询\n\t\t\t\t\t// break;\n\t\t\t\tdefault:\n\t\t\t\t\t$ids = $recommend['articles'];\n\t\t\t\t\tbreak;\n\t\t\t}\n\n\t\t\t$recommend['contents']['total'] = count($ids);\n\t\t\n\t\t// 智能关联\n\t\t} else { \n\t\t\t// 根据类型选取内容\n\t\t\tswitch ($recommend['ctype']) {\n\t\t\t\tcase 'article':\n\t\t\t\t\t$qb =  Utils::getTab(\"xpmsns_pages_article as content\", \"{none}\")->query()->where('status','=', 'published');\n\t\t\t\t\t$keywordFields = [\"content.keywords\", \"content.title\"];\n\t\t\t\t\t$qb->select('content.article_id as id');\n\t\t\t\t\tbreak;\n\t\t\t\tcase 'album':\n\t\t\t\t\t$qb =  Utils::getTab(\"xpmsns_pages_album as content\", \"{none}\")->query()->where('status','=', 'published');;\n\t\t\t\t\t$keywordFields = [\"content.tags\",\"content.title\"];\n\t\t\t\t\t$qb->select('content.album_id as id');\n\t\t\t\t\tbreak;\n\t\t\t\tcase 'event':\n\t\t\t\t\t$qb =  Utils::getTab(\"xpmsns_pages_event as content\", \"{none}\")->query()->where('status', '<>', 'draft');\n\t\t\t\t\t$keywordFields = [\"content.tags\",\"content.name\"];\n\t\t\t\t\t$qb->select('content.event_id as id');\n\t\t\t\t\tbreak;\n\t\t\t\t// case 'all': // 使用搜索引擎来实现，先分开查询\n\t\t\t\t\t// break;\n\t\t\t\tdefault:\n\t\t\t\t\t$qb =  Utils::getTab(\"xpmsns_pages_article as content\", \"{none}\")->query();\n\t\t\t\t\t$keywordFields = [\"content.keywords\", \"content.title\"];\n\t\t\t\t\t$qb->select('content.article_id as id');\n\t\t\t\t\tbreak;\n\t\t\t}\n\n\n\n\t        // 排序条件\n\t\t\tswitch ($recommend['orderby']) {\n\t\t\t\tcase 'publish_time': \n\t\t\t\t\t$query['order'] =  \"publish_time desc\";\n\t\t\t\t\tbreak;\n               \tcase 'publish_time_asc': \n\t\t\t\t\t$query['order'] =  \"publish_time asc\";\n\t\t\t\t\tbreak;\n\t\t\t\tcase 'view_cnt':\n\t\t\t\t\t$query['order'] =  \"view_cnt desc\";\n\t\t\t\t\tbreak;\n\t\t\t\tcase 'like_cnt':\n\t\t\t\t\t$query['order'] =  \"like_cnt desc\";\n\t\t\t\t\tbreak;\n\t\t\t\tcase 'dislike_cnt':\n\t\t\t\t\t$query['order'] =  \"dislike_cnt desc\";\n\t\t\t\t\tbreak;\n\t\t\t\tcase 'comment_cnt':\n\t\t\t\t\t$query['order'] =  \"comment_cnt desc\";\n\t\t\t\t\tbreak;\n\t\t\t\tdefault:\n\t\t\t\t\t$query['order'] =  \"publish_time desc\";\n\t\t\t\t\tbreak;\n\t\t\t}\n\n\t\t\t// 查询条件\n\t\t\tif ( !empty($now) ) {\n\t          $query['now'] = $now;\n\t        }\n\n\t\t\tif ( !empty($recommend['period']) ) {\n\t\t\t\t$query['period'] = $recommend['period'];\n\t\t\t}\n\n\t\t\t// 按分类提取数据\n\t\t\tif ( !empty($recommend['categories']) ) {\n\t\t\t\t$query['category_ids'] = $recommend['categories'];\n\t\t\t}\n\n\t\t\t// 按关键词提取数据\n\t\t\t$recommend['keywords'] = str_replace(\"\\r\", \"\", $recommend['keywords']);\n\t\t\t$recommend['keywords'] = str_replace(\"\\n\", \"\", $recommend['keywords']);\n\t\t\t$recommend['keywords'] = explode(',', trim($recommend['keywords']) );\n\t\t\t$keywords = is_string($keywords) ? explode(',',$keywords) : $keywords;\n\t\t\t$keywords = array_merge( $recommend['keywords'], $keywords );\n\t\t\t$keywords = array_filter($keywords);\n\t\t\t$query['keywords'] =$keywords;\n\n\t\t\t// 按系列提取数据\n\t\t\t$series = is_string($series) ? explode(',',$series) : $series;\n          \t$recommend['series'] = is_array($recommend['series']) ? $recommend['series'] : [];\n\t\t\t$series = array_merge( $recommend['series'], $series );\n\t\t\t$series = array_filter( $series);\n\t\t\t$query['series'] = $series;\n          \t\n          \t// 排除文章数据\n\t\t\t$exclude_articles = is_string($exclude_articles) ? explode(',',$exclude_articles) : $exclude_articles;\n          \t$recommend['exclude_articles'] = is_array($recommend['exclude_articles']) ? $recommend['exclude_articles'] : [];\n\t\t\t$exclude_articles = array_merge( $recommend['exclude_articles'], $exclude_articles );\n\t\t\t$exclude_articles = array_filter( $exclude_articles);\n\t\t\t$query['exclude_articles'] = $exclude_articles;\n         \n\t\t\tif ( $recommend['thumb_only'] ) {\n\t\t\t\t$query['thumb_only'] = 1;\n\t\t\t}\n\n\t\t\t// 必须包含主题图片\n\t\t\tif ( $query['thumb_only'] ) {\n\t\t\t\t$qb->whereNotNull('content.cover');\n\t\t\t\t$qb->where('content.cover', '<>', \"\");\n\t\t\t}\n          \n          \tif ( $recommend['video_only']) {\n\t\t\t\t$query['video_only'] = 1;\n\t\t\t}\n\n\t\t\t// 必须包含视频\n\t\t\tif ( $query['video_only'] ) {\n\t\t\t\t$qb->whereNotNull('content.videos');\n\t\t\t\t$qb->where('content.videos', '<>', \"\");\n\t\t\t\t$qb->where('content.videos', '<>', \"[]\");\n\t\t\t}\n\n\t\t\t// 按分类ID查找\n\t\t\tif ( array_key_exists('category_ids', $query)  && !empty($query['category_ids']) ) {\n\t\t\t\t$cids = is_string($query['category_ids']) ? explode(',', $query['category_ids']) : $query['category_ids'];\n\t\t\t\t$cids = array_filter($cids);\n              \tif ( !empty($cids) ) {\n\t\t\t\t\tif ( $recommend['ctype'] == 'article' || $recommend['ctype'] == 'all' ) {\n\t\t\t\t\t\t$qb->leftJoin(\"xpmsns_pages_article_category as ac\", \"ac.article_id\", \"=\", \"content.article_id\");\n\t\t\t\t\t\t$qb->whereIn('ac.category_id', $cids );\t\n\t\t\t\t\t}else {\n\t\t\t\t\t\t$qb->where(function ( $qb ) use($cids) {\n\t\t\t\t\t\t\tforeach( $cids as $cid ) {\n\t\t\t\t\t\t\t\t$qb->orWhere('categories', \"like\", \"%{$cid}%\");  // 名称符合关键词\n\t\t\t\t\t\t\t}\n\t\t\t\t\t\t});\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t}\n          \n          \t// 按系列查询数据\n\t\t\tif ( array_key_exists('series', $query)  && !empty($query['series']) ) {\n\t\t\t\t$sids = is_string($query['series']) ? explode(',', $query['series']) : $query['series'];\n\t\t\t\t$sids = array_filter($sids);\n              \tif ( !empty($sids) ) {\n\t\t\t\t\t$qb->where(function ( $qb ) use($sids) {\n\t\t\t\t\t\tforeach( $sids as $sid ) {\n\t\t\t\t\t\t\t$qb->orWhere('series', \"like\", \"%{$sid}%\");  // 名称符合关键词\n\t\t\t\t\t\t}\n\t\t\t\t\t});\n\t\t\t\t}\n\t\t\t}\n          \n            // 排除文章数据\n\t\t\tif ( array_key_exists('exclude_articles', $query)  && !empty($query['exclude_articles']) ) {\n\t\t\t\t$exids = is_string($query['exclude_articles']) ? explode(',', $query['exclude_articles']) : $query['exclude_articles'];\n\t\t\t\t$exids = array_filter($exids);\n              \tif ( !empty($exids) ) {\n\t\t\t\t\t$qb->whereNotIn('content.article_id', $exids);\n\t\t\t\t}\n\t\t\t}\n\n\t\t\t// 按关键词词组查找 ( 非搜索 )\n\t\t\tif ( array_key_exists('keywords', $query) && !empty($query['keywords']) ) {\n\n\t\t\t\t// 过滤空值\n\t\t\t\t$keywords = $query['keywords'];\n\t\t\t\tforeach( $keywords as $idx=>$key ) {\n\t\t\t\t\t$keywords[$idx] = trim($key);\n\t\t\t\t\tif  ( empty($keywords[$idx]) ) {\n\t\t\t\t\t\tunset($keywords[$idx]);\n\t\t\t\t\t}\n\t\t\t\t}\n\n\t\t\t\tif ( !empty($keywords) ) {\n\t\t\t\t\t$qb->where(function ( $qb ) use($keywords, $keywordFields) {\n\t\t\t\t\t\tforeach( $keywords as $idx=>$keyword ) {\n\t\t\t\t\t\t\tforeach ($keywordFields as $keywordField) {\n\t\t\t\t\t\t\t\t$qb->orWhere($keywordField, \"like\", \"%{$keyword}%\");  // 名称符合关键词\n\t\t\t\t\t\t\t}\n\t\t\t\t\t\t}\n\t\t\t\t\t});\n\t\t\t\t}\n\t\t\t}\n\n\n\t\t\t// 按时间范围\n\t\t\tif ( array_key_exists('period', $query) && !empty($query['period']) ) {\n\t\t\t\t$now = empty($query['now']) ? date('Y-m-d H:i:s') : date('Y-m-d H:i:s', strtotime($query['now']) );\n\t\t\t\t$now_t = strtotime( $now );\n\n\t\t\t\tswitch ($query['period']) {\n\n\t\t\t\t\tcase '24hours':  // 24小时\n\t\t\t\t\t\t$from = date('Y-m-d H:i:s', strtotime(\"-24 hours\",$now_t));\n\t\t\t\t\t\t$qb->where('publish_time' , '<=', $now );\n\t\t\t\t\t\t$qb->where('publish_time' , '>=', $from );\n\t\t\t\t\t\tbreak;\n\n\t\t\t\t\tcase 'daily' : // 当天\n\t\t\t\t\t\t$from = date('Y-m-d 00:00:00', $now_t);\n\t\t\t\t\t\t$end = date('Y-m-d 23:59:59', $now_t);\n\t\t\t\t\t\t$qb->where('publish_time' , '<=', $end );\n\t\t\t\t\t\t$qb->where('publish_time' , '>=', $from );\n\t\t\t\t\t\tbreak;\n\n\t\t\t\t\tcase '7days': // 7天\n\t\t\t\t\t\t$end = date('Y-m-d H:i:s', $now_t);\n\t\t\t\t\t\t$end_t = strtotime($end);\n\t\t\t\t\t\t$from = date('Y-m-d H:i:s',  strtotime(\"-7 days\",$end_t));\n\t\t\t\t\t\t$qb->where('publish_time' , '<=', $end );\n\t\t\t\t\t\t$qb->where('publish_time' , '>=', $from );\n\t\t\t\t\t\tbreak;\n\n\t\t\t\t\tcase 'weekly': // 本周\n\t\t\t\t\t\t$from = date('Y-m-d 00:00:00', strtotime('-1 Monday',$now_t));\n\t\t\t\t\t\t$from_t = strtotime($from);\n\t\t\t\t\t\t$end = date('Y-m-d 00:00:00',  strtotime(\"+1 Weeks\",$from_t));\n\t\t\t\t\t\t$qb->where('publish_time' , '<=', $end );\n\t\t\t\t\t\t$qb->where('publish_time' , '>=', $from );\n\t\t\t\t\t\tbreak;\n\n\t\t\t\t\tcase '30days': // 30天\n\t\t\t\t\t\t$end = date('Y-m-d H:i:s', $now_t);\n\t\t\t\t\t\t$end_t = strtotime($end);\n\t\t\t\t\t\t$from = date('Y-m-d H:i:s',  strtotime(\"-30 days\",$end_t));\n\t\t\t\t\t\t$qb->where('publish_time' , '<=', $end );\n\t\t\t\t\t\t$qb->where('publish_time' , '>=', $from );\n\t\t\t\t\t\tbreak;\n\n\t\t\t\t\tcase 'monthly': // 本月\n\t\t\t\t\t\t$from = date('Y-m-01 00:00:00', $now_t);\n\t\t\t\t\t\t$from_t = strtotime($from);\n\t\t\t\t\t\t$end = date('Y-m-d 00:00:00',  strtotime(\"+1 Month\",$from_t));\n\t\t\t\t\t\t$qb->where('publish_time' , '<=', $end );\n\t\t\t\t\t\t$qb->where('publish_time' , '>=', $from );\n\t\t\t\t\t\tbreak;\n\n\t\t\t\t\tcase 'yearly':  // 今年\n\t\t\t\t\t\t$from = date('Y-01-01 00:00:00', $now_t);\n\t\t\t\t\t\t$end = date('Y-12-31 23:59:59',  $now_t);\n\t\t\t\t\t\t$qb->where('publish_time' , '<=', $end );\n\t\t\t\t\t\t$qb->where('publish_time' , '>=', $from );\n\t\t\t\t\t\tbreak;\n\n\t\t\t\t\tdefault: // 无限\n\t\t\t\t\t\t# code...\n\t\t\t\t\t\tbreak;\n\t\t\t\t}\n\t\t\t}\n\n\n\t\t\t// 排序: \n\t\t\tif ( array_key_exists('order', $query) && !empty($query['order'])  ) {\n\t\t\t\t$order = explode(' ', $query['order']);\n\t\t\t\t$order[1] = !empty($order[1]) ? $order[1] : 'asc';\n\t\t\t\t$qb->orderBy($order[0], $order[1] );\n\t\t\t}\n\n\n\t\t\t// 查询文章列表\n\t\t\t$resp = $qb->distinct()->pgArray( $perpage, ['content._id'], 'page', $page );\n\t\t\tif ( $_GET['debug'] == 1 ) {\n\t\t\t\t$recommend['_sql'] = $qb->getSql();\n\t\t\t\t$recommend['_query'] = $query; \n\t\t\t}\n\n\t\t\t$recommend['contents'] = $resp;\n\n\t\t\tif ( empty($resp['data']) ) {\n\t\t\t\treturn $recommend;\n\t\t\t}\n\n\t\t\t$ids = array_column($resp['data'], 'id');\n\n\t\t}\n\n\t\t// 根据类型选取内容\n\t\tswitch ($recommend['ctype']) {\n\t\t\tcase 'article':\n\t\t\t\t$recommend['contents']['data'] = (new \\Xpmsns\\Pages\\Model\\Article)->getInByArticleId( $ids, [\n\t\t\t\t\t'title', 'cover', 'article_id', 'images', 'thumbs', 'videos', 'author', 'origin', 'origin_url','summary','status', 'publish_time',\n\t\t\t\t\t'view_cnt','like_cnt','dislike_cnt','comment_cnt',\n                  \t'series'\n\t\t\t\t]);\n\t\t\t\tbreak;\n\t\t\tcase 'album':\n\t\t\t\t$recommend['contents']['data'] = (new \\Xpmsns\\Pages\\Model\\Album)->getInByAlbumId( $ids, [\n\t\t\t\t\t'title', 'cover', 'album_id', 'images','link', 'tags', 'author', 'origin', 'origin_url','summary','status', 'publish_time',\n\t\t\t\t\t'view_cnt','like_cnt','dislike_cnt','comment_cnt',\n\t\t\t\t\t'c.name'\n\t\t\t\t]);\n\n\t\t\t\tbreak;\n\t\t\tcase 'event':\n\t\t\t\t$recommend['contents']['data'] = (new \\Xpmsns\\Pages\\Model\\Event)->getInByEventId( $ids, [\n\t\t\t\t\t'name', 'cover', 'event_id', 'images','link', 'tags','summary','status', 'publish_time',\n\t\t\t\t\t'view_cnt','like_cnt','dislike_cnt','comment_cnt',\n\t\t\t\t\t'c.name'\n\t\t\t\t]);\n\t\t\t\t\n\t\t\t\tbreak;\n\t\t\tdefault:\n\t\t\t\t\n\t\t\t\t$recommend['contents']['data'] = (new \\Xpmsns\\Pages\\Model\\Article)->getInByArticleId( $ids, [\n\t\t\t\t\t'title', 'cover', 'article_id', 'images', 'thumbs', 'videos', 'author', 'origin', 'origin_url','summary','status', 'publish_time',\n\t\t\t\t\t'view_cnt','like_cnt','dislike_cnt','comment_cnt'\n\t\t\t\t]);\n\n\t\t\t\tbreak;\n\t\t}\n      \tif ( is_array($recommend['contents']['data']) ){\n\t\t\t$data = [];\n\t\t\tforeach ($ids as $id ) {\n\t\t\t\t$data[] = $recommend['contents']['data'][$id];\n\t\t\t}\n\t\t\t$recommend['contents']['data'] = $data;\n        }\n\t\treturn $recommend;\n\t}"
+                }
+            ]
+        },
+        "links": {
+            "fields": [
+                {
+                    "cname": "文章",
+                    "type": "inWhere",
+                    "model": "\\Xpmsns\\Pages\\Model\\Article",
+                    "table": "article",
+                    "prefix": "xpmsns_pages_",
+                    "field": "article_id",
+                    "on": "in",
+                    "name": "articles",
+                    "alias": "a"
+                },
+                {
+                    "cname": "不包含文章",
+                    "type": "inWhere",
+                    "model": "\\Xpmsns\\Pages\\Model\\Article",
+                    "table": "article",
+                    "prefix": "xpmsns_pages_",
+                    "field": "article_id",
+                    "on": "in",
+                    "name": "exclude_articles",
+                    "alias": "ea"
+                },
+                {
+                    "cname": "活动",
+                    "type": "inWhere",
+                    "model": "\\Xpmsns\\Pages\\Model\\Event",
+                    "table": "event",
+                    "prefix": "xpmsns_pages_",
+                    "field": "event_id",
+                    "on": "in",
+                    "name": "events",
+                    "alias": "evt"
+                },
+                {
+                    "cname": "图集",
+                    "type": "inWhere",
+                    "model": "\\Xpmsns\\Pages\\Model\\Album",
+                    "table": "album",
+                    "prefix": "xpmsns_pages_",
+                    "field": "album_id",
+                    "on": "in",
+                    "name": "albums",
+                    "alias": "al"
+                },
+                {
+                    "cname": "系列",
+                    "type": "inWhere",
+                    "model": "\\Xpmsns\\Pages\\Model\\Series",
+                    "table": "series",
+                    "prefix": "xpmsns_pages_",
+                    "field": "series_id",
+                    "on": "in",
+                    "name": "series",
+                    "alias": "s"
+                },
+                {
+                    "cname": "栏目",
+                    "type": "inWhere",
+                    "model": "\\Xpmsns\\Pages\\Model\\Category",
+                    "table": "category",
+                    "prefix": "xpmsns_pages_",
+                    "field": "category_id",
+                    "on": "in",
+                    "name": "categories",
+                    "alias": "c"
+                }
+            ]
+        },
+        "detail": {
+            "index": "name=recommend_id",
+            "title": "name=title",
+            "columns": [
+                {
+                    "cname": "主题",
+                    "name": "title",
+                    "type": "input",
+                    "placeholder": "请填写推荐主题",
+                    "helper": "",
+                    "exp": "",
+                    "readonly": "",
+                    "attr": {
+                        "default": ""
+                    },
+                    "validator": [
+                        {
+                            "method": "required",
+                            "value": "true",
+                            "message": "请填写推荐主题"
+                        }
+                    ]
+                },
+                {
+                    "cname": "别名",
+                    "name": "slug",
+                    "type": "input",
+                    "placeholder": "请填写推荐别名",
+                    "helper": "",
+                    "exp": "",
+                    "readonly": "",
+                    "attr": {
+                        "default": ""
+                    },
+                    "validator": [
+                        {
+                            "method": "required",
+                            "value": "true",
+                            "message": "请填写推荐别名"
+                        },
+                        {
+                            "method": "match",
+                            "value": "[0-9a-zA-Z\\_\\-]+",
+                            "message": "推荐别名格式不正确"
+                        }
+                    ]
+                },
+                {
+                    "cname": "位置代码",
+                    "name": "pos",
+                    "type": "input",
+                    "placeholder": "呈现位置代码",
+                    "helper": "",
+                    "exp": "",
+                    "readonly": "",
+                    "attr": {
+                        "default": ""
+                    },
+                    "validator": [
+                        {
+                            "method": "",
+                            "value": "",
+                            "message": ""
+                        }
+                    ]
+                },
+                {
+                    "cname": "样式代码",
+                    "name": "style",
+                    "type": "input",
+                    "placeholder": "呈现样式代码",
+                    "helper": "",
+                    "exp": "",
+                    "readonly": "",
+                    "attr": {
+                        "default": ""
+                    },
+                    "validator": [
+                        {
+                            "method": "",
+                            "value": "",
+                            "message": ""
+                        }
+                    ]
+                },
+                {
+                    "cname": "推荐方式",
+                    "name": "type",
+                    "type": "radio",
+                    "placeholder": "请选择推荐方式",
+                    "helper": "",
+                    "exp": "",
+                    "readonly": "",
+                    "attr": {
+                        "option": "智能=auto,静态=static",
+                        "default": "auto"
+                    },
+                    "validator": [
+                        {
+                            "method": "",
+                            "value": "",
+                            "message": ""
+                        }
+                    ]
+                },
+                {
+                    "cname": "内容类型",
+                    "name": "ctype",
+                    "type": "radio",
+                    "placeholder": "请选择内容类型",
+                    "helper": "",
+                    "exp": "",
+                    "readonly": "",
+                    "attr": {
+                        "option": "混合=all,图文=article,活动=event,图集=album",
+                        "default": "article"
+                    },
+                    "validator": [
+                        {
+                            "method": "",
+                            "value": "",
+                            "message": ""
+                        }
+                    ]
+                },
+                {
+                    "cname": "必须有主题图片",
+                    "name": "thumb_only",
+                    "type": "radio",
+                    "placeholder": "是否包含主题图片",
+                    "helper": "",
+                    "exp": "",
+                    "readonly": "",
+                    "attr": {
+                        "option": "是=1,否=0",
+                        "default": "0"
+                    },
+                    "validator": [
+                        {
+                            "method": "",
+                            "value": "",
+                            "message": ""
+                        }
+                    ]
+                },
+                {
+                    "cname": "必须有视频内容",
+                    "name": "video_only",
+                    "type": "radio",
+                    "placeholder": "是否必须有视频内容",
+                    "helper": "",
+                    "exp": "",
+                    "readonly": "",
+                    "attr": {
+                        "option": "是=1,否=0",
+                        "default": "0"
+                    },
+                    "validator": [
+                        {
+                            "method": "",
+                            "value": "",
+                            "message": ""
+                        }
+                    ]
+                },
+                {
+                    "cname": "根据用户喜好推荐",
+                    "name": "bigdata_engine",
+                    "type": "radio",
+                    "placeholder": "启用根据用户喜好推荐",
+                    "helper": "开启喜好推荐，需要调用简墨云服务。请在系统管理中授权，允许推送文章和部分用户访问轨迹信息到简墨云数据分析引擎。",
+                    "exp": "",
+                    "readonly": "",
+                    "attr": {
+                        "option": "开启=1,关闭=0",
+                        "default": "0"
+                    },
+                    "validator": [
+                        {
+                            "method": "",
+                            "value": "",
+                            "message": ""
+                        }
+                    ]
+                },
+                {
+                    "cname": "统计周期",
+                    "name": "period",
+                    "type": "radio",
+                    "placeholder": "请选择统计周期",
+                    "helper": "",
+                    "exp": "",
+                    "readonly": "",
+                    "attr": {
+                        "option": "24小时=24hours,今日=daily,7天=7days,本周=weekly,30天=30days,本月=monthly,今年=yearly,无限=unlimited",
+                        "default": "auto"
+                    },
+                    "validator": [
+                        {
+                            "method": "",
+                            "value": "",
+                            "message": "请选择推荐方式"
+                        }
+                    ]
+                },
+                {
+                    "cname": "排序方式",
+                    "name": "orderby",
+                    "type": "radio",
+                    "placeholder": "请选择排序方式",
+                    "helper": "",
+                    "exp": "",
+                    "readonly": "",
+                    "attr": {
+                        "option": "最新发布=publish_time,发布顺序=publish_time_asc, 最多浏览=view_cnt, 最多点赞=like_cnt, 最多评论=comment_cnt,最多讨厌=dislike_cnt",
+                        "default": "publish_time"
+                    },
+                    "validator": [
+                        {
+                            "method": "required",
+                            "value": "true",
+                            "message": "请选择排序方式"
+                        }
+                    ]
+                },
+                {
+                    "cname": "关键词",
+                    "name": "keywords",
+                    "type": "input",
+                    "placeholder": "请填写搜索关键词",
+                    "helper": "多个用 \",\" 分割",
+                    "exp": "",
+                    "readonly": "",
+                    "attr": {
+                        "default": ""
+                    },
+                    "validator": [
+                        {
+                            "method": "",
+                            "value": "",
+                            "message": ""
+                        }
+                    ]
+                },
+                {
+                    "cname": "指定系列",
+                    "name": "series",
+                    "type": "select-remote",
+                    "placeholder": "请选择所属系列",
+                    "helper": "编辑文章时, 在编辑器右侧工具栏菜单设定。 ",
+                    "exp": "",
+                    "readonly": "",
+                    "attr": {
+                        "table": "series",
+                        "prefix": "xpmsns_pages_",
+                        "model": "\\Xpmsns\\Pages\\Model\\Series",
+                        "fields": [
+                            "series_id",
+                            "name"
+                        ],
+                        "option": "series_id",
+                        "style": "{{name}}({{series_id}}})",
+                        "default": "",
+                        "multiple": "1",
+                        "api": "",
+                        "cancel": "",
+                        "cancelable": "1"
+                    },
+                    "validator": [
+                        {
+                            "method": "",
+                            "value": "",
+                            "message": ""
+                        }
+                    ]
+                },
+                {
+                    "cname": "指定栏目",
+                    "name": "categories",
+                    "type": "select-remote",
+                    "placeholder": "请选择相关栏目的文章",
+                    "helper": "",
+                    "exp": "",
+                    "readonly": "",
+                    "attr": {
+                        "table": "category",
+                        "prefix": "xpmsns_pages_",
+                        "model": "\\Xpmsns\\Pages\\Model\\Category",
+                        "fields": [
+                            "category_id",
+                            "name"
+                        ],
+                        "option": "category_id",
+                        "style": "{{name}}({{category_id}})",
+                        "default": "",
+                        "multiple": "1",
+                        "api": "",
+                        "cancel": "",
+                        "cancelable": "1"
+                    },
+                    "validator": [
+                        {
+                            "method": "",
+                            "value": "",
+                            "message": ""
+                        }
+                    ]
+                },
+                {
+                    "cname": "指定文章",
+                    "name": "articles",
+                    "type": "select-remote",
+                    "placeholder": "请选择文章",
+                    "helper": "",
+                    "exp": "",
+                    "readonly": "",
+                    "attr": {
+                        "table": "article",
+                        "prefix": "xpmsns_pages_",
+                        "model": "\\Xpmsns\\Pages\\Model\\Article",
+                        "fields": [
+                            "article_id",
+                            "title"
+                        ],
+                        "option": "article_id",
+                        "style": "{{title}}({{article_id}})",
+                        "default": "",
+                        "multiple": "1",
+                        "api": "",
+                        "cancel": "",
+                        "cancelable": "1"
+                    },
+                    "validator": [
+                        {
+                            "method": "",
+                            "value": "",
+                            "message": ""
+                        }
+                    ]
+                },
+                {
+                    "cname": "排除文章",
+                    "name": "exclude_articles",
+                    "type": "select-remote",
+                    "placeholder": "请选择文章",
+                    "helper": "",
+                    "exp": "",
+                    "readonly": "",
+                    "attr": {
+                        "table": "article",
+                        "prefix": "xpmsns_pages_",
+                        "model": "\\Xpmsns\\Pages\\Model\\Article",
+                        "fields": [
+                            "article_id",
+                            "title"
+                        ],
+                        "option": "article_id",
+                        "style": "{{title}}({{article_id}})",
+                        "default": "",
+                        "multiple": "1",
+                        "api": "",
+                        "cancel": "",
+                        "cancelable": "1"
+                    },
+                    "validator": [
+                        {
+                            "method": "",
+                            "value": "",
+                            "message": ""
+                        }
+                    ]
+                },
+                {
+                    "cname": "指定活动",
+                    "name": "events",
+                    "type": "select-remote",
+                    "placeholder": "请选择活动",
+                    "helper": "",
+                    "exp": "",
+                    "readonly": "",
+                    "attr": {
+                        "table": "event",
+                        "prefix": "xpmsns_pages_",
+                        "model": "\\Xpmsns\\Pages\\Model\\Event",
+                        "fields": [
+                            "event_id",
+                            "name"
+                        ],
+                        "option": "event_id",
+                        "style": "{{name}}({{event_id}})",
+                        "default": "",
+                        "multiple": "1",
+                        "api": "",
+                        "cancel": "",
+                        "cancelable": "1"
+                    },
+                    "validator": [
+                        {
+                            "method": "",
+                            "value": "",
+                            "message": ""
+                        }
+                    ]
+                },
+                {
+                    "cname": "指定图集",
+                    "name": "albums",
+                    "type": "select-remote",
+                    "placeholder": "请选择图集",
+                    "helper": "",
+                    "exp": "",
+                    "readonly": "",
+                    "attr": {
+                        "table": "album",
+                        "prefix": "xpmsns_pages_",
+                        "model": "\\Xpmsns\\Pages\\Model\\Album",
+                        "fields": [
+                            "album_id",
+                            "title"
+                        ],
+                        "option": "album_id",
+                        "style": "{{title}}({{album_id}})",
+                        "default": "",
+                        "multiple": "1",
+                        "api": "",
+                        "cancel": "",
+                        "cancelable": "1"
+                    },
+                    "validator": [
+                        {
+                            "method": "",
+                            "value": "",
+                            "message": ""
+                        }
+                    ]
+                },
+                {
+                    "cname": "简介",
+                    "name": "summary",
+                    "type": "textarea",
+                    "placeholder": "请填写推荐简介",
+                    "helper": "",
+                    "exp": "",
+                    "readonly": "",
+                    "attr": {
+                        "default": "",
+                        "rows": "4",
+                        "autoheight": "1"
+                    },
+                    "validator": [
+                        {
+                            "method": "required",
+                            "value": "true",
+                            "message": "请填写推荐主题"
+                        }
+                    ]
+                },
+                {
+                    "cname": "图标",
+                    "name": "icon",
+                    "type": "image",
+                    "placeholder": "请上传图标",
+                    "helper": "",
+                    "exp": "",
+                    "readonly": "",
+                    "attr": {
+                        "width": "150",
+                        "height": "150",
+                        "allow": "",
+                        "cropable": ""
+                    },
+                    "validator": [
+                        {
+                            "method": "",
+                            "value": "",
+                            "message": ""
+                        }
+                    ]
+                },
+                {
+                    "cname": "摘要图片",
+                    "name": "images",
+                    "type": "image-groups",
+                    "placeholder": "请上传推荐位图片",
+                    "helper": "",
+                    "exp": "",
+                    "readonly": "",
+                    "attr": {
+                        "width": "320",
+                        "height": "180",
+                        "allow": "",
+                        "cropable": "yes",
+                        "maxsize": "",
+                        "api": "",
+                        "title_cname": "",
+                        "link_cname": "",
+                        "summary_cname": ""
+                    },
+                    "validator": [
+                        {
+                            "method": "",
+                            "value": "",
+                            "message": ""
+                        }
+                    ]
+                },
+                {
+                    "cname": "状态",
+                    "name": "status",
+                    "type": "radio",
+                    "placeholder": "",
+                    "helper": "",
+                    "exp": "",
+                    "readonly": "",
+                    "attr": {
+                        "option": "开启=on,关闭=off",
+                        "default": "on"
+                    },
+                    "validator": [
+                        {
+                            "method": "",
+                            "value": "",
+                            "message": ""
+                        }
+                    ]
+                }
+            ],
+            "jscode": [
+                ""
+            ],
+            "undefined": [
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                ""
+            ]
+        },
+        "list": {
+            "keyword_param": "keyword",
+            "keyword": [
+                "name=recommend_id",
+                "name=title",
+                "name=slug"
+            ],
+            "jscode": [
+                ""
+            ],
+            "conditions": [
+                {
+                    "or": "0",
+                    "field": "name=recommend_id",
+                    "type": "=",
+                    "cname": "推荐ID",
+                    "param": "",
+                    "default": ""
+                },
+                {
+                    "or": "0",
+                    "field": "name=slug",
+                    "type": "in",
+                    "cname": "推荐别名",
+                    "param": "",
+                    "default": ""
+                },
+                {
+                    "or": "0",
+                    "field": "name=pos",
+                    "type": "=",
+                    "cname": "位置代码",
+                    "param": "",
+                    "default": ""
+                },
+                {
+                    "or": "0",
+                    "field": "name=type",
+                    "type": "=",
+                    "cname": "推荐方式",
+                    "param": "",
+                    "default": ""
+                },
+                {
+                    "or": "0",
+                    "field": "name=period",
+                    "type": "=",
+                    "cname": "统计周期",
+                    "param": "",
+                    "default": ""
+                },
+                {
+                    "or": "0",
+                    "field": "name=title",
+                    "type": "like",
+                    "cname": "主题",
+                    "param": "",
+                    "default": ""
+                },
+                {
+                    "or": "0",
+                    "field": "name=ctype",
+                    "type": "=",
+                    "cname": "内容类型",
+                    "param": "",
+                    "default": ""
+                },
+                {
+                    "or": "0",
+                    "field": "name=thumb_only",
+                    "type": "=",
+                    "cname": "必须有主题图片",
+                    "param": "",
+                    "default": ""
+                },
+                {
+                    "or": "0",
+                    "field": "name=bigdata_engine",
+                    "type": "=",
+                    "cname": "喜好推荐",
+                    "param": "",
+                    "default": ""
+                },
+                {
+                    "or": "0",
+                    "field": "name=video_only",
+                    "type": "=",
+                    "cname": "必须有视频内容",
+                    "param": "",
+                    "default": ""
+                },
+                {
+                    "or": "0",
+                    "field": "name=status",
+                    "type": "=",
+                    "cname": "状态",
+                    "param": "",
+                    "default": ""
+                }
+            ],
+            "orderby": [
+                {
+                    "field": "name=created_at",
+                    "type": "",
+                    "cname": "创建时间",
+                    "param": ""
+                },
+                {
+                    "field": "name=updated_at",
+                    "type": "",
+                    "cname": "更新时间",
+                    "param": ""
+                }
+            ],
+            "statusby": [
+                {
+                    "name": "name=type",
+                    "cname": "推荐方式",
+                    "status": "智能=auto|danger, 静态=static|primary"
+                },
+                {
+                    "name": "name=ctype",
+                    "cname": "内容类型",
+                    "status": "混合=all|danger, 图文=article|primary, 图集=album|primary, 活动=event|primary"
+                },
+                {
+                    "name": "name=period",
+                    "cname": "统计周期",
+                    "status": "24小时=24hours|info,今日=daily|info,7天=7days|info,本周=weekly|info,30天=30days|info,本月=monthly|info,今年=yearly|info,无限=unlimited|info"
+                },
+                {
+                    "name": "name=orderby",
+                    "cname": "文章排序",
+                    "status": "最新发布=publish_time|info, 发布顺序=publish_time_asc|info,最多浏览=view_cnt|info, 最多点赞=like_cnt|info, 最多评论=comment_cnt|info, 最多讨厌=dislike_cnt|info"
+                },
+                {
+                    "name": "name=status",
+                    "cname": "状态",
+                    "status": "开启=on|primary,关闭=off|danger "
+                }
+            ],
+            "columns": [
+                {
+                    "fields": [
+                        "name=slug"
+                    ],
+                    "cname": "",
+                    "filter": "",
+                    "default": ""
+                },
+                {
+                    "fields": [
+                        "name=title"
+                    ],
+                    "cname": "",
+                    "filter": "",
+                    "default": ""
+                },
+                {
+                    "fields": [
+                        "name=type"
+                    ],
+                    "cname": "推荐方式",
+                    "filter": "",
+                    "default": ""
+                },
+                {
+                    "fields": [
+                        "name=ctype"
+                    ],
+                    "cname": "内容类型",
+                    "filter": "",
+                    "default": ""
+                },
+                {
+                    "fields": [
+                        "name=period"
+                    ],
+                    "cname": "统计周期",
+                    "filter": "",
+                    "default": ""
+                },
+                {
+                    "fields": [
+                        "name=orderby"
+                    ],
+                    "cname": "文章排序",
+                    "filter": "",
+                    "default": ""
+                },
+                {
+                    "fields": [
+                        "name=keywords"
+                    ],
+                    "cname": "",
+                    "filter": "",
+                    "default": ""
+                },
+                {
+                    "fields": [
+                        "name=created_at",
+                        "name=updated_at"
+                    ],
+                    "cname": "",
+                    "filter": "{{ updated_at ? updated_at : created_at }}",
+                    "default": ""
+                },
+                {
+                    "fields": [
+                        "name=status"
+                    ],
+                    "cname": "",
+                    "filter": "",
+                    "default": ""
+                }
+            ]
+        },
+        "api": {
+            "getstatus": "1",
+            "createstatus": "1",
+            "searchstatus": "1",
+            "uploadparam": "",
+            "updatestatus": "0",
+            "deletestatus": "0",
+            "uploadstatus": "0",
+            "getkey": [
+                "name=recommend_id",
+                "name=slug"
+            ],
+            "getfields": [
+                "name=recommend_id",
+                "name=title",
+                "name=slug",
+                "name=pos",
+                "name=style",
+                "name=type",
+                "name=bigdata_engine",
+                "name=period",
+                "name=images",
+                "name=tpl_pc",
+                "name=tpl_h5",
+                "name=tpl_wxapp",
+                "name=tpl_android",
+                "name=tpl_ios",
+                "name=keywords",
+                "name=series",
+                "name=orderby",
+                "name=status",
+                "name=created_at",
+                "name=updated_at",
+                "model=%5CXpmsns%5CPages%5CModel%5CArticle&name=article_id&table=article&prefix=xpmsns_pages_&alias=a&type=inWhere",
+                "model=%5CXpmsns%5CPages%5CModel%5CArticle&name=title&table=article&prefix=xpmsns_pages_&alias=a&type=inWhere",
+                "model=%5CXpmsns%5CPages%5CModel%5CEvent&name=event_id&table=event&prefix=xpmsns_pages_&alias=evt&type=inWhere",
+                "model=%5CXpmsns%5CPages%5CModel%5CEvent&name=name&table=event&prefix=xpmsns_pages_&alias=evt&type=inWhere",
+                "model=%5CXpmsns%5CPages%5CModel%5CAlbum&name=album_id&table=album&prefix=xpmsns_pages_&alias=al&type=inWhere",
+                "model=%5CXpmsns%5CPages%5CModel%5CAlbum&name=title&table=album&prefix=xpmsns_pages_&alias=al&type=inWhere",
+                "model=%5CXpmsns%5CPages%5CModel%5CCategory&name=category_id&table=category&prefix=xpmsns_pages_&alias=c&type=inWhere",
+                "model=%5CXpmsns%5CPages%5CModel%5CCategory&name=name&table=category&prefix=xpmsns_pages_&alias=c&type=inWhere"
+            ],
+            "createfields": [
+                "name=title",
+                "name=type",
+                "name=ctype"
+            ],
+            "updatekey": [
+                "name=recommend_id"
+            ],
+            "deletekey": [
+                "name=recommend_id"
+            ],
+            "searchfields": [
+                "name=recommend_id",
+                "name=title",
+                "name=pos",
+                "name=type",
+                "name=bigdata_engine",
+                "name=images",
+                "name=keywords",
+                "name=series",
+                "name=orderby",
+                "name=status",
+                "name=created_at",
+                "name=updated_at",
+                "model=%5CXpmsns%5CPages%5CModel%5CArticle&name=article_id&table=article&prefix=xpmsns_pages_&alias=a&type=inWhere",
+                "model=%5CXpmsns%5CPages%5CModel%5CArticle&name=title&table=article&prefix=xpmsns_pages_&alias=a&type=inWhere",
+                "model=%5CXpmsns%5CPages%5CModel%5CEvent&name=event_id&table=event&prefix=xpmsns_pages_&alias=evt&type=inWhere",
+                "model=%5CXpmsns%5CPages%5CModel%5CEvent&name=name&table=event&prefix=xpmsns_pages_&alias=evt&type=inWhere",
+                "model=%5CXpmsns%5CPages%5CModel%5CAlbum&name=album_id&table=album&prefix=xpmsns_pages_&alias=al&type=inWhere",
+                "model=%5CXpmsns%5CPages%5CModel%5CAlbum&name=title&table=album&prefix=xpmsns_pages_&alias=al&type=inWhere",
+                "model=%5CXpmsns%5CPages%5CModel%5CCategory&name=category_id&table=category&prefix=xpmsns_pages_&alias=c&type=inWhere",
+                "model=%5CXpmsns%5CPages%5CModel%5CCategory&name=name&table=category&prefix=xpmsns_pages_&alias=c&type=inWhere"
+            ],
+            "getauth": {
+                "sign": "",
+                "secret": "",
+                "image": ""
+            },
+            "createauth": {
+                "sign": "1",
+                "secret": "1",
+                "image": ""
+            },
+            "updateauth": {
+                "sign": "1",
+                "secret": "1",
+                "image": ""
+            },
+            "deleteauth": {
+                "sign": "1",
+                "secret": "1",
+                "image": ""
+            },
+            "searchauth": {
+                "sign": "",
+                "secret": "",
+                "image": ""
+            },
+            "uploadauth": {
+                "sign": "",
+                "secret": "1",
+                "image": ""
+            },
+            "methods": [
+                {
+                    "name": "getArticles",
+                    "cname": "读取推荐文章",
+                    "source": "\tprotected function getArticles( $query, $data ) {\n\t\t\n\t\t// 支持POST和GET查询\n\t\t$data = array_merge( $query, $data );\n\n\t\t$inst = new \\Xpmsns\\Pages\\Model\\Recommend;\n\t\t$keywords = !empty($data['keywords']) ?  explode(',',$data['keywords']) : []; \n\t\t$page = !empty($data['page']) ?  $data['page'] : 1; \n\t\t$perpage = !empty($data['perpage']) ?  $data['perpage'] : 20; \n      \t$now = !empty($data['now']) ?  $data['now'] : null; \n         \n\n\t\tif ( array_key_exists('slug', $data) && !empty($data['slug']) ) {\n\t\t\treturn $inst->getArticlesBySlug( $data['slug'], $keywords, $now, $page, $perpage);\n\t\t} else if ( array_key_exists('recommend_id', $data) && !empty($data['recommend_id']) ) {\n\t\t\treturn $inst->getArticles( $data['recommend_id'], $keywords, $now, $page, $perpage);\n\t\t}\n\n\t\tthrow new Excp('错误的查询参数', 402, ['query'=>$query, 'data'=>$data]);\n\t}"
+                },
+                {
+                    "name": "getContents",
+                    "cname": "读取推荐内容",
+                    "source": "       protected function getContents( $query, $data ) {\n\t\t\n\t\t// 支持POST和GET查询\n\t\t$data = array_merge( $query, $data );\n\n\t\t$inst = new \\Xpmsns\\Pages\\Model\\Recommend;\n\t\t$keywords = !empty($data['keywords']) ?  explode(',',$data['keywords']) : []; \n        $series = !empty($data['series']) ?  explode(',',$data['series']) : [];\n        $exclude_articles = !empty($data['exclude_articles']) ?  explode(',',$data['exclude_articles']) : [];\n\t\t$page = !empty($data['page']) ?  $data['page'] : 1; \n\t\t$perpage = !empty($data['perpage']) ?  $data['perpage'] : 20; \n      \t$now = !empty($data['now']) ?  $data['now'] : null; \n        if ( array_key_exists('series', $data) && empty($series) ) {\n        \t$series = ['not null'];\n        }\n\n\t\tif ( array_key_exists('slug', $data) && !empty($data['slug']) ) {\n\t\t\treturn $inst->getContentsBySlug( $data['slug'], $keywords,$series, $exclude_articles, $page, $perpage, $now);\n\t\t} else if ( array_key_exists('recommend_id', $data) && !empty($data['recommend_id']) ) {\n\t\t\treturn $inst->getContents( $data['recommend_id'], $keywords, $series,$exclude_articles,$page, $perpage, $now);\n\t\t}\n         \n        if ( array_key_exists('slugs', $data) && !empty($data['slugs']) ) {\n\t\t\t$data['slugs'] = explode(',', $data['slugs']);\n\t\t\t$contents = [];\n\t\t\tforeach ($data['slugs'] as $slug) {\n\t\t\t\t$contents[$slug] = $inst->getContentsBySlug( trim($slug), $keywords,$series, $exclude_articles,$page, $perpage, $now); \n\t\t\t}\n\t\t\treturn $contents;\n\t\t}\n\t\tthrow new Excp('错误的查询参数', 402, ['query'=>$query, 'data'=>$data]);\n\t}"
+                }
+            ]
+        }
+    },
+    "process": {
+        "general": "saved",
+        "struct": "saved",
+        "links": "saved",
+        "detail": "saved",
+        "list": "saved",
+        "api": "saved"
+    },
+    "next": null,
+    "prev": null,
+    "templete": {
+        "org": "xpmsns",
+        "name": "model",
+        "slug": "xpmsns_model",
+        "cname": "XpmSE 应用数据模型母版",
+        "version": "1.0.0",
+        "summary": "生成 XpmSE 应用数据模型。涵盖资源模型CURD、API CURD和标准资源管理界面。"
+    }
+}

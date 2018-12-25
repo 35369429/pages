@@ -1,0 +1,556 @@
+{
+    "name": "简墨-系列管理",
+    "data": {
+        "struct": {
+            "table": "series",
+            "fields": [
+                {
+                    "name": "series_id",
+                    "cname": "系列ID",
+                    "type": "string",
+                    "length": "128",
+                    "default": "",
+                    "unique": "1",
+                    "index": "",
+                    "nullable": "1",
+                    "json": "",
+                    "auto": "1",
+                    "file": "",
+                    "private": ""
+                },
+                {
+                    "name": "name",
+                    "cname": "系列名称",
+                    "type": "string",
+                    "length": "128",
+                    "default": "",
+                    "unique": "",
+                    "index": "",
+                    "nullable": "1",
+                    "json": "",
+                    "auto": "",
+                    "file": "",
+                    "private": ""
+                },
+                {
+                    "name": "slug",
+                    "cname": "系列别名",
+                    "type": "string",
+                    "length": "128",
+                    "default": "",
+                    "unique": "1",
+                    "index": "",
+                    "nullable": "",
+                    "json": "",
+                    "auto": "",
+                    "file": "",
+                    "private": ""
+                },
+                {
+                    "name": "category_id",
+                    "cname": "所属栏目",
+                    "type": "string",
+                    "length": "128",
+                    "default": "",
+                    "unique": "",
+                    "index": "1",
+                    "nullable": "",
+                    "json": "",
+                    "auto": "",
+                    "file": "",
+                    "private": ""
+                },
+                {
+                    "name": "summary",
+                    "cname": "摘要",
+                    "type": "string",
+                    "length": "400",
+                    "default": "",
+                    "unique": "",
+                    "index": "",
+                    "nullable": "",
+                    "json": "",
+                    "auto": "",
+                    "file": "",
+                    "private": ""
+                },
+                {
+                    "name": "orderby",
+                    "cname": "排序方式",
+                    "type": "string",
+                    "length": "128",
+                    "default": "",
+                    "unique": "",
+                    "index": "1",
+                    "nullable": "",
+                    "json": "",
+                    "auto": "",
+                    "file": "",
+                    "private": ""
+                },
+                {
+                    "name": "param",
+                    "cname": "参数",
+                    "type": "string",
+                    "length": "128",
+                    "default": "",
+                    "unique": "",
+                    "index": "1",
+                    "nullable": "1",
+                    "json": "",
+                    "auto": "",
+                    "file": "",
+                    "private": ""
+                },
+                {
+                    "name": "status",
+                    "cname": "状态",
+                    "type": "string",
+                    "length": "20",
+                    "default": "",
+                    "unique": "",
+                    "index": "1",
+                    "nullable": "1",
+                    "json": "",
+                    "auto": "",
+                    "file": "",
+                    "private": ""
+                }
+            ],
+            "methods": [
+                {
+                    "name": "",
+                    "cname": "",
+                    "source": ""
+                }
+            ]
+        },
+        "links": {
+            "fields": [
+                {
+                    "cname": "栏目",
+                    "type": "leftJoin",
+                    "model": "\\Xpmsns\\Pages\\Model\\Category",
+                    "table": "category",
+                    "prefix": "xpmsns_pages_",
+                    "field": "category_id",
+                    "on": "=",
+                    "name": "category_id",
+                    "alias": "c"
+                }
+            ]
+        },
+        "api": {
+            "getstatus": "1",
+            "createstatus": "1",
+            "updatestatus": "1",
+            "deletestatus": "1",
+            "searchstatus": "1",
+            "uploadparam": "",
+            "uploadstatus": "0",
+            "getkey": [
+                "name=series_id",
+                "name=name",
+                "name=slug"
+            ],
+            "getfields": [
+                "name=series_id",
+                "name=name",
+                "name=slug",
+                "name=summary",
+                "name=orderby",
+                "name=param",
+                "name=status",
+                "name=created_at",
+                "name=updated_at",
+                "model=%5CXpmsns%5CPages%5CModel%5CCategory&name=category_id&table=category&prefix=xpmsns_pages_&alias=c&type=leftJoin",
+                "model=%5CXpmsns%5CPages%5CModel%5CCategory&name=name&table=category&prefix=xpmsns_pages_&alias=c&type=leftJoin"
+            ],
+            "createfields": [
+                "name=series_id",
+                "name=name"
+            ],
+            "updatekey": [
+                "name=series_id"
+            ],
+            "deletekey": [
+                "name=series_id"
+            ],
+            "searchfields": [
+                "name=series_id",
+                "name=name",
+                "name=slug",
+                "name=summary",
+                "name=orderby",
+                "name=param",
+                "name=status",
+                "name=created_at",
+                "name=updated_at",
+                "model=%5CXpmsns%5CPages%5CModel%5CCategory&name=category_id&table=category&prefix=xpmsns_pages_&alias=c&type=leftJoin",
+                "model=%5CXpmsns%5CPages%5CModel%5CCategory&name=name&table=category&prefix=xpmsns_pages_&alias=c&type=leftJoin"
+            ],
+            "getauth": {
+                "sign": "",
+                "secret": "",
+                "image": ""
+            },
+            "createauth": {
+                "sign": "1",
+                "secret": "1",
+                "image": ""
+            },
+            "updateauth": {
+                "sign": "1",
+                "secret": "1",
+                "image": ""
+            },
+            "deleteauth": {
+                "sign": "1",
+                "secret": "1",
+                "image": ""
+            },
+            "searchauth": {
+                "sign": "",
+                "secret": "",
+                "image": ""
+            },
+            "uploadauth": {
+                "sign": "",
+                "secret": "1",
+                "image": ""
+            },
+            "methods": [
+                {
+                    "name": "",
+                    "cname": "",
+                    "source": "\n"
+                }
+            ]
+        },
+        "detail": {
+            "index": "name=series_id",
+            "title": "name=name",
+            "columns": [
+                {
+                    "cname": "名称",
+                    "name": "name",
+                    "type": "input",
+                    "placeholder": "请填写系列名称",
+                    "helper": "",
+                    "exp": "",
+                    "readonly": "",
+                    "attr": {
+                        "default": ""
+                    },
+                    "validator": [
+                        {
+                            "method": "",
+                            "value": "",
+                            "message": ""
+                        }
+                    ]
+                },
+                {
+                    "cname": "别名",
+                    "name": "slug",
+                    "type": "input",
+                    "placeholder": "请填写系列别名",
+                    "helper": "",
+                    "exp": "",
+                    "readonly": "",
+                    "attr": {
+                        "default": ""
+                    },
+                    "validator": [
+                        {
+                            "method": "",
+                            "value": "",
+                            "message": ""
+                        }
+                    ]
+                },
+                {
+                    "cname": "所属栏目",
+                    "name": "category_id",
+                    "type": "select-remote",
+                    "placeholder": "请选择所属栏目",
+                    "helper": "",
+                    "exp": "",
+                    "readonly": "",
+                    "attr": {
+                        "table": "category",
+                        "prefix": "xpmsns_pages_",
+                        "model": "\\Xpmsns\\Pages\\Model\\Category",
+                        "fields": [
+                            "category_id",
+                            "name"
+                        ],
+                        "option": "category_id",
+                        "style": "{{name}}({{category_id}})",
+                        "default": "",
+                        "multiple": "",
+                        "api": "",
+                        "cancel": "",
+                        "cancelable": "1"
+                    },
+                    "validator": [
+                        {
+                            "method": "",
+                            "value": "",
+                            "message": ""
+                        }
+                    ]
+                },
+                {
+                    "cname": "排序",
+                    "name": "orderby",
+                    "type": "radio",
+                    "placeholder": "",
+                    "helper": "",
+                    "exp": "",
+                    "readonly": "",
+                    "attr": {
+                        "option": "最新发表优先=publish_time_desc,最后发表优先=publish_time_asc",
+                        "default": "publish_time_asc"
+                    },
+                    "validator": [
+                        {
+                            "method": "",
+                            "value": "",
+                            "message": ""
+                        }
+                    ]
+                },
+                {
+                    "cname": "简介",
+                    "name": "summary",
+                    "type": "textarea",
+                    "placeholder": "请填写系列简介",
+                    "helper": "",
+                    "exp": "",
+                    "readonly": "",
+                    "attr": {
+                        "default": "",
+                        "rows": "4",
+                        "autoheight": ""
+                    },
+                    "validator": [
+                        {
+                            "method": "",
+                            "value": "",
+                            "message": ""
+                        }
+                    ]
+                },
+                {
+                    "cname": "参数",
+                    "name": "param",
+                    "type": "input",
+                    "placeholder": "填写查询参数 （用于条件过滤）",
+                    "helper": "",
+                    "exp": "",
+                    "readonly": "",
+                    "attr": {
+                        "default": ""
+                    },
+                    "validator": [
+                        {
+                            "method": "",
+                            "value": "",
+                            "message": ""
+                        }
+                    ]
+                },
+                {
+                    "cname": "状态",
+                    "name": "status",
+                    "type": "radio",
+                    "placeholder": "",
+                    "helper": "",
+                    "exp": "",
+                    "readonly": "",
+                    "attr": {
+                        "option": "开启=on,关闭=off",
+                        "default": "on"
+                    },
+                    "validator": [
+                        {
+                            "method": "",
+                            "value": "",
+                            "message": ""
+                        }
+                    ]
+                }
+            ],
+            "jscode": [
+                ""
+            ],
+            "undefined": [
+                "",
+                "",
+                "",
+                "",
+                "",
+                ""
+            ]
+        },
+        "list": {
+            "keyword_param": "keyword",
+            "keyword": [
+                "name=series_id",
+                "name=name",
+                "name=slug"
+            ],
+            "jscode": [
+                ""
+            ],
+            "conditions": [
+                {
+                    "or": "0",
+                    "field": "name=series_id",
+                    "type": "=",
+                    "cname": "系列ID",
+                    "param": "",
+                    "default": ""
+                },
+                {
+                    "or": "0",
+                    "field": "name=series_id",
+                    "type": "in",
+                    "cname": "系列IDS",
+                    "param": "",
+                    "default": ""
+                },
+                {
+                    "or": "0",
+                    "field": "name=param",
+                    "type": "=",
+                    "cname": "参数",
+                    "param": "",
+                    "default": ""
+                },
+                {
+                    "or": "0",
+                    "field": "name=slug",
+                    "type": "=",
+                    "cname": "别名",
+                    "param": "",
+                    "default": ""
+                },
+                {
+                    "or": "0",
+                    "field": "name=category_id",
+                    "type": "=",
+                    "cname": "栏目",
+                    "param": "",
+                    "default": ""
+                },
+                {
+                    "or": "0",
+                    "field": "name=orderby",
+                    "type": "=",
+                    "cname": " 排序",
+                    "param": "",
+                    "default": ""
+                },
+                {
+                    "or": "0",
+                    "field": "name=status",
+                    "type": "=",
+                    "cname": "状态",
+                    "param": "",
+                    "default": ""
+                }
+            ],
+            "orderby": [
+                {
+                    "field": "name=created_at",
+                    "type": "",
+                    "cname": "创建时间",
+                    "param": ""
+                },
+                {
+                    "field": "name=updated_at",
+                    "type": "desc",
+                    "cname": "创建时间倒序",
+                    "param": ""
+                }
+            ],
+            "statusby": [
+                {
+                    "name": "name=status",
+                    "cname": "状态",
+                    "status": "开启=on|primary,关闭=off|danger"
+                }
+            ],
+            "columns": [
+                {
+                    "fields": [
+                        "name=slug"
+                    ],
+                    "cname": "别名",
+                    "filter": "",
+                    "default": ""
+                },
+                {
+                    "fields": [
+                        "name=name"
+                    ],
+                    "cname": "名称",
+                    "filter": "",
+                    "default": ""
+                },
+                {
+                    "fields": [
+                        "model=%5CXpmsns%5CPages%5CModel%5CCategory&name=name&table=category&prefix=xpmsns_pages_&alias=c&type=leftJoin"
+                    ],
+                    "cname": "栏目",
+                    "filter": "{{c_name}}",
+                    "default": ""
+                },
+                {
+                    "fields": [
+                        "name=status"
+                    ],
+                    "cname": "状态",
+                    "filter": "",
+                    "default": ""
+                },
+                {
+                    "fields": [
+                        "name=created_at",
+                        "name=updated_at"
+                    ],
+                    "cname": "更新时间",
+                    "filter": "{{ updated_at ? updated_at : created_at }}",
+                    "default": ""
+                }
+            ]
+        },
+        "general": {
+            "app": "pages",
+            "org": "xpmsns",
+            "model": "_create",
+            "name": "series",
+            "cname": "系列"
+        }
+    },
+    "process": {
+        "struct": "saved",
+        "api": "saved",
+        "general": "saved",
+        "detail": "saved",
+        "list": "saved",
+        "links": "saved"
+    },
+    "next": null,
+    "prev": null,
+    "templete": {
+        "org": "xpmsns",
+        "name": "model",
+        "slug": "xpmsns_model",
+        "cname": "XpmSE 应用数据模型母版",
+        "version": "1.0.0",
+        "summary": "生成 XpmSE 应用数据模型。涵盖资源模型CURD、API CURD和标准资源管理界面。"
+    }
+}

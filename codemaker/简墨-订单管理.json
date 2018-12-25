@@ -1,0 +1,1342 @@
+{
+    "name": "简墨-订单管理",
+    "data": {
+        "general": {
+            "app": "pages",
+            "org": "xpmsns",
+            "model": "_create",
+            "name": "order",
+            "cname": "订单"
+        },
+        "struct": {
+            "table": "order",
+            "fields": [
+                {
+                    "name": "order_id",
+                    "cname": "订单ID",
+                    "type": "string",
+                    "length": "128",
+                    "default": "",
+                    "unique": "1",
+                    "index": "",
+                    "nullable": "",
+                    "json": "",
+                    "auto": "1",
+                    "file": "",
+                    "private": ""
+                },
+                {
+                    "name": "outer_id",
+                    "cname": "外部ID",
+                    "type": "string",
+                    "length": "128",
+                    "default": "",
+                    "unique": "",
+                    "index": "1",
+                    "nullable": "",
+                    "json": "",
+                    "auto": "",
+                    "file": "",
+                    "private": ""
+                },
+                {
+                    "name": "goods_ids",
+                    "cname": "商品清单",
+                    "type": "text",
+                    "length": "",
+                    "default": "",
+                    "unique": "",
+                    "index": "",
+                    "nullable": "",
+                    "json": "1",
+                    "auto": "",
+                    "file": "",
+                    "private": ""
+                },
+                {
+                    "name": "items_ids",
+                    "cname": "单品清单",
+                    "type": "text",
+                    "length": "",
+                    "default": "",
+                    "unique": "",
+                    "index": "",
+                    "nullable": "",
+                    "json": "1",
+                    "auto": "",
+                    "file": "",
+                    "private": ""
+                },
+                {
+                    "name": "total",
+                    "cname": "金额",
+                    "type": "integer",
+                    "length": "1",
+                    "default": "0",
+                    "unique": "",
+                    "index": "1",
+                    "nullable": "",
+                    "json": "",
+                    "auto": "",
+                    "file": "",
+                    "private": ""
+                },
+                {
+                    "name": "freight",
+                    "cname": "运费",
+                    "type": "integer",
+                    "length": "1",
+                    "default": "0",
+                    "unique": "",
+                    "index": "1",
+                    "nullable": "",
+                    "json": "",
+                    "auto": "",
+                    "file": "",
+                    "private": ""
+                },
+                {
+                    "name": "total_cost",
+                    "cname": "实付金额",
+                    "type": "integer",
+                    "length": "1",
+                    "default": "0",
+                    "unique": "",
+                    "index": "1",
+                    "nullable": "",
+                    "json": "",
+                    "auto": "",
+                    "file": "",
+                    "private": ""
+                },
+                {
+                    "name": "money_cost",
+                    "cname": "消费货币",
+                    "type": "integer",
+                    "length": "1",
+                    "default": "0",
+                    "unique": "",
+                    "index": "1",
+                    "nullable": "",
+                    "json": "",
+                    "auto": "",
+                    "file": "",
+                    "private": ""
+                },
+                {
+                    "name": "coin_cost",
+                    "cname": "消费积分",
+                    "type": "integer",
+                    "length": "1",
+                    "default": "0",
+                    "unique": "",
+                    "index": "1",
+                    "nullable": "",
+                    "json": "",
+                    "auto": "",
+                    "file": "",
+                    "private": ""
+                },
+                {
+                    "name": "bitcoin_cost",
+                    "cname": "消费代币",
+                    "type": "float",
+                    "length": "",
+                    "default": "0",
+                    "unique": "",
+                    "index": "1",
+                    "nullable": "",
+                    "json": "",
+                    "auto": "",
+                    "file": "",
+                    "private": ""
+                },
+                {
+                    "name": "freight_cost",
+                    "cname": "实付运费",
+                    "type": "integer",
+                    "length": "1",
+                    "default": "0",
+                    "unique": "",
+                    "index": "1",
+                    "nullable": "",
+                    "json": "",
+                    "auto": "",
+                    "file": "",
+                    "private": ""
+                },
+                {
+                    "name": "payment_detail",
+                    "cname": "支付明细",
+                    "type": "text",
+                    "length": "",
+                    "default": "",
+                    "unique": "",
+                    "index": "",
+                    "nullable": "",
+                    "json": "1",
+                    "auto": "",
+                    "file": "",
+                    "private": ""
+                },
+                {
+                    "name": "user_id",
+                    "cname": "用户",
+                    "type": "string",
+                    "length": "128",
+                    "default": "",
+                    "unique": "",
+                    "index": "1",
+                    "nullable": "",
+                    "json": "",
+                    "auto": "",
+                    "file": "",
+                    "private": ""
+                },
+                {
+                    "name": "name",
+                    "cname": "收件人",
+                    "type": "string",
+                    "length": "128",
+                    "default": "",
+                    "unique": "",
+                    "index": "1",
+                    "nullable": "",
+                    "json": "",
+                    "auto": "",
+                    "file": "",
+                    "private": ""
+                },
+                {
+                    "name": "area",
+                    "cname": "国家地区",
+                    "type": "string",
+                    "length": "50",
+                    "default": "",
+                    "unique": "",
+                    "index": "1",
+                    "nullable": "",
+                    "json": "",
+                    "auto": "",
+                    "file": "",
+                    "private": ""
+                },
+                {
+                    "name": "prvn",
+                    "cname": "省份",
+                    "type": "string",
+                    "length": "50",
+                    "default": "",
+                    "unique": "",
+                    "index": "1",
+                    "nullable": "",
+                    "json": "",
+                    "auto": "",
+                    "file": "",
+                    "private": ""
+                },
+                {
+                    "name": "city",
+                    "cname": "城市",
+                    "type": "string",
+                    "length": "50",
+                    "default": "",
+                    "unique": "",
+                    "index": "1",
+                    "nullable": "",
+                    "json": "",
+                    "auto": "",
+                    "file": "",
+                    "private": ""
+                },
+                {
+                    "name": "town",
+                    "cname": "区县",
+                    "type": "string",
+                    "length": "50",
+                    "default": "",
+                    "unique": "",
+                    "index": "1",
+                    "nullable": "",
+                    "json": "",
+                    "auto": "",
+                    "file": "",
+                    "private": ""
+                },
+                {
+                    "name": "zipcode",
+                    "cname": "邮编",
+                    "type": "string",
+                    "length": "50",
+                    "default": "",
+                    "unique": "",
+                    "index": "1",
+                    "nullable": "",
+                    "json": "",
+                    "auto": "",
+                    "file": "",
+                    "private": ""
+                },
+                {
+                    "name": "address",
+                    "cname": "收货地址",
+                    "type": "string",
+                    "length": "600",
+                    "default": "",
+                    "unique": "",
+                    "index": "",
+                    "nullable": "",
+                    "json": "",
+                    "auto": "",
+                    "file": "",
+                    "private": ""
+                },
+                {
+                    "name": "mobile",
+                    "cname": "联系电话",
+                    "type": "string",
+                    "length": "50",
+                    "default": "",
+                    "unique": "",
+                    "index": "1",
+                    "nullable": "",
+                    "json": "",
+                    "auto": "",
+                    "file": "",
+                    "private": ""
+                },
+                {
+                    "name": "payment",
+                    "cname": "付款方式",
+                    "type": "string",
+                    "length": "32",
+                    "default": "",
+                    "unique": "",
+                    "index": "1",
+                    "nullable": "",
+                    "json": "",
+                    "auto": "",
+                    "file": "",
+                    "private": ""
+                },
+                {
+                    "name": "shipping_id",
+                    "cname": "物流",
+                    "type": "string",
+                    "length": "128",
+                    "default": "",
+                    "unique": "",
+                    "index": "1",
+                    "nullable": "",
+                    "json": "",
+                    "auto": "",
+                    "file": "",
+                    "private": ""
+                },
+                {
+                    "name": "tracking_no",
+                    "cname": "物流单号",
+                    "type": "string",
+                    "length": "32",
+                    "default": "",
+                    "unique": "",
+                    "index": "1",
+                    "nullable": "",
+                    "json": "",
+                    "auto": "",
+                    "file": "",
+                    "private": ""
+                },
+                {
+                    "name": "freight_in",
+                    "cname": "物流成本",
+                    "type": "integer",
+                    "length": "1",
+                    "default": "",
+                    "unique": "",
+                    "index": "1",
+                    "nullable": "",
+                    "json": "",
+                    "auto": "",
+                    "file": "",
+                    "private": ""
+                },
+                {
+                    "name": "status",
+                    "cname": "订单状态",
+                    "type": "string",
+                    "length": "32",
+                    "default": "",
+                    "unique": "",
+                    "index": "1",
+                    "nullable": "",
+                    "json": "",
+                    "auto": "",
+                    "file": "",
+                    "private": ""
+                },
+                {
+                    "name": "remark",
+                    "cname": "备注",
+                    "type": "text",
+                    "length": "",
+                    "default": "",
+                    "unique": "",
+                    "index": "",
+                    "nullable": "",
+                    "json": "",
+                    "auto": "",
+                    "file": "",
+                    "private": ""
+                },
+                {
+                    "name": "snapshot",
+                    "cname": "快照",
+                    "type": "longText",
+                    "length": "",
+                    "default": "",
+                    "unique": "",
+                    "index": "",
+                    "nullable": "",
+                    "json": "",
+                    "auto": "",
+                    "file": "",
+                    "private": ""
+                }
+            ],
+            "methods": [
+                {
+                    "name": "",
+                    "cname": "",
+                    "source": ""
+                }
+            ]
+        },
+        "detail": {
+            "index": "name=order_id",
+            "title": "name=order_id",
+            "columns": [
+                {
+                    "cname": "外部ID",
+                    "name": "outer_id",
+                    "type": "input",
+                    "placeholder": "",
+                    "helper": "",
+                    "exp": "",
+                    "readonly": "1",
+                    "attr": {
+                        "default": ""
+                    },
+                    "validator": [
+                        {
+                            "method": "",
+                            "value": "",
+                            "message": ""
+                        }
+                    ]
+                },
+                {
+                    "cname": "商品清单",
+                    "name": "goods_ids",
+                    "type": "select-remote",
+                    "placeholder": "",
+                    "helper": "",
+                    "exp": "",
+                    "readonly": "",
+                    "attr": {
+                        "table": "goods",
+                        "prefix": "xpmsns_pages_",
+                        "model": "\\Xpmsns\\Pages\\Model\\Goods",
+                        "fields": [
+                            "goods_id",
+                            "name"
+                        ],
+                        "option": "goods_id",
+                        "style": "{{name}}({{goods_id}})",
+                        "default": "",
+                        "multiple": "1",
+                        "api": "",
+                        "cancel": "",
+                        "cancelable": "1"
+                    },
+                    "validator": [
+                        {
+                            "method": "",
+                            "value": "",
+                            "message": ""
+                        }
+                    ]
+                },
+                {
+                    "cname": "单品清单",
+                    "name": "items_ids",
+                    "type": "select-remote",
+                    "placeholder": "",
+                    "helper": "",
+                    "exp": "",
+                    "readonly": "",
+                    "attr": {
+                        "table": "item",
+                        "prefix": "xpmsns_pages_",
+                        "model": "\\Xpmsns\\Pages\\Model\\Item",
+                        "fields": [
+                            "item_id",
+                            "name"
+                        ],
+                        "option": "item_id",
+                        "style": "{{name}}({{item_id}})",
+                        "default": "",
+                        "multiple": "1",
+                        "api": "",
+                        "cancel": "",
+                        "cancelable": "1"
+                    },
+                    "validator": [
+                        {
+                            "method": "",
+                            "value": "",
+                            "message": ""
+                        }
+                    ]
+                },
+                {
+                    "cname": "订单金额",
+                    "name": "total",
+                    "type": "input",
+                    "placeholder": "",
+                    "helper": "",
+                    "exp": "",
+                    "readonly": "1",
+                    "attr": {
+                        "default": ""
+                    },
+                    "validator": [
+                        {
+                            "method": "",
+                            "value": "",
+                            "message": ""
+                        }
+                    ]
+                },
+                {
+                    "cname": "运费",
+                    "name": "freight",
+                    "type": "input",
+                    "placeholder": "",
+                    "helper": "",
+                    "exp": "",
+                    "readonly": "1",
+                    "attr": {
+                        "default": ""
+                    },
+                    "validator": [
+                        {
+                            "method": "",
+                            "value": "",
+                            "message": ""
+                        }
+                    ]
+                },
+                {
+                    "cname": "实付金额",
+                    "name": "total_cost",
+                    "type": "input",
+                    "placeholder": "请输入实付金额",
+                    "helper": "单位: 分",
+                    "exp": "",
+                    "readonly": "",
+                    "attr": {
+                        "default": ""
+                    },
+                    "validator": [
+                        {
+                            "method": "",
+                            "value": "",
+                            "message": ""
+                        }
+                    ]
+                },
+                {
+                    "cname": "实付运费",
+                    "name": "freight_cost",
+                    "type": "input",
+                    "placeholder": "",
+                    "helper": "单位: 分",
+                    "exp": "",
+                    "readonly": "",
+                    "attr": {
+                        "default": ""
+                    },
+                    "validator": [
+                        {
+                            "method": "",
+                            "value": "",
+                            "message": ""
+                        }
+                    ]
+                },
+                {
+                    "cname": "消费货币",
+                    "name": "money_cost",
+                    "type": "input",
+                    "placeholder": "请输入消费金货币",
+                    "helper": "单位: 分",
+                    "exp": "",
+                    "readonly": "",
+                    "attr": {
+                        "default": ""
+                    },
+                    "validator": [
+                        {
+                            "method": "",
+                            "value": "",
+                            "message": ""
+                        }
+                    ]
+                },
+                {
+                    "cname": "消费积分",
+                    "name": "coin_cost",
+                    "type": "input",
+                    "placeholder": "请输入消费积分",
+                    "helper": "单位: 个",
+                    "exp": "",
+                    "readonly": "",
+                    "attr": {
+                        "default": ""
+                    },
+                    "validator": [
+                        {
+                            "method": "",
+                            "value": "",
+                            "message": ""
+                        }
+                    ]
+                },
+                {
+                    "cname": "消费代币",
+                    "name": "bitcoin_cost",
+                    "type": "input",
+                    "placeholder": "请输入消费代币",
+                    "helper": "单位: eth/btc",
+                    "exp": "",
+                    "readonly": "",
+                    "attr": {
+                        "default": ""
+                    },
+                    "validator": [
+                        {
+                            "method": "",
+                            "value": "",
+                            "message": ""
+                        }
+                    ]
+                },
+                {
+                    "cname": "支付明细",
+                    "name": "payment_detail",
+                    "type": "textarea",
+                    "placeholder": "",
+                    "helper": "货币单位/代币/积分换算比例",
+                    "exp": "",
+                    "readonly": "1",
+                    "attr": {
+                        "default": "",
+                        "rows": "",
+                        "autoheight": "1"
+                    },
+                    "validator": [
+                        {
+                            "method": "",
+                            "value": "",
+                            "message": ""
+                        }
+                    ]
+                },
+                {
+                    "cname": "用户",
+                    "name": "user_id",
+                    "type": "select-remote",
+                    "placeholder": "",
+                    "helper": "",
+                    "exp": "",
+                    "readonly": "",
+                    "attr": {
+                        "table": "user",
+                        "prefix": "xpmsns_user_",
+                        "model": "\\Xpmsns\\User\\Model\\User",
+                        "fields": [
+                            "user_id",
+                            "name",
+                            "nickname",
+                            "mobile"
+                        ],
+                        "option": "user_id",
+                        "style": "{{name ? name: nickname}} ( ID:{{user_id}}  手机: {{mobile}} )",
+                        "default": "",
+                        "multiple": "",
+                        "api": "",
+                        "cancel": "",
+                        "cancelable": "1"
+                    },
+                    "validator": [
+                        {
+                            "method": "",
+                            "value": "",
+                            "message": ""
+                        }
+                    ]
+                },
+                {
+                    "cname": "收件人",
+                    "name": "name",
+                    "type": "input",
+                    "placeholder": "请填写收件人信息",
+                    "helper": "",
+                    "exp": "",
+                    "readonly": "",
+                    "attr": {
+                        "default": ""
+                    },
+                    "validator": [
+                        {
+                            "method": "",
+                            "value": "",
+                            "message": ""
+                        }
+                    ]
+                },
+                {
+                    "cname": "国家地区",
+                    "name": "area",
+                    "type": "input",
+                    "placeholder": "请输入国家/地区",
+                    "helper": "",
+                    "exp": "",
+                    "readonly": "",
+                    "attr": {
+                        "default": "中国"
+                    },
+                    "validator": [
+                        {
+                            "method": "",
+                            "value": "",
+                            "message": ""
+                        }
+                    ]
+                },
+                {
+                    "cname": "省份",
+                    "name": "prvn",
+                    "type": "input",
+                    "placeholder": "请输入省份名称",
+                    "helper": "",
+                    "exp": "",
+                    "readonly": "",
+                    "attr": {
+                        "default": ""
+                    },
+                    "validator": [
+                        {
+                            "method": "",
+                            "value": "",
+                            "message": ""
+                        }
+                    ]
+                },
+                {
+                    "cname": "城市",
+                    "name": "city",
+                    "type": "input",
+                    "placeholder": "请输入城市名称",
+                    "helper": "",
+                    "exp": "",
+                    "readonly": "",
+                    "attr": {
+                        "default": ""
+                    },
+                    "validator": [
+                        {
+                            "method": "",
+                            "value": "",
+                            "message": ""
+                        }
+                    ]
+                },
+                {
+                    "cname": "区县",
+                    "name": "town",
+                    "type": "input",
+                    "placeholder": "请输入区县名称",
+                    "helper": "",
+                    "exp": "",
+                    "readonly": "",
+                    "attr": {
+                        "default": ""
+                    },
+                    "validator": [
+                        {
+                            "method": "",
+                            "value": "",
+                            "message": ""
+                        }
+                    ]
+                },
+                {
+                    "cname": "邮编",
+                    "name": "zipcode",
+                    "type": "input",
+                    "placeholder": "请输入邮编",
+                    "helper": "",
+                    "exp": "",
+                    "readonly": "",
+                    "attr": {
+                        "default": ""
+                    },
+                    "validator": [
+                        {
+                            "method": "",
+                            "value": "",
+                            "message": ""
+                        }
+                    ]
+                },
+                {
+                    "cname": "收货地址",
+                    "name": "address",
+                    "type": "input",
+                    "placeholder": "请填写收货地址",
+                    "helper": "",
+                    "exp": "",
+                    "readonly": "",
+                    "attr": {
+                        "default": ""
+                    },
+                    "validator": [
+                        {
+                            "method": "",
+                            "value": "",
+                            "message": ""
+                        }
+                    ]
+                },
+                {
+                    "cname": "联系电话",
+                    "name": "mobile",
+                    "type": "input",
+                    "placeholder": "请填写联系电话",
+                    "helper": "",
+                    "exp": "",
+                    "readonly": "",
+                    "attr": {
+                        "default": ""
+                    },
+                    "validator": [
+                        {
+                            "method": "",
+                            "value": "",
+                            "message": ""
+                        }
+                    ]
+                },
+                {
+                    "cname": "付款方式",
+                    "name": "payment",
+                    "type": "radio",
+                    "placeholder": "",
+                    "helper": "",
+                    "exp": "",
+                    "readonly": "",
+                    "attr": {
+                        "option": "支付宝=alipay,微信=wechat,积分=coin",
+                        "default": "wechat"
+                    },
+                    "validator": [
+                        {
+                            "method": "",
+                            "value": "",
+                            "message": ""
+                        }
+                    ]
+                },
+                {
+                    "cname": "物流",
+                    "name": "shipping_id",
+                    "type": "select-remote",
+                    "placeholder": "请选择快递公司",
+                    "helper": "",
+                    "exp": "",
+                    "readonly": "",
+                    "attr": {
+                        "table": "shipping",
+                        "prefix": "xpmsns_pages_",
+                        "model": "\\Xpmsns\\Pages\\Model\\Shipping",
+                        "fields": [
+                            "company",
+                            "name"
+                        ],
+                        "option": "shipping_id",
+                        "style": "{{name}}({{company}})",
+                        "default": "",
+                        "multiple": "",
+                        "api": "",
+                        "cancel": "",
+                        "cancelable": ""
+                    },
+                    "validator": [
+                        {
+                            "method": "",
+                            "value": "",
+                            "message": ""
+                        }
+                    ]
+                },
+                {
+                    "cname": "物流单号",
+                    "name": "tracking_no",
+                    "type": "input",
+                    "placeholder": "请输入物流单号",
+                    "helper": "",
+                    "exp": "",
+                    "readonly": "",
+                    "attr": {
+                        "default": ""
+                    },
+                    "validator": [
+                        {
+                            "method": "",
+                            "value": "",
+                            "message": ""
+                        }
+                    ]
+                },
+                {
+                    "cname": "物流成本",
+                    "name": "freight_in",
+                    "type": "input",
+                    "placeholder": "",
+                    "helper": "",
+                    "exp": "",
+                    "readonly": "1",
+                    "attr": {
+                        "default": ""
+                    },
+                    "validator": [
+                        {
+                            "method": "",
+                            "value": "",
+                            "message": ""
+                        }
+                    ]
+                },
+                {
+                    "cname": "订单状态",
+                    "name": "status",
+                    "type": "radio",
+                    "placeholder": "",
+                    "helper": "",
+                    "exp": "",
+                    "readonly": "",
+                    "attr": {
+                        "option": "待支付=wait_pay,已付款=pay_complete,待确认=wait_confirm,待发货=wait_shipping,已发货=shiping,待评价=wait_comment,已取消=cancel,申请退款=apply_refund,退款中=refunding,退款完毕=refund_complete,申请换货=apply_exchange,换货中=exchanging,换货完毕=exchange_complete,完成=complete",
+                        "default": "wait_pay"
+                    },
+                    "validator": [
+                        {
+                            "method": "",
+                            "value": "",
+                            "message": ""
+                        }
+                    ]
+                },
+                {
+                    "cname": "备注",
+                    "name": "remark",
+                    "type": "textarea",
+                    "placeholder": "",
+                    "helper": "",
+                    "exp": "",
+                    "readonly": "",
+                    "attr": {
+                        "default": "",
+                        "rows": "4",
+                        "autoheight": "1"
+                    },
+                    "validator": [
+                        {
+                            "method": "",
+                            "value": "",
+                            "message": ""
+                        }
+                    ]
+                },
+                {
+                    "cname": "快照",
+                    "name": "snapshot",
+                    "type": "textarea",
+                    "placeholder": "",
+                    "helper": "",
+                    "exp": "",
+                    "readonly": "1",
+                    "attr": {
+                        "default": "",
+                        "rows": "4",
+                        "autoheight": "1"
+                    },
+                    "validator": [
+                        {
+                            "method": "",
+                            "value": "",
+                            "message": ""
+                        }
+                    ]
+                }
+            ],
+            "jscode": [
+                ""
+            ],
+            "undefined": [
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                ""
+            ]
+        },
+        "links": {
+            "fields": [
+                {
+                    "cname": "用户",
+                    "type": "leftJoin",
+                    "model": "\\Xpmsns\\User\\Model\\User",
+                    "table": "user",
+                    "prefix": "xpmsns_user_",
+                    "field": "user_id",
+                    "on": "=",
+                    "name": "user_id",
+                    "alias": "user"
+                },
+                {
+                    "cname": "商品",
+                    "type": "inWhere",
+                    "model": "\\Xpmsns\\Pages\\Model\\Goods",
+                    "table": "goods",
+                    "prefix": "xpmsns_pages_",
+                    "field": "goods_id",
+                    "on": "in",
+                    "name": "goods_ids",
+                    "alias": "goods"
+                },
+                {
+                    "cname": "单品",
+                    "type": "inWhere",
+                    "model": "\\Xpmsns\\Pages\\Model\\Item",
+                    "table": "item",
+                    "prefix": "xpmsns_pages_",
+                    "field": "item_id",
+                    "on": "in",
+                    "name": "items_ids",
+                    "alias": "item"
+                },
+                {
+                    "cname": "物流",
+                    "type": "inWhere",
+                    "model": "\\Xpmsns\\Pages\\Model\\Shipping",
+                    "table": "shipping",
+                    "prefix": "xpmsns_pages_",
+                    "field": "shipping_id",
+                    "on": "=",
+                    "name": "shipping_id",
+                    "alias": "shipping"
+                }
+            ]
+        },
+        "list": {
+            "keyword_param": "keyword",
+            "keyword": [
+                "name=order_id",
+                "name=outer_id",
+                "name=user_id",
+                "name=name",
+                "name=mobile"
+            ],
+            "jscode": [
+                ""
+            ],
+            "conditions": [
+                {
+                    "or": "0",
+                    "field": "name=order_id",
+                    "type": "=",
+                    "cname": "",
+                    "param": "",
+                    "default": ""
+                },
+                {
+                    "or": "0",
+                    "field": "name=outer_id",
+                    "type": "=",
+                    "cname": "",
+                    "param": "",
+                    "default": ""
+                },
+                {
+                    "or": "0",
+                    "field": "name=status",
+                    "type": "=",
+                    "cname": "",
+                    "param": "",
+                    "default": ""
+                },
+                {
+                    "or": "0",
+                    "field": "name=name",
+                    "type": "like",
+                    "cname": "",
+                    "param": "",
+                    "default": ""
+                },
+                {
+                    "or": "0",
+                    "field": "model=%5CXpmsns%5CUser%5CModel%5CUser&name=user_id&table=user&prefix=xpmsns_user_&alias=user&type=leftJoin",
+                    "type": "=",
+                    "cname": "",
+                    "param": "",
+                    "default": ""
+                }
+            ],
+            "orderby": [
+                {
+                    "field": "name=created_at",
+                    "type": "desc",
+                    "cname": "",
+                    "param": ""
+                },
+                {
+                    "field": "name=updated_at",
+                    "type": "desc",
+                    "cname": "",
+                    "param": ""
+                }
+            ],
+            "statusby": [
+                {
+                    "name": "name=status",
+                    "cname": "",
+                    "status": "待支付=wait_pay|muted,已付款=pay_complete|danger,待确认=wait_confirm|danger,待发货=wait_shipping|danger,已发货=shiping|muted,待评价=wait_comment|danger,已取消=cancel|muted,申请退款=apply_refund|danger,退款中=refunding|muted,退款完毕=refund_complete|success,申请换货=apply_exchange|danger,换货中=exchanging|muted,换货完毕=exchange_complete|success,完成=complete|success"
+                }
+            ],
+            "columns": [
+                {
+                    "fields": [
+                        "name=order_id"
+                    ],
+                    "cname": "",
+                    "filter": "",
+                    "default": ""
+                },
+                {
+                    "fields": [
+                        "model=%5CXpmsns%5CPages%5CModel%5CGoods&name=name&table=goods&prefix=xpmsns_pages_&alias=goods&type=inWhere"
+                    ],
+                    "cname": "商品",
+                    "filter": "",
+                    "default": ""
+                },
+                {
+                    "fields": [
+                        "model=%5CXpmsns%5CPages%5CModel%5CItem&name=name&table=item&prefix=xpmsns_pages_&alias=item&type=inWhere"
+                    ],
+                    "cname": "单品",
+                    "filter": "",
+                    "default": ""
+                },
+                {
+                    "fields": [
+                        "name=name"
+                    ],
+                    "cname": "",
+                    "filter": "",
+                    "default": ""
+                },
+                {
+                    "fields": [
+                        "name=mobile"
+                    ],
+                    "cname": "",
+                    "filter": "",
+                    "default": ""
+                },
+                {
+                    "fields": [
+                        "name=total_cost"
+                    ],
+                    "cname": "",
+                    "filter": "",
+                    "default": ""
+                },
+                {
+                    "fields": [
+                        "name=created_at",
+                        "name=updated_at"
+                    ],
+                    "cname": "更新时间",
+                    "filter": "{{updated_at ? updated_at : created_at}}",
+                    "default": ""
+                },
+                {
+                    "fields": [
+                        "name=status"
+                    ],
+                    "cname": "",
+                    "filter": "",
+                    "default": ""
+                }
+            ]
+        },
+        "api": {
+            "getstatus": "1",
+            "createstatus": "1",
+            "updatestatus": "1",
+            "deletestatus": "1",
+            "searchstatus": "1",
+            "uploadstatus": "1",
+            "uploadparam": "",
+            "getkey": [
+                "name=order_id"
+            ],
+            "getfields": [
+                "name=order_id",
+                "name=outer_id",
+                "name=total",
+                "name=freight",
+                "name=total_cost",
+                "name=money_cost",
+                "name=coin_cost",
+                "name=bitcoin_cost",
+                "name=freight_cost",
+                "name=payment_detail",
+                "name=name",
+                "name=area",
+                "name=prvn",
+                "name=city",
+                "name=town",
+                "name=zipcode",
+                "name=address",
+                "name=mobile",
+                "name=tracking_no",
+                "name=status",
+                "name=created_at",
+                "name=updated_at",
+                "model=%5CXpmsns%5CUser%5CModel%5CUser&name=user_id&table=user&prefix=xpmsns_user_&alias=user&type=leftJoin"
+            ],
+            "createfields": [
+                "name=goods_ids",
+                "name=user_id",
+                "name=name"
+            ],
+            "updatekey": [
+                "name=order_id"
+            ],
+            "deletekey": [
+                "name=order_id"
+            ],
+            "searchfields": [
+                "name=order_id",
+                "name=outer_id",
+                "name=total",
+                "name=freight",
+                "name=total_cost",
+                "name=money_cost",
+                "name=coin_cost",
+                "name=bitcoin_cost",
+                "name=freight_cost",
+                "name=payment_detail",
+                "name=user_id",
+                "name=name",
+                "name=area",
+                "name=prvn",
+                "name=city",
+                "name=town",
+                "name=address",
+                "name=mobile",
+                "name=tracking_no",
+                "name=status",
+                "name=remark"
+            ],
+            "getauth": {
+                "sign": "",
+                "secret": "",
+                "image": ""
+            },
+            "createauth": {
+                "sign": "",
+                "secret": "1",
+                "image": ""
+            },
+            "updateauth": {
+                "sign": "",
+                "secret": "1",
+                "image": ""
+            },
+            "deleteauth": {
+                "sign": "",
+                "secret": "1",
+                "image": ""
+            },
+            "searchauth": {
+                "sign": "",
+                "secret": "",
+                "image": ""
+            },
+            "uploadauth": {
+                "sign": "",
+                "secret": "1",
+                "image": ""
+            },
+            "methods": [
+                {
+                    "name": "",
+                    "cname": "",
+                    "source": ""
+                }
+            ]
+        }
+    },
+    "process": {
+        "general": "saved",
+        "struct": "saved",
+        "detail": "saved",
+        "links": "saved",
+        "list": "saved",
+        "api": "saved"
+    },
+    "next": null,
+    "prev": null,
+    "templete": {
+        "org": "xpmsns",
+        "name": "model",
+        "slug": "xpmsns_model",
+        "cname": "XpmSE 应用数据模型母版",
+        "version": "1.0.0",
+        "summary": "生成 XpmSE 应用数据模型。涵盖资源模型CURD、API CURD和标准资源管理界面。"
+    }
+}

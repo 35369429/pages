@@ -1,0 +1,781 @@
+{
+    "name": "简墨-专栏管理",
+    "data": {
+        "struct": {
+            "table": "special",
+            "fields": [
+                {
+                    "name": "special_id",
+                    "cname": "专栏ID",
+                    "type": "string",
+                    "length": "128",
+                    "default": "",
+                    "unique": "1",
+                    "index": "",
+                    "nullable": "1",
+                    "json": "",
+                    "auto": "1",
+                    "file": "",
+                    "private": ""
+                },
+                {
+                    "name": "user_id",
+                    "cname": "用户ID",
+                    "type": "string",
+                    "length": "128",
+                    "default": "",
+                    "unique": "",
+                    "index": "1",
+                    "nullable": "",
+                    "json": "",
+                    "auto": "",
+                    "file": "",
+                    "private": ""
+                },
+                {
+                    "name": "type",
+                    "cname": "专栏类型",
+                    "type": "string",
+                    "length": "128",
+                    "default": "expert",
+                    "unique": "",
+                    "index": "1",
+                    "nullable": "1",
+                    "json": "",
+                    "auto": "",
+                    "file": "",
+                    "private": ""
+                },
+                {
+                    "name": "name",
+                    "cname": "专栏名称",
+                    "type": "string",
+                    "length": "128",
+                    "default": "",
+                    "unique": "",
+                    "index": "1",
+                    "nullable": "1",
+                    "json": "",
+                    "auto": "",
+                    "file": "",
+                    "private": ""
+                },
+                {
+                    "name": "path",
+                    "cname": "专栏地址",
+                    "type": "string",
+                    "length": "128",
+                    "default": "",
+                    "unique": "1",
+                    "index": "",
+                    "nullable": "1",
+                    "json": "",
+                    "auto": "",
+                    "file": "",
+                    "private": ""
+                },
+                {
+                    "name": "logo",
+                    "cname": "专栏LOGO",
+                    "type": "text",
+                    "length": "",
+                    "default": "",
+                    "unique": "",
+                    "index": "",
+                    "nullable": "",
+                    "json": "1",
+                    "auto": "",
+                    "file": "1",
+                    "private": ""
+                },
+                {
+                    "name": "category_ids",
+                    "cname": "内容类目",
+                    "type": "text",
+                    "length": "",
+                    "default": "",
+                    "unique": "",
+                    "index": "",
+                    "nullable": "",
+                    "json": "1",
+                    "auto": "",
+                    "file": "",
+                    "private": ""
+                },
+                {
+                    "name": "recommend_ids",
+                    "cname": "推荐内容",
+                    "type": "text",
+                    "length": "",
+                    "default": "",
+                    "unique": "",
+                    "index": "",
+                    "nullable": "",
+                    "json": "1",
+                    "auto": "",
+                    "file": "",
+                    "private": ""
+                },
+                {
+                    "name": "summary",
+                    "cname": "简介",
+                    "type": "string",
+                    "length": "400",
+                    "default": "",
+                    "unique": "",
+                    "index": "",
+                    "nullable": "",
+                    "json": "",
+                    "auto": "",
+                    "file": "",
+                    "private": ""
+                },
+                {
+                    "name": "param",
+                    "cname": "参数",
+                    "type": "string",
+                    "length": "128",
+                    "default": "",
+                    "unique": "",
+                    "index": "1",
+                    "nullable": "1",
+                    "json": "",
+                    "auto": "",
+                    "file": "",
+                    "private": ""
+                },
+                {
+                    "name": "docs",
+                    "cname": "申请材料",
+                    "type": "text",
+                    "length": "",
+                    "default": "",
+                    "unique": "",
+                    "index": "",
+                    "nullable": "",
+                    "json": "1",
+                    "auto": "",
+                    "file": "1",
+                    "private": ""
+                },
+                {
+                    "name": "status",
+                    "cname": "状态",
+                    "type": "string",
+                    "length": "20",
+                    "default": "on",
+                    "unique": "",
+                    "index": "1",
+                    "nullable": "1",
+                    "json": "",
+                    "auto": "",
+                    "file": "",
+                    "private": ""
+                }
+            ],
+            "methods": [
+                {
+                    "name": "",
+                    "cname": "",
+                    "source": ""
+                }
+            ]
+        },
+        "links": {
+            "fields": [
+                {
+                    "cname": "栏目",
+                    "type": "inWhere",
+                    "model": "\\Xpmsns\\Pages\\Model\\Category",
+                    "table": "category",
+                    "prefix": "xpmsns_pages_",
+                    "field": "category_id",
+                    "on": "in",
+                    "name": "category_ids",
+                    "alias": "c"
+                },
+                {
+                    "cname": "推荐",
+                    "type": "inWhere",
+                    "model": "\\Xpmsns\\Pages\\Model\\Recommend",
+                    "table": "recommend",
+                    "prefix": "xpmsns_pages_",
+                    "field": "recommend_id",
+                    "on": "in",
+                    "name": "recommend_ids",
+                    "alias": "r"
+                },
+                {
+                    "cname": "用户",
+                    "type": "leftJoin",
+                    "model": "\\Xpmsns\\User\\Model\\User",
+                    "table": "user",
+                    "prefix": "xpmsns_user_",
+                    "field": "user_id",
+                    "on": "=",
+                    "name": "user_id",
+                    "alias": "u"
+                }
+            ]
+        },
+        "api": {
+            "getstatus": "1",
+            "createfields": "name=name",
+            "createstatus": "1",
+            "updatestatus": "1",
+            "deletestatus": "1",
+            "searchstatus": "1",
+            "uploadparam": "",
+            "uploadstatus": "0",
+            "getkey": [
+                "name=special_id",
+                "name=path"
+            ],
+            "getfields": [
+                "name=type",
+                "name=name",
+                "name=path",
+                "name=summary",
+                "name=param",
+                "name=docs",
+                "name=status",
+                "name=created_at",
+                "name=updated_at",
+                "model=%5CXpmsns%5CPages%5CModel%5CCategory&name=category_id&table=category&prefix=xpmsns_pages_&alias=c&type=inWhere",
+                "model=%5CXpmsns%5CPages%5CModel%5CCategory&name=name&table=category&prefix=xpmsns_pages_&alias=c&type=inWhere",
+                "model=%5CXpmsns%5CPages%5CModel%5CRecommend&name=recommend_id&table=recommend&prefix=xpmsns_pages_&alias=r&type=inWhere",
+                "model=%5CXpmsns%5CUser%5CModel%5CUser&name=user_id&table=user&prefix=xpmsns_user_&alias=u&type=leftJoin",
+                "model=%5CXpmsns%5CUser%5CModel%5CUser&name=name&table=user&prefix=xpmsns_user_&alias=u&type=leftJoin"
+            ],
+            "updatekey": [
+                "name=special_id"
+            ],
+            "deletekey": [
+                "name=special_id"
+            ],
+            "searchfields": [
+                "name=type",
+                "name=name",
+                "name=path",
+                "name=summary",
+                "name=param",
+                "name=status",
+                "name=created_at",
+                "name=updated_at",
+                "model=%5CXpmsns%5CPages%5CModel%5CCategory&name=category_id&table=category&prefix=xpmsns_pages_&alias=c&type=inWhere",
+                "model=%5CXpmsns%5CPages%5CModel%5CCategory&name=name&table=category&prefix=xpmsns_pages_&alias=c&type=inWhere",
+                "model=%5CXpmsns%5CUser%5CModel%5CUser&name=user_id&table=user&prefix=xpmsns_user_&alias=u&type=leftJoin",
+                "model=%5CXpmsns%5CUser%5CModel%5CUser&name=name&table=user&prefix=xpmsns_user_&alias=u&type=leftJoin"
+            ],
+            "getauth": {
+                "sign": "",
+                "secret": "",
+                "image": ""
+            },
+            "createauth": {
+                "sign": "1",
+                "secret": "1",
+                "image": ""
+            },
+            "updateauth": {
+                "sign": "1",
+                "secret": "1",
+                "image": ""
+            },
+            "deleteauth": {
+                "sign": "1",
+                "secret": "1",
+                "image": ""
+            },
+            "searchauth": {
+                "sign": "",
+                "secret": "",
+                "image": ""
+            },
+            "uploadauth": {
+                "sign": "",
+                "secret": "",
+                "image": ""
+            },
+            "methods": [
+                {
+                    "name": "",
+                    "cname": "",
+                    "source": ""
+                }
+            ]
+        },
+        "detail": {
+            "index": "name=special_id",
+            "title": "name=name",
+            "columns": [
+                {
+                    "cname": "名称",
+                    "name": "name",
+                    "type": "input",
+                    "placeholder": "请填写专栏名称",
+                    "helper": "",
+                    "exp": "",
+                    "readonly": "",
+                    "attr": {
+                        "default": ""
+                    },
+                    "validator": [
+                        {
+                            "method": "",
+                            "value": "",
+                            "message": ""
+                        }
+                    ]
+                },
+                {
+                    "cname": "地址",
+                    "name": "path",
+                    "type": "input",
+                    "placeholder": "请填写专栏地址",
+                    "helper": "",
+                    "exp": "",
+                    "readonly": "",
+                    "attr": {
+                        "default": ""
+                    },
+                    "validator": [
+                        {
+                            "method": "",
+                            "value": "",
+                            "message": ""
+                        }
+                    ]
+                },
+                {
+                    "cname": "类型",
+                    "name": "type",
+                    "type": "radio",
+                    "placeholder": "",
+                    "helper": "",
+                    "exp": "",
+                    "readonly": "",
+                    "attr": {
+                        "option": "内容专题=special,业界专家=expert,自媒体=wemedia,官方机构=official",
+                        "default": "special"
+                    },
+                    "validator": [
+                        {
+                            "method": "",
+                            "value": "",
+                            "message": ""
+                        }
+                    ]
+                },
+                {
+                    "cname": "内容类目",
+                    "name": "category_ids",
+                    "type": "select-remote",
+                    "placeholder": "请选择专注领域",
+                    "helper": "",
+                    "exp": "",
+                    "readonly": "",
+                    "attr": {
+                        "table": "category",
+                        "prefix": "xpmsns_pages_",
+                        "model": "\\Xpmsns\\Pages\\Model\\Category",
+                        "fields": [
+                            "category_id",
+                            "name"
+                        ],
+                        "option": "category_id",
+                        "style": "{{name}}({{category_id}})",
+                        "default": "",
+                        "multiple": "1",
+                        "api": "",
+                        "cancel": "",
+                        "cancelable": "1"
+                    },
+                    "validator": [
+                        {
+                            "method": "",
+                            "value": "",
+                            "message": ""
+                        }
+                    ]
+                },
+                {
+                    "cname": "内容区块 (推荐)",
+                    "name": "recommend_ids",
+                    "type": "select-remote",
+                    "placeholder": "请选择推荐",
+                    "helper": "",
+                    "exp": "",
+                    "readonly": "",
+                    "attr": {
+                        "table": "recommend",
+                        "prefix": "xpmsns_pages_",
+                        "model": "\\Xpmsns\\Pages\\Model\\Recommend",
+                        "fields": [
+                            "recommend_id",
+                            "title"
+                        ],
+                        "option": "recommend_id",
+                        "style": "{{title}}({{recommend_id}})",
+                        "default": "",
+                        "multiple": "1",
+                        "api": "",
+                        "cancel": "",
+                        "cancelable": "1"
+                    },
+                    "validator": [
+                        {
+                            "method": "",
+                            "value": "",
+                            "message": ""
+                        }
+                    ]
+                },
+                {
+                    "cname": "简介",
+                    "name": "summary",
+                    "type": "textarea",
+                    "placeholder": "请填写专栏简介",
+                    "helper": "",
+                    "exp": "",
+                    "readonly": "",
+                    "attr": {
+                        "default": "",
+                        "rows": "4",
+                        "autoheight": ""
+                    },
+                    "validator": [
+                        {
+                            "method": "",
+                            "value": "",
+                            "message": ""
+                        }
+                    ]
+                },
+                {
+                    "cname": "LOGO",
+                    "name": "logo",
+                    "type": "image",
+                    "placeholder": "请上传专栏LOGO",
+                    "helper": "",
+                    "exp": "",
+                    "readonly": "",
+                    "attr": {
+                        "width": "200",
+                        "height": "200",
+                        "allow": "",
+                        "cropable": "1"
+                    },
+                    "validator": [
+                        {
+                            "method": "",
+                            "value": "",
+                            "message": ""
+                        }
+                    ]
+                },
+                {
+                    "cname": "申请材料",
+                    "name": "docs",
+                    "type": "image-groups",
+                    "placeholder": "请上传证明材料",
+                    "helper": "",
+                    "exp": "",
+                    "readonly": "",
+                    "attr": {
+                        "width": "200",
+                        "height": "200",
+                        "allow": "",
+                        "cropable": "",
+                        "maxsize": "",
+                        "api": "",
+                        "title_cname": "",
+                        "link_cname": "",
+                        "summary_cname": ""
+                    },
+                    "validator": [
+                        {
+                            "method": "",
+                            "value": "",
+                            "message": ""
+                        }
+                    ]
+                },
+                {
+                    "cname": "关联用户",
+                    "name": "user_id",
+                    "type": "select-remote",
+                    "placeholder": "请选择关联用户",
+                    "helper": "",
+                    "exp": "",
+                    "readonly": "",
+                    "attr": {
+                        "table": "user",
+                        "prefix": "xpmsns_user_",
+                        "model": "\\Xpmsns\\User\\Model\\User",
+                        "fields": [
+                            "user_id",
+                            "name",
+                            "nickname"
+                        ],
+                        "option": "user_id",
+                        "style": "{{name ? name : nickname}}({{user_id}})",
+                        "default": "",
+                        "multiple": "",
+                        "api": "",
+                        "cancel": "",
+                        "cancelable": "1"
+                    },
+                    "validator": [
+                        {
+                            "method": "",
+                            "value": "",
+                            "message": ""
+                        }
+                    ]
+                },
+                {
+                    "cname": "参数",
+                    "name": "param",
+                    "type": "input",
+                    "placeholder": "填写查询参数 （用于条件过滤）",
+                    "helper": "",
+                    "exp": "",
+                    "readonly": "",
+                    "attr": {
+                        "default": ""
+                    },
+                    "validator": [
+                        {
+                            "method": "",
+                            "value": "",
+                            "message": ""
+                        }
+                    ]
+                },
+                {
+                    "cname": "状态",
+                    "name": "status",
+                    "type": "radio",
+                    "placeholder": "",
+                    "helper": "",
+                    "exp": "",
+                    "readonly": "",
+                    "attr": {
+                        "option": "开启=on,关闭=off,审核中=pending,不通过=failure",
+                        "default": "on"
+                    },
+                    "validator": [
+                        {
+                            "method": "",
+                            "value": "",
+                            "message": ""
+                        }
+                    ]
+                }
+            ],
+            "jscode": [
+                ""
+            ],
+            "undefined": [
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                ""
+            ]
+        },
+        "list": {
+            "keyword_param": "keyword",
+            "keyword": [
+                "name=special_id",
+                "name=name",
+                "name=path",
+                "model=%5CXpmsns%5CUser%5CModel%5CUser&name=name&table=user&prefix=xpmsns_user_&alias=u&type=leftJoin"
+            ],
+            "jscode": [
+                ""
+            ],
+            "conditions": [
+                {
+                    "or": "0",
+                    "field": "name=special_id",
+                    "type": "=",
+                    "cname": "专栏ID",
+                    "param": "",
+                    "default": ""
+                },
+                {
+                    "or": "0",
+                    "field": "name=special_id",
+                    "type": "in",
+                    "cname": "专栏IDS",
+                    "param": "",
+                    "default": ""
+                },
+                {
+                    "or": "0",
+                    "field": "name=param",
+                    "type": "=",
+                    "cname": "参数",
+                    "param": "",
+                    "default": ""
+                },
+                {
+                    "or": "0",
+                    "field": "name=path",
+                    "type": "=",
+                    "cname": "地址",
+                    "param": "",
+                    "default": ""
+                },
+                {
+                    "or": "0",
+                    "field": "model=%5CXpmsns%5CUser%5CModel%5CUser&name=name&table=user&prefix=xpmsns_user_&alias=u&type=leftJoin",
+                    "type": "like",
+                    "cname": "用户",
+                    "param": "uname",
+                    "default": ""
+                },
+                {
+                    "or": "0",
+                    "field": "name=name",
+                    "type": "like",
+                    "cname": "名称",
+                    "param": "",
+                    "default": ""
+                },
+                {
+                    "or": "0",
+                    "field": "name=type",
+                    "type": "=",
+                    "cname": "类型",
+                    "param": "",
+                    "default": ""
+                },
+                {
+                    "or": "0",
+                    "field": "name=status",
+                    "type": "=",
+                    "cname": "状态",
+                    "param": "",
+                    "default": ""
+                }
+            ],
+            "orderby": [
+                {
+                    "field": "name=created_at",
+                    "type": "",
+                    "cname": "创建时间",
+                    "param": ""
+                },
+                {
+                    "field": "name=updated_at",
+                    "type": "desc",
+                    "cname": "创建时间倒序",
+                    "param": ""
+                }
+            ],
+            "statusby": [
+                {
+                    "name": "name=status",
+                    "cname": "状态",
+                    "status": "开启=on|primary,关闭=off|danger,审核中=pending|warning,不通过=failure|danger"
+                },
+                {
+                    "name": "name=type",
+                    "cname": "类型",
+                    "status": "内容专题=special|primary,业界专家=expert|success,自媒体=wemedia|success,官方机构=official|success"
+                }
+            ],
+            "columns": [
+                {
+                    "fields": [
+                        "name=path"
+                    ],
+                    "cname": "地址",
+                    "filter": "",
+                    "default": ""
+                },
+                {
+                    "fields": [
+                        "name=name"
+                    ],
+                    "cname": "名称",
+                    "filter": "",
+                    "default": ""
+                },
+                {
+                    "fields": [
+                        "name=type"
+                    ],
+                    "cname": "类型",
+                    "filter": "",
+                    "default": ""
+                },
+                {
+                    "fields": [
+                        "model=%5CXpmsns%5CPages%5CModel%5CCategory&name=name&table=category&prefix=xpmsns_pages_&alias=c&type=inWhere"
+                    ],
+                    "cname": "内容类目",
+                    "filter": "",
+                    "default": ""
+                },
+                {
+                    "fields": [
+                        "model=%5CXpmsns%5CUser%5CModel%5CUser&name=name&table=user&prefix=xpmsns_user_&alias=u&type=leftJoin",
+                        "model=%5CXpmsns%5CUser%5CModel%5CUser&name=nickname&table=user&prefix=xpmsns_user_&alias=u&type=leftJoin"
+                    ],
+                    "cname": "关联用户",
+                    "filter": "{{u_name ? u_name : u_nickname}}",
+                    "default": ""
+                },
+                {
+                    "fields": [
+                        "name=status"
+                    ],
+                    "cname": "状态",
+                    "filter": "",
+                    "default": ""
+                },
+                {
+                    "fields": [
+                        "name=created_at",
+                        "name=updated_at"
+                    ],
+                    "cname": "更新时间",
+                    "filter": "{{ updated_at ? updated_at : created_at }}",
+                    "default": ""
+                }
+            ]
+        },
+        "general": {
+            "app": "pages",
+            "org": "xpmsns",
+            "model": "_create",
+            "name": "special",
+            "cname": "专栏"
+        }
+    },
+    "process": {
+        "struct": "saved",
+        "api": "saved",
+        "general": "saved",
+        "detail": "saved",
+        "list": "saved",
+        "links": "saved"
+    },
+    "next": null,
+    "prev": null,
+    "templete": {
+        "org": "xpmsns",
+        "name": "model",
+        "slug": "xpmsns_model",
+        "cname": "XpmSE 应用数据模型母版",
+        "version": "1.0.0",
+        "summary": "生成 XpmSE 应用数据模型。涵盖资源模型CURD、API CURD和标准资源管理界面。"
+    }
+}

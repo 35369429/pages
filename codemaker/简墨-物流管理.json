@@ -1,0 +1,444 @@
+{
+    "name": "简墨-物流管理",
+    "data": {
+        "general": {
+            "app": "pages",
+            "org": "xpmsns",
+            "model": "_create",
+            "name": "shipping",
+            "cname": "物流"
+        },
+        "struct": {
+            "table": "shipping",
+            "fields": [
+                {
+                    "name": "shipping_id",
+                    "cname": "物流ID",
+                    "type": "string",
+                    "length": "128",
+                    "default": "",
+                    "unique": "1",
+                    "index": "",
+                    "nullable": "",
+                    "json": "",
+                    "auto": "1",
+                    "file": "",
+                    "private": ""
+                },
+                {
+                    "name": "company",
+                    "cname": "物流公司",
+                    "type": "string",
+                    "length": "100",
+                    "default": "",
+                    "unique": "",
+                    "index": "1",
+                    "nullable": "",
+                    "json": "",
+                    "auto": "",
+                    "file": "",
+                    "private": ""
+                },
+                {
+                    "name": "name",
+                    "cname": "公司简称",
+                    "type": "string",
+                    "length": "100",
+                    "default": "",
+                    "unique": "",
+                    "index": "1",
+                    "nullable": "",
+                    "json": "",
+                    "auto": "",
+                    "file": "",
+                    "private": ""
+                },
+                {
+                    "name": "products",
+                    "cname": "物流产品",
+                    "type": "text",
+                    "length": "",
+                    "default": "",
+                    "unique": "",
+                    "index": "",
+                    "nullable": "",
+                    "json": "1",
+                    "auto": "",
+                    "file": "",
+                    "private": ""
+                },
+                {
+                    "name": "scope",
+                    "cname": "配送范围",
+                    "type": "text",
+                    "length": "",
+                    "default": "",
+                    "unique": "",
+                    "index": "",
+                    "nullable": "",
+                    "json": "1",
+                    "auto": "",
+                    "file": "",
+                    "private": ""
+                },
+                {
+                    "name": "formula",
+                    "cname": "运费公式",
+                    "type": "text",
+                    "length": "",
+                    "default": "",
+                    "unique": "",
+                    "index": "",
+                    "nullable": "",
+                    "json": "1",
+                    "auto": "",
+                    "file": "",
+                    "private": ""
+                },
+                {
+                    "name": "api",
+                    "cname": "物流API",
+                    "type": "text",
+                    "length": "",
+                    "default": "",
+                    "unique": "",
+                    "index": "",
+                    "nullable": "",
+                    "json": "1",
+                    "auto": "",
+                    "file": "",
+                    "private": ""
+                }
+            ],
+            "methods": [
+                {
+                    "name": "",
+                    "cname": "",
+                    "source": ""
+                }
+            ]
+        },
+        "detail": {
+            "index": "name=shipping_id",
+            "title": "name=company",
+            "columns": [
+                {
+                    "cname": "物流公司",
+                    "name": "company",
+                    "type": "input",
+                    "placeholder": "请填写快递公司/速递公司名称",
+                    "helper": "",
+                    "exp": "",
+                    "readonly": "",
+                    "attr": {
+                        "default": ""
+                    },
+                    "validator": [
+                        {
+                            "method": "",
+                            "value": "",
+                            "message": ""
+                        }
+                    ]
+                },
+                {
+                    "cname": "公司简称",
+                    "name": "name",
+                    "type": "input",
+                    "placeholder": "请填写快递公司/速递公司简称，如顺丰",
+                    "helper": "",
+                    "exp": "",
+                    "readonly": "",
+                    "attr": {
+                        "default": ""
+                    },
+                    "validator": [
+                        {
+                            "method": "",
+                            "value": "",
+                            "message": ""
+                        }
+                    ]
+                },
+                {
+                    "cname": "物流产品",
+                    "name": "products",
+                    "type": "textarea",
+                    "placeholder": "物流产品清单",
+                    "helper": "由工程师填写",
+                    "exp": "",
+                    "readonly": "",
+                    "attr": {
+                        "default": "",
+                        "rows": "4",
+                        "autoheight": ""
+                    },
+                    "validator": [
+                        {
+                            "method": "",
+                            "value": "",
+                            "message": ""
+                        }
+                    ]
+                },
+                {
+                    "cname": "配送范围",
+                    "name": "scope",
+                    "type": "textarea",
+                    "placeholder": "配送范围清单",
+                    "helper": "由工程师填写",
+                    "exp": "",
+                    "readonly": "",
+                    "attr": {
+                        "default": "",
+                        "rows": "4",
+                        "autoheight": ""
+                    },
+                    "validator": [
+                        {
+                            "method": "",
+                            "value": "",
+                            "message": ""
+                        }
+                    ]
+                },
+                {
+                    "cname": "运费公式",
+                    "name": "formula",
+                    "type": "textarea",
+                    "placeholder": "运费计算公式",
+                    "helper": "由工程师填写",
+                    "exp": "",
+                    "readonly": "",
+                    "attr": {
+                        "default": "",
+                        "rows": "4",
+                        "autoheight": ""
+                    },
+                    "validator": [
+                        {
+                            "method": "",
+                            "value": "",
+                            "message": ""
+                        }
+                    ]
+                },
+                {
+                    "cname": "物流API",
+                    "name": "api",
+                    "type": "textarea",
+                    "placeholder": "物流API接口",
+                    "helper": "由工程师填写",
+                    "exp": "",
+                    "readonly": "",
+                    "attr": {
+                        "default": "",
+                        "rows": "4",
+                        "autoheight": ""
+                    },
+                    "validator": [
+                        {
+                            "method": "",
+                            "value": "",
+                            "message": ""
+                        }
+                    ]
+                }
+            ],
+            "jscode": [
+                ""
+            ],
+            "undefined": [
+                "",
+                "",
+                "",
+                "",
+                "",
+                ""
+            ]
+        },
+        "list": {
+            "keyword_param": "keyword",
+            "conditions": [
+                {
+                    "or": "0",
+                    "field": "name=shipping_id",
+                    "type": "=",
+                    "cname": "",
+                    "param": "",
+                    "default": ""
+                },
+                {
+                    "or": "0",
+                    "field": "name=company",
+                    "type": "like",
+                    "cname": "",
+                    "param": "",
+                    "default": ""
+                },
+                {
+                    "or": "0",
+                    "field": "name=name",
+                    "type": "like",
+                    "cname": "",
+                    "param": "",
+                    "default": ""
+                }
+            ],
+            "orderby": [
+                {
+                    "field": "name=created_at",
+                    "type": "desc",
+                    "cname": "",
+                    "param": ""
+                },
+                {
+                    "field": "name=updated_at",
+                    "type": "desc",
+                    "cname": "",
+                    "param": ""
+                }
+            ],
+            "statusby": [
+                {
+                    "name": "",
+                    "cname": "",
+                    "status": ""
+                }
+            ],
+            "columns": [
+                {
+                    "fields": [
+                        "name=shipping_id"
+                    ],
+                    "cname": "",
+                    "filter": "",
+                    "default": ""
+                },
+                {
+                    "fields": [
+                        "name=name"
+                    ],
+                    "cname": "",
+                    "filter": "",
+                    "default": ""
+                },
+                {
+                    "fields": [
+                        "name=company"
+                    ],
+                    "cname": "",
+                    "filter": "",
+                    "default": ""
+                },
+                {
+                    "fields": [
+                        "name=created_at",
+                        "name=updated_at"
+                    ],
+                    "cname": "更新时间",
+                    "filter": "{{updated_at ? updated_at : created_at}}",
+                    "default": ""
+                }
+            ],
+            "keyword": [
+                "name=shipping_id",
+                "name=company",
+                "name=name"
+            ],
+            "jscode": [
+                ""
+            ]
+        },
+        "api": {
+            "getstatus": "1",
+            "createfields": "name=shipping_id",
+            "searchstatus": "1",
+            "uploadparam": "",
+            "methods": [
+                {
+                    "name": "",
+                    "cname": "",
+                    "source": ""
+                }
+            ],
+            "createstatus": "0",
+            "updatestatus": "0",
+            "deletestatus": "0",
+            "uploadstatus": "0",
+            "getkey": [
+                "name=shipping_id"
+            ],
+            "getfields": [
+                "name=shipping_id",
+                "name=company",
+                "name=name",
+                "name=products",
+                "name=scope",
+                "name=created_at",
+                "name=updated_at"
+            ],
+            "updatekey": [
+                "name=shipping_id"
+            ],
+            "deletekey": [
+                "name=shipping_id"
+            ],
+            "searchfields": [
+                "name=shipping_id",
+                "name=company",
+                "name=name",
+                "name=products",
+                "name=created_at",
+                "name=updated_at"
+            ],
+            "getauth": {
+                "sign": "",
+                "secret": "",
+                "image": ""
+            },
+            "createauth": {
+                "sign": "",
+                "secret": "",
+                "image": ""
+            },
+            "updateauth": {
+                "sign": "",
+                "secret": "",
+                "image": ""
+            },
+            "deleteauth": {
+                "sign": "",
+                "secret": "",
+                "image": ""
+            },
+            "searchauth": {
+                "sign": "",
+                "secret": "",
+                "image": ""
+            },
+            "uploadauth": {
+                "sign": "",
+                "secret": "1",
+                "image": ""
+            }
+        }
+    },
+    "process": {
+        "general": "saved",
+        "struct": "saved",
+        "detail": "saved",
+        "list": "saved",
+        "api": "saved"
+    },
+    "next": null,
+    "prev": null,
+    "templete": {
+        "org": "xpmsns",
+        "name": "model",
+        "slug": "xpmsns_model",
+        "cname": "XpmSE 应用数据模型母版",
+        "version": "1.0.0",
+        "summary": "生成 XpmSE 应用数据模型。涵盖资源模型CURD、API CURD和标准资源管理界面。"
+    }
+}

@@ -1,0 +1,298 @@
+{
+    "name": "简墨-标签管理",
+    "data": {
+        "struct": {
+            "table": "tag",
+            "fields": [
+                {
+                    "name": "tag_id",
+                    "cname": "标签ID",
+                    "type": "string",
+                    "length": "128",
+                    "default": "",
+                    "unique": "1",
+                    "index": "1",
+                    "nullable": "1",
+                    "json": "",
+                    "auto": "",
+                    "file": "",
+                    "private": ""
+                },
+                {
+                    "name": "name",
+                    "cname": "名称",
+                    "type": "string",
+                    "length": "128",
+                    "default": "",
+                    "unique": "1",
+                    "index": "",
+                    "nullable": "1",
+                    "json": "",
+                    "auto": "",
+                    "file": "",
+                    "private": ""
+                },
+                {
+                    "name": "param",
+                    "cname": "参数",
+                    "type": "string",
+                    "length": "128",
+                    "default": "",
+                    "unique": "",
+                    "index": "1",
+                    "nullable": "1",
+                    "json": "",
+                    "auto": "",
+                    "file": "",
+                    "private": ""
+                }
+            ],
+            "methods": [
+                {
+                    "name": "put",
+                    "cname": "",
+                    "source": "\tfunction put ( $tagnames ) {\n\n\t\t$resp = $this->query()->whereIn( \"name\", $tagnames )->select(\"name\", \"tag_id\")->get();\n\t\t\n\t\t$havenames = [];$tagids = [];\n\t\tforeach ($resp as $rs) { array_push($havenames, $rs['name']); array_push($tagids, $rs['tag_id']);}\n\n\t\t$diffnames = array_diff( $tagnames, $havenames);\n\n\t\tforeach ($diffnames as $idx=>$tag ) {\n\n\t\t\tif( empty(trim($tag)) ) {\n\t\t\t\tcontinue;\n\t\t\t}\n\n\t\t\t$rs = $this->create([\"name\"=>$tag]);\n\t\t\tarray_push($tagids, $rs['tag_id']);\n\t\t}\n\n\t\treturn  $tagids;\n\n\t}\n"
+                }
+            ]
+        },
+        "links": [],
+        "api": {
+            "getstatus": "1",
+            "createstatus": "1",
+            "updatestatus": "1",
+            "deletestatus": "1",
+            "searchstatus": "1",
+            "uploadstatus": "1",
+            "uploadparam": "",
+            "getkey": [
+                "name=tag_id",
+                "name=name"
+            ],
+            "getfields": [
+                "name=tag_id",
+                "name=name",
+                "name=param",
+                "name=created_at",
+                "name=updated_at"
+            ],
+            "updatekey": [
+                "name=tag_id"
+            ],
+            "deletekey": [
+                "name=tag_id"
+            ],
+            "searchfields": [
+                "name=tag_id",
+                "name=name",
+                "name=param",
+                "name=created_at",
+                "name=updated_at"
+            ],
+            "getauth": {
+                "sign": "",
+                "secret": "",
+                "image": ""
+            },
+            "createauth": {
+                "sign": "",
+                "secret": "",
+                "image": ""
+            },
+            "updateauth": {
+                "sign": "",
+                "secret": "",
+                "image": ""
+            },
+            "deleteauth": {
+                "sign": "",
+                "secret": "",
+                "image": ""
+            },
+            "searchauth": {
+                "sign": "",
+                "secret": "",
+                "image": ""
+            },
+            "uploadauth": {
+                "sign": "",
+                "secret": "1",
+                "image": ""
+            },
+            "methods": [
+                {
+                    "name": "__construct_old",
+                    "cname": "",
+                    "source": "\tfunction __construct_old() {\n\n\t\tparent::__construct();\n\t\t$this->allowMethod('get', [\"PHP\",'GET'])\n\t\t     ->allowQuery('get',  ['tagId', 'select'])\n\t\t     ->allowMethod('search', [\"PHP\",'GET'])\n\t\t     ->allowQuery('search',  [\n\t\t     \t\"select\",\n\t\t     \t'name','orName','inName',\n\t\t     \t'fullname','orFullname','inFullname',\n\t\t     \t'categoryId','orcategoryId','incategoryId',\n\t\t     \t'parentId','orParentId','inParentId',\n\t\t     \t'children',\n\t\t     \t'hidden', 'orHidden',\n\t\t     \t'status', 'orStatus',\n\t\t     \t'praram','orParam',\n\t\t     \t'order',\n\t\t     \t'page','perpage'\n\t\t     ]);\n\t}\n"
+                },
+                {
+                    "name": "search_old",
+                    "cname": "",
+                    "source": "\tprotected function search_old( $query=[] ) {\n\n\t\t$select = empty($query['select']) ? 'name' : $query['select'];\n\t\t$select = is_array($select) ? $select : explode(',', $select);\n\n\t\t// 验证 Select 参数\n\t\t$allowFields = [\"*\",\"tag_id\",\"name\",\"param\"];\n\n\t\tforeach ($select as $idx => $field) {\n\t\t\tif ( !in_array($field, $allowFields)){\n\t\t\t\tthrow new Excp(\" select 参数错误 ($field 非法字段)\", 400, ['query'=>$query]);\n\t\t\t}\n\t\t}\n\n\t\n\t\t// Order 默认参数\n\t\t$query['order'] = !empty($query['order']) ? $query['order'] : 'tag_id';\n\t\t$allowOrder = [\"updated_at\", \"tag_id\"];\n\t\t$orderList = explode(',', $query['order']);\n\n\n\t\t// 分页参数\n\t\t$query['page'] = !empty($query['page']) ? intval($query['page']) : 1;\n\t\t$query['perpage'] = !empty($query['perpage']) ? intval($query['perpage']) : 50;\n\n\n\n\t\t// 查询数据表\n\t\t$t = new \\Xpmsns\\pages\\Model\\Tag;\n\t\t$qb = $t->query();\n\n\t\t// 设定查询条件\n\t\t$this->qb( $qb, 'name', 'name', $query, [\"and\", \"or\", \"in\"] );\n\t\t$this->qb( $qb, 'tag_id', 'tagId', $query, [\"and\", \"or\", \"in\"] );\n\t\t$this->qb( $qb, 'param', 'param', $query, ['and', 'or'], 'like');\n\n\t\t// 处理排序\n\t\tforeach ($orderList as $order) {\n\t\t\t$order = trim($order);\n\t\t\t$orderArr = preg_split('/[ ]+/', $order );\n\t\t\t$orderArr[1] = !empty($orderArr[1]) ? $orderArr[1] : 'desc';\n\n\t\t\tif ( !in_array($orderArr[0], $allowOrder)) {\n\t\t\t\tthrow new Excp(\" order 参数错误 ({$orderArr[0]} 非法字段)\", 400, ['query'=>$query]);\n\t\t\t}\n\n\t\t\t$qb->orderBy($orderArr[0],$orderArr[1]);\n\t\t}\n\t\t\n\t\t// 查询数据\n\t\t$qb->select( $select );\n\t\t$result = $qb ->paginate($query['perpage'],['tag_id'], 'page', $query['page'] );\n\t\t$resultData = $result->toArray();\n\t\t\n\n\t\t// 处理结果集\n\t\t$data = $resultData['data'];\n\n\t\t$resp['curr'] = $resultData['current_page'];\n\t\t$resp['perpage'] = $resultData['per_page'];\n\t\t\n\t\t$resp['next'] = ( $resultData['next_page_url'] === null ) ? false : intval( str_replace('/?page=', '',$resultData['next_page_url']));\n\t\t$resp['prev'] = ( $resultData['prev_page_url'] === null ) ? false : intval( str_replace('/?page=', '',$resultData['prev_page_url']));\n\n\t\t$resp['from'] = $resultData['from'];\n\t\t$resp['to'] = $resultData['to'];\n\t\t\n\t\t$resp['last'] = $resultData['last_page'];\n\t\t$resp['total'] = $resultData['total'];\n\t\t$resp['data'] = $data;\n\n\t\tif ( empty($data) ) {\n\t\t\treturn $resp;\n\t\t}\n\n\t\tif ( count(end($data)) == 1) {\n\t\t\tforeach ($data as $idx=>$rs ) {\n\t\t\t\t$resp['data'][$idx] = current($rs);\n\t\t\t}\n\t\t}\n\t\t\n\t\treturn $resp;\n\n\t}\n"
+                },
+                {
+                    "name": "get_old",
+                    "cname": "",
+                    "source": "\tprotected function get_old( $query=[] ) {\n\n\t\t// 验证数值\n\t\tif ( empty($query['name']) ) {\n\t\t\tthrow new Excp(\" name 参数错误\", 400, ['query'=>$query]);\n\t\t}\n\n\t\t$name = $query['name'];\n\t\t$select = empty($query['select']) ? '*' : $query['select'];\n\t\t$select = is_array($select) ? $select : explode(',', $select);\n\n\t\t// 验证 Select 参数\n\t\t$allowFields = [\"*\",\"tag_id\",\"name\",\"param\"];\n\n\t\tforeach ($select as $idx => $field) {\n\t\t\tif ( !in_array($field, $allowFields)){\n\t\t\t\tthrow new Excp(\" select 参数错误 ($field 非法字段)\", 400, ['query'=>$query]);\n\t\t\t}\n\t\t}\n\t\t\n\t\t$cate = new \\Xpmsns\\pages\\Model\\Tag;\n\t\t$rs = $cate->getLine(\"WHERE name=:name LIMIT 1\", $select, [\"name\"=>$name]);\n\t\tif ( empty($rs) ) {\n\t\t\tthrow new Excp(\"标签不存在\", 404,  ['query'=>$query]);\n\t\t}\n\n\t\treturn $rs;\n\t}\n"
+                }
+            ]
+        },
+        "detail": {
+            "index": "name=tag_id",
+            "title": "name=name",
+            "columns": [
+                {
+                    "cname": "名称",
+                    "name": "name",
+                    "type": "input",
+                    "placeholder": "请填写标签名称",
+                    "helper": "",
+                    "exp": "",
+                    "readonly": "",
+                    "attr": {
+                        "default": ""
+                    },
+                    "validator": [
+                        {
+                            "method": "required",
+                            "value": "true",
+                            "message": "请填写标签名称"
+                        }
+                    ]
+                },
+                {
+                    "cname": "参数",
+                    "name": "param",
+                    "type": "input",
+                    "placeholder": "填写查询参数 （用于条件过滤）",
+                    "helper": "",
+                    "exp": "",
+                    "readonly": "",
+                    "attr": {
+                        "default": ""
+                    },
+                    "validator": [
+                        {
+                            "method": "",
+                            "value": "",
+                            "message": ""
+                        }
+                    ]
+                }
+            ]
+        },
+        "list": {
+            "keyword_param": "keyword",
+            "keyword": [
+                "name=tag_id",
+                "name=name",
+                "name=param"
+            ],
+            "conditions": [
+                {
+                    "or": "0",
+                    "field": "name=tag_id",
+                    "type": "=",
+                    "cname": "标签ID",
+                    "param": "",
+                    "default": ""
+                },
+                {
+                    "or": "0",
+                    "field": "name=tag_id",
+                    "type": "in",
+                    "cname": "标签IDS",
+                    "param": "",
+                    "default": ""
+                },
+                {
+                    "or": "0",
+                    "field": "name=param",
+                    "type": "=",
+                    "cname": "参数",
+                    "param": "",
+                    "default": ""
+                }
+            ],
+            "orderby": [
+                {
+                    "field": "name=created_at",
+                    "type": "",
+                    "cname": "创建时间",
+                    "param": ""
+                },
+                {
+                    "field": "name=updated_at",
+                    "type": "desc",
+                    "cname": "创建时间倒序",
+                    "param": ""
+                }
+            ],
+            "statusby": [
+                {
+                    "name": "name=param",
+                    "cname": "按参数",
+                    "status": "热门=hot|primary, 推荐=rec|default"
+                }
+            ],
+            "columns": [
+                {
+                    "fields": [
+                        "name=tag_id"
+                    ],
+                    "cname": "",
+                    "filter": "",
+                    "default": ""
+                },
+                {
+                    "fields": [
+                        "name=name"
+                    ],
+                    "cname": "",
+                    "filter": "",
+                    "default": ""
+                },
+                {
+                    "fields": [
+                        "name=param"
+                    ],
+                    "cname": "",
+                    "filter": "",
+                    "default": ""
+                },
+                {
+                    "fields": [
+                        "name=created_at",
+                        "name=updated_at"
+                    ],
+                    "cname": "更新时间",
+                    "filter": "{{ updated_at ? updated_at : created_at }}",
+                    "default": ""
+                }
+            ]
+        },
+        "general": {
+            "app": "pages",
+            "org": "xpmsns",
+            "model": "\\Xpmsns\\Pages\\Model\\Tag",
+            "name": "tag",
+            "cname": "标签"
+        }
+    },
+    "process": {
+        "struct": "saved",
+        "api": "saved",
+        "general": "saved",
+        "detail": "saved",
+        "list": "saved"
+    },
+    "next": null,
+    "prev": null,
+    "templete": {
+        "org": "xpmsns",
+        "name": "model",
+        "slug": "xpmsns_model",
+        "cname": "XpmSE 应用数据模型母版",
+        "version": "1.0.0",
+        "summary": "生成 XpmSE 应用数据模型。涵盖资源模型CURD、API CURD和标准资源管理界面。"
+    }
+}

@@ -1,0 +1,1446 @@
+{
+    "name": "简墨-站点管理",
+    "data": {
+        "general": {
+            "app": "demo",
+            "org": "xpmsns",
+            "name": "siteconf",
+            "cname": "站点配置"
+        },
+        "struct": {
+            "table": "site",
+            "fields": [
+                {
+                    "name": "site_id",
+                    "cname": "配制ID",
+                    "type": "string",
+                    "length": "128",
+                    "default": "",
+                    "unique": "1",
+                    "index": "",
+                    "nullable": "1",
+                    "json": "",
+                    "auto": "1",
+                    "file": "",
+                    "private": ""
+                },
+                {
+                    "name": "site_slug",
+                    "cname": "配制别名",
+                    "type": "string",
+                    "length": "128",
+                    "default": "",
+                    "unique": "1",
+                    "index": "",
+                    "nullable": "",
+                    "json": "",
+                    "auto": "",
+                    "file": "",
+                    "private": ""
+                },
+                {
+                    "name": "position",
+                    "cname": "呈现位置",
+                    "type": "string",
+                    "length": "128",
+                    "default": "",
+                    "unique": "",
+                    "index": "1",
+                    "nullable": "",
+                    "json": "",
+                    "auto": "",
+                    "file": "",
+                    "private": ""
+                },
+                {
+                    "name": "site_name",
+                    "cname": "网站名称",
+                    "type": "string",
+                    "length": "128",
+                    "default": "",
+                    "unique": "",
+                    "index": "1",
+                    "nullable": "",
+                    "json": "",
+                    "auto": "",
+                    "file": "",
+                    "private": ""
+                },
+                {
+                    "name": "site_slogen",
+                    "cname": "网站Slogen",
+                    "type": "string",
+                    "length": "400",
+                    "default": "",
+                    "unique": "",
+                    "index": "",
+                    "nullable": "",
+                    "json": "",
+                    "auto": "",
+                    "file": "",
+                    "private": ""
+                },
+                {
+                    "name": "icon",
+                    "cname": "网站图标",
+                    "type": "string",
+                    "length": "200",
+                    "default": "",
+                    "unique": "",
+                    "index": "",
+                    "nullable": "",
+                    "json": "",
+                    "auto": "",
+                    "file": "1",
+                    "private": ""
+                },
+                {
+                    "name": "icon_light",
+                    "cname": "浅色图标",
+                    "type": "string",
+                    "length": "200",
+                    "default": "",
+                    "unique": "",
+                    "index": "",
+                    "nullable": "",
+                    "json": "",
+                    "auto": "",
+                    "file": "1",
+                    "private": ""
+                },
+                {
+                    "name": "icon_dark",
+                    "cname": "深色图标",
+                    "type": "string",
+                    "length": "200",
+                    "default": "",
+                    "unique": "",
+                    "index": "",
+                    "nullable": "",
+                    "json": "",
+                    "auto": "",
+                    "file": "1",
+                    "private": ""
+                },
+                {
+                    "name": "site_intro",
+                    "cname": "网站简介",
+                    "type": "string",
+                    "length": "400",
+                    "default": "",
+                    "unique": "",
+                    "index": "",
+                    "nullable": "",
+                    "json": "",
+                    "auto": "",
+                    "file": "",
+                    "private": ""
+                },
+                {
+                    "name": "site_homepage",
+                    "cname": "官网地址",
+                    "type": "string",
+                    "length": "200",
+                    "default": "",
+                    "unique": "",
+                    "index": "",
+                    "nullable": "",
+                    "json": "",
+                    "auto": "",
+                    "file": "",
+                    "private": ""
+                },
+                {
+                    "name": "site_downloadpage",
+                    "cname": "应用下载地址",
+                    "type": "string",
+                    "length": "200",
+                    "default": "",
+                    "unique": "",
+                    "index": "",
+                    "nullable": "",
+                    "json": "",
+                    "auto": "",
+                    "file": "",
+                    "private": ""
+                },
+                {
+                    "name": "site_logo",
+                    "cname": "网站LOGO",
+                    "type": "string",
+                    "length": "200",
+                    "default": "",
+                    "unique": "",
+                    "index": "",
+                    "nullable": "",
+                    "json": "",
+                    "auto": "",
+                    "file": "1",
+                    "private": ""
+                },
+                {
+                    "name": "site_logo_light",
+                    "cname": "浅色LOGO",
+                    "type": "string",
+                    "length": "200",
+                    "default": "",
+                    "unique": "",
+                    "index": "",
+                    "nullable": "",
+                    "json": "",
+                    "auto": "",
+                    "file": "1",
+                    "private": ""
+                },
+                {
+                    "name": "site_logo_dark",
+                    "cname": "深色LOGO",
+                    "type": "string",
+                    "length": "200",
+                    "default": "",
+                    "unique": "",
+                    "index": "",
+                    "nullable": "",
+                    "json": "",
+                    "auto": "",
+                    "file": "1",
+                    "private": ""
+                },
+                {
+                    "name": "site_no",
+                    "cname": "网站备案号",
+                    "type": "string",
+                    "length": "200",
+                    "default": "",
+                    "unique": "",
+                    "index": "1",
+                    "nullable": "",
+                    "json": "",
+                    "auto": "",
+                    "file": "",
+                    "private": ""
+                },
+                {
+                    "name": "company",
+                    "cname": "公司名称",
+                    "type": "string",
+                    "length": "400",
+                    "default": "",
+                    "unique": "",
+                    "index": "",
+                    "nullable": "",
+                    "json": "",
+                    "auto": "",
+                    "file": "",
+                    "private": ""
+                },
+                {
+                    "name": "address",
+                    "cname": "公司地址",
+                    "type": "string",
+                    "length": "400",
+                    "default": "",
+                    "unique": "",
+                    "index": "",
+                    "nullable": "",
+                    "json": "",
+                    "auto": "",
+                    "file": "",
+                    "private": ""
+                },
+                {
+                    "name": "tel",
+                    "cname": "客服电话",
+                    "type": "string",
+                    "length": "200",
+                    "default": "",
+                    "unique": "",
+                    "index": "",
+                    "nullable": "",
+                    "json": "",
+                    "auto": "",
+                    "file": "",
+                    "private": ""
+                },
+                {
+                    "name": "qq",
+                    "cname": "客服QQ",
+                    "type": "string",
+                    "length": "200",
+                    "default": "",
+                    "unique": "",
+                    "index": "",
+                    "nullable": "",
+                    "json": "",
+                    "auto": "",
+                    "file": "",
+                    "private": ""
+                },
+                {
+                    "name": "email",
+                    "cname": "客服邮箱",
+                    "type": "string",
+                    "length": "200",
+                    "default": "",
+                    "unique": "",
+                    "index": "",
+                    "nullable": "",
+                    "json": "",
+                    "auto": "",
+                    "file": "",
+                    "private": ""
+                },
+                {
+                    "name": "se_time",
+                    "cname": " 服务时间",
+                    "type": "string",
+                    "length": "200",
+                    "default": "",
+                    "unique": "",
+                    "index": "",
+                    "nullable": "",
+                    "json": "",
+                    "auto": "",
+                    "file": "",
+                    "private": ""
+                },
+                {
+                    "name": "contact_name",
+                    "cname": "合作联系人",
+                    "type": "string",
+                    "length": "200",
+                    "default": "",
+                    "unique": "",
+                    "index": "",
+                    "nullable": "",
+                    "json": "",
+                    "auto": "",
+                    "file": "",
+                    "private": ""
+                },
+                {
+                    "name": "contact_email",
+                    "cname": "合作邮箱",
+                    "type": "string",
+                    "length": "200",
+                    "default": "",
+                    "unique": "",
+                    "index": "",
+                    "nullable": "",
+                    "json": "",
+                    "auto": "",
+                    "file": "",
+                    "private": ""
+                },
+                {
+                    "name": "contact_tel",
+                    "cname": "合作电话",
+                    "type": "string",
+                    "length": "200",
+                    "default": "",
+                    "unique": "",
+                    "index": "",
+                    "nullable": "",
+                    "json": "",
+                    "auto": "",
+                    "file": "",
+                    "private": ""
+                },
+                {
+                    "name": "contact_qq",
+                    "cname": "合作QQ",
+                    "type": "string",
+                    "length": "200",
+                    "default": "",
+                    "unique": "",
+                    "index": "",
+                    "nullable": "",
+                    "json": "",
+                    "auto": "",
+                    "file": "",
+                    "private": ""
+                },
+                {
+                    "name": "qr_wxapp",
+                    "cname": "小程序二维码",
+                    "type": "string",
+                    "length": "200",
+                    "default": "",
+                    "unique": "",
+                    "index": "",
+                    "nullable": "",
+                    "json": "",
+                    "auto": "",
+                    "file": "1",
+                    "private": ""
+                },
+                {
+                    "name": "qr_wxpub",
+                    "cname": "订阅号二维码",
+                    "type": "string",
+                    "length": "200",
+                    "default": "",
+                    "unique": "",
+                    "index": "",
+                    "nullable": "",
+                    "json": "",
+                    "auto": "",
+                    "file": "1",
+                    "private": ""
+                },
+                {
+                    "name": "name_wxpub",
+                    "cname": "订阅号名称",
+                    "type": "string",
+                    "length": "200",
+                    "default": "",
+                    "unique": "",
+                    "index": "",
+                    "nullable": "",
+                    "json": "",
+                    "auto": "",
+                    "file": "",
+                    "private": ""
+                },
+                {
+                    "name": "qr_wxse",
+                    "cname": "服务号二维码",
+                    "type": "string",
+                    "length": "200",
+                    "default": "",
+                    "unique": "",
+                    "index": "",
+                    "nullable": "",
+                    "json": "",
+                    "auto": "",
+                    "file": "1",
+                    "private": ""
+                },
+                {
+                    "name": "name_wxse",
+                    "cname": "服务号名称",
+                    "type": "string",
+                    "length": "200",
+                    "default": "",
+                    "unique": "",
+                    "index": "",
+                    "nullable": "",
+                    "json": "",
+                    "auto": "",
+                    "file": "",
+                    "private": ""
+                },
+                {
+                    "name": "qr_android",
+                    "cname": "安卓应用二维码",
+                    "type": "string",
+                    "length": "200",
+                    "default": "",
+                    "unique": "",
+                    "index": "",
+                    "nullable": "",
+                    "json": "",
+                    "auto": "",
+                    "file": "1",
+                    "private": ""
+                },
+                {
+                    "name": "qr_ios",
+                    "cname": "苹果应用二维码",
+                    "type": "string",
+                    "length": "200",
+                    "default": "",
+                    "unique": "",
+                    "index": "",
+                    "nullable": "",
+                    "json": "",
+                    "auto": "",
+                    "file": "1",
+                    "private": ""
+                },
+                {
+                    "name": "status",
+                    "cname": "状态",
+                    "type": "string",
+                    "length": "50",
+                    "default": "online",
+                    "unique": "",
+                    "index": "1",
+                    "nullable": "",
+                    "json": "",
+                    "auto": "",
+                    "file": "",
+                    "private": ""
+                },
+                {
+                    "name": "user",
+                    "cname": "操作者",
+                    "type": "string",
+                    "length": "128",
+                    "default": "",
+                    "unique": "",
+                    "index": "1",
+                    "nullable": "",
+                    "json": "",
+                    "auto": "",
+                    "file": "",
+                    "private": ""
+                }
+            ],
+            "methods": [
+                {
+                    "name": "",
+                    "cname": "",
+                    "source": ""
+                }
+            ]
+        },
+        "list": {
+            "keyword_param": "keyword",
+            "keyword": [
+                "name=site_id",
+                "name=site_slug",
+                "name=position",
+                "name=site_name"
+            ],
+            "jscode": [
+                ""
+            ],
+            "conditions": [
+                {
+                    "or": "0",
+                    "field": "name=site_id",
+                    "type": "=",
+                    "cname": "",
+                    "param": "",
+                    "default": ""
+                },
+                {
+                    "or": "0",
+                    "field": "name=site_slug",
+                    "type": "=",
+                    "cname": "",
+                    "param": "",
+                    "default": ""
+                },
+                {
+                    "or": "0",
+                    "field": "name=site_name",
+                    "type": "like",
+                    "cname": "",
+                    "param": "",
+                    "default": ""
+                },
+                {
+                    "or": "0",
+                    "field": "name=status",
+                    "type": "=",
+                    "cname": "",
+                    "param": "",
+                    "default": ""
+                },
+                {
+                    "or": "0",
+                    "field": "name=position",
+                    "type": "=",
+                    "cname": "",
+                    "param": "",
+                    "default": ""
+                }
+            ],
+            "orderby": [
+                {
+                    "field": "name=updated_at",
+                    "type": "desc",
+                    "cname": "",
+                    "param": ""
+                },
+                {
+                    "field": "name=created_at",
+                    "type": "desc",
+                    "cname": "",
+                    "param": ""
+                }
+            ],
+            "statusby": [
+                {
+                    "name": "name=status",
+                    "cname": "激活状态",
+                    "status": "上线=online|success, 下线=offline|danger"
+                }
+            ],
+            "columns": [
+                {
+                    "fields": [
+                        "name=site_id"
+                    ],
+                    "cname": "",
+                    "filter": "",
+                    "default": ""
+                },
+                {
+                    "fields": [
+                        "name=site_slug"
+                    ],
+                    "cname": "",
+                    "filter": "",
+                    "default": ""
+                },
+                {
+                    "fields": [
+                        "name=position"
+                    ],
+                    "cname": "",
+                    "filter": "",
+                    "default": ""
+                },
+                {
+                    "fields": [
+                        "name=site_name"
+                    ],
+                    "cname": "",
+                    "filter": "",
+                    "default": ""
+                },
+                {
+                    "fields": [
+                        "name=status"
+                    ],
+                    "cname": "",
+                    "filter": "",
+                    "default": ""
+                }
+            ]
+        },
+        "detail": {
+            "index": "name=site_id",
+            "title": "name=site_slug",
+            "columns": [
+                {
+                    "cname": "别名",
+                    "name": "site_slug",
+                    "type": "input",
+                    "placeholder": "请填写配置别名",
+                    "helper": "",
+                    "exp": "",
+                    "readonly": "",
+                    "attr": {
+                        "default": ""
+                    },
+                    "validator": [
+                        {
+                            "method": "required",
+                            "value": "true",
+                            "message": "请填写配置别名"
+                        },
+                        {
+                            "method": "minlength",
+                            "value": "2",
+                            "message": "配置别名至少2个字"
+                        },
+                        {
+                            "method": "minlength",
+                            "value": "60",
+                            "message": "配置别名不能超过2个字"
+                        }
+                    ]
+                },
+                {
+                    "cname": "呈现位置",
+                    "name": "position",
+                    "type": "input",
+                    "placeholder": "请填写呈现位置",
+                    "helper": "",
+                    "exp": "",
+                    "readonly": "",
+                    "attr": {
+                        "default": ""
+                    },
+                    "validator": [
+                        {
+                            "method": "",
+                            "value": "",
+                            "message": ""
+                        }
+                    ]
+                },
+                {
+                    "cname": "网站名称",
+                    "name": "site_name",
+                    "type": "input",
+                    "placeholder": "请填写网站名称",
+                    "helper": "",
+                    "exp": "",
+                    "readonly": "",
+                    "attr": {
+                        "default": ""
+                    },
+                    "validator": [
+                        {
+                            "method": "",
+                            "value": "",
+                            "message": ""
+                        }
+                    ]
+                },
+                {
+                    "cname": "Slogen",
+                    "name": "site_slogen",
+                    "type": "input",
+                    "placeholder": "请填写网站名称",
+                    "helper": "",
+                    "exp": "",
+                    "readonly": "",
+                    "attr": {
+                        "default": "请填写网站广告语"
+                    },
+                    "validator": [
+                        {
+                            "method": "",
+                            "value": "",
+                            "message": ""
+                        }
+                    ]
+                },
+                {
+                    "cname": "图标",
+                    "name": "icon",
+                    "type": "image",
+                    "placeholder": "请上传网站图标",
+                    "helper": "",
+                    "exp": "",
+                    "readonly": "",
+                    "attr": {
+                        "width": "192",
+                        "height": "192",
+                        "allow": "",
+                        "cropable": ""
+                    },
+                    "validator": [
+                        {
+                            "method": "",
+                            "value": "",
+                            "message": ""
+                        }
+                    ]
+                },
+                {
+                    "cname": "浅色图标",
+                    "name": "icon_light",
+                    "type": "image",
+                    "placeholder": "请上传浅色网站图标",
+                    "helper": "",
+                    "exp": "",
+                    "readonly": "",
+                    "attr": {
+                        "width": "192",
+                        "height": "192",
+                        "allow": "",
+                        "cropable": ""
+                    },
+                    "validator": [
+                        {
+                            "method": "",
+                            "value": "",
+                            "message": ""
+                        }
+                    ]
+                },
+                {
+                    "cname": "深色图标",
+                    "name": "icon_dark",
+                    "type": "image",
+                    "placeholder": "请上传深色网站图标",
+                    "helper": "",
+                    "exp": "",
+                    "readonly": "",
+                    "attr": {
+                        "width": "192",
+                        "height": "192",
+                        "allow": "",
+                        "cropable": ""
+                    },
+                    "validator": [
+                        {
+                            "method": "",
+                            "value": "",
+                            "message": ""
+                        }
+                    ]
+                },
+                {
+                    "cname": "网站LOGO",
+                    "name": "site_logo",
+                    "type": "image",
+                    "placeholder": "请上传网站LOGO",
+                    "helper": "",
+                    "exp": "",
+                    "readonly": "",
+                    "attr": {
+                        "width": "300",
+                        "height": "100",
+                        "allow": ".png",
+                        "cropable": ""
+                    },
+                    "validator": [
+                        {
+                            "method": "",
+                            "value": "",
+                            "message": ""
+                        }
+                    ]
+                },
+                {
+                    "cname": "浅色LOGO",
+                    "name": "site_logo_light",
+                    "type": "image",
+                    "placeholder": "请上传浅色LOGO",
+                    "helper": "",
+                    "exp": "",
+                    "readonly": "",
+                    "attr": {
+                        "width": "300",
+                        "height": "100",
+                        "allow": ".png",
+                        "cropable": ""
+                    },
+                    "validator": [
+                        {
+                            "method": "",
+                            "value": "",
+                            "message": ""
+                        }
+                    ]
+                },
+                {
+                    "cname": "深色LOGO",
+                    "name": "site_logo_dark",
+                    "type": "image",
+                    "placeholder": "请上传深色LOGO",
+                    "helper": "",
+                    "exp": "",
+                    "readonly": "",
+                    "attr": {
+                        "width": "300",
+                        "height": "100",
+                        "allow": ".png",
+                        "cropable": ""
+                    },
+                    "validator": [
+                        {
+                            "method": "",
+                            "value": "",
+                            "message": ""
+                        }
+                    ]
+                },
+                {
+                    "cname": "网站简介",
+                    "name": "site_intro",
+                    "type": "textarea",
+                    "placeholder": "请填写网站简介",
+                    "helper": "",
+                    "exp": "",
+                    "readonly": "",
+                    "attr": {
+                        "default": "",
+                        "rows": "",
+                        "autoheight": ""
+                    },
+                    "validator": [
+                        {
+                            "method": "",
+                            "value": "",
+                            "message": ""
+                        }
+                    ]
+                },
+                {
+                    "cname": "官网地址",
+                    "name": "site_homepage",
+                    "type": "input",
+                    "placeholder": "请填写官网地址",
+                    "helper": "",
+                    "exp": "",
+                    "readonly": "",
+                    "attr": {
+                        "default": ""
+                    },
+                    "validator": [
+                        {
+                            "method": "",
+                            "value": "",
+                            "message": ""
+                        }
+                    ]
+                },
+                {
+                    "cname": "客户端下载地址",
+                    "name": "site_downloadpage",
+                    "type": "input",
+                    "placeholder": "请填写客户端下载地址",
+                    "helper": "",
+                    "exp": "",
+                    "readonly": "",
+                    "attr": {
+                        "default": ""
+                    },
+                    "validator": [
+                        {
+                            "method": "",
+                            "value": "",
+                            "message": ""
+                        }
+                    ]
+                },
+                {
+                    "cname": "网站备案号",
+                    "name": "site_no",
+                    "type": "input",
+                    "placeholder": "请填写网站备案号",
+                    "helper": "",
+                    "exp": "",
+                    "readonly": "",
+                    "attr": {
+                        "default": ""
+                    },
+                    "validator": [
+                        {
+                            "method": "",
+                            "value": "",
+                            "message": ""
+                        }
+                    ]
+                },
+                {
+                    "cname": "公司名称",
+                    "name": "company",
+                    "type": "input",
+                    "placeholder": "请填写公司名称",
+                    "helper": "",
+                    "exp": "",
+                    "readonly": "",
+                    "attr": {
+                        "default": ""
+                    },
+                    "validator": [
+                        {
+                            "method": "",
+                            "value": "",
+                            "message": ""
+                        }
+                    ]
+                },
+                {
+                    "cname": "公司地址",
+                    "name": "address",
+                    "type": "input",
+                    "placeholder": "请填写公司地址",
+                    "helper": "",
+                    "exp": "",
+                    "readonly": "",
+                    "attr": {
+                        "default": ""
+                    },
+                    "validator": [
+                        {
+                            "method": "",
+                            "value": "",
+                            "message": ""
+                        }
+                    ]
+                },
+                {
+                    "cname": "客服电话",
+                    "name": "tel",
+                    "type": "input",
+                    "placeholder": "请填写客服电话",
+                    "helper": "",
+                    "exp": "",
+                    "readonly": "",
+                    "attr": {
+                        "default": ""
+                    },
+                    "validator": [
+                        {
+                            "method": "",
+                            "value": "",
+                            "message": ""
+                        }
+                    ]
+                },
+                {
+                    "cname": "客服QQ",
+                    "name": "qq",
+                    "type": "input",
+                    "placeholder": "请填写客服QQ",
+                    "helper": "",
+                    "exp": "",
+                    "readonly": "",
+                    "attr": {
+                        "default": ""
+                    },
+                    "validator": [
+                        {
+                            "method": "",
+                            "value": "",
+                            "message": ""
+                        }
+                    ]
+                },
+                {
+                    "cname": "客服邮箱",
+                    "name": "email",
+                    "type": "input",
+                    "placeholder": "请填写客服邮箱",
+                    "helper": "",
+                    "exp": "",
+                    "readonly": "",
+                    "attr": {
+                        "default": ""
+                    },
+                    "validator": [
+                        {
+                            "method": "",
+                            "value": "",
+                            "message": ""
+                        }
+                    ]
+                },
+                {
+                    "cname": "客服服务时间",
+                    "name": "se_time",
+                    "type": "input",
+                    "placeholder": "请填写客服服务时间",
+                    "helper": "",
+                    "exp": "",
+                    "readonly": "",
+                    "attr": {
+                        "default": ""
+                    },
+                    "validator": [
+                        {
+                            "method": "",
+                            "value": "",
+                            "message": ""
+                        }
+                    ]
+                },
+                {
+                    "cname": "合作联系人",
+                    "name": "contact_name",
+                    "type": "input",
+                    "placeholder": "请填写合作联系人",
+                    "helper": "",
+                    "exp": "",
+                    "readonly": "",
+                    "attr": {
+                        "default": ""
+                    },
+                    "validator": [
+                        {
+                            "method": "",
+                            "value": "",
+                            "message": ""
+                        }
+                    ]
+                },
+                {
+                    "cname": "合作邮箱",
+                    "name": "contact_email",
+                    "type": "input",
+                    "placeholder": "请填写合作联系邮箱",
+                    "helper": "",
+                    "exp": "",
+                    "readonly": "",
+                    "attr": {
+                        "default": ""
+                    },
+                    "validator": [
+                        {
+                            "method": "",
+                            "value": "",
+                            "message": ""
+                        }
+                    ]
+                },
+                {
+                    "cname": "合作电话",
+                    "name": "contact_tel",
+                    "type": "input",
+                    "placeholder": "请填写合作联系电话",
+                    "helper": "",
+                    "exp": "",
+                    "readonly": "",
+                    "attr": {
+                        "default": ""
+                    },
+                    "validator": [
+                        {
+                            "method": "",
+                            "value": "",
+                            "message": ""
+                        }
+                    ]
+                },
+                {
+                    "cname": "合作QQ",
+                    "name": "contact_qq",
+                    "type": "input",
+                    "placeholder": "请填写合作联系QQ",
+                    "helper": "",
+                    "exp": "",
+                    "readonly": "",
+                    "attr": {
+                        "default": ""
+                    },
+                    "validator": [
+                        {
+                            "method": "",
+                            "value": "",
+                            "message": ""
+                        }
+                    ]
+                },
+                {
+                    "cname": "小程序二维码",
+                    "name": "qr_wxapp",
+                    "type": "image",
+                    "placeholder": "请上传小程序二维码",
+                    "helper": "",
+                    "exp": "",
+                    "readonly": "",
+                    "attr": {
+                        "width": "200",
+                        "height": "200",
+                        "allow": ".png,.jpg",
+                        "cropable": "1"
+                    },
+                    "validator": [
+                        {
+                            "method": "",
+                            "value": "",
+                            "message": ""
+                        }
+                    ]
+                },
+                {
+                    "cname": "订阅号二维码",
+                    "name": "qr_wxpub",
+                    "type": "image",
+                    "placeholder": "请上传订阅号二维码",
+                    "helper": "",
+                    "exp": "",
+                    "readonly": "",
+                    "attr": {
+                        "width": "200",
+                        "height": "200",
+                        "allow": ".png,.jpg",
+                        "cropable": "1"
+                    },
+                    "validator": [
+                        {
+                            "method": "",
+                            "value": "",
+                            "message": ""
+                        }
+                    ]
+                },
+                {
+                    "cname": "订阅号名称",
+                    "name": "name_wxpub",
+                    "type": "input",
+                    "placeholder": "请填写订阅号名称",
+                    "helper": "",
+                    "exp": "",
+                    "readonly": "",
+                    "attr": {
+                        "default": ""
+                    },
+                    "validator": [
+                        {
+                            "method": "",
+                            "value": "",
+                            "message": ""
+                        }
+                    ]
+                },
+                {
+                    "cname": "服务号二维码",
+                    "name": "qr_wxse",
+                    "type": "image",
+                    "placeholder": "请上传服务号二维码",
+                    "helper": "",
+                    "exp": "",
+                    "readonly": "",
+                    "attr": {
+                        "width": "200",
+                        "height": "200",
+                        "allow": ".png,.jpg",
+                        "cropable": "1"
+                    },
+                    "validator": [
+                        {
+                            "method": "",
+                            "value": "",
+                            "message": ""
+                        }
+                    ]
+                },
+                {
+                    "cname": "服务号名称",
+                    "name": "name_wxse",
+                    "type": "input",
+                    "placeholder": "请填写服务号名称",
+                    "helper": "",
+                    "exp": "",
+                    "readonly": "",
+                    "attr": {
+                        "default": ""
+                    },
+                    "validator": [
+                        {
+                            "method": "",
+                            "value": "",
+                            "message": ""
+                        }
+                    ]
+                },
+                {
+                    "cname": "安卓客户端二维码",
+                    "name": "qr_android",
+                    "type": "image",
+                    "placeholder": "请上传安卓客户端二维码",
+                    "helper": "",
+                    "exp": "",
+                    "readonly": "",
+                    "attr": {
+                        "width": "200",
+                        "height": "200",
+                        "allow": ".png,.jpg",
+                        "cropable": "1"
+                    },
+                    "validator": [
+                        {
+                            "method": "",
+                            "value": "",
+                            "message": ""
+                        }
+                    ]
+                },
+                {
+                    "cname": "苹果客户端二维码",
+                    "name": "qr_ios",
+                    "type": "image",
+                    "placeholder": "请上传苹果客户端二维码",
+                    "helper": "",
+                    "exp": "",
+                    "readonly": "",
+                    "attr": {
+                        "width": "200",
+                        "height": "200",
+                        "allow": ".png,.jpg",
+                        "cropable": "1"
+                    },
+                    "validator": [
+                        {
+                            "method": "",
+                            "value": "",
+                            "message": ""
+                        }
+                    ]
+                },
+                {
+                    "cname": "状态",
+                    "name": "status",
+                    "type": "select",
+                    "placeholder": "请选择广告状态",
+                    "helper": "",
+                    "exp": "",
+                    "readonly": "",
+                    "attr": {
+                        "option": "上线=online, 下线=offline",
+                        "default": "online"
+                    },
+                    "validator": [
+                        {
+                            "method": "required",
+                            "value": "true",
+                            "message": "请选择广告状态"
+                        }
+                    ]
+                }
+            ],
+            "jscode": [
+                ""
+            ],
+            "undefined": [
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                ""
+            ]
+        },
+        "api": {
+            "getstatus": "1",
+            "createstatus": "1",
+            "updatestatus": "1",
+            "deletestatus": "1",
+            "searchstatus": "1",
+            "uploadstatus": "1",
+            "uploadparam": "docs",
+            "getkey": [
+                "name=site_id",
+                "name=site_slug"
+            ],
+            "getfields": [
+                "name=site_id",
+                "name=site_slug",
+                "name=position",
+                "name=site_name",
+                "name=site_slogen",
+                "name=icon_light",
+                "name=icon_dark",
+                "name=site_intro",
+                "name=site_homepage",
+                "name=site_downloadpage",
+                "name=site_logo",
+                "name=site_logo_light",
+                "name=site_logo_dark",
+                "name=site_no",
+                "name=company",
+                "name=address",
+                "name=tel",
+                "name=qr_wxapp",
+                "name=qr_wxpub",
+                "name=qr_wxse",
+                "name=qr_android",
+                "name=qr_ios",
+                "name=status",
+                "name=created_at",
+                "name=updated_at"
+            ],
+            "createfields": [
+                "name=site_id",
+                "name=site_slug"
+            ],
+            "updatekey": [
+                "name=site_id",
+                "name=site_slug"
+            ],
+            "deletekey": [
+                "name=site_id",
+                "name=site_slug"
+            ],
+            "searchfields": [
+                "name=site_id",
+                "name=site_slug",
+                "name=position",
+                "name=site_name",
+                "name=site_slogen",
+                "name=icon_light",
+                "name=icon_dark",
+                "name=site_intro",
+                "name=site_homepage",
+                "name=site_downloadpage",
+                "name=site_logo",
+                "name=site_logo_light",
+                "name=site_logo_dark",
+                "name=site_no",
+                "name=company",
+                "name=address",
+                "name=tel",
+                "name=qr_wxapp",
+                "name=qr_wxpub",
+                "name=qr_wxse",
+                "name=qr_android",
+                "name=qr_ios",
+                "name=status",
+                "name=created_at",
+                "name=updated_at"
+            ],
+            "getauth": {
+                "sign": "",
+                "secret": "",
+                "image": ""
+            },
+            "createauth": {
+                "sign": "",
+                "secret": "1",
+                "image": ""
+            },
+            "updateauth": {
+                "sign": "",
+                "secret": "1",
+                "image": ""
+            },
+            "deleteauth": {
+                "sign": "",
+                "secret": "1",
+                "image": ""
+            },
+            "searchauth": {
+                "sign": "",
+                "secret": "",
+                "image": ""
+            },
+            "uploadauth": {
+                "sign": "",
+                "secret": "1",
+                "image": ""
+            },
+            "methods": [
+                {
+                    "name": "",
+                    "cname": "",
+                    "source": ""
+                }
+            ]
+        }
+    },
+    "process": {
+        "general": "saved",
+        "struct": "saved",
+        "list": "saved",
+        "detail": "saved",
+        "api": "saved"
+    },
+    "next": null,
+    "prev": null,
+    "templete": {
+        "org": "xpmsns",
+        "name": "model",
+        "slug": "xpmsns_model",
+        "cname": "XpmSE 应用数据模型母版",
+        "version": "1.0.0",
+        "summary": "生成 XpmSE 应用数据模型。涵盖资源模型CURD、API CURD和标准资源管理界面。"
+    }
+}

@@ -1,0 +1,490 @@
+{
+    "name": "简墨-单品快照",
+    "data": {
+        "general": {
+            "app": "pages",
+            "org": "xpmsns",
+            "model": "_create",
+            "name": "snapshot",
+            "cname": "快照"
+        },
+        "struct": {
+            "table": "snapshot",
+            "fields": [
+                {
+                    "name": "snapshot_id",
+                    "cname": "快照ID",
+                    "type": "string",
+                    "length": "128",
+                    "default": "",
+                    "unique": "1",
+                    "index": "",
+                    "nullable": "",
+                    "json": "",
+                    "auto": "1",
+                    "file": "",
+                    "private": ""
+                },
+                {
+                    "name": "goods_id",
+                    "cname": "商品ID",
+                    "type": "string",
+                    "length": "128",
+                    "default": "",
+                    "unique": "",
+                    "index": "1",
+                    "nullable": "",
+                    "json": "",
+                    "auto": "",
+                    "file": "",
+                    "private": ""
+                },
+                {
+                    "name": "item_id",
+                    "cname": "单品ID",
+                    "type": "string",
+                    "length": "128",
+                    "default": "",
+                    "unique": "",
+                    "index": "1",
+                    "nullable": "",
+                    "json": "",
+                    "auto": "",
+                    "file": "",
+                    "private": ""
+                },
+                {
+                    "name": "name",
+                    "cname": "单品名称",
+                    "type": "string",
+                    "length": "200",
+                    "default": "",
+                    "unique": "",
+                    "index": "1",
+                    "nullable": "",
+                    "json": "",
+                    "auto": "",
+                    "file": "",
+                    "private": ""
+                },
+                {
+                    "name": "price",
+                    "cname": "成交价",
+                    "type": "integer",
+                    "length": "1",
+                    "default": "",
+                    "unique": "",
+                    "index": "1",
+                    "nullable": "",
+                    "json": "",
+                    "auto": "",
+                    "file": "",
+                    "private": ""
+                },
+                {
+                    "name": "goods",
+                    "cname": "商品数据",
+                    "type": "longText",
+                    "length": "",
+                    "default": "",
+                    "unique": "",
+                    "index": "",
+                    "nullable": "",
+                    "json": "1",
+                    "auto": "",
+                    "file": "",
+                    "private": ""
+                },
+                {
+                    "name": "item",
+                    "cname": "单品数据",
+                    "type": "",
+                    "length": "",
+                    "default": "",
+                    "unique": "",
+                    "index": "",
+                    "nullable": "",
+                    "json": "1",
+                    "auto": "",
+                    "file": "",
+                    "private": ""
+                }
+            ],
+            "methods": [
+                {
+                    "name": "",
+                    "cname": "",
+                    "source": ""
+                }
+            ]
+        },
+        "links": {
+            "fields": [
+                {
+                    "cname": "商品",
+                    "type": "leftJoin",
+                    "model": "\\Xpmsns\\Pages\\Model\\Goods",
+                    "table": "goods",
+                    "prefix": "xpmsns_pages_",
+                    "field": "goods_id",
+                    "on": "=",
+                    "name": "goods_id",
+                    "alias": "g"
+                },
+                {
+                    "cname": "单品",
+                    "type": "leftJoin",
+                    "model": "\\Xpmsns\\Pages\\Model\\Item",
+                    "table": "item",
+                    "prefix": "xpmsns_pages_",
+                    "field": "item_id",
+                    "on": "=",
+                    "name": "item_id",
+                    "alias": "i"
+                }
+            ]
+        },
+        "detail": {
+            "index": "name=snapshot_id",
+            "title": "name=name",
+            "jscode": [
+                ""
+            ],
+            "undefined": [
+                "",
+                "",
+                "",
+                ""
+            ],
+            "columns": [
+                {
+                    "cname": "商品ID",
+                    "name": "goods_id",
+                    "type": "select-remote",
+                    "placeholder": "",
+                    "helper": "",
+                    "exp": "",
+                    "readonly": "",
+                    "attr": {
+                        "table": "goods",
+                        "prefix": "xpmsns_pages_",
+                        "model": "\\Xpmsns\\Pages\\Model\\Goods",
+                        "fields": [
+                            "goods_id",
+                            "name"
+                        ],
+                        "option": "goods_id",
+                        "style": "{{name}}({{goods_id}})",
+                        "default": "",
+                        "multiple": "",
+                        "api": "",
+                        "cancel": "",
+                        "cancelable": "1"
+                    },
+                    "validator": [
+                        {
+                            "method": "",
+                            "value": "",
+                            "message": ""
+                        }
+                    ]
+                },
+                {
+                    "cname": "单品ID",
+                    "name": "item_id",
+                    "type": "select-remote",
+                    "placeholder": "",
+                    "helper": "",
+                    "exp": "",
+                    "readonly": "",
+                    "attr": {
+                        "table": "item",
+                        "prefix": "xpmsns_pages_",
+                        "model": "\\Xpmsns\\Pages\\Model\\Item",
+                        "fields": [
+                            "item_id",
+                            "name"
+                        ],
+                        "option": "item_id",
+                        "style": "{{name}}({{item_id}})",
+                        "default": "",
+                        "multiple": "",
+                        "api": "",
+                        "cancel": "",
+                        "cancelable": ""
+                    },
+                    "validator": [
+                        {
+                            "method": "",
+                            "value": "",
+                            "message": ""
+                        }
+                    ]
+                },
+                {
+                    "cname": "单品名称",
+                    "name": "name",
+                    "type": "input",
+                    "placeholder": "",
+                    "helper": "",
+                    "exp": "",
+                    "readonly": "1",
+                    "attr": {
+                        "default": ""
+                    },
+                    "validator": [
+                        {
+                            "method": "",
+                            "value": "",
+                            "message": ""
+                        }
+                    ]
+                },
+                {
+                    "cname": "成交价",
+                    "name": "price",
+                    "type": "input",
+                    "placeholder": "",
+                    "helper": "",
+                    "exp": "",
+                    "readonly": "1",
+                    "attr": {
+                        "default": ""
+                    },
+                    "validator": [
+                        {
+                            "method": "",
+                            "value": "",
+                            "message": ""
+                        }
+                    ]
+                },
+                {
+                    "cname": "商品数据",
+                    "name": "goods",
+                    "type": "textarea",
+                    "placeholder": "",
+                    "helper": "",
+                    "exp": "",
+                    "readonly": "1",
+                    "attr": {
+                        "default": "",
+                        "rows": "",
+                        "autoheight": ""
+                    },
+                    "validator": [
+                        {
+                            "method": "",
+                            "value": "",
+                            "message": ""
+                        }
+                    ]
+                },
+                {
+                    "cname": "单品数据",
+                    "name": "item",
+                    "type": "textarea",
+                    "placeholder": "",
+                    "helper": "",
+                    "exp": "",
+                    "readonly": "1",
+                    "attr": {
+                        "default": "",
+                        "rows": "",
+                        "autoheight": ""
+                    },
+                    "validator": [
+                        {
+                            "method": "",
+                            "value": "",
+                            "message": ""
+                        }
+                    ]
+                }
+            ]
+        },
+        "list": {
+            "keyword_param": "keyword",
+            "orderby": [
+                {
+                    "field": "name=snapshot_id",
+                    "type": "",
+                    "cname": "",
+                    "param": ""
+                },
+                {
+                    "field": "name=created_at",
+                    "type": "desc",
+                    "cname": "",
+                    "param": ""
+                },
+                {
+                    "field": "name=updated_at",
+                    "type": "desc",
+                    "cname": "",
+                    "param": ""
+                }
+            ],
+            "statusby": [
+                {
+                    "name": "",
+                    "cname": "",
+                    "status": ""
+                }
+            ],
+            "columns": [
+                {
+                    "fields": [
+                        "name=snapshot_id"
+                    ],
+                    "cname": "",
+                    "filter": "",
+                    "default": ""
+                },
+                {
+                    "fields": [
+                        "name=name"
+                    ],
+                    "cname": "",
+                    "filter": "",
+                    "default": ""
+                },
+                {
+                    "fields": [
+                        "name=price"
+                    ],
+                    "cname": "",
+                    "filter": "",
+                    "default": ""
+                },
+                {
+                    "fields": [
+                        "name=created_at",
+                        "name=updated_at"
+                    ],
+                    "cname": "更新时间",
+                    "filter": "{{updated_at ? updated_at : created_at}}",
+                    "default": ""
+                }
+            ],
+            "keyword": [
+                "name=snapshot_id",
+                "name=name",
+                "name=price"
+            ],
+            "jscode": [
+                ""
+            ],
+            "conditions": [
+                {
+                    "or": "0",
+                    "field": "name=snapshot_id",
+                    "type": "=",
+                    "cname": "",
+                    "param": "",
+                    "default": ""
+                },
+                {
+                    "or": "0",
+                    "field": "name=name",
+                    "type": "like",
+                    "cname": "",
+                    "param": "",
+                    "default": ""
+                }
+            ]
+        },
+        "api": {
+            "getstatus": "1",
+            "createstatus": "1",
+            "updatestatus": "1",
+            "deletestatus": "1",
+            "searchstatus": "1",
+            "uploadparam": "",
+            "methods": [
+                {
+                    "name": "",
+                    "cname": "",
+                    "source": ""
+                }
+            ],
+            "uploadstatus": "0",
+            "getkey": [
+                "name=snapshot_id"
+            ],
+            "getfields": [
+                "name=name",
+                "name=price",
+                "name=goods",
+                "name=item",
+                "name=created_at",
+                "name=updated_at"
+            ],
+            "createfields": [
+                "name=snapshot_id",
+                "name=name"
+            ],
+            "updatekey": [
+                "name=snapshot_id"
+            ],
+            "deletekey": [
+                "name=snapshot_id"
+            ],
+            "searchfields": [
+                "name=snapshot_id",
+                "name=name",
+                "name=price",
+                "name=created_at",
+                "name=updated_at"
+            ],
+            "getauth": {
+                "sign": "",
+                "secret": "",
+                "image": ""
+            },
+            "createauth": {
+                "sign": "1",
+                "secret": "1",
+                "image": "1"
+            },
+            "updateauth": {
+                "sign": "1",
+                "secret": "1",
+                "image": "1"
+            },
+            "deleteauth": {
+                "sign": "1",
+                "secret": "1",
+                "image": "1"
+            },
+            "searchauth": {
+                "sign": "",
+                "secret": "",
+                "image": ""
+            },
+            "uploadauth": {
+                "sign": "",
+                "secret": "1",
+                "image": ""
+            }
+        }
+    },
+    "process": {
+        "general": "saved",
+        "struct": "saved",
+        "links": "saved",
+        "detail": "saved",
+        "list": "saved",
+        "api": "saved"
+    },
+    "next": null,
+    "prev": null,
+    "templete": {
+        "org": "xpmsns",
+        "name": "model",
+        "slug": "xpmsns_model",
+        "cname": "XpmSE 应用数据模型母版",
+        "version": "1.0.0",
+        "summary": "生成 XpmSE 应用数据模型。涵盖资源模型CURD、API CURD和标准资源管理界面。"
+    }
+}
