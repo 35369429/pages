@@ -141,7 +141,9 @@ class Article extends Api {
 	 * 
 	 * @param  array  $query [description]
 	 * @return array 文章结果集列表
+       * 
 	 */
+  
 	protected function search( $query=[] ) {
 
 		$select = empty($query['select']) ? [
