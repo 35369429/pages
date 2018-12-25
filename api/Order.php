@@ -4,7 +4,7 @@
  * 订单数据接口 
  *
  * 程序作者: XpmSE机器人
- * 最后修改: 2018-12-23 23:30:06
+ * 最后修改: 2018-12-25 21:07:33
  * 程序母版: /data/stor/private/templates/xpmsns/model/code/api/Name.php
  */
 namespace Xpmsns\Pages\Api;
@@ -27,6 +27,12 @@ class Order extends Api {
 	/**
 	 * 自定义函数 
 	 */
+
+    // @KEEP BEGIN
+    protected function custFun1() {
+
+    }
+    // @KEEP END
 
 
 	/**
@@ -192,7 +198,11 @@ class Order extends Api {
 
 			$inst = new \Xpmsns\Pages\Model\Order;
 			return $inst->getByOrderId($data["order_id"], $select);
-		}
+        }
+        
+        // @KEEP BEGIN
+        $test = "MP";
+        // @KEEP END
 
 		throw new Excp("未知查询条件", 404, ['query'=>$query, 'data'=>$data]);
 	}
