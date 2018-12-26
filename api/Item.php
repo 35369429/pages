@@ -99,7 +99,7 @@ class Item extends Api {
 	*               	["_map_shipping"][$shipping_ids[n]]["formula"], // shipping.formula
 	*               	["_map_shipping"][$shipping_ids[n]]["api"], // shipping.api
 	*/
-	protected function get( $query, $data ) {
+	protected function get( $query, $data ) { 
 
 
 		// 支持POST和GET查询
@@ -127,7 +127,22 @@ class Item extends Api {
 		throw new Excp("未知查询条件", 404, ['query'=>$query, 'data'=>$data]);
 	}
 
+	protected function search( $query, $data ) {
 
+
+		// 支持POST和GET查询
+		$data = array_merge( $query, $data );
+
+		// 读取字段
+		$select = empty($data['select']) ? ["item.item_id","item.name","item.params","item.price","item.price_low","item.price_in","item.price_val","item.promotion","item.payment","item.shipping_ids","item.weight","item.volume","item.sum","item.shipped_sum","item.available_sum","item.status","item.images","item.content","item.created_at","item.updated_at","shipping.company","shipping.name"] : $data['select'];
+		if ( is_string($select) ) {
+			$select = explode(',', $select);
+		}
+		$data['select'] = $select;
+
+		$inst = new \Xpmsns\Pages\Model\Item;
+		return $inst->search( $data );
+	}
 
 
 
