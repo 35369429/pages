@@ -125,6 +125,7 @@ class Goods extends Model {
             $goods["lower_price_min"] = 0;
             $goods["lower_coin"] = intval($goods["lower_price"]);
             $goods["lower_coin_max"] = intval($goods["lower_price"]);
+            $goods["available_sum"] = intval( $goods["sku_sum"]  ) - intval( $goods["shipped_sum"]  ) ;
             return;
         }
 
@@ -139,7 +140,7 @@ class Goods extends Model {
         // 计算单品总数(SKU合)
         if ( array_key_exists("sku_sum", $goods) ) {
             $itemSum = array_column( $items, "sum");
-            $goods["sku_cnt"] = array_sum( $itemSum );
+            $goods["sku_sum"] = array_sum( $itemSum );
         }
 
         // 计算货运装箱总数()
@@ -172,6 +173,52 @@ class Goods extends Model {
         }
 
     }
+
+
+    /**
+     * 将指定数量的商品库存设定为运送中
+     * @param string $goods_id 商品ID
+     * @param string $item_id  单品ID
+     * @param int $quantity  数量
+     */
+    function shipping( $goods_id, $item_id, $quantity ) {
+        if ( empty($item_id) ) {
+           $this->updateBy("goods_id", [
+                "goods_id"=>$goods_id,
+                "sku_sum" => 'DB::RAW(sku_sum-'.intval($quantity).')',
+                "shipped_sum" => 'DB::RAW(shipped_sum+'.intval($quantity).')',
+           ]);
+        } else {
+            $it = new Item;
+            $it->shipping( $item_id, $quantity);
+        }
+    }
+
+    function cancel( $goods_id, $item_id, $quantity ) {
+        if ( empty($item_id) ) {
+            $this->updateBy("goods_id", [
+                 "goods_id"=>$goods_id,
+                 "sku_sum" => 'DB::RAW(sku_sum+'.intval($quantity).')',
+                 "shipped_sum" => 'DB::RAW(shipped_sum-'.intval($quantity).')',
+            ]);
+         } else {
+             $it = new Item;
+             $it->cancel( $item_id, $quantity);
+         }
+    }
+
+    function success( $goods_id, $item_id, $quantity ) {
+        if ( empty($item_id) ) {
+            $this->updateBy("goods_id", [
+                 "goods_id"=>$goods_id,
+                 "shipped_sum" => 'DB::RAW(shipped_sum-'.intval($quantity).')',
+            ]);
+         } else {
+             $it = new Item;
+             $it->success( $item_id, $quantity);
+         }
+    }
+
 
     // @KEEP END
 

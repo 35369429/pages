@@ -49,19 +49,21 @@ class Order extends Api {
     }
 
     /**
-     * 使用余额付款
-     */
-    protected function payByBalance( $query, $post ) {
-
-    }
-
-    /**
      * 使用积分付款
      */
     protected function payByCoin( $query, $post ) {
 
     }
 
+
+    /**
+     * 使用余额付款
+     */
+    protected function payByBalance( $query, $post ) {
+
+    }
+
+  
     /**
      * 生成订单并付款(或发起付款请求)
      */

@@ -58,8 +58,32 @@ class Order extends Model {
         $data = array_merge($data, $snapshot);
 
         // 计算运费
+        
+        // 检查库存
+        foreach( $data["snapshot"] as $ss ) {
+            $quantity = $ss["quantity"];
+            $available = $ss["available"];
+            if ($quantity > $available ) {
+                throw new Excp("商品库存不足", 502, ["snapshot"=>$ss]);
+            }
+        }
 
-        return $this->create( $data );
+         // 扣减库存信息
+        $g = new Goods();
+        foreach( $data["snapshot"] as $ss ) {
+             $quantity = $ss["quantity"];
+             $goods_id = $ss["goods_id"];
+             $item_id  = $ss["item_id"];
+             $g->shipping( $goods_id, $item_id, $quantity );
+        }
+
+
+        // 创建订单
+        $rs = $this->create( $data );
+
+       
+
+        return $rs;
     }
 
 
@@ -95,6 +119,7 @@ class Order extends Model {
             $ss["price"] = $goods_detail["lower_price"];
             $ss["coin"] = $goods_detail["lower_coin"];
             $ss["coin_max"] = $item_detail["lower_coin_max"];
+            $ss["available"] = $goods_detail["available_sum"];
             $ss["goods_detail"] = $goods_detail;
             $goods_ids[] = $goods_id;
 
@@ -110,6 +135,7 @@ class Order extends Model {
                 $ss["coin"] =  $item_detail["coin"];
                 $ss["coin_max"] = $item_detail["coin_max"];
                 $ss["item_detail"] = $item_detail;
+                $ss["available"] = $item_detail["available_sum"];
                 $item_ids[] = $item_id;
             }
 

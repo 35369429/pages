@@ -57,7 +57,7 @@ class Item extends Model {
      * @param string $item_id 单品信息
      */
     function itemDetail( $item_id ) {
-        
+
         $qb = $this->query();
         $qb->where("item_id", "=", $item_id);
         $rows = $qb->get()->toArray();
@@ -72,6 +72,38 @@ class Item extends Model {
         $this->countItem( $rs );
         return $rs;
     }
+
+    /**
+     * 将指定数量的商品库存设定为运送中
+     * @param string $goods_id 商品ID
+     * @param string $item_id  单品ID
+     * @param int $quantity  数量
+     */
+    function shipping( $item_id, $quantity ) {
+
+        $this->updateBy("item_id", [
+            "item_id"=>$item_id,
+            "sum" => 'DB::RAW(sum-'.intval($quantity).')',
+            "shipped_sum" => 'DB::RAW(shipped_sum+'.intval($quantity).')',
+       ]);
+    }
+
+    function cancel( $item_id, $quantity ) {
+
+        $this->updateBy("item_id", [
+            "item_id"=>$item_id,
+            "sum" => 'DB::RAW(sum-'.intval($quantity).')',
+            "shipped_sum" => 'DB::RAW(shipped_sum+'.intval($quantity).')',
+       ]);
+    }
+
+    function success( $item_id, $quantity ) {
+        $this->updateBy("item_id", [
+            "item_id"=>$item_id,
+            "shipped_sum" => 'DB::RAW(shipped_sum-'.intval($quantity).')',
+       ]);
+    }
+
 
     /**
      * 读取商品的所有单品
