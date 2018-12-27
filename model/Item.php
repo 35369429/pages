@@ -51,6 +51,33 @@ class Item extends Model {
 
 
     //  @KEEP BEGIN
+
+    /**
+     * 根据单品ID读取单品信息
+     * @param string $item_id 单品信息
+     */
+    function itemDetail( $item_id ) {
+        
+        $qb = $this->query();
+        $qb->where("item_id", "=", $item_id);
+        $rows = $qb->get()->toArray();
+        if ( empty( $rows) ) {
+            return $rows;
+        }
+
+        $rs = current( $rows );
+        $this->format($rs);
+
+        // 计算SKU, 实际价格等信息
+        $this->countItem( $rs );
+        return $rs;
+    }
+
+    /**
+     * 读取商品的所有单品
+     * @param string $goods_id 商品ID
+     * @param array $goods 商品信息
+     */
     function goodsItems( $goods_id, $goods = [] ) {
 
         $qb = $this->query();

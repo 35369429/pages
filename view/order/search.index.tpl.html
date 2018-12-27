@@ -234,7 +234,7 @@ use \Xpmse\T;
 									<?php $rs["_map_goods"]= &$response["goods"]; $v=null; $v=T::s("{% for idx in goods_ids %} {{_map_goods[idx].name}} {% endfor %}", $rs ); echo empty($v) ? T::s("", $rs ) : $v; ?>
 								</td>
 								<td class="font-w300">
-									<?php $rs["_map_item"]= &$response["item"]; $v=null; $v=T::s("{% for idx in items_ids %} {{_map_item[idx].name}} {% endfor %}", $rs ); echo empty($v) ? T::s("", $rs ) : $v; ?>
+									<?php $rs["_map_item"]= &$response["item"]; $v=null; $v=T::s("{% for idx in item_ids %} {{_map_item[idx].name}} {% endfor %}", $rs ); echo empty($v) ? T::s("", $rs ) : $v; ?>
 								</td>
 								<td class="font-w300">
 									<?php $v=null; $v=T::s("{{name}}", $rs ); echo empty($v) ? T::s("", $rs ) : $v; ?>

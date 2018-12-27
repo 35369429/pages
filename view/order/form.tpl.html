@@ -89,12 +89,12 @@ use \Xpmse\T;
 
 
  
-	<!-- 下拉选择(动态数据): 单品清单 (items_ids) 开始  -->
+	<!-- 下拉选择(动态数据): 单品清单 (item_ids) 开始  -->
 	<div class="form-group   ">
-		<label class="col-xs-2 control-label" for="items_ids">单品清单</label>
+		<label class="col-xs-2 control-label" for="item_ids">单品清单</label>
 		<div class="col-xs-8"> 
 			<select class="js-select2 form-control input-lg" style="width: 100%;" 
-					id="items_ids" name="items_ids" 
+					id="item_ids" name="item_ids" 
 					data-language="zh-CN"
 					data-param-cancelable="1"
 					data-param-cancel="取消选择"
@@ -105,7 +105,7 @@ use \Xpmse\T;
 					data-param-option="item_id"
 					data-param-default=""
 					data-ajax-url="/_a/mina/helper/select2?method=get"
-					data-preload-url="/_a/mina/helper/select2?method=get&preload=<?=T::v('<%=items_ids | join(\',\')%>', $rs )?>"
+					data-preload-url="/_a/mina/helper/select2?method=get&preload=<?=T::v('<%=item_ids | join(\',\')%>', $rs )?>"
 					data-placeholder=""  multiple data-select2-multiple=1  >
 				<option></option>
 			</select>
@@ -115,7 +115,7 @@ use \Xpmse\T;
 		<script type="text/javascript">
 		$(function(){
 			// 取消选择
-			$('select[name=items_ids]').on("select2:select", function( e ){
+			$('select[name=item_ids]').on("select2:select", function( e ){
 				var data = e.params.data || {};
 				id = data.id || '';
 				if ( '__cancel' ==  data.id ) {
@@ -125,7 +125,7 @@ use \Xpmse\T;
 		});
 		</script>
 		 
-	</div><!-- END 下拉选择(动态数据): 单品清单 (items_ids) -->
+	</div><!-- END 下拉选择(动态数据): 单品清单 (item_ids) -->
 
 	<!-- 单行文本: 订单金额 (total) 开始  -->
 	<div class="form-group   ">

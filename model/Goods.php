@@ -121,6 +121,10 @@ class Goods extends Model {
         }
 
         if (empty($goods["items"])  || !is_array($goods["items"]) ) {
+            $goods["lower_price"] = intval($goods["lower_price"]);
+            $goods["lower_price_min"] = 0;
+            $goods["lower_coin"] = intval($goods["lower_price"]);
+            $goods["lower_coin_max"] = intval($goods["lower_price"]);
             return;
         }
 
@@ -152,6 +156,7 @@ class Goods extends Model {
 
         // 计算所有单品最低单价
         if ( array_key_exists("lower_price", $goods) ) {
+
             $price = array_column( $items, "price");
             $goods["lower_price"] = min($price);
 
@@ -163,6 +168,7 @@ class Goods extends Model {
 
             $coin_max  = array_column( $items, "coin_max");
             $goods["lower_coin_max"] = min($coin_max);
+
         }
 
     }

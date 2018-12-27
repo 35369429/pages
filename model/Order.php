@@ -4,7 +4,7 @@
  * 订单数据模型
  *
  * 程序作者: XpmSE机器人
- * 最后修改: 2018-12-25 21:07:35
+ * 最后修改: 2018-12-27 21:03:17
  * 程序母版: /data/stor/private/templates/xpmsns/model/code/model/Name.php
  */
 namespace Xpmsns\Pages\Model;
@@ -45,28 +45,88 @@ class Order extends Model {
      */
     public function make( $data ) {
 
-        // 校验&读取商品信息
-        $goods_ids = is_string($data["goods_ids"]) ?  explode(",",$data["goods_ids"]) : [];
-        if ( empty($goods_ids) ) {
-            throw New Excp("请提供商品IDs", 404, ["data"=>$data]);
+        if ( empty($data["goods"]) ) {
+            throw new Excp("未指定购买信息", 404, ["data"=>$data]);
         }
-        
-        // 生成商品快照
-        $g = new Goods();
-        $goods = $g->searchGoods([
-            "goods_ids" => $goods_ids,
-            "select" => ["*"],
-        ]);
 
-        // 保存单品信息
-        $item_ids = is_string($data["item_ids"]) ?  explode(",",$data["item_ids"]) : [];
-        
-        
+        if (empty($data["user_id"])){
+            throw new Excp("未指定购买用户信息", 404, ["data"=>$data]);
+        }
 
-        return $item_ids;
+        $snapshot = $this->takeSnapshot($data["goods"]);
+        $data["status"] = "wait_pay";  // 待支付
+        $data = array_merge($data, $snapshot);
 
+        // 计算运费
+
+        return $this->create( $data );
     }
 
+
+    /**
+     * 根据商品信息描述字符串,获取全量商品信息
+     * @param string $goods_text 商品信息集合字符串
+     * 商品描述格式 :goods_id>:item_idX:quantity
+     *            :goods_id  [必填]商品ID
+     *            >:item_idX [选填]商品所属单品ID
+     *            X:quantity [选填]数量, 默认为1
+     * 
+     *      示例 1190164007277187>4988649036969294X1,3102721829519507X2,1190164007277187
+     *  
+     */
+    public function takeSnapshot( string $goods_text ) {
+        $goods_arr =  explode(",",$goods_text);
+        $snapshot = []; $goods_ids=[]; $item_ids=[]; $total=0; $total_coin=0;
+        $g = new Goods();
+        $it = new Item();
+
+        foreach( $goods_arr as $txt ) {
+            $arr = preg_split("/@|>|X|x/", $txt);
+            $goods_id = $arr[0];
+            $item_id = $arr[1];
+            $quantity = empty($arr[2]) ? 1 : intval($arr[2]);
+            $ss = ["type"=>"goods", "goods_id"=>$goods_id, "item_id"=>$item_id, "quantity"=>$quantity];
+            $goods_detail = $g->getGoodsDetail($goods_id);
+            if ( empty($goods_detail) ) {
+                throw new Excp("商品信息不存在", 404, ["goods_text"=>$goods_text, "goods_id"=>$goods_id]);
+            }
+
+            unset( $goods_detail["items"]);
+            $ss["price"] = $goods_detail["lower_price"];
+            $ss["coin"] = $goods_detail["lower_coin"];
+            $ss["coin_max"] = $item_detail["lower_coin_max"];
+            $ss["goods_detail"] = $goods_detail;
+            $goods_ids[] = $goods_id;
+
+            // 商品信息
+            if ( !empty($item_id) ) {
+                $item_detail = $it->itemDetail($item_id);
+                $ss["type"] = "item";
+                if ( empty($item_detail) ) {
+                    throw new Excp("单品信息不存在", 404, ["goods_text"=>$goods_text,"item_id"=>$item_id, "goods_id"=>$goods_id]);
+                }
+
+                $ss["price"] = $item_detail["price"];
+                $ss["coin"] =  $item_detail["coin"];
+                $ss["coin_max"] = $item_detail["coin_max"];
+                $ss["item_detail"] = $item_detail;
+                $item_ids[] = $item_id;
+            }
+
+            $total = $total + intval($ss["price"]);
+            $total_coin = $total_coin + intval($ss["coin"]);
+
+            $snapshot[] = $ss;
+        }
+
+        return [
+            "goods_ids" => $goods_ids,
+            "item_ids" => $item_ids,
+            "snapshot" => $snapshot,
+            "total" => $total,
+            "total_coin" => $total_coin,
+        ];
+    }
 
     // @KEEP END
 
@@ -83,7 +143,7 @@ class Order extends Model {
 		// 商品清单
 		$this->putColumn( 'goods_ids', $this->type("text", ["json"=>true, "null"=>true]));
 		// 单品清单
-		$this->putColumn( 'items_ids', $this->type("text", ["json"=>true, "null"=>true]));
+		$this->putColumn( 'item_ids', $this->type("text", ["json"=>true, "null"=>true]));
 		// 金额
 		$this->putColumn( 'total', $this->type("integer", ["length"=>1, "index"=>true, "null"=>true]));
 		// 运费
@@ -131,7 +191,7 @@ class Order extends Model {
 		// 备注
 		$this->putColumn( 'remark', $this->type("text", ["null"=>true]));
 		// 快照
-		$this->putColumn( 'snapshot', $this->type("longText", ["null"=>true]));
+		$this->putColumn( 'snapshot', $this->type("longText", ["json"=>true, "null"=>true]));
 
 		return $this;
 	}
@@ -239,8 +299,8 @@ class Order extends Model {
 	 *          	  $rs["outer_id"],  // 外部ID 
 	 *          	  $rs["goods_ids"],  // 商品清单 
 	 *                $rs["_map_goods"][$goods_ids[n]]["goods_id"], // goods.goods_id
-	 *          	  $rs["items_ids"],  // 单品清单 
-	 *                $rs["_map_item"][$items_ids[n]]["item_id"], // item.item_id
+	 *          	  $rs["item_ids"],  // 单品清单 
+	 *                $rs["_map_item"][$item_ids[n]]["item_id"], // item.item_id
 	 *          	  $rs["total"],  // 金额 
 	 *          	  $rs["freight"],  // 运费 
 	 *          	  $rs["total_cost"],  // 实付金额 
@@ -335,26 +395,26 @@ class Order extends Model {
 	 *                $rs["_map_goods"][$goods_ids[n]]["pay_duration"], // goods.pay_duration
 	 *                $rs["_map_goods"][$goods_ids[n]]["status"], // goods.status
 	 *                $rs["_map_goods"][$goods_ids[n]]["events"], // goods.events
-	 *                $rs["_map_item"][$items_ids[n]]["created_at"], // item.created_at
-	 *                $rs["_map_item"][$items_ids[n]]["updated_at"], // item.updated_at
-	 *                $rs["_map_item"][$items_ids[n]]["goods_id"], // item.goods_id
-	 *                $rs["_map_item"][$items_ids[n]]["name"], // item.name
-	 *                $rs["_map_item"][$items_ids[n]]["params"], // item.params
-	 *                $rs["_map_item"][$items_ids[n]]["price"], // item.price
-	 *                $rs["_map_item"][$items_ids[n]]["price_low"], // item.price_low
-	 *                $rs["_map_item"][$items_ids[n]]["price_in"], // item.price_in
-	 *                $rs["_map_item"][$items_ids[n]]["price_val"], // item.price_val
-	 *                $rs["_map_item"][$items_ids[n]]["promotion"], // item.promotion
-	 *                $rs["_map_item"][$items_ids[n]]["payment"], // item.payment
-	 *                $rs["_map_item"][$items_ids[n]]["delivery"], // item.delivery
-	 *                $rs["_map_item"][$items_ids[n]]["weight"], // item.weight
-	 *                $rs["_map_item"][$items_ids[n]]["volume"], // item.volume
-	 *                $rs["_map_item"][$items_ids[n]]["sum"], // item.sum
-	 *                $rs["_map_item"][$items_ids[n]]["shipped_sum"], // item.shipped_sum
-	 *                $rs["_map_item"][$items_ids[n]]["available_sum"], // item.available_sum
-	 *                $rs["_map_item"][$items_ids[n]]["status"], // item.status
-	 *                $rs["_map_item"][$items_ids[n]]["images"], // item.images
-	 *                $rs["_map_item"][$items_ids[n]]["content"], // item.content
+	 *                $rs["_map_item"][$item_ids[n]]["created_at"], // item.created_at
+	 *                $rs["_map_item"][$item_ids[n]]["updated_at"], // item.updated_at
+	 *                $rs["_map_item"][$item_ids[n]]["goods_id"], // item.goods_id
+	 *                $rs["_map_item"][$item_ids[n]]["name"], // item.name
+	 *                $rs["_map_item"][$item_ids[n]]["params"], // item.params
+	 *                $rs["_map_item"][$item_ids[n]]["price"], // item.price
+	 *                $rs["_map_item"][$item_ids[n]]["price_low"], // item.price_low
+	 *                $rs["_map_item"][$item_ids[n]]["price_in"], // item.price_in
+	 *                $rs["_map_item"][$item_ids[n]]["price_val"], // item.price_val
+	 *                $rs["_map_item"][$item_ids[n]]["promotion"], // item.promotion
+	 *                $rs["_map_item"][$item_ids[n]]["payment"], // item.payment
+	 *                $rs["_map_item"][$item_ids[n]]["delivery"], // item.delivery
+	 *                $rs["_map_item"][$item_ids[n]]["weight"], // item.weight
+	 *                $rs["_map_item"][$item_ids[n]]["volume"], // item.volume
+	 *                $rs["_map_item"][$item_ids[n]]["sum"], // item.sum
+	 *                $rs["_map_item"][$item_ids[n]]["shipped_sum"], // item.shipped_sum
+	 *                $rs["_map_item"][$item_ids[n]]["available_sum"], // item.available_sum
+	 *                $rs["_map_item"][$item_ids[n]]["status"], // item.status
+	 *                $rs["_map_item"][$item_ids[n]]["images"], // item.images
+	 *                $rs["_map_item"][$item_ids[n]]["content"], // item.content
 	 *                $rs["_map_shipping"][$shipping_id[n]]["created_at"], // shipping.created_at
 	 *                $rs["_map_shipping"][$shipping_id[n]]["updated_at"], // shipping.updated_at
 	 *                $rs["_map_shipping"][$shipping_id[n]]["company"], // shipping.company
@@ -392,7 +452,7 @@ class Order extends Model {
   		$goods_ids = []; // 读取 inWhere goods 数据
 		$goods_ids = array_merge($goods_ids, is_array($rs["goods_ids"]) ? $rs["goods_ids"] : [$rs["goods_ids"]]);
  		$item_ids = []; // 读取 inWhere item 数据
-		$item_ids = array_merge($item_ids, is_array($rs["items_ids"]) ? $rs["items_ids"] : [$rs["items_ids"]]);
+		$item_ids = array_merge($item_ids, is_array($rs["item_ids"]) ? $rs["item_ids"] : [$rs["item_ids"]]);
  		$shipping_ids = []; // 读取 inWhere shipping 数据
 		$shipping_ids = array_merge($shipping_ids, is_array($rs["shipping_id"]) ? $rs["shipping_id"] : [$rs["shipping_id"]]);
 
@@ -461,7 +521,7 @@ class Order extends Model {
   			// for inWhere goods
 			$goods_ids = array_merge($goods_ids, is_array($rs["goods_ids"]) ? $rs["goods_ids"] : [$rs["goods_ids"]]);
  			// for inWhere item
-			$item_ids = array_merge($item_ids, is_array($rs["items_ids"]) ? $rs["items_ids"] : [$rs["items_ids"]]);
+			$item_ids = array_merge($item_ids, is_array($rs["item_ids"]) ? $rs["item_ids"] : [$rs["item_ids"]]);
  			// for inWhere shipping
 			$shipping_ids = array_merge($shipping_ids, is_array($rs["shipping_id"]) ? $rs["shipping_id"] : [$rs["shipping_id"]]);
 		}
@@ -562,7 +622,7 @@ class Order extends Model {
   			// for inWhere goods
 			$goods_ids = array_merge($goods_ids, is_array($rs["goods_ids"]) ? $rs["goods_ids"] : [$rs["goods_ids"]]);
  			// for inWhere item
-			$item_ids = array_merge($item_ids, is_array($rs["items_ids"]) ? $rs["items_ids"] : [$rs["items_ids"]]);
+			$item_ids = array_merge($item_ids, is_array($rs["item_ids"]) ? $rs["item_ids"] : [$rs["item_ids"]]);
  			// for inWhere shipping
 			$shipping_ids = array_merge($shipping_ids, is_array($rs["shipping_id"]) ? $rs["shipping_id"] : [$rs["shipping_id"]]);
 		}
@@ -611,8 +671,8 @@ class Order extends Model {
 	 *               	["outer_id"],  // 外部ID 
 	 *               	["goods_ids"],  // 商品清单 
 	 *               	["goods"][$goods_ids[n]]["goods_id"], // goods.goods_id
-	 *               	["items_ids"],  // 单品清单 
-	 *               	["item"][$items_ids[n]]["item_id"], // item.item_id
+	 *               	["item_ids"],  // 单品清单 
+	 *               	["item"][$item_ids[n]]["item_id"], // item.item_id
 	 *               	["total"],  // 金额 
 	 *               	["freight"],  // 运费 
 	 *               	["total_cost"],  // 实付金额 
@@ -707,26 +767,26 @@ class Order extends Model {
 	 *               	["goods"][$goods_ids[n]]["pay_duration"], // goods.pay_duration
 	 *               	["goods"][$goods_ids[n]]["status"], // goods.status
 	 *               	["goods"][$goods_ids[n]]["events"], // goods.events
-	 *               	["item"][$items_ids[n]]["created_at"], // item.created_at
-	 *               	["item"][$items_ids[n]]["updated_at"], // item.updated_at
-	 *               	["item"][$items_ids[n]]["goods_id"], // item.goods_id
-	 *               	["item"][$items_ids[n]]["name"], // item.name
-	 *               	["item"][$items_ids[n]]["params"], // item.params
-	 *               	["item"][$items_ids[n]]["price"], // item.price
-	 *               	["item"][$items_ids[n]]["price_low"], // item.price_low
-	 *               	["item"][$items_ids[n]]["price_in"], // item.price_in
-	 *               	["item"][$items_ids[n]]["price_val"], // item.price_val
-	 *               	["item"][$items_ids[n]]["promotion"], // item.promotion
-	 *               	["item"][$items_ids[n]]["payment"], // item.payment
-	 *               	["item"][$items_ids[n]]["delivery"], // item.delivery
-	 *               	["item"][$items_ids[n]]["weight"], // item.weight
-	 *               	["item"][$items_ids[n]]["volume"], // item.volume
-	 *               	["item"][$items_ids[n]]["sum"], // item.sum
-	 *               	["item"][$items_ids[n]]["shipped_sum"], // item.shipped_sum
-	 *               	["item"][$items_ids[n]]["available_sum"], // item.available_sum
-	 *               	["item"][$items_ids[n]]["status"], // item.status
-	 *               	["item"][$items_ids[n]]["images"], // item.images
-	 *               	["item"][$items_ids[n]]["content"], // item.content
+	 *               	["item"][$item_ids[n]]["created_at"], // item.created_at
+	 *               	["item"][$item_ids[n]]["updated_at"], // item.updated_at
+	 *               	["item"][$item_ids[n]]["goods_id"], // item.goods_id
+	 *               	["item"][$item_ids[n]]["name"], // item.name
+	 *               	["item"][$item_ids[n]]["params"], // item.params
+	 *               	["item"][$item_ids[n]]["price"], // item.price
+	 *               	["item"][$item_ids[n]]["price_low"], // item.price_low
+	 *               	["item"][$item_ids[n]]["price_in"], // item.price_in
+	 *               	["item"][$item_ids[n]]["price_val"], // item.price_val
+	 *               	["item"][$item_ids[n]]["promotion"], // item.promotion
+	 *               	["item"][$item_ids[n]]["payment"], // item.payment
+	 *               	["item"][$item_ids[n]]["delivery"], // item.delivery
+	 *               	["item"][$item_ids[n]]["weight"], // item.weight
+	 *               	["item"][$item_ids[n]]["volume"], // item.volume
+	 *               	["item"][$item_ids[n]]["sum"], // item.sum
+	 *               	["item"][$item_ids[n]]["shipped_sum"], // item.shipped_sum
+	 *               	["item"][$item_ids[n]]["available_sum"], // item.available_sum
+	 *               	["item"][$item_ids[n]]["status"], // item.status
+	 *               	["item"][$item_ids[n]]["images"], // item.images
+	 *               	["item"][$item_ids[n]]["content"], // item.content
 	 *               	["shipping"][$shipping_id[n]]["created_at"], // shipping.created_at
 	 *               	["shipping"][$shipping_id[n]]["updated_at"], // shipping.updated_at
 	 *               	["shipping"][$shipping_id[n]]["company"], // shipping.company
@@ -816,7 +876,7 @@ class Order extends Model {
   			// for inWhere goods
 			$goods_ids = array_merge($goods_ids, is_array($rs["goods_ids"]) ? $rs["goods_ids"] : [$rs["goods_ids"]]);
  			// for inWhere item
-			$item_ids = array_merge($item_ids, is_array($rs["items_ids"]) ? $rs["items_ids"] : [$rs["items_ids"]]);
+			$item_ids = array_merge($item_ids, is_array($rs["item_ids"]) ? $rs["item_ids"] : [$rs["item_ids"]]);
  			// for inWhere shipping
 			$shipping_ids = array_merge($shipping_ids, is_array($rs["shipping_id"]) ? $rs["shipping_id"] : [$rs["shipping_id"]]);
 		}
@@ -916,7 +976,7 @@ class Order extends Model {
 				$inwhereSelect["item"][] = "item_id";
 				if ( trim($fd) != "*" ) {
 					unset($select[$idx]);
-					array_push($linkSelect, "order.items_ids");
+					array_push($linkSelect, "order.item_ids");
 				}
 			}
 			
@@ -953,7 +1013,7 @@ class Order extends Model {
 			"order_id",  // 订单ID
 			"outer_id",  // 外部ID
 			"goods_ids",  // 商品清单
-			"items_ids",  // 单品清单
+			"item_ids",  // 单品清单
 			"total",  // 金额
 			"freight",  // 运费
 			"total_cost",  // 实付金额
