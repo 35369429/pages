@@ -4,7 +4,7 @@
  * 订单数据模型
  *
  * 程序作者: XpmSE机器人
- * 最后修改: 2018-12-27 21:03:17
+ * 最后修改: 2018-12-27 22:27:13
  * 程序母版: /data/stor/private/templates/xpmsns/model/code/model/Name.php
  */
 namespace Xpmsns\Pages\Model;
@@ -84,6 +84,108 @@ class Order extends Model {
        
 
         return $rs;
+    }
+
+
+    /**
+     * 积分付款
+     * @param string $order_id 订单ID
+     * @param string $user_id 用户ID
+     */
+    function payByCoin( $order_id, $user_id ) {
+
+        $order = $this->getBy("order_id", $order_id);
+        if ( $order["user_id"] != $user_id ) {
+            throw new Excp("下单用户和付款用户不一致", 402, ["order"=>$order, "user_id"=>$user_id]);
+        }
+
+        // 验证订单状态
+        $allowPayment = ["wait_pay"];
+        if ( !in_array( $order["status"], $allowPayment) ){
+            throw new Excp("当前订单无需付款", 402, ["order"=>$order, "status"=>$status, "allowPayment"=>$allowPayment, "user_id"=>$user_id]);
+        }
+
+        // 金额
+        $quantity = ( $order["total_cost"] == 0 ) ? $order["total"] : $order["total_cost"];
+
+        // 验证付款方式
+
+        // 校验余额
+        $u = new \Xpmsns\User\Model\User;
+        $coin = $u->getCoin($user_id);
+        if ( $coin < $quantity ) {
+            throw new Excp("用户账户积分余额不足", 402, ["order"=>$order, "user_id"=>$user_id, "coin"=>$coin, "quantity"=>$quantity]);
+        }
+
+        // 付款
+        $pay = new \Xpmsns\User\Model\Coin();
+        $coin = $pay->create([
+            "user_id" => $user_id,
+            "quantity" => $quantity * -1,
+            "type" => "decrease",
+            "snapshot" => ["type"=>"order", "order_id"=>$order_id, "data"=>$order],
+        ]);
+
+        // 变更订单状态 & 数据
+        unset( $coin["snapshot"] );
+        return $this->updateBy("order_id",[
+            "order_id" => $order_id,
+            "payment_detail" => $coin,
+            "coin_cost" => $quantity,  // 实付积分
+            "payment" => "coin",  // 付款方式
+            "status" => "pay_complete",  // 设定为已付款
+        ]);
+    }
+
+
+    /**
+     * 余额付款
+     * @param string $order_id 订单ID
+     * @param string $user_id 用户ID
+     */
+    function payByBalance( $order_id, $user_id) {
+
+        $order = $this->getBy("order_id", $order_id);
+        if ( $order["user_id"] != $user_id ) {
+            throw new Excp("下单用户和付款用户不一致", 402, ["order"=>$order, "user_id"=>$user_id]);
+        }
+
+        // 验证订单状态
+        $allowPayment = ["wait_pay"];
+        if ( !in_array( $order["status"], $allowPayment) ){
+            throw new Excp("当前订单无需付款", 402, ["order"=>$order, "status"=>$status, "allowPayment"=>$allowPayment, "user_id"=>$user_id]);
+        }
+
+        // 金额
+        $quantity = ( $order["total_cost"] == 0 ) ? $order["total"] : $order["total_cost"];
+
+        // 验证付款方式
+
+        // 校验余额
+        $u = new \Xpmsns\User\Model\User;
+        $blc = $u->getBalance($user_id);
+        if ( $blc < $quantity ) {
+            throw new Excp("用户账户余额不足", 402, ["order"=>$order, "user_id"=>$user_id, "balance"=>$blc, "quantity"=>$quantity]);
+        }
+
+        // 付款
+        $pay = new \Xpmsns\User\Model\Balance();
+        $coin = $pay->create([
+            "user_id" => $user_id,
+            "quantity" => $quantity * -1,
+            "type" => "decrease",
+            "snapshot" => ["type"=>"order", "order_id"=>$order_id, "data"=>$order],
+        ]);
+
+        // 变更订单状态 & 数据
+        unset( $coin["snapshot"] );
+        return $this->updateBy("order_id",[
+            "order_id" => $order_id,
+            "payment_detail" => $coin,
+            "money_cost" => $quantity,  // 实付金额
+            "payment" => "balance",  // 付款方式
+            "status" => "pay_complete",  // 设定为已付款
+        ]);
     }
 
 
