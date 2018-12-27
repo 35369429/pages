@@ -29,9 +29,35 @@ class Order extends Api {
 	 */
 
     // @KEEP BEGIN
-    protected function custFun1() {
+
+    /**
+     * 生成订单
+     */
+    protected function make( $query, $post ) {
 
     }
+
+    /**
+     * 使用余额付款
+     */
+    protected function payByBalance( $query, $post ) {
+
+    }
+
+    /**
+     * 使用积分付款
+     */
+    protected function payByCoin( $query, $post ) {
+
+    }
+
+    /**
+     * 生成订单并付款(或发起付款请求)
+     */
+    protected function makeAndPay( $query, $post ){
+
+    }
+    
     // @KEEP END
 
 

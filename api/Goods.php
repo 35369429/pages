@@ -4,7 +4,7 @@
  * 商品数据接口 
  *
  * 程序作者: XpmSE机器人
- * 最后修改: 2018-12-21 23:08:48
+ * 最后修改: 2018-12-27 19:02:22
  * 程序母版: /data/stor/private/templates/xpmsns/model/code/api/Name.php
  */
 namespace Xpmsns\Pages\Api;
@@ -346,7 +346,7 @@ class Goods extends Api {
 	 *         	      $query['perpage'] 每页显示记录数，默认为 20
 	 *			      $query["keyword"] 按关键词查询
 	 *			      $query["goods_id"] 按商品ID查询 ( AND = )
-	 *			      $query["goods_id"] 按商品ID查询 ( AND IN )
+	 *			      $query["goods_ids"] 按商品ID查询 ( AND IN )
 	 *			      $query["slug"] 按别名查询 ( AND = )
 	 *			      $query["name"] 按名称查询 ( AND = )
 	 *			      $query["sku_cnt"] 按SKU数量查询 ( AND = )
@@ -362,7 +362,7 @@ class Goods extends Api {
 	 *         	      $data['perpage'] 每页显示记录数，默认为 20
 	 *			      $data["keyword"] 按关键词查询
 	 *			      $data["goods_id"] 按商品ID查询 ( AND = )
-	 *			      $data["goods_id"] 按商品ID查询 ( AND IN )
+	 *			      $data["goods_ids"] 按商品ID查询 ( AND IN )
 	 *			      $data["slug"] 按别名查询 ( AND = )
 	 *			      $data["name"] 按名称查询 ( AND = )
 	 *			      $data["sku_cnt"] 按SKU数量查询 ( AND = )

@@ -37,6 +37,29 @@ class Order extends Model {
 	 * 自定义函数 
 	 */
 
+    // @KEEP BEGIN
+    
+    /**
+     * 生成订单
+     * @param array $data 订单信息
+     */
+    public function make( $data ) {
+
+        // 校验&读取商品信息
+        $goods_ids = is_string($data["goods_ids"]) ?  explode(",",$data["goods_ids"]) : [];
+        if ( empty($goods_ids) ) {
+            throw New Excp("请提供商品IDs", 404, ["data"=>$data]);
+        }
+        
+        $item_ids = $data["item_ids"];
+
+
+
+
+    }
+
+
+    // @KEEP END
 
 	/**
 	 * 创建数据表

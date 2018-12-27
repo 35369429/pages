@@ -166,6 +166,58 @@ use \Xpmse\T;
 		 
 	</div><!-- END 下拉选择(动态数据): 内容区块 (推荐) (recommend_ids) -->
 
+	<!-- 单行文本: SKU数量 (sku_cnt) 开始  -->
+	<div class="form-group   ">
+		<label class="col-xs-2 control-label" for="sku_cnt">SKU数量</label>
+		<div class="col-xs-8">
+			<input class="form-control input-lg"  
+				type="text" 
+				id="sku_cnt" name="sku_cnt" 
+				placeholder=""  
+				value="<?=T::v('<%=sku_cnt | e(\'html\')%>', $rs )?>" /> 
+			<div class="help-block"></div>
+		</div>
+	</div><!-- END 单行文本: SKU数量 (sku_cnt) -->
+
+	<!-- 单行文本: 单品总数 (sku_sum) 开始  -->
+	<div class="form-group   ">
+		<label class="col-xs-2 control-label" for="sku_sum">单品总数</label>
+		<div class="col-xs-8">
+			<input class="form-control input-lg"  
+				type="text" 
+				id="sku_sum" name="sku_sum" 
+				placeholder=""  
+				value="<?=T::v('<%=sku_sum | e(\'html\')%>', $rs )?>" /> 
+			<div class="help-block"></div>
+		</div>
+	</div><!-- END 单行文本: 单品总数 (sku_sum) -->
+
+	<!-- 单行文本: 货运装箱总数 (shipped_sum) 开始  -->
+	<div class="form-group   ">
+		<label class="col-xs-2 control-label" for="shipped_sum">货运装箱总数</label>
+		<div class="col-xs-8">
+			<input class="form-control input-lg"  
+				type="text" 
+				id="shipped_sum" name="shipped_sum" 
+				placeholder=""  
+				value="<?=T::v('<%=shipped_sum | e(\'html\')%>', $rs )?>" /> 
+			<div class="help-block"></div>
+		</div>
+	</div><!-- END 单行文本: 货运装箱总数 (shipped_sum) -->
+
+	<!-- 单行文本: 可售SKU总数 (available_sum) 开始  -->
+	<div class="form-group   ">
+		<label class="col-xs-2 control-label" for="available_sum">可售SKU总数</label>
+		<div class="col-xs-8">
+			<input class="form-control input-lg"  
+				type="text" 
+				id="available_sum" name="available_sum" 
+				placeholder=""  
+				value="<?=T::v('<%=available_sum | e(\'html\')%>', $rs )?>" /> 
+			<div class="help-block"></div>
+		</div>
+	</div><!-- END 单行文本: 可售SKU总数 (available_sum) -->
+
 
 
 	<!-- 文本域: 简介 (summary) 开始  -->
@@ -629,14 +681,14 @@ closed_at_change();
 
 
 
-	<!-- 富文本(summernote): 产品详情 (content) 开始  -->
+	<!-- 富文本(summernote): 商品详情 (content) 开始  -->
 	<div class="form-group     ">
-		<label class="col-xs-2 control-label" for="content">产品详情</label>
+		<label class="col-xs-2 control-label" for="content">商品详情</label>
 		<div class="col-xs-8">
 			<textarea class="js-summernote" name="content" id="content" placeholder="" ><?=T::v('<%=content | e(\'html\')%>', $rs )?></textarea>
 			<div class="help-block"></div>
 		</div>
-	</div><!-- END 富文本(summernote): 产品详情 (content) -->
+	</div><!-- END 富文本(summernote): 商品详情 (content) -->
 	<script type="text/javascript">
 		// Init full text editor
 		$('.js-summernote[name=content]').summernote({

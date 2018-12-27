@@ -4,7 +4,7 @@
  * 商品数据模型
  *
  * 程序作者: XpmSE机器人
- * 最后修改: 2018-12-21 23:08:50
+ * 最后修改: 2018-12-27 19:02:23
  * 程序母版: /data/stor/private/templates/xpmsns/model/code/model/Name.php
  */
 namespace Xpmsns\Pages\Model;
@@ -981,7 +981,7 @@ class Goods extends Model {
 	 *         	      $query['perpage'] 每页显示记录数，默认为 20
 	 *			      $query["keyword"] 按关键词查询
 	 *			      $query["goods_id"] 按商品ID查询 ( = )
-	 *			      $query["goods_id"] 按商品IDS查询 ( IN )
+	 *			      $query["goods_ids"] 按商品IDS查询 ( IN )
 	 *			      $query["slug"] 按别名查询 ( = )
 	 *			      $query["name"] 按名称查询 ( = )
 	 *			      $query["sku_cnt"] 按SKU查询 ( = )
@@ -1103,11 +1103,11 @@ class Goods extends Model {
 		}
 		  
 		// 按商品IDS查询 (IN)  
-		if ( array_key_exists("goods_id", $query) &&!empty($query['goods_id']) ) {
-			if ( is_string($query['goods_id']) ) {
-				$query['goods_id'] = explode(',', $query['goods_id']);
+		if ( array_key_exists("goods_ids", $query) &&!empty($query['goods_ids']) ) {
+			if ( is_string($query['goods_ids']) ) {
+				$query['goods_ids'] = explode(',', $query['goods_ids']);
 			}
-			$qb->whereIn("goods.goods_id",  $query['goods_id'] );
+			$qb->whereIn("goods.goods_id",  $query['goods_ids'] );
 		}
 		  
 		// 按别名查询 (=)  
