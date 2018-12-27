@@ -33,8 +33,19 @@ class Order extends Api {
     /**
      * 生成订单
      */
-    protected function make( $query, $post ) {
+    protected function make( $query, $data ) {
+        
+        $u = new \Xpmsns\User\Model\User;
+        $user = $u->getUserInfo();
+        $user_id = $user["user_id"];
 
+        if ( empty($user_id) ) {
+            throw new Excp("用户尚未登录", 402, ["query"=>$query, "data"=>$data]);
+        }
+
+        $data["user_id"] = $data;
+        $o = new \Xpmsns\Pages\Model\Order;
+        return $o->make( $data );
     }
 
     /**
@@ -57,7 +68,7 @@ class Order extends Api {
     protected function makeAndPay( $query, $post ){
 
     }
-    
+
     // @KEEP END
 
 

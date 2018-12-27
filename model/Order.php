@@ -51,10 +51,19 @@ class Order extends Model {
             throw New Excp("请提供商品IDs", 404, ["data"=>$data]);
         }
         
-        $item_ids = $data["item_ids"];
+        // 生成商品快照
+        $g = new Goods();
+        $goods = $g->searchGoods([
+            "goods_ids" => $goods_ids,
+            "select" => ["*"],
+        ]);
 
+        // 保存单品信息
+        $item_ids = is_string($data["item_ids"]) ?  explode(",",$data["item_ids"]) : [];
+        
+        
 
-
+        return $item_ids;
 
     }
 

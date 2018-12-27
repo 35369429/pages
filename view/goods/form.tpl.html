@@ -267,7 +267,7 @@ use \Xpmse\T;
 	<!-- 多图片组上传: 图片 (images) 开始  -->
 	<div class="xpmse-image-groups-content    draggable-column">
 		
-		<?php if(count($rs['images']) < 1): ?><?php $steps = 1 -  count($rs['images']); for( $i=0; $i<$steps; $i++){ $rs['images'][] = [];} ?><?php endif ?><?php if( is_array($rs['images']) && utils::array_depth($rs['images']) != 2): ?><?php foreach($rs['images'] as $idx=>$it ){ $rs['images'][$idx] = ['img'=>$it]; }?><?php endif ?><?php foreach ( $rs['images'] as $__key=>$img ): ?> 
+		<?php if(@count($rs['images']) < 1): ?><?php $steps = 1 -  @count($rs['images']); for( $i=0; $i<$steps; $i++){ $rs['images'][] = [];} ?><?php endif ?><?php if( is_array($rs['images']) && utils::array_depth($rs['images']) != 2): ?><?php foreach($rs['images'] as $idx=>$it ){ $rs['images'][$idx] = ['img'=>$it]; }?><?php endif ?><?php foreach ( $rs['images'] as $__key=>$img ): ?> 
 		<div class="xpmse-image-groups draggable-item" data-nested="images" data-multiple="1">
 			<div class="form-group " >
 				<label class="col-xs-2 control-label draggable-handler" for="images">图片</label>
@@ -355,7 +355,7 @@ use \Xpmse\T;
 	<!-- 多图片组上传: 视频 (videos) 开始  -->
 	<div class="xpmse-image-groups-content    draggable-column">
 		
-		<?php if(count($rs['videos']) < 1): ?><?php $steps = 1 -  count($rs['videos']); for( $i=0; $i<$steps; $i++){ $rs['videos'][] = [];} ?><?php endif ?><?php if( is_array($rs['videos']) && utils::array_depth($rs['videos']) != 2): ?><?php foreach($rs['videos'] as $idx=>$it ){ $rs['videos'][$idx] = ['img'=>$it]; }?><?php endif ?><?php foreach ( $rs['videos'] as $__key=>$img ): ?> 
+		<?php if(@count($rs['videos']) < 1): ?><?php $steps = 1 -  @count($rs['videos']); for( $i=0; $i<$steps; $i++){ $rs['videos'][] = [];} ?><?php endif ?><?php if( is_array($rs['videos']) && utils::array_depth($rs['videos']) != 2): ?><?php foreach($rs['videos'] as $idx=>$it ){ $rs['videos'][$idx] = ['img'=>$it]; }?><?php endif ?><?php foreach ( $rs['videos'] as $__key=>$img ): ?> 
 		<div class="xpmse-image-groups draggable-item" data-nested="videos" data-multiple="1">
 			<div class="form-group " >
 				<label class="col-xs-2 control-label draggable-handler" for="videos">视频</label>
@@ -441,7 +441,7 @@ use \Xpmse\T;
 
 	<!-- JSON文本数组: 参数表 (params) <?=T::v('<%=params%>', $rs )?> 开始   minLength(1) -->
 	<div class="xpmse-json-input-panel"  >
-		<?php if(count($rs['params']) < 1): ?><?php $steps = 1 -  count($rs['params']); for( $i=0; $i<$steps; $i++){ $rs['params'][] = [];} ?><?php endif ?><?php if( is_array($rs['params']) && utils::array_depth($rs['params']) != 2): ?><?php foreach($rs['params'] as $idx=>$it ){ $rs['params'][$idx] = ['val'=>$it]; }?><?php endif ?><?php foreach ( $rs['params'] as $__key=>$val ): ?>		<div class="xpmse-json-input  "  name="params__origin"   data-nested="params__origin" data-multiple="1" >
+		<?php if(@count($rs['params']) < 1): ?><?php $steps = 1 -  @count($rs['params']); for( $i=0; $i<$steps; $i++){ $rs['params'][] = [];} ?><?php endif ?><?php if( is_array($rs['params']) && utils::array_depth($rs['params']) != 2): ?><?php foreach($rs['params'] as $idx=>$it ){ $rs['params'][$idx] = ['val'=>$it]; }?><?php endif ?><?php foreach ( $rs['params'] as $__key=>$val ): ?>		<div class="xpmse-json-input  "  name="params__origin"   data-nested="params__origin" data-multiple="1" >
 			<div class="form-group " >
 				<label class="col-xs-2 control-label" for="params">参数表 </label>
 				<div class="col-xs-2">
