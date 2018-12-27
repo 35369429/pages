@@ -49,6 +49,125 @@ class Goods extends Model {
 	 * 自定义函数 
 	 */
 
+    // @KEEP BEGIN
+    
+    /**
+     * 根据ID读取商品全量信息
+     * @param string $goods_id 商品ID
+     */
+    function getGoodsDetail( $goods_id ) {
+
+        $goods = $this->getByGoodsId( $goods_id );
+        if ( empty($goods) ) {
+            throw new Excp("商品信息不存在", 404, ["goods_id"=>$goods_id]);
+        }
+
+        $it = new Item();
+        $items = $it->goodsItems( $goods_id, $goods );
+        $goods["items"] = $items;
+
+        $this->countGoods($goods);
+        return $goods;
+    }
+
+
+    /**
+     * 检索商品并返回商品全量信息
+     */
+    function searchGoods( $query ) {
+
+        $goods = $this->search( $query );
+        if ( empty($goods["data"]) ) {
+            return $goods;
+        }
+
+        $itemMap =[];
+        $goods_ids = array_unique( array_column($goods["data"], "goods_id") );
+        if ( !empty($goods_ids) ) {
+            // 读取 Items
+            $it = new Item();
+            $items = $it->query()
+                        ->whereIn("goods_id", $goods_ids)
+                        ->select([
+                            "item_id","goods_id","name","params","price","price_low","price_val","promotion","payment",
+                            "shipping_ids","weight","volume","sum","shipped_sum","available_sum","status","images",
+                        ])
+                        ->get()
+                        ->toArray();
+            
+            foreach( $items as & $rs ) {
+                $it->countItem($rs);
+                $itemMap["{$rs['goods_id']}"][] = $rs;
+            }
+        }
+
+        foreach( $goods["data"] as &$rs ) {
+            $rs["items"] = $itemMap["{$rs['goods_id']}"];
+            $this->countGoods($rs);
+        }
+        
+        return $goods;
+    }
+
+
+    /**
+     * 根据商品单品信息, 计算SKU、最低价、商品描述等信息
+     * @param array &$goods 商品全量资料(涵盖单品)
+     */
+    function countGoods( & $goods ) {
+
+        if ( !is_array($goods) ) {
+            return;
+        }
+
+        if (empty($goods["items"])  || !is_array($goods["items"]) ) {
+            return;
+        }
+
+        $items = & $goods["items"];
+
+
+        // 计算SKU数量
+        if ( array_key_exists("sku_cnt", $goods) ) {
+            $goods["sku_cnt"] = count( $items );
+        }
+
+        // 计算单品总数(SKU合)
+        if ( array_key_exists("sku_sum", $goods) ) {
+            $itemSum = array_column( $items, "sum");
+            $goods["sku_cnt"] = array_sum( $itemSum );
+        }
+
+        // 计算货运装箱总数()
+        if ( array_key_exists("shipped_sum", $goods) ) {
+            $itemShippedSum = array_column( $items, "shipped_sum");
+            $goods["shipped_sum"] = array_sum( $itemShippedSum );
+        }
+
+        // 计算可售总数
+        if ( array_key_exists("available_sum", $goods) ) {
+            $itemAvailableSum = array_column( $items, "available_sum");
+            $goods["available_sum"] = array_sum( $itemAvailableSum );
+        }
+
+        // 计算所有单品最低单价
+        if ( array_key_exists("lower_price", $goods) ) {
+            $price = array_column( $items, "price");
+            $goods["lower_price"] = min($price);
+
+            $price_min = array_column( $items, "price_min");
+            $goods["lower_price_min"] = min($price_min);
+            
+            $coin  = array_column( $items, "coin");
+            $goods["lower_coin"] = min($coin);
+
+            $coin_max  = array_column( $items, "coin_max");
+            $goods["lower_coin_max"] = min($coin_max);
+        }
+
+    }
+
+    // @KEEP END
 
 	/**
 	 * 创建数据表

@@ -50,6 +50,93 @@ class Item extends Model {
 	 */
 
 
+    //  @KEEP BEGIN
+    function goodsItems( $goods_id, $goods = [] ) {
+
+        $qb = $this->query();
+        $qb->where("goods_id", "=", $goods_id);
+        $rows = $qb->get()->toArray();
+        if ( empty( $rows) ) {
+            return $rows;
+        }
+
+        $copyFromGoods = ["images", "content"];
+        foreach( $rows as & $rs ) {
+            $this->format( $rs );
+
+            // 处理默认值
+            foreach( $copyFromGoods as $field ) {
+                if ( empty($rs["$field"]) ){
+                    $rs["$field"] = $goods["$field"];
+                }
+            }
+
+            // 计算SKU, 实际价格等信息
+            $this->countItem( $rs );
+        }
+        
+        return $rows;
+    }
+
+
+    /**
+     * 根据单品信息, 计算SKU、实际价格等
+     * @param array &$goods 商品全量资料(涵盖单品)
+     */
+    function countItem( & $item ) {
+
+        // 计算商品价格
+        if( array_key_exists("price", $item) && array_key_exists("promotion", $item) ) {
+            
+            $PI = $this->promotion( $item["price"], $item["promotion"]);
+
+            // 计算可售价格
+            $item["price_real"] = $PI["price"];
+
+            // 最少可用价格
+            $item["price_min"] = $PI["price_min"];
+
+            // 计算积分价格
+            $item["coin"] = $PI["coin"];
+
+            // 最多可用积分
+            $item["coin_max"] = $PI["coin_max"];
+
+        }
+
+        // 计算SKU
+        if( array_key_exists("sum", $item) && 
+            array_key_exists("shipped_sum", $item) && 
+            array_key_exists("available_sum", $item) ){
+            $item["available_sum"] = $item["sum"] - $item["shipped_sum"];
+        }
+
+    }
+
+    /**
+     * 根据优惠方式，计算实际价格
+     * @param int $price 价格(单位:分)
+     * @param string $promotion  优惠名称(许可数值)
+     * @param string $user 当前访问用户
+     *          
+     */
+    function promotion( $price, $promotion, $user=null ) {
+
+        // 优惠方式: 折扣=discount,满减=reduction,会员=vip,包邮=free-shipping,邀请=invite,分享=share
+        // 销售方式: 标准=normal,闪购=flash,抢购=rush,团购=group,拼团=sharing,众筹=crowd,拍卖=auction,分期=repayment,1元购=draw
+        $priceInfo = [
+            "price" => $price,
+            "price_min" => 0,
+            "coin" => $price,
+            "coin_max" => $price,
+        ];
+
+        return $priceInfo;
+    }
+
+    // @KEEP END
+
+
 	/**
 	 * 创建数据表
 	 * @return $this

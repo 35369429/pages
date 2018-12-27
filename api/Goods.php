@@ -27,7 +27,41 @@ class Goods extends Api {
 	/**
 	 * 自定义函数 
 	 */
+    // @KEEP BEGIN
+    
+    /**
+     * 读取商品全量信息(含所属单品)
+     * @api /xpmsns/pages/goods/getByGoodsDetail
+     * @method GET
+     * @param param goods_id 商品ID
+     */
+    function getGoodsDetail( $query, $data ) {
 
+        $goods_id = $query["goods_id"];
+        if ( empty($goods_id) ) {
+            throw new Excp("未提供商品ID", 402, ["query"=>$query]);
+        }
+        $goods = new \Xpmsns\Pages\Model\Goods;
+        return $goods->getGoodsDetail($goods_id);
+    }
+
+     /**
+     * 搜索商品，返回包含SKU、真实价格、单品信息的商品机构数组
+     * @api /xpmsns/pages/goods/searchGoods
+     * @method GET
+     * @param  @see search()
+     */
+    function searchGoods( $query, $data ) {
+        $goods = new \Xpmsns\Pages\Model\Goods;
+        // 读取字段
+		$select = empty($query['select']) ? ["goods.goods_id","goods.instance","goods.name","goods.slug","goods.tags","goods.summary","goods.cover","goods.params","goods.sku_cnt","goods.sku_sum","goods.shipped_sum","goods.available_sum","goods.lower_price","goods.status","goods.created_at","goods.updated_at","c.category_id","c.name"] : $query['select'];
+		if ( is_string($select) ) {
+			$select = explode(',', $select);
+		}
+		$query['select'] = $select;
+        return $goods->searchGoods($query);
+    }
+    // @KEEP END
 
 	/**
 	 * 查询一条商品记录
