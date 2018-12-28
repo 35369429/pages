@@ -4,7 +4,7 @@
  * 订单数据接口 
  *
  * 程序作者: XpmSE机器人
- * 最后修改: 2018-12-27 22:27:12
+ * 最后修改: 2018-12-28 10:17:07
  * 程序母版: /data/stor/private/templates/xpmsns/model/code/api/Name.php
  */
 namespace Xpmsns\Pages\Api;
@@ -122,6 +122,41 @@ class Order extends Api {
         $order_id = $order["order_id"];
         $payMethod = "payBy{$payment}";
         return $o->$payMethod( $order_id, $user_id );
+    }
+
+
+    /**
+     * 查询用户订单
+     */
+    protected function search( $query, $data ) {
+
+        $u = new \Xpmsns\User\Model\User;
+        $user = $u->getUserInfo();
+        $user_id = $user["user_id"];
+
+        if ( empty($user_id) ) {
+            throw new Excp("用户尚未登录", 402, ["query"=>$query, "data"=>$data]);
+        }
+
+        // 读取字段
+		$select = empty($query['select']) ? [
+            "order.order_id", "order.goods_ids", "order.item_ids", "order.created_at", "order.updated_at", "order.status",
+            "order.total", "order.total_cost", "order.money_cost","order.coin_cost", "order.shipping_id", "order.tracking_no",
+            "shipping.name",
+            "order.name","order.mobile",
+            "user.name", "user.nickname",
+            "goods.name", "goods.goods_id",
+            "item.name", "item.item_id","item.goods_id",
+        ] : $query['select'];
+
+		if ( is_string($select) ) {
+			$select = explode(',', $select);
+		}
+		$query['select'] = $select;
+
+        $o = new \Xpmsns\Pages\Model\Order;
+        $query["user_user_id"] = $user_id;
+        return $o->search( $query );
     }
 
     // @KEEP END
