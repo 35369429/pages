@@ -159,6 +159,46 @@ class Order extends Api {
         return $o->search( $query );
     }
 
+    /**
+     * 查询订单全量信息
+     */
+    protected function getDetail( $query, $data ){
+
+        $u = new \Xpmsns\User\Model\User;
+        $user = $u->getUserInfo();
+        $user_id = $user["user_id"];
+
+        if ( empty($user_id) ) {
+            throw new Excp("用户尚未登录", 402, ["query"=>$query, "data"=>$data]);
+        }
+
+        $order_id = $query["order_id"];
+        if ( empty($order_id) ) {
+            throw new Excp("请提供订单ID", 402, ["query"=>$query, "data"=>$data]);
+        }
+
+         // 读取字段
+		$select = empty($query['select']) ? [
+            "order.*",
+            "shipping.*",
+            "user.*",
+            "goods.*",
+            "item.*",
+        ] : $query['select'];
+
+		if ( is_string($select) ) {
+			$select = explode(',', $select);
+		}
+
+        $o = new \Xpmsns\Pages\Model\Order;
+        $order =$o->getByOrderId( $order_id,$select );
+        if ( $order["user_id"] != $user_id ){
+            throw new Excp("订单所有者与登录用户不一致", 402, ["order_id"=>$order_id, "order_user_id"=>$order["user_id"], "user_id"=>$user_id]);
+        }
+
+        return $order;
+    }
+
     // @KEEP END
 
 
