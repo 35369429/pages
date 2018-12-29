@@ -43,7 +43,7 @@ class Article extends Model {
 	private $option = null;
 	private $npl = null;
 
-
+    
 	/**
 	 * 初始化
 	 * @param array $param [description]
@@ -168,7 +168,38 @@ class Article extends Model {
 				           ->putColumn( 'tag_id', $this->type('string', ['index'=>1 , 'length'=>128]) )
 				           ->putColumn( 'unique_id', $this->type('string', ['length'=>128, 'unique'=>true]) );
 		// }
-	}
+    }
+
+    /**
+     * 触发用户行为(通知所有该行为订阅者)
+     * @param string $slug 用户行为别名
+     * @param array $data 行为数据
+     * @return null
+     */
+    function triggerBehavior( $slug, $data=[] ) {
+
+        // 许可行为
+        $allowed = ["xpmsns/pages/article/read"];
+        if ( !in_array($slug,$allowed) ){
+            return;
+        }
+
+        // 创建用户对象
+        try {
+            $u = new \Xpmsns\User\Model\User;
+        } catch( Excp $e) { return; }
+
+        $uinfo = $u->getUserInfo();
+        if ( empty($uinfo["user_id"]) ) {
+            return;
+        }
+
+        // 执行行为(通知所有该行为订阅者)
+        try {
+            (new \Xpmsns\User\Model\Behavior)->runBySlug($slug, $uinfo["user_id"], $data );
+        }catch(Excp $e) {}
+        
+    }
 
 
 	/**
