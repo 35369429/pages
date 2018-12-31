@@ -466,7 +466,7 @@ class Article extends Api {
         ]);
         
         // 执行访客阅读行为
-        $art->triggerVistorBehavior("xpmsns/pages/article/readbyvistor", [
+        $art->triggerVisitorBehavior("xpmsns/pages/article/readbyvisitor", [
             "source_id"=>$article_id,
             "type"=>"article",
             "read_at"=>time()

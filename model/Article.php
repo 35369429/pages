@@ -211,10 +211,10 @@ class Article extends Model {
      * @param array $data 行为数据
      * @return null
      */
-    function triggerVistorBehavior( $slug, $data=[] ) {
+    function triggerVisitorBehavior( $slug, $data=[] ) {
 
         // 许可行为
-        $allowed = ["xpmsns/pages/article/readbyvistor"];
+        $allowed = ["xpmsns/pages/article/readbyvisitor"];
         if ( !in_array($slug,$allowed) ){
             return;
         }
