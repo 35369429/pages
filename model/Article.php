@@ -200,7 +200,7 @@ class Article extends Model {
         // 执行行为(通知所有该行为订阅者)
         try {
             $env = $behavior->getEnv();
-            $behavior->runBySlug($slug, $data, $env, $uinfo["user_id"]);
+            $behavior->runBySlug($slug, $data, $env );
         }catch(Excp $e) {}
         
     }
