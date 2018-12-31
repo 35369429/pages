@@ -458,8 +458,14 @@ class Article extends Api {
 			$rs['tag'] = $art->getTags($article_id, 'tag.tag_id', 'name', 'param');
         }
         
-        // 执行阅读行为
-        $art->triggerBehavior("xpmsns/pages/article/read", [
+        // 执行用户阅读行为
+        $art->triggerUserBehavior("xpmsns/pages/article/readbyuser", [
+            "article_id"=>$article_id,
+            "read_at"=>time()
+        ]);
+        
+        // 执行访客阅读行为
+        $art->triggerVistorBehavior("xpmsns/pages/article/readbyvistor", [
             "article_id"=>$article_id,
             "read_at"=>time()
         ]);

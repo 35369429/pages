@@ -176,10 +176,10 @@ class Article extends Model {
      * @param array $data 行为数据
      * @return null
      */
-    function triggerBehavior( $slug, $data=[] ) {
+    function triggerUserBehavior( $slug, $data=[] ) {
 
         // 许可行为
-        $allowed = ["xpmsns/pages/article/read"];
+        $allowed = ["xpmsns/pages/article/readbyuser"];
         if ( !in_array($slug,$allowed) ){
             return;
         }
@@ -189,17 +189,59 @@ class Article extends Model {
             $u = new \Xpmsns\User\Model\User;
         } catch( Excp $e) { return; }
 
-        $uinfo = $u->getUserInfo();
+        $uinfo = $u->getUserInfo();        
         if ( empty($uinfo["user_id"]) ) {
             return;
         }
-
+        
+        try {
+            $behavior = new \Xpmsns\User\Model\Behavior;
+        } catch( Excp $e) { return; }
         // 执行行为(通知所有该行为订阅者)
         try {
-            (new \Xpmsns\User\Model\Behavior)->runBySlug($slug, $uinfo["user_id"], $data );
+            $env = $behavior->getEnv();
+            $behavior->runBySlug($slug, $data, $env, $uinfo["user_id"]);
         }catch(Excp $e) {}
         
     }
+
+    /**
+     * 触发访客行为(通知所有该行为订阅者)
+     * @param string $slug 用户行为别名
+     * @param array $data 行为数据
+     * @return null
+     */
+    function triggerVistorBehavior( $slug, $data=[] ) {
+
+        // 许可行为
+        $allowed = ["xpmsns/pages/article/readbyvistor"];
+        if ( !in_array($slug,$allowed) ){
+            return;
+        }
+
+        // 创建用户对象
+        try {
+            $u = new \Xpmsns\User\Model\User;
+        } catch( Excp $e) { return; }
+
+        $uinfo = $u->getUserInfo();        
+        if ( !empty($uinfo["user_id"]) ) {
+            return;
+        }
+        
+        try {
+            $behavior = new \Xpmsns\User\Model\Behavior;
+        } catch( Excp $e) { return; }
+        // 执行行为(通知所有该行为订阅者)
+        try {
+            $env = $behavior->getEnv();
+            $behavior->runBySlug($slug, $data, $env );
+        }catch(Excp $e) {}
+        
+    }
+
+
+    
 
 
 	/**
