@@ -458,18 +458,18 @@ class Article extends Api {
         }
 
         try {  // 标记为已打开
-            $art->opened( $article_id ); 
+            $response = $art->opened( $article_id ); 
         } catch(Excp $e) { $e->log(); }
 
-        try {  // 触发打开文章行为
-            \Xpmsns\User\Model\Behavior::trigger("xpmsns/pages/article/open", [
-                "article_id"=>$article_id,
-                "inviter" => \Xpmsns\User\Model\User::inviter(),
-                "time"=>time()
-            ]);
-        } catch(Excp $e) { $e->log(); }
-
-        
+        if ( $response === true ) {
+            try {  // 触发打开文章行为
+                \Xpmsns\User\Model\Behavior::trigger("xpmsns/pages/article/open", [
+                    "article_id"=>$article_id,
+                    "inviter" => \Xpmsns\User\Model\User::inviter(),
+                    "time"=>time()
+                ]);
+            } catch(Excp $e) { $e->log(); }
+        }        
 		return $rs;
     }
     

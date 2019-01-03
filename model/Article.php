@@ -83,10 +83,16 @@ class Article extends Model {
     /**
      * 标记为打开，并记录打开时刻
      * @param string $article_id 文章ID
+     * @return bool 如已打开返回false , 新打开返回true
      */
     function opened( $article_id ) {
         @session_start();
+        if ( !empty($_SESSION["article_opened_{$article_id}"]) ) {
+            return false;
+        }
+
         $_SESSION["article_opened_{$article_id}"] = time();
+        return true;
     }
 
     /**
@@ -209,6 +215,9 @@ class Article extends Model {
                 "daily_limit"=>1, "process"=>5, 
                 "quantity" => [100,200,300,400,500],
                 "auto_accept" => 0,
+                "params" => [
+                    "count"=>5
+                ],
                 "accept" => ["class"=>"\\xpmsns\\pages\\model\\article", "method"=>"onArticleReadingAccpet"],
                 "status" => "online",
             ],[
@@ -216,6 +225,9 @@ class Article extends Model {
                 "daily_limit"=>1, "process"=>5, 
                 "quantity" => [100,200,300,400,500],
                 "auto_accept" => 0,
+                "params" => [
+                    "count"=>5
+                ],
                 "accept" => ["class"=>"\\xpmsns\\pages\\model\\article", "method"=>"onArticleInviteeReadingAccpet"],
                 "status" => "online",
             ]
@@ -311,7 +323,7 @@ class Article extends Model {
      * @param array $env 环境数据 (session_id, user_id, client_ip, time, user, cookies...)
      */
     public function updateViewsScript( $behavior, $subscriber, $data, $env ) {
-        echo "\t updateViewsScript  {$data["article_id"]} {$data["time"]} \n";
+        echo "\n\t updateViewsScript  {$data["article_id"]} {$data["time"]} \n";
     }
 
 
@@ -323,7 +335,54 @@ class Article extends Model {
      * @param array $env 环境数据 (session_id, user_id, client_ip, time, user, cookies...)
      */
     public function onArticleReadingChange( $behavior, $subscriber, $data, $env ) {
-        echo "\t onArticleReadingChange  {$data["article_id"]} {$data["time"]} \n";
+
+        // 记录阅读历史 (下一版实现)
+
+        $task_slug = $subscriber["outer_id"];
+        $user_id = $env["user_id"];
+        if (empty( $user_id )) {
+            return;
+        }
+
+        $t = new \Xpmsns\User\Model\Usertask;
+        $task = $t->getByTaskSlugAndUserId( $task_slug, $user_id );
+        if ( empty($task) ) {
+            throw new Excp("未找到任务信息({$task_slug})", 404, ["task_slug"=>$task_slug, "user_id"=>$user_id]);
+        }
+
+        // 自动接受任务
+        $usertask = $task["usertask"];
+        if( 
+            $task["auto_accept"] == 1 &&
+            ( empty($usertask) || ( $usertask["status"] != "accepted" &&  $task["type"] == "repeatable" ) )
+        ) {
+            $task["usertask"] = $usertask = $t->acceptBySlug( $task_slug, $user_id );
+        }
+
+        if ( empty($task["usertask"]) ) {
+            throw new Excp("用户尚未接受该任务({$task_slug})", 404, ["task_slug"=>$task_slug, "user_id"=>$user_id]); 
+        }
+
+        // 扩展数量
+        $params = is_array($task["params"]) ? $task["params"] : [];
+        $params["count"] = empty($params["count"]) ?  intval($task["process"]) : intval($params["count"]);
+        if ( $params["count"] != intval($task["process"]) ) {
+            $tt = new  \Xpmsns\User\Model\Task;
+            $quantity = []; 
+            for( $i=0;$i<$params["count"]; $i++) {
+                $quantity[$i] = 0;
+            }
+            $quantity[$params["count"]-1] = end($task["quantity"]);
+
+            $tt->updateBy("task_id", [
+                "task_id"=>$task["task_id"],
+                "process" => $params["count"],
+                "quantity" => $quantity,
+            ]);
+        }
+
+        $process = intval($usertask["process"]) + 1;
+        $t->processByUsertaskId( $usertask["usertask_id"], $process );
     }
 
 
