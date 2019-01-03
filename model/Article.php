@@ -226,7 +226,8 @@ class Article extends Model {
                 "quantity" => [100,200,300,400,500],
                 "auto_accept" => 0,
                 "params" => [
-                    "count"=>5
+                    "count"=>5,
+                    "duration"=>4
                 ],
                 "accept" => ["class"=>"\\xpmsns\\pages\\model\\article", "method"=>"onArticleInviteeReadingAccpet"],
                 "status" => "online",
@@ -337,7 +338,6 @@ class Article extends Model {
     public function onArticleReadingChange( $behavior, $subscriber, $data, $env ) {
 
         // 记录阅读历史 (下一版实现)
-
         $task_slug = $subscriber["outer_id"];
         $user_id = $env["user_id"];
         if (empty( $user_id )) {
@@ -387,14 +387,72 @@ class Article extends Model {
 
 
     /**
-     * 订阅器: 阅读文章任务 (关闭文章行为发生时, 触发此函数, 可在后台暂停或关闭)
+     * 订阅器: 邀请好友阅读文章任务 (关闭文章行为发生时, 触发此函数, 可在后台暂停或关闭)
      * @param array $behavior  行为(打开文章)数据结构
      * @param array $subscriber  订阅者(更新文章阅读量脚本) 数据结构  ["outer_id"=>"article-updateViewsScript...", "origin"=>"article" ... ]
      * @param array $data  行为数据 ["article_id"=>"文章ID", "time"=>"关闭时刻", "duration"=>"停留时长", "inviter"=>"邀请者信息"],
      * @param array $env 环境数据 (session_id, user_id, client_ip, time, user, cookies...)
      */
     public function onArticleInviteeReadingChange( $behavior, $subscriber, $data, $env ) {
-        echo "\t onArticleInviteeReadingChange  {$data["article_id"]} {$data["time"]} {$data["duration"]} \n";
+
+        // 记录阅读历史 (下一版实现)
+        $task_slug = $subscriber["outer_id"];
+        $inviter = $data["inviter"];
+        $user_id = $inviter["user_id"];
+        if (empty( $user_id )) {
+            return;
+        }
+
+        // 排除自己
+        if ( $env["user_id"] == $user_id ) {
+            return;
+        }
+
+        $t = new \Xpmsns\User\Model\Usertask;
+        $task = $t->getByTaskSlugAndUserId( $task_slug, $user_id );
+        if ( empty($task) ) {
+            throw new Excp("未找到任务信息({$task_slug})", 404, ["task_slug"=>$task_slug, "user_id"=>$user_id]);
+        }
+
+        // 自动接受任务
+        $usertask = $task["usertask"];
+        if( 
+            $task["auto_accept"] == 1 &&
+            ( empty($usertask) || ( $usertask["status"] != "accepted" &&  $task["type"] == "repeatable" ) )
+        ) {
+            $task["usertask"] = $usertask = $t->acceptBySlug( $task_slug, $user_id );
+        }
+
+        if ( empty($task["usertask"]) ) {
+            throw new Excp("用户尚未接受该任务({$task_slug})", 404, ["task_slug"=>$task_slug, "user_id"=>$user_id]); 
+        }
+
+        // 扩展数量
+        $params = is_array($task["params"]) ? $task["params"] : [];
+        $params["count"] = empty($params["count"]) ?  intval($task["process"]) : intval($params["count"]);
+        if ( $params["count"] != intval($task["process"]) ) {
+            $tt = new  \Xpmsns\User\Model\Task;
+            $quantity = []; 
+            for( $i=0;$i<$params["count"]; $i++) {
+                $quantity[$i] = 0;
+            }
+            $quantity[$params["count"]-1] = end($task["quantity"]);
+
+            $tt->updateBy("task_id", [
+                "task_id"=>$task["task_id"],
+                "process" => $params["count"],
+                "quantity" => $quantity,
+            ]);
+        }
+
+        // 计算 $params["duration"]
+        $params["duration"] = isset($params["duration"]) ? intval($params["duration"]) : 0;
+        if ( $data["duration"] < $params["duration"] ) {
+            return ;
+        }
+
+        $process = intval($usertask["process"]) + 1;
+        $t->processByUsertaskId( $usertask["usertask_id"], $process );
     }
 
 
