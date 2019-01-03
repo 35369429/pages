@@ -240,6 +240,10 @@ class Article extends Model {
             ],
         ];
 
+        if ( !class_exists("\\Xpmsns\\User\\Model\\Task") ){
+            return ;
+        }
+
         $t = new \Xpmsns\User\Model\Task();
         $b = new \Xpmsns\User\Model\Behavior();
         $s = new \Xpmsns\User\Model\Subscriber();
