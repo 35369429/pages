@@ -77,7 +77,32 @@ class Article extends Model {
 		// ];
 		// $this->stor = new Local( $options );
 		$this->media = new Media(['host'=>$this->host]);
-	}
+    }
+    
+
+    /**
+     * 标记为打开，并记录打开时刻
+     * @param string $article_id 文章ID
+     */
+    function opened( $article_id ) {
+        @session_start();
+        $_SESSION["article_opened_{$article_id}"] = time();
+    }
+
+    /**
+     * 标记为关闭，并计算停留时长
+     * @param string $article_id 文章ID
+     * @return int $duration 停留时长
+     */
+    function closed( $article_id ) {
+        @session_start();
+        $start = $_SESSION["article_opened_{$article_id}"];
+        unset( $_SESSION["article_opened_{$article_id}"] );
+        if ( empty($start) ) {
+            return 0;
+        }
+        return time()-intval($start);
+    }
 
 	
 	/**
@@ -313,79 +338,6 @@ class Article extends Model {
         echo "\t onArticleInviteeReadingChange  {$data["article_id"]} {$data["time"]} {$data["duration"]} \n";
     }
 
-
-    /**
-     * 触发用户行为(通知所有该行为订阅者)
-     * @param string $slug 用户行为别名
-     * @param array $data 行为数据
-     * @return null
-     */
-    function triggerUserBehavior( $slug, $data=[] ) {
-
-        // 许可行为
-        $allowed = ["xpmsns/pages/article/readbyuser"];
-        if ( !in_array($slug,$allowed) ){
-            return;
-        }
-
-        // 创建用户对象
-        try {
-            $u = new \Xpmsns\User\Model\User;
-        } catch( Excp $e) { return; }
-
-        $uinfo = $u->getUserInfo();        
-        if ( empty($uinfo["user_id"]) ) {
-            return;
-        }
-        
-        try {
-            $behavior = new \Xpmsns\User\Model\Behavior;
-        } catch( Excp $e) { return; }
-        // 执行行为(通知所有该行为订阅者)
-        try {
-            $env = $behavior->getEnv();
-            $behavior->runBySlug($slug, $data, $env );
-        }catch(Excp $e) {}
-        
-    }
-
-    /**
-     * 触发访客行为(通知所有该行为订阅者)
-     * @param string $slug 用户行为别名
-     * @param array $data 行为数据
-     * @return null
-     */
-    function triggerVisitorBehavior( $slug, $data=[] ) {
-
-        // 许可行为
-        $allowed = ["xpmsns/pages/article/readbyvisitor"];
-        if ( !in_array($slug,$allowed) ){
-            return;
-        }
-
-        // 创建用户对象
-        try {
-            $u = new \Xpmsns\User\Model\User;
-        } catch( Excp $e) { return; }
-
-        $uinfo = $u->getUserInfo();        
-        if ( !empty($uinfo["user_id"]) ) {
-            return;
-        }
-        
-        try {
-            $behavior = new \Xpmsns\User\Model\Behavior;
-        } catch( Excp $e) { return; }
-        // 执行行为(通知所有该行为订阅者)
-        try {
-            $env = $behavior->getEnv();
-            $behavior->runBySlug($slug, $data, $env );
-        }catch(Excp $e) {}
-        
-    }
-
-
-    
 
 
 	/**

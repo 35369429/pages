@@ -437,7 +437,6 @@ class Article extends Api {
 			}
 		}
 
-		
 		$art = new \Xpmsns\pages\Model\Article;
 		$rs = $art->getLine("WHERE article_id=:article_id LIMIT 1", $select, ["article_id"=>$article_id]);
 		if ( empty($rs) ) {
@@ -457,23 +456,51 @@ class Article extends Api {
 		if ( $getTag ) {
 			$rs['tag'] = $art->getTags($article_id, 'tag.tag_id', 'name', 'param');
         }
-        
-        // 执行用户阅读行为
-        $art->triggerUserBehavior("xpmsns/pages/article/readbyuser", [
-            "source_id"=>$article_id,
-            "type"=>"article",
-            "read_at"=>time()
-        ]);
-        
-        // 执行访客阅读行为
-        $art->triggerVisitorBehavior("xpmsns/pages/article/readbyvisitor", [
-            "source_id"=>$article_id,
-            "type"=>"article",
-            "read_at"=>time()
-        ]);
+
+        try {  // 标记为已打开
+            $art->opened( $article_id ); 
+        } catch(Excp $e) { $e->log(); }
+
+        try {  // 触发打开文章行为
+            \Xpmsns\User\Model\Behavior::trigger("xpmsns/pages/article/open", [
+                "article_id"=>$article_id,
+                "inviter" => \Xpmsns\User\Model\User::inviter(),
+                "time"=>time()
+            ]);
+        } catch(Excp $e) { $e->log(); }
+
         
 		return $rs;
-	}
+    }
+    
+
+    /**
+     * 标记为离开文章(一般为当浏览器关闭/小程序/APP页面切换时调用)
+     * @param string $articleId 文章ID
+     */
+    protected function leave( $query ){
+        // 验证数值
+		if ( !preg_match("/^([0-9]+)/", $query['articleId']) ) {
+			throw new Excp(" articleId 参数错误", 400, ['query'=>$query]);
+        }
+        
+        $article_id = $query['articleId'];
+        $art = new \Xpmsns\pages\Model\Article;
+        // 标记为关闭并记录阅读时长
+        $duration = $art->closed( $article_id );
+
+        try {  // 触发关闭文章行为
+            \Xpmsns\User\Model\Behavior::trigger("xpmsns/pages/article/close", [
+                "article_id"=>$article_id,
+                "inviter" => \Xpmsns\User\Model\User::inviter(),
+                "duration" => $duration,
+                "time"=>time()
+            ]);
+        } catch(Excp $e) { $e->log(); }
+
+        return $duration;
+    }
+
 
 
 	protected function qrcode( $query ) {
