@@ -181,14 +181,14 @@ class Article extends Model {
         $tasks = [
             [
                 "name"=>"阅读文章任务", "slug"=>"article-reading", "type"=>"repeatable",
-                "daily_limit"=>5, "process"=>5, 
+                "daily_limit"=>1, "process"=>5, 
                 "quantity" => [100,200,300,400,500],
                 "auto_accept" => 0,
                 "accept" => ["class"=>"\\xpmsns\\pages\\model\\article", "method"=>"onArticleReadingAccpet"],
                 "status" => "online",
             ],[
                 "name"=>"邀请好友阅读文章任务", "slug"=>"article-invitee-reading", "type"=>"repeatable",
-                "daily_limit"=>5, "process"=>5, 
+                "daily_limit"=>1, "process"=>5, 
                 "quantity" => [100,200,300,400,500],
                 "auto_accept" => 0,
                 "accept" => ["class"=>"\\xpmsns\\pages\\model\\article", "method"=>"onArticleInviteeReadingAccpet"],
