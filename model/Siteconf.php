@@ -4,11 +4,11 @@
  * 站点配置数据模型
  *
  * 程序作者: XpmSE机器人
- * 最后修改: 2018-08-14 21:41:58
+ * 最后修改: 2019-01-04 02:42:44
  * 程序母版: /data/stor/private/templates/xpmsns/model/code/model/Name.php
  */
 namespace Xpmsns\Pages\Model;
-                                                  
+                                                    
 use \Xpmse\Excp;
 use \Xpmse\Model;
 use \Xpmse\Utils;
@@ -124,6 +124,10 @@ class Siteconf extends Model {
 		$this->putColumn( 'status', $this->type("string", ["length"=>50, "index"=>true, "default"=>"online", "null"=>true]));
 		// 操作者
 		$this->putColumn( 'user', $this->type("string", ["length"=>128, "index"=>true, "null"=>true]));
+		// 头部脚本
+		$this->putColumn( 'header', $this->type("text", ["null"=>true]));
+		// 网站尾部
+		$this->putColumn( 'footer', $this->type("text", ["null"=>true]));
 
 		return $this;
 	}
@@ -267,6 +271,8 @@ class Siteconf extends Model {
 	 *          	  $rs["qr_ios"],  // 苹果应用二维码 
 	 *          	  $rs["status"],  // 状态 
 	 *          	  $rs["user"],  // 操作者 
+	 *          	  $rs["header"],  // 头部脚本 
+	 *          	  $rs["footer"],  // 网站尾部 
 	 *          	  $rs["created_at"],  // 创建时间 
 	 *          	  $rs["updated_at"],  // 更新时间 
 	 */
@@ -400,6 +406,8 @@ class Siteconf extends Model {
 	 *          	  $rs["qr_ios"],  // 苹果应用二维码 
 	 *          	  $rs["status"],  // 状态 
 	 *          	  $rs["user"],  // 操作者 
+	 *          	  $rs["header"],  // 头部脚本 
+	 *          	  $rs["footer"],  // 网站尾部 
 	 *          	  $rs["created_at"],  // 创建时间 
 	 *          	  $rs["updated_at"],  // 更新时间 
 	 */
@@ -951,6 +959,8 @@ class Siteconf extends Model {
 	 *               	["qr_ios"],  // 苹果应用二维码 
 	 *               	["status"],  // 状态 
 	 *               	["user"],  // 操作者 
+	 *               	["header"],  // 头部脚本 
+	 *               	["footer"],  // 网站尾部 
 	 *               	["created_at"],  // 创建时间 
 	 *               	["updated_at"],  // 更新时间 
 	 */
@@ -1047,6 +1057,12 @@ class Siteconf extends Model {
 		// 过滤 inWhere 查询字段
 		$inwhereSelect = []; $linkSelect = [];
 		foreach ($select as $idx=>$fd ) {
+			
+			// 添加本表前缀
+			if ( !strpos( $fd, ".")  ) {
+				$select[$idx] = "site." .$select[$idx];
+				continue;
+			}
 		}
 
 		// filter 查询字段
@@ -1100,6 +1116,8 @@ class Siteconf extends Model {
 			"qr_ios",  // 苹果应用二维码
 			"status",  // 状态
 			"user",  // 操作者
+			"header",  // 头部脚本
+			"footer",  // 网站尾部
 			"created_at",  // 创建时间
 			"updated_at",  // 更新时间
 		];

@@ -4,7 +4,7 @@
  * 站点配置控制器
  *
  * 程序作者: XpmSE机器人
- * 最后修改: 2018-08-14 21:41:57
+ * 最后修改: 2019-01-04 02:42:44
  * 程序母版: /data/stor/private/templates/xpmsns/model/code/controller/Name.php
  */
 
@@ -112,7 +112,32 @@ class SiteconfController extends \Xpmse\Loader\Controller {
 		 			"js/plugins/jquery-validation/jquery.validate.min.js",
 		    		"js/plugins/jquery-ui/jquery-ui.min.js",
 		    		"js/plugins/summernote/summernote.min.js",
-		    		"js/plugins/summernote/lang/summernote-zh-CN.js",
+                    "js/plugins/summernote/lang/summernote-zh-CN.js",
+                    "js/plugins/codemirror/lib/codemirror.js",
+                    "js/plugins/codemirror/addon/search/searchcursor.js",
+                    "js/plugins/codemirror/addon/search/search.js",
+                    "js/plugins/codemirror/addon/dialog/dialog.js",
+                    "js/plugins/codemirror/addon/edit/matchbrackets.js",
+                    "js/plugins/codemirror/addon/edit/closebrackets.js",
+                    "js/plugins/codemirror/addon/comment/comment.js",
+                    "js/plugins/codemirror/addon/wrap/hardwrap.js",
+                    "js/plugins/codemirror/addon/fold/foldcode.js",
+                    "js/plugins/codemirror/addon/fold/brace-fold.js",
+                    "js/plugins/codemirror/mode/javascript/javascript.js",
+                    "js/plugins/codemirror/mode/shell/shell.js",
+                    "js/plugins/codemirror/mode/sql/sql.js",
+                    "js/plugins/codemirror/mode/python/python.js",
+                    "js/plugins/codemirror/mode/go/go.js",
+                    "js/plugins/codemirror/mode/php/php.js",
+                    "js/plugins/codemirror/mode/htmlmixed/htmlmixed.js",
+                    "js/plugins/codemirror/mode/xml/xml.js",
+                    "js/plugins/codemirror/mode/css/css.js",
+                    "js/plugins/codemirror/mode/sass/sass.js",
+                    "js/plugins/codemirror/mode/vue/vue.js",
+                    "js/plugins/codemirror/mode/textile/textile.js",
+                    "js/plugins/codemirror/mode/clike/clike.js",
+                    "js/plugins/codemirror/mode/markdown/markdown.js",
+                    "js/plugins/codemirror/keymap/sublime.js",
 				],
 			'css'=>[
 				"js/plugins/bootstrap-datepicker/bootstrap-datepicker3.min.css",
@@ -120,7 +145,11 @@ class SiteconfController extends \Xpmse\Loader\Controller {
 	 			"js/plugins/select2/select2-bootstrap.min.css",
 	 			"js/plugins/jquery-tags-input/jquery.tagsinput.min.css",
 	 			"js/plugins/summernote/summernote.css",
-	 			"js/plugins/summernote/summernote-bs3.min.css"
+                "js/plugins/summernote/summernote-bs3.min.css",
+                "js/plugins/codemirror/lib/codemirror.css",
+                "js/plugins/codemirror/addon/fold/foldgutter.css",
+                "js/plugins/codemirror/addon/dialog/dialog.css",
+                "js/plugins/codemirror/theme/monokai.css",
 	 		],
 
 			'crumb' => [
@@ -142,7 +171,8 @@ class SiteconfController extends \Xpmse\Loader\Controller {
 	 * @return
 	 */
 	function save() {
-		$data = $_POST;
+        $data = $_POST;
+        Utils::JsonFromInput( $data );
 		$inst = new \Xpmsns\Pages\Model\Siteconf;
 		$rs = $inst->saveBySiteId( $data );
 		echo json_encode($rs);
@@ -175,37 +205,37 @@ class SiteconfController extends \Xpmse\Loader\Controller {
 
 		// 复制图片
 		if ( is_array($rs['icon']) &&  !empty($rs['icon']['local'])) {
-			$rs['icon'] = $inst->uploadIcon( $site_id, $rs['icon']['local'], true);
+			$rs['icon'] = $inst->uploadIconBySiteId( $site_id, $rs['icon']['local'], true);
 		}
 		if ( is_array($rs['icon_light']) &&  !empty($rs['icon_light']['local'])) {
-			$rs['icon_light'] = $inst->uploadIconlight( $site_id, $rs['icon_light']['local'], true);
+			$rs['icon_light'] = $inst->uploadIconlightBySiteId( $site_id, $rs['icon_light']['local'], true);
 		}
 		if ( is_array($rs['icon_dark']) &&  !empty($rs['icon_dark']['local'])) {
-			$rs['icon_dark'] = $inst->uploadIcondark( $site_id, $rs['icon_dark']['local'], true);
+			$rs['icon_dark'] = $inst->uploadIcondarkBySiteId( $site_id, $rs['icon_dark']['local'], true);
 		}
 		if ( is_array($rs['site_logo']) &&  !empty($rs['site_logo']['local'])) {
-			$rs['site_logo'] = $inst->uploadSitelogo( $site_id, $rs['site_logo']['local'], true);
+			$rs['site_logo'] = $inst->uploadSitelogoBySiteId( $site_id, $rs['site_logo']['local'], true);
 		}
 		if ( is_array($rs['site_logo_light']) &&  !empty($rs['site_logo_light']['local'])) {
-			$rs['site_logo_light'] = $inst->uploadSitelogolight( $site_id, $rs['site_logo_light']['local'], true);
+			$rs['site_logo_light'] = $inst->uploadSitelogolightBySiteId( $site_id, $rs['site_logo_light']['local'], true);
 		}
 		if ( is_array($rs['site_logo_dark']) &&  !empty($rs['site_logo_dark']['local'])) {
-			$rs['site_logo_dark'] = $inst->uploadSitelogodark( $site_id, $rs['site_logo_dark']['local'], true);
+			$rs['site_logo_dark'] = $inst->uploadSitelogodarkBySiteId( $site_id, $rs['site_logo_dark']['local'], true);
 		}
 		if ( is_array($rs['qr_wxapp']) &&  !empty($rs['qr_wxapp']['local'])) {
-			$rs['qr_wxapp'] = $inst->uploadQrwxapp( $site_id, $rs['qr_wxapp']['local'], true);
+			$rs['qr_wxapp'] = $inst->uploadQrwxappBySiteId( $site_id, $rs['qr_wxapp']['local'], true);
 		}
 		if ( is_array($rs['qr_wxpub']) &&  !empty($rs['qr_wxpub']['local'])) {
-			$rs['qr_wxpub'] = $inst->uploadQrwxpub( $site_id, $rs['qr_wxpub']['local'], true);
+			$rs['qr_wxpub'] = $inst->uploadQrwxpubBySiteId( $site_id, $rs['qr_wxpub']['local'], true);
 		}
 		if ( is_array($rs['qr_wxse']) &&  !empty($rs['qr_wxse']['local'])) {
-			$rs['qr_wxse'] = $inst->uploadQrwxse( $site_id, $rs['qr_wxse']['local'], true);
+			$rs['qr_wxse'] = $inst->uploadQrwxseBySiteId( $site_id, $rs['qr_wxse']['local'], true);
 		}
 		if ( is_array($rs['qr_android']) &&  !empty($rs['qr_android']['local'])) {
-			$rs['qr_android'] = $inst->uploadQrandroid( $site_id, $rs['qr_android']['local'], true);
+			$rs['qr_android'] = $inst->uploadQrandroidBySiteId( $site_id, $rs['qr_android']['local'], true);
 		}
 		if ( is_array($rs['qr_ios']) &&  !empty($rs['qr_ios']['local'])) {
-			$rs['qr_ios'] = $inst->uploadQrios( $site_id, $rs['qr_ios']['local'], true);
+			$rs['qr_ios'] = $inst->uploadQriosBySiteId( $site_id, $rs['qr_ios']['local'], true);
 		}
 
 		$data = [
@@ -225,19 +255,53 @@ class SiteconfController extends \Xpmse\Loader\Controller {
 		return [
 			'js' => [
 		 			"js/plugins/select2/select2.full.min.js",
+		 			"js/plugins/select2/i18n/zh-CN.js",
 		 			"js/plugins/dropzonejs/dropzone.min.js",
 		 			"js/plugins/cropper/cropper.min.js",
 		 			"js/plugins/jquery-tags-input/jquery.tagsinput.min.js",
 		 			"js/plugins/bootstrap-datepicker/bootstrap-datepicker.min.js",
 		 			'js/plugins/masked-inputs/jquery.maskedinput.min.js',
 		 			"js/plugins/jquery-validation/jquery.validate.min.js",
-		    		"js/plugins/jquery-ui/jquery-ui.min.js"
+		    		"js/plugins/jquery-ui/jquery-ui.min.js",
+		    		"js/plugins/summernote/summernote.min.js",
+                    "js/plugins/summernote/lang/summernote-zh-CN.js",
+                    "js/plugins/codemirror/lib/codemirror.js",
+                    "js/plugins/codemirror/addon/search/searchcursor.js",
+                    "js/plugins/codemirror/addon/search/search.js",
+                    "js/plugins/codemirror/addon/dialog/dialog.js",
+                    "js/plugins/codemirror/addon/edit/matchbrackets.js",
+                    "js/plugins/codemirror/addon/edit/closebrackets.js",
+                    "js/plugins/codemirror/addon/comment/comment.js",
+                    "js/plugins/codemirror/addon/wrap/hardwrap.js",
+                    "js/plugins/codemirror/addon/fold/foldcode.js",
+                    "js/plugins/codemirror/addon/fold/brace-fold.js",
+                    "js/plugins/codemirror/mode/javascript/javascript.js",
+                    "js/plugins/codemirror/mode/shell/shell.js",
+                    "js/plugins/codemirror/mode/sql/sql.js",
+                    "js/plugins/codemirror/mode/python/python.js",
+                    "js/plugins/codemirror/mode/go/go.js",
+                    "js/plugins/codemirror/mode/php/php.js",
+                    "js/plugins/codemirror/mode/htmlmixed/htmlmixed.js",
+                    "js/plugins/codemirror/mode/xml/xml.js",
+                    "js/plugins/codemirror/mode/css/css.js",
+                    "js/plugins/codemirror/mode/sass/sass.js",
+                    "js/plugins/codemirror/mode/vue/vue.js",
+                    "js/plugins/codemirror/mode/textile/textile.js",
+                    "js/plugins/codemirror/mode/clike/clike.js",
+                    "js/plugins/codemirror/mode/markdown/markdown.js",
+                    "js/plugins/codemirror/keymap/sublime.js",
 				],
 			'css'=>[
 				"js/plugins/bootstrap-datepicker/bootstrap-datepicker3.min.css",
 	 			"js/plugins/select2/select2.min.css",
 	 			"js/plugins/select2/select2-bootstrap.min.css",
-	 			"js/plugins/jquery-tags-input/jquery.tagsinput.min.css"
+	 			"js/plugins/jquery-tags-input/jquery.tagsinput.min.css",
+	 			"js/plugins/summernote/summernote.css",
+                "js/plugins/summernote/summernote-bs3.min.css",
+                "js/plugins/codemirror/lib/codemirror.css",
+                "js/plugins/codemirror/addon/fold/foldgutter.css",
+                "js/plugins/codemirror/addon/dialog/dialog.css",
+                "js/plugins/codemirror/theme/monokai.css",
 	 		],
 
 			'crumb' => [

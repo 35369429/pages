@@ -36,7 +36,7 @@ use \Xpmse\T;
 	<div class="form-group   ">
 		<label class="col-xs-2 control-label" for="site_slug">别名<span class="text-danger">*</span></label>
 		<div class="col-xs-8">
-			<input class="form-control input-lg"  
+			<input class="form-control input-lg "  
 				type="text" 
 				id="site_slug" name="site_slug" 
 				placeholder="请填写配置别名"  
@@ -49,7 +49,7 @@ use \Xpmse\T;
 	<div class="form-group   ">
 		<label class="col-xs-2 control-label" for="position">呈现位置</label>
 		<div class="col-xs-8">
-			<input class="form-control input-lg"  
+			<input class="form-control input-lg "  
 				type="text" 
 				id="position" name="position" 
 				placeholder="请填写呈现位置"  
@@ -62,7 +62,7 @@ use \Xpmse\T;
 	<div class="form-group   ">
 		<label class="col-xs-2 control-label" for="site_name">网站名称</label>
 		<div class="col-xs-8">
-			<input class="form-control input-lg"  
+			<input class="form-control input-lg "  
 				type="text" 
 				id="site_name" name="site_name" 
 				placeholder="请填写网站名称"  
@@ -75,7 +75,7 @@ use \Xpmse\T;
 	<div class="form-group   ">
 		<label class="col-xs-2 control-label" for="site_slogen">Slogen</label>
 		<div class="col-xs-8">
-			<input class="form-control input-lg"  
+			<input class="form-control input-lg "  
 				type="text" 
 				id="site_slogen" name="site_slogen" 
 				placeholder="请填写网站名称"  
@@ -88,7 +88,7 @@ use \Xpmse\T;
 
 
 	<!-- 单图上传: 图标 (icon) 开始  -->
-	<div class="xpmse-images  " name="icon">
+	<div class="xpmse-image  " name="icon">
 		<div class="form-group " >
 			<label class="col-xs-2 control-label" for="icon">图标</label>
 			<div class="col-xs-8">
@@ -117,7 +117,7 @@ use \Xpmse\T;
 
 
 	<!-- 单图上传: 浅色图标 (icon_light) 开始  -->
-	<div class="xpmse-images  " name="icon_light">
+	<div class="xpmse-image  " name="icon_light">
 		<div class="form-group " >
 			<label class="col-xs-2 control-label" for="icon_light">浅色图标</label>
 			<div class="col-xs-8">
@@ -146,7 +146,7 @@ use \Xpmse\T;
 
 
 	<!-- 单图上传: 深色图标 (icon_dark) 开始  -->
-	<div class="xpmse-images  " name="icon_dark">
+	<div class="xpmse-image  " name="icon_dark">
 		<div class="form-group " >
 			<label class="col-xs-2 control-label" for="icon_dark">深色图标</label>
 			<div class="col-xs-8">
@@ -175,7 +175,7 @@ use \Xpmse\T;
 
 
 	<!-- 单图上传: 网站LOGO (site_logo) 开始  -->
-	<div class="xpmse-images  " name="site_logo">
+	<div class="xpmse-image  " name="site_logo">
 		<div class="form-group " >
 			<label class="col-xs-2 control-label" for="site_logo">网站LOGO</label>
 			<div class="col-xs-8">
@@ -204,7 +204,7 @@ use \Xpmse\T;
 
 
 	<!-- 单图上传: 浅色LOGO (site_logo_light) 开始  -->
-	<div class="xpmse-images  " name="site_logo_light">
+	<div class="xpmse-image  " name="site_logo_light">
 		<div class="form-group " >
 			<label class="col-xs-2 control-label" for="site_logo_light">浅色LOGO</label>
 			<div class="col-xs-8">
@@ -233,7 +233,7 @@ use \Xpmse\T;
 
 
 	<!-- 单图上传: 深色LOGO (site_logo_dark) 开始  -->
-	<div class="xpmse-images  " name="site_logo_dark">
+	<div class="xpmse-image  " name="site_logo_dark">
 		<div class="form-group " >
 			<label class="col-xs-2 control-label" for="site_logo_dark">深色LOGO</label>
 			<div class="col-xs-8">
@@ -260,12 +260,11 @@ use \Xpmse\T;
 
 
 
-
 	<!-- 文本域: 网站简介 (site_intro) 开始  -->
 	<div class="form-group   ">
 		<label class="col-xs-2 control-label" for="site_intro">网站简介</label>
 		<div class="col-xs-8">
-			<textarea class="form-control input-lg"  
+			<textarea class="form-control input-lg "   
 				type="text" 
 				id="site_intro" name="site_intro" rows=""
 				placeholder="请填写网站简介"><?=T::v('<%=site_intro  | e(\'html\')%>', $rs )?></textarea> 
@@ -277,7 +276,7 @@ use \Xpmse\T;
 	<div class="form-group   ">
 		<label class="col-xs-2 control-label" for="site_homepage">官网地址</label>
 		<div class="col-xs-8">
-			<input class="form-control input-lg"  
+			<input class="form-control input-lg "  
 				type="text" 
 				id="site_homepage" name="site_homepage" 
 				placeholder="请填写官网地址"  
@@ -290,7 +289,7 @@ use \Xpmse\T;
 	<div class="form-group   ">
 		<label class="col-xs-2 control-label" for="site_downloadpage">客户端下载地址</label>
 		<div class="col-xs-8">
-			<input class="form-control input-lg"  
+			<input class="form-control input-lg "  
 				type="text" 
 				id="site_downloadpage" name="site_downloadpage" 
 				placeholder="请填写客户端下载地址"  
@@ -303,7 +302,7 @@ use \Xpmse\T;
 	<div class="form-group   ">
 		<label class="col-xs-2 control-label" for="site_no">网站备案号</label>
 		<div class="col-xs-8">
-			<input class="form-control input-lg"  
+			<input class="form-control input-lg "  
 				type="text" 
 				id="site_no" name="site_no" 
 				placeholder="请填写网站备案号"  
@@ -316,7 +315,7 @@ use \Xpmse\T;
 	<div class="form-group   ">
 		<label class="col-xs-2 control-label" for="company">公司名称</label>
 		<div class="col-xs-8">
-			<input class="form-control input-lg"  
+			<input class="form-control input-lg "  
 				type="text" 
 				id="company" name="company" 
 				placeholder="请填写公司名称"  
@@ -329,7 +328,7 @@ use \Xpmse\T;
 	<div class="form-group   ">
 		<label class="col-xs-2 control-label" for="address">公司地址</label>
 		<div class="col-xs-8">
-			<input class="form-control input-lg"  
+			<input class="form-control input-lg "  
 				type="text" 
 				id="address" name="address" 
 				placeholder="请填写公司地址"  
@@ -342,7 +341,7 @@ use \Xpmse\T;
 	<div class="form-group   ">
 		<label class="col-xs-2 control-label" for="tel">客服电话</label>
 		<div class="col-xs-8">
-			<input class="form-control input-lg"  
+			<input class="form-control input-lg "  
 				type="text" 
 				id="tel" name="tel" 
 				placeholder="请填写客服电话"  
@@ -355,7 +354,7 @@ use \Xpmse\T;
 	<div class="form-group   ">
 		<label class="col-xs-2 control-label" for="qq">客服QQ</label>
 		<div class="col-xs-8">
-			<input class="form-control input-lg"  
+			<input class="form-control input-lg "  
 				type="text" 
 				id="qq" name="qq" 
 				placeholder="请填写客服QQ"  
@@ -368,7 +367,7 @@ use \Xpmse\T;
 	<div class="form-group   ">
 		<label class="col-xs-2 control-label" for="email">客服邮箱</label>
 		<div class="col-xs-8">
-			<input class="form-control input-lg"  
+			<input class="form-control input-lg "  
 				type="text" 
 				id="email" name="email" 
 				placeholder="请填写客服邮箱"  
@@ -381,7 +380,7 @@ use \Xpmse\T;
 	<div class="form-group   ">
 		<label class="col-xs-2 control-label" for="se_time">客服服务时间</label>
 		<div class="col-xs-8">
-			<input class="form-control input-lg"  
+			<input class="form-control input-lg "  
 				type="text" 
 				id="se_time" name="se_time" 
 				placeholder="请填写客服服务时间"  
@@ -394,7 +393,7 @@ use \Xpmse\T;
 	<div class="form-group   ">
 		<label class="col-xs-2 control-label" for="contact_name">合作联系人</label>
 		<div class="col-xs-8">
-			<input class="form-control input-lg"  
+			<input class="form-control input-lg "  
 				type="text" 
 				id="contact_name" name="contact_name" 
 				placeholder="请填写合作联系人"  
@@ -407,7 +406,7 @@ use \Xpmse\T;
 	<div class="form-group   ">
 		<label class="col-xs-2 control-label" for="contact_email">合作邮箱</label>
 		<div class="col-xs-8">
-			<input class="form-control input-lg"  
+			<input class="form-control input-lg "  
 				type="text" 
 				id="contact_email" name="contact_email" 
 				placeholder="请填写合作联系邮箱"  
@@ -420,7 +419,7 @@ use \Xpmse\T;
 	<div class="form-group   ">
 		<label class="col-xs-2 control-label" for="contact_tel">合作电话</label>
 		<div class="col-xs-8">
-			<input class="form-control input-lg"  
+			<input class="form-control input-lg "  
 				type="text" 
 				id="contact_tel" name="contact_tel" 
 				placeholder="请填写合作联系电话"  
@@ -433,7 +432,7 @@ use \Xpmse\T;
 	<div class="form-group   ">
 		<label class="col-xs-2 control-label" for="contact_qq">合作QQ</label>
 		<div class="col-xs-8">
-			<input class="form-control input-lg"  
+			<input class="form-control input-lg "  
 				type="text" 
 				id="contact_qq" name="contact_qq" 
 				placeholder="请填写合作联系QQ"  
@@ -446,7 +445,7 @@ use \Xpmse\T;
 
 
 	<!-- 单图上传: 小程序二维码 (qr_wxapp) 开始  -->
-	<div class="xpmse-images  " name="qr_wxapp">
+	<div class="xpmse-image  " name="qr_wxapp">
 		<div class="form-group " >
 			<label class="col-xs-2 control-label" for="qr_wxapp">小程序二维码</label>
 			<div class="col-xs-8">
@@ -475,7 +474,7 @@ use \Xpmse\T;
 
 
 	<!-- 单图上传: 订阅号二维码 (qr_wxpub) 开始  -->
-	<div class="xpmse-images  " name="qr_wxpub">
+	<div class="xpmse-image  " name="qr_wxpub">
 		<div class="form-group " >
 			<label class="col-xs-2 control-label" for="qr_wxpub">订阅号二维码</label>
 			<div class="col-xs-8">
@@ -504,7 +503,7 @@ use \Xpmse\T;
 	<div class="form-group   ">
 		<label class="col-xs-2 control-label" for="name_wxpub">订阅号名称</label>
 		<div class="col-xs-8">
-			<input class="form-control input-lg"  
+			<input class="form-control input-lg "  
 				type="text" 
 				id="name_wxpub" name="name_wxpub" 
 				placeholder="请填写订阅号名称"  
@@ -517,7 +516,7 @@ use \Xpmse\T;
 
 
 	<!-- 单图上传: 服务号二维码 (qr_wxse) 开始  -->
-	<div class="xpmse-images  " name="qr_wxse">
+	<div class="xpmse-image  " name="qr_wxse">
 		<div class="form-group " >
 			<label class="col-xs-2 control-label" for="qr_wxse">服务号二维码</label>
 			<div class="col-xs-8">
@@ -546,7 +545,7 @@ use \Xpmse\T;
 	<div class="form-group   ">
 		<label class="col-xs-2 control-label" for="name_wxse">服务号名称</label>
 		<div class="col-xs-8">
-			<input class="form-control input-lg"  
+			<input class="form-control input-lg "  
 				type="text" 
 				id="name_wxse" name="name_wxse" 
 				placeholder="请填写服务号名称"  
@@ -559,7 +558,7 @@ use \Xpmse\T;
 
 
 	<!-- 单图上传: 安卓客户端二维码 (qr_android) 开始  -->
-	<div class="xpmse-images  " name="qr_android">
+	<div class="xpmse-image  " name="qr_android">
 		<div class="form-group " >
 			<label class="col-xs-2 control-label" for="qr_android">安卓客户端二维码</label>
 			<div class="col-xs-8">
@@ -588,7 +587,7 @@ use \Xpmse\T;
 
 
 	<!-- 单图上传: 苹果客户端二维码 (qr_ios) 开始  -->
-	<div class="xpmse-images  " name="qr_ios">
+	<div class="xpmse-image  " name="qr_ios">
 		<div class="form-group " >
 			<label class="col-xs-2 control-label" for="qr_ios">苹果客户端二维码</label>
 			<div class="col-xs-8">
@@ -614,22 +613,44 @@ use \Xpmse\T;
 	</div><!-- END 单图上传: 苹果客户端二维码 (qr_ios) -->
 
 
- 
-	<!-- 下拉选择: 状态 (status) 开始  -->
+
+	<!-- 文本域: 头部注入脚本 (header) 开始  -->
 	<div class="form-group   ">
+		<label class="col-xs-2 control-label" for="header">头部注入脚本</label>
+		<div class="col-xs-8">
+			<textarea class="form-control input-lg "   
+				type="text" 
+				id="header" name="header" rows="4"
+				placeholder="填写头部脚本"><?=T::v('<%=header  | e(\'html\')%>', $rs )?></textarea> 
+			<div class="help-block">插入到 &lt;head&gt; &lt;/head&gt; 之间的HTML代码</div>
+		</div>
+	</div><!-- END 文本域: 头部注入脚本 (header) -->
+
+
+
+	<!-- 文本域: 尾部注入脚本 (footer) 开始  -->
+	<div class="form-group   ">
+		<label class="col-xs-2 control-label" for="footer">尾部注入脚本</label>
+		<div class="col-xs-8">
+			<textarea class="form-control input-lg "   
+				type="text" 
+				id="footer" name="footer" rows="4"
+				placeholder="填写尾部脚本"><?=T::v('<%=footer  | e(\'html\')%>', $rs )?></textarea> 
+			<div class="help-block">插入到 &lt;/body&gt; 之前的HTML代码</div>
+		</div>
+	</div><!-- END 文本域: 尾部注入脚本 (footer) -->
+
+
+	<!-- 单选框: 状态 (status) 开始  -->
+	<div class="form-group    ">
 		<label class="col-xs-2 control-label" for="status">状态<span class="text-danger">*</span></label>
 		<div class="col-xs-8">
-			<select class="js-select2 form-control input-lg" style="width: 100%;"
-					id="status" name="status"  
-					data-placeholder="请选择广告状态" >
-				<option></option>
-				<?php $rs["status"] = is_string($rs["status"]) ? [$rs["status"]] : $rs["status"] ; if (empty($rs["status"])) { $rs["status"] = ["online"]; } ?>
-<option value="online" <?=in_array("online", $rs["status"]) ? "selected" : ""?> > 上线</option>
-<option value="offline" <?=in_array("offline", $rs["status"]) ? "selected" : ""?> >  下线</option>
-			</select>
+			<?php if (is_null($rs["status"])) { $rs["status"] = "online"; } ?>
+<label class="css-input  css-radio css-radio-lg css-radio-primary push-10-r"><input   type="radio" name="status" data-uncheck-value="online" value="online" <?=("online" == $rs["status"]) ? "checked" : ""?> > <span></span> 上线</label>
+<label class="css-input  css-radio css-radio-lg css-radio-primary push-10-r"><input   type="radio" name="status" data-uncheck-value="offline" value="offline" <?=("offline" == $rs["status"]) ? "checked" : ""?> > <span></span>  下线</label>
 			<div class="help-block"></div>
 		</div>
-	</div><!-- END 下拉选择: 状态 (status) -->
+	</div><!-- END 单选框: 状态 (status) 开始  -->
 
 				<!--  提交按钮 -->
 				<div class="block block-quickpanel sidebar-mini">
