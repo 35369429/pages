@@ -216,7 +216,7 @@ class Article extends Model {
             [
                 "name" => "更新文章阅读量脚本",
                 "behavior_slug"=>"xpmsns/pages/article/open",
-                "ourter_id" => "article-updateViewsScript",
+                "outer_id" => "article-updateViewsScript",
                 "origin" => "article",
                 "timeout" => 30,
                 "handler" => ["class"=>"\\xpmsns\\pages\\model\\article", "method"=>"updateViewsScript"],
@@ -224,7 +224,7 @@ class Article extends Model {
             ],[
                 "name" => "阅读文章任务",
                 "behavior_slug"=>"xpmsns/pages/article/open",
-                "ourter_id" => "article-reading",
+                "outer_id" => "article-reading",
                 "origin" => "task",
                 "timeout" => 30,
                 "handler" => ["class"=>"\\xpmsns\\pages\\model\\article", "method"=>"onArticleReadingChange"],
@@ -232,7 +232,7 @@ class Article extends Model {
             ],[
                 "name" => "邀请好友阅读文章任务",
                 "behavior_slug"=>"xpmsns/pages/article/close",
-                "ourter_id" => "article-invitee-reading",
+                "outer_id" => "article-invitee-reading",
                 "origin" => "task",
                 "timeout" => 30,
                 "handler" => ["class"=>"\\xpmsns\\pages\\model\\article", "method"=>"onArticleInviteeReadingChange"],
@@ -281,7 +281,7 @@ class Article extends Model {
     /**
      * 订阅器: 更新文章阅读量脚本 (打开文章行为发生时, 触发此函数, 可在后台暂停或关闭)
      * @param array $behavior  行为(打开文章)数据结构
-     * @param array $subscriber  订阅者(更新文章阅读量脚本) 数据结构  ["ourter_id"=>"article-updateViewsScript...", "origin"=>"article" ... ]
+     * @param array $subscriber  订阅者(更新文章阅读量脚本) 数据结构  ["outer_id"=>"article-updateViewsScript...", "origin"=>"article" ... ]
      * @param array $data  行为数据 ["article_id"=>"文章ID", "time"=>"打开时刻", "inviter"=>"邀请者信息"] ...
      * @param array $env 环境数据 (session_id, user_id, client_ip, time, user, cookies...)
      */
@@ -293,7 +293,7 @@ class Article extends Model {
     /**
      * 订阅器: 阅读文章任务 (打开文章行为发生时, 触发此函数, 可在后台暂停或关闭)
      * @param array $behavior  行为(打开文章)数据结构
-     * @param array $subscriber  订阅者(更新文章阅读量脚本) 数据结构  ["ourter_id"=>"article-updateViewsScript...", "origin"=>"article" ... ]
+     * @param array $subscriber  订阅者(更新文章阅读量脚本) 数据结构  ["outer_id"=>"article-updateViewsScript...", "origin"=>"article" ... ]
      * @param array $data  行为数据 ["article_id"=>"文章ID", "time"=>"打开时刻", "inviter"=>"邀请者信息"] ...
      * @param array $env 环境数据 (session_id, user_id, client_ip, time, user, cookies...)
      */
@@ -305,7 +305,7 @@ class Article extends Model {
     /**
      * 订阅器: 阅读文章任务 (关闭文章行为发生时, 触发此函数, 可在后台暂停或关闭)
      * @param array $behavior  行为(打开文章)数据结构
-     * @param array $subscriber  订阅者(更新文章阅读量脚本) 数据结构  ["ourter_id"=>"article-updateViewsScript...", "origin"=>"article" ... ]
+     * @param array $subscriber  订阅者(更新文章阅读量脚本) 数据结构  ["outer_id"=>"article-updateViewsScript...", "origin"=>"article" ... ]
      * @param array $data  行为数据 ["article_id"=>"文章ID", "time"=>"关闭时刻", "duration"=>"停留时长", "inviter"=>"邀请者信息"],
      * @param array $env 环境数据 (session_id, user_id, client_ip, time, user, cookies...)
      */
