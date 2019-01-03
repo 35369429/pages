@@ -170,6 +170,146 @@ class Article extends Model {
 		// }
     }
 
+
+
+     /**
+     * 图文初始化( 注册行为/注册任务/设置默认值等... )
+     */
+    public function __defaults() {
+
+        // 注册任务
+        $tasks = [
+            [
+                "name"=>"阅读文章任务", "slug"=>"article-reading", "type"=>"repeatable",
+                "daily_limit"=>5, "process"=>5, 
+                "quantity" => [100,200,300,400,500],
+                "auto_accept" => 0,
+                "accept" => ["class"=>"\\xpmsns\\pages\\model\\article", "method"=>"onArticleReadingAccpet"],
+                "status" => "online",
+            ],[
+                "name"=>"邀请好友阅读文章任务", "slug"=>"article-invitee-reading", "type"=>"repeatable",
+                "daily_limit"=>5, "process"=>5, 
+                "quantity" => [100,200,300,400,500],
+                "auto_accept" => 0,
+                "accept" => ["class"=>"\\xpmsns\\pages\\model\\article", "method"=>"onArticleInviteeReadingAccpet"],
+                "status" => "online",
+            ]
+        ];
+
+        // 注册行为
+        $behaviors =[
+            [
+                "name" => "打开文章", "slug"=>"xpmsns/pages/article/open",
+                "intro" =>  "本行为当有访问者打开文章时触发",
+                "params" => ["article_id"=>"文章ID", "time"=>"打开时刻", "inviter"=>"邀请者信息"],
+                "status" => "online",
+            ],[
+                "name" => "关闭文章", "slug"=>"xpmsns/pages/article/close",
+                "intro" =>  "本行为当有访问者关闭文章时触发",
+                "params" => ["article_id"=>"文章ID", "time"=>"关闭时刻", "duration"=>"停留时长", "inviter"=>"邀请者信息"],
+                "status" => "online",
+            ]
+        ];
+
+        // 订阅行为( 响应任务处理 )
+        $subscribers =[
+            [
+                "name" => "更新文章阅读量脚本",
+                "behavior_slug"=>"xpmsns/pages/article/open",
+                "ourter_id" => "article-updateViewsScript",
+                "origin" => "article",
+                "timeout" => 30,
+                "handler" => ["class"=>"\\xpmsns\\pages\\model\\article", "method"=>"updateViewsScript"],
+                "status" => "on",
+            ],[
+                "name" => "阅读文章任务",
+                "behavior_slug"=>"xpmsns/pages/article/open",
+                "ourter_id" => "article-reading",
+                "origin" => "task",
+                "timeout" => 30,
+                "handler" => ["class"=>"\\xpmsns\\pages\\model\\article", "method"=>"onArticleReadingChange"],
+                "status" => "on",
+            ],[
+                "name" => "邀请好友阅读文章任务",
+                "behavior_slug"=>"xpmsns/pages/article/close",
+                "ourter_id" => "article-invitee-reading",
+                "origin" => "task",
+                "timeout" => 30,
+                "handler" => ["class"=>"\\xpmsns\\pages\\model\\article", "method"=>"onArticleInviteeReadingChange"],
+                "status" => "on",
+            ],
+        ];
+
+        $t = new \Xpmsns\User\Model\Task();
+        $b = new \Xpmsns\User\Model\Behavior();
+        $s = new \Xpmsns\User\Model\Subscriber();
+
+        foreach( $tasks as $task ){
+            try { $t->create($task); } catch( Excp $e) { $e->log(); }
+        }
+
+        foreach( $behaviors as $behavior ){
+            try { $b->create($behavior); } catch( Excp $e) { $e->log(); }
+        }
+        foreach( $subscribers as $subscriber ){
+            try { $s->create($subscriber); } catch( Excp $e) { $e->log(); }
+        }
+    }
+
+
+    /**
+     * 任务接受响应: 阅读文章任务(验证是否符合接受条件)
+     * @return 符合返回 true, 不符合返回 false
+     */
+    public function onCheckinAccpet(){
+        return true;
+    }
+
+    /**
+     * 任务接受响应: 邀请好友阅读文章任务(验证是否符合接受条件)
+     * @return 符合返回 true, 不符合返回 false
+     */
+    public function onArticleInviteeReadingAccpet(){
+        return true;
+    }
+
+
+    /**
+     * 订阅器: 更新文章阅读量脚本 (打开文章行为发生时, 触发此函数, 可在后台暂停或关闭)
+     * @param array $behavior  行为(打开文章)数据结构
+     * @param array $subscriber  订阅者(更新文章阅读量脚本) 数据结构  ["ourter_id"=>"article-updateViewsScript...", "origin"=>"article" ... ]
+     * @param array $data  行为数据 ["article_id"=>"文章ID", "time"=>"打开时刻", "inviter"=>"邀请者信息"] ...
+     * @param array $env 环境数据 (session_id, user_id, client_ip, time, user, cookies...)
+     */
+    public function updateViewsScript( $behavior, $subscriber, $data, $env ) {
+        echo "\t updateViewsScript  {$data["article_id"]} {$data["time"]} \n";
+    }
+
+
+    /**
+     * 订阅器: 阅读文章任务 (打开文章行为发生时, 触发此函数, 可在后台暂停或关闭)
+     * @param array $behavior  行为(打开文章)数据结构
+     * @param array $subscriber  订阅者(更新文章阅读量脚本) 数据结构  ["ourter_id"=>"article-updateViewsScript...", "origin"=>"article" ... ]
+     * @param array $data  行为数据 ["article_id"=>"文章ID", "time"=>"打开时刻", "inviter"=>"邀请者信息"] ...
+     * @param array $env 环境数据 (session_id, user_id, client_ip, time, user, cookies...)
+     */
+    public function onArticleReadingChange( $behavior, $subscriber, $data, $env ) {
+        echo "\t onArticleReadingChange  {$data["article_id"]} {$data["time"]} \n";
+    }
+
+
+    /**
+     * 订阅器: 阅读文章任务 (关闭文章行为发生时, 触发此函数, 可在后台暂停或关闭)
+     * @param array $behavior  行为(打开文章)数据结构
+     * @param array $subscriber  订阅者(更新文章阅读量脚本) 数据结构  ["ourter_id"=>"article-updateViewsScript...", "origin"=>"article" ... ]
+     * @param array $data  行为数据 ["article_id"=>"文章ID", "time"=>"关闭时刻", "duration"=>"停留时长", "inviter"=>"邀请者信息"],
+     * @param array $env 环境数据 (session_id, user_id, client_ip, time, user, cookies...)
+     */
+    public function onArticleInviteeReadingChange( $behavior, $subscriber, $data, $env ) {
+        echo "\t onArticleInviteeReadingChange  {$data["article_id"]} {$data["time"]} {$data["duration"]} \n";
+    }
+
+
     /**
      * 触发用户行为(通知所有该行为订阅者)
      * @param string $slug 用户行为别名
