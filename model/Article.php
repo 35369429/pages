@@ -324,7 +324,15 @@ class Article extends Model {
      * @param array $env 环境数据 (session_id, user_id, client_ip, time, user, cookies...)
      */
     public function updateViewsScript( $behavior, $subscriber, $data, $env ) {
-        echo "\n\t updateViewsScript  {$data["article_id"]} {$data["time"]} \n";
+        $article_id = $data["article_id"];
+        if ( empty( $article_id ) ) {
+            return;
+        }
+
+        $this->updateBy( 'article_id', [
+            "article_id"=>$article_id,
+            "view_cnt" => 'DB::RAW(`view_cnt` + 1)'
+        ]);
     }
 
 
