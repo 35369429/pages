@@ -4,7 +4,7 @@
  * 推荐数据接口 
  *
  * 程序作者: XpmSE机器人
- * 最后修改: 2018-08-27 20:06:52
+ * 最后修改: 2019-01-04 14:53:55
  * 程序母版: /data/stor/private/templates/xpmsns/model/code/api/Name.php
  */
 namespace Xpmsns\Pages\Api;
@@ -23,6 +23,9 @@ class Recommend extends Api {
 	function __construct() {
 		parent::__construct();
 	}
+
+    
+    // @KEEP BEGIN
 
 	/**
 	 * 自定义函数 读取推荐文章
@@ -67,21 +70,50 @@ class Recommend extends Api {
         }
 
 		if ( array_key_exists('slug', $data) && !empty($data['slug']) ) {
-			return $inst->getContentsBySlug( $data['slug'], $keywords,$series, $exclude_articles, $page, $perpage, $now);
+            $resp = $inst->getContentsBySlug( $data['slug'], $keywords,$series, $exclude_articles, $page, $perpage, $now);
+
+            // 关联用户收藏数据
+            $art = new \Xpmsns\Pages\Model\Article;
+            $user = \Xpmsns\User\Model\User::info();
+            if ( !empty($user["user_id"]) && $query["withfavorite"] == 1 ) {
+                $art->withFavorite( $resp["contents"]["data"], $user["user_id"]);
+            }
+        
+            return $resp;
+
 		} else if ( array_key_exists('recommend_id', $data) && !empty($data['recommend_id']) ) {
-			return $inst->getContents( $data['recommend_id'], $keywords, $series,$exclude_articles,$page, $perpage, $now);
+            $resp = $inst->getContents( $data['recommend_id'], $keywords, $series,$exclude_articles,$page, $perpage, $now);
+
+             // 关联用户收藏数据
+             $art = new \Xpmsns\Pages\Model\Article;
+             $user = \Xpmsns\User\Model\User::info();
+             if ( !empty($user["user_id"]) && $query["withfavorite"] == 1 ) {
+                 $art->withFavorite( $resp["contents"]["data"], $user["user_id"]);
+             }
+
+            return $resp;
 		}
          
         if ( array_key_exists('slugs', $data) && !empty($data['slugs']) ) {
 			$data['slugs'] = explode(',', $data['slugs']);
 			$contents = [];
 			foreach ($data['slugs'] as $slug) {
-				$contents[$slug] = $inst->getContentsBySlug( trim($slug), $keywords,$series, $exclude_articles,$page, $perpage, $now); 
+                $contents[$slug] = $inst->getContentsBySlug( trim($slug), $keywords,$series, $exclude_articles,$page, $perpage, $now); 
+                
+                // 关联用户收藏数据
+                $art = new \Xpmsns\Pages\Model\Article;
+                $user = \Xpmsns\User\Model\User::info();
+                if ( !empty($user["user_id"]) && $query["withfavorite"] == 1 ) {
+                    $art->withFavorite( $contents[$slug]["contents"]["data"], $user["user_id"]);
+                }
 			}
 			return $contents;
 		}
 		throw new Excp('错误的查询参数', 402, ['query'=>$query, 'data'=>$data]);
-	}
+    }
+    
+    // @KEEP END
+
 
 	/**
 	 * 查询一条推荐记录
@@ -168,6 +200,7 @@ class Recommend extends Api {
 	*               	["_map_article"][$articles[n]]["like_cnt"], // article.like_cnt
 	*               	["_map_article"][$articles[n]]["dislike_cnt"], // article.dislike_cnt
 	*               	["_map_article"][$articles[n]]["comment_cnt"], // article.comment_cnt
+	*               	["_map_article"][$articles[n]]["series"], // article.series
 	*               	["_map_article"][$exclude_articles[n]]["created_at"], // article.created_at
 	*               	["_map_article"][$exclude_articles[n]]["updated_at"], // article.updated_at
 	*               	["_map_article"][$exclude_articles[n]]["outer_id"], // article.outer_id
@@ -204,6 +237,7 @@ class Recommend extends Api {
 	*               	["_map_article"][$exclude_articles[n]]["like_cnt"], // article.like_cnt
 	*               	["_map_article"][$exclude_articles[n]]["dislike_cnt"], // article.dislike_cnt
 	*               	["_map_article"][$exclude_articles[n]]["comment_cnt"], // article.comment_cnt
+	*               	["_map_article"][$exclude_articles[n]]["series"], // article.series
 	*               	["_map_event"][$events[n]]["created_at"], // event.created_at
 	*               	["_map_event"][$events[n]]["updated_at"], // event.updated_at
 	*               	["_map_event"][$events[n]]["slug"], // event.slug
@@ -254,6 +288,7 @@ class Recommend extends Api {
 	*               	["_map_album"][$albums[n]]["dislike_cnt"], // album.dislike_cnt
 	*               	["_map_album"][$albums[n]]["comment_cnt"], // album.comment_cnt
 	*               	["_map_album"][$albums[n]]["status"], // album.status
+	*               	["_map_album"][$albums[n]]["series"], // album.series
 	*               	["_map_series"][$series[n]]["created_at"], // series.created_at
 	*               	["_map_series"][$series[n]]["updated_at"], // series.updated_at
 	*               	["_map_series"][$series[n]]["name"], // series.name
@@ -505,6 +540,7 @@ class Recommend extends Api {
 	*               	["article"][$articles[n]]["like_cnt"], // article.like_cnt
 	*               	["article"][$articles[n]]["dislike_cnt"], // article.dislike_cnt
 	*               	["article"][$articles[n]]["comment_cnt"], // article.comment_cnt
+	*               	["article"][$articles[n]]["series"], // article.series
 	*               	["article"][$exclude_articles[n]]["created_at"], // article.created_at
 	*               	["article"][$exclude_articles[n]]["updated_at"], // article.updated_at
 	*               	["article"][$exclude_articles[n]]["outer_id"], // article.outer_id
@@ -541,6 +577,7 @@ class Recommend extends Api {
 	*               	["article"][$exclude_articles[n]]["like_cnt"], // article.like_cnt
 	*               	["article"][$exclude_articles[n]]["dislike_cnt"], // article.dislike_cnt
 	*               	["article"][$exclude_articles[n]]["comment_cnt"], // article.comment_cnt
+	*               	["article"][$exclude_articles[n]]["series"], // article.series
 	*               	["event"][$events[n]]["created_at"], // event.created_at
 	*               	["event"][$events[n]]["updated_at"], // event.updated_at
 	*               	["event"][$events[n]]["slug"], // event.slug
@@ -591,6 +628,7 @@ class Recommend extends Api {
 	*               	["album"][$albums[n]]["dislike_cnt"], // album.dislike_cnt
 	*               	["album"][$albums[n]]["comment_cnt"], // album.comment_cnt
 	*               	["album"][$albums[n]]["status"], // album.status
+	*               	["album"][$albums[n]]["series"], // album.series
 	*               	["series"][$series[n]]["created_at"], // series.created_at
 	*               	["series"][$series[n]]["updated_at"], // series.updated_at
 	*               	["series"][$series[n]]["name"], // series.name

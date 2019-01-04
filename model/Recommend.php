@@ -4,7 +4,7 @@
  * 推荐数据模型
  *
  * 程序作者: XpmSE机器人
- * 最后修改: 2018-08-27 20:06:55
+ * 最后修改: 2019-01-04 14:53:58
  * 程序母版: /data/stor/private/templates/xpmsns/model/code/model/Name.php
  */
 namespace Xpmsns\Pages\Model;
@@ -586,6 +586,8 @@ function getContentsBy( $type,  $recommend_id,  $keywords=[], $series=[], $exclu
 		// 格式化: 摘要图片
 		// 返回值: [{"url":"访问地址...", "path":"文件路径...", "origin":"原始文件访问地址..." }]
 		if ( array_key_exists('images', $rs ) ) {
+			$is_string = is_string($rs["images"]);
+			$rs["images"] = $is_string ? [$rs["images"]] : $rs["images"];
 			$rs["images"] = !is_array($rs["images"]) ? [] : $rs["images"];
 			foreach ($rs["images"] as & $file ) {
 				if ( is_array($file) && !empty($file['path']) ) {
@@ -596,6 +598,9 @@ function getContentsBy( $type,  $recommend_id,  $keywords=[], $series=[], $exclu
 				} else {
 					$file = [];
 				}
+			}
+			if ($is_string) {
+				$rs["images"] = current($rs["images"]);
 			}
 		}
 
@@ -838,6 +843,7 @@ function getContentsBy( $type,  $recommend_id,  $keywords=[], $series=[], $exclu
 	 *                $rs["_map_article"][$articles[n]]["like_cnt"], // article.like_cnt
 	 *                $rs["_map_article"][$articles[n]]["dislike_cnt"], // article.dislike_cnt
 	 *                $rs["_map_article"][$articles[n]]["comment_cnt"], // article.comment_cnt
+	 *                $rs["_map_article"][$articles[n]]["series"], // article.series
 	 *                $rs["_map_article"][$exclude_articles[n]]["created_at"], // article.created_at
 	 *                $rs["_map_article"][$exclude_articles[n]]["updated_at"], // article.updated_at
 	 *                $rs["_map_article"][$exclude_articles[n]]["outer_id"], // article.outer_id
@@ -874,6 +880,7 @@ function getContentsBy( $type,  $recommend_id,  $keywords=[], $series=[], $exclu
 	 *                $rs["_map_article"][$exclude_articles[n]]["like_cnt"], // article.like_cnt
 	 *                $rs["_map_article"][$exclude_articles[n]]["dislike_cnt"], // article.dislike_cnt
 	 *                $rs["_map_article"][$exclude_articles[n]]["comment_cnt"], // article.comment_cnt
+	 *                $rs["_map_article"][$exclude_articles[n]]["series"], // article.series
 	 *                $rs["_map_event"][$events[n]]["created_at"], // event.created_at
 	 *                $rs["_map_event"][$events[n]]["updated_at"], // event.updated_at
 	 *                $rs["_map_event"][$events[n]]["slug"], // event.slug
@@ -924,6 +931,7 @@ function getContentsBy( $type,  $recommend_id,  $keywords=[], $series=[], $exclu
 	 *                $rs["_map_album"][$albums[n]]["dislike_cnt"], // album.dislike_cnt
 	 *                $rs["_map_album"][$albums[n]]["comment_cnt"], // album.comment_cnt
 	 *                $rs["_map_album"][$albums[n]]["status"], // album.status
+	 *                $rs["_map_album"][$albums[n]]["series"], // album.series
 	 *                $rs["_map_series"][$series[n]]["created_at"], // series.created_at
 	 *                $rs["_map_series"][$series[n]]["updated_at"], // series.updated_at
 	 *                $rs["_map_series"][$series[n]]["name"], // series.name
@@ -1235,6 +1243,7 @@ function getContentsBy( $type,  $recommend_id,  $keywords=[], $series=[], $exclu
 	 *                $rs["_map_article"][$articles[n]]["like_cnt"], // article.like_cnt
 	 *                $rs["_map_article"][$articles[n]]["dislike_cnt"], // article.dislike_cnt
 	 *                $rs["_map_article"][$articles[n]]["comment_cnt"], // article.comment_cnt
+	 *                $rs["_map_article"][$articles[n]]["series"], // article.series
 	 *                $rs["_map_article"][$exclude_articles[n]]["created_at"], // article.created_at
 	 *                $rs["_map_article"][$exclude_articles[n]]["updated_at"], // article.updated_at
 	 *                $rs["_map_article"][$exclude_articles[n]]["outer_id"], // article.outer_id
@@ -1271,6 +1280,7 @@ function getContentsBy( $type,  $recommend_id,  $keywords=[], $series=[], $exclu
 	 *                $rs["_map_article"][$exclude_articles[n]]["like_cnt"], // article.like_cnt
 	 *                $rs["_map_article"][$exclude_articles[n]]["dislike_cnt"], // article.dislike_cnt
 	 *                $rs["_map_article"][$exclude_articles[n]]["comment_cnt"], // article.comment_cnt
+	 *                $rs["_map_article"][$exclude_articles[n]]["series"], // article.series
 	 *                $rs["_map_event"][$events[n]]["created_at"], // event.created_at
 	 *                $rs["_map_event"][$events[n]]["updated_at"], // event.updated_at
 	 *                $rs["_map_event"][$events[n]]["slug"], // event.slug
@@ -1321,6 +1331,7 @@ function getContentsBy( $type,  $recommend_id,  $keywords=[], $series=[], $exclu
 	 *                $rs["_map_album"][$albums[n]]["dislike_cnt"], // album.dislike_cnt
 	 *                $rs["_map_album"][$albums[n]]["comment_cnt"], // album.comment_cnt
 	 *                $rs["_map_album"][$albums[n]]["status"], // album.status
+	 *                $rs["_map_album"][$albums[n]]["series"], // album.series
 	 *                $rs["_map_series"][$series[n]]["created_at"], // series.created_at
 	 *                $rs["_map_series"][$series[n]]["updated_at"], // series.updated_at
 	 *                $rs["_map_series"][$series[n]]["name"], // series.name
@@ -1830,6 +1841,7 @@ function getContentsBy( $type,  $recommend_id,  $keywords=[], $series=[], $exclu
 	 *               	["article"][$articles[n]]["like_cnt"], // article.like_cnt
 	 *               	["article"][$articles[n]]["dislike_cnt"], // article.dislike_cnt
 	 *               	["article"][$articles[n]]["comment_cnt"], // article.comment_cnt
+	 *               	["article"][$articles[n]]["series"], // article.series
 	 *               	["article"][$exclude_articles[n]]["created_at"], // article.created_at
 	 *               	["article"][$exclude_articles[n]]["updated_at"], // article.updated_at
 	 *               	["article"][$exclude_articles[n]]["outer_id"], // article.outer_id
@@ -1866,6 +1878,7 @@ function getContentsBy( $type,  $recommend_id,  $keywords=[], $series=[], $exclu
 	 *               	["article"][$exclude_articles[n]]["like_cnt"], // article.like_cnt
 	 *               	["article"][$exclude_articles[n]]["dislike_cnt"], // article.dislike_cnt
 	 *               	["article"][$exclude_articles[n]]["comment_cnt"], // article.comment_cnt
+	 *               	["article"][$exclude_articles[n]]["series"], // article.series
 	 *               	["event"][$events[n]]["created_at"], // event.created_at
 	 *               	["event"][$events[n]]["updated_at"], // event.updated_at
 	 *               	["event"][$events[n]]["slug"], // event.slug
@@ -1916,6 +1929,7 @@ function getContentsBy( $type,  $recommend_id,  $keywords=[], $series=[], $exclu
 	 *               	["album"][$albums[n]]["dislike_cnt"], // album.dislike_cnt
 	 *               	["album"][$albums[n]]["comment_cnt"], // album.comment_cnt
 	 *               	["album"][$albums[n]]["status"], // album.status
+	 *               	["album"][$albums[n]]["series"], // album.series
 	 *               	["series"][$series[n]]["created_at"], // series.created_at
 	 *               	["series"][$series[n]]["updated_at"], // series.updated_at
 	 *               	["series"][$series[n]]["name"], // series.name

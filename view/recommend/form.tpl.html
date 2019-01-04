@@ -36,7 +36,7 @@ use \Xpmse\T;
 	<div class="form-group   ">
 		<label class="col-xs-2 control-label" for="title">主题<span class="text-danger">*</span></label>
 		<div class="col-xs-8">
-			<input class="form-control input-lg"  
+			<input class="form-control input-lg "  
 				type="text" 
 				id="title" name="title" 
 				placeholder="请填写推荐主题"  
@@ -49,7 +49,7 @@ use \Xpmse\T;
 	<div class="form-group   ">
 		<label class="col-xs-2 control-label" for="slug">别名<span class="text-danger">*</span></label>
 		<div class="col-xs-8">
-			<input class="form-control input-lg"  
+			<input class="form-control input-lg "  
 				type="text" 
 				id="slug" name="slug" 
 				placeholder="请填写推荐别名"  
@@ -62,7 +62,7 @@ use \Xpmse\T;
 	<div class="form-group   ">
 		<label class="col-xs-2 control-label" for="pos">位置代码</label>
 		<div class="col-xs-8">
-			<input class="form-control input-lg"  
+			<input class="form-control input-lg "  
 				type="text" 
 				id="pos" name="pos" 
 				placeholder="呈现位置代码"  
@@ -75,7 +75,7 @@ use \Xpmse\T;
 	<div class="form-group   ">
 		<label class="col-xs-2 control-label" for="style">样式代码</label>
 		<div class="col-xs-8">
-			<input class="form-control input-lg"  
+			<input class="form-control input-lg "  
 				type="text" 
 				id="style" name="style" 
 				placeholder="呈现样式代码"  
@@ -86,96 +86,96 @@ use \Xpmse\T;
 
 
 	<!-- 单选框: 推荐方式 (type) 开始  -->
-	<div class="form-group   ">
+	<div class="form-group    ">
 		<label class="col-xs-2 control-label" for="type">推荐方式</label>
 		<div class="col-xs-8">
 			<?php if (is_null($rs["type"])) { $rs["type"] = "auto"; } ?>
-<label class="css-input  css-radio css-radio-lg css-radio-primary push-10-r"><input  type="radio" name="type" data-uncheck-value="auto" value="auto" <?=("auto" == $rs["type"]) ? "checked" : ""?> > <span></span> 智能</label>
-<label class="css-input  css-radio css-radio-lg css-radio-primary push-10-r"><input  type="radio" name="type" data-uncheck-value="static" value="static" <?=("static" == $rs["type"]) ? "checked" : ""?> > <span></span> 静态</label>
+<label class="css-input  css-radio css-radio-lg css-radio-primary push-10-r"><input   type="radio" name="type" data-uncheck-value="auto" value="auto" <?=("auto" == $rs["type"]) ? "checked" : ""?> > <span></span> 智能</label>
+<label class="css-input  css-radio css-radio-lg css-radio-primary push-10-r"><input   type="radio" name="type" data-uncheck-value="static" value="static" <?=("static" == $rs["type"]) ? "checked" : ""?> > <span></span> 静态</label>
 			<div class="help-block"></div>
 		</div>
 	</div><!-- END 单选框: 推荐方式 (type) 开始  -->
 
 
 	<!-- 单选框: 内容类型 (ctype) 开始  -->
-	<div class="form-group   ">
+	<div class="form-group    ">
 		<label class="col-xs-2 control-label" for="ctype">内容类型</label>
 		<div class="col-xs-8">
 			<?php if (is_null($rs["ctype"])) { $rs["ctype"] = "article"; } ?>
-<label class="css-input  css-radio css-radio-lg css-radio-primary push-10-r"><input  type="radio" name="ctype" data-uncheck-value="all" value="all" <?=("all" == $rs["ctype"]) ? "checked" : ""?> > <span></span> 混合</label>
-<label class="css-input  css-radio css-radio-lg css-radio-primary push-10-r"><input  type="radio" name="ctype" data-uncheck-value="article" value="article" <?=("article" == $rs["ctype"]) ? "checked" : ""?> > <span></span> 图文</label>
-<label class="css-input  css-radio css-radio-lg css-radio-primary push-10-r"><input  type="radio" name="ctype" data-uncheck-value="event" value="event" <?=("event" == $rs["ctype"]) ? "checked" : ""?> > <span></span> 活动</label>
-<label class="css-input  css-radio css-radio-lg css-radio-primary push-10-r"><input  type="radio" name="ctype" data-uncheck-value="album" value="album" <?=("album" == $rs["ctype"]) ? "checked" : ""?> > <span></span> 图集</label>
+<label class="css-input  css-radio css-radio-lg css-radio-primary push-10-r"><input   type="radio" name="ctype" data-uncheck-value="all" value="all" <?=("all" == $rs["ctype"]) ? "checked" : ""?> > <span></span> 混合</label>
+<label class="css-input  css-radio css-radio-lg css-radio-primary push-10-r"><input   type="radio" name="ctype" data-uncheck-value="article" value="article" <?=("article" == $rs["ctype"]) ? "checked" : ""?> > <span></span> 图文</label>
+<label class="css-input  css-radio css-radio-lg css-radio-primary push-10-r"><input   type="radio" name="ctype" data-uncheck-value="event" value="event" <?=("event" == $rs["ctype"]) ? "checked" : ""?> > <span></span> 活动</label>
+<label class="css-input  css-radio css-radio-lg css-radio-primary push-10-r"><input   type="radio" name="ctype" data-uncheck-value="album" value="album" <?=("album" == $rs["ctype"]) ? "checked" : ""?> > <span></span> 图集</label>
 			<div class="help-block"></div>
 		</div>
 	</div><!-- END 单选框: 内容类型 (ctype) 开始  -->
 
 
 	<!-- 单选框: 必须有主题图片 (thumb_only) 开始  -->
-	<div class="form-group   ">
+	<div class="form-group    ">
 		<label class="col-xs-2 control-label" for="thumb_only">必须有主题图片</label>
 		<div class="col-xs-8">
 			<?php if (is_null($rs["thumb_only"])) { $rs["thumb_only"] = "0"; } ?>
-<label class="css-input  css-radio css-radio-lg css-radio-primary push-10-r"><input  type="radio" name="thumb_only" data-uncheck-value="1" value="1" <?=("1" == $rs["thumb_only"]) ? "checked" : ""?> > <span></span> 是</label>
-<label class="css-input  css-radio css-radio-lg css-radio-primary push-10-r"><input  type="radio" name="thumb_only" data-uncheck-value="0" value="0" <?=("0" == $rs["thumb_only"]) ? "checked" : ""?> > <span></span> 否</label>
+<label class="css-input  css-radio css-radio-lg css-radio-primary push-10-r"><input   type="radio" name="thumb_only" data-uncheck-value="1" value="1" <?=("1" == $rs["thumb_only"]) ? "checked" : ""?> > <span></span> 是</label>
+<label class="css-input  css-radio css-radio-lg css-radio-primary push-10-r"><input   type="radio" name="thumb_only" data-uncheck-value="0" value="0" <?=("0" == $rs["thumb_only"]) ? "checked" : ""?> > <span></span> 否</label>
 			<div class="help-block"></div>
 		</div>
 	</div><!-- END 单选框: 必须有主题图片 (thumb_only) 开始  -->
 
 
 	<!-- 单选框: 必须有视频内容 (video_only) 开始  -->
-	<div class="form-group   ">
+	<div class="form-group    ">
 		<label class="col-xs-2 control-label" for="video_only">必须有视频内容</label>
 		<div class="col-xs-8">
 			<?php if (is_null($rs["video_only"])) { $rs["video_only"] = "0"; } ?>
-<label class="css-input  css-radio css-radio-lg css-radio-primary push-10-r"><input  type="radio" name="video_only" data-uncheck-value="1" value="1" <?=("1" == $rs["video_only"]) ? "checked" : ""?> > <span></span> 是</label>
-<label class="css-input  css-radio css-radio-lg css-radio-primary push-10-r"><input  type="radio" name="video_only" data-uncheck-value="0" value="0" <?=("0" == $rs["video_only"]) ? "checked" : ""?> > <span></span> 否</label>
+<label class="css-input  css-radio css-radio-lg css-radio-primary push-10-r"><input   type="radio" name="video_only" data-uncheck-value="1" value="1" <?=("1" == $rs["video_only"]) ? "checked" : ""?> > <span></span> 是</label>
+<label class="css-input  css-radio css-radio-lg css-radio-primary push-10-r"><input   type="radio" name="video_only" data-uncheck-value="0" value="0" <?=("0" == $rs["video_only"]) ? "checked" : ""?> > <span></span> 否</label>
 			<div class="help-block"></div>
 		</div>
 	</div><!-- END 单选框: 必须有视频内容 (video_only) 开始  -->
 
 
 	<!-- 单选框: 根据用户喜好推荐 (bigdata_engine) 开始  -->
-	<div class="form-group   ">
+	<div class="form-group    ">
 		<label class="col-xs-2 control-label" for="bigdata_engine">根据用户喜好推荐</label>
 		<div class="col-xs-8">
 			<?php if (is_null($rs["bigdata_engine"])) { $rs["bigdata_engine"] = "0"; } ?>
-<label class="css-input  css-radio css-radio-lg css-radio-primary push-10-r"><input  type="radio" name="bigdata_engine" data-uncheck-value="1" value="1" <?=("1" == $rs["bigdata_engine"]) ? "checked" : ""?> > <span></span> 开启</label>
-<label class="css-input  css-radio css-radio-lg css-radio-primary push-10-r"><input  type="radio" name="bigdata_engine" data-uncheck-value="0" value="0" <?=("0" == $rs["bigdata_engine"]) ? "checked" : ""?> > <span></span> 关闭</label>
+<label class="css-input  css-radio css-radio-lg css-radio-primary push-10-r"><input   type="radio" name="bigdata_engine" data-uncheck-value="1" value="1" <?=("1" == $rs["bigdata_engine"]) ? "checked" : ""?> > <span></span> 开启</label>
+<label class="css-input  css-radio css-radio-lg css-radio-primary push-10-r"><input   type="radio" name="bigdata_engine" data-uncheck-value="0" value="0" <?=("0" == $rs["bigdata_engine"]) ? "checked" : ""?> > <span></span> 关闭</label>
 			<div class="help-block">开启喜好推荐，需要调用简墨云服务。请在系统管理中授权，允许推送文章和部分用户访问轨迹信息到简墨云数据分析引擎。</div>
 		</div>
 	</div><!-- END 单选框: 根据用户喜好推荐 (bigdata_engine) 开始  -->
 
 
 	<!-- 单选框: 统计周期 (period) 开始  -->
-	<div class="form-group   ">
+	<div class="form-group    ">
 		<label class="col-xs-2 control-label" for="period">统计周期</label>
 		<div class="col-xs-8">
 			<?php if (is_null($rs["period"])) { $rs["period"] = "auto"; } ?>
-<label class="css-input  css-radio css-radio-lg css-radio-primary push-10-r"><input  type="radio" name="period" data-uncheck-value="24hours" value="24hours" <?=("24hours" == $rs["period"]) ? "checked" : ""?> > <span></span> 24小时</label>
-<label class="css-input  css-radio css-radio-lg css-radio-primary push-10-r"><input  type="radio" name="period" data-uncheck-value="daily" value="daily" <?=("daily" == $rs["period"]) ? "checked" : ""?> > <span></span> 今日</label>
-<label class="css-input  css-radio css-radio-lg css-radio-primary push-10-r"><input  type="radio" name="period" data-uncheck-value="7days" value="7days" <?=("7days" == $rs["period"]) ? "checked" : ""?> > <span></span> 7天</label>
-<label class="css-input  css-radio css-radio-lg css-radio-primary push-10-r"><input  type="radio" name="period" data-uncheck-value="weekly" value="weekly" <?=("weekly" == $rs["period"]) ? "checked" : ""?> > <span></span> 本周</label>
-<label class="css-input  css-radio css-radio-lg css-radio-primary push-10-r"><input  type="radio" name="period" data-uncheck-value="30days" value="30days" <?=("30days" == $rs["period"]) ? "checked" : ""?> > <span></span> 30天</label>
-<label class="css-input  css-radio css-radio-lg css-radio-primary push-10-r"><input  type="radio" name="period" data-uncheck-value="monthly" value="monthly" <?=("monthly" == $rs["period"]) ? "checked" : ""?> > <span></span> 本月</label>
-<label class="css-input  css-radio css-radio-lg css-radio-primary push-10-r"><input  type="radio" name="period" data-uncheck-value="yearly" value="yearly" <?=("yearly" == $rs["period"]) ? "checked" : ""?> > <span></span> 今年</label>
-<label class="css-input  css-radio css-radio-lg css-radio-primary push-10-r"><input  type="radio" name="period" data-uncheck-value="unlimited" value="unlimited" <?=("unlimited" == $rs["period"]) ? "checked" : ""?> > <span></span> 无限</label>
+<label class="css-input  css-radio css-radio-lg css-radio-primary push-10-r"><input   type="radio" name="period" data-uncheck-value="24hours" value="24hours" <?=("24hours" == $rs["period"]) ? "checked" : ""?> > <span></span> 24小时</label>
+<label class="css-input  css-radio css-radio-lg css-radio-primary push-10-r"><input   type="radio" name="period" data-uncheck-value="daily" value="daily" <?=("daily" == $rs["period"]) ? "checked" : ""?> > <span></span> 今日</label>
+<label class="css-input  css-radio css-radio-lg css-radio-primary push-10-r"><input   type="radio" name="period" data-uncheck-value="7days" value="7days" <?=("7days" == $rs["period"]) ? "checked" : ""?> > <span></span> 7天</label>
+<label class="css-input  css-radio css-radio-lg css-radio-primary push-10-r"><input   type="radio" name="period" data-uncheck-value="weekly" value="weekly" <?=("weekly" == $rs["period"]) ? "checked" : ""?> > <span></span> 本周</label>
+<label class="css-input  css-radio css-radio-lg css-radio-primary push-10-r"><input   type="radio" name="period" data-uncheck-value="30days" value="30days" <?=("30days" == $rs["period"]) ? "checked" : ""?> > <span></span> 30天</label>
+<label class="css-input  css-radio css-radio-lg css-radio-primary push-10-r"><input   type="radio" name="period" data-uncheck-value="monthly" value="monthly" <?=("monthly" == $rs["period"]) ? "checked" : ""?> > <span></span> 本月</label>
+<label class="css-input  css-radio css-radio-lg css-radio-primary push-10-r"><input   type="radio" name="period" data-uncheck-value="yearly" value="yearly" <?=("yearly" == $rs["period"]) ? "checked" : ""?> > <span></span> 今年</label>
+<label class="css-input  css-radio css-radio-lg css-radio-primary push-10-r"><input   type="radio" name="period" data-uncheck-value="unlimited" value="unlimited" <?=("unlimited" == $rs["period"]) ? "checked" : ""?> > <span></span> 无限</label>
 			<div class="help-block"></div>
 		</div>
 	</div><!-- END 单选框: 统计周期 (period) 开始  -->
 
 
 	<!-- 单选框: 排序方式 (orderby) 开始  -->
-	<div class="form-group   ">
+	<div class="form-group    ">
 		<label class="col-xs-2 control-label" for="orderby">排序方式<span class="text-danger">*</span></label>
 		<div class="col-xs-8">
 			<?php if (is_null($rs["orderby"])) { $rs["orderby"] = "publish_time"; } ?>
-<label class="css-input  css-radio css-radio-lg css-radio-primary push-10-r"><input  type="radio" name="orderby" data-uncheck-value="publish_time" value="publish_time" <?=("publish_time" == $rs["orderby"]) ? "checked" : ""?> > <span></span> 最新发布</label>
-<label class="css-input  css-radio css-radio-lg css-radio-primary push-10-r"><input  type="radio" name="orderby" data-uncheck-value="publish_time_asc" value="publish_time_asc" <?=("publish_time_asc" == $rs["orderby"]) ? "checked" : ""?> > <span></span> 发布顺序</label>
-<label class="css-input  css-radio css-radio-lg css-radio-primary push-10-r"><input  type="radio" name="orderby" data-uncheck-value="view_cnt" value="view_cnt" <?=("view_cnt" == $rs["orderby"]) ? "checked" : ""?> > <span></span>  最多浏览</label>
-<label class="css-input  css-radio css-radio-lg css-radio-primary push-10-r"><input  type="radio" name="orderby" data-uncheck-value="like_cnt" value="like_cnt" <?=("like_cnt" == $rs["orderby"]) ? "checked" : ""?> > <span></span>  最多点赞</label>
-<label class="css-input  css-radio css-radio-lg css-radio-primary push-10-r"><input  type="radio" name="orderby" data-uncheck-value="comment_cnt" value="comment_cnt" <?=("comment_cnt" == $rs["orderby"]) ? "checked" : ""?> > <span></span>  最多评论</label>
-<label class="css-input  css-radio css-radio-lg css-radio-primary push-10-r"><input  type="radio" name="orderby" data-uncheck-value="dislike_cnt" value="dislike_cnt" <?=("dislike_cnt" == $rs["orderby"]) ? "checked" : ""?> > <span></span> 最多讨厌</label>
+<label class="css-input  css-radio css-radio-lg css-radio-primary push-10-r"><input   type="radio" name="orderby" data-uncheck-value="publish_time" value="publish_time" <?=("publish_time" == $rs["orderby"]) ? "checked" : ""?> > <span></span> 最新发布</label>
+<label class="css-input  css-radio css-radio-lg css-radio-primary push-10-r"><input   type="radio" name="orderby" data-uncheck-value="publish_time_asc" value="publish_time_asc" <?=("publish_time_asc" == $rs["orderby"]) ? "checked" : ""?> > <span></span> 发布顺序</label>
+<label class="css-input  css-radio css-radio-lg css-radio-primary push-10-r"><input   type="radio" name="orderby" data-uncheck-value="view_cnt" value="view_cnt" <?=("view_cnt" == $rs["orderby"]) ? "checked" : ""?> > <span></span>  最多浏览</label>
+<label class="css-input  css-radio css-radio-lg css-radio-primary push-10-r"><input   type="radio" name="orderby" data-uncheck-value="like_cnt" value="like_cnt" <?=("like_cnt" == $rs["orderby"]) ? "checked" : ""?> > <span></span>  最多点赞</label>
+<label class="css-input  css-radio css-radio-lg css-radio-primary push-10-r"><input   type="radio" name="orderby" data-uncheck-value="comment_cnt" value="comment_cnt" <?=("comment_cnt" == $rs["orderby"]) ? "checked" : ""?> > <span></span>  最多评论</label>
+<label class="css-input  css-radio css-radio-lg css-radio-primary push-10-r"><input   type="radio" name="orderby" data-uncheck-value="dislike_cnt" value="dislike_cnt" <?=("dislike_cnt" == $rs["orderby"]) ? "checked" : ""?> > <span></span> 最多讨厌</label>
 			<div class="help-block"></div>
 		</div>
 	</div><!-- END 单选框: 排序方式 (orderby) 开始  -->
@@ -184,7 +184,7 @@ use \Xpmse\T;
 	<div class="form-group   ">
 		<label class="col-xs-2 control-label" for="keywords">关键词</label>
 		<div class="col-xs-8">
-			<input class="form-control input-lg"  
+			<input class="form-control input-lg "  
 				type="text" 
 				id="keywords" name="keywords" 
 				placeholder="请填写搜索关键词"  
@@ -200,7 +200,7 @@ use \Xpmse\T;
 	<div class="form-group   ">
 		<label class="col-xs-2 control-label" for="series">指定系列</label>
 		<div class="col-xs-8"> 
-			<select class="js-select2 form-control input-lg" style="width: 100%;" 
+			<select class="js-select2 form-control input-lg "  style="width: 100%;" 
 					id="series" name="series" 
 					data-language="zh-CN"
 					data-param-cancelable="1"
@@ -230,9 +230,8 @@ use \Xpmse\T;
 				}
 			});
 		});
-		</script>
-		 
-	</div><!-- END 下拉选择(动态数据): 指定系列 (series) -->
+        </script>
+        	</div><!-- END 下拉选择(动态数据): 指定系列 (series) -->
 
 
 
@@ -241,7 +240,7 @@ use \Xpmse\T;
 	<div class="form-group   ">
 		<label class="col-xs-2 control-label" for="categories">指定栏目</label>
 		<div class="col-xs-8"> 
-			<select class="js-select2 form-control input-lg" style="width: 100%;" 
+			<select class="js-select2 form-control input-lg "  style="width: 100%;" 
 					id="categories" name="categories" 
 					data-language="zh-CN"
 					data-param-cancelable="1"
@@ -271,9 +270,8 @@ use \Xpmse\T;
 				}
 			});
 		});
-		</script>
-		 
-	</div><!-- END 下拉选择(动态数据): 指定栏目 (categories) -->
+        </script>
+        	</div><!-- END 下拉选择(动态数据): 指定栏目 (categories) -->
 
 
 
@@ -282,7 +280,7 @@ use \Xpmse\T;
 	<div class="form-group   ">
 		<label class="col-xs-2 control-label" for="articles">指定文章</label>
 		<div class="col-xs-8"> 
-			<select class="js-select2 form-control input-lg" style="width: 100%;" 
+			<select class="js-select2 form-control input-lg "  style="width: 100%;" 
 					id="articles" name="articles" 
 					data-language="zh-CN"
 					data-param-cancelable="1"
@@ -312,9 +310,8 @@ use \Xpmse\T;
 				}
 			});
 		});
-		</script>
-		 
-	</div><!-- END 下拉选择(动态数据): 指定文章 (articles) -->
+        </script>
+        	</div><!-- END 下拉选择(动态数据): 指定文章 (articles) -->
 
 
 
@@ -323,7 +320,7 @@ use \Xpmse\T;
 	<div class="form-group   ">
 		<label class="col-xs-2 control-label" for="exclude_articles">排除文章</label>
 		<div class="col-xs-8"> 
-			<select class="js-select2 form-control input-lg" style="width: 100%;" 
+			<select class="js-select2 form-control input-lg "  style="width: 100%;" 
 					id="exclude_articles" name="exclude_articles" 
 					data-language="zh-CN"
 					data-param-cancelable="1"
@@ -353,9 +350,8 @@ use \Xpmse\T;
 				}
 			});
 		});
-		</script>
-		 
-	</div><!-- END 下拉选择(动态数据): 排除文章 (exclude_articles) -->
+        </script>
+        	</div><!-- END 下拉选择(动态数据): 排除文章 (exclude_articles) -->
 
 
 
@@ -364,7 +360,7 @@ use \Xpmse\T;
 	<div class="form-group   ">
 		<label class="col-xs-2 control-label" for="events">指定活动</label>
 		<div class="col-xs-8"> 
-			<select class="js-select2 form-control input-lg" style="width: 100%;" 
+			<select class="js-select2 form-control input-lg "  style="width: 100%;" 
 					id="events" name="events" 
 					data-language="zh-CN"
 					data-param-cancelable="1"
@@ -394,9 +390,8 @@ use \Xpmse\T;
 				}
 			});
 		});
-		</script>
-		 
-	</div><!-- END 下拉选择(动态数据): 指定活动 (events) -->
+        </script>
+        	</div><!-- END 下拉选择(动态数据): 指定活动 (events) -->
 
 
 
@@ -405,7 +400,7 @@ use \Xpmse\T;
 	<div class="form-group   ">
 		<label class="col-xs-2 control-label" for="albums">指定图集</label>
 		<div class="col-xs-8"> 
-			<select class="js-select2 form-control input-lg" style="width: 100%;" 
+			<select class="js-select2 form-control input-lg "  style="width: 100%;" 
 					id="albums" name="albums" 
 					data-language="zh-CN"
 					data-param-cancelable="1"
@@ -435,9 +430,8 @@ use \Xpmse\T;
 				}
 			});
 		});
-		</script>
-		 
-	</div><!-- END 下拉选择(动态数据): 指定图集 (albums) -->
+        </script>
+        	</div><!-- END 下拉选择(动态数据): 指定图集 (albums) -->
 
 
 
@@ -445,7 +439,7 @@ use \Xpmse\T;
 	<div class="form-group   ">
 		<label class="col-xs-2 control-label" for="summary">简介<span class="text-danger">*</span></label>
 		<div class="col-xs-8">
-			<textarea class="form-control input-lg"  
+			<textarea class="form-control input-lg "   
 				type="text" 
 				id="summary" name="summary" rows="4"
 				placeholder="请填写推荐简介"><?=T::v('<%=summary  | e(\'html\')%>', $rs )?></textarea> 
@@ -457,7 +451,7 @@ use \Xpmse\T;
 
 
 	<!-- 单图上传: 图标 (icon) 开始  -->
-	<div class="xpmse-images  " name="icon">
+	<div class="xpmse-image  " name="icon">
 		<div class="form-group " >
 			<label class="col-xs-2 control-label" for="icon">图标</label>
 			<div class="col-xs-8">
@@ -488,7 +482,7 @@ use \Xpmse\T;
 	<!-- 多图片组上传: 摘要图片 (images) 开始  -->
 	<div class="xpmse-image-groups-content    draggable-column">
 		
-		<?php if(count($rs['images']) < 1): ?><?php $steps = 1 -  count($rs['images']); for( $i=0; $i<$steps; $i++){ $rs['images'][] = [];} ?><?php endif ?><?php if( is_array($rs['images']) && utils::array_depth($rs['images']) != 2): ?><?php foreach($rs['images'] as $idx=>$it ){ $rs['images'][$idx] = ['img'=>$it]; }?><?php endif ?><?php foreach ( $rs['images'] as $img ): ?> 
+		<?php if(@count($rs['images']) < 1): ?><?php $steps = 1 -  @count($rs['images']); for( $i=0; $i<$steps; $i++){ $rs['images'][] = [];} ?><?php endif ?><?php if( is_array($rs['images']) && utils::array_depth($rs['images']) != 2): ?><?php foreach($rs['images'] as $idx=>$it ){ $rs['images'][$idx] = ['img'=>$it]; }?><?php endif ?><?php foreach ( $rs['images'] as $__key=>$img ): ?> 
 		<div class="xpmse-image-groups draggable-item" data-nested="images" data-multiple="1">
 			<div class="form-group " >
 				<label class="col-xs-2 control-label draggable-handler" for="images">摘要图片</label>
@@ -572,12 +566,12 @@ use \Xpmse\T;
 
 
 	<!-- 单选框: 状态 (status) 开始  -->
-	<div class="form-group   ">
+	<div class="form-group    ">
 		<label class="col-xs-2 control-label" for="status">状态</label>
 		<div class="col-xs-8">
 			<?php if (is_null($rs["status"])) { $rs["status"] = "on"; } ?>
-<label class="css-input  css-radio css-radio-lg css-radio-primary push-10-r"><input  type="radio" name="status" data-uncheck-value="on" value="on" <?=("on" == $rs["status"]) ? "checked" : ""?> > <span></span> 开启</label>
-<label class="css-input  css-radio css-radio-lg css-radio-primary push-10-r"><input  type="radio" name="status" data-uncheck-value="off" value="off" <?=("off" == $rs["status"]) ? "checked" : ""?> > <span></span> 关闭</label>
+<label class="css-input  css-radio css-radio-lg css-radio-primary push-10-r"><input   type="radio" name="status" data-uncheck-value="on" value="on" <?=("on" == $rs["status"]) ? "checked" : ""?> > <span></span> 开启</label>
+<label class="css-input  css-radio css-radio-lg css-radio-primary push-10-r"><input   type="radio" name="status" data-uncheck-value="off" value="off" <?=("off" == $rs["status"]) ? "checked" : ""?> > <span></span> 关闭</label>
 			<div class="help-block"></div>
 		</div>
 	</div><!-- END 单选框: 状态 (status) 开始  -->
