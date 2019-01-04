@@ -110,6 +110,34 @@ class Article extends Model {
         return time()-intval($start);
     }
 
+
+    /**
+     * 关联某人收藏信息
+     * @param array &$articles 文章信息
+     * @param string $user_id 用户ID 
+     * @return null
+     */
+    function withFavorite( & $articles, $user_id, $select=["favorite.origin_outer_id","favorite.favorite_id","user.user_id","user.name","user.nickname","user.mobile","favorite.origin","favorite.outer_id","favorite.created_at","favorite.updated_at"]) {
+
+        $article_ids = array_column( $articles, "article_id");
+        if ( empty( $article_ids) ) {
+            return;
+        }
+
+        // 读取收藏信息
+        $fav = new \Xpmsns\User\Model\Favorite;
+        $origin_outer_ids = array_map(function($article_id) use( $user_id ){ return "article_{$user_id}_{$article_id}"; }, $article_ids);
+        $favorites = $fav->getInByOriginOuterId($origin_outer_ids, $select);
+
+        foreach($articles as & $article ) {
+            $origin_outer_id = "article_{$user_id}_{$article['article_id']}";
+            $article["favorite"] = $favorites[$origin_outer_id];
+            if (is_null($article["favorite"]) ){
+                $article["favorite"] = [];
+            }
+        }
+    }
+
 	
 	/**
 	 * 数据表结构

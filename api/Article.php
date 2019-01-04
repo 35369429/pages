@@ -381,7 +381,13 @@ class Article extends Api {
 		$resp['end'] = $resultData['end'];
 		$resp['frontend'] = $resultData['frontend'];
 		$resp['frontstart'] = $resultData['frontstart'];
-		
+        
+        // 关联用户收藏数据
+        $user = \Xpmsns\User\Model\User::info();
+        if ( !empty($user["user_id"]) && $query["withfavorite"] == 1 ) {
+            $art->withFavorite( $resp["data"], $user["user_id"]);
+        }
+
 		return $resp;
 	}
 
