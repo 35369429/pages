@@ -4,7 +4,7 @@
  * 商品控制器
  *
  * 程序作者: XpmSE机器人
- * 最后修改: 2019-01-08 16:10:06
+ * 最后修改: 2019-01-08 16:15:43
  * 程序母版: /data/stor/private/templates/xpmsns/model/code/controller/Name.php
  */
 
