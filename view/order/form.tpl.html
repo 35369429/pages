@@ -36,7 +36,7 @@ use \Xpmse\T;
 	<div class="form-group   ">
 		<label class="col-xs-2 control-label" for="outer_id">外部ID</label>
 		<div class="col-xs-8">
-			<input class="form-control input-lg"  
+			<input class="form-control input-lg disabled"  disabled
 				type="text" 
 				id="outer_id" name="outer_id" 
 				placeholder=""  
@@ -52,7 +52,7 @@ use \Xpmse\T;
 	<div class="form-group   ">
 		<label class="col-xs-2 control-label" for="goods_ids">商品清单</label>
 		<div class="col-xs-8"> 
-			<select class="js-select2 form-control input-lg" style="width: 100%;" 
+			<select class="js-select2 form-control input-lg "  style="width: 100%;" 
 					id="goods_ids" name="goods_ids" 
 					data-language="zh-CN"
 					data-param-cancelable="1"
@@ -82,9 +82,8 @@ use \Xpmse\T;
 				}
 			});
 		});
-		</script>
-		 
-	</div><!-- END 下拉选择(动态数据): 商品清单 (goods_ids) -->
+        </script>
+        	</div><!-- END 下拉选择(动态数据): 商品清单 (goods_ids) -->
 
 
 
@@ -93,7 +92,7 @@ use \Xpmse\T;
 	<div class="form-group   ">
 		<label class="col-xs-2 control-label" for="item_ids">单品清单</label>
 		<div class="col-xs-8"> 
-			<select class="js-select2 form-control input-lg" style="width: 100%;" 
+			<select class="js-select2 form-control input-lg "  style="width: 100%;" 
 					id="item_ids" name="item_ids" 
 					data-language="zh-CN"
 					data-param-cancelable="1"
@@ -123,15 +122,14 @@ use \Xpmse\T;
 				}
 			});
 		});
-		</script>
-		 
-	</div><!-- END 下拉选择(动态数据): 单品清单 (item_ids) -->
+        </script>
+        	</div><!-- END 下拉选择(动态数据): 单品清单 (item_ids) -->
 
 	<!-- 单行文本: 订单金额 (total) 开始  -->
 	<div class="form-group   ">
 		<label class="col-xs-2 control-label" for="total">订单金额</label>
 		<div class="col-xs-8">
-			<input class="form-control input-lg"  
+			<input class="form-control input-lg disabled"  disabled
 				type="text" 
 				id="total" name="total" 
 				placeholder=""  
@@ -144,7 +142,7 @@ use \Xpmse\T;
 	<div class="form-group   ">
 		<label class="col-xs-2 control-label" for="freight">运费</label>
 		<div class="col-xs-8">
-			<input class="form-control input-lg"  
+			<input class="form-control input-lg disabled"  disabled
 				type="text" 
 				id="freight" name="freight" 
 				placeholder=""  
@@ -157,7 +155,7 @@ use \Xpmse\T;
 	<div class="form-group   ">
 		<label class="col-xs-2 control-label" for="total_cost">实付金额</label>
 		<div class="col-xs-8">
-			<input class="form-control input-lg"  
+			<input class="form-control input-lg "  
 				type="text" 
 				id="total_cost" name="total_cost" 
 				placeholder="请输入实付金额"  
@@ -170,7 +168,7 @@ use \Xpmse\T;
 	<div class="form-group   ">
 		<label class="col-xs-2 control-label" for="freight_cost">实付运费</label>
 		<div class="col-xs-8">
-			<input class="form-control input-lg"  
+			<input class="form-control input-lg "  
 				type="text" 
 				id="freight_cost" name="freight_cost" 
 				placeholder=""  
@@ -183,7 +181,7 @@ use \Xpmse\T;
 	<div class="form-group   ">
 		<label class="col-xs-2 control-label" for="money_cost">消费货币</label>
 		<div class="col-xs-8">
-			<input class="form-control input-lg"  
+			<input class="form-control input-lg "  
 				type="text" 
 				id="money_cost" name="money_cost" 
 				placeholder="请输入消费金货币"  
@@ -196,7 +194,7 @@ use \Xpmse\T;
 	<div class="form-group   ">
 		<label class="col-xs-2 control-label" for="coin_cost">消费积分</label>
 		<div class="col-xs-8">
-			<input class="form-control input-lg"  
+			<input class="form-control input-lg "  
 				type="text" 
 				id="coin_cost" name="coin_cost" 
 				placeholder="请输入消费积分"  
@@ -209,7 +207,7 @@ use \Xpmse\T;
 	<div class="form-group   ">
 		<label class="col-xs-2 control-label" for="bitcoin_cost">消费代币</label>
 		<div class="col-xs-8">
-			<input class="form-control input-lg"  
+			<input class="form-control input-lg "  
 				type="text" 
 				id="bitcoin_cost" name="bitcoin_cost" 
 				placeholder="请输入消费代币"  
@@ -220,17 +218,53 @@ use \Xpmse\T;
 
 
 
-	<!-- 文本域: 支付明细 (payment_detail) 开始  -->
-	<div class="form-group   ">
-		<label class="col-xs-2 control-label" for="payment_detail">支付明细</label>
-		<div class="col-xs-8">
-			<textarea class="form-control input-lg"  
-				type="text" 
-				id="payment_detail" name="payment_detail" rows=""
-				placeholder=""><?=T::v('<%=payment_detail  | e(\'html\')%>', $rs )?></textarea> 
-			<div class="help-block">货币单位/代币/积分换算比例</div>
+
+    <!-- JSON编辑器(json-editor): 支付明细 (payment_detail) 开始  -->
+	<style type="text/css">
+		.CodeMirror {
+			border: 1px solid #e6e6e6;
+		}
+	</style>
+	<div class="json-editor draggable-item" data-name="payment_detail" >
+
+		<div class="form-group">
+			<label class="col-xs-2 control-label">支付明细</label>
+			<div class="col-xs-8">
+                <textarea class="form-control input-lg disabled" name="payment_detail"  type="text"  rows="6" 
+                    disabled
+                    placeholder="请填写自定义JavaScript代码"><?=T::v('<%=payment_detail | json_encode(constant(\'JSON_PRETTY_PRINT\') b-or constant(\'JSON_UNESCAPED_UNICODE\') )%>', $rs )?></textarea>
+                <input type="hidden" name="__json_cols" value="payment_detail" />
+			</div>
+			<div class="col-xs-2 push-10-t"></div>
 		</div>
-	</div><!-- END 文本域: 支付明细 (payment_detail) -->
+
+		<!-- helper -->
+		<div class="form-group helper"> 
+			<label class="col-xs-2 control-label" for="schedule"></label>
+			<div class="col-xs-9">
+				<div class="help-block">货币单位/代币/积分换算比例</div>
+			</div>
+		</div><!-- end helper -->
+	</div>
+    <!-- END 代码编辑器(json-editor): 支付明细 (payment_detail)  -->
+
+    <script type="text/javascript">
+    
+        // 载入代码编辑器
+		if ( typeof CodeMirror != 'undefined' ) {
+			
+			var txt_id = (new Date).getTime() + Math.floor(Math.random()*1000000+1);
+			$('textarea[name="payment_detail"]').attr('id', txt_id );
+			CodeMirror.fromTextArea(document.getElementById(txt_id), {
+				lineNumbers: true,
+				mode: "text/javascript",
+                readOnly: true,
+				viewportMargin: Infinity
+			}).on('change', function( cm ){ // 更新 txt 数据
+				document.getElementById(txt_id).value = cm.getValue();
+			});
+		}
+	</script>
 
 
 
@@ -239,7 +273,7 @@ use \Xpmse\T;
 	<div class="form-group   ">
 		<label class="col-xs-2 control-label" for="user_id">用户</label>
 		<div class="col-xs-8"> 
-			<select class="js-select2 form-control input-lg" style="width: 100%;" 
+			<select class="js-select2 form-control input-lg "  style="width: 100%;" 
 					id="user_id" name="user_id" 
 					data-language="zh-CN"
 					data-param-cancelable="1"
@@ -269,15 +303,14 @@ use \Xpmse\T;
 				}
 			});
 		});
-		</script>
-		 
-	</div><!-- END 下拉选择(动态数据): 用户 (user_id) -->
+        </script>
+        	</div><!-- END 下拉选择(动态数据): 用户 (user_id) -->
 
 	<!-- 单行文本: 收件人 (name) 开始  -->
 	<div class="form-group   ">
 		<label class="col-xs-2 control-label" for="name">收件人</label>
 		<div class="col-xs-8">
-			<input class="form-control input-lg"  
+			<input class="form-control input-lg "  
 				type="text" 
 				id="name" name="name" 
 				placeholder="请填写收件人信息"  
@@ -290,7 +323,7 @@ use \Xpmse\T;
 	<div class="form-group   ">
 		<label class="col-xs-2 control-label" for="area">国家地区</label>
 		<div class="col-xs-8">
-			<input class="form-control input-lg"  
+			<input class="form-control input-lg "  
 				type="text" 
 				id="area" name="area" 
 				placeholder="请输入国家/地区"  
@@ -303,7 +336,7 @@ use \Xpmse\T;
 	<div class="form-group   ">
 		<label class="col-xs-2 control-label" for="prvn">省份</label>
 		<div class="col-xs-8">
-			<input class="form-control input-lg"  
+			<input class="form-control input-lg "  
 				type="text" 
 				id="prvn" name="prvn" 
 				placeholder="请输入省份名称"  
@@ -316,7 +349,7 @@ use \Xpmse\T;
 	<div class="form-group   ">
 		<label class="col-xs-2 control-label" for="city">城市</label>
 		<div class="col-xs-8">
-			<input class="form-control input-lg"  
+			<input class="form-control input-lg "  
 				type="text" 
 				id="city" name="city" 
 				placeholder="请输入城市名称"  
@@ -329,7 +362,7 @@ use \Xpmse\T;
 	<div class="form-group   ">
 		<label class="col-xs-2 control-label" for="town">区县</label>
 		<div class="col-xs-8">
-			<input class="form-control input-lg"  
+			<input class="form-control input-lg "  
 				type="text" 
 				id="town" name="town" 
 				placeholder="请输入区县名称"  
@@ -342,7 +375,7 @@ use \Xpmse\T;
 	<div class="form-group   ">
 		<label class="col-xs-2 control-label" for="zipcode">邮编</label>
 		<div class="col-xs-8">
-			<input class="form-control input-lg"  
+			<input class="form-control input-lg "  
 				type="text" 
 				id="zipcode" name="zipcode" 
 				placeholder="请输入邮编"  
@@ -355,7 +388,7 @@ use \Xpmse\T;
 	<div class="form-group   ">
 		<label class="col-xs-2 control-label" for="address">收货地址</label>
 		<div class="col-xs-8">
-			<input class="form-control input-lg"  
+			<input class="form-control input-lg "  
 				type="text" 
 				id="address" name="address" 
 				placeholder="请填写收货地址"  
@@ -368,7 +401,7 @@ use \Xpmse\T;
 	<div class="form-group   ">
 		<label class="col-xs-2 control-label" for="mobile">联系电话</label>
 		<div class="col-xs-8">
-			<input class="form-control input-lg"  
+			<input class="form-control input-lg "  
 				type="text" 
 				id="mobile" name="mobile" 
 				placeholder="请填写联系电话"  
@@ -379,14 +412,14 @@ use \Xpmse\T;
 
 
 	<!-- 单选框: 付款方式 (payment) 开始  -->
-	<div class="form-group   ">
+	<div class="form-group    ">
 		<label class="col-xs-2 control-label" for="payment">付款方式</label>
 		<div class="col-xs-8">
 			<?php if (is_null($rs["payment"])) { $rs["payment"] = "wechat"; } ?>
-<label class="css-input  css-radio css-radio-lg css-radio-primary push-10-r"><input  type="radio" name="payment" data-uncheck-value="alipay" value="alipay" <?=("alipay" == $rs["payment"]) ? "checked" : ""?> > <span></span> 支付宝</label>
-<label class="css-input  css-radio css-radio-lg css-radio-primary push-10-r"><input  type="radio" name="payment" data-uncheck-value="wechat" value="wechat" <?=("wechat" == $rs["payment"]) ? "checked" : ""?> > <span></span> 微信</label>
-<label class="css-input  css-radio css-radio-lg css-radio-primary push-10-r"><input  type="radio" name="payment" data-uncheck-value="coin" value="coin" <?=("coin" == $rs["payment"]) ? "checked" : ""?> > <span></span> 积分</label>
-<label class="css-input  css-radio css-radio-lg css-radio-primary push-10-r"><input  type="radio" name="payment" data-uncheck-value="balance" value="balance" <?=("balance" == $rs["payment"]) ? "checked" : ""?> > <span></span> 余额</label>
+<label class="css-input  css-radio css-radio-lg css-radio-primary push-10-r"><input   type="radio" name="payment" data-uncheck-value="alipay" value="alipay" <?=("alipay" == $rs["payment"]) ? "checked" : ""?> > <span></span> 支付宝</label>
+<label class="css-input  css-radio css-radio-lg css-radio-primary push-10-r"><input   type="radio" name="payment" data-uncheck-value="wechat" value="wechat" <?=("wechat" == $rs["payment"]) ? "checked" : ""?> > <span></span> 微信</label>
+<label class="css-input  css-radio css-radio-lg css-radio-primary push-10-r"><input   type="radio" name="payment" data-uncheck-value="coin" value="coin" <?=("coin" == $rs["payment"]) ? "checked" : ""?> > <span></span> 积分</label>
+<label class="css-input  css-radio css-radio-lg css-radio-primary push-10-r"><input   type="radio" name="payment" data-uncheck-value="balance" value="balance" <?=("balance" == $rs["payment"]) ? "checked" : ""?> > <span></span> 余额</label>
 			<div class="help-block"></div>
 		</div>
 	</div><!-- END 单选框: 付款方式 (payment) 开始  -->
@@ -398,7 +431,7 @@ use \Xpmse\T;
 	<div class="form-group   ">
 		<label class="col-xs-2 control-label" for="shipping_id">物流</label>
 		<div class="col-xs-8"> 
-			<select class="js-select2 form-control input-lg" style="width: 100%;" 
+			<select class="js-select2 form-control input-lg "  style="width: 100%;" 
 					id="shipping_id" name="shipping_id" 
 					data-language="zh-CN"
 					data-param-cancelable="0"
@@ -416,14 +449,13 @@ use \Xpmse\T;
 			</select>
 			<div class="help-block"></div>
 		</div>
-		 
-	</div><!-- END 下拉选择(动态数据): 物流 (shipping_id) -->
+			</div><!-- END 下拉选择(动态数据): 物流 (shipping_id) -->
 
 	<!-- 单行文本: 物流单号 (tracking_no) 开始  -->
 	<div class="form-group   ">
 		<label class="col-xs-2 control-label" for="tracking_no">物流单号</label>
 		<div class="col-xs-8">
-			<input class="form-control input-lg"  
+			<input class="form-control input-lg "  
 				type="text" 
 				id="tracking_no" name="tracking_no" 
 				placeholder="请输入物流单号"  
@@ -436,7 +468,7 @@ use \Xpmse\T;
 	<div class="form-group   ">
 		<label class="col-xs-2 control-label" for="freight_in">物流成本</label>
 		<div class="col-xs-8">
-			<input class="form-control input-lg"  
+			<input class="form-control input-lg disabled"  disabled
 				type="text" 
 				id="freight_in" name="freight_in" 
 				placeholder=""  
@@ -447,24 +479,24 @@ use \Xpmse\T;
 
 
 	<!-- 单选框: 订单状态 (status) 开始  -->
-	<div class="form-group   ">
+	<div class="form-group    ">
 		<label class="col-xs-2 control-label" for="status">订单状态</label>
 		<div class="col-xs-8">
 			<?php if (is_null($rs["status"])) { $rs["status"] = "wait_pay"; } ?>
-<label class="css-input  css-radio css-radio-lg css-radio-primary push-10-r"><input  type="radio" name="status" data-uncheck-value="wait_pay" value="wait_pay" <?=("wait_pay" == $rs["status"]) ? "checked" : ""?> > <span></span> 待支付</label>
-<label class="css-input  css-radio css-radio-lg css-radio-primary push-10-r"><input  type="radio" name="status" data-uncheck-value="pay_complete" value="pay_complete" <?=("pay_complete" == $rs["status"]) ? "checked" : ""?> > <span></span> 已付款</label>
-<label class="css-input  css-radio css-radio-lg css-radio-primary push-10-r"><input  type="radio" name="status" data-uncheck-value="wait_confirm" value="wait_confirm" <?=("wait_confirm" == $rs["status"]) ? "checked" : ""?> > <span></span> 待确认</label>
-<label class="css-input  css-radio css-radio-lg css-radio-primary push-10-r"><input  type="radio" name="status" data-uncheck-value="wait_shipping" value="wait_shipping" <?=("wait_shipping" == $rs["status"]) ? "checked" : ""?> > <span></span> 待发货</label>
-<label class="css-input  css-radio css-radio-lg css-radio-primary push-10-r"><input  type="radio" name="status" data-uncheck-value="shiping" value="shiping" <?=("shiping" == $rs["status"]) ? "checked" : ""?> > <span></span> 已发货</label>
-<label class="css-input  css-radio css-radio-lg css-radio-primary push-10-r"><input  type="radio" name="status" data-uncheck-value="wait_comment" value="wait_comment" <?=("wait_comment" == $rs["status"]) ? "checked" : ""?> > <span></span> 待评价</label>
-<label class="css-input  css-radio css-radio-lg css-radio-primary push-10-r"><input  type="radio" name="status" data-uncheck-value="cancel" value="cancel" <?=("cancel" == $rs["status"]) ? "checked" : ""?> > <span></span> 已取消</label>
-<label class="css-input  css-radio css-radio-lg css-radio-primary push-10-r"><input  type="radio" name="status" data-uncheck-value="apply_refund" value="apply_refund" <?=("apply_refund" == $rs["status"]) ? "checked" : ""?> > <span></span> 申请退款</label>
-<label class="css-input  css-radio css-radio-lg css-radio-primary push-10-r"><input  type="radio" name="status" data-uncheck-value="refunding" value="refunding" <?=("refunding" == $rs["status"]) ? "checked" : ""?> > <span></span> 退款中</label>
-<label class="css-input  css-radio css-radio-lg css-radio-primary push-10-r"><input  type="radio" name="status" data-uncheck-value="refund_complete" value="refund_complete" <?=("refund_complete" == $rs["status"]) ? "checked" : ""?> > <span></span> 退款完毕</label>
-<label class="css-input  css-radio css-radio-lg css-radio-primary push-10-r"><input  type="radio" name="status" data-uncheck-value="apply_exchange" value="apply_exchange" <?=("apply_exchange" == $rs["status"]) ? "checked" : ""?> > <span></span> 申请换货</label>
-<label class="css-input  css-radio css-radio-lg css-radio-primary push-10-r"><input  type="radio" name="status" data-uncheck-value="exchanging" value="exchanging" <?=("exchanging" == $rs["status"]) ? "checked" : ""?> > <span></span> 换货中</label>
-<label class="css-input  css-radio css-radio-lg css-radio-primary push-10-r"><input  type="radio" name="status" data-uncheck-value="exchange_complete" value="exchange_complete" <?=("exchange_complete" == $rs["status"]) ? "checked" : ""?> > <span></span> 换货完毕</label>
-<label class="css-input  css-radio css-radio-lg css-radio-primary push-10-r"><input  type="radio" name="status" data-uncheck-value="complete" value="complete" <?=("complete" == $rs["status"]) ? "checked" : ""?> > <span></span> 完成</label>
+<label class="css-input  css-radio css-radio-lg css-radio-primary push-10-r"><input   type="radio" name="status" data-uncheck-value="wait_pay" value="wait_pay" <?=("wait_pay" == $rs["status"]) ? "checked" : ""?> > <span></span> 待支付</label>
+<label class="css-input  css-radio css-radio-lg css-radio-primary push-10-r"><input   type="radio" name="status" data-uncheck-value="pay_complete" value="pay_complete" <?=("pay_complete" == $rs["status"]) ? "checked" : ""?> > <span></span> 已付款</label>
+<label class="css-input  css-radio css-radio-lg css-radio-primary push-10-r"><input   type="radio" name="status" data-uncheck-value="wait_confirm" value="wait_confirm" <?=("wait_confirm" == $rs["status"]) ? "checked" : ""?> > <span></span> 待确认</label>
+<label class="css-input  css-radio css-radio-lg css-radio-primary push-10-r"><input   type="radio" name="status" data-uncheck-value="wait_shipping" value="wait_shipping" <?=("wait_shipping" == $rs["status"]) ? "checked" : ""?> > <span></span> 待发货</label>
+<label class="css-input  css-radio css-radio-lg css-radio-primary push-10-r"><input   type="radio" name="status" data-uncheck-value="shiping" value="shiping" <?=("shiping" == $rs["status"]) ? "checked" : ""?> > <span></span> 已发货</label>
+<label class="css-input  css-radio css-radio-lg css-radio-primary push-10-r"><input   type="radio" name="status" data-uncheck-value="wait_comment" value="wait_comment" <?=("wait_comment" == $rs["status"]) ? "checked" : ""?> > <span></span> 待评价</label>
+<label class="css-input  css-radio css-radio-lg css-radio-primary push-10-r"><input   type="radio" name="status" data-uncheck-value="cancel" value="cancel" <?=("cancel" == $rs["status"]) ? "checked" : ""?> > <span></span> 已取消</label>
+<label class="css-input  css-radio css-radio-lg css-radio-primary push-10-r"><input   type="radio" name="status" data-uncheck-value="apply_refund" value="apply_refund" <?=("apply_refund" == $rs["status"]) ? "checked" : ""?> > <span></span> 申请退款</label>
+<label class="css-input  css-radio css-radio-lg css-radio-primary push-10-r"><input   type="radio" name="status" data-uncheck-value="refunding" value="refunding" <?=("refunding" == $rs["status"]) ? "checked" : ""?> > <span></span> 退款中</label>
+<label class="css-input  css-radio css-radio-lg css-radio-primary push-10-r"><input   type="radio" name="status" data-uncheck-value="refund_complete" value="refund_complete" <?=("refund_complete" == $rs["status"]) ? "checked" : ""?> > <span></span> 退款完毕</label>
+<label class="css-input  css-radio css-radio-lg css-radio-primary push-10-r"><input   type="radio" name="status" data-uncheck-value="apply_exchange" value="apply_exchange" <?=("apply_exchange" == $rs["status"]) ? "checked" : ""?> > <span></span> 申请换货</label>
+<label class="css-input  css-radio css-radio-lg css-radio-primary push-10-r"><input   type="radio" name="status" data-uncheck-value="exchanging" value="exchanging" <?=("exchanging" == $rs["status"]) ? "checked" : ""?> > <span></span> 换货中</label>
+<label class="css-input  css-radio css-radio-lg css-radio-primary push-10-r"><input   type="radio" name="status" data-uncheck-value="exchange_complete" value="exchange_complete" <?=("exchange_complete" == $rs["status"]) ? "checked" : ""?> > <span></span> 换货完毕</label>
+<label class="css-input  css-radio css-radio-lg css-radio-primary push-10-r"><input   type="radio" name="status" data-uncheck-value="complete" value="complete" <?=("complete" == $rs["status"]) ? "checked" : ""?> > <span></span> 完成</label>
 			<div class="help-block"></div>
 		</div>
 	</div><!-- END 单选框: 订单状态 (status) 开始  -->
@@ -475,7 +507,7 @@ use \Xpmse\T;
 	<div class="form-group   ">
 		<label class="col-xs-2 control-label" for="remark">备注</label>
 		<div class="col-xs-8">
-			<textarea class="form-control input-lg"  
+			<textarea class="form-control input-lg "   
 				type="text" 
 				id="remark" name="remark" rows="4"
 				placeholder=""><?=T::v('<%=remark  | e(\'html\')%>', $rs )?></textarea> 
@@ -485,17 +517,53 @@ use \Xpmse\T;
 
 
 
-	<!-- 文本域: 快照 (snapshot) 开始  -->
-	<div class="form-group   ">
-		<label class="col-xs-2 control-label" for="snapshot">快照</label>
-		<div class="col-xs-8">
-			<textarea class="form-control input-lg"  
-				type="text" 
-				id="snapshot" name="snapshot" rows="4"
-				placeholder=""><?=T::v('<%=snapshot  | e(\'html\')%>', $rs )?></textarea> 
-			<div class="help-block"></div>
+
+    <!-- JSON编辑器(json-editor): 快照 (snapshot) 开始  -->
+	<style type="text/css">
+		.CodeMirror {
+			border: 1px solid #e6e6e6;
+		}
+	</style>
+	<div class="json-editor draggable-item" data-name="snapshot" >
+
+		<div class="form-group">
+			<label class="col-xs-2 control-label">快照</label>
+			<div class="col-xs-8">
+                <textarea class="form-control input-lg disabled" name="snapshot"  type="text"  rows="6" 
+                    disabled
+                    placeholder="请填写自定义JavaScript代码"><?=T::v('<%=snapshot | json_encode(constant(\'JSON_PRETTY_PRINT\') b-or constant(\'JSON_UNESCAPED_UNICODE\') )%>', $rs )?></textarea>
+                <input type="hidden" name="__json_cols" value="snapshot" />
+			</div>
+			<div class="col-xs-2 push-10-t"></div>
 		</div>
-	</div><!-- END 文本域: 快照 (snapshot) -->
+
+		<!-- helper -->
+		<div class="form-group helper"> 
+			<label class="col-xs-2 control-label" for="schedule"></label>
+			<div class="col-xs-9">
+				<div class="help-block"></div>
+			</div>
+		</div><!-- end helper -->
+	</div>
+    <!-- END 代码编辑器(json-editor): 快照 (snapshot)  -->
+
+    <script type="text/javascript">
+    
+        // 载入代码编辑器
+		if ( typeof CodeMirror != 'undefined' ) {
+			
+			var txt_id = (new Date).getTime() + Math.floor(Math.random()*1000000+1);
+			$('textarea[name="snapshot"]').attr('id', txt_id );
+			CodeMirror.fromTextArea(document.getElementById(txt_id), {
+				lineNumbers: true,
+				mode: "text/javascript",
+                readOnly: true,
+				viewportMargin: Infinity
+			}).on('change', function( cm ){ // 更新 txt 数据
+				document.getElementById(txt_id).value = cm.getValue();
+			});
+		}
+	</script>
 
 				<!--  提交按钮 -->
 				<div class="block block-quickpanel sidebar-mini">

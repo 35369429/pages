@@ -4,7 +4,7 @@
  * 订单数据模型
  *
  * 程序作者: XpmSE机器人
- * 最后修改: 2018-12-28 10:17:07
+ * 最后修改: 2019-01-08 16:05:22
  * 程序母版: /data/stor/private/templates/xpmsns/model/code/model/Name.php
  */
 namespace Xpmsns\Pages\Model;
@@ -462,6 +462,7 @@ class Order extends Model {
 	 *                $rs["user_group_id"], // user.group_id
 	 *                $rs["user_name"], // user.name
 	 *                $rs["user_idno"], // user.idno
+	 *                $rs["user_idtype"], // user.idtype
 	 *                $rs["user_iddoc"], // user.iddoc
 	 *                $rs["user_nickname"], // user.nickname
 	 *                $rs["user_sex"], // user.sex
@@ -471,6 +472,8 @@ class Order extends Model {
 	 *                $rs["user_headimgurl"], // user.headimgurl
 	 *                $rs["user_language"], // user.language
 	 *                $rs["user_birthday"], // user.birthday
+	 *                $rs["user_bio"], // user.bio
+	 *                $rs["user_bgimgurl"], // user.bgimgurl
 	 *                $rs["user_mobile"], // user.mobile
 	 *                $rs["user_mobile_nation"], // user.mobile_nation
 	 *                $rs["user_mobile_full"], // user.mobile_full
@@ -493,9 +496,9 @@ class Order extends Model {
 	 *                $rs["user_password"], // user.password
 	 *                $rs["user_pay_password"], // user.pay_password
 	 *                $rs["user_status"], // user.status
-	 *                $rs["user_bio"], // user.bio
-	 *                $rs["user_bgimgurl"], // user.bgimgurl
-	 *                $rs["user_idtype"], // user.idtype
+	 *                $rs["user_inviter"], // user.inviter
+	 *                $rs["user_follower_cnt"], // user.follower_cnt
+	 *                $rs["user_following_cnt"], // user.following_cnt
 	 *                $rs["_map_goods"][$goods_ids[n]]["created_at"], // goods.created_at
 	 *                $rs["_map_goods"][$goods_ids[n]]["updated_at"], // goods.updated_at
 	 *                $rs["_map_goods"][$goods_ids[n]]["instance"], // goods.instance
@@ -543,6 +546,7 @@ class Order extends Model {
 	 *                $rs["_map_item"][$item_ids[n]]["status"], // item.status
 	 *                $rs["_map_item"][$item_ids[n]]["images"], // item.images
 	 *                $rs["_map_item"][$item_ids[n]]["content"], // item.content
+	 *                $rs["_map_item"][$item_ids[n]]["shipping_ids"], // item.shipping_ids
 	 *                $rs["shipping_created_at"], // shipping.created_at
 	 *                $rs["shipping_updated_at"], // shipping.updated_at
 	 *                $rs["shipping_company"], // shipping.company
@@ -811,6 +815,7 @@ class Order extends Model {
 	 *               	["user_group_id"], // user.group_id
 	 *               	["user_name"], // user.name
 	 *               	["user_idno"], // user.idno
+	 *               	["user_idtype"], // user.idtype
 	 *               	["user_iddoc"], // user.iddoc
 	 *               	["user_nickname"], // user.nickname
 	 *               	["user_sex"], // user.sex
@@ -820,6 +825,8 @@ class Order extends Model {
 	 *               	["user_headimgurl"], // user.headimgurl
 	 *               	["user_language"], // user.language
 	 *               	["user_birthday"], // user.birthday
+	 *               	["user_bio"], // user.bio
+	 *               	["user_bgimgurl"], // user.bgimgurl
 	 *               	["user_mobile"], // user.mobile
 	 *               	["user_mobile_nation"], // user.mobile_nation
 	 *               	["user_mobile_full"], // user.mobile_full
@@ -842,9 +849,9 @@ class Order extends Model {
 	 *               	["user_password"], // user.password
 	 *               	["user_pay_password"], // user.pay_password
 	 *               	["user_status"], // user.status
-	 *               	["user_bio"], // user.bio
-	 *               	["user_bgimgurl"], // user.bgimgurl
-	 *               	["user_idtype"], // user.idtype
+	 *               	["user_inviter"], // user.inviter
+	 *               	["user_follower_cnt"], // user.follower_cnt
+	 *               	["user_following_cnt"], // user.following_cnt
 	 *               	["goods"][$goods_ids[n]]["created_at"], // goods.created_at
 	 *               	["goods"][$goods_ids[n]]["updated_at"], // goods.updated_at
 	 *               	["goods"][$goods_ids[n]]["instance"], // goods.instance
@@ -892,6 +899,7 @@ class Order extends Model {
 	 *               	["item"][$item_ids[n]]["status"], // item.status
 	 *               	["item"][$item_ids[n]]["images"], // item.images
 	 *               	["item"][$item_ids[n]]["content"], // item.content
+	 *               	["item"][$item_ids[n]]["shipping_ids"], // item.shipping_ids
 	 *               	["shipping_created_at"], // shipping.created_at
 	 *               	["shipping_updated_at"], // shipping.updated_at
 	 *               	["shipping_company"], // shipping.company
