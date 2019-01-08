@@ -904,15 +904,31 @@ class Article extends Model {
         	}
         }
 
+        // 标签
+        $qbt = Utils::getTab('xpmsns_pages_article_tag as at', "{none}")->query();
+        $qbt->leftJoin('xpmsns_pages_tag as t' , 'at.tag_id', '=', 't.tag_id');
+        $qbt->whereIn('at.article_id', $article_ids);
+        $datat = $qbt->select('at.article_id', 't.tag_id','t.name')->get()->toArray();
+        $tags = [];
+        foreach ($datat as $t ) {
+        	$id  = $t['article_id'];
+        	$tags[$id][] = $t;
+        }
 
 		$map = [];
 		foreach ($data as & $rs ) {
 			$this->format($rs);
-			// 增加分类
-			$rs['category'] = empty($cates[$rs['article_id']]) ?  [] : $cates[$rs['article_id']];
-			$rs['category_last'] = last($rs['category']);
+            // 增加分类
+            if ( is_array($tags[$rs['article_id']]) ) {
+                $rs['tags'] = array_column($tags[$rs['article_id']],"name");
+                $rs['tag_ids'] = array_column($tags[$rs['article_id']],"tag_id");
+            }
+
+            $rs['tag'] = empty($tags[$rs['article_id']]) ?  [] : $tags[$rs['article_id']];
+            $rs['category'] = empty($cates[$rs['article_id']]) ?  [] : $cates[$rs['article_id']];
+            $rs['category_last'] = last($rs['category']);
+            $rs['tag_last'] = last($rs['tag']);
 			$map[$rs['article_id']] = $rs;
-			
 		}
 		return $map;
 	}
