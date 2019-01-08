@@ -169,6 +169,13 @@ class Item extends Model {
             $item["available_sum"] = $item["sum"] - $item["shipped_sum"];
         }
 
+         // 计算呈现界面
+         if ( isset( $item["content"]) ) {
+            $render = new \Mina\Delta\Render();
+            $render->loadByHTML($item["content"]);
+			$item['ap_content'] = $render->wxapp(); // 生成小程序正文
+        }
+
     }
 
     /**

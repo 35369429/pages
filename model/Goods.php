@@ -119,7 +119,29 @@ class Goods extends Model {
         if ( !is_array($goods) ) {
             return;
         }
+        
+        // 计算呈现界面
+        if ( isset( $goods["content"]) ) {
+            $render = new \Mina\Delta\Render();
+            $render->loadByHTML($goods["content"]);
+			$goods['ap_content'] = $render->wxapp(); // 生成小程序正文
+        }
 
+        if ( isset( $goods["content_serv"]) ) {
+            $render = new \Mina\Delta\Render();
+            $render->loadByHTML($goods["content_serv"]);
+			$goods['ap_content_serv'] = $render->wxapp(); // 生成小程序正文
+        }
+
+        if ( isset( $goods["content_faq"]) ) {
+            $render = new \Mina\Delta\Render();
+            $render->loadByHTML($goods["content_faq"]);
+			$goods['ap_content_faq'] = $render->wxapp(); // 生成小程序正文
+        }
+
+
+
+        // 没有单品
         if (empty($goods["items"])  || !is_array($goods["items"]) ) {
             $goods["lower_price_min"] = 0;
             $goods["shipped_sum"] = intval($goods["shipped_sum"]);
@@ -131,6 +153,7 @@ class Goods extends Model {
             return;
         }
 
+        // 处理单品
         $items = & $goods["items"];
 
 
