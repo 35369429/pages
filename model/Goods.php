@@ -4,7 +4,7 @@
  * 商品数据模型
  *
  * 程序作者: XpmSE机器人
- * 最后修改: 2019-01-08 16:15:44
+ * 最后修改: 2019-01-08 16:41:30
  * 程序母版: /data/stor/private/templates/xpmsns/model/code/model/Name.php
  */
 namespace Xpmsns\Pages\Model;
@@ -121,8 +121,10 @@ class Goods extends Model {
         }
 
         if (empty($goods["items"])  || !is_array($goods["items"]) ) {
-            $goods["lower_price"] = intval($goods["lower_price"]);
             $goods["lower_price_min"] = 0;
+            $goods["shipped_sum"] = intval($goods["shipped_sum"]);
+            $goods["sku_sum"] = intval($goods["sku_sum"]);
+            $goods["lower_price"] = intval($goods["lower_price"]);
             $goods["lower_coin"] = intval($goods["lower_price"]);
             $goods["lower_coin_max"] = intval($goods["lower_price"]);
             $goods["available_sum"] = intval( $goods["sku_sum"]  ) - intval( $goods["shipped_sum"]  ) ;
@@ -185,8 +187,8 @@ class Goods extends Model {
         if ( empty($item_id) ) {
            $this->updateBy("goods_id", [
                 "goods_id"=>$goods_id,
-                "sku_sum" => 'DB::RAW(sku_sum-'.intval($quantity).')',
-                "shipped_sum" => 'DB::RAW(shipped_sum+'.intval($quantity).')',
+                "sku_sum" => 'DB::RAW(IFNULL(sku_sum,0)-'.intval($quantity).')',
+                "shipped_sum" => 'DB::RAW(IFNULL(shipped_sum,0)+'.intval($quantity).')',
            ]);
         } else {
             $it = new Item;
@@ -198,8 +200,8 @@ class Goods extends Model {
         if ( empty($item_id) ) {
             $this->updateBy("goods_id", [
                  "goods_id"=>$goods_id,
-                 "sku_sum" => 'DB::RAW(sku_sum+'.intval($quantity).')',
-                 "shipped_sum" => 'DB::RAW(shipped_sum-'.intval($quantity).')',
+                 "sku_sum" => 'DB::RAW(IFNULL(sku_sum,0)+'.intval($quantity).')',
+                 "shipped_sum" => 'DB::RAW(IFNULL(shipped_sum,0)-'.intval($quantity).')',
             ]);
          } else {
              $it = new Item;
@@ -211,7 +213,7 @@ class Goods extends Model {
         if ( empty($item_id) ) {
             $this->updateBy("goods_id", [
                  "goods_id"=>$goods_id,
-                 "shipped_sum" => 'DB::RAW(shipped_sum-'.intval($quantity).')',
+                 "shipped_sum" => 'DB::RAW(IFNULL(shipped_sum,0)-'.intval($quantity).')',
             ]);
          } else {
              $it = new Item;

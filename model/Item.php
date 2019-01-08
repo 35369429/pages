@@ -83,8 +83,8 @@ class Item extends Model {
 
         $this->updateBy("item_id", [
             "item_id"=>$item_id,
-            "sum" => 'DB::RAW(sum-'.intval($quantity).')',
-            "shipped_sum" => 'DB::RAW(shipped_sum+'.intval($quantity).')',
+            "sum" => 'DB::RAW(IFNULL(sum,0)-'.intval($quantity).')',
+            "shipped_sum" => 'DB::RAW(IFNULL(shipped_sum,0)+'.intval($quantity).')',
        ]);
     }
 
@@ -93,14 +93,14 @@ class Item extends Model {
         $this->updateBy("item_id", [
             "item_id"=>$item_id,
             "sum" => 'DB::RAW(sum-'.intval($quantity).')',
-            "shipped_sum" => 'DB::RAW(shipped_sum+'.intval($quantity).')',
+            "shipped_sum" => 'DB::RAW(IFNULL(shipped_sum,0)+'.intval($quantity).')',
        ]);
     }
 
     function success( $item_id, $quantity ) {
         $this->updateBy("item_id", [
             "item_id"=>$item_id,
-            "shipped_sum" => 'DB::RAW(shipped_sum-'.intval($quantity).')',
+            "shipped_sum" => 'DB::RAW(IFNULL(shipped_sum,0)-'.intval($quantity).')',
        ]);
     }
 
