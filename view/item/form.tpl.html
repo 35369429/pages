@@ -39,7 +39,7 @@ use \Xpmse\T;
 	<div class="form-group   ">
 		<label class="col-xs-2 control-label" for="goods_id">所属商品</label>
 		<div class="col-xs-8"> 
-			<select class="js-select2 form-control input-lg" style="width: 100%;" 
+			<select class="js-select2 form-control input-lg "  style="width: 100%;" 
 					id="goods_id" name="goods_id" 
 					data-language="zh-CN"
 					data-param-cancelable="0"
@@ -57,14 +57,13 @@ use \Xpmse\T;
 			</select>
 			<div class="help-block"></div>
 		</div>
-		 
-	</div><!-- END 下拉选择(动态数据): 所属商品 (goods_id) -->
+			</div><!-- END 下拉选择(动态数据): 所属商品 (goods_id) -->
 
 	<!-- 单行文本: 名称 (name) 开始  -->
 	<div class="form-group   ">
 		<label class="col-xs-2 control-label" for="name">名称</label>
 		<div class="col-xs-8">
-			<input class="form-control input-lg"  
+			<input class="form-control input-lg "  
 				type="text" 
 				id="name" name="name" 
 				placeholder="请填写名称"  
@@ -77,7 +76,7 @@ use \Xpmse\T;
 
 	<!-- JSON文本数组: 参数 (params) <?=T::v('<%=params%>', $rs )?> 开始   minLength(1) -->
 	<div class="xpmse-json-input-panel"  >
-		<?php if(count($rs['params']) < 1): ?><?php $steps = 1 -  count($rs['params']); for( $i=0; $i<$steps; $i++){ $rs['params'][] = [];} ?><?php endif ?><?php if( is_array($rs['params']) && utils::array_depth($rs['params']) != 2): ?><?php foreach($rs['params'] as $idx=>$it ){ $rs['params'][$idx] = ['val'=>$it]; }?><?php endif ?><?php foreach ( $rs['params'] as $__key=>$val ): ?>		<div class="xpmse-json-input  "  name="params__origin"   data-nested="params__origin" data-multiple="1" >
+		<?php if(@count($rs['params']) < 1): ?><?php $steps = 1 -  @count($rs['params']); for( $i=0; $i<$steps; $i++){ $rs['params'][] = [];} ?><?php endif ?><?php if( is_array($rs['params']) && utils::array_depth($rs['params']) != 2): ?><?php foreach($rs['params'] as $idx=>$it ){ $rs['params'][$idx] = ['val'=>$it]; }?><?php endif ?><?php foreach ( $rs['params'] as $__key=>$val ): ?>		<div class="xpmse-json-input  "  name="params__origin"   data-nested="params__origin" data-multiple="1" >
 			<div class="form-group " >
 				<label class="col-xs-2 control-label" for="params">参数 </label>
 				<div class="col-xs-2">
@@ -89,7 +88,7 @@ use \Xpmse\T;
 					<div class="help-block"></div>
 				</div>
 				<div class="col-xs-6">
-					<input class="form-control input-lg"  
+					<input class="form-control input-lg "   
 						type="text" 
 						data-name="value"
 						placeholder="请输入数值"
@@ -168,7 +167,7 @@ use \Xpmse\T;
 	<div class="form-group   ">
 		<label class="col-xs-2 control-label" for="price">单价</label>
 		<div class="col-xs-8">
-			<input class="form-control input-lg"  
+			<input class="form-control input-lg "  
 				type="text" 
 				id="price" name="price" 
 				placeholder="请输入单价"  
@@ -181,7 +180,7 @@ use \Xpmse\T;
 	<div class="form-group   ">
 		<label class="col-xs-2 control-label" for="price_low">底价</label>
 		<div class="col-xs-8">
-			<input class="form-control input-lg"  
+			<input class="form-control input-lg "  
 				type="text" 
 				id="price_low" name="price_low" 
 				placeholder="请输入进价,  用户不可见,用于统计核算"  
@@ -194,7 +193,7 @@ use \Xpmse\T;
 	<div class="form-group   ">
 		<label class="col-xs-2 control-label" for="price_in">进价</label>
 		<div class="col-xs-8">
-			<input class="form-control input-lg"  
+			<input class="form-control input-lg "  
 				type="text" 
 				id="price_in" name="price_in" 
 				placeholder="请输入进价,  用户不可见,用于统计核算"  
@@ -207,7 +206,7 @@ use \Xpmse\T;
 	<div class="form-group   ">
 		<label class="col-xs-2 control-label" for="price_val">保价</label>
 		<div class="col-xs-8">
-			<input class="form-control input-lg"  
+			<input class="form-control input-lg "  
 				type="text" 
 				id="price_val" name="price_val" 
 				placeholder="请输入保价,  用户不可见,用于物流配送"  
@@ -218,34 +217,34 @@ use \Xpmse\T;
 
 
 	<!-- 单选框: 优惠方式 (promotion) 开始  -->
-	<div class="form-group   ">
+	<div class="form-group    ">
 		<label class="col-xs-2 control-label" for="promotion">优惠方式</label>
 		<div class="col-xs-8">
 			<?php if (is_null($rs["promotion"])) { $rs["promotion"] = ""; } ?>
-<label class="css-input  css-radio css-radio-lg css-radio-primary push-10-r"><input  type="radio" name="promotion" data-uncheck-value="discount" value="discount" <?=("discount" == $rs["promotion"]) ? "checked" : ""?> > <span></span> 折扣</label>
-<label class="css-input  css-radio css-radio-lg css-radio-primary push-10-r"><input  type="radio" name="promotion" data-uncheck-value="reduction" value="reduction" <?=("reduction" == $rs["promotion"]) ? "checked" : ""?> > <span></span> 满减</label>
-<label class="css-input  css-radio css-radio-lg css-radio-primary push-10-r"><input  type="radio" name="promotion" data-uncheck-value="vip" value="vip" <?=("vip" == $rs["promotion"]) ? "checked" : ""?> > <span></span> 会员</label>
-<label class="css-input  css-radio css-radio-lg css-radio-primary push-10-r"><input  type="radio" name="promotion" data-uncheck-value="free-shipping" value="free-shipping" <?=("free-shipping" == $rs["promotion"]) ? "checked" : ""?> > <span></span> 包邮</label>
-<label class="css-input  css-radio css-radio-lg css-radio-primary push-10-r"><input  type="radio" name="promotion" data-uncheck-value="invite" value="invite" <?=("invite" == $rs["promotion"]) ? "checked" : ""?> > <span></span> 邀请</label>
-<label class="css-input  css-radio css-radio-lg css-radio-primary push-10-r"><input  type="radio" name="promotion" data-uncheck-value="share" value="share" <?=("share" == $rs["promotion"]) ? "checked" : ""?> > <span></span> 分享</label>
+<label class="css-input  css-radio css-radio-lg css-radio-primary push-10-r"><input   type="radio" name="promotion" data-uncheck-value="discount" value="discount" <?=("discount" == $rs["promotion"]) ? "checked" : ""?> > <span></span> 折扣</label>
+<label class="css-input  css-radio css-radio-lg css-radio-primary push-10-r"><input   type="radio" name="promotion" data-uncheck-value="reduction" value="reduction" <?=("reduction" == $rs["promotion"]) ? "checked" : ""?> > <span></span> 满减</label>
+<label class="css-input  css-radio css-radio-lg css-radio-primary push-10-r"><input   type="radio" name="promotion" data-uncheck-value="vip" value="vip" <?=("vip" == $rs["promotion"]) ? "checked" : ""?> > <span></span> 会员</label>
+<label class="css-input  css-radio css-radio-lg css-radio-primary push-10-r"><input   type="radio" name="promotion" data-uncheck-value="free-shipping" value="free-shipping" <?=("free-shipping" == $rs["promotion"]) ? "checked" : ""?> > <span></span> 包邮</label>
+<label class="css-input  css-radio css-radio-lg css-radio-primary push-10-r"><input   type="radio" name="promotion" data-uncheck-value="invite" value="invite" <?=("invite" == $rs["promotion"]) ? "checked" : ""?> > <span></span> 邀请</label>
+<label class="css-input  css-radio css-radio-lg css-radio-primary push-10-r"><input   type="radio" name="promotion" data-uncheck-value="share" value="share" <?=("share" == $rs["promotion"]) ? "checked" : ""?> > <span></span> 分享</label>
 			<div class="help-block"></div>
 		</div>
 	</div><!-- END 单选框: 优惠方式 (promotion) 开始  -->
 
 
 	<!-- 单选框: 付款方式 (payment) 开始  -->
-	<div class="form-group   ">
+	<div class="form-group    ">
 		<label class="col-xs-2 control-label" for="payment">付款方式</label>
 		<div class="col-xs-8">
 			<?php if (is_null($rs["payment"])) { $rs["payment"] = ""; } ?>
-<label class="css-input  css-radio css-radio-lg css-radio-primary push-10-r"><input  type="radio" name="payment" data-uncheck-value="alipay" value="alipay" <?=("alipay" == $rs["payment"]) ? "checked" : ""?> > <span></span> 支付宝</label>
-<label class="css-input  css-radio css-radio-lg css-radio-primary push-10-r"><input  type="radio" name="payment" data-uncheck-value="wechat" value="wechat" <?=("wechat" == $rs["payment"]) ? "checked" : ""?> > <span></span> 微信</label>
-<label class="css-input  css-radio css-radio-lg css-radio-primary push-10-r"><input  type="radio" name="payment" data-uncheck-value="account" value="account" <?=("account" == $rs["payment"]) ? "checked" : ""?> > <span></span> 余额</label>
-<label class="css-input  css-radio css-radio-lg css-radio-primary push-10-r"><input  type="radio" name="payment" data-uncheck-value="coin" value="coin" <?=("coin" == $rs["payment"]) ? "checked" : ""?> > <span></span> 积分</label>
-<label class="css-input  css-radio css-radio-lg css-radio-primary push-10-r"><input  type="radio" name="payment" data-uncheck-value="vipcard" value="vipcard" <?=("vipcard" == $rs["payment"]) ? "checked" : ""?> > <span></span> 会员卡</label>
-<label class="css-input  css-radio css-radio-lg css-radio-primary push-10-r"><input  type="radio" name="payment" data-uncheck-value="giftcard" value="giftcard" <?=("giftcard" == $rs["payment"]) ? "checked" : ""?> > <span></span> 礼品卡</label>
-<label class="css-input  css-radio css-radio-lg css-radio-primary push-10-r"><input  type="radio" name="payment" data-uncheck-value="cash" value="cash" <?=("cash" == $rs["payment"]) ? "checked" : ""?> > <span></span> 货到付款</label>
-<label class="css-input  css-radio css-radio-lg css-radio-primary push-10-r"><input  type="radio" name="payment" data-uncheck-value="bitcoin" value="bitcoin" <?=("bitcoin" == $rs["payment"]) ? "checked" : ""?> > <span></span> 比特币</label>
+<label class="css-input  css-radio css-radio-lg css-radio-primary push-10-r"><input   type="radio" name="payment" data-uncheck-value="alipay" value="alipay" <?=("alipay" == $rs["payment"]) ? "checked" : ""?> > <span></span> 支付宝</label>
+<label class="css-input  css-radio css-radio-lg css-radio-primary push-10-r"><input   type="radio" name="payment" data-uncheck-value="wechat" value="wechat" <?=("wechat" == $rs["payment"]) ? "checked" : ""?> > <span></span> 微信</label>
+<label class="css-input  css-radio css-radio-lg css-radio-primary push-10-r"><input   type="radio" name="payment" data-uncheck-value="account" value="account" <?=("account" == $rs["payment"]) ? "checked" : ""?> > <span></span> 余额</label>
+<label class="css-input  css-radio css-radio-lg css-radio-primary push-10-r"><input   type="radio" name="payment" data-uncheck-value="coin" value="coin" <?=("coin" == $rs["payment"]) ? "checked" : ""?> > <span></span> 积分</label>
+<label class="css-input  css-radio css-radio-lg css-radio-primary push-10-r"><input   type="radio" name="payment" data-uncheck-value="vipcard" value="vipcard" <?=("vipcard" == $rs["payment"]) ? "checked" : ""?> > <span></span> 会员卡</label>
+<label class="css-input  css-radio css-radio-lg css-radio-primary push-10-r"><input   type="radio" name="payment" data-uncheck-value="giftcard" value="giftcard" <?=("giftcard" == $rs["payment"]) ? "checked" : ""?> > <span></span> 礼品卡</label>
+<label class="css-input  css-radio css-radio-lg css-radio-primary push-10-r"><input   type="radio" name="payment" data-uncheck-value="cash" value="cash" <?=("cash" == $rs["payment"]) ? "checked" : ""?> > <span></span> 货到付款</label>
+<label class="css-input  css-radio css-radio-lg css-radio-primary push-10-r"><input   type="radio" name="payment" data-uncheck-value="bitcoin" value="bitcoin" <?=("bitcoin" == $rs["payment"]) ? "checked" : ""?> > <span></span> 比特币</label>
 			<div class="help-block"></div>
 		</div>
 	</div><!-- END 单选框: 付款方式 (payment) 开始  -->
@@ -257,7 +256,7 @@ use \Xpmse\T;
 	<div class="form-group   ">
 		<label class="col-xs-2 control-label" for="shipping_ids">物流</label>
 		<div class="col-xs-8"> 
-			<select class="js-select2 form-control input-lg" style="width: 100%;" 
+			<select class="js-select2 form-control input-lg "  style="width: 100%;" 
 					id="shipping_ids" name="shipping_ids" 
 					data-language="zh-CN"
 					data-param-cancelable="0"
@@ -275,14 +274,13 @@ use \Xpmse\T;
 			</select>
 			<div class="help-block"></div>
 		</div>
-		 
-	</div><!-- END 下拉选择(动态数据): 物流 (shipping_ids) -->
+			</div><!-- END 下拉选择(动态数据): 物流 (shipping_ids) -->
 
 	<!-- 单行文本: 重量 (weight) 开始  -->
 	<div class="form-group   ">
 		<label class="col-xs-2 control-label" for="weight">重量</label>
 		<div class="col-xs-8">
-			<input class="form-control input-lg"  
+			<input class="form-control input-lg "  
 				type="text" 
 				id="weight" name="weight" 
 				placeholder="请输入单品重量"  
@@ -295,7 +293,7 @@ use \Xpmse\T;
 	<div class="form-group   ">
 		<label class="col-xs-2 control-label" for="volume">体积</label>
 		<div class="col-xs-8">
-			<input class="form-control input-lg"  
+			<input class="form-control input-lg "  
 				type="text" 
 				id="volume" name="volume" 
 				placeholder="请输入单品体积"  
@@ -308,7 +306,7 @@ use \Xpmse\T;
 	<div class="form-group   ">
 		<label class="col-xs-2 control-label" for="sum">总数</label>
 		<div class="col-xs-8">
-			<input class="form-control input-lg"  
+			<input class="form-control input-lg "  
 				type="text" 
 				id="sum" name="sum" 
 				placeholder="请填写单品总数"  
@@ -321,7 +319,7 @@ use \Xpmse\T;
 	<div class="form-group   ">
 		<label class="col-xs-2 control-label" for="shipped_sum">货运装箱总数</label>
 		<div class="col-xs-8">
-			<input class="form-control input-lg"  
+			<input class="form-control input-lg disabled"  disabled
 				type="text" 
 				id="shipped_sum" name="shipped_sum" 
 				placeholder=""  
@@ -334,7 +332,7 @@ use \Xpmse\T;
 	<div class="form-group   ">
 		<label class="col-xs-2 control-label" for="available_sum">可售数量</label>
 		<div class="col-xs-8">
-			<input class="form-control input-lg"  
+			<input class="form-control input-lg disabled"  disabled
 				type="text" 
 				id="available_sum" name="available_sum" 
 				placeholder=""  
@@ -345,12 +343,12 @@ use \Xpmse\T;
 
 
 	<!-- 单选框: 状态 (status) 开始  -->
-	<div class="form-group   ">
+	<div class="form-group    ">
 		<label class="col-xs-2 control-label" for="status">状态</label>
 		<div class="col-xs-8">
 			<?php if (is_null($rs["status"])) { $rs["status"] = "offline"; } ?>
-<label class="css-input  css-radio css-radio-lg css-radio-primary push-10-r"><input  type="radio" name="status" data-uncheck-value="online" value="online" <?=("online" == $rs["status"]) ? "checked" : ""?> > <span></span> 上架</label>
-<label class="css-input  css-radio css-radio-lg css-radio-primary push-10-r"><input  type="radio" name="status" data-uncheck-value="offline" value="offline" <?=("offline" == $rs["status"]) ? "checked" : ""?> > <span></span>  下架</label>
+<label class="css-input  css-radio css-radio-lg css-radio-primary push-10-r"><input   type="radio" name="status" data-uncheck-value="online" value="online" <?=("online" == $rs["status"]) ? "checked" : ""?> > <span></span> 上架</label>
+<label class="css-input  css-radio css-radio-lg css-radio-primary push-10-r"><input   type="radio" name="status" data-uncheck-value="offline" value="offline" <?=("offline" == $rs["status"]) ? "checked" : ""?> > <span></span>  下架</label>
 			<div class="help-block"></div>
 		</div>
 	</div><!-- END 单选框: 状态 (status) 开始  -->
@@ -361,7 +359,7 @@ use \Xpmse\T;
 	<!-- 多图片组上传: 图片 (images) 开始  -->
 	<div class="xpmse-image-groups-content    draggable-column">
 		
-		<?php if(count($rs['images']) < 1): ?><?php $steps = 1 -  count($rs['images']); for( $i=0; $i<$steps; $i++){ $rs['images'][] = [];} ?><?php endif ?><?php if( is_array($rs['images']) && utils::array_depth($rs['images']) != 2): ?><?php foreach($rs['images'] as $idx=>$it ){ $rs['images'][$idx] = ['img'=>$it]; }?><?php endif ?><?php foreach ( $rs['images'] as $__key=>$img ): ?> 
+		<?php if(@count($rs['images']) < 1): ?><?php $steps = 1 -  @count($rs['images']); for( $i=0; $i<$steps; $i++){ $rs['images'][] = [];} ?><?php endif ?><?php if( is_array($rs['images']) && utils::array_depth($rs['images']) != 2): ?><?php foreach($rs['images'] as $idx=>$it ){ $rs['images'][$idx] = ['img'=>$it]; }?><?php endif ?><?php foreach ( $rs['images'] as $__key=>$img ): ?> 
 		<div class="xpmse-image-groups draggable-item" data-nested="images" data-multiple="1">
 			<div class="form-group " >
 				<label class="col-xs-2 control-label draggable-handler" for="images">图片</label>

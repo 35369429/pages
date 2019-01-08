@@ -4,7 +4,7 @@
  * 单品数据模型
  *
  * 程序作者: XpmSE机器人
- * 最后修改: 2018-12-23 23:25:23
+ * 最后修改: 2019-01-08 16:13:55
  * 程序母版: /data/stor/private/templates/xpmsns/model/code/model/Name.php
  */
 namespace Xpmsns\Pages\Model;
