@@ -4,7 +4,7 @@
  * 商品数据模型
  *
  * 程序作者: XpmSE机器人
- * 最后修改: 2018-12-27 19:50:19
+ * 最后修改: 2019-01-08 16:10:06
  * 程序母版: /data/stor/private/templates/xpmsns/model/code/model/Name.php
  */
 namespace Xpmsns\Pages\Model;

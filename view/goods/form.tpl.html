@@ -36,7 +36,7 @@ use \Xpmse\T;
 	<div class="form-group   ">
 		<label class="col-xs-2 control-label" for="name">名称</label>
 		<div class="col-xs-8">
-			<input class="form-control input-lg"  
+			<input class="form-control input-lg "  
 				type="text" 
 				id="name" name="name" 
 				placeholder="请填写商品名称"  
@@ -49,7 +49,7 @@ use \Xpmse\T;
 	<div class="form-group   ">
 		<label class="col-xs-2 control-label" for="slug">别名</label>
 		<div class="col-xs-8">
-			<input class="form-control input-lg"  
+			<input class="form-control input-lg "  
 				type="text" 
 				id="slug" name="slug" 
 				placeholder="请填写商品别名 ( 别名必须唯一 )"  
@@ -62,7 +62,7 @@ use \Xpmse\T;
 	<div class="form-group   ">
 		<label class="col-xs-2 control-label" for="lower_price">单价</label>
 		<div class="col-xs-8">
-			<input class="form-control input-lg"  
+			<input class="form-control input-lg "  
 				type="text" 
 				id="lower_price" name="lower_price" 
 				placeholder="请填写单价"  
@@ -75,7 +75,7 @@ use \Xpmse\T;
 	<div class="form-group   ">
 		<label class="col-xs-2 control-label" for="tags">标签</label>
 		<div class="col-xs-8">
-			<input class="form-control input-lg"  
+			<input class="form-control input-lg "  
 				type="text" 
 				id="tags" name="tags" 
 				placeholder="请填写标签, 多个用逗号分隔"  
@@ -91,7 +91,7 @@ use \Xpmse\T;
 	<div class="form-group   ">
 		<label class="col-xs-2 control-label" for="category_ids">类目</label>
 		<div class="col-xs-8"> 
-			<select class="js-select2 form-control input-lg" style="width: 100%;" 
+			<select class="js-select2 form-control input-lg "  style="width: 100%;" 
 					id="category_ids" name="category_ids" 
 					data-language="zh-CN"
 					data-param-cancelable="1"
@@ -121,9 +121,8 @@ use \Xpmse\T;
 				}
 			});
 		});
-		</script>
-		 
-	</div><!-- END 下拉选择(动态数据): 类目 (category_ids) -->
+        </script>
+        	</div><!-- END 下拉选择(动态数据): 类目 (category_ids) -->
 
 
 
@@ -132,7 +131,7 @@ use \Xpmse\T;
 	<div class="form-group   ">
 		<label class="col-xs-2 control-label" for="recommend_ids">内容区块 (推荐)</label>
 		<div class="col-xs-8"> 
-			<select class="js-select2 form-control input-lg" style="width: 100%;" 
+			<select class="js-select2 form-control input-lg "  style="width: 100%;" 
 					id="recommend_ids" name="recommend_ids" 
 					data-language="zh-CN"
 					data-param-cancelable="1"
@@ -162,15 +161,14 @@ use \Xpmse\T;
 				}
 			});
 		});
-		</script>
-		 
-	</div><!-- END 下拉选择(动态数据): 内容区块 (推荐) (recommend_ids) -->
+        </script>
+        	</div><!-- END 下拉选择(动态数据): 内容区块 (推荐) (recommend_ids) -->
 
 	<!-- 单行文本: SKU数量 (sku_cnt) 开始  -->
 	<div class="form-group   ">
 		<label class="col-xs-2 control-label" for="sku_cnt">SKU数量</label>
 		<div class="col-xs-8">
-			<input class="form-control input-lg"  
+			<input class="form-control input-lg disabled"  disabled
 				type="text" 
 				id="sku_cnt" name="sku_cnt" 
 				placeholder=""  
@@ -183,7 +181,7 @@ use \Xpmse\T;
 	<div class="form-group   ">
 		<label class="col-xs-2 control-label" for="sku_sum">单品总数</label>
 		<div class="col-xs-8">
-			<input class="form-control input-lg"  
+			<input class="form-control input-lg "  
 				type="text" 
 				id="sku_sum" name="sku_sum" 
 				placeholder=""  
@@ -196,7 +194,7 @@ use \Xpmse\T;
 	<div class="form-group   ">
 		<label class="col-xs-2 control-label" for="shipped_sum">货运装箱总数</label>
 		<div class="col-xs-8">
-			<input class="form-control input-lg"  
+			<input class="form-control input-lg "  
 				type="text" 
 				id="shipped_sum" name="shipped_sum" 
 				placeholder=""  
@@ -209,7 +207,7 @@ use \Xpmse\T;
 	<div class="form-group   ">
 		<label class="col-xs-2 control-label" for="available_sum">可售SKU总数</label>
 		<div class="col-xs-8">
-			<input class="form-control input-lg"  
+			<input class="form-control input-lg disabled"  disabled
 				type="text" 
 				id="available_sum" name="available_sum" 
 				placeholder=""  
@@ -224,7 +222,7 @@ use \Xpmse\T;
 	<div class="form-group   ">
 		<label class="col-xs-2 control-label" for="summary">简介</label>
 		<div class="col-xs-8">
-			<textarea class="form-control input-lg"  
+			<textarea class="form-control input-lg "   
 				type="text" 
 				id="summary" name="summary" rows="4"
 				placeholder="请填写专栏简介"><?=T::v('<%=summary  | e(\'html\')%>', $rs )?></textarea> 
@@ -453,7 +451,7 @@ use \Xpmse\T;
 					<div class="help-block"></div>
 				</div>
 				<div class="col-xs-6">
-					<input class="form-control input-lg"  
+					<input class="form-control input-lg "   
 						type="text" 
 						data-name="value"
 						placeholder="请输入数值"
@@ -530,19 +528,19 @@ use \Xpmse\T;
 
 
 	<!-- 单选框: 销售方式 (sale_way) 开始  -->
-	<div class="form-group   ">
+	<div class="form-group    ">
 		<label class="col-xs-2 control-label" for="sale_way">销售方式</label>
 		<div class="col-xs-8">
 			<?php if (is_null($rs["sale_way"])) { $rs["sale_way"] = "normal"; } ?>
-<label class="css-input  css-radio css-radio-lg css-radio-primary push-10-r"><input  type="radio" name="sale_way" data-uncheck-value="normal" value="normal" <?=("normal" == $rs["sale_way"]) ? "checked" : ""?> > <span></span> 标准</label>
-<label class="css-input  css-radio css-radio-lg css-radio-primary push-10-r"><input  type="radio" name="sale_way" data-uncheck-value="flash" value="flash" <?=("flash" == $rs["sale_way"]) ? "checked" : ""?> > <span></span> 闪购</label>
-<label class="css-input  css-radio css-radio-lg css-radio-primary push-10-r"><input  type="radio" name="sale_way" data-uncheck-value="rush" value="rush" <?=("rush" == $rs["sale_way"]) ? "checked" : ""?> > <span></span> 抢购</label>
-<label class="css-input  css-radio css-radio-lg css-radio-primary push-10-r"><input  type="radio" name="sale_way" data-uncheck-value="group" value="group" <?=("group" == $rs["sale_way"]) ? "checked" : ""?> > <span></span> 团购</label>
-<label class="css-input  css-radio css-radio-lg css-radio-primary push-10-r"><input  type="radio" name="sale_way" data-uncheck-value="sharing" value="sharing" <?=("sharing" == $rs["sale_way"]) ? "checked" : ""?> > <span></span> 拼团</label>
-<label class="css-input  css-radio css-radio-lg css-radio-primary push-10-r"><input  type="radio" name="sale_way" data-uncheck-value="crowd" value="crowd" <?=("crowd" == $rs["sale_way"]) ? "checked" : ""?> > <span></span> 众筹</label>
-<label class="css-input  css-radio css-radio-lg css-radio-primary push-10-r"><input  type="radio" name="sale_way" data-uncheck-value="auction" value="auction" <?=("auction" == $rs["sale_way"]) ? "checked" : ""?> > <span></span> 拍卖</label>
-<label class="css-input  css-radio css-radio-lg css-radio-primary push-10-r"><input  type="radio" name="sale_way" data-uncheck-value="repayment" value="repayment" <?=("repayment" == $rs["sale_way"]) ? "checked" : ""?> > <span></span> 分期</label>
-<label class="css-input  css-radio css-radio-lg css-radio-primary push-10-r"><input  type="radio" name="sale_way" data-uncheck-value="draw" value="draw" <?=("draw" == $rs["sale_way"]) ? "checked" : ""?> > <span></span> 1元购</label>
+<label class="css-input  css-radio css-radio-lg css-radio-primary push-10-r"><input   type="radio" name="sale_way" data-uncheck-value="normal" value="normal" <?=("normal" == $rs["sale_way"]) ? "checked" : ""?> > <span></span> 标准</label>
+<label class="css-input  css-radio css-radio-lg css-radio-primary push-10-r"><input   type="radio" name="sale_way" data-uncheck-value="flash" value="flash" <?=("flash" == $rs["sale_way"]) ? "checked" : ""?> > <span></span> 闪购</label>
+<label class="css-input  css-radio css-radio-lg css-radio-primary push-10-r"><input   type="radio" name="sale_way" data-uncheck-value="rush" value="rush" <?=("rush" == $rs["sale_way"]) ? "checked" : ""?> > <span></span> 抢购</label>
+<label class="css-input  css-radio css-radio-lg css-radio-primary push-10-r"><input   type="radio" name="sale_way" data-uncheck-value="group" value="group" <?=("group" == $rs["sale_way"]) ? "checked" : ""?> > <span></span> 团购</label>
+<label class="css-input  css-radio css-radio-lg css-radio-primary push-10-r"><input   type="radio" name="sale_way" data-uncheck-value="sharing" value="sharing" <?=("sharing" == $rs["sale_way"]) ? "checked" : ""?> > <span></span> 拼团</label>
+<label class="css-input  css-radio css-radio-lg css-radio-primary push-10-r"><input   type="radio" name="sale_way" data-uncheck-value="crowd" value="crowd" <?=("crowd" == $rs["sale_way"]) ? "checked" : ""?> > <span></span> 众筹</label>
+<label class="css-input  css-radio css-radio-lg css-radio-primary push-10-r"><input   type="radio" name="sale_way" data-uncheck-value="auction" value="auction" <?=("auction" == $rs["sale_way"]) ? "checked" : ""?> > <span></span> 拍卖</label>
+<label class="css-input  css-radio css-radio-lg css-radio-primary push-10-r"><input   type="radio" name="sale_way" data-uncheck-value="repayment" value="repayment" <?=("repayment" == $rs["sale_way"]) ? "checked" : ""?> > <span></span> 分期</label>
+<label class="css-input  css-radio css-radio-lg css-radio-primary push-10-r"><input   type="radio" name="sale_way" data-uncheck-value="draw" value="draw" <?=("draw" == $rs["sale_way"]) ? "checked" : ""?> > <span></span> 1元购</label>
 			<div class="help-block"></div>
 		</div>
 	</div><!-- END 单选框: 销售方式 (sale_way) 开始  -->
@@ -551,7 +549,7 @@ use \Xpmse\T;
 	<div class="form-group   ">
 		<label class="col-xs-2 control-label" for="pay_duration">付款期限</label>
 		<div class="col-xs-8">
-			<input class="form-control input-lg"  
+			<input class="form-control input-lg "  
 				type="text" 
 				id="pay_duration" name="pay_duration" 
 				placeholder="请输入下单后可以等待付款时长."  
@@ -668,12 +666,12 @@ closed_at_change();
 
 
 	<!-- 单选框: 状态 (status) 开始  -->
-	<div class="form-group   ">
+	<div class="form-group    ">
 		<label class="col-xs-2 control-label" for="status">状态</label>
 		<div class="col-xs-8">
 			<?php if (is_null($rs["status"])) { $rs["status"] = "online"; } ?>
-<label class="css-input  css-radio css-radio-lg css-radio-primary push-10-r"><input  type="radio" name="status" data-uncheck-value="online" value="online" <?=("online" == $rs["status"]) ? "checked" : ""?> > <span></span> 上架</label>
-<label class="css-input  css-radio css-radio-lg css-radio-primary push-10-r"><input  type="radio" name="status" data-uncheck-value="offline" value="offline" <?=("offline" == $rs["status"]) ? "checked" : ""?> > <span></span> 下架</label>
+<label class="css-input  css-radio css-radio-lg css-radio-primary push-10-r"><input   type="radio" name="status" data-uncheck-value="online" value="online" <?=("online" == $rs["status"]) ? "checked" : ""?> > <span></span> 上架</label>
+<label class="css-input  css-radio css-radio-lg css-radio-primary push-10-r"><input   type="radio" name="status" data-uncheck-value="offline" value="offline" <?=("offline" == $rs["status"]) ? "checked" : ""?> > <span></span> 下架</label>
 			<div class="help-block"></div>
 		</div>
 	</div><!-- END 单选框: 状态 (status) 开始  -->
@@ -813,7 +811,7 @@ closed_at_change();
 	<div class="form-group   ">
 		<label class="col-xs-2 control-label" for="events">事件</label>
 		<div class="col-xs-8">
-			<textarea class="form-control input-lg"  
+			<textarea class="form-control input-lg "   
 				type="text" 
 				id="events" name="events" rows="8"
 				placeholder="设置事件响应，请工程师填写，主要用于自动发货，对接ERP系统。"><?=T::v('<%=events  | e(\'html\')%>', $rs )?></textarea> 
