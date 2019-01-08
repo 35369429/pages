@@ -187,7 +187,6 @@ class Goods extends Model {
         if ( empty($item_id) ) {
            $this->updateBy("goods_id", [
                 "goods_id"=>$goods_id,
-                "sku_sum" => 'DB::RAW(IFNULL(sku_sum,0)-'.intval($quantity).')',
                 "shipped_sum" => 'DB::RAW(IFNULL(shipped_sum,0)+'.intval($quantity).')',
            ]);
         } else {
@@ -200,7 +199,6 @@ class Goods extends Model {
         if ( empty($item_id) ) {
             $this->updateBy("goods_id", [
                  "goods_id"=>$goods_id,
-                 "sku_sum" => 'DB::RAW(IFNULL(sku_sum,0)+'.intval($quantity).')',
                  "shipped_sum" => 'DB::RAW(IFNULL(shipped_sum,0)-'.intval($quantity).')',
             ]);
          } else {
@@ -213,6 +211,7 @@ class Goods extends Model {
         if ( empty($item_id) ) {
             $this->updateBy("goods_id", [
                  "goods_id"=>$goods_id,
+                 "sku_sum" => 'DB::RAW(IFNULL(sku_sum,0)-'.intval($quantity).')',
                  "shipped_sum" => 'DB::RAW(IFNULL(shipped_sum,0)-'.intval($quantity).')',
             ]);
          } else {
