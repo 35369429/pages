@@ -4,7 +4,7 @@
  * 专栏数据模型
  *
  * 程序作者: XpmSE机器人
- * 最后修改: 2019-01-09 13:36:40
+ * 最后修改: 2019-01-09 14:01:53
  * 程序母版: /data/stor/private/templates/xpmsns/model/code/model/Name.php
  */
 namespace Xpmsns\Pages\Model;
@@ -93,49 +93,21 @@ class Special extends Model {
 	 * @return
 	 */
 	public function format( & $rs ) {
-
+     
+		$fileFields = []; 
 		// 格式化: 专栏LOGO
 		// 返回值: [{"url":"访问地址...", "path":"文件路径...", "origin":"原始文件访问地址..." }]
 		if ( array_key_exists('logo', $rs ) ) {
-			$is_string = is_string($rs["logo"]);
-			$rs["logo"] = $is_string ? [$rs["logo"]] : $rs["logo"];
-			$rs["logo"] = !is_array($rs["logo"]) ? [] : $rs["logo"];
-			foreach ($rs["logo"] as & $file ) {
-				if ( is_array($file) && !empty($file['path']) ) {
-					$fs = $this->media->get( $file['path'] );
-					$file = array_merge( $file, $fs );
-				} else if ( is_string($file) ) {
-					$file =empty($file) ? [] : $this->media->get( $file );
-				} else {
-					$file = [];
-				}
-			}
-			if ($is_string) {
-				$rs["logo"] = current($rs["logo"]);
-			}
+            array_push($fileFields, 'logo');
 		}
-
 		// 格式化: 申请材料
 		// 返回值: [{"url":"访问地址...", "path":"文件路径...", "origin":"原始文件访问地址..." }]
 		if ( array_key_exists('docs', $rs ) ) {
-			$is_string = is_string($rs["docs"]);
-			$rs["docs"] = $is_string ? [$rs["docs"]] : $rs["docs"];
-			$rs["docs"] = !is_array($rs["docs"]) ? [] : $rs["docs"];
-			foreach ($rs["docs"] as & $file ) {
-				if ( is_array($file) && !empty($file['path']) ) {
-					$fs = $this->media->get( $file['path'] );
-					$file = array_merge( $file, $fs );
-				} else if ( is_string($file) ) {
-					$file =empty($file) ? [] : $this->media->get( $file );
-				} else {
-					$file = [];
-				}
-			}
-			if ($is_string) {
-				$rs["docs"] = current($rs["docs"]);
-			}
+            array_push($fileFields, 'docs');
 		}
 
+        // 处理图片和文件字段 
+        $this->__fileFields( $rs, $fileFields );
 
 		// 格式化: 状态
 		// 返回值: "_status_types" 所有状态表述, "_status_name" 状态名称,  "_status" 当前状态表述, "status" 当前状态数值
