@@ -4,11 +4,11 @@
  * 专栏数据模型
  *
  * 程序作者: XpmSE机器人
- * 最后修改: 2019-01-09 12:00:28
+ * 最后修改: 2019-01-09 13:15:42
  * 程序母版: /data/stor/private/templates/xpmsns/model/code/model/Name.php
  */
 namespace Xpmsns\Pages\Model;
-                     
+                      
 use \Xpmse\Excp;
 use \Xpmse\Model;
 use \Xpmse\Utils;
@@ -80,6 +80,8 @@ class Special extends Model {
 		$this->putColumn( 'docs', $this->type("text", ["json"=>true, "null"=>true]));
 		// 状态
 		$this->putColumn( 'status', $this->type("string", ["length"=>20, "index"=>true, "default"=>"on", "null"=>false]));
+		// 消息
+		$this->putColumn( 'message', $this->type("string", ["length"=>600, "null"=>true]));
 
 		return $this;
 	}
@@ -219,6 +221,7 @@ class Special extends Model {
 	 *          	  $rs["param"],  // 参数 
 	 *          	  $rs["docs"],  // 申请材料 
 	 *          	  $rs["status"],  // 状态 
+	 *          	  $rs["message"],  // 消息 
 	 *          	  $rs["created_at"],  // 创建时间 
 	 *          	  $rs["updated_at"],  // 更新时间 
 	 *                $rs["_map_category"][$category_ids[n]]["created_at"], // category.created_at
@@ -461,6 +464,7 @@ class Special extends Model {
 	 *          	  $rs["param"],  // 参数 
 	 *          	  $rs["docs"],  // 申请材料 
 	 *          	  $rs["status"],  // 状态 
+	 *          	  $rs["message"],  // 消息 
 	 *          	  $rs["created_at"],  // 创建时间 
 	 *          	  $rs["updated_at"],  // 更新时间 
 	 *                $rs["_map_category"][$category_ids[n]]["created_at"], // category.created_at
@@ -703,6 +707,7 @@ class Special extends Model {
 	 *          	  $rs["param"],  // 参数 
 	 *          	  $rs["docs"],  // 申请材料 
 	 *          	  $rs["status"],  // 状态 
+	 *          	  $rs["message"],  // 消息 
 	 *          	  $rs["created_at"],  // 创建时间 
 	 *          	  $rs["updated_at"],  // 更新时间 
 	 *                $rs["_map_category"][$category_ids[n]]["created_at"], // category.created_at
@@ -945,6 +950,7 @@ class Special extends Model {
 	 *          	  $rs["param"],  // 参数 
 	 *          	  $rs["docs"],  // 申请材料 
 	 *          	  $rs["status"],  // 状态 
+	 *          	  $rs["message"],  // 消息 
 	 *          	  $rs["created_at"],  // 创建时间 
 	 *          	  $rs["updated_at"],  // 更新时间 
 	 *                $rs["_map_category"][$category_ids[n]]["created_at"], // category.created_at
@@ -1475,6 +1481,7 @@ class Special extends Model {
 	 *               	["param"],  // 参数 
 	 *               	["docs"],  // 申请材料 
 	 *               	["status"],  // 状态 
+	 *               	["message"],  // 消息 
 	 *               	["created_at"],  // 创建时间 
 	 *               	["updated_at"],  // 更新时间 
 	 *               	["category"][$category_ids[n]]["created_at"], // category.created_at
@@ -1791,6 +1798,7 @@ class Special extends Model {
 			"param",  // 参数
 			"docs",  // 申请材料
 			"status",  // 状态
+			"message",  // 消息
 			"created_at",  // 创建时间
 			"updated_at",  // 更新时间
 		];

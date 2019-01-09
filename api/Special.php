@@ -4,11 +4,11 @@
  * 专栏数据接口 
  *
  * 程序作者: XpmSE机器人
- * 最后修改: 2019-01-09 12:00:26
+ * 最后修改: 2019-01-09 13:15:40
  * 程序母版: /data/stor/private/templates/xpmsns/model/code/api/Name.php
  */
 namespace Xpmsns\Pages\Api;
-                     
+                      
 
 use \Xpmse\Loader\App;
 use \Xpmse\Excp;
@@ -117,6 +117,7 @@ class Special extends Api {
 	 *               	["param"],  // 参数 
 	 *               	["docs"],  // 申请材料 
 	 *               	["status"],  // 状态 
+	 *               	["message"],  // 消息 
 	 *               	["created_at"],  // 创建时间 
 	 *               	["updated_at"],  // 更新时间 
 	*               	["_map_category"][$category_ids[n]]["created_at"], // category.created_at
@@ -219,7 +220,7 @@ class Special extends Api {
 		$data = array_merge( $query, $data );
 
 		// 读取字段
-		$select = empty($data['select']) ? ["special.type","special.name","special.path","special.summary","special.param","special.docs","special.status","special.created_at","special.updated_at","c.category_id","c.name","r.recommend_id","u.user_id","u.name"] : $data['select'];
+		$select = empty($data['select']) ? ["special.type","special.name","special.path","special.summary","special.param","special.docs","special.status","special.message","special.created_at","special.updated_at"] : $data['select'];
 		if ( is_string($select) ) {
 			$select = explode(',', $select);
 		}
@@ -282,6 +283,7 @@ class Special extends Api {
 	 *               $data['param'] 参数
 	 *               $data['docs'] 申请材料
 	 *               $data['status'] 状态
+	 *               $data['message'] 消息
 	 *
 	 * @return array 新增的专栏记录  @see get()
 	 */
@@ -313,6 +315,7 @@ class Special extends Api {
 	 *               $data['param'] 参数
 	 *               $data['docs'] 申请材料
 	 *               $data['status'] 状态
+	 *               $data['message'] 消息
 	 *
 	 * @return array 更新的专栏记录 @see get()
 	 * 
@@ -337,7 +340,7 @@ class Special extends Api {
 	/**
 	 * 根据条件检索专栏记录
 	 * @param  array $query GET 参数
-	 *         	      $query['select'] 选取字段，默认选择 ["special.type","special.name","special.path","special.summary","special.param","special.status","special.created_at","special.updated_at","c.category_id","c.name","u.user_id","u.name"]
+	 *         	      $query['select'] 选取字段，默认选择 ["special.type","special.name","special.path","special.summary","special.param","special.status","special.created_at","special.updated_at"]
 	 *         	      $query['page'] 页码，默认为 1
 	 *         	      $query['perpage'] 每页显示记录数，默认为 20
 	 *			      $query["keyword"] 按关键词查询
@@ -353,7 +356,7 @@ class Special extends Api {
 	 *			      $query["orderby_updated_at_desc"]  按创建时间倒序 DESC 排序
      *
 	 * @param  array $data  POST 参数
-	 *         	      $data['select'] 选取字段，默认选择 ["name=type","name=name","name=path","name=summary","name=param","name=status","name=created_at","name=updated_at","model=%5CXpmsns%5CPages%5CModel%5CCategory&name=category_id&table=category&prefix=xpmsns_pages_&alias=c&type=inWhere","model=%5CXpmsns%5CPages%5CModel%5CCategory&name=name&table=category&prefix=xpmsns_pages_&alias=c&type=inWhere","model=%5CXpmsns%5CUser%5CModel%5CUser&name=user_id&table=user&prefix=xpmsns_user_&alias=u&type=leftJoin","model=%5CXpmsns%5CUser%5CModel%5CUser&name=name&table=user&prefix=xpmsns_user_&alias=u&type=leftJoin"]
+	 *         	      $data['select'] 选取字段，默认选择 ["name=type","name=name","name=path","name=summary","name=param","name=status","name=created_at","name=updated_at"]
 	 *         	      $data['page'] 页码，默认为 1
 	 *         	      $data['perpage'] 每页显示记录数，默认为 20
 	 *			      $data["keyword"] 按关键词查询
@@ -385,6 +388,7 @@ class Special extends Api {
 	 *               	["param"],  // 参数 
 	 *               	["docs"],  // 申请材料 
 	 *               	["status"],  // 状态 
+	 *               	["message"],  // 消息 
 	 *               	["created_at"],  // 创建时间 
 	 *               	["updated_at"],  // 更新时间 
 	*               	["category"][$category_ids[n]]["created_at"], // category.created_at
@@ -487,7 +491,7 @@ class Special extends Api {
 		$data = array_merge( $query, $data );
 
 		// 读取字段
-		$select = empty($data['select']) ? ["special.type","special.name","special.path","special.summary","special.param","special.status","special.created_at","special.updated_at","c.category_id","c.name","u.user_id","u.name"] : $data['select'];
+		$select = empty($data['select']) ? ["special.type","special.name","special.path","special.summary","special.param","special.status","special.created_at","special.updated_at"] : $data['select'];
 		if ( is_string($select) ) {
 			$select = explode(',', $select);
 		}
