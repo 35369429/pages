@@ -194,13 +194,14 @@ use \Xpmse\T;
 					<table class="js-table-checkable table table-hover remove-margin">
 						<thead>
 							<tr>
+								<th class="font-w300"> LOGO </th>
 								<th class="font-w300"> 地址 </th>
 								<th class="font-w300"> 名称 </th>
 								<th class="font-w300"> 类型 </th>
 								<th class="font-w300"> 内容类目 </th>
-								<th class="font-w300"> 关联用户 </th>
-								<th class="font-w300"> 状态 </th>
+								<th class="font-w300"> 用户 </th>
 								<th class="font-w300"> 更新时间 </th>
+								<th class="font-w300"> 状态 </th>
 							</tr>
 						</thead>
 
@@ -208,6 +209,13 @@ use \Xpmse\T;
 							<?php foreach ($response['data'] as $rs) :?>
 							<tr data-toggle="block-group" 
 								onclick="window.location='<?=App::R('special', 'detail', ['special_id'=>$rs['special_id']])?>'" >
+								<td class="font-w300">
+									<div style="line-height: 84px;display: inline-block; max-width:260px;word-wrap:break-word;" > 
+										<?php if ( !empty($rs["logo"]['url']) ) : ?>
+										<img src="<?=$rs["logo"]['url']?>" height="64" style="max-width:260px;"/> 
+										<?php endif;?>
+									</div>
+								</td>
 								<td class="font-w300">
 									<?php $v=null; $v=T::s("{{path}}", $rs ); echo empty($v) ? T::s("", $rs ) : $v; ?>
 								</td>
@@ -218,16 +226,16 @@ use \Xpmse\T;
 									<span class="text-<?=$rs['_type']['style']?>"><?=$rs['_type']['name'] ? $rs['_type']['name']  : $rs['type'] ?></span>
 								</td>
 								<td class="font-w300">
-									<?php $v=null; $v=T::s("{{c.name}}", $rs ); echo empty($v) ? T::s("", $rs ) : $v; ?>
+									<?php $rs["_map_category"]= &$response["category"]; $v=null; $v=T::s("{% for idx in category_ids %} {{_map_category[idx].name}} {% endfor %}", $rs ); echo empty($v) ? T::s("", $rs ) : $v; ?>
 								</td>
 								<td class="font-w300">
-									<?php $v=null; $v=T::s("{{u_name ? u_name : u_nickname}}", $rs ); echo empty($v) ? T::s("", $rs ) : $v; ?>
+									<?php $v=null; $v=T::s("{{user_name ? user_name : user_nickname}}", $rs ); echo empty($v) ? T::s("", $rs ) : $v; ?>
+								</td>
+								<td class="font-w300">
+									<?php $v=null; $v=T::s("{{ updated_at ? updated_at | date(\"Y年m月d日 @H:i:s\") : created_at | date(\"Y年m月d日 @H:i:s\")  }}", $rs ); echo empty($v) ? T::s("", $rs ) : $v; ?>
 								</td>
 								<td class="font-w300">
 									<span class="text-<?=$rs['_status']['style']?>"><?=$rs['_status']['name'] ? $rs['_status']['name']  : $rs['status'] ?></span>
-								</td>
-								<td class="font-w300">
-									<?php $v=null; $v=T::s("{{ updated_at ? updated_at : created_at }}", $rs ); echo empty($v) ? T::s("", $rs ) : $v; ?>
 								</td>
 							</tr>
 							<?php endforeach;?>
@@ -235,7 +243,7 @@ use \Xpmse\T;
 						</tbody>
 
 						<tfoot>
-							<tr><td colspan="7"> <nav class="pull-right">
+							<tr><td colspan="8"> <nav class="pull-right">
 
 								<ul class="pagination">
 									<?php if ($response['prev'] !== false): ?>

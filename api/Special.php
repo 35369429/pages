@@ -4,11 +4,11 @@
  * 专栏数据接口 
  *
  * 程序作者: XpmSE机器人
- * 最后修改: 2019-01-09 11:27:13
+ * 最后修改: 2019-01-09 12:00:26
  * 程序母版: /data/stor/private/templates/xpmsns/model/code/api/Name.php
  */
 namespace Xpmsns\Pages\Api;
-                    
+                     
 
 use \Xpmse\Loader\App;
 use \Xpmse\Excp;
@@ -27,6 +27,64 @@ class Special extends Api {
 	/**
 	 * 自定义函数 
 	 */
+    // @KEEP BEGIN
+
+	
+
+	/**
+	 * 我的专栏信息更新/开通 API
+	 * @param  [type] $query [description]
+	 * @param  [type] $data  [description]
+	 * @return [type]        [description]
+	 */
+	protected function updateMySpecial( $query, $data ) {
+
+		// 用户身份验证
+		$u = new \Xpmsns\User\Model\User();
+		$uinfo = $u->getUserInfo();
+		if ( empty($uinfo['user_id']) ) {
+			throw new Excp("用户尚未登录", 403,  ['user'=>$uinfo]);
+		}
+
+		// 许可字段清单
+		$allowed = ["type", "name", "path", "logo", "category_ids", "summary", "docs"];
+		$data = array_filter(
+			$data,
+			function ($key) use ($allowed) {
+				return in_array($key, $allowed);
+			},
+			ARRAY_FILTER_USE_KEY
+		);
+
+		// handle files field
+		if ( array_key_exists('logo', $data) && is_string($data['logo']) ) {
+			$data['logo'] = json_decode($data['logo'], true);
+		}
+		if ( array_key_exists('docs', $data) && is_string($data['docs']) ) {
+			$data['docs'] = json_decode($data['docs'], true);
+		}
+
+		// User ID 
+		$data['user_id'] = $uinfo['user_id'];
+
+        // 专栏状态
+        $data["status"] = "pending";
+		
+		// SaveData 检查专栏是否存在, 存在则更新，不存在则创建
+		$sp = new \Xpmsns\Pages\Model\Special();
+		$us = $sp->query()->where('user_id', $data['user_id'])->limit(1)->select('special_id')->get()->toArray();
+		if ( empty($us) ) { 
+			$us = $sp->create($data);
+		} else { 
+			$data["special_id"] = current($us)["special_id"];
+			$us = $sp->updateBy("special_id", $data);
+		}
+
+		return $us;
+	}
+
+    // @KEEP END
+
 
 
 	/**

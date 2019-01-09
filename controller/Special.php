@@ -4,7 +4,7 @@
  * 专栏控制器
  *
  * 程序作者: XpmSE机器人
- * 最后修改: 2019-01-09 11:27:14
+ * 最后修改: 2019-01-09 12:00:27
  * 程序母版: /data/stor/private/templates/xpmsns/model/code/controller/Name.php
  */
 
@@ -202,6 +202,7 @@ class SpecialController extends \Xpmse\Loader\Controller {
 		// 删除唯一索引字段
 		unset($rs['special_id']);
 		unset($rs['user_id']);
+		unset($rs['name']);
 		unset($rs['path']);
 
 		// 复制图片
