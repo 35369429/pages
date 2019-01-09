@@ -4,7 +4,7 @@
  * 专栏数据模型
  *
  * 程序作者: XpmSE机器人
- * 最后修改: 2019-01-09 13:15:42
+ * 最后修改: 2019-01-09 13:36:40
  * 程序母版: /data/stor/private/templates/xpmsns/model/code/model/Name.php
  */
 namespace Xpmsns\Pages\Model;
@@ -144,7 +144,7 @@ class Special extends Model {
 		  		"on" => [
 		  			"value" => "on",
 		  			"name" => "开启",
-		  			"style" => "primary"
+		  			"style" => "success"
 		  		],
 		  		"off" => [
 		  			"value" => "off",
@@ -160,6 +160,11 @@ class Special extends Model {
 		  			"value" => "failure",
 		  			"name" => "不通过",
 		  			"style" => "danger"
+		  		],
+		  		"reset" => [
+		  			"value" => "reset",
+		  			"name" => "重新开通",
+		  			"style" => "primary"
 		  		],
 			];
 			$rs["_status_name"] = "status";

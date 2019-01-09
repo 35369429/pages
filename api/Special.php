@@ -4,7 +4,7 @@
  * 专栏数据接口 
  *
  * 程序作者: XpmSE机器人
- * 最后修改: 2019-01-09 13:15:40
+ * 最后修改: 2019-01-09 13:36:39
  * 程序母版: /data/stor/private/templates/xpmsns/model/code/api/Name.php
  */
 namespace Xpmsns\Pages\Api;
@@ -29,6 +29,39 @@ class Special extends Api {
 	 */
     // @KEEP BEGIN
 
+
+    /**
+     * 重新开通专栏申请
+     */
+    protected function resetMySpecial( $query, $data ) {
+        
+        // 用户身份验证
+		$u = new \Xpmsns\User\Model\User();
+		$uinfo = $u->getUserInfo();
+		if ( empty($uinfo['user_id']) ) {
+			throw new Excp("用户尚未登录", 403,  ['user'=>$uinfo]);
+        }
+        
+        // SaveData 检查专栏是否存在, 存在则更新，不存在则创建
+		$sp = new \Xpmsns\Pages\Model\Special();
+		$us = $sp->query()->where('user_id', $uinfo['user_id'])->limit(1)->select('special_id')->get()->toArray();
+		if ( empty($us) ) { 
+            throw new Excp("专栏不存在", 404,["user_id"=>$user_id]);
+        }
+
+        $special = $sp->updateBy("special_id",[
+            "special_id" => current($us)["special_id"],
+            "status" => "reset"
+        ]);
+
+        if ( !empty($query["then"] )){
+            header("Location: {$query['then']}");
+            return;
+        }
+
+        // 更新状态
+        return $special;
+    }
 	
 
 	/**

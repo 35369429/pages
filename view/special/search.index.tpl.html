@@ -108,6 +108,7 @@ use \Xpmse\T;
 									<?=($query['status'] == 'off') ? '关闭' : '' ?>
 									<?=($query['status'] == 'pending') ? '审核中' : '' ?>
 									<?=($query['status'] == 'failure') ? '不通过' : '' ?>
+									<?=($query['status'] == 'reset') ? '重新开通' : '' ?>
 									<?=(empty($query['status'])) ? '状态' : '' ?>
 									<span class="caret"></span> 
 								</button>
@@ -137,6 +138,11 @@ use \Xpmse\T;
 									<li >
 										<a href="javascript:search('status','failure')">
 										   不通过
+										</a>
+									</li>
+									<li >
+										<a href="javascript:search('status','reset')">
+										   重新开通
 										</a>
 									</li>
 								</ul>
