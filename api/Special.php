@@ -4,7 +4,7 @@
  * 专栏数据接口 
  *
  * 程序作者: XpmSE机器人
- * 最后修改: 2019-01-09 11:11:41
+ * 最后修改: 2019-01-09 11:27:13
  * 程序母版: /data/stor/private/templates/xpmsns/model/code/api/Name.php
  */
 namespace Xpmsns\Pages\Api;
@@ -46,7 +46,7 @@ class Special extends Api {
 	 * @return array 专栏记录 Key Value 结构数据 
 	 *               	["special_id"],  // 专栏ID 
 	 *               	["user_id"],  // 用户ID 
-	*               	["u_user_id"], // user.user_id
+	*               	["user_user_id"], // user.user_id
 	 *               	["type"],  // 专栏类型 
 	 *               	["name"],  // 专栏名称 
 	 *               	["path"],  // 专栏地址 
@@ -111,48 +111,48 @@ class Special extends Api {
 	*               	["_map_recommend"][$recommend_ids[n]]["status"], // recommend.status
 	*               	["_map_recommend"][$recommend_ids[n]]["bigdata_engine"], // recommend.bigdata_engine
 	*               	["_map_recommend"][$recommend_ids[n]]["series"], // recommend.series
-	*               	["u_created_at"], // user.created_at
-	*               	["u_updated_at"], // user.updated_at
-	*               	["u_group_id"], // user.group_id
-	*               	["u_name"], // user.name
-	*               	["u_idno"], // user.idno
-	*               	["u_idtype"], // user.idtype
-	*               	["u_iddoc"], // user.iddoc
-	*               	["u_nickname"], // user.nickname
-	*               	["u_sex"], // user.sex
-	*               	["u_city"], // user.city
-	*               	["u_province"], // user.province
-	*               	["u_country"], // user.country
-	*               	["u_headimgurl"], // user.headimgurl
-	*               	["u_language"], // user.language
-	*               	["u_birthday"], // user.birthday
-	*               	["u_bio"], // user.bio
-	*               	["u_bgimgurl"], // user.bgimgurl
-	*               	["u_mobile"], // user.mobile
-	*               	["u_mobile_nation"], // user.mobile_nation
-	*               	["u_mobile_full"], // user.mobile_full
-	*               	["u_email"], // user.email
-	*               	["u_contact_name"], // user.contact_name
-	*               	["u_contact_tel"], // user.contact_tel
-	*               	["u_title"], // user.title
-	*               	["u_company"], // user.company
-	*               	["u_zip"], // user.zip
-	*               	["u_address"], // user.address
-	*               	["u_remark"], // user.remark
-	*               	["u_tag"], // user.tag
-	*               	["u_user_verified"], // user.user_verified
-	*               	["u_name_verified"], // user.name_verified
-	*               	["u_verify"], // user.verify
-	*               	["u_verify_data"], // user.verify_data
-	*               	["u_mobile_verified"], // user.mobile_verified
-	*               	["u_email_verified"], // user.email_verified
-	*               	["u_extra"], // user.extra
-	*               	["u_password"], // user.password
-	*               	["u_pay_password"], // user.pay_password
-	*               	["u_status"], // user.status
-	*               	["u_inviter"], // user.inviter
-	*               	["u_follower_cnt"], // user.follower_cnt
-	*               	["u_following_cnt"], // user.following_cnt
+	*               	["user_created_at"], // user.created_at
+	*               	["user_updated_at"], // user.updated_at
+	*               	["user_group_id"], // user.group_id
+	*               	["user_name"], // user.name
+	*               	["user_idno"], // user.idno
+	*               	["user_idtype"], // user.idtype
+	*               	["user_iddoc"], // user.iddoc
+	*               	["user_nickname"], // user.nickname
+	*               	["user_sex"], // user.sex
+	*               	["user_city"], // user.city
+	*               	["user_province"], // user.province
+	*               	["user_country"], // user.country
+	*               	["user_headimgurl"], // user.headimgurl
+	*               	["user_language"], // user.language
+	*               	["user_birthday"], // user.birthday
+	*               	["user_bio"], // user.bio
+	*               	["user_bgimgurl"], // user.bgimgurl
+	*               	["user_mobile"], // user.mobile
+	*               	["user_mobile_nation"], // user.mobile_nation
+	*               	["user_mobile_full"], // user.mobile_full
+	*               	["user_email"], // user.email
+	*               	["user_contact_name"], // user.contact_name
+	*               	["user_contact_tel"], // user.contact_tel
+	*               	["user_title"], // user.title
+	*               	["user_company"], // user.company
+	*               	["user_zip"], // user.zip
+	*               	["user_address"], // user.address
+	*               	["user_remark"], // user.remark
+	*               	["user_tag"], // user.tag
+	*               	["user_user_verified"], // user.user_verified
+	*               	["user_name_verified"], // user.name_verified
+	*               	["user_verify"], // user.verify
+	*               	["user_verify_data"], // user.verify_data
+	*               	["user_mobile_verified"], // user.mobile_verified
+	*               	["user_email_verified"], // user.email_verified
+	*               	["user_extra"], // user.extra
+	*               	["user_password"], // user.password
+	*               	["user_pay_password"], // user.pay_password
+	*               	["user_status"], // user.status
+	*               	["user_inviter"], // user.inviter
+	*               	["user_follower_cnt"], // user.follower_cnt
+	*               	["user_following_cnt"], // user.following_cnt
 	*/
 	protected function get( $query, $data ) {
 
@@ -314,7 +314,7 @@ class Special extends Api {
 	 *               data:[{"key":"val"}...] 字段
 	 *               	["special_id"],  // 专栏ID 
 	 *               	["user_id"],  // 用户ID 
-	*               	["u_user_id"], // user.user_id
+	*               	["user_user_id"], // user.user_id
 	 *               	["type"],  // 专栏类型 
 	 *               	["name"],  // 专栏名称 
 	 *               	["path"],  // 专栏地址 
@@ -379,48 +379,48 @@ class Special extends Api {
 	*               	["recommend"][$recommend_ids[n]]["status"], // recommend.status
 	*               	["recommend"][$recommend_ids[n]]["bigdata_engine"], // recommend.bigdata_engine
 	*               	["recommend"][$recommend_ids[n]]["series"], // recommend.series
-	*               	["u_created_at"], // user.created_at
-	*               	["u_updated_at"], // user.updated_at
-	*               	["u_group_id"], // user.group_id
-	*               	["u_name"], // user.name
-	*               	["u_idno"], // user.idno
-	*               	["u_idtype"], // user.idtype
-	*               	["u_iddoc"], // user.iddoc
-	*               	["u_nickname"], // user.nickname
-	*               	["u_sex"], // user.sex
-	*               	["u_city"], // user.city
-	*               	["u_province"], // user.province
-	*               	["u_country"], // user.country
-	*               	["u_headimgurl"], // user.headimgurl
-	*               	["u_language"], // user.language
-	*               	["u_birthday"], // user.birthday
-	*               	["u_bio"], // user.bio
-	*               	["u_bgimgurl"], // user.bgimgurl
-	*               	["u_mobile"], // user.mobile
-	*               	["u_mobile_nation"], // user.mobile_nation
-	*               	["u_mobile_full"], // user.mobile_full
-	*               	["u_email"], // user.email
-	*               	["u_contact_name"], // user.contact_name
-	*               	["u_contact_tel"], // user.contact_tel
-	*               	["u_title"], // user.title
-	*               	["u_company"], // user.company
-	*               	["u_zip"], // user.zip
-	*               	["u_address"], // user.address
-	*               	["u_remark"], // user.remark
-	*               	["u_tag"], // user.tag
-	*               	["u_user_verified"], // user.user_verified
-	*               	["u_name_verified"], // user.name_verified
-	*               	["u_verify"], // user.verify
-	*               	["u_verify_data"], // user.verify_data
-	*               	["u_mobile_verified"], // user.mobile_verified
-	*               	["u_email_verified"], // user.email_verified
-	*               	["u_extra"], // user.extra
-	*               	["u_password"], // user.password
-	*               	["u_pay_password"], // user.pay_password
-	*               	["u_status"], // user.status
-	*               	["u_inviter"], // user.inviter
-	*               	["u_follower_cnt"], // user.follower_cnt
-	*               	["u_following_cnt"], // user.following_cnt
+	*               	["user_created_at"], // user.created_at
+	*               	["user_updated_at"], // user.updated_at
+	*               	["user_group_id"], // user.group_id
+	*               	["user_name"], // user.name
+	*               	["user_idno"], // user.idno
+	*               	["user_idtype"], // user.idtype
+	*               	["user_iddoc"], // user.iddoc
+	*               	["user_nickname"], // user.nickname
+	*               	["user_sex"], // user.sex
+	*               	["user_city"], // user.city
+	*               	["user_province"], // user.province
+	*               	["user_country"], // user.country
+	*               	["user_headimgurl"], // user.headimgurl
+	*               	["user_language"], // user.language
+	*               	["user_birthday"], // user.birthday
+	*               	["user_bio"], // user.bio
+	*               	["user_bgimgurl"], // user.bgimgurl
+	*               	["user_mobile"], // user.mobile
+	*               	["user_mobile_nation"], // user.mobile_nation
+	*               	["user_mobile_full"], // user.mobile_full
+	*               	["user_email"], // user.email
+	*               	["user_contact_name"], // user.contact_name
+	*               	["user_contact_tel"], // user.contact_tel
+	*               	["user_title"], // user.title
+	*               	["user_company"], // user.company
+	*               	["user_zip"], // user.zip
+	*               	["user_address"], // user.address
+	*               	["user_remark"], // user.remark
+	*               	["user_tag"], // user.tag
+	*               	["user_user_verified"], // user.user_verified
+	*               	["user_name_verified"], // user.name_verified
+	*               	["user_verify"], // user.verify
+	*               	["user_verify_data"], // user.verify_data
+	*               	["user_mobile_verified"], // user.mobile_verified
+	*               	["user_email_verified"], // user.email_verified
+	*               	["user_extra"], // user.extra
+	*               	["user_password"], // user.password
+	*               	["user_pay_password"], // user.pay_password
+	*               	["user_status"], // user.status
+	*               	["user_inviter"], // user.inviter
+	*               	["user_follower_cnt"], // user.follower_cnt
+	*               	["user_following_cnt"], // user.following_cnt
 	 */
 	protected function search( $query, $data ) {
 

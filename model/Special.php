@@ -4,7 +4,7 @@
  * 专栏数据模型
  *
  * 程序作者: XpmSE机器人
- * 最后修改: 2019-01-09 11:11:42
+ * 最后修改: 2019-01-09 11:27:14
  * 程序母版: /data/stor/private/templates/xpmsns/model/code/model/Name.php
  */
 namespace Xpmsns\Pages\Model;
@@ -206,7 +206,7 @@ class Special extends Model {
 	 * @return array $rs 结果集 
 	 *          	  $rs["special_id"],  // 专栏ID 
 	 *          	  $rs["user_id"],  // 用户ID 
-	 *                $rs["u_user_id"], // user.user_id
+	 *                $rs["user_user_id"], // user.user_id
 	 *          	  $rs["type"],  // 专栏类型 
 	 *          	  $rs["name"],  // 专栏名称 
 	 *          	  $rs["path"],  // 专栏地址 
@@ -271,48 +271,48 @@ class Special extends Model {
 	 *                $rs["_map_recommend"][$recommend_ids[n]]["status"], // recommend.status
 	 *                $rs["_map_recommend"][$recommend_ids[n]]["bigdata_engine"], // recommend.bigdata_engine
 	 *                $rs["_map_recommend"][$recommend_ids[n]]["series"], // recommend.series
-	 *                $rs["u_created_at"], // user.created_at
-	 *                $rs["u_updated_at"], // user.updated_at
-	 *                $rs["u_group_id"], // user.group_id
-	 *                $rs["u_name"], // user.name
-	 *                $rs["u_idno"], // user.idno
-	 *                $rs["u_idtype"], // user.idtype
-	 *                $rs["u_iddoc"], // user.iddoc
-	 *                $rs["u_nickname"], // user.nickname
-	 *                $rs["u_sex"], // user.sex
-	 *                $rs["u_city"], // user.city
-	 *                $rs["u_province"], // user.province
-	 *                $rs["u_country"], // user.country
-	 *                $rs["u_headimgurl"], // user.headimgurl
-	 *                $rs["u_language"], // user.language
-	 *                $rs["u_birthday"], // user.birthday
-	 *                $rs["u_bio"], // user.bio
-	 *                $rs["u_bgimgurl"], // user.bgimgurl
-	 *                $rs["u_mobile"], // user.mobile
-	 *                $rs["u_mobile_nation"], // user.mobile_nation
-	 *                $rs["u_mobile_full"], // user.mobile_full
-	 *                $rs["u_email"], // user.email
-	 *                $rs["u_contact_name"], // user.contact_name
-	 *                $rs["u_contact_tel"], // user.contact_tel
-	 *                $rs["u_title"], // user.title
-	 *                $rs["u_company"], // user.company
-	 *                $rs["u_zip"], // user.zip
-	 *                $rs["u_address"], // user.address
-	 *                $rs["u_remark"], // user.remark
-	 *                $rs["u_tag"], // user.tag
-	 *                $rs["u_user_verified"], // user.user_verified
-	 *                $rs["u_name_verified"], // user.name_verified
-	 *                $rs["u_verify"], // user.verify
-	 *                $rs["u_verify_data"], // user.verify_data
-	 *                $rs["u_mobile_verified"], // user.mobile_verified
-	 *                $rs["u_email_verified"], // user.email_verified
-	 *                $rs["u_extra"], // user.extra
-	 *                $rs["u_password"], // user.password
-	 *                $rs["u_pay_password"], // user.pay_password
-	 *                $rs["u_status"], // user.status
-	 *                $rs["u_inviter"], // user.inviter
-	 *                $rs["u_follower_cnt"], // user.follower_cnt
-	 *                $rs["u_following_cnt"], // user.following_cnt
+	 *                $rs["user_created_at"], // user.created_at
+	 *                $rs["user_updated_at"], // user.updated_at
+	 *                $rs["user_group_id"], // user.group_id
+	 *                $rs["user_name"], // user.name
+	 *                $rs["user_idno"], // user.idno
+	 *                $rs["user_idtype"], // user.idtype
+	 *                $rs["user_iddoc"], // user.iddoc
+	 *                $rs["user_nickname"], // user.nickname
+	 *                $rs["user_sex"], // user.sex
+	 *                $rs["user_city"], // user.city
+	 *                $rs["user_province"], // user.province
+	 *                $rs["user_country"], // user.country
+	 *                $rs["user_headimgurl"], // user.headimgurl
+	 *                $rs["user_language"], // user.language
+	 *                $rs["user_birthday"], // user.birthday
+	 *                $rs["user_bio"], // user.bio
+	 *                $rs["user_bgimgurl"], // user.bgimgurl
+	 *                $rs["user_mobile"], // user.mobile
+	 *                $rs["user_mobile_nation"], // user.mobile_nation
+	 *                $rs["user_mobile_full"], // user.mobile_full
+	 *                $rs["user_email"], // user.email
+	 *                $rs["user_contact_name"], // user.contact_name
+	 *                $rs["user_contact_tel"], // user.contact_tel
+	 *                $rs["user_title"], // user.title
+	 *                $rs["user_company"], // user.company
+	 *                $rs["user_zip"], // user.zip
+	 *                $rs["user_address"], // user.address
+	 *                $rs["user_remark"], // user.remark
+	 *                $rs["user_tag"], // user.tag
+	 *                $rs["user_user_verified"], // user.user_verified
+	 *                $rs["user_name_verified"], // user.name_verified
+	 *                $rs["user_verify"], // user.verify
+	 *                $rs["user_verify_data"], // user.verify_data
+	 *                $rs["user_mobile_verified"], // user.mobile_verified
+	 *                $rs["user_email_verified"], // user.email_verified
+	 *                $rs["user_extra"], // user.extra
+	 *                $rs["user_password"], // user.password
+	 *                $rs["user_pay_password"], // user.pay_password
+	 *                $rs["user_status"], // user.status
+	 *                $rs["user_inviter"], // user.inviter
+	 *                $rs["user_follower_cnt"], // user.follower_cnt
+	 *                $rs["user_following_cnt"], // user.following_cnt
 	 */
 	public function getBySpecialId( $special_id, $select=['*']) {
 		
@@ -327,8 +327,8 @@ class Special extends Model {
 
 		// 创建查询构造器
 		$qb = Utils::getTab("xpmsns_pages_special as special", "{none}")->query();
-   		$qb->leftJoin("xpmsns_user_user as u", "u.user_id", "=", "special.user_id"); // 连接用户
-		$qb->where('special_id', '=', $special_id );
+   		$qb->leftJoin("xpmsns_user_user as user", "user.user_id", "=", "special.user_id"); // 连接用户
+		$qb->where('special.special_id', '=', $special_id );
 		$qb->limit( 1 );
 		$qb->select($select);
 		$rows = $qb->get()->toArray();
@@ -381,7 +381,7 @@ class Special extends Model {
 
 		// 创建查询构造器
 		$qb = Utils::getTab("xpmsns_pages_special as special", "{none}")->query();
-   		$qb->leftJoin("xpmsns_user_user as u", "u.user_id", "=", "special.user_id"); // 连接用户
+   		$qb->leftJoin("xpmsns_user_user as user", "user.user_id", "=", "special.user_id"); // 连接用户
 		$qb->whereIn('special.special_id', $special_ids);
 		
 		// 排序
@@ -448,7 +448,7 @@ class Special extends Model {
 	 * @return array $rs 结果集 
 	 *          	  $rs["special_id"],  // 专栏ID 
 	 *          	  $rs["user_id"],  // 用户ID 
-	 *                $rs["u_user_id"], // user.user_id
+	 *                $rs["user_user_id"], // user.user_id
 	 *          	  $rs["type"],  // 专栏类型 
 	 *          	  $rs["name"],  // 专栏名称 
 	 *          	  $rs["path"],  // 专栏地址 
@@ -513,48 +513,48 @@ class Special extends Model {
 	 *                $rs["_map_recommend"][$recommend_ids[n]]["status"], // recommend.status
 	 *                $rs["_map_recommend"][$recommend_ids[n]]["bigdata_engine"], // recommend.bigdata_engine
 	 *                $rs["_map_recommend"][$recommend_ids[n]]["series"], // recommend.series
-	 *                $rs["u_created_at"], // user.created_at
-	 *                $rs["u_updated_at"], // user.updated_at
-	 *                $rs["u_group_id"], // user.group_id
-	 *                $rs["u_name"], // user.name
-	 *                $rs["u_idno"], // user.idno
-	 *                $rs["u_idtype"], // user.idtype
-	 *                $rs["u_iddoc"], // user.iddoc
-	 *                $rs["u_nickname"], // user.nickname
-	 *                $rs["u_sex"], // user.sex
-	 *                $rs["u_city"], // user.city
-	 *                $rs["u_province"], // user.province
-	 *                $rs["u_country"], // user.country
-	 *                $rs["u_headimgurl"], // user.headimgurl
-	 *                $rs["u_language"], // user.language
-	 *                $rs["u_birthday"], // user.birthday
-	 *                $rs["u_bio"], // user.bio
-	 *                $rs["u_bgimgurl"], // user.bgimgurl
-	 *                $rs["u_mobile"], // user.mobile
-	 *                $rs["u_mobile_nation"], // user.mobile_nation
-	 *                $rs["u_mobile_full"], // user.mobile_full
-	 *                $rs["u_email"], // user.email
-	 *                $rs["u_contact_name"], // user.contact_name
-	 *                $rs["u_contact_tel"], // user.contact_tel
-	 *                $rs["u_title"], // user.title
-	 *                $rs["u_company"], // user.company
-	 *                $rs["u_zip"], // user.zip
-	 *                $rs["u_address"], // user.address
-	 *                $rs["u_remark"], // user.remark
-	 *                $rs["u_tag"], // user.tag
-	 *                $rs["u_user_verified"], // user.user_verified
-	 *                $rs["u_name_verified"], // user.name_verified
-	 *                $rs["u_verify"], // user.verify
-	 *                $rs["u_verify_data"], // user.verify_data
-	 *                $rs["u_mobile_verified"], // user.mobile_verified
-	 *                $rs["u_email_verified"], // user.email_verified
-	 *                $rs["u_extra"], // user.extra
-	 *                $rs["u_password"], // user.password
-	 *                $rs["u_pay_password"], // user.pay_password
-	 *                $rs["u_status"], // user.status
-	 *                $rs["u_inviter"], // user.inviter
-	 *                $rs["u_follower_cnt"], // user.follower_cnt
-	 *                $rs["u_following_cnt"], // user.following_cnt
+	 *                $rs["user_created_at"], // user.created_at
+	 *                $rs["user_updated_at"], // user.updated_at
+	 *                $rs["user_group_id"], // user.group_id
+	 *                $rs["user_name"], // user.name
+	 *                $rs["user_idno"], // user.idno
+	 *                $rs["user_idtype"], // user.idtype
+	 *                $rs["user_iddoc"], // user.iddoc
+	 *                $rs["user_nickname"], // user.nickname
+	 *                $rs["user_sex"], // user.sex
+	 *                $rs["user_city"], // user.city
+	 *                $rs["user_province"], // user.province
+	 *                $rs["user_country"], // user.country
+	 *                $rs["user_headimgurl"], // user.headimgurl
+	 *                $rs["user_language"], // user.language
+	 *                $rs["user_birthday"], // user.birthday
+	 *                $rs["user_bio"], // user.bio
+	 *                $rs["user_bgimgurl"], // user.bgimgurl
+	 *                $rs["user_mobile"], // user.mobile
+	 *                $rs["user_mobile_nation"], // user.mobile_nation
+	 *                $rs["user_mobile_full"], // user.mobile_full
+	 *                $rs["user_email"], // user.email
+	 *                $rs["user_contact_name"], // user.contact_name
+	 *                $rs["user_contact_tel"], // user.contact_tel
+	 *                $rs["user_title"], // user.title
+	 *                $rs["user_company"], // user.company
+	 *                $rs["user_zip"], // user.zip
+	 *                $rs["user_address"], // user.address
+	 *                $rs["user_remark"], // user.remark
+	 *                $rs["user_tag"], // user.tag
+	 *                $rs["user_user_verified"], // user.user_verified
+	 *                $rs["user_name_verified"], // user.name_verified
+	 *                $rs["user_verify"], // user.verify
+	 *                $rs["user_verify_data"], // user.verify_data
+	 *                $rs["user_mobile_verified"], // user.mobile_verified
+	 *                $rs["user_email_verified"], // user.email_verified
+	 *                $rs["user_extra"], // user.extra
+	 *                $rs["user_password"], // user.password
+	 *                $rs["user_pay_password"], // user.pay_password
+	 *                $rs["user_status"], // user.status
+	 *                $rs["user_inviter"], // user.inviter
+	 *                $rs["user_follower_cnt"], // user.follower_cnt
+	 *                $rs["user_following_cnt"], // user.following_cnt
 	 */
 	public function getByUserId( $user_id, $select=['*']) {
 		
@@ -569,8 +569,8 @@ class Special extends Model {
 
 		// 创建查询构造器
 		$qb = Utils::getTab("xpmsns_pages_special as special", "{none}")->query();
-   		$qb->leftJoin("xpmsns_user_user as u", "u.user_id", "=", "special.user_id"); // 连接用户
-		$qb->where('user_id', '=', $user_id );
+   		$qb->leftJoin("xpmsns_user_user as user", "user.user_id", "=", "special.user_id"); // 连接用户
+		$qb->where('special.user_id', '=', $user_id );
 		$qb->limit( 1 );
 		$qb->select($select);
 		$rows = $qb->get()->toArray();
@@ -623,7 +623,7 @@ class Special extends Model {
 
 		// 创建查询构造器
 		$qb = Utils::getTab("xpmsns_pages_special as special", "{none}")->query();
-   		$qb->leftJoin("xpmsns_user_user as u", "u.user_id", "=", "special.user_id"); // 连接用户
+   		$qb->leftJoin("xpmsns_user_user as user", "user.user_id", "=", "special.user_id"); // 连接用户
 		$qb->whereIn('special.user_id', $user_ids);
 		
 		// 排序
@@ -690,7 +690,7 @@ class Special extends Model {
 	 * @return array $rs 结果集 
 	 *          	  $rs["special_id"],  // 专栏ID 
 	 *          	  $rs["user_id"],  // 用户ID 
-	 *                $rs["u_user_id"], // user.user_id
+	 *                $rs["user_user_id"], // user.user_id
 	 *          	  $rs["type"],  // 专栏类型 
 	 *          	  $rs["name"],  // 专栏名称 
 	 *          	  $rs["path"],  // 专栏地址 
@@ -755,48 +755,48 @@ class Special extends Model {
 	 *                $rs["_map_recommend"][$recommend_ids[n]]["status"], // recommend.status
 	 *                $rs["_map_recommend"][$recommend_ids[n]]["bigdata_engine"], // recommend.bigdata_engine
 	 *                $rs["_map_recommend"][$recommend_ids[n]]["series"], // recommend.series
-	 *                $rs["u_created_at"], // user.created_at
-	 *                $rs["u_updated_at"], // user.updated_at
-	 *                $rs["u_group_id"], // user.group_id
-	 *                $rs["u_name"], // user.name
-	 *                $rs["u_idno"], // user.idno
-	 *                $rs["u_idtype"], // user.idtype
-	 *                $rs["u_iddoc"], // user.iddoc
-	 *                $rs["u_nickname"], // user.nickname
-	 *                $rs["u_sex"], // user.sex
-	 *                $rs["u_city"], // user.city
-	 *                $rs["u_province"], // user.province
-	 *                $rs["u_country"], // user.country
-	 *                $rs["u_headimgurl"], // user.headimgurl
-	 *                $rs["u_language"], // user.language
-	 *                $rs["u_birthday"], // user.birthday
-	 *                $rs["u_bio"], // user.bio
-	 *                $rs["u_bgimgurl"], // user.bgimgurl
-	 *                $rs["u_mobile"], // user.mobile
-	 *                $rs["u_mobile_nation"], // user.mobile_nation
-	 *                $rs["u_mobile_full"], // user.mobile_full
-	 *                $rs["u_email"], // user.email
-	 *                $rs["u_contact_name"], // user.contact_name
-	 *                $rs["u_contact_tel"], // user.contact_tel
-	 *                $rs["u_title"], // user.title
-	 *                $rs["u_company"], // user.company
-	 *                $rs["u_zip"], // user.zip
-	 *                $rs["u_address"], // user.address
-	 *                $rs["u_remark"], // user.remark
-	 *                $rs["u_tag"], // user.tag
-	 *                $rs["u_user_verified"], // user.user_verified
-	 *                $rs["u_name_verified"], // user.name_verified
-	 *                $rs["u_verify"], // user.verify
-	 *                $rs["u_verify_data"], // user.verify_data
-	 *                $rs["u_mobile_verified"], // user.mobile_verified
-	 *                $rs["u_email_verified"], // user.email_verified
-	 *                $rs["u_extra"], // user.extra
-	 *                $rs["u_password"], // user.password
-	 *                $rs["u_pay_password"], // user.pay_password
-	 *                $rs["u_status"], // user.status
-	 *                $rs["u_inviter"], // user.inviter
-	 *                $rs["u_follower_cnt"], // user.follower_cnt
-	 *                $rs["u_following_cnt"], // user.following_cnt
+	 *                $rs["user_created_at"], // user.created_at
+	 *                $rs["user_updated_at"], // user.updated_at
+	 *                $rs["user_group_id"], // user.group_id
+	 *                $rs["user_name"], // user.name
+	 *                $rs["user_idno"], // user.idno
+	 *                $rs["user_idtype"], // user.idtype
+	 *                $rs["user_iddoc"], // user.iddoc
+	 *                $rs["user_nickname"], // user.nickname
+	 *                $rs["user_sex"], // user.sex
+	 *                $rs["user_city"], // user.city
+	 *                $rs["user_province"], // user.province
+	 *                $rs["user_country"], // user.country
+	 *                $rs["user_headimgurl"], // user.headimgurl
+	 *                $rs["user_language"], // user.language
+	 *                $rs["user_birthday"], // user.birthday
+	 *                $rs["user_bio"], // user.bio
+	 *                $rs["user_bgimgurl"], // user.bgimgurl
+	 *                $rs["user_mobile"], // user.mobile
+	 *                $rs["user_mobile_nation"], // user.mobile_nation
+	 *                $rs["user_mobile_full"], // user.mobile_full
+	 *                $rs["user_email"], // user.email
+	 *                $rs["user_contact_name"], // user.contact_name
+	 *                $rs["user_contact_tel"], // user.contact_tel
+	 *                $rs["user_title"], // user.title
+	 *                $rs["user_company"], // user.company
+	 *                $rs["user_zip"], // user.zip
+	 *                $rs["user_address"], // user.address
+	 *                $rs["user_remark"], // user.remark
+	 *                $rs["user_tag"], // user.tag
+	 *                $rs["user_user_verified"], // user.user_verified
+	 *                $rs["user_name_verified"], // user.name_verified
+	 *                $rs["user_verify"], // user.verify
+	 *                $rs["user_verify_data"], // user.verify_data
+	 *                $rs["user_mobile_verified"], // user.mobile_verified
+	 *                $rs["user_email_verified"], // user.email_verified
+	 *                $rs["user_extra"], // user.extra
+	 *                $rs["user_password"], // user.password
+	 *                $rs["user_pay_password"], // user.pay_password
+	 *                $rs["user_status"], // user.status
+	 *                $rs["user_inviter"], // user.inviter
+	 *                $rs["user_follower_cnt"], // user.follower_cnt
+	 *                $rs["user_following_cnt"], // user.following_cnt
 	 */
 	public function getByPath( $path, $select=['*']) {
 		
@@ -811,8 +811,8 @@ class Special extends Model {
 
 		// 创建查询构造器
 		$qb = Utils::getTab("xpmsns_pages_special as special", "{none}")->query();
-   		$qb->leftJoin("xpmsns_user_user as u", "u.user_id", "=", "special.user_id"); // 连接用户
-		$qb->where('path', '=', $path );
+   		$qb->leftJoin("xpmsns_user_user as user", "user.user_id", "=", "special.user_id"); // 连接用户
+		$qb->where('special.path', '=', $path );
 		$qb->limit( 1 );
 		$qb->select($select);
 		$rows = $qb->get()->toArray();
@@ -865,7 +865,7 @@ class Special extends Model {
 
 		// 创建查询构造器
 		$qb = Utils::getTab("xpmsns_pages_special as special", "{none}")->query();
-   		$qb->leftJoin("xpmsns_user_user as u", "u.user_id", "=", "special.user_id"); // 连接用户
+   		$qb->leftJoin("xpmsns_user_user as user", "user.user_id", "=", "special.user_id"); // 连接用户
 		$qb->whereIn('special.path', $paths);
 		
 		// 排序
@@ -1109,7 +1109,7 @@ class Special extends Model {
 
 		// 创建查询构造器
 		$qb = Utils::getTab("xpmsns_pages_special as special", "{none}")->query();
-   		$qb->leftJoin("xpmsns_user_user as u", "u.user_id", "=", "special.user_id"); // 连接用户
+   		$qb->leftJoin("xpmsns_user_user as user", "user.user_id", "=", "special.user_id"); // 连接用户
 
 
 		foreach ($order as $field => $order ) {
@@ -1170,7 +1170,7 @@ class Special extends Model {
 	 * @return array 专栏记录集 {"total":100, "page":1, "perpage":20, data:[{"key":"val"}...], "from":1, "to":1, "prev":false, "next":1, "curr":10, "last":20}
 	 *               	["special_id"],  // 专栏ID 
 	 *               	["user_id"],  // 用户ID 
-	 *               	["u_user_id"], // user.user_id
+	 *               	["user_user_id"], // user.user_id
 	 *               	["type"],  // 专栏类型 
 	 *               	["name"],  // 专栏名称 
 	 *               	["path"],  // 专栏地址 
@@ -1235,48 +1235,48 @@ class Special extends Model {
 	 *               	["recommend"][$recommend_ids[n]]["status"], // recommend.status
 	 *               	["recommend"][$recommend_ids[n]]["bigdata_engine"], // recommend.bigdata_engine
 	 *               	["recommend"][$recommend_ids[n]]["series"], // recommend.series
-	 *               	["u_created_at"], // user.created_at
-	 *               	["u_updated_at"], // user.updated_at
-	 *               	["u_group_id"], // user.group_id
-	 *               	["u_name"], // user.name
-	 *               	["u_idno"], // user.idno
-	 *               	["u_idtype"], // user.idtype
-	 *               	["u_iddoc"], // user.iddoc
-	 *               	["u_nickname"], // user.nickname
-	 *               	["u_sex"], // user.sex
-	 *               	["u_city"], // user.city
-	 *               	["u_province"], // user.province
-	 *               	["u_country"], // user.country
-	 *               	["u_headimgurl"], // user.headimgurl
-	 *               	["u_language"], // user.language
-	 *               	["u_birthday"], // user.birthday
-	 *               	["u_bio"], // user.bio
-	 *               	["u_bgimgurl"], // user.bgimgurl
-	 *               	["u_mobile"], // user.mobile
-	 *               	["u_mobile_nation"], // user.mobile_nation
-	 *               	["u_mobile_full"], // user.mobile_full
-	 *               	["u_email"], // user.email
-	 *               	["u_contact_name"], // user.contact_name
-	 *               	["u_contact_tel"], // user.contact_tel
-	 *               	["u_title"], // user.title
-	 *               	["u_company"], // user.company
-	 *               	["u_zip"], // user.zip
-	 *               	["u_address"], // user.address
-	 *               	["u_remark"], // user.remark
-	 *               	["u_tag"], // user.tag
-	 *               	["u_user_verified"], // user.user_verified
-	 *               	["u_name_verified"], // user.name_verified
-	 *               	["u_verify"], // user.verify
-	 *               	["u_verify_data"], // user.verify_data
-	 *               	["u_mobile_verified"], // user.mobile_verified
-	 *               	["u_email_verified"], // user.email_verified
-	 *               	["u_extra"], // user.extra
-	 *               	["u_password"], // user.password
-	 *               	["u_pay_password"], // user.pay_password
-	 *               	["u_status"], // user.status
-	 *               	["u_inviter"], // user.inviter
-	 *               	["u_follower_cnt"], // user.follower_cnt
-	 *               	["u_following_cnt"], // user.following_cnt
+	 *               	["user_created_at"], // user.created_at
+	 *               	["user_updated_at"], // user.updated_at
+	 *               	["user_group_id"], // user.group_id
+	 *               	["user_name"], // user.name
+	 *               	["user_idno"], // user.idno
+	 *               	["user_idtype"], // user.idtype
+	 *               	["user_iddoc"], // user.iddoc
+	 *               	["user_nickname"], // user.nickname
+	 *               	["user_sex"], // user.sex
+	 *               	["user_city"], // user.city
+	 *               	["user_province"], // user.province
+	 *               	["user_country"], // user.country
+	 *               	["user_headimgurl"], // user.headimgurl
+	 *               	["user_language"], // user.language
+	 *               	["user_birthday"], // user.birthday
+	 *               	["user_bio"], // user.bio
+	 *               	["user_bgimgurl"], // user.bgimgurl
+	 *               	["user_mobile"], // user.mobile
+	 *               	["user_mobile_nation"], // user.mobile_nation
+	 *               	["user_mobile_full"], // user.mobile_full
+	 *               	["user_email"], // user.email
+	 *               	["user_contact_name"], // user.contact_name
+	 *               	["user_contact_tel"], // user.contact_tel
+	 *               	["user_title"], // user.title
+	 *               	["user_company"], // user.company
+	 *               	["user_zip"], // user.zip
+	 *               	["user_address"], // user.address
+	 *               	["user_remark"], // user.remark
+	 *               	["user_tag"], // user.tag
+	 *               	["user_user_verified"], // user.user_verified
+	 *               	["user_name_verified"], // user.name_verified
+	 *               	["user_verify"], // user.verify
+	 *               	["user_verify_data"], // user.verify_data
+	 *               	["user_mobile_verified"], // user.mobile_verified
+	 *               	["user_email_verified"], // user.email_verified
+	 *               	["user_extra"], // user.extra
+	 *               	["user_password"], // user.password
+	 *               	["user_pay_password"], // user.pay_password
+	 *               	["user_status"], // user.status
+	 *               	["user_inviter"], // user.inviter
+	 *               	["user_follower_cnt"], // user.follower_cnt
+	 *               	["user_following_cnt"], // user.following_cnt
 	 */
 	public function search( $query = [] ) {
 
@@ -1291,7 +1291,7 @@ class Special extends Model {
 
 		// 创建查询构造器
 		$qb = Utils::getTab("xpmsns_pages_special as special", "{none}")->query();
-   		$qb->leftJoin("xpmsns_user_user as u", "u.user_id", "=", "special.user_id"); // 连接用户
+   		$qb->leftJoin("xpmsns_user_user as user", "user.user_id", "=", "special.user_id"); // 连接用户
 
 		// 按关键词查找
 		if ( array_key_exists("keyword", $query) && !empty($query["keyword"]) ) {
@@ -1415,8 +1415,8 @@ class Special extends Model {
 				continue;
 			}
 			
-			// 连接栏目 (category as c )
-			if ( strpos( $fd, "c." ) === 0 || strpos("category.", $fd ) === 0  || trim($fd) == "*" ) {
+			// 连接栏目 (category as category )
+			if ( strpos( $fd, "category." ) === 0 || strpos("category.", $fd ) === 0  || trim($fd) == "*" ) {
 				$arr = explode( ".", $fd );
 				$arr[1]  = !empty($arr[1]) ? $arr[1] : "*";
 				$inwhereSelect["category"][] = trim($arr[1]);
@@ -1427,8 +1427,8 @@ class Special extends Model {
 				}
 			}
 			
-			// 连接推荐 (recommend as r )
-			if ( strpos( $fd, "r." ) === 0 || strpos("recommend.", $fd ) === 0  || trim($fd) == "*" ) {
+			// 连接推荐 (recommend as recommend )
+			if ( strpos( $fd, "recommend." ) === 0 || strpos("recommend.", $fd ) === 0  || trim($fd) == "*" ) {
 				$arr = explode( ".", $fd );
 				$arr[1]  = !empty($arr[1]) ? $arr[1] : "*";
 				$inwhereSelect["recommend"][] = trim($arr[1]);
@@ -1439,8 +1439,8 @@ class Special extends Model {
 				}
 			}
 			
-			//  连接用户 (user as u )
-			if ( trim($fd) == "user.*" || trim($fd) == "u.*"  || trim($fd) == "*" ) {
+			//  连接用户 (user as user )
+			if ( trim($fd) == "user.*" || trim($fd) == "user.*"  || trim($fd) == "*" ) {
 				$fields = [];
 				if ( method_exists("\\Xpmsns\\User\\Model\\User", 'getFields') ) {
 					$fields = \Xpmsns\User\Model\User::getFields();
@@ -1448,7 +1448,7 @@ class Special extends Model {
 
 				if ( !empty($fields) ) { 
 					foreach ($fields as $field ) {
-						$field = "u.{$field} as u_{$field}";
+						$field = "user.{$field} as user_{$field}";
 						array_push($linkSelect, $field);
 					}
 
@@ -1460,12 +1460,12 @@ class Special extends Model {
 			}
 
 			else if ( strpos( $fd, "user." ) === 0 ) {
-				$as = str_replace('user.', 'u_', $select[$idx]);
+				$as = str_replace('user.', 'user_', $select[$idx]);
 				$select[$idx] = $select[$idx] . " as {$as} ";
 			}
 
-			else if ( strpos( $fd, "u.") === 0 ) {
-				$as = str_replace('u.', 'u_', $select[$idx]);
+			else if ( strpos( $fd, "user.") === 0 ) {
+				$as = str_replace('user.', 'user_', $select[$idx]);
 				$select[$idx] = $select[$idx] . " as {$as} ";
 			}
 

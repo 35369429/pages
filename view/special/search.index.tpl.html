@@ -218,7 +218,7 @@ use \Xpmse\T;
 									<span class="text-<?=$rs['_type']['style']?>"><?=$rs['_type']['name'] ? $rs['_type']['name']  : $rs['type'] ?></span>
 								</td>
 								<td class="font-w300">
-									<?php $rs["_map_category"]= &$response["category"]; $v=null; $v=T::s("{% for idx in category_ids %} {{_map_category[idx].name}} {% endfor %}", $rs ); echo empty($v) ? T::s("", $rs ) : $v; ?>
+									<?php $v=null; $v=T::s("{{c.name}}", $rs ); echo empty($v) ? T::s("", $rs ) : $v; ?>
 								</td>
 								<td class="font-w300">
 									<?php $v=null; $v=T::s("{{u_name ? u_name : u_nickname}}", $rs ); echo empty($v) ? T::s("", $rs ) : $v; ?>
