@@ -4,7 +4,7 @@
  * 专栏控制器
  *
  * 程序作者: XpmSE机器人
- * 最后修改: 2018-10-15 21:23:20
+ * 最后修改: 2019-01-09 11:11:42
  * 程序母版: /data/stor/private/templates/xpmsns/model/code/controller/Name.php
  */
 
@@ -112,7 +112,32 @@ class SpecialController extends \Xpmse\Loader\Controller {
 		 			"js/plugins/jquery-validation/jquery.validate.min.js",
 		    		"js/plugins/jquery-ui/jquery-ui.min.js",
 		    		"js/plugins/summernote/summernote.min.js",
-		    		"js/plugins/summernote/lang/summernote-zh-CN.js",
+                    "js/plugins/summernote/lang/summernote-zh-CN.js",
+                    "js/plugins/codemirror/lib/codemirror.js",
+                    "js/plugins/codemirror/addon/search/searchcursor.js",
+                    "js/plugins/codemirror/addon/search/search.js",
+                    "js/plugins/codemirror/addon/dialog/dialog.js",
+                    "js/plugins/codemirror/addon/edit/matchbrackets.js",
+                    "js/plugins/codemirror/addon/edit/closebrackets.js",
+                    "js/plugins/codemirror/addon/comment/comment.js",
+                    "js/plugins/codemirror/addon/wrap/hardwrap.js",
+                    "js/plugins/codemirror/addon/fold/foldcode.js",
+                    "js/plugins/codemirror/addon/fold/brace-fold.js",
+                    "js/plugins/codemirror/mode/javascript/javascript.js",
+                    "js/plugins/codemirror/mode/shell/shell.js",
+                    "js/plugins/codemirror/mode/sql/sql.js",
+                    "js/plugins/codemirror/mode/python/python.js",
+                    "js/plugins/codemirror/mode/go/go.js",
+                    "js/plugins/codemirror/mode/php/php.js",
+                    "js/plugins/codemirror/mode/htmlmixed/htmlmixed.js",
+                    "js/plugins/codemirror/mode/xml/xml.js",
+                    "js/plugins/codemirror/mode/css/css.js",
+                    "js/plugins/codemirror/mode/sass/sass.js",
+                    "js/plugins/codemirror/mode/vue/vue.js",
+                    "js/plugins/codemirror/mode/textile/textile.js",
+                    "js/plugins/codemirror/mode/clike/clike.js",
+                    "js/plugins/codemirror/mode/markdown/markdown.js",
+                    "js/plugins/codemirror/keymap/sublime.js",
 				],
 			'css'=>[
 				"js/plugins/bootstrap-datepicker/bootstrap-datepicker3.min.css",
@@ -120,7 +145,11 @@ class SpecialController extends \Xpmse\Loader\Controller {
 	 			"js/plugins/select2/select2-bootstrap.min.css",
 	 			"js/plugins/jquery-tags-input/jquery.tagsinput.min.css",
 	 			"js/plugins/summernote/summernote.css",
-	 			"js/plugins/summernote/summernote-bs3.min.css"
+                "js/plugins/summernote/summernote-bs3.min.css",
+                "js/plugins/codemirror/lib/codemirror.css",
+                "js/plugins/codemirror/addon/fold/foldgutter.css",
+                "js/plugins/codemirror/addon/dialog/dialog.css",
+                "js/plugins/codemirror/theme/monokai.css",
 	 		],
 
 			'crumb' => [
@@ -142,7 +171,8 @@ class SpecialController extends \Xpmse\Loader\Controller {
 	 * @return
 	 */
 	function save() {
-		$data = $_POST;
+        $data = $_POST;
+        Utils::JsonFromInput( $data );
 		$inst = new \Xpmsns\Pages\Model\Special;
 		$rs = $inst->saveBySpecialId( $data );
 		echo json_encode($rs);
@@ -171,6 +201,7 @@ class SpecialController extends \Xpmse\Loader\Controller {
 
 		// 删除唯一索引字段
 		unset($rs['special_id']);
+		unset($rs['user_id']);
 		unset($rs['path']);
 
 		// 复制图片
@@ -220,19 +251,53 @@ class SpecialController extends \Xpmse\Loader\Controller {
 		return [
 			'js' => [
 		 			"js/plugins/select2/select2.full.min.js",
+		 			"js/plugins/select2/i18n/zh-CN.js",
 		 			"js/plugins/dropzonejs/dropzone.min.js",
 		 			"js/plugins/cropper/cropper.min.js",
 		 			"js/plugins/jquery-tags-input/jquery.tagsinput.min.js",
 		 			"js/plugins/bootstrap-datepicker/bootstrap-datepicker.min.js",
 		 			'js/plugins/masked-inputs/jquery.maskedinput.min.js',
 		 			"js/plugins/jquery-validation/jquery.validate.min.js",
-		    		"js/plugins/jquery-ui/jquery-ui.min.js"
+		    		"js/plugins/jquery-ui/jquery-ui.min.js",
+		    		"js/plugins/summernote/summernote.min.js",
+                    "js/plugins/summernote/lang/summernote-zh-CN.js",
+                    "js/plugins/codemirror/lib/codemirror.js",
+                    "js/plugins/codemirror/addon/search/searchcursor.js",
+                    "js/plugins/codemirror/addon/search/search.js",
+                    "js/plugins/codemirror/addon/dialog/dialog.js",
+                    "js/plugins/codemirror/addon/edit/matchbrackets.js",
+                    "js/plugins/codemirror/addon/edit/closebrackets.js",
+                    "js/plugins/codemirror/addon/comment/comment.js",
+                    "js/plugins/codemirror/addon/wrap/hardwrap.js",
+                    "js/plugins/codemirror/addon/fold/foldcode.js",
+                    "js/plugins/codemirror/addon/fold/brace-fold.js",
+                    "js/plugins/codemirror/mode/javascript/javascript.js",
+                    "js/plugins/codemirror/mode/shell/shell.js",
+                    "js/plugins/codemirror/mode/sql/sql.js",
+                    "js/plugins/codemirror/mode/python/python.js",
+                    "js/plugins/codemirror/mode/go/go.js",
+                    "js/plugins/codemirror/mode/php/php.js",
+                    "js/plugins/codemirror/mode/htmlmixed/htmlmixed.js",
+                    "js/plugins/codemirror/mode/xml/xml.js",
+                    "js/plugins/codemirror/mode/css/css.js",
+                    "js/plugins/codemirror/mode/sass/sass.js",
+                    "js/plugins/codemirror/mode/vue/vue.js",
+                    "js/plugins/codemirror/mode/textile/textile.js",
+                    "js/plugins/codemirror/mode/clike/clike.js",
+                    "js/plugins/codemirror/mode/markdown/markdown.js",
+                    "js/plugins/codemirror/keymap/sublime.js",
 				],
 			'css'=>[
 				"js/plugins/bootstrap-datepicker/bootstrap-datepicker3.min.css",
 	 			"js/plugins/select2/select2.min.css",
 	 			"js/plugins/select2/select2-bootstrap.min.css",
-	 			"js/plugins/jquery-tags-input/jquery.tagsinput.min.css"
+	 			"js/plugins/jquery-tags-input/jquery.tagsinput.min.css",
+	 			"js/plugins/summernote/summernote.css",
+                "js/plugins/summernote/summernote-bs3.min.css",
+                "js/plugins/codemirror/lib/codemirror.css",
+                "js/plugins/codemirror/addon/fold/foldgutter.css",
+                "js/plugins/codemirror/addon/dialog/dialog.css",
+                "js/plugins/codemirror/theme/monokai.css",
 	 		],
 
 			'crumb' => [

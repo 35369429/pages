@@ -4,11 +4,11 @@
  * 专栏数据模型
  *
  * 程序作者: XpmSE机器人
- * 最后修改: 2018-10-15 21:23:20
+ * 最后修改: 2019-01-09 11:11:42
  * 程序母版: /data/stor/private/templates/xpmsns/model/code/model/Name.php
  */
 namespace Xpmsns\Pages\Model;
-                   
+                    
 use \Xpmse\Excp;
 use \Xpmse\Model;
 use \Xpmse\Utils;
@@ -59,7 +59,7 @@ class Special extends Model {
 		// 专栏ID
 		$this->putColumn( 'special_id', $this->type("string", ["length"=>128, "unique"=>true, "null"=>false]));
 		// 用户ID
-		$this->putColumn( 'user_id', $this->type("string", ["length"=>128, "index"=>true, "null"=>true]));
+		$this->putColumn( 'user_id', $this->type("string", ["length"=>128, "unique"=>true, "null"=>true]));
 		// 专栏类型
 		$this->putColumn( 'type', $this->type("string", ["length"=>128, "index"=>true, "default"=>"expert", "null"=>false]));
 		// 专栏名称
@@ -95,6 +95,8 @@ class Special extends Model {
 		// 格式化: 专栏LOGO
 		// 返回值: [{"url":"访问地址...", "path":"文件路径...", "origin":"原始文件访问地址..." }]
 		if ( array_key_exists('logo', $rs ) ) {
+			$is_string = is_string($rs["logo"]);
+			$rs["logo"] = $is_string ? [$rs["logo"]] : $rs["logo"];
 			$rs["logo"] = !is_array($rs["logo"]) ? [] : $rs["logo"];
 			foreach ($rs["logo"] as & $file ) {
 				if ( is_array($file) && !empty($file['path']) ) {
@@ -106,11 +108,16 @@ class Special extends Model {
 					$file = [];
 				}
 			}
+			if ($is_string) {
+				$rs["logo"] = current($rs["logo"]);
+			}
 		}
 
 		// 格式化: 申请材料
 		// 返回值: [{"url":"访问地址...", "path":"文件路径...", "origin":"原始文件访问地址..." }]
 		if ( array_key_exists('docs', $rs ) ) {
+			$is_string = is_string($rs["docs"]);
+			$rs["docs"] = $is_string ? [$rs["docs"]] : $rs["docs"];
 			$rs["docs"] = !is_array($rs["docs"]) ? [] : $rs["docs"];
 			foreach ($rs["docs"] as & $file ) {
 				if ( is_array($file) && !empty($file['path']) ) {
@@ -121,6 +128,9 @@ class Special extends Model {
 				} else {
 					$file = [];
 				}
+			}
+			if ($is_string) {
+				$rs["docs"] = current($rs["docs"]);
 			}
 		}
 
@@ -266,6 +276,7 @@ class Special extends Model {
 	 *                $rs["u_group_id"], // user.group_id
 	 *                $rs["u_name"], // user.name
 	 *                $rs["u_idno"], // user.idno
+	 *                $rs["u_idtype"], // user.idtype
 	 *                $rs["u_iddoc"], // user.iddoc
 	 *                $rs["u_nickname"], // user.nickname
 	 *                $rs["u_sex"], // user.sex
@@ -275,6 +286,8 @@ class Special extends Model {
 	 *                $rs["u_headimgurl"], // user.headimgurl
 	 *                $rs["u_language"], // user.language
 	 *                $rs["u_birthday"], // user.birthday
+	 *                $rs["u_bio"], // user.bio
+	 *                $rs["u_bgimgurl"], // user.bgimgurl
 	 *                $rs["u_mobile"], // user.mobile
 	 *                $rs["u_mobile_nation"], // user.mobile_nation
 	 *                $rs["u_mobile_full"], // user.mobile_full
@@ -297,9 +310,9 @@ class Special extends Model {
 	 *                $rs["u_password"], // user.password
 	 *                $rs["u_pay_password"], // user.pay_password
 	 *                $rs["u_status"], // user.status
-	 *                $rs["u_bio"], // user.bio
-	 *                $rs["u_bgimgurl"], // user.bgimgurl
-	 *                $rs["u_idtype"], // user.idtype
+	 *                $rs["u_inviter"], // user.inviter
+	 *                $rs["u_follower_cnt"], // user.follower_cnt
+	 *                $rs["u_following_cnt"], // user.following_cnt
 	 */
 	public function getBySpecialId( $special_id, $select=['*']) {
 		
@@ -425,7 +438,249 @@ class Special extends Model {
 		// 增加表单查询索引字段
 		array_push($select, "special.special_id");
 		$inwhereSelect = $this->formatSelect( $select ); // 过滤 inWhere 查询字段
-		$rs = $this->saveBy("special_id", $data, ["special_id", "path"], ['_id', 'special_id']);
+		$rs = $this->saveBy("special_id", $data, ["special_id", "user_id", "path"], ['_id', 'special_id']);
+		return $this->getBySpecialId( $rs['special_id'], $select );
+	}
+	
+	/**
+	 * 按用户ID查询一条专栏记录
+	 * @param string $user_id 唯一主键
+	 * @return array $rs 结果集 
+	 *          	  $rs["special_id"],  // 专栏ID 
+	 *          	  $rs["user_id"],  // 用户ID 
+	 *                $rs["u_user_id"], // user.user_id
+	 *          	  $rs["type"],  // 专栏类型 
+	 *          	  $rs["name"],  // 专栏名称 
+	 *          	  $rs["path"],  // 专栏地址 
+	 *          	  $rs["logo"],  // 专栏LOGO 
+	 *          	  $rs["category_ids"],  // 内容类目 
+	 *                $rs["_map_category"][$category_ids[n]]["category_id"], // category.category_id
+	 *          	  $rs["recommend_ids"],  // 推荐内容 
+	 *                $rs["_map_recommend"][$recommend_ids[n]]["recommend_id"], // recommend.recommend_id
+	 *          	  $rs["summary"],  // 简介 
+	 *          	  $rs["param"],  // 参数 
+	 *          	  $rs["docs"],  // 申请材料 
+	 *          	  $rs["status"],  // 状态 
+	 *          	  $rs["created_at"],  // 创建时间 
+	 *          	  $rs["updated_at"],  // 更新时间 
+	 *                $rs["_map_category"][$category_ids[n]]["created_at"], // category.created_at
+	 *                $rs["_map_category"][$category_ids[n]]["updated_at"], // category.updated_at
+	 *                $rs["_map_category"][$category_ids[n]]["slug"], // category.slug
+	 *                $rs["_map_category"][$category_ids[n]]["project"], // category.project
+	 *                $rs["_map_category"][$category_ids[n]]["page"], // category.page
+	 *                $rs["_map_category"][$category_ids[n]]["wechat"], // category.wechat
+	 *                $rs["_map_category"][$category_ids[n]]["wechat_offset"], // category.wechat_offset
+	 *                $rs["_map_category"][$category_ids[n]]["name"], // category.name
+	 *                $rs["_map_category"][$category_ids[n]]["fullname"], // category.fullname
+	 *                $rs["_map_category"][$category_ids[n]]["link"], // category.link
+	 *                $rs["_map_category"][$category_ids[n]]["root_id"], // category.root_id
+	 *                $rs["_map_category"][$category_ids[n]]["parent_id"], // category.parent_id
+	 *                $rs["_map_category"][$category_ids[n]]["priority"], // category.priority
+	 *                $rs["_map_category"][$category_ids[n]]["hidden"], // category.hidden
+	 *                $rs["_map_category"][$category_ids[n]]["isnav"], // category.isnav
+	 *                $rs["_map_category"][$category_ids[n]]["param"], // category.param
+	 *                $rs["_map_category"][$category_ids[n]]["status"], // category.status
+	 *                $rs["_map_category"][$category_ids[n]]["issubnav"], // category.issubnav
+	 *                $rs["_map_category"][$category_ids[n]]["highlight"], // category.highlight
+	 *                $rs["_map_category"][$category_ids[n]]["isfootnav"], // category.isfootnav
+	 *                $rs["_map_category"][$category_ids[n]]["isblank"], // category.isblank
+	 *                $rs["_map_recommend"][$recommend_ids[n]]["created_at"], // recommend.created_at
+	 *                $rs["_map_recommend"][$recommend_ids[n]]["updated_at"], // recommend.updated_at
+	 *                $rs["_map_recommend"][$recommend_ids[n]]["title"], // recommend.title
+	 *                $rs["_map_recommend"][$recommend_ids[n]]["summary"], // recommend.summary
+	 *                $rs["_map_recommend"][$recommend_ids[n]]["icon"], // recommend.icon
+	 *                $rs["_map_recommend"][$recommend_ids[n]]["slug"], // recommend.slug
+	 *                $rs["_map_recommend"][$recommend_ids[n]]["type"], // recommend.type
+	 *                $rs["_map_recommend"][$recommend_ids[n]]["ctype"], // recommend.ctype
+	 *                $rs["_map_recommend"][$recommend_ids[n]]["thumb_only"], // recommend.thumb_only
+	 *                $rs["_map_recommend"][$recommend_ids[n]]["video_only"], // recommend.video_only
+	 *                $rs["_map_recommend"][$recommend_ids[n]]["period"], // recommend.period
+	 *                $rs["_map_recommend"][$recommend_ids[n]]["images"], // recommend.images
+	 *                $rs["_map_recommend"][$recommend_ids[n]]["tpl_pc"], // recommend.tpl_pc
+	 *                $rs["_map_recommend"][$recommend_ids[n]]["tpl_h5"], // recommend.tpl_h5
+	 *                $rs["_map_recommend"][$recommend_ids[n]]["tpl_wxapp"], // recommend.tpl_wxapp
+	 *                $rs["_map_recommend"][$recommend_ids[n]]["tpl_android"], // recommend.tpl_android
+	 *                $rs["_map_recommend"][$recommend_ids[n]]["tpl_ios"], // recommend.tpl_ios
+	 *                $rs["_map_recommend"][$recommend_ids[n]]["keywords"], // recommend.keywords
+	 *                $rs["_map_recommend"][$recommend_ids[n]]["categories"], // recommend.categories
+	 *                $rs["_map_recommend"][$recommend_ids[n]]["articles"], // recommend.articles
+	 *                $rs["_map_recommend"][$recommend_ids[n]]["events"], // recommend.events
+	 *                $rs["_map_recommend"][$recommend_ids[n]]["albums"], // recommend.albums
+	 *                $rs["_map_recommend"][$recommend_ids[n]]["orderby"], // recommend.orderby
+	 *                $rs["_map_recommend"][$recommend_ids[n]]["pos"], // recommend.pos
+	 *                $rs["_map_recommend"][$recommend_ids[n]]["exclude_articles"], // recommend.exclude_articles
+	 *                $rs["_map_recommend"][$recommend_ids[n]]["style"], // recommend.style
+	 *                $rs["_map_recommend"][$recommend_ids[n]]["status"], // recommend.status
+	 *                $rs["_map_recommend"][$recommend_ids[n]]["bigdata_engine"], // recommend.bigdata_engine
+	 *                $rs["_map_recommend"][$recommend_ids[n]]["series"], // recommend.series
+	 *                $rs["u_created_at"], // user.created_at
+	 *                $rs["u_updated_at"], // user.updated_at
+	 *                $rs["u_group_id"], // user.group_id
+	 *                $rs["u_name"], // user.name
+	 *                $rs["u_idno"], // user.idno
+	 *                $rs["u_idtype"], // user.idtype
+	 *                $rs["u_iddoc"], // user.iddoc
+	 *                $rs["u_nickname"], // user.nickname
+	 *                $rs["u_sex"], // user.sex
+	 *                $rs["u_city"], // user.city
+	 *                $rs["u_province"], // user.province
+	 *                $rs["u_country"], // user.country
+	 *                $rs["u_headimgurl"], // user.headimgurl
+	 *                $rs["u_language"], // user.language
+	 *                $rs["u_birthday"], // user.birthday
+	 *                $rs["u_bio"], // user.bio
+	 *                $rs["u_bgimgurl"], // user.bgimgurl
+	 *                $rs["u_mobile"], // user.mobile
+	 *                $rs["u_mobile_nation"], // user.mobile_nation
+	 *                $rs["u_mobile_full"], // user.mobile_full
+	 *                $rs["u_email"], // user.email
+	 *                $rs["u_contact_name"], // user.contact_name
+	 *                $rs["u_contact_tel"], // user.contact_tel
+	 *                $rs["u_title"], // user.title
+	 *                $rs["u_company"], // user.company
+	 *                $rs["u_zip"], // user.zip
+	 *                $rs["u_address"], // user.address
+	 *                $rs["u_remark"], // user.remark
+	 *                $rs["u_tag"], // user.tag
+	 *                $rs["u_user_verified"], // user.user_verified
+	 *                $rs["u_name_verified"], // user.name_verified
+	 *                $rs["u_verify"], // user.verify
+	 *                $rs["u_verify_data"], // user.verify_data
+	 *                $rs["u_mobile_verified"], // user.mobile_verified
+	 *                $rs["u_email_verified"], // user.email_verified
+	 *                $rs["u_extra"], // user.extra
+	 *                $rs["u_password"], // user.password
+	 *                $rs["u_pay_password"], // user.pay_password
+	 *                $rs["u_status"], // user.status
+	 *                $rs["u_inviter"], // user.inviter
+	 *                $rs["u_follower_cnt"], // user.follower_cnt
+	 *                $rs["u_following_cnt"], // user.following_cnt
+	 */
+	public function getByUserId( $user_id, $select=['*']) {
+		
+		if ( is_string($select) ) {
+			$select = explode(',', $select);
+		}
+
+
+		// 增加表单查询索引字段
+		array_push($select, "special.special_id");
+		$inwhereSelect = $this->formatSelect( $select ); // 过滤 inWhere 查询字段
+
+		// 创建查询构造器
+		$qb = Utils::getTab("xpmsns_pages_special as special", "{none}")->query();
+   		$qb->leftJoin("xpmsns_user_user as u", "u.user_id", "=", "special.user_id"); // 连接用户
+		$qb->where('user_id', '=', $user_id );
+		$qb->limit( 1 );
+		$qb->select($select);
+		$rows = $qb->get()->toArray();
+		if( empty($rows) ) {
+			return [];
+		}
+
+		$rs = current( $rows );
+		$this->format($rs);
+
+ 		$category_ids = []; // 读取 inWhere category 数据
+		$category_ids = array_merge($category_ids, is_array($rs["category_ids"]) ? $rs["category_ids"] : [$rs["category_ids"]]);
+ 		$recommend_ids = []; // 读取 inWhere recommend 数据
+		$recommend_ids = array_merge($recommend_ids, is_array($rs["recommend_ids"]) ? $rs["recommend_ids"] : [$rs["recommend_ids"]]);
+ 
+ 		// 读取 inWhere category 数据
+		if ( !empty($inwhereSelect["category"]) && method_exists("\\Xpmsns\\Pages\\Model\\Category", 'getInByCategoryId') ) {
+			$category_ids = array_unique($category_ids);
+			$selectFields = $inwhereSelect["category"];
+			$rs["_map_category"] = (new \Xpmsns\Pages\Model\Category)->getInByCategoryId($category_ids, $selectFields);
+		}
+ 		// 读取 inWhere recommend 数据
+		if ( !empty($inwhereSelect["recommend"]) && method_exists("\\Xpmsns\\Pages\\Model\\Recommend", 'getInByRecommendId') ) {
+			$recommend_ids = array_unique($recommend_ids);
+			$selectFields = $inwhereSelect["recommend"];
+			$rs["_map_recommend"] = (new \Xpmsns\Pages\Model\Recommend)->getInByRecommendId($recommend_ids, $selectFields);
+		}
+ 
+		return $rs;
+	}
+
+	
+
+	/**
+	 * 按用户ID查询一组专栏记录
+	 * @param array   $user_ids 唯一主键数组 ["$user_id1","$user_id2" ...]
+	 * @param array   $order        排序方式 ["field"=>"asc", "field2"=>"desc"...]
+	 * @param array   $select       选取字段，默认选取所有
+	 * @return array 专栏记录MAP {"user_id1":{"key":"value",...}...}
+	 */
+	public function getInByUserId($user_ids, $select=["special.path","special.name","special.type","c.name","u.name","u.nickname","special.status","special.created_at","special.updated_at"], $order=["special.created_at"=>"asc"] ) {
+		
+		if ( is_string($select) ) {
+			$select = explode(',', $select);
+		}
+
+		// 增加表单查询索引字段
+		array_push($select, "special.special_id");
+		$inwhereSelect = $this->formatSelect( $select ); // 过滤 inWhere 查询字段
+
+		// 创建查询构造器
+		$qb = Utils::getTab("xpmsns_pages_special as special", "{none}")->query();
+   		$qb->leftJoin("xpmsns_user_user as u", "u.user_id", "=", "special.user_id"); // 连接用户
+		$qb->whereIn('special.user_id', $user_ids);
+		
+		// 排序
+		foreach ($order as $field => $order ) {
+			$qb->orderBy( $field, $order );
+		}
+		$qb->select( $select );
+		$data = $qb->get()->toArray(); 
+
+		$map = [];
+
+ 		$category_ids = []; // 读取 inWhere category 数据
+ 		$recommend_ids = []; // 读取 inWhere recommend 数据
+ 		foreach ($data as & $rs ) {
+			$this->format($rs);
+			$map[$rs['user_id']] = $rs;
+			
+ 			// for inWhere category
+			$category_ids = array_merge($category_ids, is_array($rs["category_ids"]) ? $rs["category_ids"] : [$rs["category_ids"]]);
+ 			// for inWhere recommend
+			$recommend_ids = array_merge($recommend_ids, is_array($rs["recommend_ids"]) ? $rs["recommend_ids"] : [$rs["recommend_ids"]]);
+ 		}
+
+ 		// 读取 inWhere category 数据
+		if ( !empty($inwhereSelect["category"]) && method_exists("\\Xpmsns\\Pages\\Model\\Category", 'getInByCategoryId') ) {
+			$category_ids = array_unique($category_ids);
+			$selectFields = $inwhereSelect["category"];
+			$map["_map_category"] = (new \Xpmsns\Pages\Model\Category)->getInByCategoryId($category_ids, $selectFields);
+		}
+ 		// 读取 inWhere recommend 数据
+		if ( !empty($inwhereSelect["recommend"]) && method_exists("\\Xpmsns\\Pages\\Model\\Recommend", 'getInByRecommendId') ) {
+			$recommend_ids = array_unique($recommend_ids);
+			$selectFields = $inwhereSelect["recommend"];
+			$map["_map_recommend"] = (new \Xpmsns\Pages\Model\Recommend)->getInByRecommendId($recommend_ids, $selectFields);
+		}
+ 
+
+		return $map;
+	}
+
+
+	/**
+	 * 按用户ID保存专栏记录。(记录不存在则创建，存在则更新)
+	 * @param array $data 记录数组 (key:value 结构)
+	 * @param array $select 返回的字段，默认返回全部
+	 * @return array 数据记录数组
+	 */
+	public function saveByUserId( $data, $select=["*"] ) {
+
+		if ( is_string($select) ) {
+			$select = explode(',', $select);
+		}
+
+		// 增加表单查询索引字段
+		array_push($select, "special.special_id");
+		$inwhereSelect = $this->formatSelect( $select ); // 过滤 inWhere 查询字段
+		$rs = $this->saveBy("user_id", $data, ["special_id", "user_id", "path"], ['_id', 'special_id']);
 		return $this->getBySpecialId( $rs['special_id'], $select );
 	}
 	
@@ -505,6 +760,7 @@ class Special extends Model {
 	 *                $rs["u_group_id"], // user.group_id
 	 *                $rs["u_name"], // user.name
 	 *                $rs["u_idno"], // user.idno
+	 *                $rs["u_idtype"], // user.idtype
 	 *                $rs["u_iddoc"], // user.iddoc
 	 *                $rs["u_nickname"], // user.nickname
 	 *                $rs["u_sex"], // user.sex
@@ -514,6 +770,8 @@ class Special extends Model {
 	 *                $rs["u_headimgurl"], // user.headimgurl
 	 *                $rs["u_language"], // user.language
 	 *                $rs["u_birthday"], // user.birthday
+	 *                $rs["u_bio"], // user.bio
+	 *                $rs["u_bgimgurl"], // user.bgimgurl
 	 *                $rs["u_mobile"], // user.mobile
 	 *                $rs["u_mobile_nation"], // user.mobile_nation
 	 *                $rs["u_mobile_full"], // user.mobile_full
@@ -536,9 +794,9 @@ class Special extends Model {
 	 *                $rs["u_password"], // user.password
 	 *                $rs["u_pay_password"], // user.pay_password
 	 *                $rs["u_status"], // user.status
-	 *                $rs["u_bio"], // user.bio
-	 *                $rs["u_bgimgurl"], // user.bgimgurl
-	 *                $rs["u_idtype"], // user.idtype
+	 *                $rs["u_inviter"], // user.inviter
+	 *                $rs["u_follower_cnt"], // user.follower_cnt
+	 *                $rs["u_following_cnt"], // user.following_cnt
 	 */
 	public function getByPath( $path, $select=['*']) {
 		
@@ -664,7 +922,7 @@ class Special extends Model {
 		// 增加表单查询索引字段
 		array_push($select, "special.special_id");
 		$inwhereSelect = $this->formatSelect( $select ); // 过滤 inWhere 查询字段
-		$rs = $this->saveBy("path", $data, ["special_id", "path"], ['_id', 'special_id']);
+		$rs = $this->saveBy("path", $data, ["special_id", "user_id", "path"], ['_id', 'special_id']);
 		return $this->getBySpecialId( $rs['special_id'], $select );
 	}
 
@@ -713,6 +971,56 @@ class Special extends Model {
 
 		if ( $upload_only !== true ) {
 			$this->updateBy('special_id', ["special_id"=>$special_id, "docs"=>$paths] );
+		}
+
+		return $fs;
+	}
+
+	/**
+	 * 根据用户ID上传专栏LOGO。
+	 * @param string $user_id 用户ID
+	 * @param string $file_path 文件路径
+	 * @param mix $index 如果是数组，替换当前 index
+	 * @return array 已上传文件信息 {"url":"访问地址...", "path":"文件路径...", "origin":"原始文件访问地址..." }
+	 */
+	public function uploadLogoByUserId($user_id, $file_path, $index=null, $upload_only=false ) {
+
+		$rs = $this->getBy('user_id', $user_id, ["logo"]);
+		$paths = empty($rs["logo"]) ? [] : $rs["logo"];
+		$fs = $this->media->uploadFile( $file_path );
+		if ( $index === null ) {
+			array_push($paths, $fs['path']);
+		} else {
+			$paths[$index] = $fs['path'];
+		}
+
+		if ( $upload_only !== true ) {
+			$this->updateBy('user_id', ["user_id"=>$user_id, "logo"=>$paths] );
+		}
+
+		return $fs;
+	}
+
+	/**
+	 * 根据用户ID上传申请材料。
+	 * @param string $user_id 用户ID
+	 * @param string $file_path 文件路径
+	 * @param mix $index 如果是数组，替换当前 index
+	 * @return array 已上传文件信息 {"url":"访问地址...", "path":"文件路径...", "origin":"原始文件访问地址..." }
+	 */
+	public function uploadDocsByUserId($user_id, $file_path, $index=null, $upload_only=false ) {
+
+		$rs = $this->getBy('user_id', $user_id, ["docs"]);
+		$paths = empty($rs["docs"]) ? [] : $rs["docs"];
+		$fs = $this->media->uploadFile( $file_path );
+		if ( $index === null ) {
+			array_push($paths, $fs['path']);
+		} else {
+			$paths[$index] = $fs['path'];
+		}
+
+		if ( $upload_only !== true ) {
+			$this->updateBy('user_id', ["user_id"=>$user_id, "docs"=>$paths] );
 		}
 
 		return $fs;
@@ -932,6 +1240,7 @@ class Special extends Model {
 	 *               	["u_group_id"], // user.group_id
 	 *               	["u_name"], // user.name
 	 *               	["u_idno"], // user.idno
+	 *               	["u_idtype"], // user.idtype
 	 *               	["u_iddoc"], // user.iddoc
 	 *               	["u_nickname"], // user.nickname
 	 *               	["u_sex"], // user.sex
@@ -941,6 +1250,8 @@ class Special extends Model {
 	 *               	["u_headimgurl"], // user.headimgurl
 	 *               	["u_language"], // user.language
 	 *               	["u_birthday"], // user.birthday
+	 *               	["u_bio"], // user.bio
+	 *               	["u_bgimgurl"], // user.bgimgurl
 	 *               	["u_mobile"], // user.mobile
 	 *               	["u_mobile_nation"], // user.mobile_nation
 	 *               	["u_mobile_full"], // user.mobile_full
@@ -963,9 +1274,9 @@ class Special extends Model {
 	 *               	["u_password"], // user.password
 	 *               	["u_pay_password"], // user.pay_password
 	 *               	["u_status"], // user.status
-	 *               	["u_bio"], // user.bio
-	 *               	["u_bgimgurl"], // user.bgimgurl
-	 *               	["u_idtype"], // user.idtype
+	 *               	["u_inviter"], // user.inviter
+	 *               	["u_follower_cnt"], // user.follower_cnt
+	 *               	["u_following_cnt"], // user.following_cnt
 	 */
 	public function search( $query = [] ) {
 

@@ -4,11 +4,11 @@
  * 专栏数据接口 
  *
  * 程序作者: XpmSE机器人
- * 最后修改: 2018-10-15 21:23:18
+ * 最后修改: 2019-01-09 11:11:41
  * 程序母版: /data/stor/private/templates/xpmsns/model/code/api/Name.php
  */
 namespace Xpmsns\Pages\Api;
-                   
+                    
 
 use \Xpmse\Loader\App;
 use \Xpmse\Excp;
@@ -35,11 +35,13 @@ class Special extends Api {
 	 *               $query['select']  读取字段, 默认 ["special.type","special.name","special.path","special.summary","special.param","special.docs","special.status","special.created_at","special.updated_at","c.category_id","c.name","r.recommend_id","u.user_id","u.name"]
 	 * 				 $query['special_id']  按查询 (多条用 "," 分割)
 	 * 				 $query['path']  按查询 (多条用 "," 分割)
+	 * 				 $query['user_id']  按查询 (多条用 "," 分割)
      *
 	 * @param  array $data  POST 参数
 	 *               $data['select']  返回字段, 默认 ["special.type","special.name","special.path","special.summary","special.param","special.docs","special.status","special.created_at","special.updated_at","c.category_id","c.name","r.recommend_id","u.user_id","u.name"]
 	 * 				 $data['special_id']  按查询 (多条用 "," 分割)
 	 * 				 $data['path']  按查询 (多条用 "," 分割)
+	 * 				 $data['user_id']  按查询 (多条用 "," 分割)
 	 *
 	 * @return array 专栏记录 Key Value 结构数据 
 	 *               	["special_id"],  // 专栏ID 
@@ -114,6 +116,7 @@ class Special extends Api {
 	*               	["u_group_id"], // user.group_id
 	*               	["u_name"], // user.name
 	*               	["u_idno"], // user.idno
+	*               	["u_idtype"], // user.idtype
 	*               	["u_iddoc"], // user.iddoc
 	*               	["u_nickname"], // user.nickname
 	*               	["u_sex"], // user.sex
@@ -123,6 +126,8 @@ class Special extends Api {
 	*               	["u_headimgurl"], // user.headimgurl
 	*               	["u_language"], // user.language
 	*               	["u_birthday"], // user.birthday
+	*               	["u_bio"], // user.bio
+	*               	["u_bgimgurl"], // user.bgimgurl
 	*               	["u_mobile"], // user.mobile
 	*               	["u_mobile_nation"], // user.mobile_nation
 	*               	["u_mobile_full"], // user.mobile_full
@@ -145,9 +150,9 @@ class Special extends Api {
 	*               	["u_password"], // user.password
 	*               	["u_pay_password"], // user.pay_password
 	*               	["u_status"], // user.status
-	*               	["u_bio"], // user.bio
-	*               	["u_bgimgurl"], // user.bgimgurl
-	*               	["u_idtype"], // user.idtype
+	*               	["u_inviter"], // user.inviter
+	*               	["u_follower_cnt"], // user.follower_cnt
+	*               	["u_following_cnt"], // user.following_cnt
 	*/
 	protected function get( $query, $data ) {
 
@@ -187,6 +192,19 @@ class Special extends Api {
 			return $inst->getByPath($data["path"], $select);
 		}
 
+		// 按用户ID
+		if ( !empty($data["user_id"]) ) {
+			
+			$keys = explode(',', $data["user_id"]);
+			if ( count( $keys )  > 1 ) {
+				$inst = new \Xpmsns\Pages\Model\Special;
+				return $inst->getInByUserId($keys, $select);
+			}
+
+			$inst = new \Xpmsns\Pages\Model\Special;
+			return $inst->getByUserId($data["user_id"], $select);
+		}
+
 		throw new Excp("未知查询条件", 404, ['query'=>$query, 'data'=>$data]);
 	}
 
@@ -211,13 +229,6 @@ class Special extends Api {
 	 */
 	protected function create( $query, $data ) {
 
-		if ( !empty($query['_secret']) ) { 
-			// secret校验，一般用于小程序 & 移动应用
-			$this->authSecret($query['_secret']);
-		} else {
-			// 签名校验，一般用于后台程序调用
-			$this->auth($query); 
-		}
 
 
 		$inst = new \Xpmsns\Pages\Model\Special;
@@ -250,13 +261,6 @@ class Special extends Api {
 	 */
 	protected function update( $query, $data ) {
 
-		if ( !empty($query['_secret']) ) { 
-			// secret校验，一般用于小程序 & 移动应用
-			$this->authSecret($query['_secret']);
-		} else {
-			// 签名校验，一般用于后台程序调用
-			$this->auth($query); 
-		}
 
 		// 按专栏ID
 		if ( !empty($query["special_id"]) ) {
@@ -270,36 +274,6 @@ class Special extends Api {
 	}
 
 
-	/**
-	 * 删除一条专栏记录
-	 * @param  array $query GET 参数
-	 * 				 $query['special_id']  按专栏ID 删除
-     *
-	 * @param  array $data  POST 参数
-	 * @return bool 成功返回 ["code"=>0, "message"=>"删除成功"]
-	 */
-	protected function delete( $query, $data ) {
-
-		if ( !empty($query['_secret']) ) { 
-			// secret校验，一般用于小程序 & 移动应用
-			$this->authSecret($query['_secret']);
-		} else {
-			// 签名校验，一般用于后台程序调用
-			$this->auth($query); 
-		}
-
-		// 按专栏ID
-		if ( !empty($query["special_id"]) ) {
-			$inst = new \Xpmsns\Pages\Model\Special;
-			$resp = $inst->remove($query['special_id'], "special_id");
-			if ( $resp ) {
-				return ["code"=>0, "message"=>"删除成功"];
-			}
-			throw new Excp("删除失败", 500, ['query'=>$query, 'data'=>$data, 'response'=>$resp]);
-		}
-
-		throw new Excp("未知查询条件", 404, ['query'=>$query, 'data'=>$data]);
-	}
 
 
 	/**
@@ -410,6 +384,7 @@ class Special extends Api {
 	*               	["u_group_id"], // user.group_id
 	*               	["u_name"], // user.name
 	*               	["u_idno"], // user.idno
+	*               	["u_idtype"], // user.idtype
 	*               	["u_iddoc"], // user.iddoc
 	*               	["u_nickname"], // user.nickname
 	*               	["u_sex"], // user.sex
@@ -419,6 +394,8 @@ class Special extends Api {
 	*               	["u_headimgurl"], // user.headimgurl
 	*               	["u_language"], // user.language
 	*               	["u_birthday"], // user.birthday
+	*               	["u_bio"], // user.bio
+	*               	["u_bgimgurl"], // user.bgimgurl
 	*               	["u_mobile"], // user.mobile
 	*               	["u_mobile_nation"], // user.mobile_nation
 	*               	["u_mobile_full"], // user.mobile_full
@@ -441,9 +418,9 @@ class Special extends Api {
 	*               	["u_password"], // user.password
 	*               	["u_pay_password"], // user.pay_password
 	*               	["u_status"], // user.status
-	*               	["u_bio"], // user.bio
-	*               	["u_bgimgurl"], // user.bgimgurl
-	*               	["u_idtype"], // user.idtype
+	*               	["u_inviter"], // user.inviter
+	*               	["u_follower_cnt"], // user.follower_cnt
+	*               	["u_following_cnt"], // user.following_cnt
 	 */
 	protected function search( $query, $data ) {
 
