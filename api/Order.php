@@ -48,6 +48,10 @@ class Order extends Api {
         return $o->make( $data );
     }
 
+
+
+
+
     /**
      * 使用积分付款
      */
@@ -90,6 +94,30 @@ class Order extends Api {
 
         $o = new \Xpmsns\Pages\Model\Order;
         return $o->payByBalance( $order_id, $user_id );
+    }
+
+
+
+    /**
+     * 订单状态变更为已完整
+     */
+    protected function makeComplete( $query, $data ) {
+
+        $u = new \Xpmsns\User\Model\User;
+        $user = $u->getUserInfo();
+        $user_id = $user["user_id"];
+
+        if ( empty($user_id) ) {
+            throw new Excp("用户尚未登录", 402, ["query"=>$query, "data"=>$data]);
+        }
+
+        $order_id = $data["order_id"];
+        if ( empty($order_id) ) {
+            throw new Excp("请提供订单ID", 402, ["query"=>$query, "data"=>$data]);
+        }
+
+        $o = new \Xpmsns\Pages\Model\Order;
+        return $o->makeComplete( $order_id, $user_id );
     }
 
   

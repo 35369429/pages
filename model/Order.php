@@ -86,6 +86,30 @@ class Order extends Model {
         return $rs;
     }
 
+     /**
+     * 订单状态变更为已完整
+     * @param string $order_id 订单ID
+     * @param string $user_id 用户ID
+     */
+    function makeComplete( $order_id, $user_id ) {
+
+        $order = $this->getBy("order_id", $order_id);
+        if ( $order["user_id"] != $user_id ) {
+            throw new Excp("下单用户和当前用户不一致", 402, ["order"=>$order, "user_id"=>$user_id]);
+        }
+
+         // 验证订单状态
+         $allowPayment = ["shiping"];
+         if ( !in_array( $order["status"], $allowPayment) ){
+             throw new Excp("当前订单无法标记为完成(尚未发货)", 402, ["order"=>$order, "status"=>$status, "allowPayment"=>$allowPayment, "user_id"=>$user_id]);
+         }
+
+        return $this->updateBy("order_id",[
+            "order_id" => $order_id,
+            "status" => "complete",  // 设定为已完成
+        ]);
+    }
+
 
     /**
      * 积分付款
