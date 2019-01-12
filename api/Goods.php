@@ -41,8 +41,13 @@ class Goods extends Api {
         if ( empty($goods_id) ) {
             throw new Excp("未提供商品ID", 402, ["query"=>$query]);
         }
+        // 如果登录，个性化城实现
+        $u = new \Xpmsns\User\Model\User;
+        $user = $u->getUserInfo();
+        $user_id = $user["user_id"];
+        
         $goods = new \Xpmsns\Pages\Model\Goods;
-        return $goods->getGoodsDetail($goods_id);
+        return $goods->getGoodsDetail($goods_id, $user_id);
     }
 
      /**
@@ -57,10 +62,18 @@ class Goods extends Api {
 		$select = empty($query['select']) ? ["goods.goods_id","goods.instance","goods.name","goods.slug","goods.tags","goods.summary","goods.cover","goods.params","goods.sku_cnt","goods.sku_sum","goods.shipped_sum","goods.available_sum","goods.lower_price","goods.status","goods.created_at","goods.updated_at","c.category_id","c.name"] : $query['select'];
 		if ( is_string($select) ) {
 			$select = explode(',', $select);
-		}
+        }
+    
+        // 如果登录，个性化城实现
+        $u = new \Xpmsns\User\Model\User;
+        $user = $u->getUserInfo();
+        $user_id = $user["user_id"];
+
 		$query['select'] = $select;
-        return $goods->searchGoods($query);
+        return $goods->searchGoods($query, $user_id);
     }
+
+
     // @KEEP END
 
 	/**

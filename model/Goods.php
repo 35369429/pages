@@ -54,8 +54,9 @@ class Goods extends Model {
     /**
      * 根据ID读取商品全量信息
      * @param string $goods_id 商品ID
+     * @param string $user_id  用户ID 
      */
-    function getGoodsDetail( $goods_id ) {
+    function getGoodsDetail( $goods_id, $user_id=null ) {
 
         $goods = $this->getByGoodsId( $goods_id );
         if ( empty($goods) ) {
@@ -67,14 +68,16 @@ class Goods extends Model {
         $goods["items"] = $items;
 
         $this->countGoods($goods);
+        $this->userGoods($user_id, $goods);
         return $goods;
     }
 
 
     /**
      * 检索商品并返回商品全量信息
+     * @param string $user_id  用户ID 
      */
-    function searchGoods( $query ) {
+    function searchGoods( $query, $user_id=null ) {
 
         $goods = $this->search( $query );
         if ( empty($goods["data"]) ) {
@@ -105,9 +108,67 @@ class Goods extends Model {
             $rs["items"] = $itemMap["{$rs['goods_id']}"];
             $this->countGoods($rs);
         }
-        
+
+        $this->userGoodsList(  $user_id, $goods["data"]);
+
         return $goods;
     }
+
+
+    /**
+     * 处理用户相关信息
+     */
+    function userGoods( $user_id, & $goods ) {
+
+        $goods_list = [ $goods ];
+        $this->userGoodsList( $user_id, $goods_list );
+        $goods = current($goods_list);
+    }
+
+    function userGoodsList( $user_id,  & $goods_list ) {
+        if ( empty($user_id) ) {
+            return;
+        }
+
+        $goods_ids = array_column($goods_list, "goods_id");
+        if ( empty($goods_ids) ) {
+            return;
+        }
+
+        $order = new Order();
+        $qb = $order->query()
+                    ->whereIn("status", ['complete', 'shiping', 'wait_shipping', 'pay_complete', 'wait_confirm'])
+                    ->where( "user_id", $user_id)
+                ;
+
+        // 查询
+        $qb->where(function($qb) use ($goods_ids) {
+            $goods_id = current( $goods_ids );
+            $count = count( $goods_ids );
+            $qb->orWhere( "goods_ids" , "like",  "%{$goods_id}%" );
+            for($i=1; $i<$count; $i++ ) {
+                $goods_id = $goods_id[$i];
+                $qb->orWhere( "goods_ids" , "like",  "%{$goods_id}%" );
+            }
+        });
+
+        $qb->select(["goods_ids", "order_id", "user_id"]);
+        $rows = $qb->get()->toArray();
+        
+        $hasbuy = [];
+        foreach( $rows as $row ) {
+            $hasbuy = array_merge( $hasbuy, $row["goods_ids"]);
+        }
+
+        $hasbuy = array_unique($hasbuy);
+
+        foreach($goods_list as & $goods ) {
+            if ( in_array($goods["goods_id"], $hasbuy) ){
+                $goods["hasbuy"] = true;
+            }
+        }
+    }
+
 
 
     /**
