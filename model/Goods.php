@@ -163,11 +163,7 @@ class Goods extends Model {
         $hasbuy = array_unique($hasbuy);
 
         foreach($goods_list as & $goods ) {
-            if ( in_array($goods["goods_id"], $hasbuy) ){
-                $goods["hasbuy"] = true;
-            } else {
-                $goods["hasbuy"] = false;
-            }
+            $goods["hasbuy"] =  in_array($goods["goods_id"], $hasbuy);
         }
     }
 
