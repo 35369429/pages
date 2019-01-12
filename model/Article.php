@@ -82,7 +82,7 @@ class Article extends Model {
 
         // 缓存
         $this->cache = new Cache( [
-            "prefix" => "xpmsns_pages_:",
+            "prefix" => "xpmsns_pages_article:",
             "host" => Conf::G("mem/redis/host"),
             "port" => Conf::G("mem/redis/port"),
             "passwd"=> Conf::G("mem/redis/password")
