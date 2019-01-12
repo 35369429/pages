@@ -165,6 +165,8 @@ class Goods extends Model {
         foreach($goods_list as & $goods ) {
             if ( in_array($goods["goods_id"], $hasbuy) ){
                 $goods["hasbuy"] = true;
+            } else {
+                $goods["hasbuy"] = false;
             }
         }
     }

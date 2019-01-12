@@ -14,6 +14,7 @@ use \Xpmse\Media as Media;
 use \Xpmse\Nlp as NPL;
 use \Mina\Delta\Render as Render;
 use \Xpmse\Task as Task;
+use \Xpmse\Job;
 use \Exception as Exception;
 
 define('ARTICLE_PUBLISHED', 'published');  // 文章状态 已发布
@@ -372,7 +373,7 @@ class Article extends Model {
      * @param array $env 环境数据 (session_id, user_id, client_ip, time, user, cookies...)
      */
     public function onArticleReadingChange( $behavior, $subscriber, $data, $env ) {
-
+        
         // 记录阅读历史 (下一版实现)
         $task_slug = $subscriber["outer_id"];
         $user_id = $env["user_id"];
@@ -380,6 +381,8 @@ class Article extends Model {
             return;
         }
 
+        $job = new Job(["name"=>"XpmsnsUserBehavior"]);
+        
         $t = new \Xpmsns\User\Model\Usertask;
         $task = $t->getByTaskSlugAndUserId( $task_slug, $user_id );
         if ( empty($task) ) {
