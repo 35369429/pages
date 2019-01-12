@@ -15,6 +15,7 @@ use \Xpmse\Nlp as NPL;
 use \Mina\Delta\Render as Render;
 use \Xpmse\Task as Task;
 use \Xpmse\Job;
+use \Mina\Cache\Redis as Cache;
 use \Exception as Exception;
 
 define('ARTICLE_PUBLISHED', 'published');  // 文章状态 已发布
@@ -77,7 +78,16 @@ class Article extends Model {
 		// 	]
 		// ];
 		// $this->stor = new Local( $options );
-		$this->media = new Media(['host'=>$this->host]);
+        $this->media = new Media(['host'=>$this->host]);
+
+        // 缓存
+        $this->cache = new Cache( [
+            "prefix" => "xpmsns_pages_:",
+            "host" => Conf::G("mem/redis/host"),
+            "port" => Conf::G("mem/redis/port"),
+            "passwd"=> Conf::G("mem/redis/password")
+        ]);
+
     }
     
 
@@ -377,12 +387,31 @@ class Article extends Model {
         // 记录阅读历史 (下一版实现)
         $task_slug = $subscriber["outer_id"];
         $user_id = $env["user_id"];
+        $article_id = $data["article_id"];
+        $cache_name = "onArticleReadingChange:{$user_id}:{$article_id}";
+        if (empty( $article_id )) {
+            return;
+        }
+
         if (empty( $user_id )) {
             return;
         }
 
-        $job = new Job(["name"=>"XpmsnsUserBehavior"]);
         
+        $job = new Job(["name"=>"XpmsnsUserBehavior"]);
+        if ( $this->cache->get($cache_name) !== false ) {
+            $job->info("用户已读过本篇文章(user={$user_id} article={$article_id})");
+            $job->info("当前步骤: 维持不变");
+            return;
+        }
+
+        // 缓存到第二日凌晨
+        $tomorrow = strtotime("+1d", time());
+        $tomorrow = strtotime(date("Y-m-d 00:00:00", $tomorrow));
+        $tls = $tomorrow-time();
+        $this->cache->set($cache_name, time(), $tls);
+        $job->info("标记为已读有效期至".date("Y-m-d 00:00:00", $tomorrow). " (user={$user_id} article={$article_id}) tls={$tls}");
+
         $t = new \Xpmsns\User\Model\Usertask;
         $task = $t->getByTaskSlugAndUserId( $task_slug, $user_id );
         if ( empty($task) ) {
@@ -420,7 +449,10 @@ class Article extends Model {
             ]);
         }
 
+        // 计算分数
         $process = intval($usertask["process"]) + 1;
+
+        $job->info("当前步骤: process={$process}");
         $t->processByUsertaskId( $usertask["usertask_id"], $process );
     }
 
@@ -438,12 +470,26 @@ class Article extends Model {
         $task_slug = $subscriber["outer_id"];
         $inviter = $data["inviter"];
         $user_id = $inviter["user_id"];
+        $article_id = $data["article_id"];
+        $cache_name = "onArticleInviteeReadingChange:{$user_id}:{$article_id}";
+        if (empty( $article_id )) {
+            return;
+        }
         if (empty( $user_id )) {
+            return;
+        }
+
+        $job = new Job(["name"=>"XpmsnsUserBehavior"]);
+        if ( $this->cache->get($cache_name) !== false ) {
+            $job->info("被邀请者已读过本篇文章(user={$user_id} article={$article_id})");
+            $job->info("当前步骤: 维持不变");
             return;
         }
 
         // 排除自己
         if ( $env["user_id"] == $user_id ) {
+            $job->info("被邀请者是用户自己(user={$user_id} article={$article_id})");
+            $job->info("当前步骤: 维持不变");
             return;
         }
 
@@ -491,6 +537,7 @@ class Article extends Model {
         }
 
         $process = intval($usertask["process"]) + 1;
+        $job->info("当前步骤: process={$process}");
         $t->processByUsertaskId( $usertask["usertask_id"], $process );
     }
 
