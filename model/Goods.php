@@ -137,7 +137,7 @@ class Goods extends Model {
 
         $order = new Order();
         $qb = $order->query()
-                    ->whereIn("status", ['complete', 'shiping', 'wait_shipping', 'pay_complete', 'wait_confirm'])
+                    ->whereIn("status", ['complete', 'shiping', 'wait_shipping', 'pay_complete'])
                     ->where( "user_id", $user_id)
                 ;
 
