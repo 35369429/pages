@@ -1466,7 +1466,7 @@ class Article extends Model {
 
 			// $rs = $this->article_draft->getLine("WHERE article_id=?", ['*'], [$article_id]);
 			if ( !empty($rs) ) {
-				$this->format( $rs );
+				$this->format( $rs, false);
 				return $rs;
 			}
 		}
@@ -1476,7 +1476,13 @@ class Article extends Model {
 	}
 
 
-	function format( & $article ) {
+    /**
+     * 格式化数据
+     * @param array $article 文章结构体
+     * @param bool $readonly 是否只读，默认值为 true
+     * @return $article
+     */
+	function format( & $article , $readonly=true ) {
 
 		if ( !empty($article["content"]) ) {
 
@@ -1497,7 +1503,8 @@ class Article extends Model {
 		}
 
 		// 提取关键字
-		if ( array_key_exists('keywords', $article) && 
+		if ( !$readonly &&
+             array_key_exists('keywords', $article) && 
 			 array_key_exists('title', $article) && 
 			 array_key_exists('status', $article) && 
 			 array_key_exists('article_id', $article) && 
@@ -1511,7 +1518,8 @@ class Article extends Model {
 		}
 
 		// 提取SEO关键字
-		if ( array_key_exists('seo_keywords', $article) && 
+		if ( !$readonly && 
+            array_key_exists('seo_keywords', $article) && 
 			 array_key_exists('title', $article) && 
 			 array_key_exists('status', $article) && 
 			 array_key_exists('article_id', $article) && 
@@ -1632,7 +1640,7 @@ class Article extends Model {
 		$rs['draft_status'] = DRAFT_APPLIED;  // 标记草稿与文章同步
 
 		$data =  $this->article_draft->updateBy( 'article_id', $rs );
-		$this->format( $data );
+		$this->format( $data, false);
 		return $data;
 	}
 
