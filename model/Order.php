@@ -62,7 +62,7 @@ class Order extends Model {
         $u = new \Xpmsns\User\Model\User;
         $coin = $u->getCoin($user_id);
         if ( $coin < $total_coin ) {
-            throw new Excp("用户账户积分余额不足", 402, ["user_id"=>$user_id, "coin"=>$coin, "quantity"=>$total_coin]);
+            throw new Excp("用户账户积分余额不足(余额:{$coin} 需要: {$total_coin})", 402, ["user_id"=>$user_id, "coin"=>$coin, "quantity"=>$total_coin]);
         }
 
         // 计算运费
