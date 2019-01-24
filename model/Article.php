@@ -396,22 +396,15 @@ class Article extends Model {
         if (empty( $user_id )) {
             return;
         }
-
         
         $job = new Job(["name"=>"XpmsnsUserBehavior"]);
         if ( $this->cache->get($cache_name) !== false ) {
-            $job->info("用户已读过本篇文章(user={$user_id} article={$article_id})");
-            $job->info("当前步骤: 维持不变");
+            $job->info("\t用户已读过本篇文章(user={$user_id} article={$article_id})");
+            $job->info("\t当前步骤: 维持不变");
             return;
         }
 
-        // 缓存到第二日凌晨
-        $tomorrow = strtotime("+1d", time());
-        $tomorrow = strtotime(date("Y-m-d 00:00:00", $tomorrow));
-        $tls = $tomorrow-time();
-        $this->cache->set($cache_name, time(), $tls);
-        $job->info("标记为已读有效期至".date("Y-m-d 00:00:00", $tomorrow). " (user={$user_id} article={$article_id}) tls={$tls}");
-
+        // 读取任务信息
         $t = new \Xpmsns\User\Model\Usertask;
         $task = $t->getByTaskSlugAndUserId( $task_slug, $user_id );
         if ( empty($task) ) {
@@ -430,6 +423,19 @@ class Article extends Model {
         if ( empty($task["usertask"]) ) {
             throw new Excp("用户尚未接受该任务({$task_slug})", 404, ["task_slug"=>$task_slug, "user_id"=>$user_id]); 
         }
+
+        // 任务已完成忽略处理
+        if ( !empty($task["usertask"]) && $usertask["status"] == "completed" ) {
+            return;
+        }
+
+
+        // 缓存到第二日凌晨
+        $tomorrow = strtotime("+1d", time());
+        $tomorrow = strtotime(date("Y-m-d 00:00:00", $tomorrow));
+        $tls = $tomorrow-time();
+        $this->cache->set($cache_name, time(), $tls);
+        $job->info("\t标记为已读有效期至".date("Y-m-d 00:00:00", $tomorrow). " (user={$user_id} article={$article_id}) tls={$tls}");
 
         // 扩展数量
         $params = is_array($task["params"]) ? $task["params"] : [];
@@ -451,8 +457,7 @@ class Article extends Model {
 
         // 计算分数
         $process = intval($usertask["process"]) + 1;
-
-        $job->info("当前步骤: process={$process}");
+        $job->info("\t当前步骤: process={$process}");
         $t->processByUsertaskId( $usertask["usertask_id"], $process );
     }
 

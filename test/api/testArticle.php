@@ -142,7 +142,8 @@ class testArticleapi extends PHPUnit_Framework_TestCase {
             $this->assertTrue($task["usertask"]["process"] ==  $i+1 );
             $this->assertTrue(($coinAfter - $coinBefore) == $quantity[$i] );
         }
-        
+
+        $this->assertTrue($task["usertask"]["status"] == "completed" );
     }
 
 
