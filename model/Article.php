@@ -421,7 +421,8 @@ class Article extends Model {
         }
 
         if ( empty($task["usertask"]) ) {
-            throw new Excp("用户尚未接受该任务({$task_slug})", 404, ["task_slug"=>$task_slug, "user_id"=>$user_id]); 
+            // throw new Excp("用户尚未接受该任务({$task_slug})", 404, ["task_slug"=>$task_slug, "user_id"=>$user_id]); 
+            return;
         }
 
         // 任务已完成忽略处理
@@ -486,22 +487,22 @@ class Article extends Model {
 
         $job = new Job(["name"=>"XpmsnsUserBehavior"]);
         if ( $this->cache->get($cache_name) !== false ) {
-            $job->info("被邀请者已读过本篇文章(user={$user_id} article={$article_id})");
-            $job->info("当前步骤: 维持不变");
+            $job->info("\t被邀请者已读过本篇文章(user={$user_id} article={$article_id})");
+            $job->info("\t当前步骤: 维持不变");
             return;
         }
 
         // 排除自己
         if ( $env["user_id"] == $user_id ) {
-            $job->info("被邀请者是用户自己(user={$user_id} article={$article_id})");
-            $job->info("当前步骤: 维持不变");
+            $job->info("\t被邀请者是用户自己(user={$user_id} article={$article_id})");
+            $job->info("\t当前步骤: 维持不变");
             return;
         }
 
         $t = new \Xpmsns\User\Model\Usertask;
         $task = $t->getByTaskSlugAndUserId( $task_slug, $user_id );
         if ( empty($task) ) {
-            throw new Excp("未找到任务信息({$task_slug})", 404, ["task_slug"=>$task_slug, "user_id"=>$user_id]);
+            throw new Excp("\t未找到任务信息({$task_slug})", 404, ["task_slug"=>$task_slug, "user_id"=>$user_id]);
         }
 
         // 自动接受任务
@@ -514,7 +515,8 @@ class Article extends Model {
         }
 
         if ( empty($task["usertask"]) ) {
-            throw new Excp("用户尚未接受该任务({$task_slug})", 404, ["task_slug"=>$task_slug, "user_id"=>$user_id]); 
+            throw new Excp("\t用户尚未接受该任务({$task_slug})", 404, ["task_slug"=>$task_slug, "user_id"=>$user_id]); 
+            return;
         }
 
         // 扩展数量
@@ -542,7 +544,7 @@ class Article extends Model {
         }
 
         $process = intval($usertask["process"]) + 1;
-        $job->info("当前步骤: process={$process}");
+        $job->info("\t当前步骤: process={$process}");
         $t->processByUsertaskId( $usertask["usertask_id"], $process );
     }
 

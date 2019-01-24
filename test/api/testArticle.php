@@ -21,6 +21,11 @@ class testArticleapi extends PHPUnit_Framework_TestCase {
         return $value;
     }
 
+    protected function &getInvite() {
+        static $value = null;
+        return $value;
+    }
+
 
     protected function &getArticle() {
         static $value = null;
@@ -35,6 +40,8 @@ class testArticleapi extends PHPUnit_Framework_TestCase {
     protected function out( $message ) {
         fwrite(STDOUT,$message );
     }
+
+    
 
     function testCreateUser() {
 
@@ -77,7 +84,7 @@ class testArticleapi extends PHPUnit_Framework_TestCase {
 
     function testArticles() {
 
-        $this->out( "\n创建测试文章.....");
+        $this->out( "\n创建测试文章集合.....");
         $art = new \Xpmsns\Pages\Model\Article;
         $articles = &$this->getArticles();
 
@@ -88,6 +95,24 @@ class testArticleapi extends PHPUnit_Framework_TestCase {
                 "content" => "<p><b>单元测试文章：</b> 单元测试创建文章 {$now}</p>"
             ]);
         }
+        $this->out( "完成\n");
+    }
+
+    function testInvite() {
+
+
+        $user = &$this->getUser();
+
+        $this->out( "\n创建邀请链接.....");
+        $inv = new \Xpmsns\User\Model\Invite;
+        $invite = &$this->getInvite();
+        $invite = $inv->saveBy("invite_id",[
+            "slug" => "invite-unit-test",
+            "user_id" => $user["user_id"],
+            "data" => [
+                "message" => "for unit test"
+            ]
+        ]);
         $this->out( "完成\n");
     }
 
@@ -158,7 +183,8 @@ class testArticleapi extends PHPUnit_Framework_TestCase {
         $user = &$this->getUser();
         $user_id = $user["user_id"];
         $u->loginSetSession( $user_id );
-       
+        $coinBefore = $u->getCoin( $user_id );
+        
         // 访问API 
 		$api = new \Xpmsns\pages\Api\Article;
         $resp = $api->call('get',['articleId'=>$article["article_id"], "select"=>"title,article_id"]);
@@ -168,9 +194,84 @@ class testArticleapi extends PHPUnit_Framework_TestCase {
         $duration = $api->call('leave',['articleId'=>$article["article_id"]]);
         $this->assertTrue( $duration >= 1);
 
-        // 验证计数器是否增加
+        $coinAfter =  $u->getCoin( $user_id );
+        $this->out( 
+            "阅读文章: {$resp["title"]} ".  
+            " 停留时长: {$duration} ". 
+            " 积分余额: {$coinBefore} -> {$coinAfter} (+". ($coinAfter - $coinBefore) .  ")\n"
+        );
+    }
+
+
+
+    // 测试用户登录之后，并且接受阅读文章任务
+	function testGetAfterAcceptInviteeReadingTask() {
+
+        $articles = &$this->getArticles();
+        $this->out( "\n\n测试登录并接受邀请阅读文章任务后，被邀请者访问文章 (".count($articles).")\n-------\n");
+
+        // 模拟用户登录
+        $u = new \Xpmsns\User\Model\User;
+        $user = &$this->getUser();
+        $user_id = $user["user_id"];
+        $u->loginSetSession( $user_id );
+
+        // 领取任务 (阅读文章任务)
+        $ut = new \Xpmsns\User\Model\UserTask;
+        $ut->acceptBySlug("article-invitee-reading", $user_id);
+        $task = $ut->getByTaskSlugAndUserId("article-invitee-reading", $user_id );
+        $quantity = $task["quantity"];
+
+        // 邀请阅读
+        $invite = &$this->getInvite();
+        $inv = new \Xpmsns\User\Api\Invite;
+        $resp = $inv->call('get',['invite_id'=>$invite["invite_id"]]);
+        
+        // 退出登录
+        $u->logout();
+
+        // 模拟被邀请者登录
+        $inviter = &$this->getInviter();
+        $inviter_id = $inviter["user_id"];
+        $u->loginSetSession( $inviter_id );
+      
+       
+        // 访问API 
+        $api = new \Xpmsns\pages\Api\Article;
+        
+        // 验证任务信息
+        for( $i=0; $i<count($quantity); $i++ ) {
+
+            $article = $articles[$i];
+            if ( empty($article) ) {
+                continue;
+            }
+
+            $coinBefore = $u->getCoin( $user_id );
+            $resp = $api->call('get',['articleId'=>$article["article_id"], "select"=>"title,article_id"]);
+            $this->assertTrue( $resp["article_id"] == $article["article_id"]);
+            $this->assertTrue( $resp["title"] == $article["title"]);
+            usleep(5100000);
+            $duration = $api->call('leave',['articleId'=>$article["article_id"]]);
+            $this->assertTrue( $duration >= 5);
+            usleep(1100000);
+            $coinAfter =  $u->getCoin( $user_id );
+            $this->out( 
+                "邀请阅读文章: {$resp["title"]} ".  
+                " 停留时长: {$duration} ". 
+                " 积分余额: {$coinBefore} -> {$coinAfter} (+". ($coinAfter - $coinBefore) .  ")\n"
+            );
+
+            // 验证进程
+            $task = $ut->getByTaskSlugAndUserId("article-invitee-reading", $user_id );
+            $this->assertTrue($task["usertask"]["process"] ==  $i+1 );
+            $this->assertTrue(($coinAfter - $coinBefore) == $quantity[$i] );
+        }
+
+        $this->assertTrue($task["usertask"]["status"] == "completed" );
 
     }
+
 
 
 
@@ -186,8 +287,10 @@ class testArticleapi extends PHPUnit_Framework_TestCase {
         $article = &$this->getArticle();
         $article_id = $article["article_id"];
 
-
         $articles = &$this->getArticles();
+
+        $invite = &$this->getInvite();
+        $invite_id = $invite["invite"];
 
         $this->out( "\n清除测试数据.....");
         sleep(2);
@@ -196,10 +299,13 @@ class testArticleapi extends PHPUnit_Framework_TestCase {
         $u = new \Xpmsns\User\Model\User;
         $art = new \Xpmsns\Pages\Model\Article;
         $ut = new \Xpmsns\User\Model\UserTask;
+        $inv = new \Xpmsns\User\Model\Invite;
+
         $u->runSql("DELETE FROM {{table}} WHERE `user_id`=?", false, [$user_id]);
         $u->runSql("DELETE FROM {{table}} WHERE `user_id`=?", false, [$inviter_id]);
-        $art->runSql("DELETE FROM {{table}} WHERE `article_id`=?", false, [$article_id]);
         $ut->runSql("DELETE FROM {{table}} WHERE `user_id`=?", false, [$user_id]);
+        $art->runSql("DELETE FROM {{table}} WHERE `article_id`=?", false, [$article_id]);
+        $inv->runSql("DELETE FROM {{table}} WHERE `invite_id`=?", false, [$invite_id]);
 
         foreach($articles as $article ) {
             $art->runSql("DELETE FROM {{table}} WHERE `article_id`=?", false, [$article["article_id"]]);
