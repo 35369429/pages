@@ -4,7 +4,7 @@
  * 推荐数据模型
  *
  * 程序作者: XpmSE机器人
- * 最后修改: 2019-01-04 14:53:58
+ * 最后修改: 2019-01-26 11:06:32
  * 程序母版: /data/stor/private/templates/xpmsns/model/code/model/Name.php
  */
 namespace Xpmsns\Pages\Model;
@@ -14,7 +14,9 @@ use \Xpmse\Model;
 use \Xpmse\Utils;
 use \Xpmse\Conf;
 use \Xpmse\Media;
+use \Mina\Cache\Redis as Cache;
 use \Xpmse\Loader\App as App;
+use \Xpmse\Job;
 
 
 class Recommend extends Model {
@@ -32,17 +34,31 @@ class Recommend extends Model {
 	 */
 	protected $mediaPrivate = null;
 
+    /**
+     * 数据缓存对象
+     */
+    protected $cache = null;
+
 	/**
-	 * 推荐数据模型
+	 * 推荐数据模型【3】
 	 * @param array $param 配置参数
 	 *              $param['prefix']  数据表前缀，默认为 xpmsns_pages_
 	 */
 	function __construct( $param=[] ) {
 
 		parent::__construct(array_merge(['prefix'=>'xpmsns_pages_'],$param));
-		$this->table('recommend'); // 数据表名称 xpmsns_pages_recommend
+        $this->table('recommend'); // 数据表名称 xpmsns_pages_recommend
+         // + Redis缓存
+        $this->cache = new Cache([
+            "prefix" => "xpmsns_pages_recommend:",
+            "host" => Conf::G("mem/redis/host"),
+            "port" => Conf::G("mem/redis/port"),
+            "passwd"=> Conf::G("mem/redis/password")
+        ]);
+
 		$this->media = new Media(['host'=>Utils::getHome()]);  // 公有媒体文件实例
 
+       
 	}
 
 	/**
@@ -576,34 +592,21 @@ function getContentsBy( $type,  $recommend_id,  $keywords=[], $series=[], $exclu
 	 * @return
 	 */
 	public function format( & $rs ) {
-
+     
+		$fileFields = []; 
 		// 格式化: 图标
 		// 返回值: {"url":"访问地址...", "path":"文件路径...", "origin":"原始文件访问地址..." }
 		if ( array_key_exists('icon', $rs ) ) {
-			$rs["icon"] = empty($rs["icon"]) ? [] : $this->media->get( $rs["icon"] );
+            array_push($fileFields, 'icon');
 		}
-
 		// 格式化: 摘要图片
 		// 返回值: [{"url":"访问地址...", "path":"文件路径...", "origin":"原始文件访问地址..." }]
 		if ( array_key_exists('images', $rs ) ) {
-			$is_string = is_string($rs["images"]);
-			$rs["images"] = $is_string ? [$rs["images"]] : $rs["images"];
-			$rs["images"] = !is_array($rs["images"]) ? [] : $rs["images"];
-			foreach ($rs["images"] as & $file ) {
-				if ( is_array($file) && !empty($file['path']) ) {
-					$fs = $this->media->get( $file['path'] );
-					$file = array_merge( $file, $fs );
-				} else if ( is_string($file) ) {
-					$file =empty($file) ? [] : $this->media->get( $file );
-				} else {
-					$file = [];
-				}
-			}
-			if ($is_string) {
-				$rs["images"] = current($rs["images"]);
-			}
+            array_push($fileFields, 'images');
 		}
 
+        // 处理图片和文件字段 
+        $this->__fileFields( $rs, $fileFields );
 
 		// 格式化: 方式
 		// 返回值: "_type_types" 所有状态表述, "_type_name" 状态名称,  "_type" 当前状态表述, "type" 当前状态数值
@@ -976,7 +979,7 @@ function getContentsBy( $type,  $recommend_id,  $keywords=[], $series=[], $exclu
 
 		// 创建查询构造器
 		$qb = Utils::getTab("xpmsns_pages_recommend as recommend", "{none}")->query();
-      		$qb->where('recommend_id', '=', $recommend_id );
+      		$qb->where('recommend.recommend_id', '=', $recommend_id );
 		$qb->limit( 1 );
 		$qb->select($select);
 		$rows = $qb->get()->toArray();
@@ -1376,7 +1379,7 @@ function getContentsBy( $type,  $recommend_id,  $keywords=[], $series=[], $exclu
 
 		// 创建查询构造器
 		$qb = Utils::getTab("xpmsns_pages_recommend as recommend", "{none}")->query();
-      		$qb->where('slug', '=', $slug );
+      		$qb->where('recommend.slug', '=', $slug );
 		$qb->limit( 1 );
 		$qb->select($select);
 		$rows = $qb->get()->toArray();
