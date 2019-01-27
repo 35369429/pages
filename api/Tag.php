@@ -1,197 +1,176 @@
 <?php
-
-namespace Xpmsns\pages\Api;
+/**
+ * Class Tag 
+ * 标签数据接口 
+ *
+ * 程序作者: XpmSE机器人
+ * 最后修改: 2019-01-27 17:19:39
+ * 程序母版: /data/stor/private/templates/xpmsns/model/code/api/Name.php
+ */
+namespace Xpmsns\Pages\Api;
+             
 
 use \Xpmse\Loader\App;
 use \Xpmse\Excp;
 use \Xpmse\Utils;
 use \Xpmse\Api;
 
-
-/**
- * 标签API接口
- */
 class Tag extends Api {
 
 	/**
-	 * 初始化
-	 * @param array $param [description]
+	 * 标签数据接口
 	 */
 	function __construct() {
-
 		parent::__construct();
-		$this->allowMethod('get', ["PHP",'GET'])
-		     ->allowQuery('get',  ['tagId', 'select'])
-		     ->allowMethod('search', ["PHP",'GET'])
-		     ->allowQuery('search',  [
-		     	"select",
-		     	'name','orName','inName',
-		     	'fullname','orFullname','inFullname',
-		     	'categoryId','orcategoryId','incategoryId',
-		     	'parentId','orParentId','inParentId',
-		     	'children',
-		     	'hidden', 'orHidden',
-		     	'status', 'orStatus',
-		     	'praram','orParam',
-		     	'order',
-		     	'page','perpage'
-		     ]);
 	}
+
+	/**
+	 * 自定义函数 
+	 */
 
 
 	/**
-	 * 查询标签列表
+	 * 查询一条标签记录
+	 * @param  array $query GET 参数
+	 *               $query['select']  读取字段, 默认 ["tag.tag_id","tag.name","tag.param","tag.article_cnt","tag.album_cnt","tag.event_cnt","tag.goods_cnt","tag.question_cnt","tag.created_at","tag.updated_at"]
+	 * 				 $query['tag_id']  按查询 (多条用 "," 分割)
+	 * 				 $query['name']  按查询 (多条用 "," 分割)
+     *
+	 * @param  array $data  POST 参数
+	 *               $data['select']  返回字段, 默认 ["tag.tag_id","tag.name","tag.param","tag.article_cnt","tag.album_cnt","tag.event_cnt","tag.goods_cnt","tag.question_cnt","tag.created_at","tag.updated_at"]
+	 * 				 $data['tag_id']  按查询 (多条用 "," 分割)
+	 * 				 $data['name']  按查询 (多条用 "," 分割)
 	 *
-	 * 读取字段 select 默认 name
-	 *
-	 *    示例:  ["*"] /["tag_id", "name" ....] / "*" / "tag_id,name"
-	 *    许可值: "*","tag_id","name","param"
-	 * 
-	 * 
-	 * 查询条件
-	 * 	  1. 按名称查询  name | orName | inName
-	 * 	  3. 按标签ID查询  tagId | orTagId | inTagId 
-	 * 	  8. 按参数标记查询  param | orParam
-	 * 	  
-	 * 排序方式 order 默认 tag_id  updated_at asc, tag_id desc
-	 * 
-	 *    1. 按标签更新顺序  updated_at
-	 *    2. 按标签创建顺序  tag_id  
-	 *    
-	 *
-	 * 当前页码 page    默认 1 
-	 * 每页数量 perpage 默认 50 
-	 * 	
-	 * 
-	 * @param  array  $query 
-	 * @return array 文章结果集列表
-	 */
-	protected function search( $query=[] ) {
+	 * @return array 标签记录 Key Value 结构数据 
+	 *               	["tag_id"],  // 标签ID 
+	 *               	["name"],  // 名称 
+	 *               	["param"],  // 参数 
+	 *               	["article_cnt"],  // 文章数 
+	 *               	["album_cnt"],  // 图集数 
+	 *               	["event_cnt"],  // 活动数 
+	 *               	["goods_cnt"],  // 商品数 
+	 *               	["question_cnt"],  // 提问数 
+	 *               	["created_at"],  // 创建时间 
+	 *               	["updated_at"],  // 更新时间 
+	*/
+	protected function get( $query, $data ) {
 
-		$select = empty($query['select']) ? 'name' : $query['select'];
-		$select = is_array($select) ? $select : explode(',', $select);
 
-		// 验证 Select 参数
-		$allowFields = ["*","tag_id","name","param"];
+		// 支持POST和GET查询
+		$data = array_merge( $query, $data );
 
-		foreach ($select as $idx => $field) {
-			if ( !in_array($field, $allowFields)){
-				throw new Excp(" select 参数错误 ($field 非法字段)", 400, ['query'=>$query]);
-			}
+		// 读取字段
+		$select = empty($data['select']) ? ["tag.tag_id","tag.name","tag.param","tag.article_cnt","tag.album_cnt","tag.event_cnt","tag.goods_cnt","tag.question_cnt","tag.created_at","tag.updated_at"] : $data['select'];
+		if ( is_string($select) ) {
+			$select = explode(',', $select);
 		}
 
-	
-		// Order 默认参数
-		$query['order'] = !empty($query['order']) ? $query['order'] : 'tag_id';
-		$allowOrder = ["updated_at", "tag_id"];
-		$orderList = explode(',', $query['order']);
-
-
-		// 分页参数
-		$query['page'] = !empty($query['page']) ? intval($query['page']) : 1;
-		$query['perpage'] = !empty($query['perpage']) ? intval($query['perpage']) : 50;
-
-
-
-		// 查询数据表
-		$t = new \Xpmsns\pages\Model\Tag;
-		$qb = $t->query();
-
-		// 设定查询条件
-		$this->qb( $qb, 'name', 'name', $query, ["and", "or", "in"] );
-		$this->qb( $qb, 'tag_id', 'tagId', $query, ["and", "or", "in"] );
-		$this->qb( $qb, 'param', 'param', $query, ['and', 'or'], 'like');
-
-		// 处理排序
-		foreach ($orderList as $order) {
-			$order = trim($order);
-			$orderArr = preg_split('/[ ]+/', $order );
-			$orderArr[1] = !empty($orderArr[1]) ? $orderArr[1] : 'desc';
-
-			if ( !in_array($orderArr[0], $allowOrder)) {
-				throw new Excp(" order 参数错误 ({$orderArr[0]} 非法字段)", 400, ['query'=>$query]);
+		// 按标签ID
+		if ( !empty($data["tag_id"]) ) {
+			
+			$keys = explode(',', $data["tag_id"]);
+			if ( count( $keys )  > 1 ) {
+				$inst = new \Xpmsns\Pages\Model\Tag;
+				return $inst->getInByTagId($keys, $select);
 			}
 
-			$qb->orderBy($orderArr[0],$orderArr[1]);
-		}
-		
-		// 查询数据
-		$qb->select( $select );
-		$result = $qb ->paginate($query['perpage'],['tag_id'], 'page', $query['page'] );
-		$resultData = $result->toArray();
-		
-
-		// 处理结果集
-		$data = $resultData['data'];
-
-		$resp['curr'] = $resultData['current_page'];
-		$resp['perpage'] = $resultData['per_page'];
-		
-		$resp['next'] = ( $resultData['next_page_url'] === null ) ? false : intval( str_replace('/?page=', '',$resultData['next_page_url']));
-		$resp['prev'] = ( $resultData['prev_page_url'] === null ) ? false : intval( str_replace('/?page=', '',$resultData['prev_page_url']));
-
-		$resp['from'] = $resultData['from'];
-		$resp['to'] = $resultData['to'];
-		
-		$resp['last'] = $resultData['last_page'];
-		$resp['total'] = $resultData['total'];
-		$resp['data'] = $data;
-
-		if ( empty($data) ) {
-			return $resp;
+			$inst = new \Xpmsns\Pages\Model\Tag;
+			return $inst->getByTagId($data["tag_id"], $select);
 		}
 
-		if ( count(end($data)) == 1) {
-			foreach ($data as $idx=>$rs ) {
-				$resp['data'][$idx] = current($rs);
+		// 按名称
+		if ( !empty($data["name"]) ) {
+			
+			$keys = explode(',', $data["name"]);
+			if ( count( $keys )  > 1 ) {
+				$inst = new \Xpmsns\Pages\Model\Tag;
+				return $inst->getInByName($keys, $select);
 			}
-		}
-		
-		return $resp;
 
+			$inst = new \Xpmsns\Pages\Model\Tag;
+			return $inst->getByName($data["name"], $select);
+		}
+
+		throw new Excp("未知查询条件", 404, ['query'=>$query, 'data'=>$data]);
 	}
+
+
+
+
 
 
 
 	/**
-	 * 读取标签详情信息
-	 * @param  array  $query Query 查询
-	 *                   int ["name"]  标签详情
-	 *                   
-	 *          string|array ["select"] 读取字段  
-	 *          			 示例:  ["*"] /["tag_id", "name" ....] / "*" / "tag_id,name"
-	 *          		     许可值: "*","tag_id","name","param"
-	 *                    
-	 * @return Array 文章数据
-	 * 
+	 * 根据条件检索标签记录
+	 * @param  array $query GET 参数
+	 *         	      $query['select'] 选取字段，默认选择 ["tag.tag_id","tag.name","tag.article_cnt","tag.album_cnt","tag.event_cnt","tag.goods_cnt","tag.question_cnt","tag.created_at","tag.updated_at"]
+	 *         	      $query['page'] 页码，默认为 1
+	 *         	      $query['perpage'] 每页显示记录数，默认为 20
+	 *			      $query["keyword"] 按关键词查询
+	 *			      $query["tag_id"] 按标签ID查询 ( AND = )
+	 *			      $query["name"] 按名称查询 ( AND LIKE )
+	 *			      $query["created_desc"]  按创建时间倒序 DESC 排序
+	 *			      $query["updated_desc"]  按更新时间倒序 DESC 排序
+	 *			      $query["article_desc"]  按文章数量倒序 DESC 排序
+	 *			      $query["article_asc"]  按文章数量正序 ASC 排序
+	 *			      $query["album_desc"]  按图集数量倒序 DESC 排序
+	 *			      $query["album_asc"]  按图集数量正序 ASC 排序
+	 *			      $query["event_desc"]  按活动数量倒序 DESC 排序
+	 *			      $query["event_asc"]  按活动数量正序 DESC 排序
+	 *			      $query["goods_desc"]  按商品数量倒序 DESC 排序
+	 *			      $query["goods_asc"]  按商品数量正序 ASC 排序
+	 *			      $query["question_desc"]  按提问数量倒序 DESC 排序
+	 *			      $query["question_asc"]  按提问数量正序 ASC 排序
+     *
+	 * @param  array $data  POST 参数
+	 *         	      $data['select'] 选取字段，默认选择 ["name=tag_id","name=name","name=article_cnt","name=album_cnt","name=event_cnt","name=goods_cnt","name=question_cnt","name=created_at","name=updated_at"]
+	 *         	      $data['page'] 页码，默认为 1
+	 *         	      $data['perpage'] 每页显示记录数，默认为 20
+	 *			      $data["keyword"] 按关键词查询
+	 *			      $data["tag_id"] 按标签ID查询 ( AND = )
+	 *			      $data["name"] 按名称查询 ( AND LIKE )
+	 *			      $data["created_desc"]  按创建时间倒序 DESC 排序
+	 *			      $data["updated_desc"]  按更新时间倒序 DESC 排序
+	 *			      $data["article_desc"]  按文章数量倒序 DESC 排序
+	 *			      $data["article_asc"]  按文章数量正序 ASC 排序
+	 *			      $data["album_desc"]  按图集数量倒序 DESC 排序
+	 *			      $data["album_asc"]  按图集数量正序 ASC 排序
+	 *			      $data["event_desc"]  按活动数量倒序 DESC 排序
+	 *			      $data["event_asc"]  按活动数量正序 DESC 排序
+	 *			      $data["goods_desc"]  按商品数量倒序 DESC 排序
+	 *			      $data["goods_asc"]  按商品数量正序 ASC 排序
+	 *			      $data["question_desc"]  按提问数量倒序 DESC 排序
+	 *			      $data["question_asc"]  按提问数量正序 ASC 排序
+	 *
+	 * @return array 标签记录集 {"total":100, "page":1, "perpage":20, data:[{"key":"val"}...], "from":1, "to":1, "prev":false, "next":1, "curr":10, "last":20}
+	 *               data:[{"key":"val"}...] 字段
+	 *               	["tag_id"],  // 标签ID 
+	 *               	["name"],  // 名称 
+	 *               	["param"],  // 参数 
+	 *               	["article_cnt"],  // 文章数 
+	 *               	["album_cnt"],  // 图集数 
+	 *               	["event_cnt"],  // 活动数 
+	 *               	["goods_cnt"],  // 商品数 
+	 *               	["question_cnt"],  // 提问数 
+	 *               	["created_at"],  // 创建时间 
+	 *               	["updated_at"],  // 更新时间 
 	 */
-	protected function get( $query=[] ) {
+	protected function search( $query, $data ) {
 
-		// 验证数值
-		if ( empty($query['name']) ) {
-			throw new Excp(" name 参数错误", 400, ['query'=>$query]);
+
+		// 支持POST和GET查询
+		$data = array_merge( $query, $data );
+
+		// 读取字段
+		$select = empty($data['select']) ? ["tag.tag_id","tag.name","tag.article_cnt","tag.album_cnt","tag.event_cnt","tag.goods_cnt","tag.question_cnt","tag.created_at","tag.updated_at"] : $data['select'];
+		if ( is_string($select) ) {
+			$select = explode(',', $select);
 		}
+		$data['select'] = $select;
 
-		$name = $query['name'];
-		$select = empty($query['select']) ? '*' : $query['select'];
-		$select = is_array($select) ? $select : explode(',', $select);
-
-		// 验证 Select 参数
-		$allowFields = ["*","tag_id","name","param"];
-
-		foreach ($select as $idx => $field) {
-			if ( !in_array($field, $allowFields)){
-				throw new Excp(" select 参数错误 ($field 非法字段)", 400, ['query'=>$query]);
-			}
-		}
-		
-		$cate = new \Xpmsns\pages\Model\Tag;
-		$rs = $cate->getLine("WHERE name=:name LIMIT 1", $select, ["name"=>$name]);
-		if ( empty($rs) ) {
-			throw new Excp("标签不存在", 404,  ['query'=>$query]);
-		}
-
-		return $rs;
+		$inst = new \Xpmsns\Pages\Model\Tag;
+		return $inst->search( $data );
 	}
+
 
 }
