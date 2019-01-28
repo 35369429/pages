@@ -149,6 +149,42 @@ class Article extends Model {
         }
     }
 
+
+    /**
+     * 关联某人赞同数据
+     * @param array &$rows 回答数据
+     * @param string $user_id 用户ID 
+     * @return null
+     */
+    function withAgree( & $rows, $user_id, $select=["agree.origin_outer_id","agree.agree_id","user.user_id","user.name","user.nickname","user.mobile","agree.origin","agree.outer_id","agree.created_at","agree.updated_at"]) {
+
+        if ( !class_exists("\\Xpmsns\\Comment\\Model\\Agree") ) {
+            return;
+        }
+        
+        $ids = array_column( $rows, "article_id");
+        if ( empty( $ids) ) {
+            return;
+        }
+
+        // 读取赞同信息
+        $ag = new \Xpmsns\Comment\Model\Agree;
+        $origin_outer_ids = array_map(function($id) use( $user_id ){ return "article_{$user_id}_{$id}"; }, $ids);
+        $agrees = $ag->getInByOriginOuterId($origin_outer_ids, $select);
+
+        // 合并到数据表
+        foreach($rows as & $rs ) {
+            $origin_outer_id = "article_{$user_id}_{$rs['article_id']}";
+            $rs["agree"] = $agrees[$origin_outer_id];
+            if (is_null($rs["agree"]) ){
+                $rs["agree"] = [];
+                $rs["has_agreed"] = false;
+            }  else {
+                $rs["has_agreed"] = true;
+            }
+        }
+    }
+
 	
 	/**
 	 * 数据表结构

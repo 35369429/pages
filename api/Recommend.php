@@ -78,6 +78,12 @@ class Recommend extends Api {
             if ( !empty($user["user_id"]) && $query["withfavorite"] == 1 ) {
                 $art->withFavorite( $resp["contents"]["data"], $user["user_id"]);
             }
+
+            // 关联用户赞赏数据
+            if ( !empty($user["user_id"]) && $query["withagree"] == 1 ) {
+                $art->withAgree( $resp["contents"]["data"], $user["user_id"]);
+            }
+
         
             return $resp;
 
@@ -90,7 +96,11 @@ class Recommend extends Api {
              if ( !empty($user["user_id"]) && $query["withfavorite"] == 1 ) {
                  $art->withFavorite( $resp["contents"]["data"], $user["user_id"]);
              }
-
+            
+            // 关联用户赞赏数据
+            if ( !empty($user["user_id"]) && $query["withagree"] == 1 ) {
+                $art->withAgree( $resp["contents"]["data"],  $user["user_id"]);
+            }
             return $resp;
 		}
          
@@ -105,6 +115,11 @@ class Recommend extends Api {
                 $user = \Xpmsns\User\Model\User::info();
                 if ( !empty($user["user_id"]) && $query["withfavorite"] == 1 ) {
                     $art->withFavorite( $contents[$slug]["contents"]["data"], $user["user_id"]);
+                }
+
+                // 关联用户赞赏数据
+                if ( !empty($user["user_id"]) && $query["withagree"] == 1 ) {
+                    $art->withAgree( $resp["contents"]["data"], $user["user_id"]);
                 }
 			}
 			return $contents;

@@ -388,6 +388,11 @@ class Article extends Api {
             $art->withFavorite( $resp["data"], $user["user_id"]);
         }
 
+        // 关联用户赞赏数据
+        if ( !empty($user["user_id"]) && $query["withagree"] == 1 ) {
+            $art->withAgree( $resp["data"], $user["user_id"]);
+        }
+
 		return $resp;
 	}
 
