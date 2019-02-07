@@ -223,9 +223,14 @@ class Article extends Model {
 			'links' => ['longText', ['json'=>true]], // 访问链接
 			'series' => ['string', ['json'=>true, 'length'=>400, 'index'=>1]], // 所属系列
 			'user' => ['string', ['length'=>128,'index'=>1]], // 最后编辑用户ID
-			'policies' => ['string', ['json'=>true]], // 文章权限预留字段
 			'status'=> ['string', ['length'=>40,'index'=>1, 'default'=>ARTICLE_UNPUBLISHED]],  // 文章状态 unpublished/published/pending
-			'keywords' => ['string',['length'=>600, 'index'=>1]],  // 提取关键词
+            'keywords' => ['string',['length'=>600, 'index'=>1]],  // 提取关键词
+
+            // 用户相关信息
+            'user_id' => ["string", ["length"=>128, "index"=>true, "null"=>true]],// 用户ID
+            'policies' => ['string', ["length"=>32, "index"=>true, "default"=>"public", "null"=>true]], // 文章访问策略  public/partially/private/follower-only
+            'policies_detail' => ['string', ["length"=>600, "json"=>true, "null"=>true]], // 访问策略详情
+
 		];
 
 		$struct_draft_only = [
@@ -239,9 +244,15 @@ class Article extends Model {
 			'view_cnt' => ['bigInteger', ['index'=>1, 'default'=>0]], // 浏览量
 			'like_cnt' => ['bigInteger', ['index'=>1, 'default'=>0]],  // 点赞(喜欢)数量 
 			'dislike_cnt' => ['bigInteger', ['index'=>1, 'default'=>0]],  // 讨厌 (不喜欢)数量 
-			'comment_cnt'  => ['bigInteger', ['index'=>1, 'default'=>0]]   // 评论数量
-		];
-
+            'comment_cnt'  => ['bigInteger', ['index'=>1, 'default'=>0]],   // 评论数量
+            'agree_cnt' => ["integer", ["length"=>1, "index"=>true, "default"=>0]], // 赞同量
+            'priority' => ["integer", ["length"=>1, "index"=>true, "default"=>99999]], // 优先级
+            'coin_view' => ["integer", ["length"=>1, "index"=>true, "null"=>true]],  // 访问积分
+            'money_view' => ["integer", ["length"=>1, "index"=>true, "null"=>true]],  // 访问金额
+            'specials' => ['string', ['json'=>true, 'length'=>400, 'index'=>true]], // 所属专栏
+            'history' => ["longText", ["json"=>true, "null"=>true]],  // 修改历史( 逐步替代历史数据 )
+        ];
+        
 		// 添加文章表和草稿表结构
 		foreach ($struct as $field => $args ) {
 			$this->putColumn( $field, $this->type($args[0], $args[1]) );
