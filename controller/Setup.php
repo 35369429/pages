@@ -57,8 +57,26 @@ class SetupController extends \Xpmse\Loader\Controller {
 				"engine"=>"baidu", 
 				"config"=>["appid"=>null,"apikey"=>null, "secretkey"=>null]
 			]);
-		}
-
+        }
+        
+        // 用户发表文章策略
+        $audit_policies = $option->get("article/ugc/policies");
+		if ( $audit_policies == null ) {
+			$option->register("用户发表文章策略", "article/ugc/policies", [
+                "create"=> "audit-all",
+                "update"=> "not-allowed",
+                "value-allowed" => [
+                    "not-allowed" => "不允许发表",
+                    "all" => "允许用户和专栏作者发表文章",
+                    "contribute-only" => "允许用户投稿",
+                    "special-only" => "允许专栏作者发表文章",
+                    "audit-all" => "允许用户和专栏作者发表文章,提交内容更需要审核",
+                    "audit-contribute-only" => "允许用户投稿,提交内容更需要审核",
+                    "audit-special-only" => "允许专栏作者发表文章,提交内容更需要审核",
+                ]
+            ]);
+        }
+        
 
 		// 添加默认分类
 		$categories = [

@@ -20,6 +20,8 @@ use \Exception as Exception;
 
 define('ARTICLE_PUBLISHED', 'published');  // 文章状态 已发布
 define('ARTICLE_UNPUBLISHED', 'unpublished');  // 文章状态 未发布
+// 文章状态 审核中
+define('ARTICLE_AUDITING', 'auditing');  
 define('ARTICLE_PENDING', 'pending');  // 文章状态 未完成抓取
 define('DRAFT_APPLIED', 'applied'); // 已合并到文章中 DRAFT
 define('DRAFT_UNAPPLIED', 'unapplied'); // 未合并到文章中 DRAFT
@@ -28,6 +30,7 @@ define('STATUS_PUBLISHED', 'PUBLISHED');   // 已发布
 define('STATUS_UNPUBLISHED', 'UNPUBLISHED');   // 未发布
 define('STATUS_UNAPPLIED', 'UNAPPLIED');   // 有修改（尚未更新)
 define('STATUS_PENDING', 'PENDING');   // 同步中（数据尚未准备好）
+define('STATUS_AUDITING', "AUDITING"); // 审核中
 
 define('DEFAULT_PROJECT_NAME', 'default');  // 默认项目名称
 define('DEFAULT_PAGE_SLUG', '/article/detail');  // 默认页面地址
@@ -1863,8 +1866,10 @@ class Article extends Model {
 			$map = [
 				STATUS_UNPUBLISHED => '草稿',
 				STATUS_PENDING => '同步中',
-				STATUS_UNAPPLIED => '待更新',
-				STATUS_PUBLISHED => '已发布'
+                STATUS_AUDITING => '审核中',
+                STATUS_UNAPPLIED => '待更新',
+                STATUS_PUBLISHED => '已发布',
+                
 			];
 		}
 

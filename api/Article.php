@@ -42,6 +42,9 @@ class Article extends Api {
 		     ]);
 	}
 
+    /**
+     * 用于蜘蛛更新文章
+     */
 	protected function spiderUpdate( $data ) {
 		
 		$appid = $_SERVER["HTTP_AUTHORIZATION_APPID"];
@@ -51,11 +54,95 @@ class Article extends Api {
 
 		$article = new \Xpmsns\Pages\Model\Article;
 		return $article->spiderUpdate( $this->params );
-	}
+    }
+    
 
+    /**
+     * 发布文章接口 
+     */
+    protected function create( $query, $data ) {
+
+        // 读取用户资料
+        $user = \Xpmsns\User\Model\User::info();
+        $user_id = $user["user_id"];
+        if ( empty($user_id) ) {
+            throw new Excp("用户尚未登录", 402, ["query"=>$query, "data"=>$data]);
+        }
+
+        // 验证用户登录等级(用户名密码/短信登录有该接口访问权限)
+
+        // 读取用户ID 
+        $data["user_id"] = $user_id;
+        $data["status"] = Xpmsns\pages\Model::STATUS_AUDITING;
+
+        // 许可字段清单
+		$allowed =  [
+            "user_id",  // 用户ID
+            "author",   // 作者
+            "title",  // 标题
+            "keywords", // 关键词
+            "summary",  // 摘要
+            
+            "cover",  // 封面
+            "thumbs", // 主题图
+
+            "images",  // 图集文章
+            "videos",  // 视频文章
+            "audios",  // 音频文章
+
+            "author",  // 作者
+            "origin",  // 来源
+            "origin_url",  // 来源网址
+            "content",  //  正文
+            
+            "category",  // 类目(多个用"," 分割)
+            "tag",       // 标签 (多个用"," 分割)
+            "series",    // 系列
+            "specials",  // 所属专栏 
+
+			"policies",  // 访问策略
+			"policies_detail",  // 访问策略详情
+            "status",  // 状态
+            
+            "seo_title",  // 标题
+            "seo_keywords", // 关键词
+            "seo_summary",  // 摘要
+
+            "coin_view",  // 访问所需积分
+            "money_view", // 访问所需金额
+
+            "stick",    // 是否置顶状态
+            "priority",  // 访问优先级
+        ];
+        
+		$data = array_filter(
+			$data,
+			function ($key) use ($allowed) {
+				return in_array($key, $allowed);
+			},
+			ARRAY_FILTER_USE_KEY
+        );
+
+        // 读取配置
+        $option = new \Xpmse\Option('xpmsns/pages');
+        $audit_policies = $option->get("article/ugc/policies");
+
+        
+
+    }
+
+
+    /**
+     * 修改文章接口
+     */
+    protected function update( $data ) {
+
+    }
+
+    
 
 	/**
-	 * 查询推荐信息
+	 * 查询推荐信息 (即将废弃)
 	 * @param  [type] $query [description]
 	 * @param  [type] $data  [description]
 	 * @return [type]        [description]
@@ -95,8 +182,9 @@ class Article extends Api {
 			$query['perpage'] =6;
 			$query['page'] = 1;
 			$data['dry'] = $this->search($query);
-		}
-		
+        }
+        
+        $data["__warning"] = "本方法将在1.7版本中废弃, 请慎重调用";
 		return $data;
 	}
 
