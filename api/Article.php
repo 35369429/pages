@@ -60,7 +60,7 @@ class Article extends Api {
     /**
      * 发布文章接口 
      */
-    protected function create( $query, $data ) {
+    protected function save( $query, $data ) {
 
         // 读取用户资料
         $user = \Xpmsns\User\Model\User::info();
@@ -69,26 +69,26 @@ class Article extends Api {
             throw new Excp("用户尚未登录", 402, ["query"=>$query, "data"=>$data]);
         }
 
-        // 验证用户登录等级(用户名密码/短信登录有该接口访问权限)
+        // ? 验证用户登录等级(用户名密码/短信登录有该接口访问权限)
 
         // 读取用户ID 
         $data["user_id"] = $user_id;
-        $data["status"] = Xpmsns\pages\Model::STATUS_AUDITING;
-
+        
         // 许可字段清单
 		$allowed =  [
+            "article_id", // 文章ID 
             "user_id",  // 用户ID
             "author",   // 作者
             "title",  // 标题
             "keywords", // 关键词
             "summary",  // 摘要
             
-            "cover",  // 封面
-            "thumbs", // 主题图
+            "cover",  // 封面 (JSON String)
+            "thumbs", // 主题图 (JSON String)
 
-            "images",  // 图集文章
-            "videos",  // 视频文章
-            "audios",  // 音频文章
+            "images",  // 图集文章  (JSON String)
+            "videos",  // 视频文章  (JSON String)
+            "audios",  // 音频文章  (JSON String)
 
             "author",  // 作者
             "origin",  // 来源
@@ -101,7 +101,7 @@ class Article extends Api {
             "specials",  // 所属专栏 
 
 			"policies",  // 访问策略
-			"policies_detail",  // 访问策略详情
+			"policies_detail",  // 访问策略详情  (JSON String)
             "status",  // 状态
             
             "seo_title",  // 标题
@@ -123,12 +123,69 @@ class Article extends Api {
 			ARRAY_FILTER_USE_KEY
         );
 
-        // 读取配置
-        $option = new \Xpmse\Option('xpmsns/pages');
-        $audit_policies = $option->get("article/ugc/policies");
-
+        // 读取用户专栏信息
+        $spe = new \Xpmsns\pages\Model\Special();
+        $special = $spe->getByUserId( $user_id );
         
 
+        // 读取权限配置
+        $option = new \Xpmse\Option('xpmsns/pages');
+        $ugc_policies = $option->get("article/ugc/policies");
+        $policies = $ugc_policies["create"];
+
+        // 校验权限
+        if ($policies == "not-allowed" ) {
+            throw new Excp("无接口访问权限", 403, ["policies"=>$policies]);
+        }
+
+        // 仅专栏可以访问
+        if( in_array($policies, ["special-only", "audit-special-only"]) && empty($special) ) {
+            throw new Excp("无接口访问权限", 403, ["policies"=>$policies]);
+        }
+
+        // 需要审核, 将权限设定为可访问
+        $art = new \Xpmsns\pages\Model\Article();
+
+        if( in_array($policies, ["audit-all", "audit-contribute-only", "audit-special-only"]) && 
+            in_array($data["status"], ["published"]) ) {
+            $data["status"] = "auditing";
+        }
+
+        // 处理封面
+        if ( !empty($data['cover']) ) {
+			$data['cover'] = json_decode($data['cover'], true);
+        }
+
+        return $art->save( $data );
+    }
+
+
+    protected function getUserArticle( $query, $data ) {
+
+        // 读取用户资料
+        $user = \Xpmsns\User\Model\User::info();
+        $user_id = $user["user_id"];
+        if ( empty($user_id) ) {
+            throw new Excp("用户尚未登录", 402, ["query"=>$query, "data"=>$data]);
+        }
+
+        // ? 验证用户登录等级(用户名密码/短信登录有该接口访问权限)
+
+        // 读取用户ID 
+        $data["user_id"] = $user_id;
+        $article_id = $query["article_id"];
+        if ( empty($article_id) ) {
+            throw new Excp("未提供文章ID", 402, ["query"=>$query]);
+        }
+
+        $art = new \Xpmsns\pages\Model\Article();
+        $article = $art->getByArticleId($article_id, $query["select"]);
+
+        if ( $article["user_id"] != $user_id ) {
+            throw new Excp("没有该文章的权限", 403, ["user_id"=>$user_id]);
+        }
+
+        return $article;
     }
 
 
@@ -139,7 +196,6 @@ class Article extends Api {
 
     }
 
-    
 
 	/**
 	 * 查询推荐信息 (即将废弃)

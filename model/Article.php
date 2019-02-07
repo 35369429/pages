@@ -20,9 +20,9 @@ use \Exception as Exception;
 
 define('ARTICLE_PUBLISHED', 'published');  // 文章状态 已发布
 define('ARTICLE_UNPUBLISHED', 'unpublished');  // 文章状态 未发布
-// 文章状态 审核中
-define('ARTICLE_AUDITING', 'auditing');  
+define('ARTICLE_AUDITING', 'auditing');   // 文章状态 审核中
 define('ARTICLE_PENDING', 'pending');  // 文章状态 未完成抓取
+
 define('DRAFT_APPLIED', 'applied'); // 已合并到文章中 DRAFT
 define('DRAFT_UNAPPLIED', 'unapplied'); // 未合并到文章中 DRAFT
 
@@ -188,6 +188,64 @@ class Article extends Model {
         }
     }
 
+
+    /**
+     * 读取文章详情
+     * @param string $article_id 文章ID
+     * @param array $select 数据选项
+     * @return array 文章结构体
+     */
+    function getByArticleId( $article_id, $select=["*"] ) {
+
+        $getTag = false; $getCategory = false;
+        $select = empty($query['select']) ? '*' : $query['select'];
+		$select = is_array($select) ? $select : explode(',', $select);
+
+		foreach ($select as $idx => $field) {
+
+			if ( $field == '*') {
+				$getTag = true; $getCategory = true;
+			}
+
+			if ( $field == 'category' ) {
+				$getCategory = true;
+				unset( $select[$idx] );
+			}
+
+			if ( $field == 'tag' ) {
+				$getTag = true;
+				unset( $select[$idx] );
+			}
+        }
+        
+		$rs = $this->getLine("WHERE article_id=:article_id LIMIT 1", $select, ["article_id"=>$article_id]);
+		if ( empty($rs) ) {
+			throw new Excp("文章不存在", 404,  ['query'=>$query]);
+		}
+
+		$this->format($rs);
+
+		if( $getCategory) {
+			$rs['category'] = $this->getCategories($article_id,"category.category_id","name","fullname","project","page","parent_id","priority","hidden","param" );
+
+			if ( is_array($rs['category']) ) {
+                $rs['category_last'] = end($rs['category']);
+                $rs['category_ids'] =  array_column($rs["category"], "category_id");
+			}
+		}
+
+		if ( $getTag ) {
+            $rs["tag"] = $this->getTags($article_id, 'tag.tag_id', 'name', 'param');
+            $rs["tags"] = [];
+            if ( is_array($rs["tag"]) ){
+                $rs["tags"] =  array_column($rs["tag"], "name");
+            }
+        }
+ 
+		return $rs;
+
+    }
+
 	
 	/**
 	 * 数据表结构
@@ -199,7 +257,7 @@ class Article extends Model {
 		$struct = [
 			'article_id'=> ['string', ['length'=>128, 'unique'=>true]],  // 文章 ID  ( 同 _id )
 			'outer_id'=> ['string', ['length'=>128, 'unique'=>1]],  // 外部ID用于数据同步下载 ( 同 _id )
-			'cover'=> ['string',  ['length'=>256]],   // 文章封面
+			'cover'=> ['string',  ['length'=>600, "json"=>true]],   // 文章封面
 			'thumbs' =>['text',  ["json"=>true]],     // 主题图片(三张)
 			'images'=> ['text',  ['json'=>true]],  // 图集文章
 			'videos'=> ['text',  ['json'=>true]],  // 视频文章
@@ -234,6 +292,12 @@ class Article extends Model {
             'policies' => ['string', ["length"=>32, "index"=>true, "default"=>"public", "null"=>true]], // 文章访问策略  public/partially/private/follower-only
             'policies_detail' => ['string', ["length"=>600, "json"=>true, "null"=>true]], // 访问策略详情
 
+            // 追加信息
+            'priority' => ["integer", ["length"=>1, "index"=>true, "default"=>99999]], // 优先级
+            'coin_view' => ["integer", ["length"=>1, "index"=>true, "null"=>true]],  // 访问积分
+            'money_view' => ["integer", ["length"=>1, "index"=>true, "null"=>true]],  // 访问金额
+            'specials' => ['string', ['json'=>true, 'length'=>400, 'index'=>true]], // 所属专栏
+
 		];
 
 		$struct_draft_only = [
@@ -249,10 +313,6 @@ class Article extends Model {
 			'dislike_cnt' => ['bigInteger', ['index'=>1, 'default'=>0]],  // 讨厌 (不喜欢)数量 
             'comment_cnt'  => ['bigInteger', ['index'=>1, 'default'=>0]],   // 评论数量
             'agree_cnt' => ["integer", ["length"=>1, "index"=>true, "default"=>0]], // 赞同量
-            'priority' => ["integer", ["length"=>1, "index"=>true, "default"=>99999]], // 优先级
-            'coin_view' => ["integer", ["length"=>1, "index"=>true, "null"=>true]],  // 访问积分
-            'money_view' => ["integer", ["length"=>1, "index"=>true, "null"=>true]],  // 访问金额
-            'specials' => ['string', ['json'=>true, 'length'=>400, 'index'=>true]], // 所属专栏
             'history' => ["longText", ["json"=>true, "null"=>true]],  // 修改历史( 逐步替代历史数据 )
         ];
         
@@ -1417,7 +1477,8 @@ class Article extends Model {
 
 
 		// 保存到草稿表
-		$article_id = $data['article_id'];
+        $article_id = $data['article_id'];
+        
 
 		$data['history'] = $this->article_draft->getLine("WHERE article_id=?", ['*'], [$article_id]);
 		if ( is_array($data['history']) && !is_null($data['history']['history'])) {
@@ -1454,7 +1515,12 @@ class Article extends Model {
 		// 转为PENDING
 		if ( $data['status'] == ARTICLE_PENDING ) {
 			return $this->pending( $article_id );	
-		}
+        }
+        
+        // 转为审核中
+        if ( $data["status"] == ARTICLE_AUDITING ) {
+            return $this->auditing( $article_id );
+        }
 		
 		return $draft;
 	}
@@ -1550,13 +1616,14 @@ class Article extends Model {
 			$render = new \Mina\Delta\Render;
 			$article['ap_content'] = $render->loadByHTML($article["content"])->wxapp();
 				
-			// === 解析媒体数据 
-			$mdUtils = new \Mina\Delta\Utils;
-			$html = $mdUtils->load($article['delta'])->convert()->render();
-			$article["images"] = $mdUtils->images();
-			$article["videos"] = $mdUtils->videos();
-			$article["files"] = $mdUtils->files();
-			
+            // === 解析媒体数据 
+            if ( !empty($article['delta']) ) {
+                $mdUtils = new \Mina\Delta\Utils;
+                $html = $mdUtils->load($article['delta'])->convert()->render();
+                $article["images"] = $mdUtils->images();
+                $article["videos"] = $mdUtils->videos();
+                $article["files"] = $mdUtils->files();
+            }
 		}
 
 		// 提取关键字
@@ -1615,55 +1682,68 @@ class Article extends Model {
 			}
 		}
 
-		if ( array_key_exists('images', $article)  && is_array($article['images']) && count($article['images']) > 0) {
-
-			foreach ($article['images'] as & $img ) {
-
-
-				if ( is_array($img) &&  !empty($img['path']) ) {
-					$img['path'] = str_replace('/static-file/media', '', $img['path']); // 兼容旧版
-					$img = $this->media->get( $img['path']);
-				} else if ( is_string($img) ) {
-					$img = str_replace('/static-file/media', '', $img); // 兼容旧版
-					$img = $this->media->get( $img);
-				}
-			}
-		}
-
-		if ( array_key_exists('thumbs', $article)  && is_array($article['thumbs']) && count($article['thumbs']) > 0) {
-
-			foreach ($article['thumbs'] as & $img ) {
-				
-				if ( is_array($img) &&  !empty($img['path']) ) {
-					$img['path'] = str_replace('/static-file/media', '', $img['path']); // 兼容旧版
-					$img = $this->media->get( $img['path']);
-				} else if ( is_string($img) && !empty($img) ) {
-					$img = str_replace('/static-file/media', '', $img); // 兼容旧版
-					$img = $this->media->get( $img);
-					// $img = $u['url'];
-				}
-			}
-		}
-
-
+	
 		if ( array_key_exists('series', $article)  && is_array($article['series']) && count($article['series']) > 0) {
 			$article['series_param'] = implode(',', $article['series']);
-		}
+        }  
 
-		if (!empty($article['cover']) && substr( $article['cover'],0,4) != 'http') {
+        // 标签
+        if ( array_key_exists('tag', $article) ){
+            if ( is_array($article["tag"]) ){
+                $article["tags"] = array_column($article["tag"], "name");
+            }
+        }
+
+        $this->__fileFields( $rs, ["cover", "thumbs", "images"]);
+
+        // if ( array_key_exists('images', $article)  && is_array($article['images']) && count($article['images']) > 0) {
+
+		// 	foreach ($article['images'] as & $img ) {
+
+
+		// 		if ( is_array($img) &&  !empty($img['path']) ) {
+		// 			$img['path'] = str_replace('/static-file/media', '', $img['path']); // 兼容旧版
+		// 			$img = $this->media->get( $img['path']);
+		// 		} else if ( is_string($img) ) {
+		// 			$img = str_replace('/static-file/media', '', $img); // 兼容旧版
+		// 			$img = $this->media->get( $img);
+		// 		}
+		// 	}
+		// }
+
+		// if ( array_key_exists('thumbs', $article)  && is_array($article['thumbs']) && count($article['thumbs']) > 0) {
+
+		// 	foreach ($article['thumbs'] as & $img ) {
+				
+		// 		if ( is_array($img) &&  !empty($img['path']) ) {
+		// 			$img['path'] = str_replace('/static-file/media', '', $img['path']); // 兼容旧版
+		// 			$img = $this->media->get( $img['path']);
+		// 		} else if ( is_string($img) && !empty($img) ) {
+		// 			$img = str_replace('/static-file/media', '', $img); // 兼容旧版
+		// 			$img = $this->media->get( $img);
+		// 			// $img = $u['url'];
+		// 		}
+		// 	}
+		// }
+
+
+		// if (!empty($article['cover']) && substr( $article['cover'],0,4) != 'http') {
 			
-			$article['cover'] = str_replace('/static-file/media', '', $article['cover']); // 兼容旧版
-			$u = $this->media->get($article['cover']);
-			$article['cover'] = $u;
+		// 	$article['cover'] = str_replace('/static-file/media', '', $article['cover']); // 兼容旧版
+		// 	$u = $this->media->get($article['cover']);
+		// 	$article['cover'] = $u;
 
-		} else {
-			$url = $article['cover'];
-			$article['cover'] = [];
-			if ( !empty($url) ) {
-				$article['cover']['url'] = $url;
-				$article['cover']['path'] = $url;
-			}
-		}
+		// } else {
+		// 	$url = $article['cover'];
+		// 	$article['cover'] = [];
+		// 	if ( !empty($url) ) {
+		// 		$article['cover']['url'] = $url;
+		// 		$article['cover']['path'] = $url;
+		// 	}
+        // }
+        
+
+
 		$article['home'] = $this->host;
 		return $article;
 	}
@@ -1854,6 +1934,25 @@ class Article extends Model {
 	}
 	
 
+    /**
+     * 设定状态为审核中
+     * @param string $article_id 文章ID
+     * @return array 文章结构体
+     */
+    function auditing( $article_id ) {
+
+        $this->article_draft->updateBy('article_id',[
+			'article_id' => $article_id,
+			'status' => ARTICLE_AUDITING
+		]);
+
+		return $this->updateBy('article_id',[
+			'article_id' => $article_id,
+			'status' => ARTICLE_AUDITING
+		]);
+    }
+
+
 
 	/**
 	 * 读取文章状态名称
@@ -1869,7 +1968,6 @@ class Article extends Model {
                 STATUS_AUDITING => '审核中',
                 STATUS_UNAPPLIED => '待更新',
                 STATUS_PUBLISHED => '已发布',
-                
 			];
 		}
 
@@ -1881,9 +1979,9 @@ class Article extends Model {
 	/**
 	 * 读取文章状态码
 	 * 
-	 * @param  string $status       文章状态 unpublished 未发布/ published 已发布/ pending 数据尚未准备好
-	 * @param  string $draft_status 草稿状态 unapplied 尚未更新/ applied 修改已更新/ pending 数据尚未准备好
-	 * @return string 状态描述码 PUBLISHED 已发布 / UNPUBLISHED 未发布 / UNAPPLIED 有修改未更新  / PENDING 数据尚未准备好
+	 * @param  string $status       文章状态 unpublished 未发布/ published 已发布/ auditing 审核中 / pending 数据尚未准备好
+	 * @param  string $draft_status 草稿状态 unapplied 尚未更新/ applied 修改已更新/ auditing 审核中 / pending 数据尚未准备好
+	 * @return string 状态描述码 PUBLISHED 已发布 / UNPUBLISHED 未发布 / UNAPPLIED 有修改未更新  / PENDING 数据尚未准备好 / AUDITING 审核中
 	 */
 	function status( $status, $draft_status = null ) {
 
@@ -1893,7 +1991,10 @@ class Article extends Model {
 		} else if ( $status == ARTICLE_PENDING ) {
 			return STATUS_PENDING;
 		
-		} else {
+		} else if ( $status == ARTICLE_AUDITING ) {
+			return STATUS_AUDITING;
+		
+		}else {
 
 			if ( $draft_status == DRAFT_UNAPPLIED ) {
 				return STATUS_UNAPPLIED;
@@ -1905,7 +2006,7 @@ class Article extends Model {
 
 
 	/**
-	 * 读取文章相关图集
+	 * 读取文章相关图集 (即将废弃)
 	 * @param  [type] $article_id [description]
 	 * @return [type]             [description]
 	 */
@@ -1917,7 +2018,7 @@ class Article extends Model {
 
 
 	/**
-	 * 读取文章图集图片
+	 * 读取文章图集图片 (即将废弃)
 	 * @param  [type] $article_id [description]
 	 * @return [type]             [description]
 	 */
