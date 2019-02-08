@@ -1585,11 +1585,24 @@ class Article extends Model {
 			$rows = $qb->get()->toArray();
 			$rs = current($rows);
 
-			// echo $qb->getSql();
-
-			// $rs = $this->article_draft->getLine("WHERE article_id=?", ['*'], [$article_id]);
 			if ( !empty($rs) ) {
-				$this->format( $rs, false);
+
+                $this->format( $rs, false);
+                
+                // 读取类目
+                $rs['category'] = $this->getCategories($article_id,"category.category_id","name","fullname","project","page","parent_id","priority","hidden","param" );
+                if ( is_array($rs['category']) ) {
+                    $rs['category_last'] = end($rs['category']);
+                    $rs['category_ids'] =  array_column($rs["category"], "category_id");
+                }
+        
+                $rs["tag"] = $this->getTags($article_id, 'tag.tag_id', 'name', 'param');
+                if ( is_array($rs["tag"]) ){
+                    $rs["tags"] =  array_column($rs["tag"], "name");
+                }
+        
+                $rs['preview'] = $this->previewLinks( $article_id, $rs['category_ids']);  // 生成预览链接
+
 				return $rs;
 			}
 		}
@@ -1768,12 +1781,22 @@ class Article extends Model {
 		$rs = $this->getLine("WHERE article_id=?", ['*'], [$article_id]);
 		if ( empty( $rs) ) {
 			throw new Excp("文章不存在( {$article_id})", 404, ['article_id'=>$article_id, $override=>$override] );
-		}
+        }
+    
 
-		$rs['category'] = $this->getCategories($article_id, 'category_id');
-		$rs['tag'] = $this->getTags($article_id, 'name');
+		$rs['category'] = $this->getCategories($article_id,"category.category_id","name","fullname","project","page","parent_id","priority","hidden","param" );
+        if ( is_array($rs['category']) ) {
+            $rs['category_last'] = end($rs['category']);
+            $rs['category_ids'] =  array_column($rs["category"], "category_id");
+        }
+
+        $rs["tag"] = $this->getTags($article_id, 'tag.tag_id', 'name', 'param');
+		if ( is_array($rs["tag"]) ){
+            $rs["tags"] =  array_column($rs["tag"], "name");
+        }
+
 		$rs['history'] = [];
-		$rs['preview'] = $this->previewLinks( $article_id, $rs['category']);  // 生成预览链接
+		$rs['preview'] = $this->previewLinks( $article_id, $rs['category_ids']);  // 生成预览链接
 		$rs['draft_status'] = DRAFT_APPLIED;  // 标记草稿与文章同步
 
 		$data =  $this->article_draft->updateBy( 'article_id', $rs );
@@ -2541,7 +2564,7 @@ class Article extends Model {
 	 * @param  string | array ...$field 读取字段
 	 * @return array 分类数组
 	 */
-	function getCategories( $article_id, $field="*") {
+	function getCategories( $article_id, $field="category.*") {
 
 		$c = new Category;
 

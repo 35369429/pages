@@ -179,10 +179,10 @@ class Article extends Api {
         }
 
         $art = new \Xpmsns\pages\Model\Article();
-        $article = $art->getByArticleId($article_id, $query["select"]);
+        $article = $art->load( $article_id );
 
         if ( $article["user_id"] != $user_id ) {
-            throw new Excp("没有该文章的权限", 403, ["user_id"=>$user_id]);
+            throw new Excp("没有该文章的权限", 403, ["user_id"=>$user_id, "article.user_id"=>$article["user_id"]]);
         }
 
         return $article;
