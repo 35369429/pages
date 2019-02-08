@@ -1503,7 +1503,6 @@ class Article extends Model {
 		
 		// 发布文章
 		if ( $data['status'] == ARTICLE_PUBLISHED ) {
-
 			return $this->published( $article_id );
 		}
 
@@ -1521,7 +1520,12 @@ class Article extends Model {
         if ( $data["status"] == ARTICLE_AUDITING ) {
             return $this->auditing( $article_id );
         }
-		
+        
+
+        if ( empty($draft["status"]) ) {
+            $draft["status"] = $this->isPublished($article_id) ? ARTICLE_PUBLISHED : ARTICLE_UNPUBLISHED;
+        }
+
 		return $draft;
 	}
 
@@ -1602,6 +1606,10 @@ class Article extends Model {
                 }
         
                 $rs['preview'] = $this->previewLinks( $article_id, $rs['category_ids']);  // 生成预览链接
+
+                if ( empty($rs["status"]) ) {
+                    $rs["status"] = $this->isPublished($article_id) ? ARTICLE_PUBLISHED : ARTICLE_UNPUBLISHED;
+                }
 
 				return $rs;
 			}
