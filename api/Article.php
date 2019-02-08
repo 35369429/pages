@@ -160,6 +160,9 @@ class Article extends Api {
     }
 
 
+    /**
+     * 读取用户的文章(用于编辑)
+     */
     protected function getUserArticle( $query, $data ) {
 
         // 读取用户资料
