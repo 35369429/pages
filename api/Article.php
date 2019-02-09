@@ -101,7 +101,9 @@ class Article extends Api {
             "specials",  // 所属专栏 
 
 			"policies",  // 访问策略
-			"policies_detail",  // 访问策略详情  (JSON String)
+            "policies_detail",  // 访问策略详情  (JSON String)
+            "policies_comment",  //  评论许可策略  opened/closed/follower-only
+            "policies_reward", // 打赏许可策略  opened/closed
             "status",  // 状态
             
             "seo_title",  // 标题
@@ -154,6 +156,21 @@ class Article extends Api {
         // 处理封面
         if ( !empty($data['cover']) ) {
 			$data['cover'] = json_decode($data['cover'], true);
+        }
+
+        // 默认访问策略
+        if ( !array_key_exists("policies", $data) ) {
+			$data["policies"] = "public";
+        }
+
+        // 默认文章置顶
+        if ( !array_key_exists("stick", $data) ) {
+			$data["stick"] = 0;
+        }
+
+        // 默认打赏策略
+        if ( !array_key_exists("policies_reward", $data) ) {
+			$data["policies_reward"] = "closed";
         }
 
         return $art->save( $data );

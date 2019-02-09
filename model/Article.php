@@ -292,6 +292,9 @@ class Article extends Model {
             'policies' => ['string', ["length"=>32, "index"=>true, "default"=>"public", "null"=>true]], // 文章访问策略  public/partially/private/follower-only
             'policies_detail' => ['string', ["length"=>600, "json"=>true, "null"=>true]], // 访问策略详情
 
+            "policies_comment"=> ['string', ["length"=>32, "index"=>true, "default"=>"closed"]], // 评论许可策略  opened/closed/follower-only
+            "policies_reward"=> ['string', ["length"=>32, "index"=>true, "default"=>"opened", ]], // 打赏许可策略  opened/closed
+
             // 追加信息
             'priority' => ["integer", ["length"=>1, "index"=>true, "default"=>99999]], // 优先级
             'coin_view' => ["integer", ["length"=>1, "index"=>true, "null"=>true]],  // 访问积分
