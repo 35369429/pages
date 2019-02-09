@@ -1394,7 +1394,8 @@ class Article extends Model {
 
 		if ( is_string($data['tag']) ) {
 			$data['tag'] = explode(',', $data['tag']);
-		}
+        }
+        
 
 		// 按栏目名称设定栏目
 		if (array_key_exists('category_names',$data)){
@@ -1594,15 +1595,15 @@ class Article extends Model {
                 $this->format( $rs, false);
                 
                 // 读取类目
-                $rs['category'] = $this->getCategories($article_id,"category.category_id","name","fullname","project","page","parent_id","priority","hidden","param" );
+                // $rs['category'] = $this->getCategories($article_id,"category.category_id","name","fullname","project","page","parent_id","priority","hidden","param" );
                 if ( is_array($rs['category']) ) {
                     $rs['category_last'] = end($rs['category']);
-                    $rs['category_ids'] =  array_column($rs["category"], "category_id");
+                    $rs['category_ids'] =  $rs['category'];
                 }
         
-                $rs["tag"] = $this->getTags($article_id, 'tag.tag_id', 'name', 'param');
+                // $rs["tag"] = $this->getTags($article_id, 'tag.tag_id', 'name', 'param');
                 if ( is_array($rs["tag"]) ){
-                    $rs["tags"] =  array_column($rs["tag"], "name");
+                    $rs["tags"] =  $rs["tag"];
                 }
         
                 $rs['preview'] = $this->previewLinks( $article_id, $rs['category_ids']);  // 生成预览链接
