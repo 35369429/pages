@@ -195,7 +195,7 @@ class Article extends Api {
         $data["user_id"] = $user_id;
         $article_id = $query["article_id"];
         if ( empty($article_id) ) {
-            throw new Excp("未提供文章ID", 402, ["query"=>$query]);
+            return [];
         }
 
         $art = new \Xpmsns\pages\Model\Article();
