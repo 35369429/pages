@@ -141,7 +141,7 @@ class Article extends Api {
         }
 
         // 仅专栏可以访问
-        if( in_array($policies, ["special-only", "audit-special-only"]) && empty($special) ) {
+        if( in_array($policies, ["special-only", "audit-special-only"]) && $special["status"] != "on" ) {
             throw new Excp("无接口访问权限", 403, ["policies"=>$policies]);
         }
 
@@ -171,6 +171,13 @@ class Article extends Api {
         // 默认打赏策略
         if ( !array_key_exists("policies_reward", $data) ) {
 			$data["policies_reward"] = "closed";
+        }
+
+        // 保存专栏信息
+        if ( $special["status"] == "on" ) {
+            $data["specials"] = [
+                $special["special_id"]
+            ];
         }
 
         return $art->save( $data );
