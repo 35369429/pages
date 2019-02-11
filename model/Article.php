@@ -190,6 +190,32 @@ class Article extends Model {
 
 
     /**
+     * 读取文章分类数据
+     * @param array &$rows 文章数据
+     * @param string $select 选中数据
+     */
+    function withCategory( & $rows, $select=["category.category_id","name","fullname","project","page","parent_id","priority","hidden","param"] ){
+        $ids = array_column( $rows, "article_id");
+        if ( empty( $ids) ) {
+            return;
+        }
+        $categories = $this->getCategoriesGroup($ids, $select);
+        foreach( $rows as & $rs ) {
+            $id = $rs["article_id"];
+            $rs['category'] = [];
+            $rs['category_last'] = [];
+            $rs['category_ids'] = [];
+
+            if ( is_array($categories[$id]) ) {
+                $rs['category'] = $categories[$id];
+                $rs['category_last'] = end($rs['category']);
+                $rs['category_ids'] =  array_column($rs["category"], "category_id");
+			}
+        }
+    }
+
+
+    /**
      * 读取文章详情
      * @param string $article_id 文章ID
      * @param array $select 数据选项
@@ -890,7 +916,12 @@ class Article extends Model {
             "user.nickname as user_nickname", "user.name as user_name", "user.mobile as user_mobile", "user.headimgurl as user_headimgurl",
         
             "article.specials",
-            "special.special_id", "special.name as special_name", "special.path as special_path", "special.logo as special_logo"
+            "special.special_id", "special.name as special_name", "special.path as special_path", "special.logo as special_logo",
+
+            "article.series",
+
+            "category",
+            "tag",
         ];
         
 		$select = empty($query['select']) ? $select_defaults : $query['select'];
@@ -898,11 +929,28 @@ class Article extends Model {
 			$select = explode(',', $select);
 		}
 
-		foreach ($select as & $se ) {
-			if ( strpos( $se, ".") === false ) {
-				$se = "article.{$se}";
+
+        foreach ($select as $idx=>$field) {
+
+            if ( strpos( $field, ".") === false ) {
+				$select[$idx] = "article.{$field}";
+            }
+            
+			if ( $field == '*') {
+				$getTag = true; $getCategory = true;
+			}
+
+			if ( $field == 'category' ) {
+				$getCategory = true;
+				unset( $select[$idx] );
+			}
+
+			if ( $field == 'tag' ) {
+				$getTag = true;
+				unset( $select[$idx] );
 			}
         }
+
         
         // 按用户ID查找
 		if ( array_key_exists('user_id', $query)  && !empty($query['user_id']) ) {
@@ -1012,7 +1060,31 @@ class Article extends Model {
 					# code...
 					break;
 			}
-		}
+        }
+
+        // 发布时间大于
+        if ( array_key_exists('begin', $query) && !empty($query['begin']) ) {
+            $begin = date("Y-m-d H:i:s", strtotime($query['begin']) );
+            $qb->where('publish_time' , '>=', $begin );
+        }
+
+        // 发布时间小于
+        if ( array_key_exists('end', $query) && !empty($query['end']) ) {
+            $end = date("Y-m-d H:i:s", strtotime($query['end']) );
+            $qb->where('publish_time' , '<=', $end );
+        }
+
+        // 更新时间大于
+        if ( array_key_exists('update_begin', $query) && !empty($query['update_begin']) ) {
+            $begin = date("Y-m-d H:i:s", strtotime($query['update_begin']) );
+            $qb->where('update_time' , '>=', $begin );
+        }
+
+        // 更新时间大于
+        if ( array_key_exists('update_end', $query) && !empty($query['update_end']) ) {
+            $begin = date("Y-m-d H:i:s", strtotime($query['update_end']) );
+            $qb->where('update_time' , '<=', $begin );
+        }
 
 		// 按分类ID查找
 		if ( array_key_exists('category_ids', $query)  && !empty($query['category_ids']) ) {
@@ -1036,6 +1108,59 @@ class Article extends Model {
 			if ( !empty($tags) ) {
 				$qb->whereIn('t.name', $tags );
 			}
+        }
+
+        // 按用户专栏ID查找(用户专栏)
+        if ( array_key_exists('special_id', $query)  && !empty($query['special_id']) ) {
+            $qb->where('special.special_id' , '=', $query['special_id'] );
+        }
+
+        // 按专栏查询数据
+		if ( array_key_exists('special_ids', $query)  && !empty($query['special_ids']) ) {
+			$sids = is_string($query['special_ids']) ? explode(',', $query['special_ids']) : $query['special_ids'];
+			$sids = array_filter($sids);
+          	if ( !empty($sids) ) {
+				$qb->where(function ( $qb ) use($sids) {
+					foreach( $sids as $sid ) {
+						$qb->orWhere('article.specials', "like", "%{$sid}%");  // 名称符合关键词
+					}
+				});
+			}
+		}
+        
+        // 按系列查询数据
+		if ( array_key_exists('series_ids', $query)  && !empty($query['series_ids']) ) {
+			$sids = is_string($query['series_ids']) ? explode(',', $query['series_ids']) : $query['series_ids'];
+			$sids = array_filter($sids);
+          	if ( !empty($sids) ) {
+				$qb->where(function ( $qb ) use($sids) {
+					foreach( $sids as $sid ) {
+						$qb->orWhere('article.series', "like", "%{$sid}%");  // 名称符合关键词
+					}
+				});
+			}
+		}
+        
+        // 排除文章数据
+		if ( array_key_exists('exclude_article_ids', $query)  && !empty($query['exclude_article_ids']) ) {
+			$exids = is_string($query['exclude_article_ids']) ? explode(',', $query['exclude_article_ids']) : $query['exclude_article_ids'];
+			$exids = array_filter($exids);
+          	if ( !empty($exids) ) {
+				$qb->whereNotIn('article.article_id', $exids);
+			}
+		}
+
+        // 必须包含视频
+		if ( $query['video_only'] ) {
+			$qb->whereNotNull('article.videos');
+			$qb->where('article.videos', '<>', "");
+			$qb->where('article.videos', '<>', "[]");
+        }
+        
+        // 必须包含主题图片
+		if ( $query['thumb_only'] ) {
+			$qb->whereNotNull('article.cover');
+			$qb->where('article.cover', '<>', "");
 		}
 
 		// 排序: 最新发表
@@ -1048,7 +1173,7 @@ class Article extends Model {
                 $qb->orderBy(trim($order[0]), $order[1] );
             }
 
-        // 设定默认排序
+        // 排序: 默认排序
 		} else {
             $qb->orderBy("article.stick", "desc");
             $qb->orderBy("article.priority", "asc");
@@ -1072,12 +1197,19 @@ class Article extends Model {
 
         // 格式化数据
         $special_ids = []; $specials = [];
+        $series_ids = []; $series = [];
 		foreach ($response['data'] as & $rs ) {
             
             $this->format($rs);
 
+            // 专栏ID集合
             if ( is_array($rs["specials"]) && !empty($rs["specials"]) ) {
                 $special_ids = array_merge($special_ids, $rs["specials"]);
+            }
+
+            // 系列ID集合
+            if ( is_array($rs["series"]) && !empty($rs["series"]) ) {
+                $series_ids = array_merge($series_ids, $rs["series"]);
             }
         }
 
@@ -1088,7 +1220,19 @@ class Article extends Model {
             $specials = $spe->getInBySpecialId( $special_ids, $spe_selected);
         }
 
+        // 查找系列信息
+        if( !empty($series_ids) ) {
+            $ser = new Series();
+            $ser_selected = ["series.slug","series.name","series.status"];
+            $series = $ser->getInBySeriesId( $series_ids, $ser_selected);
+        }
+
+        if ( $getCategory ) {
+            $this->withCategory($response['data']);
+        }
+
         $response["specials"] = $specials;
+        $response["series"] = $series;
 		return $response;
 	}
 
@@ -1758,20 +1902,26 @@ class Article extends Model {
 			 $article['seo_summary'] = $this->summary($article['content']);
 		}
 
-		if ( isset($article['publish_time']) ) {
+        // 发布时间
+		if ( !empty($article['publish_time']) ) {
 			$time = strtotime($article['publish_time']);
 			$article['publish_datetime'] = date('Y-m-d H:i:s', $time);
-			$article['publish_time'] = null;
+            $article['publish_time'] = null;
+            $article['publish_date'] = null;
 			if ( $time > 0 ) {
 				$article['publish_time'] = date('@ H时i分', $time);
 				$article['publish_date'] = date('m/d/Y', $time);
 			}
-		}
-
-	
+		} else if ( array_key_exists('publish_time', $article))  {
+            $article['publish_datetime'] = null;
+            $article['publish_time'] = null;
+            $article['publish_date'] = null;
+        }
+        
+        // 发布系列
 		if ( array_key_exists('series', $article)  && is_array($article['series']) && count($article['series']) > 0) {
 			$article['series_param'] = implode(',', $article['series']);
-        }  
+        }
 
         // 标签
         if ( array_key_exists('tag', $article) ){
@@ -1816,6 +1966,7 @@ class Article extends Model {
             
 		}
 
+        // 更新文件字段
         $this->__fileFields( $article, ["cover", "thumbs", "images", "user_headimgurl", "special_logo"]);
 		$article['home'] = $this->host;
 		return $article;

@@ -83,11 +83,6 @@ class Category extends Model {
 	}
 
 
-	// function genId() {
-	// 	return uniqid();
-	// }
-
-
 	function getInByCategoryId( $ids, $select = ['*'] ) {
 
 		$qb = $this->query();
