@@ -930,8 +930,9 @@ class Article extends Model {
 
 		$select_defaults = [
 			"article.article_id", "article.title", "article.summary", 
-			"article.origin", "article.origin_url", "article.author", 
-            "article.cover", "article.images", "article.thumbs",
+            "article.origin", "article.origin_url", "article.author", 
+            "article.seo_title","article.seo_keywords","article.seo_summary",
+            "article.cover", "article.images", "article.thumbs", "article.thumbs", "article.videos",
             "article.stick", "article.priority",
             "article.view_cnt", "article.like_cnt", "article.dislike_cnt", "article.comment_cnt",
             "article.create_time","article.publish_time","article.update_time","article.status",
@@ -1252,10 +1253,12 @@ class Article extends Model {
             $series = $ser->getInBySeriesId( $series_ids, $ser_selected);
         }
 
+        // 读取分类数据
         if ( $getCategory ) {
             $this->withCategory($response['data']);
         }
 
+        // 读取标签数据
         if ( $getTag ) {
             $this->withTag($response['data']);
         }

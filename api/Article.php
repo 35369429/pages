@@ -293,7 +293,7 @@ class Article extends Api {
 
 
 	/**
-	 * 查询文章列表
+	 * 查询文章列表 
 	 * @@@ 具体查询实现，应在Model中 @@@
 	 *
 	 * 读取字段 select 默认 *
@@ -334,256 +334,24 @@ class Article extends Api {
        * 
 	 */
   
-	protected function search( $query=[] ) {
+	protected function search( $query=[], $data=[] ) {
 
-		$select = empty($query['select']) ? [
-			'article_id', 'cover', 'author', 'origin',"article_id","cover","title","author","origin","origin_url","summary","seo_title",
-			"seo_keywords","seo_summary","publish_time","tag", "images", "thumbs", "videos","category", "stick", "audios",
-			"param"
-		] : $query['select'];
-		$select = is_array($select) ? $select : explode(',', $select);
-
-		// 验证 Select 参数
-		$getTag = false; $getCategory = false;
-		$allowFields = ["*","article_id","cover","title","author","origin","origin_url","summary","seo_title","seo_keywords","seo_summary","publish_time","update_time","create_time","sync","content","ap_content","draft","ap_draft","history","stick","status","category", "tag", "images", "thumbs", "videos", "audios", "param"];
-
-		foreach ($select as $idx => $field) {
-
-			$vfield = $field; $tab = 'article'; $as = '';
-			if ( strpos( $vfield, ' as ') !== false ) {
-				$arr = explode(' as ', $vfield);
-				if ( isset($arr[1]) ) {
-					$as = " as {$arr[1]}";	
-				}
-				
-				$arr = explode('.', $arr[0]);
-				if ( isset($arr[1]) ) {
-					$field = $arr[1];
-					$tab = $arr[0];
-				}
-			}
-
-			if ( !in_array($field, $allowFields)){
-				throw new Excp(" select 参数错误 ($field 非法字段)", 400, ['query'=>$query, 'arr'=>$arr]);
-			}
-			$select[$idx] = "{$tab}." . $field . $as ;
-
-			if ( $field == '*') {
-				$getTag = true; $getCategory = true;
-			}
-
-			if ( $field == 'category' ) {
-				$getCategory = true;
-				unset( $select[$idx] );
-			}
-
-			if ( $field == 'tag' ) {
-				$getTag = true;
-				unset( $select[$idx] );
-			}
-		}
-
-		$select[] = 'article.article_id as _aid';
-
-
-		// 按子类查询
-		if ( !empty($query['subcateId']) ) {
-			$query['categoryId'] = $query['subcateId'];
-		}
-
-		// 按分类查询 ( 包含子分类 )
-		if ( !empty($query['categoryId']) ) {
-
-			$c = new \Xpmsns\Pages\Model\Category;
-			$cids = [];
-
-			$cids = $c->getCids( $query['categoryId']);
-			if ( count($cids) > 1 ) {
-				unset(  $query['categoryId'] );
-				$query['inCategoryId'] = join(",", $cids);
-			}
-		}
-
-		// if ( !empty($query['c']) ) {
-		// 	if ( is_numeric($query['c']) ) {
-		// 		$query['categoryId'] = intval($query['c']);
-		// 	} else {
-		// 		$query['category'] = trim($query['c']);
-		// 	}
-		// }
-
-		if ( !empty($query['orC']) ) {
-			if ( is_numeric($query['orC']) ) {
-				$query['orCategoryId'] = intval($query['orC']);
-			} else {
-				$query['orCategory'] = trim($query['orC']);
-			}
-		}
-
-		if ( !empty($query['inC']) ) {
-			if ( is_numeric($query['inC']) ) {
-				$query['inCategoryId'] = intval($query['inC']);
-			} else {
-				$query['inCategory'] = trim($query['inC']);
-			}
-		}
-
-
-
-		// Utils::out($query);
-
-
-		// Order 默认参数
-		$query['order'] = !empty($query['order']) ? $query['order'] : 'create_time';
-		$allowOrder = ["publish_time", "update_time", "stick" , "create_time"];
-		$orderList = explode(',', $query['order']);
-
-		// 分页参数
-		$query['page'] = !empty($query['page']) ? intval($query['page']) : 1;
-		$query['perpage'] = !empty($query['perpage']) ? intval($query['perpage']) : 20;
-
-
-
-		// 查询数据表
-		$art = new \Xpmsns\pages\Model\Article;
-		$qb = $art->query()
-				  ->leftJoin("article_category as ac", 'ac.article_id', '=', 'article.article_id')
-				  ->leftJoin('category as c', "c.category_id", '=', 'ac.category_id')
-				  ->leftJoin("article_tag as at", 'at.article_id', '=', 'article.article_id')
-				  ->leftJoin("article_draft as draft", 'draft.article_id', '=', 'article.article_id')
-				  ->leftJoin("tag as t", 't.tag_id', '=', 'at.tag_id');
-			;
-
-		// echo $qb->getSql();
-			
-		// 设定查询条件
-		$this->qb( $qb, 'c.name', 'category', $query, ["and", "or", "in"] );
-		$this->qb( $qb, 'c.category_id', 'categoryId', $query, ["and", "or", "in"] );
-		$this->qb( $qb, 't.name', 'tag', $query, ["and", "or", "in"] );
-		$this->qb( $qb, 'article.origin', 'origin', $query );
-		$this->qb( $qb, 'article.project', 'project', $query);
-		$this->qb( $qb, 'article.status', 'status', $query );
-		$this->qb( $qb, 'article.param', 'param', $query, ['and', 'or'], 'like');
-		$this->qb( $qb, 'article.title', 'title', $query, ['and', 'or'], 'like' );
-		$this->qb( $qb, 'article.publish_time', 'publish_time', $query, ['and', 'or'], '>=' );
-		$this->qb( $qb, 'article.publish_time', 'endPublish_time', $query, ['and', 'or'], '<=' );
-		$this->qb( $qb, 'article.update_time', 'update_time', $query, ['and', 'or'], '>=' );
-		$this->qb( $qb, 'article.update_time', 'endUpdate_time', $query, ['and', 'or'], '<=' );
-
-
-		// 处理排序
-		foreach ($orderList as $order) {
-			$order = trim($order);
-			$orderArr = preg_split('/[ ]+/', $order );
-			$orderArr[1] = !empty($orderArr[1]) ? $orderArr[1] : 'desc';
-
-			if ( !in_array($orderArr[0], $allowOrder)) {
-				throw new Excp(" order 参数错误 ({$orderArr[0]} 非法字段)", 400, ['query'=>$query]);
-			}
-
-			// echo 'article.'. $orderArr[0] .  "  , " . $orderArr[1]; 
-
-			$qb->orderBy('article.'.$orderArr[0],$orderArr[1]);
-		}
-		
-		
-		// echo $qb->getSql();
-
-
-		// 查询数据
-		$qb->select( $select )->distinct();
-		$resultData = $qb->pgArray($query['perpage'],['article.article_id'], 'page', $query['page'] );
-		// $resultData = $result->toArray();
-		
-
-
-		// 处理结果集
-		$data = $resultData['data'];
-
-		foreach ($data as & $rs ) {
-			$art->format( $rs );
-		}
-
-		if ( $query['debug'] == 1) {
-			$resp['_sql'] = $qb->getSQL();
-			$resp['_query'] = $query;
-		}
-
-		$resp['curr'] = $resultData['current_page'];
-		$resp['perpage'] = $resultData['per_page'];
-		
-		$resp['next'] = ( $resultData['next_page_url'] === null ) ? false : intval( str_replace('/?page=', '',$resultData['next_page_url']));
-		$resp['prev'] = ( $resultData['prev_page_url'] === null ) ? false : intval( str_replace('/?page=', '',$resultData['prev_page_url']));
-
-		$resp['from'] = $resultData['from'];
-		$resp['to'] = $resultData['to'];
-		
-		$resp['last'] = $resultData['last_page'];
-		$resp['total'] = $resultData['total'];
-		$resp['data'] = $data;
-
-		if ( empty($data) ) {
-			return $resp;
-		}
-
-		$pad = [];
-		if ( $getCategory ) {
-			// echo 'getCategory';
-			$pad = Utils::pad($data, '_aid');
-			$categories = $art->getCategoriesGroup($pad['data'], "category.category_id","name","fullname","project","page","parent_id","priority","hidden","param" );
-		}
-
-		if ( $getTag ) {
-			if ( empty($pad) ) {
-				$pad = Utils::pad($data, '_aid');
-			}
-			$tags = $art->getTagsGroup($pad['data'], 'tag.tag_id', 'name', 'param' );
-		}
-
-
-		// 处理结果集数据
-		// $resp['data'] = [];
-		foreach ($resp['data'] as & $rs ) {
-			$aid = $rs['_aid'];unset($rs['_aid']);
-
-			if ( $getCategory) {
-				$rs['category'] = $categories[$aid];
-				if ( is_array($rs['category']) ) {
-					$rs['category_last'] = end($rs['category']);
-				}
-			}
-			if ( $getCategory) {
-				$rs['tag'] = $tags[$aid];
-			}
-	
-			// $resp['data'][$idx] = $rs;
-		}
-
-
-		$arr  =  [];
-		if(!empty($resp['last'])){
-			for ($i=1; $i <= $resp['last']; $i++) { 
-				$arr[$i]  = $i;
-			}
-		}
-
-		$resp['arr'] = $arr;
-		$resp['end'] = $resultData['end'];
-		$resp['frontend'] = $resultData['frontend'];
-		$resp['frontstart'] = $resultData['frontstart'];
-        
+        $data = array_merge( $query, $data );
+        $art = new \Xpmsns\pages\Model\Article;
+        $response = $art->search( $data );
+         
         // 关联用户收藏数据
         $user = \Xpmsns\User\Model\User::info();
         if ( !empty($user["user_id"]) && $query["withfavorite"] == 1 ) {
-            $art->withFavorite( $resp["data"], $user["user_id"]);
+            $art->withFavorite( $response["data"], $user["user_id"]);
         }
-
+ 
         // 关联用户赞赏数据
         if ( !empty($user["user_id"]) && $query["withagree"] == 1 ) {
-            $art->withAgree( $resp["data"], $user["user_id"]);
+            $art->withAgree( $response["data"], $user["user_id"]);
         }
 
-		return $resp;
+        return $response;
 	}
 
 
