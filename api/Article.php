@@ -173,6 +173,11 @@ class Article extends Api {
 			$data["policies_reward"] = "closed";
         }
 
+        // 默认手动排序
+        if ( empty($data["priority"]) ) {
+			$data["priority"] = 99999;
+        }
+
         // 保存专栏信息
         if ( $special["status"] == "on" ) {
             $data["specials"] = [
@@ -187,7 +192,7 @@ class Article extends Api {
     /**
      * 读取用户的文章(用于编辑)
      */
-    protected function getUserArticle( $query, $data ) {
+    protected function userArticleDetail( $query, $data ) {
 
         // 读取用户资料
         $user = \Xpmsns\User\Model\User::info();
@@ -217,10 +222,24 @@ class Article extends Api {
 
 
     /**
-     * 修改文章接口
+     * 读取用户的文章 (用于我的文章呈现)
      */
-    protected function update( $data ) {
+    protected function userArticles( $query, $data ){
 
+        // 读取用户资料
+        $user = \Xpmsns\User\Model\User::info();
+        $user_id = $user["user_id"];
+        if ( empty($user_id) ) {
+            throw new Excp("用户尚未登录", 402, ["query"=>$query, "data"=>$data]);
+        }
+
+
+        // 查找文章
+        $query = array_merge( $query, $data );
+        $query["user_id"] = $user_id;
+        $art = new \Xpmsns\pages\Model\Article();
+
+        return $art->search( $query );
     }
 
 
@@ -421,7 +440,7 @@ class Article extends Api {
 
 		// 分页参数
 		$query['page'] = !empty($query['page']) ? intval($query['page']) : 1;
-		$query['perpage'] = !empty($query['perpage']) ? intval($query['perpage']) : 50;
+		$query['perpage'] = !empty($query['perpage']) ? intval($query['perpage']) : 20;
 
 
 

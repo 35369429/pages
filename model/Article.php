@@ -843,24 +843,56 @@ class Article extends Model {
 
 
 	/**
-	 * (已发布)文章查询
+	 * 文章查询
 	 */
 	function search( $query = [] ) {
 
-		$qb = $this->query()
-				   ->leftJoin("article_category as ac", "ac.article_id", "=", "article.article_id")
-				   ->leftJoin("category as c", "c.category_id", "=", "ac.category_id")
-				   ->leftJoin("article_tag as at", 'at.article_id', "=", "article.article_id")
-				   ->leftJoin("tag as t", "t.tag_id", "=", "at.tag_id")
-			;
-		$qb->where('article.status', '=', 'published');
+        // $qb = $this->query();
+        $qb =  Utils::getTab("xpmsns_pages_article as article", "{none}")->query();
+
+        $qb	->leftJoin("xpmsns_pages_article_draft as draft", "draft.article_id", "=", "article.article_id")
+            ->leftJoin("xpmsns_pages_article_category as ac", "ac.article_id", "=", "article.article_id")
+			->leftJoin("xpmsns_pages_category as c", "c.category_id", "=", "ac.category_id")
+			->leftJoin("xpmsns_pages_article_tag as at", 'at.article_id', "=", "article.article_id")
+            ->leftJoin("xpmsns_pages_tag as t", "t.tag_id", "=", "at.tag_id")
+            ->leftJoin("xpmsns_user_user as user", "article.user_id", "=", "user.user_id")
+            ->leftJoin("xpmsns_pages_special as special", "article.user_id", "=", "special.user_id")
+
+        ;
+        
+        // 按文章状态查询 ( 默认查询已发布文章 )
+        if ( empty($query["status"]) ) {
+            $qb->where('article.status', '=', 'published');
+
+        } else {
+            
+            if ( is_string( $query["status"] )  ) {
+                $query["status"] = explode(",",  $query["status"]);
+            }
+
+            if ( !is_array($query["status"]) ) {
+                $query["status"] =  ['published'];
+            }
+
+            $query["status"]=array_map('trim',$query["status"]);
+            $qb->whereIn('article.status', $query["status"]);
+        }
 
 		$select_defaults = [
 			"article.article_id", "article.title", "article.summary", 
 			"article.origin", "article.origin_url", "article.author", 
-			"article.cover", "article.images", "article.thumbs",
-			"article.view_cnt", "article.like_cnt", "article.dislike_cnt", "article.comment_cnt"
-		];
+            "article.cover", "article.images", "article.thumbs",
+            "article.stick", "article.priority",
+            "article.view_cnt", "article.like_cnt", "article.dislike_cnt", "article.comment_cnt",
+            "article.create_time","article.publish_time","article.update_time","article.status",
+            "draft.status as draft_status",
+            "article.user_id", 
+            "user.nickname as user_nickname", "user.name as user_name", "user.mobile as user_mobile", "user.headimgurl as user_headimgurl",
+        
+            "article.specials",
+            "special.special_id", "special.name as special_name", "special.path as special_path", "special.logo as special_logo"
+        ];
+        
 		$select = empty($query['select']) ? $select_defaults : $query['select'];
 		if ( is_string($select) ) {
 			$select = explode(',', $select);
@@ -870,17 +902,20 @@ class Article extends Model {
 			if ( strpos( $se, ".") === false ) {
 				$se = "article.{$se}";
 			}
-		}
+        }
+        
+        // 按用户ID查找
+		if ( array_key_exists('user_id', $query)  && !empty($query['user_id']) ) {
+			$qb->where("article.user_id", "=", $query['user_id']);
+        }
 
-
-		// 按文章分类查找
+		// 按文章ID查找
 		if ( array_key_exists('article_ids', $query)  && !empty($query['article_ids']) ) {
 			$aids = is_string($query['article_ids']) ? explode(',', $query['article_ids']) : $query['article_ids'];
 			if ( !empty($aids) ) {
 				$qb->whereIn('article.article_id', $aids );
 			}
 		}
-		
 
 		// 按关键词查找 
 		if ( array_key_exists('keyword', $query) && !empty($query['keyword']) ) {
@@ -911,8 +946,8 @@ class Article extends Model {
 					}
 				});
 			}
-		}
-
+        }
+        
 
 		// 按时间范围
 		if ( array_key_exists('period', $query) && !empty($query['period']) ) {
@@ -1005,10 +1040,20 @@ class Article extends Model {
 
 		// 排序: 最新发表
 		if ( array_key_exists('order', $query) && !empty($query['order'])  ) {
-			$order = explode(' ', $query['order']);
-			$order[1] = !empty($order[1]) ? $order[1] : 'asc';
-			$qb->orderBy($order[0], $order[1] );
-		}
+            $orders = explode(",", $query['order']);
+            foreach( $orders as $order_str ) {
+                $order_str = trim( $order_str );
+                $order = explode(' ', $order_str);
+                $order[1] = !empty($order[1]) ? trim($order[1]) : 'asc';
+                $qb->orderBy(trim($order[0]), $order[1] );
+            }
+
+        // 设定默认排序
+		} else {
+            $qb->orderBy("article.stick", "desc");
+            $qb->orderBy("article.priority", "asc");
+            $qb->orderBy("article.publish_time", "desc");
+        }
 		
 		// 页码
 		$page = array_key_exists('page', $query) ?  intval( $query['page']) : 1;
@@ -1016,19 +1061,35 @@ class Article extends Model {
 
 
 		// 查询文章列表
-		$articles = $qb->select($select)->distinct()->pgArray( $perpage, ['article._id'], 'page', $page );
+        $response = $qb ->select($select)
+                        ->distinct()
+                        ->pgArray( $perpage, ['article._id'], 'page', $page );
 
 		if ( $_GET['debug'] == 1 ) {
-			$articles['_sql'] = $qb->getSql();
-			$articles['_query'] = $query; 
+			$response['_sql'] = $qb->getSql();
+			$response['_query'] = $query; 
 		}
 
-		// 格式化数据
-		foreach ($articles['data'] as & $rs ) {
-			$this->format($rs);
-		}
+        // 格式化数据
+        $special_ids = []; $specials = [];
+		foreach ($response['data'] as & $rs ) {
+            
+            $this->format($rs);
 
-		return $articles;
+            if ( is_array($rs["specials"]) && !empty($rs["specials"]) ) {
+                $special_ids = array_merge($special_ids, $rs["specials"]);
+            }
+        }
+
+        // 查找专栏信息
+        if( !empty($special_ids) ) {
+            $spe = new Special();
+            $spe_selected = ["special.special_id", "special.name as special_name", "special.path as special_path", "special.logo as special_logo"];
+            $specials = $spe->getInBySpecialId( $special_ids, $spe_selected);
+        }
+
+        $response["specials"] = $specials;
+		return $response;
 	}
 
 
@@ -1718,57 +1779,44 @@ class Article extends Model {
                 $article["tags"] = array_column($article["tag"], "name");
             }
         }
-
-        $this->__fileFields( $rs, ["cover", "thumbs", "images"]);
-
-        // if ( array_key_exists('images', $article)  && is_array($article['images']) && count($article['images']) > 0) {
-
-		// 	foreach ($article['images'] as & $img ) {
-
-
-		// 		if ( is_array($img) &&  !empty($img['path']) ) {
-		// 			$img['path'] = str_replace('/static-file/media', '', $img['path']); // 兼容旧版
-		// 			$img = $this->media->get( $img['path']);
-		// 		} else if ( is_string($img) ) {
-		// 			$img = str_replace('/static-file/media', '', $img); // 兼容旧版
-		// 			$img = $this->media->get( $img);
-		// 		}
-		// 	}
-		// }
-
-		// if ( array_key_exists('thumbs', $article)  && is_array($article['thumbs']) && count($article['thumbs']) > 0) {
-
-		// 	foreach ($article['thumbs'] as & $img ) {
-				
-		// 		if ( is_array($img) &&  !empty($img['path']) ) {
-		// 			$img['path'] = str_replace('/static-file/media', '', $img['path']); // 兼容旧版
-		// 			$img = $this->media->get( $img['path']);
-		// 		} else if ( is_string($img) && !empty($img) ) {
-		// 			$img = str_replace('/static-file/media', '', $img); // 兼容旧版
-		// 			$img = $this->media->get( $img);
-		// 			// $img = $u['url'];
-		// 		}
-		// 	}
-		// }
-
-
-		// if (!empty($article['cover']) && substr( $article['cover'],0,4) != 'http') {
-			
-		// 	$article['cover'] = str_replace('/static-file/media', '', $article['cover']); // 兼容旧版
-		// 	$u = $this->media->get($article['cover']);
-		// 	$article['cover'] = $u;
-
-		// } else {
-		// 	$url = $article['cover'];
-		// 	$article['cover'] = [];
-		// 	if ( !empty($url) ) {
-		// 		$article['cover']['url'] = $url;
-		// 		$article['cover']['path'] = $url;
-		// 	}
-        // }
         
+        // 状态
+        if ( array_key_exists('status', $article ) && !empty($article['status']) ) {
+            
+			$article["_status_types"] = [
+                STATUS_UNPUBLISHED => [
+		  			"value" => STATUS_UNPUBLISHED,
+		  			"name" => "草稿",
+		  			"style" => "success"
+		  		],
+		  		STATUS_PENDING => [
+		  			"value" => STATUS_PENDING,
+		  			"name" => "同步中",
+		  			"style" => "danger"
+		  		],
+		  		STATUS_AUDITING => [
+		  			"value" => STATUS_AUDITING,
+		  			"name" => "审核中",
+		  			"style" => "warning"
+		  		],
+		  		STATUS_UNAPPLIED => [
+		  			"value" => STATUS_UNAPPLIED,
+		  			"name" => "待更新",
+		  			"style" => "danger"
+		  		],
+		  		STATUS_PUBLISHED => [
+		  			"value" => STATUS_PUBLISHED,
+		  			"name" => "已发布",
+		  			"style" => "primary"
+		  		],
+            ];
+            $status = $this->status( $article["status"], $article["draft_status"]);
+			$article["_status_name"] = "status";
+            $article["_status"] = $article["_status_types"][$status];
+            
+		}
 
-
+        $this->__fileFields( $article, ["cover", "thumbs", "images", "user_headimgurl", "special_logo"]);
 		$article['home'] = $this->host;
 		return $article;
 	}
