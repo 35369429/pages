@@ -1748,7 +1748,7 @@ class Article extends Model {
 		}
 
 		// 转为草稿
-		if ( $data['status'] == ARTICLE_UNPUBLISHED ) {
+		if ( $data['status'] == ARTICLE_UNPUBLISHED || empty($data["status"]) ) {
 			return $this->unpublished( $article_id );	
 		}
 
@@ -1762,7 +1762,7 @@ class Article extends Model {
             return $this->auditing( $article_id );
         }
         
-
+        // 读取草稿
         if ( empty($draft["status"]) ) {
             $draft["status"] = $this->isPublished($article_id) ? ARTICLE_PUBLISHED : ARTICLE_UNPUBLISHED;
         }
