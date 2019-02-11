@@ -373,12 +373,16 @@ class Article extends Api {
 	 */
 	protected function get( $query=[] ) {
 
+        if ( empty($query["articleId"]) ) {
+            $query["articleId"] = $query["article_id"];
+        }
+
 		// 验证数值
 		if ( !preg_match("/^([0-9]+)/", $query['articleId']) ) {
 			throw new Excp(" articleId 参数错误", 400, ['query'=>$query]);
 		}
 
-		$article_id = $query['articleId'];
+        $article_id = $query['articleId'];
 		$select = empty($query['select']) ? '*' : $query['select'];
 		$select = is_array($select) ? $select : explode(',', $select);
 
