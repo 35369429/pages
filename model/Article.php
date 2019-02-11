@@ -216,6 +216,30 @@ class Article extends Model {
 
 
     /**
+     * 读取文章标签数据
+     * @param array &$rows 文章数据
+     * @param string $select 选中数据
+     */
+    function withTag( & $rows, $select=['tag.tag_id', 'name', 'param'] ){
+        $ids = array_column( $rows, "article_id");
+        if ( empty( $ids) ) {
+            return;
+        }
+        $tags = $this->getTagsGroup($ids, $select);
+        foreach( $rows as & $rs ) {
+            $id = $rs["article_id"];
+            $rs['tag'] = [];
+            $rs['tags'] = [];
+
+            if ( is_array($tags[$id]) ) {
+                $rs['tag'] = $tags[$id];
+                $rs["tags"] =  array_column($rs["tag"], "name");
+			}
+        }
+    }
+
+
+    /**
      * 读取文章详情
      * @param string $article_id 文章ID
      * @param array $select 数据选项
@@ -1229,6 +1253,10 @@ class Article extends Model {
 
         if ( $getCategory ) {
             $this->withCategory($response['data']);
+        }
+
+        if ( $getTag ) {
+            $this->withTag($response['data']);
         }
 
         $response["specials"] = $specials;
