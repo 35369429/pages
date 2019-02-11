@@ -1787,12 +1787,12 @@ class Article extends Model {
                 STATUS_UNPUBLISHED => [
 		  			"value" => STATUS_UNPUBLISHED,
 		  			"name" => "草稿",
-		  			"style" => "success"
+		  			"style" => "danger"
 		  		],
 		  		STATUS_PENDING => [
 		  			"value" => STATUS_PENDING,
 		  			"name" => "同步中",
-		  			"style" => "danger"
+		  			"style" => "warning"
 		  		],
 		  		STATUS_AUDITING => [
 		  			"value" => STATUS_AUDITING,
@@ -1802,12 +1802,12 @@ class Article extends Model {
 		  		STATUS_UNAPPLIED => [
 		  			"value" => STATUS_UNAPPLIED,
 		  			"name" => "待更新",
-		  			"style" => "danger"
+		  			"style" => "warning"
 		  		],
 		  		STATUS_PUBLISHED => [
 		  			"value" => STATUS_PUBLISHED,
 		  			"name" => "已发布",
-		  			"style" => "primary"
+		  			"style" => "success"
 		  		],
             ];
             $status = $this->status( $article["status"], $article["draft_status"]);
