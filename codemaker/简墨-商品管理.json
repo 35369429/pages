@@ -219,7 +219,7 @@
                     "cname": "SKU数量",
                     "type": "integer",
                     "length": "1",
-                    "default": "",
+                    "default": "0",
                     "unique": "",
                     "index": "1",
                     "nullable": "",
@@ -233,7 +233,7 @@
                     "cname": "单品总数",
                     "type": "integer",
                     "length": "1",
-                    "default": "",
+                    "default": "0",
                     "unique": "",
                     "index": "1",
                     "nullable": "",
@@ -247,7 +247,7 @@
                     "cname": "货运装箱总数",
                     "type": "integer",
                     "length": "1",
-                    "default": "",
+                    "default": "0",
                     "unique": "",
                     "index": "1",
                     "nullable": "",
@@ -261,7 +261,7 @@
                     "cname": "可售总数",
                     "type": "integer",
                     "length": "1",
-                    "default": "",
+                    "default": "0",
                     "unique": "",
                     "index": "1",
                     "nullable": "",
@@ -275,7 +275,7 @@
                     "cname": "最低单价",
                     "type": "integer",
                     "length": "1",
-                    "default": "",
+                    "default": "0",
                     "unique": "",
                     "index": "1",
                     "nullable": "",
@@ -561,7 +561,7 @@
                     "exp": "",
                     "readonly": "",
                     "attr": {
-                        "default": ""
+                        "default": "0"
                     },
                     "validator": [
                         {
@@ -645,6 +645,82 @@
                         "api": "",
                         "cancel": "",
                         "cancelable": "1"
+                    },
+                    "validator": [
+                        {
+                            "method": "",
+                            "value": "",
+                            "message": ""
+                        }
+                    ]
+                },
+                {
+                    "cname": "SKU数量",
+                    "name": "sku_cnt",
+                    "type": "input",
+                    "placeholder": "",
+                    "helper": "",
+                    "exp": "",
+                    "readonly": "1",
+                    "attr": {
+                        "default": "0"
+                    },
+                    "validator": [
+                        {
+                            "method": "",
+                            "value": "",
+                            "message": ""
+                        }
+                    ]
+                },
+                {
+                    "cname": "单品总数",
+                    "name": "sku_sum",
+                    "type": "input",
+                    "placeholder": "",
+                    "helper": "",
+                    "exp": "",
+                    "readonly": "",
+                    "attr": {
+                        "default": "0"
+                    },
+                    "validator": [
+                        {
+                            "method": "",
+                            "value": "",
+                            "message": ""
+                        }
+                    ]
+                },
+                {
+                    "cname": "货运装箱总数",
+                    "name": "shipped_sum",
+                    "type": "input",
+                    "placeholder": "",
+                    "helper": "",
+                    "exp": "",
+                    "readonly": "1",
+                    "attr": {
+                        "default": "0"
+                    },
+                    "validator": [
+                        {
+                            "method": "",
+                            "value": "",
+                            "message": ""
+                        }
+                    ]
+                },
+                {
+                    "cname": "可售SKU总数",
+                    "name": "available_sum",
+                    "type": "input",
+                    "placeholder": "",
+                    "helper": "",
+                    "exp": "",
+                    "readonly": "1",
+                    "attr": {
+                        "default": "0"
                     },
                     "validator": [
                         {
@@ -871,7 +947,7 @@
                     ]
                 },
                 {
-                    "cname": "产品详情",
+                    "cname": "商品详情",
                     "name": "content",
                     "type": "summernote",
                     "placeholder": "",
@@ -982,6 +1058,10 @@
                 "",
                 "",
                 "",
+                "",
+                "",
+                "",
+                "",
                 ""
             ]
         },
@@ -1009,7 +1089,7 @@
                     "field": "name=goods_id",
                     "type": "in",
                     "cname": "商品IDS",
-                    "param": "",
+                    "param": "goods_ids",
                     "default": ""
                 },
                 {

@@ -54,7 +54,7 @@
                     "private": ""
                 },
                 {
-                    "name": "items_ids",
+                    "name": "item_ids",
                     "cname": "单品清单",
                     "type": "text",
                     "length": "",
@@ -398,7 +398,7 @@
                     "unique": "",
                     "index": "",
                     "nullable": "",
-                    "json": "",
+                    "json": "1",
                     "auto": "",
                     "file": "",
                     "private": ""
@@ -469,7 +469,7 @@
                 },
                 {
                     "cname": "单品清单",
-                    "name": "items_ids",
+                    "name": "item_ids",
                     "type": "select-remote",
                     "placeholder": "",
                     "helper": "",
@@ -635,7 +635,7 @@
                 {
                     "cname": "支付明细",
                     "name": "payment_detail",
-                    "type": "textarea",
+                    "type": "json-editor",
                     "placeholder": "",
                     "helper": "货币单位/代币/积分换算比例",
                     "exp": "",
@@ -848,7 +848,7 @@
                     "exp": "",
                     "readonly": "",
                     "attr": {
-                        "option": "支付宝=alipay,微信=wechat,积分=coin",
+                        "option": "支付宝=alipay,微信=wechat,积分=coin,余额=balance",
                         "default": "wechat"
                     },
                     "validator": [
@@ -973,7 +973,7 @@
                 {
                     "cname": "快照",
                     "name": "snapshot",
-                    "type": "textarea",
+                    "type": "json-editor",
                     "placeholder": "",
                     "helper": "",
                     "exp": "",
@@ -1053,12 +1053,12 @@
                     "prefix": "xpmsns_pages_",
                     "field": "item_id",
                     "on": "in",
-                    "name": "items_ids",
+                    "name": "item_ids",
                     "alias": "item"
                 },
                 {
                     "cname": "物流",
-                    "type": "inWhere",
+                    "type": "leftJoin",
                     "model": "\\Xpmsns\\Pages\\Model\\Shipping",
                     "table": "shipping",
                     "prefix": "xpmsns_pages_",
@@ -1213,13 +1213,13 @@
             ]
         },
         "api": {
-            "getstatus": "1",
-            "createstatus": "1",
-            "updatestatus": "1",
-            "deletestatus": "1",
-            "searchstatus": "1",
-            "uploadstatus": "1",
             "uploadparam": "",
+            "getstatus": "0",
+            "createstatus": "0",
+            "updatestatus": "0",
+            "deletestatus": "0",
+            "searchstatus": "0",
+            "uploadstatus": "0",
             "getkey": [
                 "name=order_id"
             ],

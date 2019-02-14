@@ -768,6 +768,7 @@
                             "name"
                         ],
                         "option": "series_id",
+                        "selectedInline": "",
                         "style": "{{name}}({{series_id}}})",
                         "default": "",
                         "multiple": "1",
@@ -800,6 +801,7 @@
                             "name"
                         ],
                         "option": "category_id",
+                        "selectedInline": "",
                         "style": "{{name}}({{category_id}})",
                         "default": "",
                         "multiple": "1",
@@ -832,6 +834,7 @@
                             "title"
                         ],
                         "option": "article_id",
+                        "selectedInline": "1",
                         "style": "{{title}}({{article_id}})",
                         "default": "",
                         "multiple": "1",
@@ -864,6 +867,7 @@
                             "title"
                         ],
                         "option": "article_id",
+                        "selectedInline": "1",
                         "style": "{{title}}({{article_id}})",
                         "default": "",
                         "multiple": "1",
@@ -896,6 +900,7 @@
                             "name"
                         ],
                         "option": "event_id",
+                        "selectedInline": "1",
                         "style": "{{name}}({{event_id}})",
                         "default": "",
                         "multiple": "1",
@@ -928,6 +933,7 @@
                             "title"
                         ],
                         "option": "album_id",
+                        "selectedInline": "1",
                         "style": "{{title}}({{album_id}})",
                         "default": "",
                         "multiple": "1",
@@ -1380,14 +1386,9 @@
             },
             "methods": [
                 {
-                    "name": "getArticles",
-                    "cname": "读取推荐文章",
-                    "source": "\tprotected function getArticles( $query, $data ) {\n\t\t\n\t\t// 支持POST和GET查询\n\t\t$data = array_merge( $query, $data );\n\n\t\t$inst = new \\Xpmsns\\Pages\\Model\\Recommend;\n\t\t$keywords = !empty($data['keywords']) ?  explode(',',$data['keywords']) : []; \n\t\t$page = !empty($data['page']) ?  $data['page'] : 1; \n\t\t$perpage = !empty($data['perpage']) ?  $data['perpage'] : 20; \n      \t$now = !empty($data['now']) ?  $data['now'] : null; \n         \n\n\t\tif ( array_key_exists('slug', $data) && !empty($data['slug']) ) {\n\t\t\treturn $inst->getArticlesBySlug( $data['slug'], $keywords, $now, $page, $perpage);\n\t\t} else if ( array_key_exists('recommend_id', $data) && !empty($data['recommend_id']) ) {\n\t\t\treturn $inst->getArticles( $data['recommend_id'], $keywords, $now, $page, $perpage);\n\t\t}\n\n\t\tthrow new Excp('错误的查询参数', 402, ['query'=>$query, 'data'=>$data]);\n\t}"
-                },
-                {
-                    "name": "getContents",
-                    "cname": "读取推荐内容",
-                    "source": "       protected function getContents( $query, $data ) {\n\t\t\n\t\t// 支持POST和GET查询\n\t\t$data = array_merge( $query, $data );\n\n\t\t$inst = new \\Xpmsns\\Pages\\Model\\Recommend;\n\t\t$keywords = !empty($data['keywords']) ?  explode(',',$data['keywords']) : []; \n        $series = !empty($data['series']) ?  explode(',',$data['series']) : [];\n        $exclude_articles = !empty($data['exclude_articles']) ?  explode(',',$data['exclude_articles']) : [];\n\t\t$page = !empty($data['page']) ?  $data['page'] : 1; \n\t\t$perpage = !empty($data['perpage']) ?  $data['perpage'] : 20; \n      \t$now = !empty($data['now']) ?  $data['now'] : null; \n        if ( array_key_exists('series', $data) && empty($series) ) {\n        \t$series = ['not null'];\n        }\n\n\t\tif ( array_key_exists('slug', $data) && !empty($data['slug']) ) {\n\t\t\treturn $inst->getContentsBySlug( $data['slug'], $keywords,$series, $exclude_articles, $page, $perpage, $now);\n\t\t} else if ( array_key_exists('recommend_id', $data) && !empty($data['recommend_id']) ) {\n\t\t\treturn $inst->getContents( $data['recommend_id'], $keywords, $series,$exclude_articles,$page, $perpage, $now);\n\t\t}\n         \n        if ( array_key_exists('slugs', $data) && !empty($data['slugs']) ) {\n\t\t\t$data['slugs'] = explode(',', $data['slugs']);\n\t\t\t$contents = [];\n\t\t\tforeach ($data['slugs'] as $slug) {\n\t\t\t\t$contents[$slug] = $inst->getContentsBySlug( trim($slug), $keywords,$series, $exclude_articles,$page, $perpage, $now); \n\t\t\t}\n\t\t\treturn $contents;\n\t\t}\n\t\tthrow new Excp('错误的查询参数', 402, ['query'=>$query, 'data'=>$data]);\n\t}"
+                    "name": "",
+                    "cname": "",
+                    "source": ""
                 }
             ]
         }

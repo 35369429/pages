@@ -24,8 +24,8 @@
                     "type": "string",
                     "length": "128",
                     "default": "",
-                    "unique": "",
-                    "index": "1",
+                    "unique": "1",
+                    "index": "",
                     "nullable": "",
                     "json": "",
                     "auto": "",
@@ -52,8 +52,8 @@
                     "type": "string",
                     "length": "128",
                     "default": "",
-                    "unique": "",
-                    "index": "1",
+                    "unique": "1",
+                    "index": "",
                     "nullable": "1",
                     "json": "",
                     "auto": "",
@@ -171,6 +171,20 @@
                     "auto": "",
                     "file": "",
                     "private": ""
+                },
+                {
+                    "name": "message",
+                    "cname": "消息",
+                    "type": "string",
+                    "length": "600",
+                    "default": "",
+                    "unique": "",
+                    "index": "",
+                    "nullable": "",
+                    "json": "",
+                    "auto": "",
+                    "file": "",
+                    "private": ""
                 }
             ],
             "methods": [
@@ -192,7 +206,7 @@
                     "field": "category_id",
                     "on": "in",
                     "name": "category_ids",
-                    "alias": "c"
+                    "alias": "category"
                 },
                 {
                     "cname": "推荐",
@@ -203,7 +217,7 @@
                     "field": "recommend_id",
                     "on": "in",
                     "name": "recommend_ids",
-                    "alias": "r"
+                    "alias": "recommend"
                 },
                 {
                     "cname": "用户",
@@ -214,7 +228,7 @@
                     "field": "user_id",
                     "on": "=",
                     "name": "user_id",
-                    "alias": "u"
+                    "alias": "user"
                 }
             ]
         },
@@ -223,13 +237,14 @@
             "createfields": "name=name",
             "createstatus": "1",
             "updatestatus": "1",
-            "deletestatus": "1",
             "searchstatus": "1",
             "uploadparam": "",
+            "deletestatus": "0",
             "uploadstatus": "0",
             "getkey": [
                 "name=special_id",
-                "name=path"
+                "name=path",
+                "name=user_id"
             ],
             "getfields": [
                 "name=type",
@@ -239,13 +254,9 @@
                 "name=param",
                 "name=docs",
                 "name=status",
+                "name=message",
                 "name=created_at",
-                "name=updated_at",
-                "model=%5CXpmsns%5CPages%5CModel%5CCategory&name=category_id&table=category&prefix=xpmsns_pages_&alias=c&type=inWhere",
-                "model=%5CXpmsns%5CPages%5CModel%5CCategory&name=name&table=category&prefix=xpmsns_pages_&alias=c&type=inWhere",
-                "model=%5CXpmsns%5CPages%5CModel%5CRecommend&name=recommend_id&table=recommend&prefix=xpmsns_pages_&alias=r&type=inWhere",
-                "model=%5CXpmsns%5CUser%5CModel%5CUser&name=user_id&table=user&prefix=xpmsns_user_&alias=u&type=leftJoin",
-                "model=%5CXpmsns%5CUser%5CModel%5CUser&name=name&table=user&prefix=xpmsns_user_&alias=u&type=leftJoin"
+                "name=updated_at"
             ],
             "updatekey": [
                 "name=special_id"
@@ -261,11 +272,7 @@
                 "name=param",
                 "name=status",
                 "name=created_at",
-                "name=updated_at",
-                "model=%5CXpmsns%5CPages%5CModel%5CCategory&name=category_id&table=category&prefix=xpmsns_pages_&alias=c&type=inWhere",
-                "model=%5CXpmsns%5CPages%5CModel%5CCategory&name=name&table=category&prefix=xpmsns_pages_&alias=c&type=inWhere",
-                "model=%5CXpmsns%5CUser%5CModel%5CUser&name=user_id&table=user&prefix=xpmsns_user_&alias=u&type=leftJoin",
-                "model=%5CXpmsns%5CUser%5CModel%5CUser&name=name&table=user&prefix=xpmsns_user_&alias=u&type=leftJoin"
+                "name=updated_at"
             ],
             "getauth": {
                 "sign": "",
@@ -273,13 +280,13 @@
                 "image": ""
             },
             "createauth": {
-                "sign": "1",
-                "secret": "1",
+                "sign": "",
+                "secret": "",
                 "image": ""
             },
             "updateauth": {
-                "sign": "1",
-                "secret": "1",
+                "sign": "",
+                "secret": "",
                 "image": ""
             },
             "deleteauth": {
@@ -562,8 +569,29 @@
                     "exp": "",
                     "readonly": "",
                     "attr": {
-                        "option": "开启=on,关闭=off,审核中=pending,不通过=failure",
+                        "option": "开启=on,关闭=off,审核中=pending,不通过=failure,重新开通=reset",
                         "default": "on"
+                    },
+                    "validator": [
+                        {
+                            "method": "",
+                            "value": "",
+                            "message": ""
+                        }
+                    ]
+                },
+                {
+                    "cname": "消息",
+                    "name": "message",
+                    "type": "textarea",
+                    "placeholder": "审核消息. 当驳回开通专栏申请时, 填写驳回理由。",
+                    "helper": "",
+                    "exp": "",
+                    "readonly": "",
+                    "attr": {
+                        "default": "",
+                        "rows": "4",
+                        "autoheight": ""
                     },
                     "validator": [
                         {
@@ -585,6 +613,7 @@
                 "",
                 "",
                 "",
+                "",
                 ""
             ]
         },
@@ -593,8 +622,7 @@
             "keyword": [
                 "name=special_id",
                 "name=name",
-                "name=path",
-                "model=%5CXpmsns%5CUser%5CModel%5CUser&name=name&table=user&prefix=xpmsns_user_&alias=u&type=leftJoin"
+                "name=path"
             ],
             "jscode": [
                 ""
@@ -634,7 +662,7 @@
                 },
                 {
                     "or": "0",
-                    "field": "model=%5CXpmsns%5CUser%5CModel%5CUser&name=name&table=user&prefix=xpmsns_user_&alias=u&type=leftJoin",
+                    "field": "",
                     "type": "like",
                     "cname": "用户",
                     "param": "uname",
@@ -683,7 +711,7 @@
                 {
                     "name": "name=status",
                     "cname": "状态",
-                    "status": "开启=on|primary,关闭=off|danger,审核中=pending|warning,不通过=failure|danger"
+                    "status": "开启=on|success,关闭=off|danger,审核中=pending|warning,不通过=failure|danger,重新开通=reset|primary"
                 },
                 {
                     "name": "name=type",
@@ -692,6 +720,14 @@
                 }
             ],
             "columns": [
+                {
+                    "fields": [
+                        "name=logo"
+                    ],
+                    "cname": "LOGO",
+                    "filter": "",
+                    "default": ""
+                },
                 {
                     "fields": [
                         "name=path"
@@ -718,7 +754,7 @@
                 },
                 {
                     "fields": [
-                        "model=%5CXpmsns%5CPages%5CModel%5CCategory&name=name&table=category&prefix=xpmsns_pages_&alias=c&type=inWhere"
+                        "model=%5CXpmsns%5CPages%5CModel%5CCategory&name=name&table=category&prefix=xpmsns_pages_&alias=category&type=inWhere"
                     ],
                     "cname": "内容类目",
                     "filter": "",
@@ -726,19 +762,11 @@
                 },
                 {
                     "fields": [
-                        "model=%5CXpmsns%5CUser%5CModel%5CUser&name=name&table=user&prefix=xpmsns_user_&alias=u&type=leftJoin",
-                        "model=%5CXpmsns%5CUser%5CModel%5CUser&name=nickname&table=user&prefix=xpmsns_user_&alias=u&type=leftJoin"
+                        "name=name",
+                        "model=%5CXpmsns%5CUser%5CModel%5CUser&name=nickname&table=user&prefix=xpmsns_user_&alias=user&type=leftJoin"
                     ],
-                    "cname": "关联用户",
-                    "filter": "{{u_name ? u_name : u_nickname}}",
-                    "default": ""
-                },
-                {
-                    "fields": [
-                        "name=status"
-                    ],
-                    "cname": "状态",
-                    "filter": "",
+                    "cname": "用户",
+                    "filter": "{{user_name ? user_name : user_nickname}}",
                     "default": ""
                 },
                 {
@@ -747,7 +775,15 @@
                         "name=updated_at"
                     ],
                     "cname": "更新时间",
-                    "filter": "{{ updated_at ? updated_at : created_at }}",
+                    "filter": "{{ updated_at ? updated_at | date(\"Y年m月d日 @H:i:s\") : created_at | date(\"Y年m月d日 @H:i:s\")  }}",
+                    "default": ""
+                },
+                {
+                    "fields": [
+                        "name=status"
+                    ],
+                    "cname": "状态",
+                    "filter": "",
                     "default": ""
                 }
             ]

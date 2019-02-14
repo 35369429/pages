@@ -485,6 +485,34 @@
                     "auto": "",
                     "file": "",
                     "private": ""
+                },
+                {
+                    "name": "header",
+                    "cname": "头部脚本",
+                    "type": "text",
+                    "length": "",
+                    "default": "",
+                    "unique": "",
+                    "index": "",
+                    "nullable": "",
+                    "json": "",
+                    "auto": "",
+                    "file": "",
+                    "private": ""
+                },
+                {
+                    "name": "footer",
+                    "cname": "网站尾部",
+                    "type": "text",
+                    "length": "",
+                    "default": "",
+                    "unique": "",
+                    "index": "",
+                    "nullable": "",
+                    "json": "",
+                    "auto": "",
+                    "file": "",
+                    "private": ""
                 }
             ],
             "methods": [
@@ -1251,9 +1279,51 @@
                     ]
                 },
                 {
+                    "cname": "头部注入脚本",
+                    "name": "header",
+                    "type": "textarea",
+                    "placeholder": "填写头部脚本",
+                    "helper": "插入到 &lt;head&gt; &lt;/head&gt; 之间的HTML代码",
+                    "exp": "",
+                    "readonly": "",
+                    "attr": {
+                        "default": "",
+                        "rows": "4",
+                        "autoheight": ""
+                    },
+                    "validator": [
+                        {
+                            "method": "",
+                            "value": "",
+                            "message": ""
+                        }
+                    ]
+                },
+                {
+                    "cname": "尾部注入脚本",
+                    "name": "footer",
+                    "type": "textarea",
+                    "placeholder": "填写尾部脚本",
+                    "helper": "插入到 &lt;/body&gt; 之前的HTML代码",
+                    "exp": "",
+                    "readonly": "",
+                    "attr": {
+                        "default": "",
+                        "rows": "4",
+                        "autoheight": ""
+                    },
+                    "validator": [
+                        {
+                            "method": "",
+                            "value": "",
+                            "message": ""
+                        }
+                    ]
+                },
+                {
                     "cname": "状态",
                     "name": "status",
-                    "type": "select",
+                    "type": "radio",
                     "placeholder": "请选择广告状态",
                     "helper": "",
                     "exp": "",
@@ -1275,6 +1345,8 @@
                 ""
             ],
             "undefined": [
+                "",
+                "",
                 "",
                 "",
                 "",
@@ -1345,6 +1417,8 @@
                 "name=qr_android",
                 "name=qr_ios",
                 "name=status",
+                "name=header",
+                "name=footer",
                 "name=created_at",
                 "name=updated_at"
             ],
@@ -1384,6 +1458,8 @@
                 "name=qr_android",
                 "name=qr_ios",
                 "name=status",
+                "name=header",
+                "name=footer",
                 "name=created_at",
                 "name=updated_at"
             ],

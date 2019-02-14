@@ -1,19 +1,19 @@
 {
-    "name": "简墨-标签管理",
+    "name": "简墨-话题管理",
     "data": {
         "general": {
             "app": "pages",
             "org": "xpmsns",
             "model": "_create",
-            "name": "tag",
-            "cname": "标签"
+            "name": "topic",
+            "cname": "话题"
         },
         "struct": {
-            "table": "tag",
+            "table": "topic",
             "fields": [
                 {
-                    "name": "tag_id",
-                    "cname": "标签ID",
+                    "name": "topic_id",
+                    "cname": "话题ID",
                     "type": "string",
                     "length": "128",
                     "default": "",
@@ -133,7 +133,7 @@
             ]
         },
         "detail": {
-            "index": "name=tag_id",
+            "index": "name=topic_id",
             "title": "name=name",
             "columns": [
                 {
@@ -288,6 +288,31 @@
         },
         "list": {
             "keyword_param": "keyword",
+            "keyword": [
+                "name=topic_id",
+                "name=name"
+            ],
+            "jscode": [
+                ""
+            ],
+            "conditions": [
+                {
+                    "or": "0",
+                    "field": "name=topic_id",
+                    "type": "=",
+                    "cname": "",
+                    "param": "",
+                    "default": ""
+                },
+                {
+                    "or": "0",
+                    "field": "name=name",
+                    "type": "like",
+                    "cname": "",
+                    "param": "",
+                    "default": ""
+                }
+            ],
             "orderby": [
                 {
                     "field": "name=created_at",
@@ -372,7 +397,7 @@
             "columns": [
                 {
                     "fields": [
-                        "name=tag_id"
+                        "name=topic_id"
                     ],
                     "cname": "",
                     "filter": "",
@@ -435,55 +460,23 @@
                     "filter": "{{ update_at  ? update_at | date('Y年m月d日 @H:i') : created_at | date('Y年m月d日 @H:i') }}",
                     "default": ""
                 }
-            ],
-            "keyword": [
-                "name=tag_id",
-                "name=name"
-            ],
-            "jscode": [
-                ""
-            ],
-            "conditions": [
-                {
-                    "or": "0",
-                    "field": "name=tag_id",
-                    "type": "=",
-                    "cname": "",
-                    "param": "",
-                    "default": ""
-                },
-                {
-                    "or": "0",
-                    "field": "name=name",
-                    "type": "like",
-                    "cname": "",
-                    "param": "",
-                    "default": ""
-                }
             ]
         },
         "api": {
             "getstatus": "1",
-            "createfields": "name=tag_id",
             "searchstatus": "1",
             "uploadparam": "",
-            "methods": [
-                {
-                    "name": "",
-                    "cname": "",
-                    "source": ""
-                }
-            ],
+            "createfields": "",
             "createstatus": "0",
             "updatestatus": "0",
             "deletestatus": "0",
             "uploadstatus": "0",
             "getkey": [
-                "name=tag_id",
+                "name=topic_id",
                 "name=name"
             ],
             "getfields": [
-                "name=tag_id",
+                "name=topic_id",
                 "name=name",
                 "name=param",
                 "name=article_cnt",
@@ -495,13 +488,13 @@
                 "name=updated_at"
             ],
             "updatekey": [
-                "name=tag_id"
+                "name=topic_id"
             ],
             "deletekey": [
-                "name=tag_id"
+                "name=topic_id"
             ],
             "searchfields": [
-                "name=tag_id",
+                "name=topic_id",
                 "name=name",
                 "name=article_cnt",
                 "name=album_cnt",
@@ -540,7 +533,14 @@
                 "sign": "",
                 "secret": "1",
                 "image": ""
-            }
+            },
+            "methods": [
+                {
+                    "name": "",
+                    "cname": "",
+                    "source": ""
+                }
+            ]
         }
     },
     "process": {
