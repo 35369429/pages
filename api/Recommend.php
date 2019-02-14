@@ -4,11 +4,11 @@
  * 推荐数据接口 
  *
  * 程序作者: XpmSE机器人
- * 最后修改: 2019-01-26 11:06:30
+ * 最后修改: 2019-02-14 21:49:35
  * 程序母版: /data/stor/private/templates/xpmsns/model/code/api/Name.php
  */
 namespace Xpmsns\Pages\Api;
-                                   
+                                      
 
 use \Xpmse\Loader\App;
 use \Xpmse\Excp;
@@ -175,6 +175,12 @@ class Recommend extends Api {
 	*               	["_map_event"][$events[n]]["event_id"], // event.event_id
 	 *               	["albums"],  // 指定图集 
 	*               	["_map_album"][$albums[n]]["album_id"], // album.album_id
+	 *               	["questions"],  // 指定提问 
+	*               	["_map_question"][$questions[n]]["question_id"], // question.question_id
+	 *               	["answers"],  // 指定回答 
+	*               	["_map_answer"][$answers[n]]["answer_id"], // answer.answer_id
+	 *               	["goods"],  // 指定商品 
+	*               	["_map_goods"][$goods[n]]["goods_id"], // goods.goods_id
 	 *               	["orderby"],  // 排序方式 
 	 *               	["status"],  // 状态 
 	 *               	["created_at"],  // 创建时间 
@@ -216,6 +222,16 @@ class Recommend extends Api {
 	*               	["_map_article"][$articles[n]]["dislike_cnt"], // article.dislike_cnt
 	*               	["_map_article"][$articles[n]]["comment_cnt"], // article.comment_cnt
 	*               	["_map_article"][$articles[n]]["series"], // article.series
+	*               	["_map_article"][$articles[n]]["user_id"], // article.user_id
+	*               	["_map_article"][$articles[n]]["policies_detail"], // article.policies_detail
+	*               	["_map_article"][$articles[n]]["agree_cnt"], // article.agree_cnt
+	*               	["_map_article"][$articles[n]]["priority"], // article.priority
+	*               	["_map_article"][$articles[n]]["coin_view"], // article.coin_view
+	*               	["_map_article"][$articles[n]]["money_view"], // article.money_view
+	*               	["_map_article"][$articles[n]]["specials"], // article.specials
+	*               	["_map_article"][$articles[n]]["history"], // article.history
+	*               	["_map_article"][$articles[n]]["policies_comment"], // article.policies_comment
+	*               	["_map_article"][$articles[n]]["policies_reward"], // article.policies_reward
 	*               	["_map_article"][$exclude_articles[n]]["created_at"], // article.created_at
 	*               	["_map_article"][$exclude_articles[n]]["updated_at"], // article.updated_at
 	*               	["_map_article"][$exclude_articles[n]]["outer_id"], // article.outer_id
@@ -253,6 +269,16 @@ class Recommend extends Api {
 	*               	["_map_article"][$exclude_articles[n]]["dislike_cnt"], // article.dislike_cnt
 	*               	["_map_article"][$exclude_articles[n]]["comment_cnt"], // article.comment_cnt
 	*               	["_map_article"][$exclude_articles[n]]["series"], // article.series
+	*               	["_map_article"][$exclude_articles[n]]["user_id"], // article.user_id
+	*               	["_map_article"][$exclude_articles[n]]["policies_detail"], // article.policies_detail
+	*               	["_map_article"][$exclude_articles[n]]["agree_cnt"], // article.agree_cnt
+	*               	["_map_article"][$exclude_articles[n]]["priority"], // article.priority
+	*               	["_map_article"][$exclude_articles[n]]["coin_view"], // article.coin_view
+	*               	["_map_article"][$exclude_articles[n]]["money_view"], // article.money_view
+	*               	["_map_article"][$exclude_articles[n]]["specials"], // article.specials
+	*               	["_map_article"][$exclude_articles[n]]["history"], // article.history
+	*               	["_map_article"][$exclude_articles[n]]["policies_comment"], // article.policies_comment
+	*               	["_map_article"][$exclude_articles[n]]["policies_reward"], // article.policies_reward
 	*               	["_map_event"][$events[n]]["created_at"], // event.created_at
 	*               	["_map_event"][$events[n]]["updated_at"], // event.updated_at
 	*               	["_map_event"][$events[n]]["slug"], // event.slug
@@ -304,6 +330,77 @@ class Recommend extends Api {
 	*               	["_map_album"][$albums[n]]["comment_cnt"], // album.comment_cnt
 	*               	["_map_album"][$albums[n]]["status"], // album.status
 	*               	["_map_album"][$albums[n]]["series"], // album.series
+	*               	["_map_question"][$questions[n]]["created_at"], // question.created_at
+	*               	["_map_question"][$questions[n]]["updated_at"], // question.updated_at
+	*               	["_map_question"][$questions[n]]["user_id"], // question.user_id
+	*               	["_map_question"][$questions[n]]["title"], // question.title
+	*               	["_map_question"][$questions[n]]["summary"], // question.summary
+	*               	["_map_question"][$questions[n]]["content"], // question.content
+	*               	["_map_question"][$questions[n]]["category_ids"], // question.category_ids
+	*               	["_map_question"][$questions[n]]["series_ids"], // question.series_ids
+	*               	["_map_question"][$questions[n]]["tags"], // question.tags
+	*               	["_map_question"][$questions[n]]["view_cnt"], // question.view_cnt
+	*               	["_map_question"][$questions[n]]["agree_cnt"], // question.agree_cnt
+	*               	["_map_question"][$questions[n]]["answer_cnt"], // question.answer_cnt
+	*               	["_map_question"][$questions[n]]["priority"], // question.priority
+	*               	["_map_question"][$questions[n]]["status"], // question.status
+	*               	["_map_question"][$questions[n]]["publish_time"], // question.publish_time
+	*               	["_map_question"][$questions[n]]["coin"], // question.coin
+	*               	["_map_question"][$questions[n]]["money"], // question.money
+	*               	["_map_question"][$questions[n]]["coin_view"], // question.coin_view
+	*               	["_map_question"][$questions[n]]["money_view"], // question.money_view
+	*               	["_map_question"][$questions[n]]["policies"], // question.policies
+	*               	["_map_question"][$questions[n]]["policies_detail"], // question.policies_detail
+	*               	["_map_question"][$questions[n]]["anonymous"], // question.anonymous
+	*               	["_map_question"][$questions[n]]["cover"], // question.cover
+	*               	["_map_question"][$questions[n]]["history"], // question.history
+	*               	["_map_answer"][$answers[n]]["created_at"], // answer.created_at
+	*               	["_map_answer"][$answers[n]]["updated_at"], // answer.updated_at
+	*               	["_map_answer"][$answers[n]]["question_id"], // answer.question_id
+	*               	["_map_answer"][$answers[n]]["user_id"], // answer.user_id
+	*               	["_map_answer"][$answers[n]]["content"], // answer.content
+	*               	["_map_answer"][$answers[n]]["publish_time"], // answer.publish_time
+	*               	["_map_answer"][$answers[n]]["policies"], // answer.policies
+	*               	["_map_answer"][$answers[n]]["policies_detail"], // answer.policies_detail
+	*               	["_map_answer"][$answers[n]]["priority"], // answer.priority
+	*               	["_map_answer"][$answers[n]]["view_cnt"], // answer.view_cnt
+	*               	["_map_answer"][$answers[n]]["agree_cnt"], // answer.agree_cnt
+	*               	["_map_answer"][$answers[n]]["coin"], // answer.coin
+	*               	["_map_answer"][$answers[n]]["money"], // answer.money
+	*               	["_map_answer"][$answers[n]]["coin_view"], // answer.coin_view
+	*               	["_map_answer"][$answers[n]]["money_view"], // answer.money_view
+	*               	["_map_answer"][$answers[n]]["anonymous"], // answer.anonymous
+	*               	["_map_answer"][$answers[n]]["accepted"], // answer.accepted
+	*               	["_map_answer"][$answers[n]]["status"], // answer.status
+	*               	["_map_answer"][$answers[n]]["history"], // answer.history
+	*               	["_map_answer"][$answers[n]]["summary"], // answer.summary
+	*               	["_map_goods"][$goods[n]]["created_at"], // goods.created_at
+	*               	["_map_goods"][$goods[n]]["updated_at"], // goods.updated_at
+	*               	["_map_goods"][$goods[n]]["instance"], // goods.instance
+	*               	["_map_goods"][$goods[n]]["name"], // goods.name
+	*               	["_map_goods"][$goods[n]]["slug"], // goods.slug
+	*               	["_map_goods"][$goods[n]]["tags"], // goods.tags
+	*               	["_map_goods"][$goods[n]]["category_ids"], // goods.category_ids
+	*               	["_map_goods"][$goods[n]]["recommend_ids"], // goods.recommend_ids
+	*               	["_map_goods"][$goods[n]]["summary"], // goods.summary
+	*               	["_map_goods"][$goods[n]]["cover"], // goods.cover
+	*               	["_map_goods"][$goods[n]]["images"], // goods.images
+	*               	["_map_goods"][$goods[n]]["videos"], // goods.videos
+	*               	["_map_goods"][$goods[n]]["params"], // goods.params
+	*               	["_map_goods"][$goods[n]]["content"], // goods.content
+	*               	["_map_goods"][$goods[n]]["content_faq"], // goods.content_faq
+	*               	["_map_goods"][$goods[n]]["content_serv"], // goods.content_serv
+	*               	["_map_goods"][$goods[n]]["sku_cnt"], // goods.sku_cnt
+	*               	["_map_goods"][$goods[n]]["sku_sum"], // goods.sku_sum
+	*               	["_map_goods"][$goods[n]]["shipped_sum"], // goods.shipped_sum
+	*               	["_map_goods"][$goods[n]]["available_sum"], // goods.available_sum
+	*               	["_map_goods"][$goods[n]]["lower_price"], // goods.lower_price
+	*               	["_map_goods"][$goods[n]]["sale_way"], // goods.sale_way
+	*               	["_map_goods"][$goods[n]]["opened_at"], // goods.opened_at
+	*               	["_map_goods"][$goods[n]]["closed_at"], // goods.closed_at
+	*               	["_map_goods"][$goods[n]]["pay_duration"], // goods.pay_duration
+	*               	["_map_goods"][$goods[n]]["status"], // goods.status
+	*               	["_map_goods"][$goods[n]]["events"], // goods.events
 	*               	["_map_series"][$series[n]]["created_at"], // series.created_at
 	*               	["_map_series"][$series[n]]["updated_at"], // series.updated_at
 	*               	["_map_series"][$series[n]]["name"], // series.name
@@ -376,65 +473,6 @@ class Recommend extends Api {
 		throw new Excp("未知查询条件", 404, ['query'=>$query, 'data'=>$data]);
 	}
 
-	/**
-	 * 添加一条推荐记录
-	 * @param  array $query GET 参数
-	 * @param  array $data  POST 参数新增的字段记录 
-	 *               $data['recommend_id'] 推荐ID
-	 *               $data['title'] 主题
-	 *               $data['summary'] 简介
-	 *               $data['icon'] 图标
-	 *               $data['slug'] 别名
-	 *               $data['pos'] 呈现位置
-	 *               $data['style'] 样式代码
-	 *               $data['type'] 方式
-	 *               $data['ctype'] 内容类型
-	 *               $data['thumb_only'] 必须包含主题图片
-	 *               $data['video_only'] 必须包含视频
-	 *               $data['bigdata_engine'] 根据用户喜好推荐
-	 *               $data['period'] 周期
-	 *               $data['images'] 摘要图片
-	 *               $data['tpl_pc'] PC端模板
-	 *               $data['tpl_h5'] 手机端模板
-	 *               $data['tpl_wxapp'] 小程序模板
-	 *               $data['tpl_android'] 安卓模板
-	 *               $data['tpl_ios'] iOS模板
-	 *               $data['keywords'] 关键词
-	 *               $data['series'] 指定系列
-	 *               $data['categories'] 指定系列
-	 *               $data['articles'] 指定文章
-	 *               $data['exclude_articles'] 排除文章
-	 *               $data['events'] 指定活动
-	 *               $data['albums'] 指定图集
-	 *               $data['orderby'] 排序方式
-	 *               $data['status'] 状态
-	 *
-	 * @return array 新增的推荐记录  @see get()
-	 */
-	protected function create( $query, $data ) {
-
-		if ( !empty($query['_secret']) ) { 
-			// secret校验，一般用于小程序 & 移动应用
-			$this->authSecret($query['_secret']);
-		} else {
-			// 签名校验，一般用于后台程序调用
-			$this->auth($query); 
-		}
-
-		if (empty($data['title'])) {
-			throw new Excp("缺少必填字段主题 (title)", 402, ['query'=>$query, 'data'=>$data]);
-		}
-		if (empty($data['type'])) {
-			throw new Excp("缺少必填字段方式 (type)", 402, ['query'=>$query, 'data'=>$data]);
-		}
-		if (empty($data['ctype'])) {
-			throw new Excp("缺少必填字段内容类型 (ctype)", 402, ['query'=>$query, 'data'=>$data]);
-		}
-
-		$inst = new \Xpmsns\Pages\Model\Recommend;
-		$rs = $inst->create( $data );
-		return $inst->getByRecommendId($rs["recommend_id"]);
-	}
 
 
 
@@ -515,6 +553,12 @@ class Recommend extends Api {
 	*               	["event"][$events[n]]["event_id"], // event.event_id
 	 *               	["albums"],  // 指定图集 
 	*               	["album"][$albums[n]]["album_id"], // album.album_id
+	 *               	["questions"],  // 指定提问 
+	*               	["question"][$questions[n]]["question_id"], // question.question_id
+	 *               	["answers"],  // 指定回答 
+	*               	["answer"][$answers[n]]["answer_id"], // answer.answer_id
+	 *               	["goods"],  // 指定商品 
+	*               	["goods"][$goods[n]]["goods_id"], // goods.goods_id
 	 *               	["orderby"],  // 排序方式 
 	 *               	["status"],  // 状态 
 	 *               	["created_at"],  // 创建时间 
@@ -556,6 +600,16 @@ class Recommend extends Api {
 	*               	["article"][$articles[n]]["dislike_cnt"], // article.dislike_cnt
 	*               	["article"][$articles[n]]["comment_cnt"], // article.comment_cnt
 	*               	["article"][$articles[n]]["series"], // article.series
+	*               	["article"][$articles[n]]["user_id"], // article.user_id
+	*               	["article"][$articles[n]]["policies_detail"], // article.policies_detail
+	*               	["article"][$articles[n]]["agree_cnt"], // article.agree_cnt
+	*               	["article"][$articles[n]]["priority"], // article.priority
+	*               	["article"][$articles[n]]["coin_view"], // article.coin_view
+	*               	["article"][$articles[n]]["money_view"], // article.money_view
+	*               	["article"][$articles[n]]["specials"], // article.specials
+	*               	["article"][$articles[n]]["history"], // article.history
+	*               	["article"][$articles[n]]["policies_comment"], // article.policies_comment
+	*               	["article"][$articles[n]]["policies_reward"], // article.policies_reward
 	*               	["article"][$exclude_articles[n]]["created_at"], // article.created_at
 	*               	["article"][$exclude_articles[n]]["updated_at"], // article.updated_at
 	*               	["article"][$exclude_articles[n]]["outer_id"], // article.outer_id
@@ -593,6 +647,16 @@ class Recommend extends Api {
 	*               	["article"][$exclude_articles[n]]["dislike_cnt"], // article.dislike_cnt
 	*               	["article"][$exclude_articles[n]]["comment_cnt"], // article.comment_cnt
 	*               	["article"][$exclude_articles[n]]["series"], // article.series
+	*               	["article"][$exclude_articles[n]]["user_id"], // article.user_id
+	*               	["article"][$exclude_articles[n]]["policies_detail"], // article.policies_detail
+	*               	["article"][$exclude_articles[n]]["agree_cnt"], // article.agree_cnt
+	*               	["article"][$exclude_articles[n]]["priority"], // article.priority
+	*               	["article"][$exclude_articles[n]]["coin_view"], // article.coin_view
+	*               	["article"][$exclude_articles[n]]["money_view"], // article.money_view
+	*               	["article"][$exclude_articles[n]]["specials"], // article.specials
+	*               	["article"][$exclude_articles[n]]["history"], // article.history
+	*               	["article"][$exclude_articles[n]]["policies_comment"], // article.policies_comment
+	*               	["article"][$exclude_articles[n]]["policies_reward"], // article.policies_reward
 	*               	["event"][$events[n]]["created_at"], // event.created_at
 	*               	["event"][$events[n]]["updated_at"], // event.updated_at
 	*               	["event"][$events[n]]["slug"], // event.slug
@@ -644,6 +708,77 @@ class Recommend extends Api {
 	*               	["album"][$albums[n]]["comment_cnt"], // album.comment_cnt
 	*               	["album"][$albums[n]]["status"], // album.status
 	*               	["album"][$albums[n]]["series"], // album.series
+	*               	["question"][$questions[n]]["created_at"], // question.created_at
+	*               	["question"][$questions[n]]["updated_at"], // question.updated_at
+	*               	["question"][$questions[n]]["user_id"], // question.user_id
+	*               	["question"][$questions[n]]["title"], // question.title
+	*               	["question"][$questions[n]]["summary"], // question.summary
+	*               	["question"][$questions[n]]["content"], // question.content
+	*               	["question"][$questions[n]]["category_ids"], // question.category_ids
+	*               	["question"][$questions[n]]["series_ids"], // question.series_ids
+	*               	["question"][$questions[n]]["tags"], // question.tags
+	*               	["question"][$questions[n]]["view_cnt"], // question.view_cnt
+	*               	["question"][$questions[n]]["agree_cnt"], // question.agree_cnt
+	*               	["question"][$questions[n]]["answer_cnt"], // question.answer_cnt
+	*               	["question"][$questions[n]]["priority"], // question.priority
+	*               	["question"][$questions[n]]["status"], // question.status
+	*               	["question"][$questions[n]]["publish_time"], // question.publish_time
+	*               	["question"][$questions[n]]["coin"], // question.coin
+	*               	["question"][$questions[n]]["money"], // question.money
+	*               	["question"][$questions[n]]["coin_view"], // question.coin_view
+	*               	["question"][$questions[n]]["money_view"], // question.money_view
+	*               	["question"][$questions[n]]["policies"], // question.policies
+	*               	["question"][$questions[n]]["policies_detail"], // question.policies_detail
+	*               	["question"][$questions[n]]["anonymous"], // question.anonymous
+	*               	["question"][$questions[n]]["cover"], // question.cover
+	*               	["question"][$questions[n]]["history"], // question.history
+	*               	["answer"][$answers[n]]["created_at"], // answer.created_at
+	*               	["answer"][$answers[n]]["updated_at"], // answer.updated_at
+	*               	["answer"][$answers[n]]["question_id"], // answer.question_id
+	*               	["answer"][$answers[n]]["user_id"], // answer.user_id
+	*               	["answer"][$answers[n]]["content"], // answer.content
+	*               	["answer"][$answers[n]]["publish_time"], // answer.publish_time
+	*               	["answer"][$answers[n]]["policies"], // answer.policies
+	*               	["answer"][$answers[n]]["policies_detail"], // answer.policies_detail
+	*               	["answer"][$answers[n]]["priority"], // answer.priority
+	*               	["answer"][$answers[n]]["view_cnt"], // answer.view_cnt
+	*               	["answer"][$answers[n]]["agree_cnt"], // answer.agree_cnt
+	*               	["answer"][$answers[n]]["coin"], // answer.coin
+	*               	["answer"][$answers[n]]["money"], // answer.money
+	*               	["answer"][$answers[n]]["coin_view"], // answer.coin_view
+	*               	["answer"][$answers[n]]["money_view"], // answer.money_view
+	*               	["answer"][$answers[n]]["anonymous"], // answer.anonymous
+	*               	["answer"][$answers[n]]["accepted"], // answer.accepted
+	*               	["answer"][$answers[n]]["status"], // answer.status
+	*               	["answer"][$answers[n]]["history"], // answer.history
+	*               	["answer"][$answers[n]]["summary"], // answer.summary
+	*               	["goods"][$goods[n]]["created_at"], // goods.created_at
+	*               	["goods"][$goods[n]]["updated_at"], // goods.updated_at
+	*               	["goods"][$goods[n]]["instance"], // goods.instance
+	*               	["goods"][$goods[n]]["name"], // goods.name
+	*               	["goods"][$goods[n]]["slug"], // goods.slug
+	*               	["goods"][$goods[n]]["tags"], // goods.tags
+	*               	["goods"][$goods[n]]["category_ids"], // goods.category_ids
+	*               	["goods"][$goods[n]]["recommend_ids"], // goods.recommend_ids
+	*               	["goods"][$goods[n]]["summary"], // goods.summary
+	*               	["goods"][$goods[n]]["cover"], // goods.cover
+	*               	["goods"][$goods[n]]["images"], // goods.images
+	*               	["goods"][$goods[n]]["videos"], // goods.videos
+	*               	["goods"][$goods[n]]["params"], // goods.params
+	*               	["goods"][$goods[n]]["content"], // goods.content
+	*               	["goods"][$goods[n]]["content_faq"], // goods.content_faq
+	*               	["goods"][$goods[n]]["content_serv"], // goods.content_serv
+	*               	["goods"][$goods[n]]["sku_cnt"], // goods.sku_cnt
+	*               	["goods"][$goods[n]]["sku_sum"], // goods.sku_sum
+	*               	["goods"][$goods[n]]["shipped_sum"], // goods.shipped_sum
+	*               	["goods"][$goods[n]]["available_sum"], // goods.available_sum
+	*               	["goods"][$goods[n]]["lower_price"], // goods.lower_price
+	*               	["goods"][$goods[n]]["sale_way"], // goods.sale_way
+	*               	["goods"][$goods[n]]["opened_at"], // goods.opened_at
+	*               	["goods"][$goods[n]]["closed_at"], // goods.closed_at
+	*               	["goods"][$goods[n]]["pay_duration"], // goods.pay_duration
+	*               	["goods"][$goods[n]]["status"], // goods.status
+	*               	["goods"][$goods[n]]["events"], // goods.events
 	*               	["series"][$series[n]]["created_at"], // series.created_at
 	*               	["series"][$series[n]]["updated_at"], // series.updated_at
 	*               	["series"][$series[n]]["name"], // series.name

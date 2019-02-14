@@ -102,10 +102,13 @@ use \Xpmse\T;
 		<label class="col-xs-2 control-label" for="ctype">内容类型</label>
 		<div class="col-xs-8">
 			<?php if (is_null($rs["ctype"])) { $rs["ctype"] = "article"; } ?>
-<label class="css-input  css-radio css-radio-lg css-radio-primary push-10-r"><input   type="radio" name="ctype" data-uncheck-value="all" value="all" <?=("all" == $rs["ctype"]) ? "checked" : ""?> > <span></span> 混合</label>
+<label class="css-input  css-radio css-radio-lg css-radio-primary push-10-r"><input   type="radio" name="ctype" data-uncheck-value="all" value="all" <?=("all" == $rs["ctype"]) ? "checked" : ""?> > <span></span> 全文检索</label>
 <label class="css-input  css-radio css-radio-lg css-radio-primary push-10-r"><input   type="radio" name="ctype" data-uncheck-value="article" value="article" <?=("article" == $rs["ctype"]) ? "checked" : ""?> > <span></span> 图文</label>
 <label class="css-input  css-radio css-radio-lg css-radio-primary push-10-r"><input   type="radio" name="ctype" data-uncheck-value="event" value="event" <?=("event" == $rs["ctype"]) ? "checked" : ""?> > <span></span> 活动</label>
 <label class="css-input  css-radio css-radio-lg css-radio-primary push-10-r"><input   type="radio" name="ctype" data-uncheck-value="album" value="album" <?=("album" == $rs["ctype"]) ? "checked" : ""?> > <span></span> 图集</label>
+<label class="css-input  css-radio css-radio-lg css-radio-primary push-10-r"><input   type="radio" name="ctype" data-uncheck-value="question" value="question" <?=("question" == $rs["ctype"]) ? "checked" : ""?> > <span></span> 提问</label>
+<label class="css-input  css-radio css-radio-lg css-radio-primary push-10-r"><input   type="radio" name="ctype" data-uncheck-value="answer" value="answer" <?=("answer" == $rs["ctype"]) ? "checked" : ""?> > <span></span> 回答</label>
+<label class="css-input  css-radio css-radio-lg css-radio-primary push-10-r"><input   type="radio" name="ctype" data-uncheck-value="goods" value="goods" <?=("goods" == $rs["ctype"]) ? "checked" : ""?> > <span></span> 商品</label>
 			<div class="help-block"></div>
 		</div>
 	</div><!-- END 单选框: 内容类型 (ctype) 开始  -->
@@ -173,7 +176,9 @@ use \Xpmse\T;
 <label class="css-input  css-radio css-radio-lg css-radio-primary push-10-r"><input   type="radio" name="orderby" data-uncheck-value="publish_time" value="publish_time" <?=("publish_time" == $rs["orderby"]) ? "checked" : ""?> > <span></span> 最新发布</label>
 <label class="css-input  css-radio css-radio-lg css-radio-primary push-10-r"><input   type="radio" name="orderby" data-uncheck-value="publish_time_asc" value="publish_time_asc" <?=("publish_time_asc" == $rs["orderby"]) ? "checked" : ""?> > <span></span> 发布顺序</label>
 <label class="css-input  css-radio css-radio-lg css-radio-primary push-10-r"><input   type="radio" name="orderby" data-uncheck-value="view_cnt" value="view_cnt" <?=("view_cnt" == $rs["orderby"]) ? "checked" : ""?> > <span></span>  最多浏览</label>
-<label class="css-input  css-radio css-radio-lg css-radio-primary push-10-r"><input   type="radio" name="orderby" data-uncheck-value="like_cnt" value="like_cnt" <?=("like_cnt" == $rs["orderby"]) ? "checked" : ""?> > <span></span>  最多点赞</label>
+<label class="css-input  css-radio css-radio-lg css-radio-primary push-10-r"><input   type="radio" name="orderby" data-uncheck-value="answer_cnt" value="answer_cnt" <?=("answer_cnt" == $rs["orderby"]) ? "checked" : ""?> > <span></span>  最多回答</label>
+<label class="css-input  css-radio css-radio-lg css-radio-primary push-10-r"><input   type="radio" name="orderby" data-uncheck-value="agree_cnt" value="agree_cnt" <?=("agree_cnt" == $rs["orderby"]) ? "checked" : ""?> > <span></span> 最多赞同</label>
+<label class="css-input  css-radio css-radio-lg css-radio-primary push-10-r"><input   type="radio" name="orderby" data-uncheck-value="like_cnt" value="like_cnt" <?=("like_cnt" == $rs["orderby"]) ? "checked" : ""?> > <span></span> 最多点赞</label>
 <label class="css-input  css-radio css-radio-lg css-radio-primary push-10-r"><input   type="radio" name="orderby" data-uncheck-value="comment_cnt" value="comment_cnt" <?=("comment_cnt" == $rs["orderby"]) ? "checked" : ""?> > <span></span>  最多评论</label>
 <label class="css-input  css-radio css-radio-lg css-radio-primary push-10-r"><input   type="radio" name="orderby" data-uncheck-value="dislike_cnt" value="dislike_cnt" <?=("dislike_cnt" == $rs["orderby"]) ? "checked" : ""?> > <span></span> 最多讨厌</label>
 			<div class="help-block"></div>
@@ -316,46 +321,6 @@ use \Xpmse\T;
 
 
  
-	<!-- 下拉选择(动态数据): 排除文章 (exclude_articles) 开始  -->
-	<div class="form-group   ">
-		<label class="col-xs-2 control-label" for="exclude_articles">排除文章</label>
-		<div class="col-xs-8"> 
-			<select class="js-select2 form-control input-lg selected-inline  "  style="width: 100%;" 
-					id="exclude_articles" name="exclude_articles" 
-					data-language="zh-CN"
-					data-param-cancelable="1"
-					data-param-cancel="取消选择"
-					data-param-model="\Xpmsns\Pages\Model\Article"
-					data-param-table="article"
-					data-param-fields="article_id,title"
-					data-param-style="{{title}}({{article_id}})"
-					data-param-option="article_id"
-					data-param-default=""
-					data-ajax-url="/_a/mina/helper/select2?method=get"
-					data-preload-url="/_a/mina/helper/select2?method=get&preload=<?=T::v('<%=exclude_articles | join(\',\')%>', $rs )?>"
-					data-placeholder="请选择文章"  multiple data-select2-multiple=1  >
-				<option></option>
-			</select>
-			<div class="help-block"></div>
-		</div>
-		 
-		<script type="text/javascript">
-		$(function(){
-			// 取消选择
-			$('select[name=exclude_articles]').on("select2:select", function( e ){
-				var data = e.params.data || {};
-				id = data.id || '';
-				if ( '__cancel' ==  data.id ) {
-					$(this).select2("val", "");
-				}
-			});
-		});
-        </script>
-        	</div><!-- END 下拉选择(动态数据): 排除文章 (exclude_articles) -->
-
-
-
- 
 	<!-- 下拉选择(动态数据): 指定活动 (events) 开始  -->
 	<div class="form-group   ">
 		<label class="col-xs-2 control-label" for="events">指定活动</label>
@@ -432,6 +397,166 @@ use \Xpmse\T;
 		});
         </script>
         	</div><!-- END 下拉选择(动态数据): 指定图集 (albums) -->
+
+
+
+ 
+	<!-- 下拉选择(动态数据): 指定提问 (questions) 开始  -->
+	<div class="form-group   ">
+		<label class="col-xs-2 control-label" for="questions">指定提问</label>
+		<div class="col-xs-8"> 
+			<select class="js-select2 form-control input-lg selected-inline  "  style="width: 100%;" 
+					id="questions" name="questions" 
+					data-language="zh-CN"
+					data-param-cancelable="1"
+					data-param-cancel="取消选择"
+					data-param-model="\Xpmsns\Qanda\Model\Question"
+					data-param-table="question"
+					data-param-fields="question_id,title"
+					data-param-style="{{title}}({{question_id}})"
+					data-param-option="question_id"
+					data-param-default=""
+					data-ajax-url="/_a/mina/helper/select2?method=get"
+					data-preload-url="/_a/mina/helper/select2?method=get&preload=<?=T::v('<%=questions | join(\',\')%>', $rs )?>"
+					data-placeholder="请选择提问"  multiple data-select2-multiple=1  >
+				<option></option>
+			</select>
+			<div class="help-block"></div>
+		</div>
+		 
+		<script type="text/javascript">
+		$(function(){
+			// 取消选择
+			$('select[name=questions]').on("select2:select", function( e ){
+				var data = e.params.data || {};
+				id = data.id || '';
+				if ( '__cancel' ==  data.id ) {
+					$(this).select2("val", "");
+				}
+			});
+		});
+        </script>
+        	</div><!-- END 下拉选择(动态数据): 指定提问 (questions) -->
+
+
+
+ 
+	<!-- 下拉选择(动态数据): 指定回答 (answers) 开始  -->
+	<div class="form-group   ">
+		<label class="col-xs-2 control-label" for="answers">指定回答</label>
+		<div class="col-xs-8"> 
+			<select class="js-select2 form-control input-lg selected-inline  "  style="width: 100%;" 
+					id="answers" name="answers" 
+					data-language="zh-CN"
+					data-param-cancelable="1"
+					data-param-cancel="取消选择"
+					data-param-model="\Xpmsns\Qanda\Model\Answer"
+					data-param-table="answer"
+					data-param-fields="answer_id,content"
+					data-param-style="{{content|striptags[:40]}}({{answer_id}})"
+					data-param-option="answer_id"
+					data-param-default=""
+					data-ajax-url="/_a/mina/helper/select2?method=get"
+					data-preload-url="/_a/mina/helper/select2?method=get&preload=<?=T::v('<%=answers | join(\',\')%>', $rs )?>"
+					data-placeholder="请选择回答"  multiple data-select2-multiple=1  >
+				<option></option>
+			</select>
+			<div class="help-block"></div>
+		</div>
+		 
+		<script type="text/javascript">
+		$(function(){
+			// 取消选择
+			$('select[name=answers]').on("select2:select", function( e ){
+				var data = e.params.data || {};
+				id = data.id || '';
+				if ( '__cancel' ==  data.id ) {
+					$(this).select2("val", "");
+				}
+			});
+		});
+        </script>
+        	</div><!-- END 下拉选择(动态数据): 指定回答 (answers) -->
+
+
+
+ 
+	<!-- 下拉选择(动态数据): 指定商品 (goods) 开始  -->
+	<div class="form-group   ">
+		<label class="col-xs-2 control-label" for="goods">指定商品</label>
+		<div class="col-xs-8"> 
+			<select class="js-select2 form-control input-lg selected-inline  "  style="width: 100%;" 
+					id="goods" name="goods" 
+					data-language="zh-CN"
+					data-param-cancelable="1"
+					data-param-cancel="取消选择"
+					data-param-model="\Xpmsns\Pages\Model\Goods"
+					data-param-table="goods"
+					data-param-fields="goods_id,name"
+					data-param-style="{{name}}({{goods_id}})"
+					data-param-option="goods_id"
+					data-param-default=""
+					data-ajax-url="/_a/mina/helper/select2?method=get"
+					data-preload-url="/_a/mina/helper/select2?method=get&preload=<?=T::v('<%=goods | join(\',\')%>', $rs )?>"
+					data-placeholder="请选择商品"  multiple data-select2-multiple=1  >
+				<option></option>
+			</select>
+			<div class="help-block"></div>
+		</div>
+		 
+		<script type="text/javascript">
+		$(function(){
+			// 取消选择
+			$('select[name=goods]').on("select2:select", function( e ){
+				var data = e.params.data || {};
+				id = data.id || '';
+				if ( '__cancel' ==  data.id ) {
+					$(this).select2("val", "");
+				}
+			});
+		});
+        </script>
+        	</div><!-- END 下拉选择(动态数据): 指定商品 (goods) -->
+
+
+
+ 
+	<!-- 下拉选择(动态数据): 排除文章 (exclude_articles) 开始  -->
+	<div class="form-group   ">
+		<label class="col-xs-2 control-label" for="exclude_articles">排除文章</label>
+		<div class="col-xs-8"> 
+			<select class="js-select2 form-control input-lg selected-inline  "  style="width: 100%;" 
+					id="exclude_articles" name="exclude_articles" 
+					data-language="zh-CN"
+					data-param-cancelable="1"
+					data-param-cancel="取消选择"
+					data-param-model="\Xpmsns\Pages\Model\Article"
+					data-param-table="article"
+					data-param-fields="article_id,title"
+					data-param-style="{{title}}({{article_id}})"
+					data-param-option="article_id"
+					data-param-default=""
+					data-ajax-url="/_a/mina/helper/select2?method=get"
+					data-preload-url="/_a/mina/helper/select2?method=get&preload=<?=T::v('<%=exclude_articles | join(\',\')%>', $rs )?>"
+					data-placeholder="请选择文章"  multiple data-select2-multiple=1  >
+				<option></option>
+			</select>
+			<div class="help-block"></div>
+		</div>
+		 
+		<script type="text/javascript">
+		$(function(){
+			// 取消选择
+			$('select[name=exclude_articles]').on("select2:select", function( e ){
+				var data = e.params.data || {};
+				id = data.id || '';
+				if ( '__cancel' ==  data.id ) {
+					$(this).select2("val", "");
+				}
+			});
+		});
+        </script>
+        	</div><!-- END 下拉选择(动态数据): 排除文章 (exclude_articles) -->
 
 
 

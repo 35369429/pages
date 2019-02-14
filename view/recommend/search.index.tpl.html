@@ -138,6 +138,9 @@ use \Xpmse\T;
 									<?=($query['ctype'] == 'article') ? '图文' : '' ?>
 									<?=($query['ctype'] == 'album') ? '图集' : '' ?>
 									<?=($query['ctype'] == 'event') ? '活动' : '' ?>
+									<?=($query['ctype'] == 'question') ? '提问' : '' ?>
+									<?=($query['ctype'] == 'answer') ? '回答' : '' ?>
+									<?=($query['ctype'] == 'goods') ? '商品' : '' ?>
 									<?=(empty($query['ctype'])) ? '内容类型' : '' ?>
 									<span class="caret"></span> 
 								</button>
@@ -167,6 +170,21 @@ use \Xpmse\T;
 									<li >
 										<a href="javascript:search('ctype','event')">
 										   活动
+										</a>
+									</li>
+									<li >
+										<a href="javascript:search('ctype','question')">
+										   提问
+										</a>
+									</li>
+									<li >
+										<a href="javascript:search('ctype','answer')">
+										   回答
+										</a>
+									</li>
+									<li >
+										<a href="javascript:search('ctype','goods')">
+										   商品
 										</a>
 									</li>
 								</ul>

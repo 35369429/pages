@@ -376,6 +376,48 @@
                     "private": ""
                 },
                 {
+                    "name": "questions",
+                    "cname": "指定提问",
+                    "type": "text",
+                    "length": "",
+                    "default": "",
+                    "unique": "",
+                    "index": "",
+                    "nullable": "",
+                    "json": "1",
+                    "auto": "",
+                    "file": "",
+                    "private": ""
+                },
+                {
+                    "name": "answers",
+                    "cname": "指定回答",
+                    "type": "text",
+                    "length": "",
+                    "default": "",
+                    "unique": "",
+                    "index": "",
+                    "nullable": "",
+                    "json": "1",
+                    "auto": "",
+                    "file": "",
+                    "private": ""
+                },
+                {
+                    "name": "goods",
+                    "cname": "指定商品",
+                    "type": "text",
+                    "length": "",
+                    "default": "",
+                    "unique": "",
+                    "index": "",
+                    "nullable": "",
+                    "json": "1",
+                    "auto": "",
+                    "file": "",
+                    "private": ""
+                },
+                {
                     "name": "orderby",
                     "cname": "排序方式",
                     "type": "string",
@@ -482,6 +524,39 @@
                     "on": "in",
                     "name": "albums",
                     "alias": "al"
+                },
+                {
+                    "cname": "问题",
+                    "type": "inWhere",
+                    "model": "\\Xpmsns\\Qanda\\Model\\Question",
+                    "table": "question",
+                    "prefix": "xpmsns_qanda_",
+                    "field": "question_id",
+                    "on": "in",
+                    "name": "questions",
+                    "alias": "qu"
+                },
+                {
+                    "cname": "回答",
+                    "type": "inWhere",
+                    "model": "\\Xpmsns\\Qanda\\Model\\Answer",
+                    "table": "answer",
+                    "prefix": "xpmsns_qanda_",
+                    "field": "answer_id",
+                    "on": "in",
+                    "name": "answers",
+                    "alias": "an"
+                },
+                {
+                    "cname": "商品",
+                    "type": "inWhere",
+                    "model": "\\Xpmsns\\Pages\\Model\\Goods",
+                    "table": "goods",
+                    "prefix": "xpmsns_pages_",
+                    "field": "goods_id",
+                    "on": "in",
+                    "name": "goods",
+                    "alias": "g"
                 },
                 {
                     "cname": "系列",
@@ -621,7 +696,7 @@
                     "exp": "",
                     "readonly": "",
                     "attr": {
-                        "option": "混合=all,图文=article,活动=event,图集=album",
+                        "option": "全文检索=all,图文=article,活动=event,图集=album,提问=question,回答=answer,商品=goods",
                         "default": "article"
                     },
                     "validator": [
@@ -721,7 +796,7 @@
                     "exp": "",
                     "readonly": "",
                     "attr": {
-                        "option": "最新发布=publish_time,发布顺序=publish_time_asc, 最多浏览=view_cnt, 最多点赞=like_cnt, 最多评论=comment_cnt,最多讨厌=dislike_cnt",
+                        "option": "最新发布=publish_time,发布顺序=publish_time_asc, 最多浏览=view_cnt, 最多回答=answer_cnt,最多赞同=agree_cnt,最多点赞=like_cnt, 最多评论=comment_cnt,最多讨厌=dislike_cnt",
                         "default": "publish_time"
                     },
                     "validator": [
@@ -851,39 +926,6 @@
                     ]
                 },
                 {
-                    "cname": "排除文章",
-                    "name": "exclude_articles",
-                    "type": "select-remote",
-                    "placeholder": "请选择文章",
-                    "helper": "",
-                    "exp": "",
-                    "readonly": "",
-                    "attr": {
-                        "table": "article",
-                        "prefix": "xpmsns_pages_",
-                        "model": "\\Xpmsns\\Pages\\Model\\Article",
-                        "fields": [
-                            "article_id",
-                            "title"
-                        ],
-                        "option": "article_id",
-                        "selectedInline": "1",
-                        "style": "{{title}}({{article_id}})",
-                        "default": "",
-                        "multiple": "1",
-                        "api": "",
-                        "cancel": "",
-                        "cancelable": "1"
-                    },
-                    "validator": [
-                        {
-                            "method": "",
-                            "value": "",
-                            "message": ""
-                        }
-                    ]
-                },
-                {
                     "cname": "指定活动",
                     "name": "events",
                     "type": "select-remote",
@@ -935,6 +977,138 @@
                         "option": "album_id",
                         "selectedInline": "1",
                         "style": "{{title}}({{album_id}})",
+                        "default": "",
+                        "multiple": "1",
+                        "api": "",
+                        "cancel": "",
+                        "cancelable": "1"
+                    },
+                    "validator": [
+                        {
+                            "method": "",
+                            "value": "",
+                            "message": ""
+                        }
+                    ]
+                },
+                {
+                    "cname": "指定提问",
+                    "name": "questions",
+                    "type": "select-remote",
+                    "placeholder": "请选择提问",
+                    "helper": "",
+                    "exp": "",
+                    "readonly": "",
+                    "attr": {
+                        "table": "question",
+                        "prefix": "xpmsns_qanda_",
+                        "model": "\\Xpmsns\\Qanda\\Model\\Question",
+                        "fields": [
+                            "question_id",
+                            "title"
+                        ],
+                        "option": "question_id",
+                        "selectedInline": "1",
+                        "style": "{{title}}({{question_id}})",
+                        "default": "",
+                        "multiple": "1",
+                        "api": "",
+                        "cancel": "",
+                        "cancelable": "1"
+                    },
+                    "validator": [
+                        {
+                            "method": "",
+                            "value": "",
+                            "message": ""
+                        }
+                    ]
+                },
+                {
+                    "cname": "指定回答",
+                    "name": "answers",
+                    "type": "select-remote",
+                    "placeholder": "请选择回答",
+                    "helper": "",
+                    "exp": "",
+                    "readonly": "",
+                    "attr": {
+                        "table": "answer",
+                        "prefix": "xpmsns_qanda_",
+                        "model": "\\Xpmsns\\Qanda\\Model\\Answer",
+                        "fields": [
+                            "answer_id",
+                            "content"
+                        ],
+                        "option": "answer_id",
+                        "selectedInline": "1",
+                        "style": "{{content|striptags[:40]}}({{answer_id}})",
+                        "default": "",
+                        "multiple": "1",
+                        "api": "",
+                        "cancel": "",
+                        "cancelable": "1"
+                    },
+                    "validator": [
+                        {
+                            "method": "",
+                            "value": "",
+                            "message": ""
+                        }
+                    ]
+                },
+                {
+                    "cname": "指定商品",
+                    "name": "goods",
+                    "type": "select-remote",
+                    "placeholder": "请选择商品",
+                    "helper": "",
+                    "exp": "",
+                    "readonly": "",
+                    "attr": {
+                        "table": "goods",
+                        "prefix": "xpmsns_pages_",
+                        "model": "\\Xpmsns\\Pages\\Model\\Goods",
+                        "fields": [
+                            "goods_id",
+                            "name"
+                        ],
+                        "option": "goods_id",
+                        "selectedInline": "1",
+                        "style": "{{name}}({{goods_id}})",
+                        "default": "",
+                        "multiple": "1",
+                        "api": "",
+                        "cancel": "",
+                        "cancelable": "1"
+                    },
+                    "validator": [
+                        {
+                            "method": "",
+                            "value": "",
+                            "message": ""
+                        }
+                    ]
+                },
+                {
+                    "cname": "排除文章",
+                    "name": "exclude_articles",
+                    "type": "select-remote",
+                    "placeholder": "请选择文章",
+                    "helper": "",
+                    "exp": "",
+                    "readonly": "",
+                    "attr": {
+                        "table": "article",
+                        "prefix": "xpmsns_pages_",
+                        "model": "\\Xpmsns\\Pages\\Model\\Article",
+                        "fields": [
+                            "article_id",
+                            "title"
+                        ],
+                        "option": "article_id",
+                        "selectedInline": "1",
+                        "style": "{{title}}({{article_id}})",
                         "default": "",
                         "multiple": "1",
                         "api": "",
@@ -1185,7 +1359,7 @@
                 {
                     "name": "name=ctype",
                     "cname": "内容类型",
-                    "status": "混合=all|danger, 图文=article|primary, 图集=album|primary, 活动=event|primary"
+                    "status": "混合=all|danger, 图文=article|primary, 图集=album|primary, 活动=event|primary,提问=question|primary,回答=answer|primary,商品=goods|primary"
                 },
                 {
                     "name": "name=period",
@@ -1195,7 +1369,7 @@
                 {
                     "name": "name=orderby",
                     "cname": "文章排序",
-                    "status": "最新发布=publish_time|info, 发布顺序=publish_time_asc|info,最多浏览=view_cnt|info, 最多点赞=like_cnt|info, 最多评论=comment_cnt|info, 最多讨厌=dislike_cnt|info"
+                    "status": "最新发布=publish_time|info, 发布顺序=publish_time_asc|info,最多浏览=view_cnt|info, 最多回答=answer_cnt|info,最多赞同=agree_cnt|info,最多点赞=like_cnt|info, 最多评论=comment_cnt|info, 最多讨厌=dislike_cnt|info"
                 },
                 {
                     "name": "name=status",
@@ -1281,9 +1455,9 @@
         },
         "api": {
             "getstatus": "1",
-            "createstatus": "1",
             "searchstatus": "1",
             "uploadparam": "",
+            "createstatus": "0",
             "updatestatus": "0",
             "deletestatus": "0",
             "uploadstatus": "0",
