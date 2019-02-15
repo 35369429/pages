@@ -1273,7 +1273,7 @@ class Article extends Model {
 	 * + getInByArticleId 方法
 	 * @return [type] [description]
 	 */
-	function getInByArticleId( $article_ids, $select='article.article_id, article.title', $order=["article.created_at"=>"asc"] ) {
+	function getInByArticleId( $article_ids, $select='article.article_id,article.title', $order=["article.created_at"=>"asc"] ) {
 
 		$article_ids = is_array($article_ids) ? $article_ids  : [];
 
@@ -1282,8 +1282,8 @@ class Article extends Model {
 		}
 
 		// 增加表单查询索引字段
-		array_push($select, "article.article_id");
-
+        array_push($select, "article.article_id");
+        $select = array_filter(array_map('trim', $select));
 		// 创建查询构造器
 		$qb = Utils::getTab("xpmsns_pages_article as article", "{none}")->query();
 		$qb->whereIn('article_id', $article_ids);

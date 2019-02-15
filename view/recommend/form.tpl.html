@@ -300,10 +300,10 @@ use \Xpmse\T;
 		<label class="col-xs-2 control-label" for="article_status">文章状态</label>
 		<div class="col-xs-8">
 			<?php if (is_null($rs["article_status"])) { $rs["article_status"] = "published"; } ?>
-<label class="css-input  css-checkbox css-checkbox-lg css-checkbox-primary push-10-r"><input   type="checkbox" name="article_status" data-uncheck-value="{" value="published" <?=("published" == $rs["article_status"] || is_array($rs["article_status"]) &&  in_array("published",$rs["article_status"]) ) ? "checked" : ""?> > <span></span> 已发布</label>
-<label class="css-input  css-checkbox css-checkbox-lg css-checkbox-primary push-10-r"><input   type="checkbox" name="article_status" data-uncheck-value="{" value="unpublished" <?=("unpublished" == $rs["article_status"] || is_array($rs["article_status"]) &&  in_array("unpublished",$rs["article_status"]) ) ? "checked" : ""?> > <span></span> 未发布</label>
-<label class="css-input  css-checkbox css-checkbox-lg css-checkbox-primary push-10-r"><input   type="checkbox" name="article_status" data-uncheck-value="{" value="auditing" <?=("auditing" == $rs["article_status"] || is_array($rs["article_status"]) &&  in_array("auditing",$rs["article_status"]) ) ? "checked" : ""?> > <span></span> 审核中</label>
-<label class="css-input  css-checkbox css-checkbox-lg css-checkbox-primary push-10-r"><input   type="checkbox" name="article_status" data-uncheck-value="{" value="pending" <?=("pending" == $rs["article_status"] || is_array($rs["article_status"]) &&  in_array("pending",$rs["article_status"]) ) ? "checked" : ""?> > <span></span> 抓取中</label>
+<label class="css-input  css-checkbox css-checkbox-lg css-checkbox-primary push-10-r"><input   type="checkbox" name="article_status" data-uncheck-value="" value="published" <?=("published" == $rs["article_status"] || is_array($rs["article_status"]) &&  in_array("published",$rs["article_status"]) ) ? "checked" : ""?> > <span></span> 已发布</label>
+<label class="css-input  css-checkbox css-checkbox-lg css-checkbox-primary push-10-r"><input   type="checkbox" name="article_status" data-uncheck-value="" value="unpublished" <?=("unpublished" == $rs["article_status"] || is_array($rs["article_status"]) &&  in_array("unpublished",$rs["article_status"]) ) ? "checked" : ""?> > <span></span> 未发布</label>
+<label class="css-input  css-checkbox css-checkbox-lg css-checkbox-primary push-10-r"><input   type="checkbox" name="article_status" data-uncheck-value="" value="auditing" <?=("auditing" == $rs["article_status"] || is_array($rs["article_status"]) &&  in_array("auditing",$rs["article_status"]) ) ? "checked" : ""?> > <span></span> 审核中</label>
+<label class="css-input  css-checkbox css-checkbox-lg css-checkbox-primary push-10-r"><input   type="checkbox" name="article_status" data-uncheck-value="" value="pending" <?=("pending" == $rs["article_status"] || is_array($rs["article_status"]) &&  in_array("pending",$rs["article_status"]) ) ? "checked" : ""?> > <span></span> 抓取中</label>
 			<div class="help-block"></div>
 		</div>
 	</div><!-- END 复选框: 文章状态 (article_status) 开始  -->
@@ -316,9 +316,9 @@ use \Xpmse\T;
 		<label class="col-xs-2 control-label" for="album_status">图集状态</label>
 		<div class="col-xs-8">
 			<?php if (is_null($rs["album_status"])) { $rs["album_status"] = "published"; } ?>
-<label class="css-input  css-checkbox css-checkbox-lg css-checkbox-primary push-10-r"><input   type="checkbox" name="album_status" data-uncheck-value="{" value="published" <?=("published" == $rs["album_status"] || is_array($rs["album_status"]) &&  in_array("published",$rs["album_status"]) ) ? "checked" : ""?> > <span></span> 已发布</label>
-<label class="css-input  css-checkbox css-checkbox-lg css-checkbox-primary push-10-r"><input   type="checkbox" name="album_status" data-uncheck-value="{" value="draft" <?=("draft" == $rs["album_status"] || is_array($rs["album_status"]) &&  in_array("draft",$rs["album_status"]) ) ? "checked" : ""?> > <span></span> 草稿</label>
-<label class="css-input  css-checkbox css-checkbox-lg css-checkbox-primary push-10-r"><input   type="checkbox" name="album_status" data-uncheck-value="{" value="closed" <?=("closed" == $rs["album_status"] || is_array($rs["album_status"]) &&  in_array("closed",$rs["album_status"]) ) ? "checked" : ""?> > <span></span> 已关闭</label>
+<label class="css-input  css-checkbox css-checkbox-lg css-checkbox-primary push-10-r"><input   type="checkbox" name="album_status" data-uncheck-value="" value="published" <?=("published" == $rs["album_status"] || is_array($rs["album_status"]) &&  in_array("published",$rs["album_status"]) ) ? "checked" : ""?> > <span></span> 已发布</label>
+<label class="css-input  css-checkbox css-checkbox-lg css-checkbox-primary push-10-r"><input   type="checkbox" name="album_status" data-uncheck-value="" value="draft" <?=("draft" == $rs["album_status"] || is_array($rs["album_status"]) &&  in_array("draft",$rs["album_status"]) ) ? "checked" : ""?> > <span></span> 草稿</label>
+<label class="css-input  css-checkbox css-checkbox-lg css-checkbox-primary push-10-r"><input   type="checkbox" name="album_status" data-uncheck-value="" value="closed" <?=("closed" == $rs["album_status"] || is_array($rs["album_status"]) &&  in_array("closed",$rs["album_status"]) ) ? "checked" : ""?> > <span></span> 已关闭</label>
 			<div class="help-block"></div>
 		</div>
 	</div><!-- END 复选框: 图集状态 (album_status) 开始  -->
@@ -331,10 +331,10 @@ use \Xpmse\T;
 		<label class="col-xs-2 control-label" for="event_status">活动状态</label>
 		<div class="col-xs-8">
 			<?php if (is_null($rs["event_status"])) { $rs["event_status"] = "open"; } ?>
-<label class="css-input  css-checkbox css-checkbox-lg css-checkbox-primary push-10-r"><input   type="checkbox" name="event_status" data-uncheck-value="{" value="open" <?=("open" == $rs["event_status"] || is_array($rs["event_status"]) &&  in_array("open",$rs["event_status"]) ) ? "checked" : ""?> > <span></span> 报名中</label>
-<label class="css-input  css-checkbox css-checkbox-lg css-checkbox-primary push-10-r"><input   type="checkbox" name="event_status" data-uncheck-value="{" value="draft" <?=("draft" == $rs["event_status"] || is_array($rs["event_status"]) &&  in_array("draft",$rs["event_status"]) ) ? "checked" : ""?> > <span></span> 草稿</label>
-<label class="css-input  css-checkbox css-checkbox-lg css-checkbox-primary push-10-r"><input   type="checkbox" name="event_status" data-uncheck-value="{" value="close" <?=("close" == $rs["event_status"] || is_array($rs["event_status"]) &&  in_array("close",$rs["event_status"]) ) ? "checked" : ""?> > <span></span> 已结束</label>
-<label class="css-input  css-checkbox css-checkbox-lg css-checkbox-primary push-10-r"><input   type="checkbox" name="event_status" data-uncheck-value="{" value="off" <?=("off" == $rs["event_status"] || is_array($rs["event_status"]) &&  in_array("off",$rs["event_status"]) ) ? "checked" : ""?> > <span></span> 已关闭</label>
+<label class="css-input  css-checkbox css-checkbox-lg css-checkbox-primary push-10-r"><input   type="checkbox" name="event_status" data-uncheck-value="" value="open" <?=("open" == $rs["event_status"] || is_array($rs["event_status"]) &&  in_array("open",$rs["event_status"]) ) ? "checked" : ""?> > <span></span> 报名中</label>
+<label class="css-input  css-checkbox css-checkbox-lg css-checkbox-primary push-10-r"><input   type="checkbox" name="event_status" data-uncheck-value="" value="draft" <?=("draft" == $rs["event_status"] || is_array($rs["event_status"]) &&  in_array("draft",$rs["event_status"]) ) ? "checked" : ""?> > <span></span> 草稿</label>
+<label class="css-input  css-checkbox css-checkbox-lg css-checkbox-primary push-10-r"><input   type="checkbox" name="event_status" data-uncheck-value="" value="close" <?=("close" == $rs["event_status"] || is_array($rs["event_status"]) &&  in_array("close",$rs["event_status"]) ) ? "checked" : ""?> > <span></span> 已结束</label>
+<label class="css-input  css-checkbox css-checkbox-lg css-checkbox-primary push-10-r"><input   type="checkbox" name="event_status" data-uncheck-value="" value="off" <?=("off" == $rs["event_status"] || is_array($rs["event_status"]) &&  in_array("off",$rs["event_status"]) ) ? "checked" : ""?> > <span></span> 已关闭</label>
 			<div class="help-block"></div>
 		</div>
 	</div><!-- END 复选框: 活动状态 (event_status) 开始  -->
@@ -347,10 +347,10 @@ use \Xpmse\T;
 		<label class="col-xs-2 control-label" for="question_status">提问状态</label>
 		<div class="col-xs-8">
 			<?php if (is_null($rs["question_status"])) { $rs["question_status"] = "opened"; } ?>
-<label class="css-input  css-checkbox css-checkbox-lg css-checkbox-primary push-10-r"><input   type="checkbox" name="question_status" data-uncheck-value="{" value="opened" <?=("opened" == $rs["question_status"] || is_array($rs["question_status"]) &&  in_array("opened",$rs["question_status"]) ) ? "checked" : ""?> > <span></span> 开放</label>
-<label class="css-input  css-checkbox css-checkbox-lg css-checkbox-primary push-10-r"><input   type="checkbox" name="question_status" data-uncheck-value="{" value="closed" <?=("closed" == $rs["question_status"] || is_array($rs["question_status"]) &&  in_array("closed",$rs["question_status"]) ) ? "checked" : ""?> > <span></span> 关闭</label>
-<label class="css-input  css-checkbox css-checkbox-lg css-checkbox-primary push-10-r"><input   type="checkbox" name="question_status" data-uncheck-value="{" value="forbidden" <?=("forbidden" == $rs["question_status"] || is_array($rs["question_status"]) &&  in_array("forbidden",$rs["question_status"]) ) ? "checked" : ""?> > <span></span> 封禁</label>
-<label class="css-input  css-checkbox css-checkbox-lg css-checkbox-primary push-10-r"><input   type="checkbox" name="question_status" data-uncheck-value="{" value="drafted" <?=("drafted" == $rs["question_status"] || is_array($rs["question_status"]) &&  in_array("drafted",$rs["question_status"]) ) ? "checked" : ""?> > <span></span> 草稿</label>
+<label class="css-input  css-checkbox css-checkbox-lg css-checkbox-primary push-10-r"><input   type="checkbox" name="question_status" data-uncheck-value="" value="opened" <?=("opened" == $rs["question_status"] || is_array($rs["question_status"]) &&  in_array("opened",$rs["question_status"]) ) ? "checked" : ""?> > <span></span> 开放</label>
+<label class="css-input  css-checkbox css-checkbox-lg css-checkbox-primary push-10-r"><input   type="checkbox" name="question_status" data-uncheck-value="" value="closed" <?=("closed" == $rs["question_status"] || is_array($rs["question_status"]) &&  in_array("closed",$rs["question_status"]) ) ? "checked" : ""?> > <span></span> 关闭</label>
+<label class="css-input  css-checkbox css-checkbox-lg css-checkbox-primary push-10-r"><input   type="checkbox" name="question_status" data-uncheck-value="" value="forbidden" <?=("forbidden" == $rs["question_status"] || is_array($rs["question_status"]) &&  in_array("forbidden",$rs["question_status"]) ) ? "checked" : ""?> > <span></span> 封禁</label>
+<label class="css-input  css-checkbox css-checkbox-lg css-checkbox-primary push-10-r"><input   type="checkbox" name="question_status" data-uncheck-value="" value="drafted" <?=("drafted" == $rs["question_status"] || is_array($rs["question_status"]) &&  in_array("drafted",$rs["question_status"]) ) ? "checked" : ""?> > <span></span> 草稿</label>
 			<div class="help-block"></div>
 		</div>
 	</div><!-- END 复选框: 提问状态 (question_status) 开始  -->
@@ -363,10 +363,10 @@ use \Xpmse\T;
 		<label class="col-xs-2 control-label" for="answer_status">回答状态</label>
 		<div class="col-xs-8">
 			<?php if (is_null($rs["answer_status"])) { $rs["answer_status"] = "opened"; } ?>
-<label class="css-input  css-checkbox css-checkbox-lg css-checkbox-primary push-10-r"><input   type="checkbox" name="answer_status" data-uncheck-value="{" value="opened" <?=("opened" == $rs["answer_status"] || is_array($rs["answer_status"]) &&  in_array("opened",$rs["answer_status"]) ) ? "checked" : ""?> > <span></span> 开放</label>
-<label class="css-input  css-checkbox css-checkbox-lg css-checkbox-primary push-10-r"><input   type="checkbox" name="answer_status" data-uncheck-value="{" value="closed" <?=("closed" == $rs["answer_status"] || is_array($rs["answer_status"]) &&  in_array("closed",$rs["answer_status"]) ) ? "checked" : ""?> > <span></span> 关闭</label>
-<label class="css-input  css-checkbox css-checkbox-lg css-checkbox-primary push-10-r"><input   type="checkbox" name="answer_status" data-uncheck-value="{" value="forbidden" <?=("forbidden" == $rs["answer_status"] || is_array($rs["answer_status"]) &&  in_array("forbidden",$rs["answer_status"]) ) ? "checked" : ""?> > <span></span> 封禁</label>
-<label class="css-input  css-checkbox css-checkbox-lg css-checkbox-primary push-10-r"><input   type="checkbox" name="answer_status" data-uncheck-value="{" value="drafted" <?=("drafted" == $rs["answer_status"] || is_array($rs["answer_status"]) &&  in_array("drafted",$rs["answer_status"]) ) ? "checked" : ""?> > <span></span> 草稿</label>
+<label class="css-input  css-checkbox css-checkbox-lg css-checkbox-primary push-10-r"><input   type="checkbox" name="answer_status" data-uncheck-value="" value="opened" <?=("opened" == $rs["answer_status"] || is_array($rs["answer_status"]) &&  in_array("opened",$rs["answer_status"]) ) ? "checked" : ""?> > <span></span> 开放</label>
+<label class="css-input  css-checkbox css-checkbox-lg css-checkbox-primary push-10-r"><input   type="checkbox" name="answer_status" data-uncheck-value="" value="closed" <?=("closed" == $rs["answer_status"] || is_array($rs["answer_status"]) &&  in_array("closed",$rs["answer_status"]) ) ? "checked" : ""?> > <span></span> 关闭</label>
+<label class="css-input  css-checkbox css-checkbox-lg css-checkbox-primary push-10-r"><input   type="checkbox" name="answer_status" data-uncheck-value="" value="forbidden" <?=("forbidden" == $rs["answer_status"] || is_array($rs["answer_status"]) &&  in_array("forbidden",$rs["answer_status"]) ) ? "checked" : ""?> > <span></span> 封禁</label>
+<label class="css-input  css-checkbox css-checkbox-lg css-checkbox-primary push-10-r"><input   type="checkbox" name="answer_status" data-uncheck-value="" value="drafted" <?=("drafted" == $rs["answer_status"] || is_array($rs["answer_status"]) &&  in_array("drafted",$rs["answer_status"]) ) ? "checked" : ""?> > <span></span> 草稿</label>
 			<div class="help-block"></div>
 		</div>
 	</div><!-- END 复选框: 回答状态 (answer_status) 开始  -->
@@ -379,8 +379,8 @@ use \Xpmse\T;
 		<label class="col-xs-2 control-label" for="goods_status">商品状态</label>
 		<div class="col-xs-8">
 			<?php if (is_null($rs["goods_status"])) { $rs["goods_status"] = "online"; } ?>
-<label class="css-input  css-checkbox css-checkbox-lg css-checkbox-primary push-10-r"><input   type="checkbox" name="goods_status" data-uncheck-value="{" value="online" <?=("online" == $rs["goods_status"] || is_array($rs["goods_status"]) &&  in_array("online",$rs["goods_status"]) ) ? "checked" : ""?> > <span></span> 上架</label>
-<label class="css-input  css-checkbox css-checkbox-lg css-checkbox-primary push-10-r"><input   type="checkbox" name="goods_status" data-uncheck-value="{" value="offline" <?=("offline" == $rs["goods_status"] || is_array($rs["goods_status"]) &&  in_array("offline",$rs["goods_status"]) ) ? "checked" : ""?> > <span></span> 下架</label>
+<label class="css-input  css-checkbox css-checkbox-lg css-checkbox-primary push-10-r"><input   type="checkbox" name="goods_status" data-uncheck-value="" value="online" <?=("online" == $rs["goods_status"] || is_array($rs["goods_status"]) &&  in_array("online",$rs["goods_status"]) ) ? "checked" : ""?> > <span></span> 上架</label>
+<label class="css-input  css-checkbox css-checkbox-lg css-checkbox-primary push-10-r"><input   type="checkbox" name="goods_status" data-uncheck-value="" value="offline" <?=("offline" == $rs["goods_status"] || is_array($rs["goods_status"]) &&  in_array("offline",$rs["goods_status"]) ) ? "checked" : ""?> > <span></span> 下架</label>
 			<div class="help-block"></div>
 		</div>
 	</div><!-- END 复选框: 商品状态 (goods_status) 开始  -->

@@ -4,7 +4,7 @@
  * 推荐数据模型
  *
  * 程序作者: XpmSE机器人
- * 最后修改: 2019-02-15 12:09:21
+ * 最后修改: 2019-02-15 13:00:10
  * 程序母版: /data/stor/private/templates/xpmsns/model/code/model/Name.php
  */
 namespace Xpmsns\Pages\Model;
@@ -124,15 +124,15 @@ class Recommend extends Model {
     private function buildQuery( & $query ) {
         
         $q = [
-            "type" => $query["type"],
-            "ctype" => $query["ctype"],
+            "type" => trim($query["type"]),
+            "ctype" => trim($query["ctype"]),
             "recommend" => $query["bigdata_engine"],
 
-            "period" => $query["period"],
+            "period" => trim($query["period"]),
             "thumb_only"=> $query["thumb_only"],
             "video_only"=> $query["video_only"],
             "audio_only"=> $query["audio_only"],
-            "keywords" => $query["keywords"],
+            "keywords" => trim($query["keywords"]),
 
             "series_ids" => array_filter($query["series"]),
             "special_ids" => array_filter($query["specials"]),
@@ -144,8 +144,8 @@ class Recommend extends Model {
             "withagree" => $query["withagree"],
             "withrelation" => $query["withrelation"],
 
-            "page" => $query["page"],
-            "perpage" => $query["perpage"],
+            "page" => intval($query["page"]),
+            "perpage" => empty($query["perpage"]) ? 20 : intval($query["perpage"]),
 
             "ttl" => $query["ttl"],
         ];
@@ -201,13 +201,15 @@ class Recommend extends Model {
 
         // 处理选择字段
         if ( !empty($query["select"]) ) {
-            $q["select"]  = $query["select"];
+            $q["select"] = $query["select"];
         }
+        
         
         // 处理内容状态
         if ( !empty($query["content_status"]) ) {
             $q["status"]  = $query["content_status"];
         }
+
 
         // 处理空值
         $q["series_ids"] =  empty($q["series_ids"]) ? null : $q["series_ids"];
@@ -219,6 +221,11 @@ class Recommend extends Model {
         if( is_array($q["status"]) ) {
             $q["status"] = array_filter(array_map('trim', $q["status"]));
             $q["status"] = implode(",", $q["status"]);
+        }
+
+        if ( is_array($q["select"]) ) {
+            $q["select"] = array_filter(array_map('trim', $q["select"]));
+            $q["select"] = implode(",", $q["select"]);
         }
       
         // 时间范围
@@ -339,11 +346,16 @@ class Recommend extends Model {
     function articles( $query ) {
         
         $user = $query["user"];
+        unset( $query["user"] );
         $art = new Article();
 
         // 静态查询
         if ( $query["type"]  == "static" ) {
-            $map = $art->getInByArticleId( $query["article_ids"], $query["select"]);
+            if ( !empty($query["select"]) ) {
+                $map = $art->getInByArticleId( $query["article_ids"], $query["select"]);
+            } else {
+                $map = $art->getInByArticleId( $query["article_ids"] );
+            }
             $rows = [];
             if( is_array( $map ) ) {
                 $rows = array_values( $map );
@@ -364,7 +376,10 @@ class Recommend extends Model {
                 \Xpmsns\User\Model\User::withRelation( $rows, $user["user_id"] );
             }
             
-            return $rows;
+            return [
+                "total"=>count($rows),
+                "data"=>$rows
+            ];
         }
 
 
@@ -385,7 +400,7 @@ class Recommend extends Model {
         if ( !empty($user["user_id"]) && $query["withrelation"] == 1  && !empty($response["data"]) ) {
             \Xpmsns\User\Model\User::withRelation( $response["data"], $user["user_id"] );
         }
-        
+
         return $response;
     }
 
@@ -411,6 +426,64 @@ class Recommend extends Model {
      * @return array 符合条件的 Questions
      */
     function questions( $query ) {
+        $user = $query["user"];
+        unset($query["user"]);
+        $que = new \Xpmsns\Qanda\Model\Question();
+
+        // 静态查询
+        if ( $query["type"]  == "static" ) {
+            if ( !empty($query["select"]) ) {
+                $map = $que->getInByQuestionId( $query["question_ids"], $query["select"]);
+            } else {
+                $map = $que->getInByQuestionId( $query["question_ids"] );
+            }
+
+            $rows = [];
+            if( is_array( $map ) ) {
+                $rows = array_values( $map );
+            }
+
+            // 关联用户收藏数据
+            // if ( !empty($user["user_id"]) && $query["withfavorite"] == 1 ) {
+            //     $que->withFavorite( $rows, $user["user_id"]);
+            // }
+    
+            // 关联用户赞赏数据
+            if ( !empty($user["user_id"]) && $query["withagree"] == 1 ) {
+                $que->withAgree( $rows, $user["user_id"]);
+            }
+
+            // 关联用户关系
+            if ( !empty($user["user_id"]) && $query["withrelation"] == 1 ) {
+                \Xpmsns\User\Model\User::withRelation( $rows, $user["user_id"] );
+            }
+            
+            return [
+                "total"=>count($rows),
+                "data"=>$rows
+            ];
+        }
+
+
+        // 动态查询
+        $response =  $que->search( $query );
+
+        // 关联用户收藏数据
+        // if ( !empty($user["user_id"]) && $query["withfavorite"] == 1 ) {
+        //     $que->withFavorite( $response["data"], $user["user_id"]);
+        // }
+ 
+        // 关联用户赞赏数据
+        if ( !empty($user["user_id"]) && $query["withagree"] == 1 ) {
+            $que->withAgree( $response["data"], $user["user_id"]);
+        }
+
+        // 关联用户关系
+        if ( !empty($user["user_id"]) && $query["withrelation"] == 1  && !empty($response["data"]) ) {
+            \Xpmsns\User\Model\User::withRelation( $response["data"], $user["user_id"] );
+        }
+        
+        return $response;
     }
 
     /**
