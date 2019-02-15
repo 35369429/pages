@@ -146,6 +146,8 @@ class Recommend extends Model {
 
             "page" => $query["page"],
             "perpage" => $query["perpage"],
+
+            "ttl" => $query["ttl"],
         ];
 
         
