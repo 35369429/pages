@@ -215,6 +215,11 @@ class Recommend extends Model {
         $q["topic_ids"] =  empty($q["topic_ids"]) ? null : $q["topic_ids"];
         $q["category_ids"] =  empty($q["category_ids"]) ? null : $q["category_ids"];
 
+        // 处理状态数值
+        if( is_array($q["status"]) ) {
+            $q["status"] = array_filter(array_map('trim', $q["status"]));
+            $q["status"] = implode(",", $q["status"]);
+        }
       
         // 时间范围
         if ( !empty($query['period']) ) {
@@ -353,6 +358,11 @@ class Recommend extends Model {
             if ( !empty($user["user_id"]) && $query["withagree"] == 1 ) {
                 $art->withAgree( $rows, $user["user_id"]);
             }
+
+            // 关联用户关系
+            if ( !empty($user["user_id"]) && $query["withrelation"] == 1 ) {
+                \Xpmsns\User\Model\User::withRelation( $rows, $user["user_id"] );
+            }
             
             return $rows;
         }
@@ -370,6 +380,12 @@ class Recommend extends Model {
         if ( !empty($user["user_id"]) && $query["withagree"] == 1 ) {
             $art->withAgree( $response["data"], $user["user_id"]);
         }
+
+        // 关联用户关系
+        if ( !empty($user["user_id"]) && $query["withrelation"] == 1  && !empty($response["data"]) ) {
+            \Xpmsns\User\Model\User::withRelation( $response["data"], $user["user_id"] );
+        }
+        
         return $response;
     }
 
