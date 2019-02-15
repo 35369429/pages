@@ -330,6 +330,7 @@ class Recommend extends Model {
      * @return array 符合条件的 Articles
      */
     function articles( $query ) {
+        
         $user = $query["user"];
         $art = new Article();
 

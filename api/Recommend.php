@@ -56,12 +56,15 @@ class Recommend extends Api {
 	/**
 	 * 自定义函数 读取推荐内容
 	 */
-       protected function getContents( $query, $data ) {
+    protected function getContents( $query, $data ) {
 		
 		// 支持POST和GET查询
         $data = array_merge( $query, $data );
 
         $reco = new \Xpmsns\Pages\Model\Recommend;
+
+        // 从缓存中读取数据
+
         
         // 按推荐别名读取推荐条件
         if ( !empty($data['slug']) ) {
