@@ -28,7 +28,7 @@ class Recommend extends Api {
     // @KEEP BEGIN
 
 	/**
-	 * 自定义函数 读取推荐文章
+	 * 自定义函数 读取推荐文章 (即将废弃)
 	 */
 	protected function getArticles( $query, $data ) {
 		
@@ -49,84 +49,68 @@ class Recommend extends Api {
 		}
 
 		throw new Excp('错误的查询参数', 402, ['query'=>$query, 'data'=>$data]);
-	}
+    }
+    
+
+
 	/**
 	 * 自定义函数 读取推荐内容
 	 */
        protected function getContents( $query, $data ) {
 		
 		// 支持POST和GET查询
-		$data = array_merge( $query, $data );
+        $data = array_merge( $query, $data );
 
-		$inst = new \Xpmsns\Pages\Model\Recommend;
-		$keywords = !empty($data['keywords']) ?  explode(',',$data['keywords']) : []; 
-        $series = !empty($data['series']) ?  explode(',',$data['series']) : [];
-        $exclude_articles = !empty($data['exclude_articles']) ?  explode(',',$data['exclude_articles']) : [];
-		$page = !empty($data['page']) ?  $data['page'] : 1; 
-		$perpage = !empty($data['perpage']) ?  $data['perpage'] : 20; 
-      	$now = !empty($data['now']) ?  $data['now'] : null; 
-        if ( array_key_exists('series', $data) && empty($series) ) {
-        	$series = ['not null'];
+        $reco = new \Xpmsns\Pages\Model\Recommend;
+        
+        // 按推荐别名读取推荐条件
+        if ( !empty($data['slug']) ) {
+            $rs = $reco->getBySlug( $data['slug'], "recommend.*" );
+            $rows[$rs['slug']] = $rs;
+
+        // 按推荐ID读取推荐条件
+        } else if( !empty($data['recommend_id'] ) ) {
+            $rs = $reco->getByRecommendId( $data['recommend_id'], "recommend.*" );
+            $rows[$rs['slug']] = $rs;
+        // 按推荐别名读取一组推荐条件 (多个可用 "," 分割)
+        } else if (!empty($data['slugs'])) {
+            if ( is_string($data['slugs']) ) {
+                $data['slugs'] = array_map('trim', explode(",", $data['slugs']));
+            }
+            $rows = $reco->getInBySlug( $data['slugs'], "recommend.*" );
+
+        // 按推荐ID读取一组推荐条件 (多个可用 "," 分割)
+        } else if (!empty($data['recommend_ids'])) {
+            if ( is_string($data['recommend_ids']) ) {
+                $data['recommend_ids'] = array_map('trim', explode(",", $data['recommend_ids']));
+            }
+            $rowsByIds = $reco->getInByRecommendId( $data['recommend_ids'], "recommend.*" );
+            foreach( $rowsByIds as $rs ) {
+                $rows[$rs['slug']] = $rs;
+            }
         }
 
-		if ( array_key_exists('slug', $data) && !empty($data['slug']) ) {
-            $resp = $inst->getContentsBySlug( $data['slug'], $keywords,$series, $exclude_articles, $page, $perpage, $now);
+        // Nonthing 
+        if ( empty($rows) ) {
+            throw new Excp('未找到符合条件的数据', 402, ['query'=>$query, 'data'=>$data]);
+        }
 
-            // 关联用户收藏数据
-            $art = new \Xpmsns\Pages\Model\Article;
-            $user = \Xpmsns\User\Model\User::info();
-            if ( !empty($user["user_id"]) && $query["withfavorite"] == 1 ) {
-                $art->withFavorite( $resp["contents"]["data"], $user["user_id"]);
-            }
+        // 提供当前用户信息
+        $user = \Xpmsns\User\Model\User::info();
+        $responses = [];
+        foreach( $rows as $slug => $rs ) {
+            $queryContent = array_merge( $data, $rs );
+            $queryContent["user"] = $user;
+            $responses["{$slug}"] = $reco->contents( $queryContent );
+        }
 
-            // 关联用户赞赏数据
-            if ( !empty($user["user_id"]) && $query["withagree"] == 1 ) {
-                $art->withAgree( $resp["contents"]["data"], $user["user_id"]);
-            }
+        // 只有一条数据， 直接返回 (兼容旧的API格式)
+        if ( count( $responses) == 1 )  {
+            return current($responses);
+        }
 
-        
-            return $resp;
-
-		} else if ( array_key_exists('recommend_id', $data) && !empty($data['recommend_id']) ) {
-            $resp = $inst->getContents( $data['recommend_id'], $keywords, $series,$exclude_articles,$page, $perpage, $now);
-
-             // 关联用户收藏数据
-             $art = new \Xpmsns\Pages\Model\Article;
-             $user = \Xpmsns\User\Model\User::info();
-             if ( !empty($user["user_id"]) && $query["withfavorite"] == 1 ) {
-                 $art->withFavorite( $resp["contents"]["data"], $user["user_id"]);
-             }
-            
-            // 关联用户赞赏数据
-            if ( !empty($user["user_id"]) && $query["withagree"] == 1 ) {
-                $art->withAgree( $resp["contents"]["data"],  $user["user_id"]);
-            }
-            return $resp;
-		}
-         
-        if ( array_key_exists('slugs', $data) && !empty($data['slugs']) ) {
-			$data['slugs'] = explode(',', $data['slugs']);
-			$contents = [];
-			foreach ($data['slugs'] as $slug) {
-                $contents[$slug] = $inst->getContentsBySlug( trim($slug), $keywords,$series, $exclude_articles,$page, $perpage, $now); 
-                
-                // 关联用户收藏数据
-                $art = new \Xpmsns\Pages\Model\Article;
-                $user = \Xpmsns\User\Model\User::info();
-                if ( !empty($user["user_id"]) && $query["withfavorite"] == 1 ) {
-                    $art->withFavorite( $contents[$slug]["contents"]["data"], $user["user_id"]);
-                }
-
-                // 关联用户赞赏数据
-                if ( !empty($user["user_id"]) && $query["withagree"] == 1 ) {
-                    $art->withAgree( $resp["contents"]["data"], $user["user_id"]);
-                }
-			}
-			return $contents;
-		}
-		throw new Excp('错误的查询参数', 402, ['query'=>$query, 'data'=>$data]);
+        return $responses;
     }
-    
     // @KEEP END
 
 

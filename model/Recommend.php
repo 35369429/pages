@@ -59,7 +59,373 @@ class Recommend extends Model {
 		$this->media = new Media(['host'=>Utils::getHome()]);  // 公有媒体文件实例
 
        
-	}
+    }
+    
+
+
+    // @KEEP BEGIN
+    
+    /**
+     * 查询推荐内容
+     * @param array $query 查询条件
+     * @return array 符合条件的 Items/Articles/Albums/Goods/Questions/Answers
+     */
+    function contents( $query ) {
+        $this->buildQuery( $query );
+
+        // 根据用户喜好推荐
+        if ( $query["recommend"]  ) {
+            return $this->recommend( $query );
+        }
+
+        
+
+        switch( $query["ctype"] ) {
+            case "article":
+            
+                return $this->articles( $query );
+                break;
+            
+            case "album":
+                return $this->albums( $query );
+                break;
+            
+            case "event":
+                return $this->events( $query );
+                break;
+            
+            case "goods":
+                return $this->goods( $query );
+                break;
+
+            case "question":
+                return $this->questions( $query );
+                break;
+            
+            case "answer":
+                return $this->answers( $query );
+                break;  
+            
+            case "fulltext":
+                return $this->fulltext( $query );
+                break;    
+            default:
+                return $this->fulltext( $query );
+                break;
+        }
+
+        throw new Excp( "错误的查询条件", 402, ["query"=>$query]);
+    }
+
+
+    /**
+     * 解析查询条件
+     */
+    private function buildQuery( & $query ) {
+        
+        $q = [
+            "type" => $query["type"],
+            "ctype" => $query["ctype"],
+            "recommend" => $query["bigdata_engine"],
+
+            "period" => $query["period"],
+            "thumb_only"=> $query["thumb_only"],
+            "video_only"=> $query["video_only"],
+            "audio_only"=> $query["audio_only"],
+            "keywords" => $query["keywords"],
+
+            "series_ids" => array_filter($query["series"]),
+            "special_ids" => array_filter($query["specials"]),
+            "topic_ids"=> array_filter($query["topics"]),
+            "category_ids"=> array_filter($query["categories"]),
+
+            "user" => $query["user"],
+            "withfavorite" => $query["withfavorite"],
+            "withagree" => $query["withagree"],
+            "withrelation" => $query["withrelation"],
+
+            "page" => $query["page"],
+            "perpage" => $query["perpage"],
+        ];
+
+        
+        
+        switch( $q["ctype"] ) {
+            case "article":
+                $q["article_ids"] = array_filter($query["articles"]);
+                $q["exclude_article_ids"] = array_filter($query["exclude_articles"]);
+                $q["select"]  = $query["article_select"];
+                $q["status"]  = $query["article_status"];
+                break;
+            
+            case "album":
+                $q["album_ids"] = array_filter($query["albums"]);
+                $q["exclude_album_ids"] = array_filter($query["exclude_albums"]);
+                $q["select"]  = $query["album_select"];
+                $q["status"]  = $query["album_status"];
+                break;
+            
+            case "event":
+                $q["event_ids"] = array_filter($query["events"]);
+                $q["exclude_event_ids"] = array_filter($query["exclude_events"]);
+                $q["select"]  = $query["event_select"];
+                $q["status"]  = $query["event_status"];
+                break;
+            
+            case "goods":
+                $q["goods_ids"] = array_filter($query["goods"]);
+                $q["exclude_goods_ids"] = array_filter($query["exclude_goods"]);
+                $q["select"]  = $query["goods_select"];
+                $q["status"]  = $query["goods_status"];
+                break;
+
+            case "question":
+                $q["question_ids"] = array_filter($query["questions"]);
+                $q["exclude_question_ids"] = array_filter($query["exclude_questions"]);
+                $q["select"]  = $query["question_select"];
+                $q["status"]  = $query["question_status"];
+                break;
+            
+            case "answer":
+                $q["answer_ids"] = array_filter($query["answers"]);
+                $q["exclude_answer_ids"] = array_filter($query["exclude_answers"]);
+                $q["select"]  = $query["answer_select"];
+                $q["status"]  = $query["answer_status"];
+                break;
+
+            default:
+                break;
+        }
+
+        // 处理选择字段
+        if ( !empty($query["select"]) ) {
+            $q["select"]  = $query["select"];
+        }
+        
+        // 处理内容状态
+        if ( !empty($query["content_status"]) ) {
+            $q["status"]  = $query["content_status"];
+        }
+
+        // 处理空值
+        $q["series_ids"] =  empty($q["series_ids"]) ? null : $q["series_ids"];
+        $q["special_ids"] =  empty($q["special_ids"]) ? null : $q["special_ids"];
+        $q["topic_ids"] =  empty($q["topic_ids"]) ? null : $q["topic_ids"];
+        $q["category_ids"] =  empty($q["category_ids"]) ? null : $q["category_ids"];
+
+      
+        // 时间范围
+        if ( !empty($query['period']) ) {
+            $now = empty($query['now']) ? date('Y-m-d H:i:s') : date('Y-m-d H:i:s', strtotime($query['now']) );
+			$now_t = strtotime( $now );
+			switch ($query['period']) {
+
+				case '24hours':  // 24小时
+                    $from = date('Y-m-d H:i:s', strtotime("-24 hours",$now_t));
+                    $q["begin"] = $from;
+                    $q["end"] = $now;
+                    unset($q["period"]);
+					break;
+
+				case 'daily' : // 当天
+					$from = date('Y-m-d 00:00:00', $now_t);
+					$end = date('Y-m-d 23:59:59', $now_t);
+					$q["begin"] = $from;
+                    $q["end"] = $end;
+                    unset($q["period"]);
+					break;
+
+				case '7days': // 7天
+					$end = date('Y-m-d H:i:s', $now_t);
+					$end_t = strtotime($end);
+					$from = date('Y-m-d H:i:s',  strtotime("-7 days",$end_t));
+					$q["begin"] = $from;
+                    $q["end"] = $end;
+                    unset($q["period"]);
+					break;
+
+				case 'weekly': // 本周
+					$from = date('Y-m-d 00:00:00', strtotime('-1 Monday',$now_t));
+					$from_t = strtotime($from);
+					$end = date('Y-m-d 00:00:00',  strtotime("+1 Weeks",$from_t));
+					$q["begin"] = $from;
+                    $q["end"] = $end;
+                    unset($q["period"]);
+					break;
+
+				case '30days': // 30天
+					$end = date('Y-m-d H:i:s', $now_t);
+					$end_t = strtotime($end);
+					$from = date('Y-m-d H:i:s',  strtotime("-30 days",$end_t));
+					$q["begin"] = $from;
+                    $q["end"] = $end;
+                    unset($q["period"]);
+					break;
+
+				case 'monthly': // 本月
+					$from = date('Y-m-01 00:00:00', $now_t);
+					$from_t = strtotime($from);
+					$end = date('Y-m-d 00:00:00',  strtotime("+1 Month",$from_t));
+					$q["begin"] = $from;
+                    $q["end"] = $end;
+                    unset($q["period"]);
+					break;
+
+				case 'yearly':  // 今年
+					$from = date('Y-01-01 00:00:00', $now_t);
+					$end = date('Y-12-31 23:59:59',  $now_t);
+					$q["begin"] = $from;
+                    $q["end"] = $end;
+                    unset($q["period"]);
+					break;
+
+				default: // 无限
+                    # code...
+                    unset($q["period"]);
+					break;
+            }
+        }
+
+
+        // 排序方式
+        switch ($query['orderby']) {
+			case 'publish_time': 
+				$q['order'] =  "{$q["ctype"]}.publish_time desc";
+                break;
+            case 'publish_time_asc': 
+				$q['order'] =  "{$q["ctype"]}.publish_time desc";
+                break; 
+            case 'agree_cnt':
+				$q['order'] =  "{$q["ctype"]}.agree_cnt desc";
+                break; 
+            case 'answer_cnt':
+				$q['order'] =  "{$q["ctype"]}.answer_cnt desc";
+				break; 
+			case 'view_cnt':
+				$q['order'] =  "{$q["ctype"]}.view_cnt desc";
+				break;
+			case 'like_cnt':
+				$q['order'] =  "{$q["ctype"]}.like_cnt desc";
+				break;
+			case 'dislike_cnt':
+				$query['order'] =  "{$q["ctype"]}.dislike_cnt desc";
+                break;
+			case 'comment_cnt':
+				$q['order'] =  "{$q["ctype"]}.comment_cnt desc";
+                break;
+            case 'custom':
+				$q['order'] = $query['order'];
+				break;
+			default:
+				$q['order'] =  "{$q["ctype"]}.publish_time desc";
+				break;
+        }
+        
+        $query = $q;
+    }
+
+    /**
+     * 查询文章 
+     * @param array $query 查询条件
+     * @return array 符合条件的 Articles
+     */
+    function articles( $query ) {
+        $user = $query["user"];
+        $art = new Article();
+
+        // 静态查询
+        if ( $query["type"]  == "static" ) {
+            $map = $art->getInByArticleId( $query["article_ids"], $query["select"]);
+            $rows = [];
+            if( is_array( $map ) ) {
+                $rows = array_values( $map );
+            }
+
+            // 关联用户收藏数据
+            if ( !empty($user["user_id"]) && $query["withfavorite"] == 1 ) {
+                $art->withFavorite( $rows, $user["user_id"]);
+            }
+    
+            // 关联用户赞赏数据
+            if ( !empty($user["user_id"]) && $query["withagree"] == 1 ) {
+                $art->withAgree( $rows, $user["user_id"]);
+            }
+            
+            return $rows;
+        }
+
+
+        // 动态查询
+        $response =  $art->search( $query );
+
+        // 关联用户收藏数据
+        if ( !empty($user["user_id"]) && $query["withfavorite"] == 1 ) {
+            $art->withFavorite( $response["data"], $user["user_id"]);
+        }
+ 
+        // 关联用户赞赏数据
+        if ( !empty($user["user_id"]) && $query["withagree"] == 1 ) {
+            $art->withAgree( $response["data"], $user["user_id"]);
+        }
+        return $response;
+    }
+
+    /**
+     * 查询图集 
+     * @param array $query 查询条件
+     * @return array 符合条件的 Albums
+     */
+    function albums( $query ) {
+    }
+
+    /**
+     * 查询商品
+     * @param array $query 查询条件
+     * @return array 符合条件的 Goods
+     */
+    function goods( $query ) {
+    }
+
+    /**
+     * 查询提问
+     * @param array $query 查询条件
+     * @return array 符合条件的 Questions
+     */
+    function questions( $query ) {
+    }
+
+    /**
+     * 查询回答
+     * @param array $query 查询条件
+     * @return array 符合条件的 Answers
+     */
+    function answers( $query ) {
+    }
+
+    /**
+     * 查询活动
+     * @param array $query 查询条件
+     * @return array 符合条件的 Events
+     */
+    function events( $query ) {
+    }
+
+    /**
+     * 全文检索 (从搜索引擎中查找)
+     * @param array $query 查询条件
+     * @return array 符合条件的 Items
+     */
+    function fulltext( $query ) {
+    }
+
+    /**
+     * 根据用户行为推荐 (从推荐引擎中查找)
+     * @param array $query 查询条件
+     * @return array 符合条件的 Items
+     */
+    function recommend( $query ) {
+    }
+    // @KEEP END
 
 	/**
 	 * 自定义函数 选取推荐文章
