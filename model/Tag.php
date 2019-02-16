@@ -83,7 +83,54 @@ class Tag extends Model {
 		return  $tagids;
 
     }
-    
+
+    /**
+     * 更新一组资源计数
+     * @param array $tags 标签列表
+     * @param string $source 资源名称
+     */
+    static public function updateCnts( $tags, $source ) {
+        $response = [];
+        foreach( $tags as $tag ) {
+            $response[$tag] = self::updateCnt( $tag, $source );
+        }
+        return $response;
+    }
+
+    /**
+     * 更新资源计数
+     * @param string $tag 标签名称
+     * @param string $source 资源名称
+     */
+    static public function updateCnt( $tag, $source ) { 
+
+        $count = null; $data=null;
+
+        // 图文
+        if ( $source == "article" ) {
+            $count = Utils::getTab('xpmsns_pages_article_tag as at', "{none}")->query()
+                        ->leftJoin("xpmsns_pages_tag as t", "at.tag_id", "=","t.tag_id")
+                        ->where("t.name", "=", $tag )
+                        ->count()
+                    ;
+            $data = ["name"=>$tag, "article_cnt"=>$count, "get"=>"article_cnt"];
+
+        // 提问
+        } else if ( $source == "question" ) {
+            $count = (new \Xpmsns\Qanda\Model\Question())->query()
+                         ->where("question.tags", 'like', "%{$tag}%")
+                         ->count()
+                    ;
+            $data = ["name"=>$tag, "question_cnt"=>$count, "get"=>"question_cnt"];
+        }
+
+        if ( $count != null && $data != null ) {
+            $rs = (new self())->saveByName($data);
+            return $rs[$data["get"]];
+        }
+
+        return 0;
+    }
     // @KEEP END
 
 	/**
