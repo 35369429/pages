@@ -533,7 +533,7 @@ class Article extends Model {
 
         $this->updateBy( 'article_id', [
             "article_id"=>$article_id,
-            "view_cnt" => 'DB::RAW(`view_cnt` + 1)'
+            "view_cnt" => 'DB::RAW(IFNULL(`view_cnt`, 0) + 1)'
         ]);
     }
 
