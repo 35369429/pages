@@ -23,12 +23,15 @@ class ArticleController extends \Xpmse\Loader\Controller {
 	// 图文列表页
 	function index() {
 
-		$art = new \Xpmsns\pages\Api\Article;
+        // $art = new \Xpmsns\pages\Api\Article;
+        $art = new \Xpmsns\pages\Model\Article;
 		$query = $_REQUEST;
 		$query['select'] = ['article_id', 'draft.title as draft_title', 'title', 'author', 'category', 'publish_time', 'update_time', 'create_time', 'status', 'draft.status as draft_status'];
 		$query['perpage'] = isset($_REQUEST['perpage']) ?  $_REQUEST['perpage'] : 10;
-		$query['order'] =  isset($_REQUEST['order']) ?  $_REQUEST['order'] : 'create_time desc';
-		$resp  = $art->call('search', $query);
+        $query['order'] =  isset($_REQUEST['order']) ?  $_REQUEST['order'] : 'create_time desc';
+        $query["status"] = empty($query["status"]) ? 'published,unpublished,auditing,pending,draft' : $query["status"];
+
+		$resp  = $art->search($query);
 
 		$cate = new \Xpmsns\pages\Model\Category;
 		$wechats = $cate->wechat();

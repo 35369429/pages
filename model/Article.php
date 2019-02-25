@@ -925,6 +925,13 @@ class Article extends Model {
             }
 
             $query["status"]=array_map('trim',$query["status"]);
+
+            // 处理草稿
+            if ( in_array("draft", $query["status"]) ) {
+                array_push($query["status"], 'unpublished');
+                $query["status"] = array_unique($query["status"]);
+            }
+
             $qb->whereIn('article.status', $query["status"]);
         }
 

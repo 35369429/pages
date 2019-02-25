@@ -10,7 +10,7 @@ use \Xpmse\Utils as Utils;
 			<div  class="col-lg-8 col-md-8 col-sm-8">
 				<div class="input-group input-group-lg">
 					<div class="input-group-addon font-w300"> 全文检索 </div> 
-					<input class="js-icon-search form-control keyword" type="text" placeholder="输入关键词" value="<?=$query['title']?>">
+					<input class="js-icon-search form-control keyword" type="text" placeholder="输入关键词" value="<?=$query['keyword']?>">
 					<span class="input-group-btn">
 						<button class="btn btn-primary font-w300 search" type="button"><i class=" si si-magnifier"></i> 搜索 </button>
 					</span>
@@ -160,9 +160,15 @@ use \Xpmse\Utils as Utils;
 										type="button" data-toggle="dropdown" > 
 									<i class="glyphicon glyphicon-list-alt"></i> 
 
-									<?php if ( $query['order'] == 'create_time desc' ) :?>
+									<?php if ( $query['order'] == 'article.create_time desc' ) :?>
 										最新创建
-									<?php elseif ( $query['order'] == 'update_time desc' ) :?>
+									<?php elseif ( $query['order'] == 'article.update_time desc' ) :?>
+                                        最近更新
+                                    <?php elseif ( $query['order'] == 'article.publish_time desc' ) :?>
+                                        最新发布
+                                    <?php elseif ( $query['order'] == 'article.stick desc,article.priority asc' ) :?>
+                                        优先级
+                                    <?php else  :?>
 										最近更新
 									<?php endif;?>
 
@@ -171,15 +177,25 @@ use \Xpmse\Utils as Utils;
 								<ul class="dropdown-menu dropdown-menu-right" style="min-width: 87px;">
 									<li class="dropdown-header"> 排序方式</li>
 									<li>
-										<a href="javascript:search('order','update_time desc')">
+										<a href="javascript:search('order','article.update_time desc')">
 										   最近更新
 										</a>
 									</li>
 									<li>
-										<a href="javascript:search('order','create_time desc')">
+										<a href="javascript:search('order','article.create_time desc')">
 										   最新创建
 										</a>
-									</li>
+                                    </li>
+                                    <li>
+                                        <a href="javascript:search('order','article.publish_time desc')">
+                                            最新发布
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="javascript:search('order','article.stick desc,article.priority asc')">
+                                            优先级
+                                        </a>
+                                    </li>
 								</ul>
 							</div> <!-- END 结果集排序 -->
 
@@ -189,13 +205,13 @@ use \Xpmse\Utils as Utils;
 										type="button" data-toggle="dropdown" >
 									<i class="glyphicon glyphicon-list-alt"></i> 
 
-									<?php if ( $query['status'] == 'UNPUBLISHED' ) :?>
+									<?php if ( $query['status'] == 'unpublished' ) :?>
 										草稿
-									<?php elseif ( $query['status'] == 'PUBLISHED' ) :?>
+									<?php elseif ( $query['status'] == 'published' ) :?>
 										已发布
-									<?php elseif ( $query['status'] == 'UNAPPLIED' ) :?>
-										待更新
-									<?php elseif ( $query['status'] == 'PENDING' ) :?>
+									<?php elseif ( $query['status'] == 'auditing' ) :?>
+										待审核
+									<?php elseif ( $query['status'] == 'pending' ) :?>
 										同步中
 									<?php else  :?> 
 										全部状态
@@ -212,22 +228,22 @@ use \Xpmse\Utils as Utils;
 										</a>
 									</li>
 									<li >
-										<a href="javascript:search('status','UNPUBLISHED')">
+										<a href="javascript:search('status','unpublished')">
 										   草稿
 										</a>
 									</li>
 									<li>
-										<a href="javascript:search('status','PUBLISHED')">
+										<a href="javascript:search('status','published')">
 										   已发布
 										</a>
 									</li>
 									<li>
-										<a href="javascript:search('status','UNAPPLIED')">
-										   待更新
+										<a href="javascript:search('status','auditing')">
+										   待审核
 										</a>
 									</li>
 									<li>
-										<a href="javascript:search('status','PENDING')">
+										<a href="javascript:search('status','pending')">
 										   同步中
 										</a>
 									</li>
@@ -245,7 +261,7 @@ use \Xpmse\Utils as Utils;
 								<ul class="dropdown-menu dropdown-menu-right" style="min-width: 87px;">
 									<li class="dropdown-header"> 文章分类</li>
 									<li >
-										<a href="javascript:search('categoryId','')">
+										<a href="javascript:search('category_ids','')">
 										   所有分类
 										</a>
 									</li>
@@ -253,7 +269,7 @@ use \Xpmse\Utils as Utils;
 									<?php 
 										$category->each(function( $cate, $depth ) use ( $category,$query ) {  ?>
 									<li >
-										<a href="javascript:search('categoryId','<?=$cate['category_id']?>')">
+										<a href="javascript:search('category_ids','<?=$cate['category_id']?>')">
 										   <?=empty($cate['wechat']) ? '' : '<i class="fa fa-wechat text-success"></i>'?>
 										   <?=$cate['name']?>
 										</a>
@@ -278,25 +294,26 @@ use \Xpmse\Utils as Utils;
 					
 					<!-- 文章列表 -->
 					<?php if($articles['total'] > 0 ): // 如果没有数据则不显示 ?>
-					<table class="js-table-checkable table table-hover remove-margin">
+					<table class="table table-hover remove-margin">
 
 						<thead>
 							<tr>
 								<th class="text-center" style="width:5%;max-width:120px;"> 编号</th>
-								<th class="font-w300" style="width:25%;">标题</th>
-								<th class="font-w300" style="width:10%;">分类</th>
+								<th class="font-w300" style="width:20%;">标题</th>
+								<th class="font-w300" style="width:6%;">分类</th>
 								<th class="font-w300" style="width:5%;">作者</th>
-								<th class="font-w300" style="width:10%;">发布日期</th>
-								<th class="font-w300" style="width:10%;">
+								<th class="font-w300" style="width:8%;">发布日期</th>
+								<th class="font-w300" style="width:8%;">
 
-								<?php if ( $query['order'] == 'create_time desc' ) :?>
+								<?php if ( $query['order'] == 'article.create_time desc' ) :?>
 									创建时间
-								<?php elseif ( $query['order'] == 'update_time desc' ) :?>
+								<?php else:?>
 									更新时间
 								<?php endif;?>
 
 								</th>
-								<th class="font-w300" style="width:5%;">状态</th>
+                                <th class="font-w300" style="width:5%;">状态</th>
+                                <th class="font-w300" style="width:5%;">管理</th>
 							</tr>
 						</thead>
 
@@ -305,26 +322,19 @@ use \Xpmse\Utils as Utils;
 							$status_map = [
 								'PUBLISHED'=>['name'=>'已发布', 'class'=>'text-success'],
 								'UNPUBLISHED'=>['name'=>'草稿', 'class'=>'text-danger'],
-								'UNAPPLIED'=>['name'=>'待更新', 'class'=>'text-warning'],
-								'PENDING'=>['name'=>'同步中', 'class'=>'text-warning']
+                                'AUDITING'=>['name'=>'待审核', 'class'=>'text-danger'],
+                                'UNAPPLIED'=>['name'=>'待更新', 'class'=>'text-warning'],
+                                'PENDING'=>['name'=>'同步中', 'class'=>'text-warning']
 							];
 							foreach ($articles['data'] as $rs) :
 								$category = '';
 								if ( is_array($rs['category']) ) {
-									$cate_pad = Utils::pad( $rs['category'] , 'name');
-									$cdata = $cate_pad['data'];
-									if ( count($cdata) > 2) {
-										$cdata = array_splice($cdata, -2);
-									}
-									$category = implode('、' ,$cdata );
-									if( count($cate_pad['data']) > 2 ) {
-										$category = $category. ' ...';
-									}
+                                    $categorys = array_column($rs['category'], "name");
+                                    $category = implode(", " , $categorys);
 								}
 								$s = $article->cstatus($rs['status'], $rs['draft_status'], $status_map);
 							?>
-							<tr data-toggle="block-group" 
-								onclick="window.location='<?=App::R('article', 'editor', ['id'=>$rs['article_id']])?>'" >
+							<tr data-toggle="block-group" >
 								<td 
 								style="min-height: 65px;height: 65px;"
 								class="text-center"><?=$rs['article_id']?></td>
@@ -335,20 +345,22 @@ use \Xpmse\Utils as Utils;
 								<td> <?=$rs['author']?> </td>
 								<td> <?= !empty($rs['publish_date']) ? date('Y年m月d日', strtotime($rs['publish_date'])) : ''?> </td>
 								<td> 
-								<?php if ( $query['order'] == 'create_time desc' ) :?>
-									<?=$rs['create_time']?> 
-								<?php elseif ( $query['order'] == 'update_time desc' ) :?>
-									<?=$rs['update_time']?> 
-								<?php endif;?>
-
+                                    <?php if ( $query['order'] == 'article.create_time desc' ) :?>
+                                        <?= date('Y年m月d日', strtotime($rs['create_time']))?> 
+                                    <?php else:?>
+                                        <?= date('Y年m月d日', strtotime($rs['update_time']))?> 
+                                    <?php endif;?>
 								</td>
-								<td> <span class="<?=$s['class']?>"><?=$s['name']?></span></td>
+                                <td> <span class="<?=$s['class']?>"><?=$s['name']?></span></td>
+                                <td>
+                                    <a target="_blank" class="btn btn-sm btn-primary" href="/admin/pages/editor?article_id=<?=$rs['article_id']?>"> 编辑 </a>
+                                </td>
 							</tr>
 							<?php endforeach;?>
 						</tbody>
 
 						<tfoot>
-							<tr><td colspan="7"> <nav class="pull-right">
+							<tr><td colspan="8"> <nav class="pull-right">
 
 								<ul class="pagination">
 									<?php if ($articles['prev'] !== false): ?>
@@ -445,8 +457,7 @@ $(function() {
 	App.initHelpers(['datepicker','select2', 'masked-inputs','tags-inputs', 'slimscroll', 'ajax-confirm']);
 	$('.search').click(function(){
 		var keyword = $('.keyword').val();
-		search('title', keyword);
-
+		search('keyword', keyword);
 	});
 
 	//  每30秒检查一次状态
