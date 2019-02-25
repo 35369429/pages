@@ -55,7 +55,88 @@ class Article extends Api {
 		$article = new \Xpmsns\Pages\Model\Article;
 		return $article->spiderUpdate( $this->params );
     }
-    
+
+
+    /**
+     * 管理员接口: 读取文章(用于编辑)
+     */
+    protected function staffArticleDetail( $query, $data ) {
+
+        // 读取用户资料
+        $staff = \Xpmse\User::info();
+        $user_id = $staff["user_id"];
+        if ( empty($user_id) ) {
+            throw new Excp("用户尚未登录", 402, ["query"=>$query, "data"=>$data]);
+        }
+
+        // ? 验证用户登录等级(用户名密码/短信登录有该接口访问权限)
+
+        // 读取用户ID 
+        $article_id = $query["article_id"];
+        if ( empty($article_id) ) {
+            return [];
+        }
+
+        $art = new \Xpmsns\pages\Model\Article();
+        $article = $art->load( $article_id );
+
+        // 校验文章权限 ()
+        // if ( $article["user_id"] != $user_id ) {
+        //     throw new Excp("没有该文章的权限", 403, ["user_id"=>$user_id, "article.user_id"=>$article["user_id"]]);
+        // }
+
+        return $article;
+    }
+
+
+    /**
+     * 发布文章接口
+     */
+    protected function staffSave( $query, $data ) {
+
+        // 读取用户资料
+        $staff = \Xpmse\User::info();
+        $user_id = $staff["user_id"];
+        if ( empty($user_id) ) {
+            throw new Excp("管理员尚未登录", 402, ["query"=>$query, "data"=>$data]);
+        }
+
+        // ? 校验管理员权限
+
+        //  读取管理员ID
+        $data["staff_id"] = $data["user"] = $user_id;
+
+        $art = new \Xpmsns\pages\Model\Article();
+
+        // 处理封面
+        if ( !empty($data['cover']) ) {
+			$data['cover'] = json_decode($data['cover'], true);
+        }
+
+        // 默认访问策略
+        if ( !array_key_exists("policies", $data) ) {
+			$data["policies"] = "public";
+        }
+
+        // 默认文章置顶
+        if ( !array_key_exists("stick", $data) ) {
+			$data["stick"] = 0;
+        }
+
+        // 默认打赏策略
+        if ( !array_key_exists("policies_reward", $data) ) {
+			$data["policies_reward"] = "closed";
+        }
+
+        // 默认手动排序
+        if ( empty($data["priority"]) ) {
+			$data["priority"] = 99999;
+        }
+
+        return $art->save( $data );
+    }
+
+
 
     /**
      * 发布文章接口 
