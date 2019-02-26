@@ -88,9 +88,37 @@ class Article extends Api {
         return $article;
     }
 
+    /**
+     * 管理员接口: 删除文章
+     */
+    protected function staffRemove( $query, $data ) {
+
+        // 读取用户资料
+        $staff = \Xpmse\User::info();
+        $user_id = $staff["user_id"];
+        if ( empty($user_id) ) {
+            throw new Excp("管理员尚未登录", 402, ["query"=>$query, "data"=>$data]);
+        }
+
+        // ? 校验管理员权限
+
+        $article_id = $data["article_id"];
+        if ( empty($article_id) ) {
+            throw new Excp("未提供待删除的文章ID", 402, ["query"=>$query, "data"=>$data]);
+        }
+
+        $art = new \Xpmsns\pages\Model\Article();
+        $resp = $art->rm($article_id, 'article_id');
+
+		if ( $resp === false ){
+			throw new Excp("删除失败 {$article_id}" , 500, ['resp'=>$resp]);
+		}
+
+        return ["code"=>0, "message"=>"删除成功"];
+    }
 
     /**
-     * 发布文章接口
+     * 管理员接口: 发布文章
      */
     protected function staffSave( $query, $data ) {
 
