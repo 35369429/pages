@@ -1670,7 +1670,14 @@ class Article extends Model {
 		} else if ( array_key_exists('publish_date', $data ) && empty($data['publish_date']) ) {
 			// $data['publish_date'] = date('Y-m-d');
 			$data['publish_time'] = date('Y-m-d H:i:s');
-		}
+        }
+        
+        // 处理日期时间格式
+        if ( !empty($data['publish_datetime']) ) {
+            $dateformat = !empty($data['dateformat']) ? trim($data['dateformat']) : 'Y-m-d H:i';
+            $publish_time = \DateTime::createFromFormat($dateformat, $data['publish_datetime']);
+            $data['publish_time'] = $publish_time->format('Y-m-d H:i:s');
+        }
 
 
 		if ( !empty($data['delta']) && empty($data["parse_content"]) ) {
