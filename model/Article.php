@@ -15,6 +15,7 @@ use \Xpmse\Nlp as NPL;
 use \Mina\Delta\Render as Render;
 use \Xpmse\Task as Task;
 use \Xpmse\Job;
+use \Xpmse\Content;
 use \Mina\Cache\Redis as Cache;
 use \Exception as Exception;
 
@@ -308,10 +309,11 @@ class Article extends Model {
 			'article_id'=> ['string', ['length'=>128, 'unique'=>true]],  // 文章 ID  ( 同 _id )
 			'outer_id'=> ['string', ['length'=>128, 'unique'=>1]],  // 外部ID用于数据同步下载 ( 同 _id )
 			'cover'=> ['string',  ['length'=>600, "json"=>true]],   // 文章封面
-			'thumbs' =>['text',  ["json"=>true]],     // 主题图片(三张)
-			'images'=> ['text',  ['json'=>true]],  // 图集文章
-			'videos'=> ['text',  ['json'=>true]],  // 视频文章
-			'audios'=> ['text',  ['json'=>true]],  // 音频文章
+			'thumbs' =>['text',  ["json"=>true]],     // 主题图片(废弃)
+			'images'=> ['text',  ['json'=>true]],  // 图片内容
+			'videos'=> ['text',  ['json'=>true]],  // 视频内容
+            'audios'=> ['text',  ['json'=>true]],  // 音频内容
+            'attachments'=> ['text',  ['json'=>true]],  // 附件内容
 			'title'=>['string',  ['length'=>128, 'index'=>1]],  // 标题
 			'author'=> ['string',  ['length'=>128, 'index'=>1]],  // 作者
 			'origin'=> ['string',  ['length'=>128, 'index'=>1]],  // 来源
@@ -325,13 +327,19 @@ class Article extends Model {
 			'create_time'=> ['timestampTz',  ["index"=>1]],  // 创建时间
 			'baidulink_time'=> ['timestampTz',  ["index"=>1]],   // 提交到百度的时间
 			'sync'=> ['string',  ["json"=>true, 'length'=>600]],  // 公众号同步状态
-			'content'=> ['longText',  [] ],  // 正文 (WEB)
-			'ap_content'=> ['longText',  ["json"=>true]],  // 小程序正文
-			'delta'=> ['longText',  ["json"=>true]],  // 编辑状态文章 (Delta )
-			'param'=> ['string', ['length'=>128,'index'=>1]],  // 自定义查询条件
+            'ap_content'=> ['longText',  ["json"=>true]],  // 小程序正文 (废弃)
+
+            'content'=> ['longText',  [] ],  // 正文 (可编辑内容, 原始正文)
+            'desktop'=> ['longText',[]],  // 阅读: 桌面浏览器
+            'mobile'=> ['longText',[]],   // 阅读: 手机浏览器
+            'app'=> ['longText',  ["json"=>true]],  // 阅读: 移动应用
+            'wxapp'=> ['longText',  ["json"=>true]],  // 阅读: 小程序
+
+			'delta'=> ['longText',  ["json"=>true]],  // 编辑状态文章 (Delta ) (废弃)
+			'param'=> ['string', ['length'=>128,'index'=>1]],  // 自定义查询条件  (废弃)
 			'stick'=> ['integer', ['index'=>1, 'default'=>"0"]],  // 置顶状态
-			'preview' => ['longText', ['json'=>true]], // 预览链接
-			'links' => ['longText', ['json'=>true]], // 访问链接
+			'preview' => ['longText', ['json'=>true]], // 预览链接  (废弃)
+			'links' => ['longText', ['json'=>true]], // 访问链接  (废弃)
 			'series' => ['string', ['json'=>true, 'length'=>400, 'index'=>1]], // 所属系列
 			'user' => ['string', ['length'=>128,'index'=>1]], // 最后编辑用户ID
 			'status'=> ['string', ['length'=>40,'index'=>1, 'default'=>ARTICLE_UNPUBLISHED]],  // 文章状态 unpublished/published/pending
@@ -1655,22 +1663,22 @@ class Article extends Model {
 			$data['category'] = explode(',', $data['category']);
 		}
 
-		// 处理时间
-		if ( !empty($data['publish_date']) ) {
+		// 处理时间( 旧版 & 废弃)
+		// if ( !empty($data['publish_date']) ) {
 
-			if ( empty($data['publish_time']) ) {
-				$data['publish_time'] = date('H:i:s');
-			}
+		// 	if ( empty($data['publish_time']) ) {
+		// 		$data['publish_time'] = date('H:i:s');
+		// 	}
 
-			$data['publish_time'] = str_replace('@', '', $data['publish_time']);
-			$data['publish_time'] = str_replace('时', ':', $data['publish_time']);
-			$data['publish_time'] = str_replace('分', ':', $data['publish_time']);
-			$data['publish_time'] = $data['publish_date'] . ' ' . $data['publish_time'];
+		// 	$data['publish_time'] = str_replace('@', '', $data['publish_time']);
+		// 	$data['publish_time'] = str_replace('时', ':', $data['publish_time']);
+		// 	$data['publish_time'] = str_replace('分', ':', $data['publish_time']);
+		// 	$data['publish_time'] = $data['publish_date'] . ' ' . $data['publish_time'];
 
-		} else if ( array_key_exists('publish_date', $data ) && empty($data['publish_date']) ) {
-			// $data['publish_date'] = date('Y-m-d');
-			$data['publish_time'] = date('Y-m-d H:i:s');
-        }
+		// } else if ( array_key_exists('publish_date', $data ) && empty($data['publish_date']) ) {
+		// 	// $data['publish_date'] = date('Y-m-d');
+		// 	$data['publish_time'] = date('Y-m-d H:i:s');
+        // }
         
         // 处理日期时间格式
         if ( !empty($data['publish_datetime']) ) {
@@ -1680,23 +1688,54 @@ class Article extends Model {
         }
 
 
-		if ( !empty($data['delta']) && empty($data["parse_content"]) ) {
+        
+
+        // 旧版 废弃
+		// if ( !empty($data['delta']) && empty($data["parse_content"]) ) {
 			
-			$this->delta_render->load($data['delta']);
+		// 	$this->delta_render->load($data['delta']);
 
-			// 生成文章正文
-			$data['content'] = $this->delta_render->html();
+		// 	// 生成文章正文
+		// 	$data['content'] = $this->delta_render->html();
 
-			// 获取图片信息
-			$data['images'] = $this->delta_render->images();
+		// 	// 获取图片信息
+		// 	$data['images'] = $this->delta_render->images();
 
-			// 获取图形信息
-			$data['videos'] = $this->delta_render->videos();
+		// 	// 获取图形信息
+		// 	$data['videos'] = $this->delta_render->videos();
 
-			// 生成小程序正文
-			$data['ap_content'] = $this->delta_render->wxapp();
-		}
+		// 	// 生成小程序正文
+		// 	$data['ap_content'] = $this->delta_render->wxapp();
+		// }
 
+        // 新版处理正文内容
+        if ( !empty($data["content"]) ) {
+            $c = new Content(["title"=> $data["title"]] );
+            $c->loadContent($data["content"]);
+
+            // 自然语言处理
+            $nlp = $this->option->get("article/npl/api");			
+			if ( $nlp != null  && !empty($nlp['config']['appid']) ) {
+				$c->withNLP( $nlp['config'], $nlp['engine'] );
+            }
+
+            // 关键词摘要
+            $data["keywords"] = $data["seo_keywords"] = implode(",", $c->keywords());
+            $data["summary"] =  $data["seo_summary"] = !empty( $data["summary"]) ? $data["summary"] : $c->summary();
+
+            // 解析内容
+            $data["desktop"] =  $c->html(); // 桌面 HTML
+            $data["mobile"] =  $c->mobile(); // 手机H5
+            $data["wxapp"] =  $c->wxapp(); // 微信小程序
+            $data["app"] =  $c->app(); // 手机应用
+
+            // 资源内容
+            $data['images'] = $c->images();
+            $data['videos'] = $c->videos();
+            $data['audios'] = $c->audios();
+            $data['attachments'] = $c->attachments();
+
+        }
 
 
 		// 添加文章
@@ -1740,9 +1779,8 @@ class Article extends Model {
 			unset( $data['history']['history']);
 		}
 
-		// 生成预览链接
-		$data['preview'] = $this->previewLinks( $article_id, $data['category']);
-
+		// 生成预览链接 (废弃)
+		// $data['preview'] = $this->previewLinks( $article_id, $data['category']);
 
 		// 历史记录
 		if ( empty($data['history'])) {
@@ -1883,86 +1921,87 @@ class Article extends Model {
      */
 	function format( & $article , $readonly=true ) {
 
-		if ( !empty($article["content"]) ) {
+        // (废弃 )
+		// if ( !empty($article["content"]) ) {
 
-			$article["content"] = str_replace("\n", "", $article['content']);
-			$article["content"] = str_replace("\t", "", $article['content']);
-			$article["content"] = str_replace("\r", "", $article['content']);
+		// 	$article["content"] = str_replace("\n", "", $article['content']);
+		// 	$article["content"] = str_replace("\t", "", $article['content']);
+		// 	$article["content"] = str_replace("\r", "", $article['content']);
 
-			$render = new \Mina\Delta\Render;
-			$article['ap_content'] = $render->loadByHTML($article["content"])->wxapp();
+		// 	$render = new \Mina\Delta\Render;
+		// 	$article['ap_content'] = $render->loadByHTML($article["content"])->wxapp();
 				
-            // === 解析媒体数据 
-            if ( !empty($article['delta']) ) {
-                $mdUtils = new \Mina\Delta\Utils;
-                $html = $mdUtils->load($article['delta'])->convert()->render();
-                $article["images"] = $mdUtils->images();
-                $article["videos"] = $mdUtils->videos();
-                $article["files"] = $mdUtils->files();
-            }
-		}
+        //     // === 解析媒体数据 
+        //     if ( !empty($article['delta']) ) {
+        //         $mdUtils = new \Mina\Delta\Utils;
+        //         $html = $mdUtils->load($article['delta'])->convert()->render();
+        //         $article["images"] = $mdUtils->images();
+        //         $article["videos"] = $mdUtils->videos();
+        //         $article["files"] = $mdUtils->files();
+        //     }
+		// }
 
-		// 提取关键字
-		if ( !$readonly &&
-             array_key_exists('keywords', $article) && 
-			 array_key_exists('title', $article) && 
-			 array_key_exists('status', $article) && 
-			 array_key_exists('article_id', $article) && 
-			 empty($article['keywords']) ) {
-			$article['keywords'] = $this->keywords($article['title'], $article['content'] );
-			$this->save([
-				'article_id' => $article['article_id'],
-				'keywords' => $article['keywords'],
-				'status' => $article['status']
-			]);
-		}
+		// // 提取关键字(废弃 )
+		// if ( !$readonly &&
+        //      array_key_exists('keywords', $article) && 
+		// 	 array_key_exists('title', $article) && 
+		// 	 array_key_exists('status', $article) && 
+		// 	 array_key_exists('article_id', $article) && 
+		// 	 empty($article['keywords']) ) {
+		// 	$article['keywords'] = $this->keywords($article['title'], $article['content'] );
+		// 	$this->save([
+		// 		'article_id' => $article['article_id'],
+		// 		'keywords' => $article['keywords'],
+		// 		'status' => $article['status']
+		// 	]);
+		// }
 
-		// 提取SEO关键字
-		if ( !$readonly && 
-            array_key_exists('seo_keywords', $article) && 
-			 array_key_exists('title', $article) && 
-			 array_key_exists('status', $article) && 
-			 array_key_exists('article_id', $article) && 
-			 empty($article['seo_keywords']) ) {
-			$article['seo_keywords'] = $this->keywords($article['title'], $article['content'] );
-			$this->save([
-				'article_id' => $article['article_id'],
-				'seo_keywords' => $article['seo_keywords'],
-				'status' => $article['status']
-			]);
-		}
+		// // 提取SEO关键字 (废弃 )
+		// if ( !$readonly && 
+        //     array_key_exists('seo_keywords', $article) && 
+		// 	 array_key_exists('title', $article) && 
+		// 	 array_key_exists('status', $article) && 
+		// 	 array_key_exists('article_id', $article) && 
+		// 	 empty($article['seo_keywords']) ) {
+		// 	$article['seo_keywords'] = $this->keywords($article['title'], $article['content'] );
+		// 	$this->save([
+		// 		'article_id' => $article['article_id'],
+		// 		'seo_keywords' => $article['seo_keywords'],
+		// 		'status' => $article['status']
+		// 	]);
+		// }
 
-		// 提取摘要
-		if ( array_key_exists('summary', $article) && 
-			 array_key_exists('content', $article) && 
-			 !empty( $article['content']) && 
-			 empty($article['summary']) ) {
-			 $article['summary'] = $this->summary($article['content']);
-		}
+		// // 提取摘要(废弃 )
+		// if ( array_key_exists('summary', $article) && 
+		// 	 array_key_exists('content', $article) && 
+		// 	 !empty( $article['content']) && 
+		// 	 empty($article['summary']) ) {
+		// 	 $article['summary'] = $this->summary($article['content']);
+		// }
 
-		// 提取SEO摘要
-		if ( array_key_exists('seo_summary', $article) && 
-			 array_key_exists('content', $article) && 
-			 !empty( $article['content']) && 
-			 empty($article['seo_summary']) ) {
-			 $article['seo_summary'] = $this->summary($article['content']);
-		}
+		// // 提取SEO摘要(废弃 )
+		// if ( array_key_exists('seo_summary', $article) && 
+		// 	 array_key_exists('content', $article) && 
+		// 	 !empty( $article['content']) && 
+		// 	 empty($article['seo_summary']) ) {
+		// 	 $article['seo_summary'] = $this->summary($article['content']);
+		// }
 
-        // 发布时间
-		if ( !empty($article['publish_time']) ) {
-			$time = strtotime($article['publish_time']);
-			$article['publish_datetime'] = date('Y-m-d H:i:s', $time);
-            $article['publish_time'] = null;
-            $article['publish_date'] = null;
-			if ( $time > 0 ) {
-				$article['publish_time'] = date('@ H时i分', $time);
-				$article['publish_date'] = date('m/d/Y', $time);
-			}
-		} else if ( array_key_exists('publish_time', $article))  {
-            $article['publish_datetime'] = null;
-            $article['publish_time'] = null;
-            $article['publish_date'] = null;
-        }
+        // // 发布时间(废弃 )
+		// if ( !empty($article['publish_time']) ) {
+		// 	$time = strtotime($article['publish_time']);
+		// 	$article['publish_datetime'] = date('Y-m-d H:i:s', $time);
+        //     $article['publish_time'] = null;
+        //     $article['publish_date'] = null;
+		// 	if ( $time > 0 ) {
+		// 		$article['publish_time'] = date('@ H时i分', $time);
+		// 		$article['publish_date'] = date('m/d/Y', $time);
+		// 	}
+		// } else if ( array_key_exists('publish_time', $article))  {
+        //     $article['publish_datetime'] = null;
+        //     $article['publish_time'] = null;
+        //     $article['publish_date'] = null;
+        // }
         
         // 发布系列
 		if ( array_key_exists('series', $article)  && is_array($article['series']) && count($article['series']) > 0) {
@@ -2013,7 +2052,7 @@ class Article extends Model {
 		}
 
         // 更新文件字段
-        $this->__fileFields( $article, ["cover", "thumbs", "images", "user_headimgurl", "special_logo"]);
+        $this->__fileFields( $article, ["cover", "thumbs", "images","videos","audios", "attachments", "user_headimgurl", "special_logo"]);
 		$article['home'] = $this->host;
 		return $article;
 	}
