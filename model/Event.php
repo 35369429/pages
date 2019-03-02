@@ -4,11 +4,11 @@
  * 活动数据模型
  *
  * 程序作者: XpmSE机器人
- * 最后修改: 2019-03-02 22:06:02
+ * 最后修改: 2019-03-02 22:26:59
  * 程序母版: /data/stor/private/templates/xpmsns/model/code/model/Name.php
  */
 namespace Xpmsns\Pages\Model;
-                                                    
+                                                     
 use \Xpmse\Excp;
 use \Xpmse\Model;
 use \Xpmse\Utils;
@@ -142,6 +142,8 @@ class Event extends Model {
 		$this->putColumn( 'publish_time', $this->type("timestamp", ["index"=>true, "null"=>true]));
 		// 浏览量
 		$this->putColumn( 'view_cnt', $this->type("bigInteger", ["length"=>1, "index"=>true, "null"=>true]));
+		// 报名人数
+		$this->putColumn( 'user_cnt', $this->type("bigInteger", ["length"=>1, "index"=>true, "null"=>true]));
 		// 点赞量
 		$this->putColumn( 'like_cnt', $this->type("bigInteger", ["length"=>1, "index"=>true, "null"=>true]));
 		// 同意量
@@ -299,6 +301,7 @@ class Event extends Model {
 	 *          	  $rs["app"],  // APP代码 
 	 *          	  $rs["publish_time"],  // 发布时间 
 	 *          	  $rs["view_cnt"],  // 浏览量 
+	 *          	  $rs["user_cnt"],  // 报名人数 
 	 *          	  $rs["like_cnt"],  // 点赞量 
 	 *          	  $rs["agree_cnt"],  // 同意量 
 	 *          	  $rs["dislike_cnt"],  // 讨厌量 
@@ -477,6 +480,7 @@ class Event extends Model {
 	 *          	  $rs["app"],  // APP代码 
 	 *          	  $rs["publish_time"],  // 发布时间 
 	 *          	  $rs["view_cnt"],  // 浏览量 
+	 *          	  $rs["user_cnt"],  // 报名人数 
 	 *          	  $rs["like_cnt"],  // 点赞量 
 	 *          	  $rs["agree_cnt"],  // 同意量 
 	 *          	  $rs["dislike_cnt"],  // 讨厌量 
@@ -1072,6 +1076,7 @@ class Event extends Model {
 	 *               	["app"],  // APP代码 
 	 *               	["publish_time"],  // 发布时间 
 	 *               	["view_cnt"],  // 浏览量 
+	 *               	["user_cnt"],  // 报名人数 
 	 *               	["like_cnt"],  // 点赞量 
 	 *               	["agree_cnt"],  // 同意量 
 	 *               	["dislike_cnt"],  // 讨厌量 
@@ -1330,6 +1335,7 @@ class Event extends Model {
 			"app",  // APP代码
 			"publish_time",  // 发布时间
 			"view_cnt",  // 浏览量
+			"user_cnt",  // 报名人数
 			"like_cnt",  // 点赞量
 			"agree_cnt",  // 同意量
 			"dislike_cnt",  // 讨厌量

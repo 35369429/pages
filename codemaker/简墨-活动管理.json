@@ -502,6 +502,20 @@
                     "private": ""
                 },
                 {
+                    "name": "user_cnt",
+                    "cname": "报名人数",
+                    "type": "bigInteger",
+                    "length": "1",
+                    "default": "",
+                    "unique": "",
+                    "index": "1",
+                    "nullable": "",
+                    "json": "",
+                    "auto": "",
+                    "file": "",
+                    "private": ""
+                },
+                {
                     "name": "like_cnt",
                     "cname": "点赞量",
                     "type": "bigInteger",

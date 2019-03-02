@@ -4,11 +4,11 @@
  * 活动数据接口 
  *
  * 程序作者: XpmSE机器人
- * 最后修改: 2019-03-02 22:06:00
+ * 最后修改: 2019-03-02 22:26:57
  * 程序母版: /data/stor/private/templates/xpmsns/model/code/api/Name.php
  */
 namespace Xpmsns\Pages\Api;
-                                                    
+                                                     
 
 use \Xpmse\Loader\App;
 use \Xpmse\Excp;
@@ -78,6 +78,7 @@ class Event extends Api {
 	 *               	["app"],  // APP代码 
 	 *               	["publish_time"],  // 发布时间 
 	 *               	["view_cnt"],  // 浏览量 
+	 *               	["user_cnt"],  // 报名人数 
 	 *               	["like_cnt"],  // 点赞量 
 	 *               	["agree_cnt"],  // 同意量 
 	 *               	["dislike_cnt"],  // 讨厌量 
@@ -240,6 +241,7 @@ class Event extends Api {
 	 *               	["app"],  // APP代码 
 	 *               	["publish_time"],  // 发布时间 
 	 *               	["view_cnt"],  // 浏览量 
+	 *               	["user_cnt"],  // 报名人数 
 	 *               	["like_cnt"],  // 点赞量 
 	 *               	["agree_cnt"],  // 同意量 
 	 *               	["dislike_cnt"],  // 讨厌量 
