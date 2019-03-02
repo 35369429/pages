@@ -1,0 +1,585 @@
+{
+    "name": "简墨-活动报名",
+    "data": {
+        "general": {
+            "app": "pages",
+            "org": "xpmsns",
+            "model": "_create",
+            "name": "userevent",
+            "cname": "报名"
+        },
+        "struct": {
+            "table": "userevent",
+            "fields": [
+                {
+                    "name": "userevent_id",
+                    "cname": "报名ID",
+                    "type": "string",
+                    "length": "128",
+                    "default": "",
+                    "unique": "1",
+                    "index": "",
+                    "nullable": "",
+                    "json": "",
+                    "auto": "1",
+                    "file": "",
+                    "private": ""
+                },
+                {
+                    "name": "user_id",
+                    "cname": "用户ID",
+                    "type": "string",
+                    "length": "128",
+                    "default": "",
+                    "unique": "",
+                    "index": "1",
+                    "nullable": "",
+                    "json": "",
+                    "auto": "",
+                    "file": "",
+                    "private": ""
+                },
+                {
+                    "name": "event_id",
+                    "cname": "活动ID",
+                    "type": "string",
+                    "length": "128",
+                    "default": "",
+                    "unique": "",
+                    "index": "1",
+                    "nullable": "",
+                    "json": "",
+                    "auto": "",
+                    "file": "",
+                    "private": ""
+                },
+                {
+                    "name": "event_user_id",
+                    "cname": "唯一ID",
+                    "type": "string",
+                    "length": "128",
+                    "default": "",
+                    "unique": "1",
+                    "index": "",
+                    "nullable": "",
+                    "json": "",
+                    "auto": "",
+                    "file": "",
+                    "private": ""
+                },
+                {
+                    "name": "signin_at",
+                    "cname": "报名时间",
+                    "type": "timestamp",
+                    "length": "",
+                    "default": "",
+                    "unique": "",
+                    "index": "1",
+                    "nullable": "",
+                    "json": "",
+                    "auto": "",
+                    "file": "",
+                    "private": ""
+                },
+                {
+                    "name": "checkin_at",
+                    "cname": "签到时间",
+                    "type": "timestamp",
+                    "length": "",
+                    "default": "",
+                    "unique": "",
+                    "index": "1",
+                    "nullable": "",
+                    "json": "",
+                    "auto": "",
+                    "file": "",
+                    "private": ""
+                },
+                {
+                    "name": "status",
+                    "cname": "状态",
+                    "type": "string",
+                    "length": "32",
+                    "default": "",
+                    "unique": "",
+                    "index": "1",
+                    "nullable": "",
+                    "json": "",
+                    "auto": "",
+                    "file": "",
+                    "private": ""
+                }
+            ],
+            "methods": [
+                {
+                    "name": "",
+                    "cname": "",
+                    "source": ""
+                }
+            ]
+        },
+        "links": {
+            "fields": [
+                {
+                    "cname": "user",
+                    "type": "leftJoin",
+                    "model": "\\Xpmsns\\User\\Model\\User",
+                    "table": "user",
+                    "prefix": "xpmsns_user_",
+                    "field": "user_id",
+                    "on": "=",
+                    "name": "user_id",
+                    "alias": "user"
+                },
+                {
+                    "cname": "event",
+                    "type": "leftJoin",
+                    "model": "\\Xpmsns\\Pages\\Model\\Event",
+                    "table": "event",
+                    "prefix": "xpmsns_pages_",
+                    "field": "event_id",
+                    "on": "=",
+                    "name": "event_id",
+                    "alias": "event"
+                }
+            ]
+        },
+        "detail": {
+            "index": "name=userevent_id",
+            "title": "name=userevent_id",
+            "jscode": [
+                ""
+            ],
+            "undefined": [
+                "",
+                "",
+                ""
+            ],
+            "columns": [
+                {
+                    "cname": "用户ID",
+                    "name": "user_id",
+                    "type": "select-remote",
+                    "placeholder": "",
+                    "helper": "",
+                    "exp": "",
+                    "readonly": "",
+                    "attr": {
+                        "table": "user",
+                        "prefix": "xpmsns_user_",
+                        "model": "\\Xpmsns\\User\\Model\\User",
+                        "fields": [
+                            "user_id",
+                            "name",
+                            "nickname",
+                            "mobile"
+                        ],
+                        "option": "user_id",
+                        "selectedInline": "1",
+                        "style": "{{name?name:nickname}}(ID:{{user_id}} 手机:{{mobile}})",
+                        "default": "",
+                        "multiple": "",
+                        "api": "",
+                        "cancel": "",
+                        "cancelable": ""
+                    },
+                    "validator": [
+                        {
+                            "method": "",
+                            "value": "",
+                            "message": ""
+                        }
+                    ]
+                },
+                {
+                    "cname": "活动ID",
+                    "name": "event_id",
+                    "type": "select-remote",
+                    "placeholder": "",
+                    "helper": "",
+                    "exp": "",
+                    "readonly": "",
+                    "attr": {
+                        "table": "event",
+                        "prefix": "xpmsns_pages_",
+                        "model": "\\Xpmsns\\Pages\\Model\\Event",
+                        "fields": [
+                            "event_id",
+                            "slug",
+                            "title"
+                        ],
+                        "option": "event_id",
+                        "selectedInline": "1",
+                        "style": "{{title}} ( ID:{{event_id}} 别名: {{slug}})",
+                        "default": "",
+                        "multiple": "",
+                        "api": "",
+                        "cancel": "",
+                        "cancelable": ""
+                    },
+                    "validator": [
+                        {
+                            "method": "",
+                            "value": "",
+                            "message": ""
+                        }
+                    ]
+                },
+                {
+                    "cname": "报名时间",
+                    "name": "signin_at",
+                    "type": "datetime-input",
+                    "placeholder": "",
+                    "helper": "",
+                    "exp": "",
+                    "readonly": "",
+                    "attr": {
+                        "default": ""
+                    },
+                    "validator": [
+                        {
+                            "method": "",
+                            "value": "",
+                            "message": ""
+                        }
+                    ]
+                },
+                {
+                    "cname": "签到时间",
+                    "name": "checkin_at",
+                    "type": "datetime-input",
+                    "placeholder": "",
+                    "helper": "",
+                    "exp": "",
+                    "readonly": "",
+                    "attr": {
+                        "default": ""
+                    },
+                    "validator": [
+                        {
+                            "method": "",
+                            "value": "",
+                            "message": ""
+                        }
+                    ]
+                },
+                {
+                    "cname": "状态",
+                    "name": "status",
+                    "type": "radio",
+                    "placeholder": "",
+                    "helper": "",
+                    "exp": "",
+                    "readonly": "",
+                    "attr": {
+                        "option": "已报名=signin,已付款=paid,已签到=checkin,已取消=cancel",
+                        "default": "signin"
+                    },
+                    "validator": [
+                        {
+                            "method": "",
+                            "value": "",
+                            "message": ""
+                        }
+                    ]
+                }
+            ]
+        },
+        "list": {
+            "keyword_param": "keywords",
+            "keyword": [
+                "name=userevent_id",
+                "name=user_id",
+                "name=event_id",
+                "name=event_user_id",
+                "model=%5CXpmsns%5CUser%5CModel%5CUser&name=user_name&table=user&prefix=xpmsns_user_&alias=user&type=leftJoin",
+                "model=%5CXpmsns%5CUser%5CModel%5CUser&name=mobile_full&table=user&prefix=xpmsns_user_&alias=user&type=leftJoin",
+                "model=%5CXpmsns%5CUser%5CModel%5CUser&name=name&table=user&prefix=xpmsns_user_&alias=user&type=leftJoin",
+                "model=%5CXpmsns%5CUser%5CModel%5CUser&name=nickname&table=user&prefix=xpmsns_user_&alias=user&type=leftJoin",
+                "model=%5CXpmsns%5CPages%5CModel%5CEvent&name=slug&table=event&prefix=xpmsns_pages_&alias=event&type=leftJoin",
+                "model=%5CXpmsns%5CPages%5CModel%5CEvent&name=title&table=event&prefix=xpmsns_pages_&alias=event&type=leftJoin"
+            ],
+            "jscode": [
+                ""
+            ],
+            "conditions": [
+                {
+                    "or": "0",
+                    "field": "name=userevent_id",
+                    "type": "=",
+                    "cname": "",
+                    "param": "",
+                    "default": ""
+                },
+                {
+                    "or": "0",
+                    "field": "name=user_id",
+                    "type": "=",
+                    "cname": "",
+                    "param": "",
+                    "default": ""
+                },
+                {
+                    "or": "0",
+                    "field": "name=event_id",
+                    "type": "=",
+                    "cname": "",
+                    "param": "",
+                    "default": ""
+                },
+                {
+                    "or": "0",
+                    "field": "model=%5CXpmsns%5CUser%5CModel%5CUser&name=mobile_full&table=user&prefix=xpmsns_user_&alias=user&type=leftJoin",
+                    "type": "=",
+                    "cname": "",
+                    "param": "user_mobile",
+                    "default": ""
+                },
+                {
+                    "or": "0",
+                    "field": "model=%5CXpmsns%5CUser%5CModel%5CUser&name=name&table=user&prefix=xpmsns_user_&alias=user&type=leftJoin",
+                    "type": "like",
+                    "cname": "",
+                    "param": "",
+                    "default": ""
+                },
+                {
+                    "or": "0",
+                    "field": "model=%5CXpmsns%5CUser%5CModel%5CUser&name=nickname&table=user&prefix=xpmsns_user_&alias=user&type=leftJoin",
+                    "type": "like",
+                    "cname": "",
+                    "param": "",
+                    "default": ""
+                },
+                {
+                    "or": "0",
+                    "field": "model=%5CXpmsns%5CPages%5CModel%5CEvent&name=title&table=event&prefix=xpmsns_pages_&alias=event&type=leftJoin",
+                    "type": "like",
+                    "cname": "",
+                    "param": "",
+                    "default": ""
+                },
+                {
+                    "or": "0",
+                    "field": "model=%5CXpmsns%5CPages%5CModel%5CEvent&name=begin&table=event&prefix=xpmsns_pages_&alias=event&type=leftJoin",
+                    "type": "=",
+                    "cname": "",
+                    "param": "",
+                    "default": ""
+                },
+                {
+                    "or": "0",
+                    "field": "model=%5CXpmsns%5CPages%5CModel%5CEvent&name=end&table=event&prefix=xpmsns_pages_&alias=event&type=leftJoin",
+                    "type": "=",
+                    "cname": "",
+                    "param": "",
+                    "default": ""
+                },
+                {
+                    "or": "0",
+                    "field": "name=signin_at",
+                    "type": ">",
+                    "cname": "",
+                    "param": "",
+                    "default": ""
+                },
+                {
+                    "or": "0",
+                    "field": "name=checkin_at",
+                    "type": ">",
+                    "cname": "",
+                    "param": "",
+                    "default": ""
+                },
+                {
+                    "or": "0",
+                    "field": "name=status",
+                    "type": "=",
+                    "cname": "",
+                    "param": "",
+                    "default": ""
+                }
+            ],
+            "orderby": [
+                {
+                    "field": "name=checkin_at",
+                    "type": "desc",
+                    "cname": "",
+                    "param": ""
+                },
+                {
+                    "field": "name=signin_at",
+                    "type": "desc",
+                    "cname": "",
+                    "param": ""
+                },
+                {
+                    "field": "model=%5CXpmsns%5CPages%5CModel%5CEvent&name=publish_time&table=event&prefix=xpmsns_pages_&alias=event&type=leftJoin",
+                    "type": "desc",
+                    "cname": "",
+                    "param": ""
+                },
+                {
+                    "field": "model=%5CXpmsns%5CPages%5CModel%5CEvent&name=begin&table=event&prefix=xpmsns_pages_&alias=event&type=leftJoin",
+                    "type": "desc",
+                    "cname": "",
+                    "param": ""
+                },
+                {
+                    "field": "model=%5CXpmsns%5CPages%5CModel%5CEvent&name=end&table=event&prefix=xpmsns_pages_&alias=event&type=leftJoin",
+                    "type": "desc",
+                    "cname": "",
+                    "param": ""
+                }
+            ],
+            "statusby": [
+                {
+                    "name": "name=status",
+                    "cname": "",
+                    "status": "已报名=signin|primary,已付款=paid|success,已签到=checkin|danger,已取消=cancel|muted"
+                }
+            ],
+            "columns": [
+                {
+                    "fields": [
+                        "name=event_id",
+                        "model=%5CXpmsns%5CPages%5CModel%5CEvent&name=slug&table=event&prefix=xpmsns_pages_&alias=event&type=leftJoin",
+                        "model=%5CXpmsns%5CPages%5CModel%5CEvent&name=title&table=event&prefix=xpmsns_pages_&alias=event&type=leftJoin"
+                    ],
+                    "cname": "活动",
+                    "filter": "{{event_title}} ( ID: {{evnet_id}} 别名: {{event_slug}})",
+                    "default": ""
+                },
+                {
+                    "fields": [
+                        "name=user_id",
+                        "model=%5CXpmsns%5CUser%5CModel%5CUser&name=name&table=user&prefix=xpmsns_user_&alias=user&type=leftJoin",
+                        "model=%5CXpmsns%5CUser%5CModel%5CUser&name=nickname&table=user&prefix=xpmsns_user_&alias=user&type=leftJoin",
+                        "model=%5CXpmsns%5CUser%5CModel%5CUser&name=mobile&table=user&prefix=xpmsns_user_&alias=user&type=leftJoin"
+                    ],
+                    "cname": "用户",
+                    "filter": "{{user_name?user_name:user_nickname}}(ID:{{user_user_id}} 手机:{{user_mobile}})",
+                    "default": ""
+                },
+                {
+                    "fields": [
+                        "name=signin_at"
+                    ],
+                    "cname": "",
+                    "filter": "",
+                    "default": ""
+                },
+                {
+                    "fields": [
+                        "name=checkin_at"
+                    ],
+                    "cname": "",
+                    "filter": "",
+                    "default": ""
+                },
+                {
+                    "fields": [
+                        "name=status"
+                    ],
+                    "cname": "",
+                    "filter": "",
+                    "default": ""
+                }
+            ]
+        },
+        "api": {
+            "getfields": "name=userevent_id",
+            "createfields": "name=userevent_id",
+            "searchfields": "name=userevent_id",
+            "uploadparam": "",
+            "methods": [
+                {
+                    "name": "",
+                    "cname": "",
+                    "source": ""
+                }
+            ],
+            "getstatus": "",
+            "createstatus": "",
+            "updatestatus": "",
+            "deletestatus": "",
+            "searchstatus": "",
+            "uploadstatus": "",
+            "getkey": [
+                "name=userevent_id"
+            ],
+            "updatekey": [
+                "name=userevent_id"
+            ],
+            "deletekey": [
+                "name=userevent_id"
+            ],
+            "getauth": [
+                "",
+                "",
+                "",
+                "",
+                "",
+                ""
+            ],
+            "createauth": [
+                "",
+                "",
+                "",
+                "",
+                "",
+                ""
+            ],
+            "updateauth": [
+                "",
+                "",
+                "",
+                "",
+                "",
+                ""
+            ],
+            "deleteauth": [
+                "",
+                "",
+                "",
+                "",
+                "",
+                ""
+            ],
+            "searchauth": [
+                "",
+                "",
+                "",
+                "",
+                "",
+                ""
+            ],
+            "uploadauth": [
+                "",
+                "",
+                "",
+                "",
+                "",
+                ""
+            ]
+        }
+    },
+    "process": {
+        "general": "saved",
+        "struct": "saved",
+        "links": "saved",
+        "detail": "saved",
+        "list": "saved",
+        "api": "saved"
+    },
+    "next": null,
+    "prev": null,
+    "templete": {
+        "org": "xpmsns",
+        "name": "model",
+        "slug": "xpmsns_model",
+        "cname": "XpmSE 应用数据模型母版",
+        "version": "1.0.0",
+        "summary": "生成 XpmSE 应用数据模型。涵盖资源模型CURD、API CURD和标准资源管理界面。"
+    }
+}
