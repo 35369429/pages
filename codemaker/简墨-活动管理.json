@@ -27,7 +27,7 @@
                 },
                 {
                     "name": "slug",
-                    "cname": "活动别名",
+                    "cname": "别名",
                     "type": "string",
                     "length": "128",
                     "default": "",
@@ -40,8 +40,8 @@
                     "private": ""
                 },
                 {
-                    "name": "name",
-                    "cname": "活动主题",
+                    "name": "title",
+                    "cname": "主题",
                     "type": "string",
                     "length": "200",
                     "default": "",
@@ -84,13 +84,13 @@
                 {
                     "name": "type",
                     "cname": "类型",
-                    "type": "text",
-                    "length": "",
+                    "type": "string",
+                    "length": "32",
                     "default": "",
                     "unique": "",
-                    "index": "",
+                    "index": "1",
                     "nullable": "",
-                    "json": "1",
+                    "json": "",
                     "auto": "",
                     "file": "",
                     "private": ""
@@ -111,7 +111,7 @@
                 },
                 {
                     "name": "summary",
-                    "cname": "活动简介",
+                    "cname": "简介",
                     "type": "string",
                     "length": "200",
                     "default": "",
@@ -139,7 +139,7 @@
                 },
                 {
                     "name": "images",
-                    "cname": "活动海报",
+                    "cname": "海报",
                     "type": "text",
                     "length": "",
                     "default": "",
@@ -170,6 +170,34 @@
                     "cname": "结束时间",
                     "type": "timestamp",
                     "length": "",
+                    "default": "",
+                    "unique": "",
+                    "index": "1",
+                    "nullable": "",
+                    "json": "",
+                    "auto": "",
+                    "file": "",
+                    "private": ""
+                },
+                {
+                    "name": "process_setting",
+                    "cname": "流程设计",
+                    "type": "text",
+                    "length": "",
+                    "default": "",
+                    "unique": "",
+                    "index": "",
+                    "nullable": "",
+                    "json": "1",
+                    "auto": "",
+                    "file": "",
+                    "private": ""
+                },
+                {
+                    "name": "process",
+                    "cname": "当前进程",
+                    "type": "string",
+                    "length": "500",
                     "default": "",
                     "unique": "",
                     "index": "1",
@@ -264,6 +292,34 @@
                     "private": ""
                 },
                 {
+                    "name": "bonus",
+                    "cname": "奖金",
+                    "type": "integer",
+                    "length": "",
+                    "default": "0",
+                    "unique": "",
+                    "index": "1",
+                    "nullable": "",
+                    "json": "",
+                    "auto": "",
+                    "file": "",
+                    "private": ""
+                },
+                {
+                    "name": "prize",
+                    "cname": "奖项",
+                    "type": "text",
+                    "length": "",
+                    "default": "",
+                    "unique": "",
+                    "index": "",
+                    "nullable": "",
+                    "json": "1",
+                    "auto": "",
+                    "file": "",
+                    "private": ""
+                },
+                {
                     "name": "hosts",
                     "cname": "主办方",
                     "type": "text",
@@ -348,6 +404,62 @@
                     "private": ""
                 },
                 {
+                    "name": "desktop",
+                    "cname": "桌面代码",
+                    "type": "longText",
+                    "length": "",
+                    "default": "",
+                    "unique": "",
+                    "index": "",
+                    "nullable": "",
+                    "json": "",
+                    "auto": "",
+                    "file": "",
+                    "private": ""
+                },
+                {
+                    "name": "mobile",
+                    "cname": "手机代码",
+                    "type": "longText",
+                    "length": "",
+                    "default": "",
+                    "unique": "",
+                    "index": "",
+                    "nullable": "",
+                    "json": "",
+                    "auto": "",
+                    "file": "",
+                    "private": ""
+                },
+                {
+                    "name": "wxapp",
+                    "cname": "小程序代码",
+                    "type": "longText",
+                    "length": "",
+                    "default": "",
+                    "unique": "",
+                    "index": "",
+                    "nullable": "",
+                    "json": "1",
+                    "auto": "",
+                    "file": "",
+                    "private": ""
+                },
+                {
+                    "name": "app",
+                    "cname": "APP代码",
+                    "type": "longText",
+                    "length": "",
+                    "default": "",
+                    "unique": "",
+                    "index": "",
+                    "nullable": "",
+                    "json": "1",
+                    "auto": "",
+                    "file": "",
+                    "private": ""
+                },
+                {
                     "name": "publish_time",
                     "cname": "发布时间",
                     "type": "timestamp",
@@ -365,7 +477,7 @@
                     "name": "view_cnt",
                     "cname": "浏览量",
                     "type": "bigInteger",
-                    "length": "20",
+                    "length": "1",
                     "default": "",
                     "unique": "",
                     "index": "1",
@@ -379,7 +491,21 @@
                     "name": "like_cnt",
                     "cname": "点赞量",
                     "type": "bigInteger",
-                    "length": "20",
+                    "length": "1",
+                    "default": "",
+                    "unique": "",
+                    "index": "1",
+                    "nullable": "",
+                    "json": "",
+                    "auto": "",
+                    "file": "",
+                    "private": ""
+                },
+                {
+                    "name": "agree_cnt",
+                    "cname": "同意量",
+                    "type": "bigInteger",
+                    "length": "1",
                     "default": "",
                     "unique": "",
                     "index": "1",
@@ -393,7 +519,7 @@
                     "name": "dislike_cnt",
                     "cname": "讨厌量",
                     "type": "bigInteger",
-                    "length": "20",
+                    "length": "1",
                     "default": "",
                     "unique": "",
                     "index": "1",
@@ -407,7 +533,7 @@
                     "name": "comment_cnt",
                     "cname": "评论量",
                     "type": "bigInteger",
-                    "length": "20",
+                    "length": "1",
                     "default": "",
                     "unique": "",
                     "index": "1",
@@ -419,7 +545,7 @@
                 },
                 {
                     "name": "status",
-                    "cname": "活动状态",
+                    "cname": "状态",
                     "type": "string",
                     "length": "200",
                     "default": "open",
@@ -451,16 +577,36 @@
                     "field": "category_id",
                     "on": "in",
                     "name": "categories",
-                    "alias": "c"
+                    "alias": "category"
                 }
             ]
         },
         "detail": {
             "index": "name=event_id",
-            "title": "name=name",
+            "title": "name=title",
             "columns": [
                 {
-                    "cname": "活动别名",
+                    "cname": "类型",
+                    "name": "type",
+                    "type": "radio",
+                    "placeholder": "请选择活动类型",
+                    "helper": "",
+                    "exp": "",
+                    "readonly": "",
+                    "attr": {
+                        "option": "线下=offline,线上=online",
+                        "default": "offline"
+                    },
+                    "validator": [
+                        {
+                            "method": "",
+                            "value": "",
+                            "message": ""
+                        }
+                    ]
+                },
+                {
+                    "cname": "别名",
                     "name": "slug",
                     "type": "input",
                     "placeholder": "请填写活动别名",
@@ -479,8 +625,8 @@
                     ]
                 },
                 {
-                    "cname": "活动主题",
-                    "name": "name",
+                    "cname": "主题",
+                    "name": "title",
                     "type": "input",
                     "placeholder": "请填写活动主题",
                     "helper": "",
@@ -533,6 +679,7 @@
                             "name"
                         ],
                         "option": "category_id",
+                        "selectedInline": "",
                         "style": "{{name}} ({{category_id}})",
                         "default": "",
                         "multiple": "1",
@@ -577,7 +724,7 @@
                     "readonly": "",
                     "attr": {
                         "default": "",
-                        "rows": "",
+                        "rows": "4",
                         "autoheight": ""
                     },
                     "validator": [
@@ -659,6 +806,44 @@
                     "type": "datetime-input",
                     "placeholder": "请选择日期时间",
                     "helper": "",
+                    "exp": "",
+                    "readonly": "",
+                    "attr": {
+                        "default": ""
+                    },
+                    "validator": [
+                        {
+                            "method": "",
+                            "value": "",
+                            "message": ""
+                        }
+                    ]
+                },
+                {
+                    "cname": "流程设计",
+                    "name": "process_setting",
+                    "type": "inputs",
+                    "placeholder": "请填活动流程",
+                    "helper": "",
+                    "exp": "",
+                    "readonly": "",
+                    "attr": {
+                        "default": ""
+                    },
+                    "validator": [
+                        {
+                            "method": "",
+                            "value": "",
+                            "message": ""
+                        }
+                    ]
+                },
+                {
+                    "cname": "当前进程",
+                    "name": "process",
+                    "type": "input",
+                    "placeholder": "请输入当前进程",
+                    "helper": "与流程设计数值保持一致",
                     "exp": "",
                     "readonly": "",
                     "attr": {
@@ -787,6 +972,47 @@
                     ]
                 },
                 {
+                    "cname": "奖金",
+                    "name": "bonus",
+                    "type": "input",
+                    "placeholder": "请填写活动奖金",
+                    "helper": "",
+                    "exp": "",
+                    "readonly": "",
+                    "attr": {
+                        "default": ""
+                    },
+                    "validator": [
+                        {
+                            "method": "",
+                            "value": "",
+                            "message": ""
+                        }
+                    ]
+                },
+                {
+                    "cname": "奖项",
+                    "name": "prize",
+                    "type": "json-input",
+                    "placeholder": "请填写活动奖项",
+                    "helper": "奖项名: 奖项内容",
+                    "exp": "",
+                    "readonly": "",
+                    "attr": {
+                        "default": "",
+                        "placeholders": "",
+                        "format": "",
+                        "free": ""
+                    },
+                    "validator": [
+                        {
+                            "method": "",
+                            "value": "",
+                            "message": ""
+                        }
+                    ]
+                },
+                {
                     "cname": "主办方",
                     "name": "hosts",
                     "type": "image-groups",
@@ -800,7 +1026,10 @@
                         "allow": "",
                         "cropable": "yes",
                         "maxsize": "",
-                        "api": ""
+                        "api": "",
+                        "title_cname": "",
+                        "link_cname": "",
+                        "summary_cname": ""
                     },
                     "validator": [
                         {
@@ -822,9 +1051,12 @@
                         "width": "300",
                         "height": "300",
                         "allow": "",
-                        "cropable": "",
+                        "cropable": "yes",
                         "maxsize": "",
-                        "api": ""
+                        "api": "",
+                        "title_cname": "",
+                        "link_cname": "",
+                        "summary_cname": ""
                     },
                     "validator": [
                         {
@@ -846,9 +1078,12 @@
                         "width": "300",
                         "height": "300",
                         "allow": "",
-                        "cropable": "",
+                        "cropable": "yes",
                         "maxsize": "",
-                        "api": ""
+                        "api": "",
+                        "title_cname": "",
+                        "link_cname": "",
+                        "summary_cname": ""
                     },
                     "validator": [
                         {
@@ -870,9 +1105,12 @@
                         "width": "300",
                         "height": "300",
                         "allow": "",
-                        "cropable": "",
+                        "cropable": "yes",
                         "maxsize": "",
-                        "api": ""
+                        "api": "",
+                        "title_cname": "",
+                        "link_cname": "",
+                        "summary_cname": ""
                     },
                     "validator": [
                         {
@@ -894,9 +1132,12 @@
                         "width": "300",
                         "height": "300",
                         "allow": "",
-                        "cropable": "",
+                        "cropable": "yes",
                         "maxsize": "",
-                        "api": ""
+                        "api": "",
+                        "title_cname": "",
+                        "link_cname": "",
+                        "summary_cname": ""
                     },
                     "validator": [
                         {
@@ -951,8 +1192,8 @@
                 {
                     "cname": "活动状态",
                     "name": "status",
-                    "type": "select",
-                    "placeholder": "请填写活动介绍",
+                    "type": "radio",
+                    "placeholder": "请选择活动状态",
                     "helper": "",
                     "exp": "",
                     "readonly": "",
@@ -971,6 +1212,36 @@
             ],
             "jscode": [
                 ""
+            ],
+            "undefined": [
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                ""
             ]
         },
         "list": {
@@ -978,7 +1249,6 @@
             "keyword": [
                 "name=event_id",
                 "name=slug",
-                "name=name",
                 "name=prov",
                 "name=city",
                 "name=town"
@@ -1074,6 +1344,14 @@
                     "cname": "",
                     "param": "",
                     "default": ""
+                },
+                {
+                    "or": "0",
+                    "field": "name=type",
+                    "type": "=",
+                    "cname": "",
+                    "param": "",
+                    "default": ""
                 }
             ],
             "orderby": [
@@ -1088,6 +1366,24 @@
                     "type": "desc",
                     "cname": "",
                     "param": ""
+                },
+                {
+                    "field": "name=publish_time",
+                    "type": "desc",
+                    "cname": "",
+                    "param": ""
+                },
+                {
+                    "field": "name=begin",
+                    "type": "desc",
+                    "cname": "",
+                    "param": ""
+                },
+                {
+                    "field": "name=end",
+                    "type": "desc",
+                    "cname": "",
+                    "param": ""
                 }
             ],
             "statusby": [
@@ -1095,6 +1391,11 @@
                     "name": "name=status",
                     "cname": "活动状态",
                     "status": "草稿=draft|danger,报名中=open|success,报名截止=close|default,活动关闭=off|default"
+                },
+                {
+                    "name": "name=type",
+                    "cname": "活动类型",
+                    "status": "线下=offline|primary,线上=online|success"
                 }
             ],
             "columns": [
@@ -1116,7 +1417,7 @@
                 },
                 {
                     "fields": [
-                        "name=name"
+                        "name=title"
                     ],
                     "cname": "",
                     "filter": "",
@@ -1124,7 +1425,7 @@
                 },
                 {
                     "fields": [
-                        "model=%5CXpmsns%5CPages%5CModel%5CCategory&name=name&table=category&prefix=xpmsns_pages_&alias=c&type=inWhere"
+                        "model=%5CXpmsns%5CPages%5CModel%5CCategory&name=name&table=category&prefix=xpmsns_pages_&alias=category&type=inWhere"
                     ],
                     "cname": "栏目",
                     "filter": "",
@@ -1172,6 +1473,14 @@
                 },
                 {
                     "fields": [
+                        "name=type"
+                    ],
+                    "cname": "",
+                    "filter": "",
+                    "default": ""
+                },
+                {
+                    "fields": [
                         "name=status"
                     ],
                     "cname": "",
@@ -1182,12 +1491,12 @@
         },
         "api": {
             "getstatus": "1",
-            "createstatus": "1",
-            "updatestatus": "1",
-            "deletestatus": "1",
             "searchstatus": "1",
             "uploadparam": "",
-            "uploadstatus": "0",
+            "createstatus": "",
+            "updatestatus": "",
+            "deletestatus": "",
+            "uploadstatus": "",
             "getkey": [
                 "name=event_id",
                 "name=slug"
@@ -1195,7 +1504,7 @@
             "getfields": [
                 "name=event_id",
                 "name=slug",
-                "name=name",
+                "name=title",
                 "name=link",
                 "name=categories",
                 "name=type",
@@ -1205,12 +1514,16 @@
                 "name=images",
                 "name=begin",
                 "name=end",
+                "name=process_setting",
+                "name=process",
                 "name=area",
                 "name=prov",
                 "name=city",
                 "name=town",
                 "name=location",
                 "name=price",
+                "name=bonus",
+                "name=prize",
                 "name=hosts",
                 "name=organizers",
                 "name=sponsors",
@@ -1220,19 +1533,16 @@
                 "name=publish_time",
                 "name=view_cnt",
                 "name=like_cnt",
+                "name=agree_cnt",
                 "name=dislike_cnt",
                 "name=comment_cnt",
                 "name=status",
                 "name=created_at",
-                "name=updated_at",
-                "model=%5CXpmsns%5CPages%5CModel%5CCategory&name=category_id&table=category&prefix=xpmsns_pages_&alias=c&type=inWhere",
-                "model=%5CXpmsns%5CPages%5CModel%5CCategory&name=name&table=category&prefix=xpmsns_pages_&alias=c&type=inWhere",
-                "model=%5CXpmsns%5CPages%5CModel%5CCategory&name=param&table=category&prefix=xpmsns_pages_&alias=c&type=inWhere"
+                "name=updated_at"
             ],
             "createfields": [
                 "name=event_id",
-                "name=slug",
-                "name=name"
+                "name=slug"
             ],
             "updatekey": [
                 "name=event_id",
@@ -1245,7 +1555,7 @@
             "searchfields": [
                 "name=event_id",
                 "name=slug",
-                "name=name",
+                "name=title",
                 "name=link",
                 "name=categories",
                 "name=type",
@@ -1255,12 +1565,16 @@
                 "name=images",
                 "name=begin",
                 "name=end",
+                "name=process_setting",
+                "name=process",
                 "name=area",
                 "name=prov",
                 "name=city",
                 "name=town",
                 "name=location",
                 "name=price",
+                "name=bonus",
+                "name=prize",
                 "name=hosts",
                 "name=organizers",
                 "name=sponsors",
@@ -1272,42 +1586,56 @@
                 "name=dislike_cnt",
                 "name=comment_cnt",
                 "name=created_at",
-                "name=updated_at",
-                "model=%5CXpmsns%5CPages%5CModel%5CCategory&name=category_id&table=category&prefix=xpmsns_pages_&alias=c&type=inWhere",
-                "model=%5CXpmsns%5CPages%5CModel%5CCategory&name=slug&table=category&prefix=xpmsns_pages_&alias=c&type=inWhere",
-                "model=%5CXpmsns%5CPages%5CModel%5CCategory&name=name&table=category&prefix=xpmsns_pages_&alias=c&type=inWhere",
-                "model=%5CXpmsns%5CPages%5CModel%5CCategory&name=param&table=category&prefix=xpmsns_pages_&alias=c&type=inWhere"
+                "name=updated_at"
             ],
-            "getauth": {
-                "sign": "",
-                "secret": "",
-                "image": ""
-            },
-            "createauth": {
-                "sign": "1",
-                "secret": "",
-                "image": ""
-            },
-            "updateauth": {
-                "sign": "1",
-                "secret": "",
-                "image": ""
-            },
-            "deleteauth": {
-                "sign": "1",
-                "secret": "",
-                "image": ""
-            },
-            "searchauth": {
-                "sign": "",
-                "secret": "",
-                "image": ""
-            },
-            "uploadauth": {
-                "sign": "",
-                "secret": "1",
-                "image": ""
-            },
+            "getauth": [
+                "",
+                "",
+                "",
+                "",
+                "",
+                ""
+            ],
+            "createauth": [
+                "",
+                "",
+                "",
+                "",
+                "",
+                ""
+            ],
+            "updateauth": [
+                "",
+                "",
+                "",
+                "",
+                "",
+                ""
+            ],
+            "deleteauth": [
+                "",
+                "",
+                "",
+                "",
+                "",
+                ""
+            ],
+            "searchauth": [
+                "",
+                "",
+                "",
+                "",
+                "",
+                ""
+            ],
+            "uploadauth": [
+                "",
+                "",
+                "",
+                "",
+                "",
+                ""
+            ],
             "methods": [
                 {
                     "name": "",
