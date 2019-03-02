@@ -4,11 +4,11 @@
  * 活动数据接口 
  *
  * 程序作者: XpmSE机器人
- * 最后修改: 2019-03-02 21:43:35
+ * 最后修改: 2019-03-02 22:06:00
  * 程序母版: /data/stor/private/templates/xpmsns/model/code/api/Name.php
  */
 namespace Xpmsns\Pages\Api;
-                                                   
+                                                    
 
 use \Xpmse\Loader\App;
 use \Xpmse\Excp;
@@ -55,6 +55,7 @@ class Event extends Api {
 	 *               	["images"],  // 海报 
 	 *               	["begin"],  // 开始时间 
 	 *               	["end"],  // 结束时间 
+	 *               	["quota"],  // 名额 
 	 *               	["process_setting"],  // 流程设计 
 	 *               	["process"],  // 当前进程 
 	 *               	["area"],  // 国家/地区 
@@ -216,6 +217,7 @@ class Event extends Api {
 	 *               	["images"],  // 海报 
 	 *               	["begin"],  // 开始时间 
 	 *               	["end"],  // 结束时间 
+	 *               	["quota"],  // 名额 
 	 *               	["process_setting"],  // 流程设计 
 	 *               	["process"],  // 当前进程 
 	 *               	["area"],  // 国家/地区 

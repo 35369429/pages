@@ -146,7 +146,7 @@ $('input[name=tags').tagsInput(options);
 		<div class="col-xs-8">
 			<textarea class="form-control input-lg "   
 				type="text" 
-				id="summary" name="summary" rows="4"
+				id="summary" name="summary" rows="3"
 				placeholder="请填写活动简介"><?=T::v('<%=summary  | e(\'html\')%>', $rs )?></textarea> 
 			<div class="help-block"></div>
 		</div>
@@ -164,8 +164,8 @@ $('input[name=tags').tagsInput(options);
 					data-api='/_a/mina/uploader/upload?type=image'
 					data-title='请上传封面'
 					data-previews=""
-					data-width="274"
-					data-height="182"
+					data-width="332"
+					data-height="205"
 					data-icon="fa fa-image" 
 					data-placeholder="请上传封面" 
 					data-allow-types="image/png,image/jpg,image/jpeg,image/gif"
@@ -195,8 +195,8 @@ $('input[name=tags').tagsInput(options);
 						data-api='/_a/mina/uploader/upload?type=image'
 						data-title=''
 						data-previews=""
-						data-width="175"
-						data-height="260"
+						data-width="332"
+						data-height="205"
 						data-icon="fa fa-image" 
 						data-placeholder="请上传海报图片" 
 						data-allow-types="image/png,image/jpg,image/jpeg,image/gif"
@@ -348,6 +348,19 @@ end_change();
 
  </script>
 </div><!-- END 单行时间日期: 结束时间 (end) -->
+
+	<!-- 单行文本: 名额 (quota) 开始  -->
+	<div class="form-group   ">
+		<label class="col-xs-2 control-label" for="quota">名额</label>
+		<div class="col-xs-8">
+			<input class="form-control input-lg "  
+				type="text" 
+				id="quota" name="quota" 
+				placeholder="请输入名额"  
+				value="<?=T::v('<%=quota | e(\'html\')%>', $rs )?>" /> 
+			<div class="help-block">0 表示不限定</div>
+		</div>
+	</div><!-- END 单行文本: 名额 (quota) -->
 
 
 
@@ -508,7 +521,7 @@ end_change();
 						data-name="key" 
 						placeholder="请输入键名"
 						value="<?=key($val)?>" /> 
-					<div class="help-block">奖项名: 奖项内容</div>
+					<div class="help-block">键名:奖项名称, 数值:奖项介绍</div>
 				</div>
 				<div class="col-xs-6">
 					<input class="form-control input-lg "   
@@ -516,7 +529,7 @@ end_change();
 						data-name="value"
 						placeholder="请输入数值"
 						value="<?=current($val)?>" /> 
-					<div class="help-block">奖项名: 奖项内容</div>
+					<div class="help-block">键名:奖项名称, 数值:奖项介绍</div>
 				</div>
 				<div class="col-xs-2 push-10-t">
 					<a href="javascript:void(0);" data-action="add"    class="text-success push-20-r"> <i class="fa fa-plus font-s20"></i> </a> 
@@ -596,13 +609,13 @@ end_change();
 		<div class="xpmse-image-groups draggable-item" data-nested="hosts" data-multiple="1">
 			<div class="form-group " >
 				<label class="col-xs-2 control-label draggable-handler" for="hosts">主办方</label>
-				<div class="col-xs-4" style="width:320px" >
+				<div class="col-xs-4" style="width:352px" >
 			   		<div name="hosts" class="file-uploader rounded rounded-4"
 						data-api='/_a/mina/uploader/upload?type=image'
 						data-title=''
 						data-previews=""
-						data-width="300"
-						data-height="300"
+						data-width="332"
+						data-height="205"
 						data-icon="fa fa-image" 
 						data-placeholder="" 
 						data-allow-types="image/png,image/jpg,image/jpeg,image/gif"
@@ -684,13 +697,13 @@ end_change();
 		<div class="xpmse-image-groups draggable-item" data-nested="organizers" data-multiple="1">
 			<div class="form-group " >
 				<label class="col-xs-2 control-label draggable-handler" for="organizers">承办方/组织者</label>
-				<div class="col-xs-4" style="width:320px" >
+				<div class="col-xs-4" style="width:352px" >
 			   		<div name="organizers" class="file-uploader rounded rounded-4"
 						data-api='/_a/mina/uploader/upload?type=image'
 						data-title=''
 						data-previews=""
-						data-width="300"
-						data-height="300"
+						data-width="332"
+						data-height="205"
 						data-icon="fa fa-image" 
 						data-placeholder="" 
 						data-allow-types="image/png,image/jpg,image/jpeg,image/gif"
@@ -772,13 +785,13 @@ end_change();
 		<div class="xpmse-image-groups draggable-item" data-nested="sponsors" data-multiple="1">
 			<div class="form-group " >
 				<label class="col-xs-2 control-label draggable-handler" for="sponsors">赞助商</label>
-				<div class="col-xs-4" style="width:320px" >
+				<div class="col-xs-4" style="width:352px" >
 			   		<div name="sponsors" class="file-uploader rounded rounded-4"
 						data-api='/_a/mina/uploader/upload?type=image'
 						data-title=''
 						data-previews=""
-						data-width="300"
-						data-height="300"
+						data-width="332"
+						data-height="205"
 						data-icon="fa fa-image" 
 						data-placeholder="" 
 						data-allow-types="image/png,image/jpg,image/jpeg,image/gif"
@@ -860,13 +873,13 @@ end_change();
 		<div class="xpmse-image-groups draggable-item" data-nested="medias" data-multiple="1">
 			<div class="form-group " >
 				<label class="col-xs-2 control-label draggable-handler" for="medias">合作媒体</label>
-				<div class="col-xs-4" style="width:320px" >
+				<div class="col-xs-4" style="width:352px" >
 			   		<div name="medias" class="file-uploader rounded rounded-4"
 						data-api='/_a/mina/uploader/upload?type=image'
 						data-title=''
 						data-previews=""
-						data-width="300"
-						data-height="300"
+						data-width="332"
+						data-height="205"
 						data-icon="fa fa-image" 
 						data-placeholder="" 
 						data-allow-types="image/png,image/jpg,image/jpeg,image/gif"
@@ -948,13 +961,13 @@ end_change();
 		<div class="xpmse-image-groups draggable-item" data-nested="speakers" data-multiple="1">
 			<div class="form-group " >
 				<label class="col-xs-2 control-label draggable-handler" for="speakers">嘉宾</label>
-				<div class="col-xs-4" style="width:320px" >
+				<div class="col-xs-4" style="width:352px" >
 			   		<div name="speakers" class="file-uploader rounded rounded-4"
 						data-api='/_a/mina/uploader/upload?type=image'
 						data-title=''
 						data-previews=""
-						data-width="300"
-						data-height="300"
+						data-width="332"
+						data-height="205"
 						data-icon="fa fa-image" 
 						data-placeholder="" 
 						data-allow-types="image/png,image/jpg,image/jpeg,image/gif"

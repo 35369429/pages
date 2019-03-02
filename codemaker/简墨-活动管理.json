@@ -180,6 +180,20 @@
                     "private": ""
                 },
                 {
+                    "name": "quota",
+                    "cname": "名额",
+                    "type": "integer",
+                    "length": "1",
+                    "default": "",
+                    "unique": "",
+                    "index": "1",
+                    "nullable": "",
+                    "json": "",
+                    "auto": "",
+                    "file": "",
+                    "private": ""
+                },
+                {
                     "name": "process_setting",
                     "cname": "流程设计",
                     "type": "text",
@@ -724,7 +738,7 @@
                     "readonly": "",
                     "attr": {
                         "default": "",
-                        "rows": "4",
+                        "rows": "3",
                         "autoheight": ""
                     },
                     "validator": [
@@ -744,8 +758,8 @@
                     "exp": "",
                     "readonly": "",
                     "attr": {
-                        "width": "274",
-                        "height": "182",
+                        "width": "332",
+                        "height": "205",
                         "allow": "",
                         "cropable": "1"
                     },
@@ -766,8 +780,8 @@
                     "exp": "",
                     "readonly": "",
                     "attr": {
-                        "width": "175",
-                        "height": "260",
+                        "width": "332",
+                        "height": "205",
                         "allow": "",
                         "cropable": "yes",
                         "maxsize": "",
@@ -810,6 +824,25 @@
                     "readonly": "",
                     "attr": {
                         "default": ""
+                    },
+                    "validator": [
+                        {
+                            "method": "",
+                            "value": "",
+                            "message": ""
+                        }
+                    ]
+                },
+                {
+                    "cname": "名额",
+                    "name": "quota",
+                    "type": "input",
+                    "placeholder": "请输入名额",
+                    "helper": "0 表示不限定",
+                    "exp": "",
+                    "readonly": "",
+                    "attr": {
+                        "default": "0"
                     },
                     "validator": [
                         {
@@ -995,7 +1028,7 @@
                     "name": "prize",
                     "type": "json-input",
                     "placeholder": "请填写活动奖项",
-                    "helper": "奖项名: 奖项内容",
+                    "helper": "键名:奖项名称, 数值:奖项介绍",
                     "exp": "",
                     "readonly": "",
                     "attr": {
@@ -1021,8 +1054,8 @@
                     "exp": "",
                     "readonly": "",
                     "attr": {
-                        "width": "300",
-                        "height": "300",
+                        "width": "332",
+                        "height": "205",
                         "allow": "",
                         "cropable": "yes",
                         "maxsize": "",
@@ -1048,8 +1081,8 @@
                     "exp": "",
                     "readonly": "",
                     "attr": {
-                        "width": "300",
-                        "height": "300",
+                        "width": "332",
+                        "height": "205",
                         "allow": "",
                         "cropable": "yes",
                         "maxsize": "",
@@ -1075,8 +1108,8 @@
                     "exp": "",
                     "readonly": "",
                     "attr": {
-                        "width": "300",
-                        "height": "300",
+                        "width": "332",
+                        "height": "205",
                         "allow": "",
                         "cropable": "yes",
                         "maxsize": "",
@@ -1102,8 +1135,8 @@
                     "exp": "",
                     "readonly": "",
                     "attr": {
-                        "width": "300",
-                        "height": "300",
+                        "width": "332",
+                        "height": "205",
                         "allow": "",
                         "cropable": "yes",
                         "maxsize": "",
@@ -1129,8 +1162,8 @@
                     "exp": "",
                     "readonly": "",
                     "attr": {
-                        "width": "300",
-                        "height": "300",
+                        "width": "332",
+                        "height": "205",
                         "allow": "",
                         "cropable": "yes",
                         "maxsize": "",
@@ -1241,6 +1274,7 @@
                 "",
                 "",
                 "",
+                "",
                 ""
             ]
         },
@@ -1249,6 +1283,10 @@
             "keyword": [
                 "name=event_id",
                 "name=slug",
+                "name=title",
+                "name=type",
+                "name=process",
+                "name=area",
                 "name=prov",
                 "name=city",
                 "name=town"
@@ -1441,18 +1479,10 @@
                 },
                 {
                     "fields": [
-                        "name=images"
-                    ],
-                    "cname": "",
-                    "filter": "",
-                    "default": ""
-                },
-                {
-                    "fields": [
                         "name=publish_time"
                     ],
                     "cname": "",
-                    "filter": "{{publish_time|toDate('Y年m月d日')}}  @{{publish_time|toTime('h时i分')}}",
+                    "filter": "{{publish_time|toDate('Y年m月d日')}} ",
                     "default": ""
                 },
                 {
@@ -1460,7 +1490,7 @@
                         "name=begin"
                     ],
                     "cname": "",
-                    "filter": "{{begin|toDate('Y年m月d日')}}  @{{begin|toTime('h时i分')}}",
+                    "filter": "{{begin|toDate('Y年m月d日')}} ",
                     "default": ""
                 },
                 {
@@ -1468,7 +1498,7 @@
                         "name=end"
                     ],
                     "cname": "",
-                    "filter": "{{end|toDate('Y年m月d日')}}  @{{end|toTime('h时i分')}}",
+                    "filter": "{{end|toDate('Y年m月d日')}} ",
                     "default": ""
                 },
                 {

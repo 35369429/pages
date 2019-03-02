@@ -208,7 +208,6 @@ use \Xpmse\T;
 								<th class="font-w300"> 主题 </th>
 								<th class="font-w300"> 栏目 </th>
 								<th class="font-w300"> 封面 </th>
-								<th class="font-w300"> 海报 </th>
 								<th class="font-w300"> 发布时间 </th>
 								<th class="font-w300"> 开始时间 </th>
 								<th class="font-w300"> 结束时间 </th>
@@ -241,24 +240,13 @@ use \Xpmse\T;
 									</div>
 								</td>
 								<td class="font-w300">
-									<div style="line-height: 84px;display: inline-block; max-width:260px;word-wrap:break-word;" > 
-									<?php foreach( $rs["images"] as $idx=>$img ): 
-										if (!empty($img['url'])) : ?>
-										<img src="<?=$img['url']?>" height="64" style="max-width:260px;" class="push-5-r" /> 
-									<?php 
-										endif; 
-										if ($idx > 1) { break;} // 最多显示3张图
-										endforeach ; ?> 
-									</div>
+									<?php $v=null; $v=T::s("{{publish_time|toDate('Y年m月d日')}}", $rs ); echo empty($v) ? T::s("", $rs ) : $v; ?>
 								</td>
 								<td class="font-w300">
-									<?php $v=null; $v=T::s("{{publish_time|toDate('Y年m月d日')}}  @{{publish_time|toTime('h时i分')}}", $rs ); echo empty($v) ? T::s("", $rs ) : $v; ?>
+									<?php $v=null; $v=T::s("{{begin|toDate('Y年m月d日')}}", $rs ); echo empty($v) ? T::s("", $rs ) : $v; ?>
 								</td>
 								<td class="font-w300">
-									<?php $v=null; $v=T::s("{{begin|toDate('Y年m月d日')}}  @{{begin|toTime('h时i分')}}", $rs ); echo empty($v) ? T::s("", $rs ) : $v; ?>
-								</td>
-								<td class="font-w300">
-									<?php $v=null; $v=T::s("{{end|toDate('Y年m月d日')}}  @{{end|toTime('h时i分')}}", $rs ); echo empty($v) ? T::s("", $rs ) : $v; ?>
+									<?php $v=null; $v=T::s("{{end|toDate('Y年m月d日')}}", $rs ); echo empty($v) ? T::s("", $rs ) : $v; ?>
 								</td>
 								<td class="font-w300">
 									<span class="text-<?=$rs['_type']['style']?>"><?=$rs['_type']['name'] ? $rs['_type']['name']  : $rs['type'] ?></span>
@@ -272,7 +260,7 @@ use \Xpmse\T;
 						</tbody>
 
 						<tfoot>
-							<tr><td colspan="11"> <nav class="pull-right">
+							<tr><td colspan="10"> <nav class="pull-right">
 
 								<ul class="pagination">
 									<?php if ($response['prev'] !== false): ?>
