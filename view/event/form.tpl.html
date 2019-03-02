@@ -32,37 +32,49 @@ use \Xpmse\T;
 				<!-- 隐藏域 -->
 				<input type="hidden" name="event_id" value="<?=$rs['event_id']?>" >
 	
-	<!-- 单行文本: 活动别名 (slug) 开始  -->
-	<div class="form-group   ">
-		<label class="col-xs-2 control-label" for="slug">活动别名</label>
+
+	<!-- 单选框: 类型 (type) 开始  -->
+	<div class="form-group    ">
+		<label class="col-xs-2 control-label" for="type">类型</label>
 		<div class="col-xs-8">
-			<input class="form-control input-lg"  
+			<?php if (is_null($rs["type"])) { $rs["type"] = "offline"; } ?>
+<label class="css-input  css-radio css-radio-lg css-radio-primary push-10-r"><input   type="radio" name="type" data-uncheck-value="offline" value="offline" <?=("offline" == $rs["type"]) ? "checked" : ""?> > <span></span> 线下</label>
+<label class="css-input  css-radio css-radio-lg css-radio-primary push-10-r"><input   type="radio" name="type" data-uncheck-value="online" value="online" <?=("online" == $rs["type"]) ? "checked" : ""?> > <span></span> 线上</label>
+			<div class="help-block"></div>
+		</div>
+	</div><!-- END 单选框: 类型 (type) 开始  -->
+
+	<!-- 单行文本: 别名 (slug) 开始  -->
+	<div class="form-group   ">
+		<label class="col-xs-2 control-label" for="slug">别名</label>
+		<div class="col-xs-8">
+			<input class="form-control input-lg "  
 				type="text" 
 				id="slug" name="slug" 
 				placeholder="请填写活动别名"  
 				value="<?=T::v('<%=slug | e(\'html\')%>', $rs )?>" /> 
 			<div class="help-block"></div>
 		</div>
-	</div><!-- END 单行文本: 活动别名 (slug) -->
+	</div><!-- END 单行文本: 别名 (slug) -->
 
-	<!-- 单行文本: 活动主题 (name) 开始  -->
+	<!-- 单行文本: 主题 (title) 开始  -->
 	<div class="form-group   ">
-		<label class="col-xs-2 control-label" for="name">活动主题</label>
+		<label class="col-xs-2 control-label" for="title">主题</label>
 		<div class="col-xs-8">
-			<input class="form-control input-lg"  
+			<input class="form-control input-lg "  
 				type="text" 
-				id="name" name="name" 
+				id="title" name="title" 
 				placeholder="请填写活动主题"  
-				value="<?=T::v('<%=name | e(\'html\')%>', $rs )?>" /> 
+				value="<?=T::v('<%=title | e(\'html\')%>', $rs )?>" /> 
 			<div class="help-block"></div>
 		</div>
-	</div><!-- END 单行文本: 活动主题 (name) -->
+	</div><!-- END 单行文本: 主题 (title) -->
 
 	<!-- 单行文本: 外部链接 (link) 开始  -->
 	<div class="form-group   ">
 		<label class="col-xs-2 control-label" for="link">外部链接</label>
 		<div class="col-xs-8">
-			<input class="form-control input-lg"  
+			<input class="form-control input-lg "  
 				type="text" 
 				id="link" name="link" 
 				placeholder="请填写外部链接"  
@@ -78,7 +90,7 @@ use \Xpmse\T;
 	<div class="form-group   ">
 		<label class="col-xs-2 control-label" for="categories">栏目</label>
 		<div class="col-xs-8"> 
-			<select class="js-select2 form-control input-lg" style="width: 100%;" 
+			<select class="js-select2 form-control input-lg   "  style="width: 100%;" 
 					id="categories" name="categories" 
 					data-language="zh-CN"
 					data-param-cancelable="0"
@@ -96,36 +108,35 @@ use \Xpmse\T;
 			</select>
 			<div class="help-block"></div>
 		</div>
-		 
-	</div><!-- END 下拉选择(动态数据): 栏目 (categories) -->
+			</div><!-- END 下拉选择(动态数据): 栏目 (categories) -->
 
 
+ <!-- 单行标签文本: 标签 (tags) 开始  -->
 
+<div class="form-group   ">
 
-	<!-- 单行标签文本: 标签 (tags) 开始  -->
-	<div class="form-group   ">
-		<label class="col-xs-2 control-label" for="tags">标签</label>
-		<div class="col-xs-8">
-			<input class="form-control input-lg"  
-				type="text" 
-				id="tags" name="tags" 
-				placeholder="请添加标签"  
-				value="<?=T::v('<%=tags | e(\'html\')%>', $rs )?>" /> 
-			<div class="help-block"></div>
-		</div>
+<label class="col-xs-2 control-label" for="tags">标签</label>
 
-		<script type="text/javascript">
-			var options = {
-				height: '42px',
-				width: '100%',
-				defaultText: '添加',
-				removeWithBackspace: true,
-				delimiter: [',']
-			}
-			$('input[name=tags').tagsInput(options);
-		</script>
-	</div><!-- END 单行标签文本: 标签 (tags) -->
+<div class="col-xs-8">
+<input class="form-control input-lg"  
+ type="text" 
+ id="tags" name="tags" 
+placeholder="请添加标签"  
+value="<?=T::v('<%=tags | e(\'html\')%>', $rs )?>" /> 
+<div class="help-block"></div>
 
+</div>
+ <script type="text/javascript">
+var options = {
+height: '42px',
+width: '100%',
+defaultText: '添加',
+removeWithBackspace: true,
+delimiter: [',']
+ }
+$('input[name=tags').tagsInput(options);
+</script>
+ </div><!-- END 单行标签文本: 标签 (tags) -->
 
 
 
@@ -133,9 +144,9 @@ use \Xpmse\T;
 	<div class="form-group   ">
 		<label class="col-xs-2 control-label" for="summary">活动简介</label>
 		<div class="col-xs-8">
-			<textarea class="form-control input-lg"  
+			<textarea class="form-control input-lg "   
 				type="text" 
-				id="summary" name="summary" rows=""
+				id="summary" name="summary" rows="4"
 				placeholder="请填写活动简介"><?=T::v('<%=summary  | e(\'html\')%>', $rs )?></textarea> 
 			<div class="help-block"></div>
 		</div>
@@ -145,7 +156,7 @@ use \Xpmse\T;
 
 
 	<!-- 单图上传: 封面 (cover) 开始  -->
-	<div class="xpmse-images  " name="cover">
+	<div class="xpmse-image  " name="cover">
 		<div class="form-group " >
 			<label class="col-xs-2 control-label" for="cover">封面</label>
 			<div class="col-xs-8">
@@ -174,40 +185,47 @@ use \Xpmse\T;
 
 
 	<!-- 多图上传: 活动海报 (images) 开始  -->
-	<?php if(count($rs['images']) < 1): ?><?php $steps = 1 -  count($rs['images']); for( $i=0; $i<$steps; $i++){ $rs['images'][] = [];} ?><?php endif ?><?php foreach ( $rs['images'] as $img ): ?> 
-	<div class="xpmse-images  " name="images">
-		<div class="form-group " >
-			<label class="col-xs-2 control-label" for="images">活动海报</label>
-			<div class="col-xs-8">
-		   		<div name="images" class="file-uploader rounded rounded-4"
-					data-api='/_a/mina/uploader/upload?type=image'
-					data-title=''
-					data-previews=""
-					data-width="175"
-					data-height="260"
-					data-icon="fa fa-image" 
-					data-placeholder="请上传海报图片" 
-					data-allow-types="image/png,image/jpg,image/jpeg,image/gif"
-					data-maxsize="20"
-					data-progress="yes"
-					data-cropable="yes"
-					data-draggable="yes"
-					data-src="<?=T::v('<%=url%>', $img )?>"
-					data-path="<?=T::v('<%=path%>', $img )?>"
-					data-multiple="1"
-					></div>
-				<div class="help-block"></div>
-			</div>
-			<div class="col-xs-2 push-10-t">
-				<a href="javascript:void(0);" data-action="add"    class="text-success push-20-r"> <i class="fa fa-plus font-s20"></i> </a> 
-				<a href="javascript:void(0);" data-action="remove" class="text-danger"> <i class="fa fa-minus font-s20"></i> </a> 
-			</div>
-		</div> 
+	<div class="xpmse-images-panel">
+		<?php if(@count($rs['images']) < 1): ?><?php $steps = 1 -  @count($rs['images']); for( $i=0; $i<$steps; $i++){ $rs['images'][] = [];} ?><?php endif ?><?php if( is_array($rs['images']) && utils::array_depth($rs['images']) != 2): ?><?php foreach($rs['images'] as $idx=>$it ){ $rs['images'][$idx] = ['img'=>$it]; }?><?php endif ?><?php foreach ( $rs['images'] as $__key=>$img ): ?> 
+		<div class="xpmse-images  " name="images">
+			<div class="form-group " >
+				<label class="col-xs-2 control-label" for="images">活动海报</label>
+				<div class="col-xs-8">
+			   		<div name="images" class="file-uploader rounded rounded-4"
+						data-api='/_a/mina/uploader/upload?type=image'
+						data-title=''
+						data-previews=""
+						data-width="175"
+						data-height="260"
+						data-icon="fa fa-image" 
+						data-placeholder="请上传海报图片" 
+						data-allow-types="image/png,image/jpg,image/jpeg,image/gif"
+						data-maxsize="20"
+						data-progress="yes"
+						data-cropable="yes"
+						data-draggable="yes"
+						data-src="<?=T::v('<%=url%>', $img )?>"
+						data-path="<?=T::v('<%=path%>', $img )?>"
+						data-multiple="1"
+						></div>
+					<div class="help-block"></div>
+				</div>
+				<div class="col-xs-1 push-10-t">
+					<a href="javascript:void(0);" data-action="add"    class="text-success push-20-r"> <i class="fa fa-plus font-s20"></i> </a> 
+					<a href="javascript:void(0);" data-action="remove" class="text-danger"> <i class="fa fa-minus font-s20"></i> </a> 
+				</div>
+			</div> 
+		</div>
+		<?php endforeach; ?> 
 	</div>
-	<?php endforeach; ?> 
 
 	<script type="text/javascript">
 		$('.xpmse-images[name="images"]').Multipliable({
+			initialized: function(elm, idx) {
+				$(elm).parent('.xpmse-images-panel') .find('.control-label').each( function(i, el ){
+					if (i >0) { $(el).html('');}
+				});
+			},
 			added: function( elm ) {
 				App.initHelper('file-uploader', {handler: $(elm).find('.file-uploader')} );
 			},
@@ -215,6 +233,7 @@ use \Xpmse\T;
 			html: function( elm ){ 
 				var html = $(elm).clone();
 				var resp = $(html);
+				resp.find('.control-label').html('');
 				resp.find('.file-uploader').html('');
 				resp.find('.file-uploader').attr('data-src', '');
 				resp.find('.file-uploader').attr('data-path', '');
@@ -226,121 +245,170 @@ use \Xpmse\T;
 
 
 
+<!-- 单行时间日期: 开始时间 (begin) 开始  -->
+<div class="form-group   ">
+<label class="col-xs-2 control-label" for="begin__date">开始时间</label>
+<div class="col-xs-4">
+<input 
+ name="begin__date" id="begin__date"
+
+class="js-datepicker form-control  input-lg" type="text" 
+data-date-format="yyyy年mm月dd日" 
+placeholder="请选择日期时间 "
+ value="<?=T::v('<%=begin | toDate%>', $rs )?>"  />
+
+<div class="help-block"></div>
+</div>
+ <div class="col-xs-4">
+<input 
+name="begin__time" id="begin__time"
+class="js-masked-time form-control  input-lg"  type="text" 
+ placeholder="请输入时间"
+value="<?=T::v('<%=begin | toTime%>', $rs )?>" /> 
+ </div>
+<input name="begin" id="begin" type="hidden" value="<?=T::v('<%=begin | toDateTime%>', $rs )?>" />
+<script type="text/javascript">
+$(function(){
+function begin_change() {
+var tm = $('input[name=begin__time').val();
+ tm = tm.replace('@ ', '');
+tm = tm.replace('时', ':');
+tm = tm.replace('分', ':');
+ tm = tm = tm + '00';
+var dt = $('input[name=begin__date]').val();
+dt = dt.replace('年', '-');
+dt = dt.replace('月', '-');
+ dt = dt.replace('日', '');
+var datetime = dt + ' ' + tm;
+$('input[name=begin]').val( datetime );
+}
+$('input[name=begin__date]').on("change", function( e ){
+ begin_change();
+
+});
+
+ $('input[name=begin__time').on("change", function( e ){
+
+begin_change();
+});
+});
+
+ </script>
+</div><!-- END 单行时间日期: 开始时间 (begin) -->
 
 
-	<!-- 单行时间日期: 开始时间 (begin) 开始  -->
-	<div class="form-group   ">
-		<label class="col-xs-2 control-label" for="begin__date">开始时间</label>
-		<div class="col-xs-4">
-			<input 
-				 name="begin__date" id="begin__date"
-				 class="js-datepicker form-control  input-lg" type="text" 
-				 data-date-format="yyyy年mm月dd日" 
-				 placeholder="请选择日期时间 "
-				 value="<?=T::v('<%=begin | toDate%>', $rs )?>"  />
 
-			<div class="help-block"></div>
+<!-- 单行时间日期: 结束时间 (end) 开始  -->
+<div class="form-group   ">
+<label class="col-xs-2 control-label" for="end__date">结束时间</label>
+<div class="col-xs-4">
+<input 
+ name="end__date" id="end__date"
+
+class="js-datepicker form-control  input-lg" type="text" 
+data-date-format="yyyy年mm月dd日" 
+placeholder="请选择日期时间 "
+ value="<?=T::v('<%=end | toDate%>', $rs )?>"  />
+
+<div class="help-block"></div>
+</div>
+ <div class="col-xs-4">
+<input 
+name="end__time" id="end__time"
+class="js-masked-time form-control  input-lg"  type="text" 
+ placeholder="请输入时间"
+value="<?=T::v('<%=end | toTime%>', $rs )?>" /> 
+ </div>
+<input name="end" id="end" type="hidden" value="<?=T::v('<%=end | toDateTime%>', $rs )?>" />
+<script type="text/javascript">
+$(function(){
+function end_change() {
+var tm = $('input[name=end__time').val();
+ tm = tm.replace('@ ', '');
+tm = tm.replace('时', ':');
+tm = tm.replace('分', ':');
+ tm = tm = tm + '00';
+var dt = $('input[name=end__date]').val();
+dt = dt.replace('年', '-');
+dt = dt.replace('月', '-');
+ dt = dt.replace('日', '');
+var datetime = dt + ' ' + tm;
+$('input[name=end]').val( datetime );
+}
+$('input[name=end__date]').on("change", function( e ){
+ end_change();
+
+});
+
+ $('input[name=end__time').on("change", function( e ){
+
+end_change();
+});
+});
+
+ </script>
+</div><!-- END 单行时间日期: 结束时间 (end) -->
+
+
+
+	<!-- 多条文本: 流程设计 (process_setting) <?=T::v('<%=process_setting%>', $rs )?> 开始   minLength(1) -->
+	<div class="xpmse-inputs-panel">
+		<?php if(@count($rs['process_setting']) < 1): ?><?php $steps = 1 -  @count($rs['process_setting']); for( $i=0; $i<$steps; $i++){ $rs['process_setting'][] = [];} ?><?php endif ?><?php if( is_array($rs['process_setting']) && utils::array_depth($rs['process_setting']) != 2): ?><?php foreach($rs['process_setting'] as $idx=>$it ){ $rs['process_setting'][$idx] = ['val'=>$it]; }?><?php endif ?><?php foreach ( $rs['process_setting'] as $__key=>$val ): ?>		<div class="xpmse-inputs  " name="process_setting">
+			<div class="form-group " >
+				<label class="col-xs-2 control-label" for="process_setting">流程设计  </label>
+				<div class="col-xs-8">
+					<input class="form-control input-lg "   
+						type="text" 
+                        id="process_setting" name="process_setting"
+                        data-multiple="1"
+						placeholder="请填活动流程"  
+						value="<?=T::v('<%=val | e(\'html\')%>', $val )?>" /> 
+					<div class="help-block"></div>
+				</div>
+				<div class="col-xs-2 push-10-t">
+					<a href="javascript:void(0);" data-action="add"    class="text-success push-20-r"> <i class="fa fa-plus font-s20"></i> </a> 
+					<a href="javascript:void(0);" data-action="remove" class="text-danger"> <i class="fa fa-minus font-s20"></i> </a> 
+				</div>
+			</div> 
 		</div>
-		<div class="col-xs-4">
-			<input 
-				name="begin__time" id="begin__time"
-				class="js-masked-time form-control  input-lg"  type="text" 
-				placeholder="请输入时间"
-				value="<?=T::v('<%=begin | toTime%>', $rs )?>" /> 
-		</div>
-		<input name="begin" id="begin" type="hidden" value="<?=T::v('<%=begin | toDateTime%>', $rs )?>" />
-
-		<script type="text/javascript">
-		$(function(){
-
-			function begin_change() {
-				var tm = $('input[name=begin__time').val();
-					tm = tm.replace('@ ', '');
-					tm = tm.replace('时', ':');
-					tm = tm.replace('分', ':');
-					tm = tm = tm + '00';
-
-				var dt = $('input[name=begin__date]').val();
-					dt = dt.replace('年', '-');
-					dt = dt.replace('月', '-');
-					dt = dt.replace('日', '');
-
-				var datetime = dt + ' ' + tm;
-				$('input[name=begin]').val( datetime );
+		<?php endforeach; ?> 
+	</div>
+	<script type="text/javascript">
+		$('.xpmse-inputs[name="process_setting"]').Multipliable({
+			initialized: function(elm, idx) {
+				$(elm).parent('.xpmse-inputs-panel') .find('.control-label').each( function(i, el ){
+					if (i >0) { $(el).html('');}
+				});
+			},
+			added: function( elm ) {},
+			removed: function(){},
+			html: function( elm ){ 
+				var html = $(elm).clone();
+				var resp = $(html);
+					resp.find('.control-label').html('');
+				return resp;
 			}
-
-			$('input[name=begin__date]').on("change", function( e ){
-				begin_change();
-			});
-			$('input[name=begin__time').on("change", function( e ){
-				begin_change();
-			});
 		});
-		</script>
+	</script><!-- END 多条文本: 流程设计 (process_setting) -->
 
-	</div><!-- END 单行时间日期: 开始时间 (begin) -->
-
-
-
-
-
-	<!-- 单行时间日期: 结束时间 (end) 开始  -->
+	<!-- 单行文本: 当前进程 (process) 开始  -->
 	<div class="form-group   ">
-		<label class="col-xs-2 control-label" for="end__date">结束时间</label>
-		<div class="col-xs-4">
-			<input 
-				 name="end__date" id="end__date"
-				 class="js-datepicker form-control  input-lg" type="text" 
-				 data-date-format="yyyy年mm月dd日" 
-				 placeholder="请选择日期时间 "
-				 value="<?=T::v('<%=end | toDate%>', $rs )?>"  />
-
-			<div class="help-block"></div>
+		<label class="col-xs-2 control-label" for="process">当前进程</label>
+		<div class="col-xs-8">
+			<input class="form-control input-lg "  
+				type="text" 
+				id="process" name="process" 
+				placeholder="请输入当前进程"  
+				value="<?=T::v('<%=process | e(\'html\')%>', $rs )?>" /> 
+			<div class="help-block">与流程设计数值保持一致</div>
 		</div>
-		<div class="col-xs-4">
-			<input 
-				name="end__time" id="end__time"
-				class="js-masked-time form-control  input-lg"  type="text" 
-				placeholder="请输入时间"
-				value="<?=T::v('<%=end | toTime%>', $rs )?>" /> 
-		</div>
-		<input name="end" id="end" type="hidden" value="<?=T::v('<%=end | toDateTime%>', $rs )?>" />
-
-		<script type="text/javascript">
-		$(function(){
-
-			function end_change() {
-				var tm = $('input[name=end__time').val();
-					tm = tm.replace('@ ', '');
-					tm = tm.replace('时', ':');
-					tm = tm.replace('分', ':');
-					tm = tm = tm + '00';
-
-				var dt = $('input[name=end__date]').val();
-					dt = dt.replace('年', '-');
-					dt = dt.replace('月', '-');
-					dt = dt.replace('日', '');
-
-				var datetime = dt + ' ' + tm;
-				$('input[name=end]').val( datetime );
-			}
-
-			$('input[name=end__date]').on("change", function( e ){
-				end_change();
-			});
-			$('input[name=end__time').on("change", function( e ){
-				end_change();
-			});
-		});
-		</script>
-
-	</div><!-- END 单行时间日期: 结束时间 (end) -->
+	</div><!-- END 单行文本: 当前进程 (process) -->
 
 	<!-- 单行文本: 国家/地区 (area) 开始  -->
 	<div class="form-group   ">
 		<label class="col-xs-2 control-label" for="area">国家/地区</label>
 		<div class="col-xs-8">
-			<input class="form-control input-lg"  
+			<input class="form-control input-lg "  
 				type="text" 
 				id="area" name="area" 
 				placeholder="请填写国家/地区"  
@@ -353,7 +421,7 @@ use \Xpmse\T;
 	<div class="form-group   ">
 		<label class="col-xs-2 control-label" for="prov">省份</label>
 		<div class="col-xs-8">
-			<input class="form-control input-lg"  
+			<input class="form-control input-lg "  
 				type="text" 
 				id="prov" name="prov" 
 				placeholder="请填写省份"  
@@ -366,7 +434,7 @@ use \Xpmse\T;
 	<div class="form-group   ">
 		<label class="col-xs-2 control-label" for="city">城市</label>
 		<div class="col-xs-8">
-			<input class="form-control input-lg"  
+			<input class="form-control input-lg "  
 				type="text" 
 				id="city" name="city" 
 				placeholder="请填写城市"  
@@ -379,7 +447,7 @@ use \Xpmse\T;
 	<div class="form-group   ">
 		<label class="col-xs-2 control-label" for="town">区县</label>
 		<div class="col-xs-8">
-			<input class="form-control input-lg"  
+			<input class="form-control input-lg "  
 				type="text" 
 				id="town" name="town" 
 				placeholder="请填写区县"  
@@ -392,7 +460,7 @@ use \Xpmse\T;
 	<div class="form-group   ">
 		<label class="col-xs-2 control-label" for="location">地点</label>
 		<div class="col-xs-8">
-			<input class="form-control input-lg"  
+			<input class="form-control input-lg "  
 				type="text" 
 				id="location" name="location" 
 				placeholder="请填写具体地点"  
@@ -405,7 +473,7 @@ use \Xpmse\T;
 	<div class="form-group   ">
 		<label class="col-xs-2 control-label" for="price">费用</label>
 		<div class="col-xs-8">
-			<input class="form-control input-lg"  
+			<input class="form-control input-lg "  
 				type="text" 
 				id="price" name="price" 
 				placeholder="请填写活动花费"  
@@ -414,17 +482,121 @@ use \Xpmse\T;
 		</div>
 	</div><!-- END 单行文本: 费用 (price) -->
 
+	<!-- 单行文本: 奖金 (bonus) 开始  -->
+	<div class="form-group   ">
+		<label class="col-xs-2 control-label" for="bonus">奖金</label>
+		<div class="col-xs-8">
+			<input class="form-control input-lg "  
+				type="text" 
+				id="bonus" name="bonus" 
+				placeholder="请填写活动奖金"  
+				value="<?=T::v('<%=bonus | e(\'html\')%>', $rs )?>" /> 
+			<div class="help-block"></div>
+		</div>
+	</div><!-- END 单行文本: 奖金 (bonus) -->
+
+
+
+	<!-- JSON文本数组: 奖项 (prize) <?=T::v('<%=prize%>', $rs )?> 开始   minLength(1) -->
+	<div class="xpmse-json-input-panel"  >
+		<?php if(@count($rs['prize']) < 1): ?><?php $steps = 1 -  @count($rs['prize']); for( $i=0; $i<$steps; $i++){ $rs['prize'][] = [];} ?><?php endif ?><?php if( is_array($rs['prize']) && utils::array_depth($rs['prize']) != 2): ?><?php foreach($rs['prize'] as $idx=>$it ){ $rs['prize'][$idx] = ['val'=>$it]; }?><?php endif ?><?php foreach ( $rs['prize'] as $__key=>$val ): ?>		<div class="xpmse-json-input  "  name="prize__origin"   data-nested="prize__origin" data-multiple="1" >
+			<div class="form-group " >
+				<label class="col-xs-2 control-label" for="prize">奖项 </label>
+				<div class="col-xs-2">
+					<input class="form-control input-lg"  
+						type="text" 
+						data-name="key" 
+						placeholder="请输入键名"
+						value="<?=key($val)?>" /> 
+					<div class="help-block">奖项名: 奖项内容</div>
+				</div>
+				<div class="col-xs-6">
+					<input class="form-control input-lg "   
+						type="text" 
+						data-name="value"
+						placeholder="请输入数值"
+						value="<?=current($val)?>" /> 
+					<div class="help-block">奖项名: 奖项内容</div>
+				</div>
+				<div class="col-xs-2 push-10-t">
+					<a href="javascript:void(0);" data-action="add"    class="text-success push-20-r"> <i class="fa fa-plus font-s20"></i> </a> 
+					<a href="javascript:void(0);" data-action="remove" class="text-danger"> <i class="fa fa-minus font-s20"></i> </a> 
+				</div>
+			</div> 
+		</div>
+		<?php endforeach; ?> 
+		<input type="hidden" name="prize" value="" />
+	</div>
+	<script type="text/javascript">
+
+		function _prize() {
+			result = []; map = {}
+			$(".form-group", '[name="prize__origin"]').each(function(idx,elm){
+				key = "";
+				val = "";
+				$('input', elm).each(function(idx,input){
+					if ( $(input).attr('data-name') == "key" ){
+						key = $(input).val();
+					} else if ($(input).attr('data-name') == "value" ){
+						val = $(input).val();
+					}
+				})
+
+				if ( key != "" ) {
+					map[key] = val;
+				}
+			})
+
+			for ( var key in map ) {
+				var obj = {};
+				obj[key] = map[key];
+				result.push(obj);
+			}
+
+			console.log( "result" , "=", result , map);
+			$('input[name="prize"]').val( "json://" + JSON.stringify(result) );
+		}
+
+
+		// Init
+		_prize();
+
+		$('.xpmse-json-input[name="prize__origin"]').Multipliable({
+			initialized: function(elm, idx) {
+				$(elm).parent('.xpmse-json-input-panel') .find('.control-label').each( function(i, el ){
+					if (i >0) { $(el).html('');}
+				});
+
+				$('input',elm).change(function(event) {
+					_prize();
+				});
+			},
+			added: function( elm ) {
+				 _prize();
+			},
+			removed: function(){
+				 _prize();
+			},
+			html: function( elm ){ 
+				var html = $(elm).clone();
+				var resp = $(html);
+					resp.find('.control-label').html('');
+				return resp;
+			}
+		});
+	</script><!-- END JSON文本: 奖项 (prize) -->
+
 
 
 
 	<!-- 多图片组上传: 主办方 (hosts) 开始  -->
 	<div class="xpmse-image-groups-content    draggable-column">
-
-		<?php if(count($rs['hosts']) < 1): ?><?php $steps = 1 -  count($rs['hosts']); for( $i=0; $i<$steps; $i++){ $rs['hosts'][] = [];} ?><?php endif ?><?php foreach ( $rs['hosts'] as $img ): ?> 
+		
+		<?php if(@count($rs['hosts']) < 1): ?><?php $steps = 1 -  @count($rs['hosts']); for( $i=0; $i<$steps; $i++){ $rs['hosts'][] = [];} ?><?php endif ?><?php if( is_array($rs['hosts']) && utils::array_depth($rs['hosts']) != 2): ?><?php foreach($rs['hosts'] as $idx=>$it ){ $rs['hosts'][$idx] = ['img'=>$it]; }?><?php endif ?><?php foreach ( $rs['hosts'] as $__key=>$img ): ?> 
 		<div class="xpmse-image-groups draggable-item" data-nested="hosts" data-multiple="1">
 			<div class="form-group " >
 				<label class="col-xs-2 control-label draggable-handler" for="hosts">主办方</label>
-				<div class="col-xs-4" style="width:320px;" >
+				<div class="col-xs-4" style="width:320px" >
 			   		<div name="hosts" class="file-uploader rounded rounded-4"
 						data-api='/_a/mina/uploader/upload?type=image'
 						data-title=''
@@ -464,10 +636,10 @@ use \Xpmse\T;
 					<div class="col-xs-12 push-10-t">
 						<textarea class="form-control input-lg"  
 							data-name="summary" rows="4"
-							placeholder="请输入介绍"><?=T::v('<%=summary | e(\'html\')%>', $img )?></textarea> 
+							placeholder="请输入图片介绍"><?=T::v('<%=summary | e(\'html\')%>', $img )?></textarea> 
 					</div>
 				</div>
-				<div class="col-xs-2 push-10-t">
+				<div class="col-xs-1 push-10-t">
 					<a href="javascript:void(0);" data-action="add"    class="text-success push-20-r"> <i class="fa fa-plus font-s20"></i> </a> 
 					<a href="javascript:void(0);" data-action="remove" class="text-danger"> <i class="fa fa-minus font-s20"></i> </a> 
 				</div>
@@ -477,6 +649,11 @@ use \Xpmse\T;
 
 		<script type="text/javascript">
 			$('.xpmse-image-groups[data-nested="hosts"]').Multipliable({
+				initialized: function(elm, idx) {
+					$(elm).parent('.xpmse-image-groups-content') .find('.control-label').each( function(i, el ){
+						if (i >0) { $(el).html('');}
+					});
+				},
 				added: function( elm ) {
 					App.initHelper('file-uploader', {handler: $(elm).find('.file-uploader')} );
 				},
@@ -484,6 +661,7 @@ use \Xpmse\T;
 				html: function( elm ){ 
 					var html = $(elm).clone();
 					var resp = $(html);
+					resp.find('.control-label').html('');
 					resp.find('.file-uploader').html('');
 					resp.find('.file-uploader').attr('data-src', '');
 					resp.find('.file-uploader').attr('data-path', '');
@@ -501,12 +679,12 @@ use \Xpmse\T;
 
 	<!-- 多图片组上传: 承办方/组织者 (organizers) 开始  -->
 	<div class="xpmse-image-groups-content    draggable-column">
-
-		<?php if(count($rs['organizers']) < 1): ?><?php $steps = 1 -  count($rs['organizers']); for( $i=0; $i<$steps; $i++){ $rs['organizers'][] = [];} ?><?php endif ?><?php foreach ( $rs['organizers'] as $img ): ?> 
+		
+		<?php if(@count($rs['organizers']) < 1): ?><?php $steps = 1 -  @count($rs['organizers']); for( $i=0; $i<$steps; $i++){ $rs['organizers'][] = [];} ?><?php endif ?><?php if( is_array($rs['organizers']) && utils::array_depth($rs['organizers']) != 2): ?><?php foreach($rs['organizers'] as $idx=>$it ){ $rs['organizers'][$idx] = ['img'=>$it]; }?><?php endif ?><?php foreach ( $rs['organizers'] as $__key=>$img ): ?> 
 		<div class="xpmse-image-groups draggable-item" data-nested="organizers" data-multiple="1">
 			<div class="form-group " >
 				<label class="col-xs-2 control-label draggable-handler" for="organizers">承办方/组织者</label>
-				<div class="col-xs-4" style="width:320px;" >
+				<div class="col-xs-4" style="width:320px" >
 			   		<div name="organizers" class="file-uploader rounded rounded-4"
 						data-api='/_a/mina/uploader/upload?type=image'
 						data-title=''
@@ -546,10 +724,10 @@ use \Xpmse\T;
 					<div class="col-xs-12 push-10-t">
 						<textarea class="form-control input-lg"  
 							data-name="summary" rows="4"
-							placeholder="请输入介绍"><?=T::v('<%=summary | e(\'html\')%>', $img )?></textarea> 
+							placeholder="请输入图片介绍"><?=T::v('<%=summary | e(\'html\')%>', $img )?></textarea> 
 					</div>
 				</div>
-				<div class="col-xs-2 push-10-t">
+				<div class="col-xs-1 push-10-t">
 					<a href="javascript:void(0);" data-action="add"    class="text-success push-20-r"> <i class="fa fa-plus font-s20"></i> </a> 
 					<a href="javascript:void(0);" data-action="remove" class="text-danger"> <i class="fa fa-minus font-s20"></i> </a> 
 				</div>
@@ -559,6 +737,11 @@ use \Xpmse\T;
 
 		<script type="text/javascript">
 			$('.xpmse-image-groups[data-nested="organizers"]').Multipliable({
+				initialized: function(elm, idx) {
+					$(elm).parent('.xpmse-image-groups-content') .find('.control-label').each( function(i, el ){
+						if (i >0) { $(el).html('');}
+					});
+				},
 				added: function( elm ) {
 					App.initHelper('file-uploader', {handler: $(elm).find('.file-uploader')} );
 				},
@@ -566,6 +749,7 @@ use \Xpmse\T;
 				html: function( elm ){ 
 					var html = $(elm).clone();
 					var resp = $(html);
+					resp.find('.control-label').html('');
 					resp.find('.file-uploader').html('');
 					resp.find('.file-uploader').attr('data-src', '');
 					resp.find('.file-uploader').attr('data-path', '');
@@ -583,12 +767,12 @@ use \Xpmse\T;
 
 	<!-- 多图片组上传: 赞助商 (sponsors) 开始  -->
 	<div class="xpmse-image-groups-content    draggable-column">
-
-		<?php if(count($rs['sponsors']) < 1): ?><?php $steps = 1 -  count($rs['sponsors']); for( $i=0; $i<$steps; $i++){ $rs['sponsors'][] = [];} ?><?php endif ?><?php foreach ( $rs['sponsors'] as $img ): ?> 
+		
+		<?php if(@count($rs['sponsors']) < 1): ?><?php $steps = 1 -  @count($rs['sponsors']); for( $i=0; $i<$steps; $i++){ $rs['sponsors'][] = [];} ?><?php endif ?><?php if( is_array($rs['sponsors']) && utils::array_depth($rs['sponsors']) != 2): ?><?php foreach($rs['sponsors'] as $idx=>$it ){ $rs['sponsors'][$idx] = ['img'=>$it]; }?><?php endif ?><?php foreach ( $rs['sponsors'] as $__key=>$img ): ?> 
 		<div class="xpmse-image-groups draggable-item" data-nested="sponsors" data-multiple="1">
 			<div class="form-group " >
 				<label class="col-xs-2 control-label draggable-handler" for="sponsors">赞助商</label>
-				<div class="col-xs-4" style="width:320px;" >
+				<div class="col-xs-4" style="width:320px" >
 			   		<div name="sponsors" class="file-uploader rounded rounded-4"
 						data-api='/_a/mina/uploader/upload?type=image'
 						data-title=''
@@ -628,10 +812,10 @@ use \Xpmse\T;
 					<div class="col-xs-12 push-10-t">
 						<textarea class="form-control input-lg"  
 							data-name="summary" rows="4"
-							placeholder="请输入介绍"><?=T::v('<%=summary | e(\'html\')%>', $img )?></textarea> 
+							placeholder="请输入图片介绍"><?=T::v('<%=summary | e(\'html\')%>', $img )?></textarea> 
 					</div>
 				</div>
-				<div class="col-xs-2 push-10-t">
+				<div class="col-xs-1 push-10-t">
 					<a href="javascript:void(0);" data-action="add"    class="text-success push-20-r"> <i class="fa fa-plus font-s20"></i> </a> 
 					<a href="javascript:void(0);" data-action="remove" class="text-danger"> <i class="fa fa-minus font-s20"></i> </a> 
 				</div>
@@ -641,6 +825,11 @@ use \Xpmse\T;
 
 		<script type="text/javascript">
 			$('.xpmse-image-groups[data-nested="sponsors"]').Multipliable({
+				initialized: function(elm, idx) {
+					$(elm).parent('.xpmse-image-groups-content') .find('.control-label').each( function(i, el ){
+						if (i >0) { $(el).html('');}
+					});
+				},
 				added: function( elm ) {
 					App.initHelper('file-uploader', {handler: $(elm).find('.file-uploader')} );
 				},
@@ -648,6 +837,7 @@ use \Xpmse\T;
 				html: function( elm ){ 
 					var html = $(elm).clone();
 					var resp = $(html);
+					resp.find('.control-label').html('');
 					resp.find('.file-uploader').html('');
 					resp.find('.file-uploader').attr('data-src', '');
 					resp.find('.file-uploader').attr('data-path', '');
@@ -665,12 +855,12 @@ use \Xpmse\T;
 
 	<!-- 多图片组上传: 合作媒体 (medias) 开始  -->
 	<div class="xpmse-image-groups-content    draggable-column">
-
-		<?php if(count($rs['medias']) < 1): ?><?php $steps = 1 -  count($rs['medias']); for( $i=0; $i<$steps; $i++){ $rs['medias'][] = [];} ?><?php endif ?><?php foreach ( $rs['medias'] as $img ): ?> 
+		
+		<?php if(@count($rs['medias']) < 1): ?><?php $steps = 1 -  @count($rs['medias']); for( $i=0; $i<$steps; $i++){ $rs['medias'][] = [];} ?><?php endif ?><?php if( is_array($rs['medias']) && utils::array_depth($rs['medias']) != 2): ?><?php foreach($rs['medias'] as $idx=>$it ){ $rs['medias'][$idx] = ['img'=>$it]; }?><?php endif ?><?php foreach ( $rs['medias'] as $__key=>$img ): ?> 
 		<div class="xpmse-image-groups draggable-item" data-nested="medias" data-multiple="1">
 			<div class="form-group " >
 				<label class="col-xs-2 control-label draggable-handler" for="medias">合作媒体</label>
-				<div class="col-xs-4" style="width:320px;" >
+				<div class="col-xs-4" style="width:320px" >
 			   		<div name="medias" class="file-uploader rounded rounded-4"
 						data-api='/_a/mina/uploader/upload?type=image'
 						data-title=''
@@ -710,10 +900,10 @@ use \Xpmse\T;
 					<div class="col-xs-12 push-10-t">
 						<textarea class="form-control input-lg"  
 							data-name="summary" rows="4"
-							placeholder="请输入介绍"><?=T::v('<%=summary | e(\'html\')%>', $img )?></textarea> 
+							placeholder="请输入图片介绍"><?=T::v('<%=summary | e(\'html\')%>', $img )?></textarea> 
 					</div>
 				</div>
-				<div class="col-xs-2 push-10-t">
+				<div class="col-xs-1 push-10-t">
 					<a href="javascript:void(0);" data-action="add"    class="text-success push-20-r"> <i class="fa fa-plus font-s20"></i> </a> 
 					<a href="javascript:void(0);" data-action="remove" class="text-danger"> <i class="fa fa-minus font-s20"></i> </a> 
 				</div>
@@ -723,6 +913,11 @@ use \Xpmse\T;
 
 		<script type="text/javascript">
 			$('.xpmse-image-groups[data-nested="medias"]').Multipliable({
+				initialized: function(elm, idx) {
+					$(elm).parent('.xpmse-image-groups-content') .find('.control-label').each( function(i, el ){
+						if (i >0) { $(el).html('');}
+					});
+				},
 				added: function( elm ) {
 					App.initHelper('file-uploader', {handler: $(elm).find('.file-uploader')} );
 				},
@@ -730,6 +925,7 @@ use \Xpmse\T;
 				html: function( elm ){ 
 					var html = $(elm).clone();
 					var resp = $(html);
+					resp.find('.control-label').html('');
 					resp.find('.file-uploader').html('');
 					resp.find('.file-uploader').attr('data-src', '');
 					resp.find('.file-uploader').attr('data-path', '');
@@ -747,12 +943,12 @@ use \Xpmse\T;
 
 	<!-- 多图片组上传: 嘉宾 (speakers) 开始  -->
 	<div class="xpmse-image-groups-content    draggable-column">
-
-		<?php if(count($rs['speakers']) < 1): ?><?php $steps = 1 -  count($rs['speakers']); for( $i=0; $i<$steps; $i++){ $rs['speakers'][] = [];} ?><?php endif ?><?php foreach ( $rs['speakers'] as $img ): ?> 
+		
+		<?php if(@count($rs['speakers']) < 1): ?><?php $steps = 1 -  @count($rs['speakers']); for( $i=0; $i<$steps; $i++){ $rs['speakers'][] = [];} ?><?php endif ?><?php if( is_array($rs['speakers']) && utils::array_depth($rs['speakers']) != 2): ?><?php foreach($rs['speakers'] as $idx=>$it ){ $rs['speakers'][$idx] = ['img'=>$it]; }?><?php endif ?><?php foreach ( $rs['speakers'] as $__key=>$img ): ?> 
 		<div class="xpmse-image-groups draggable-item" data-nested="speakers" data-multiple="1">
 			<div class="form-group " >
 				<label class="col-xs-2 control-label draggable-handler" for="speakers">嘉宾</label>
-				<div class="col-xs-4" style="width:320px;" >
+				<div class="col-xs-4" style="width:320px" >
 			   		<div name="speakers" class="file-uploader rounded rounded-4"
 						data-api='/_a/mina/uploader/upload?type=image'
 						data-title=''
@@ -792,10 +988,10 @@ use \Xpmse\T;
 					<div class="col-xs-12 push-10-t">
 						<textarea class="form-control input-lg"  
 							data-name="summary" rows="4"
-							placeholder="请输入介绍"><?=T::v('<%=summary | e(\'html\')%>', $img )?></textarea> 
+							placeholder="请输入图片介绍"><?=T::v('<%=summary | e(\'html\')%>', $img )?></textarea> 
 					</div>
 				</div>
-				<div class="col-xs-2 push-10-t">
+				<div class="col-xs-1 push-10-t">
 					<a href="javascript:void(0);" data-action="add"    class="text-success push-20-r"> <i class="fa fa-plus font-s20"></i> </a> 
 					<a href="javascript:void(0);" data-action="remove" class="text-danger"> <i class="fa fa-minus font-s20"></i> </a> 
 				</div>
@@ -805,6 +1001,11 @@ use \Xpmse\T;
 
 		<script type="text/javascript">
 			$('.xpmse-image-groups[data-nested="speakers"]').Multipliable({
+				initialized: function(elm, idx) {
+					$(elm).parent('.xpmse-image-groups-content') .find('.control-label').each( function(i, el ){
+						if (i >0) { $(el).html('');}
+					});
+				},
 				added: function( elm ) {
 					App.initHelper('file-uploader', {handler: $(elm).find('.file-uploader')} );
 				},
@@ -812,6 +1013,7 @@ use \Xpmse\T;
 				html: function( elm ){ 
 					var html = $(elm).clone();
 					var resp = $(html);
+					resp.find('.control-label').html('');
 					resp.find('.file-uploader').html('');
 					resp.find('.file-uploader').attr('data-src', '');
 					resp.find('.file-uploader').attr('data-path', '');
@@ -869,81 +1071,70 @@ use \Xpmse\T;
 
 
 
+<!-- 单行时间日期: 发布时间 (publish_time) 开始  -->
+<div class="form-group   ">
+<label class="col-xs-2 control-label" for="publish_time__date">发布时间</label>
+<div class="col-xs-4">
+<input 
+ name="publish_time__date" id="publish_time__date"
+
+class="js-datepicker form-control  input-lg" type="text" 
+data-date-format="yyyy年mm月dd日" 
+placeholder="请填写发布时间 "
+ value="<?=T::v('<%=publish_time | toDate%>', $rs )?>"  />
+
+<div class="help-block"></div>
+</div>
+ <div class="col-xs-4">
+<input 
+name="publish_time__time" id="publish_time__time"
+class="js-masked-time form-control  input-lg"  type="text" 
+ placeholder="请输入时间"
+value="<?=T::v('<%=publish_time | toTime%>', $rs )?>" /> 
+ </div>
+<input name="publish_time" id="publish_time" type="hidden" value="<?=T::v('<%=publish_time | toDateTime%>', $rs )?>" />
+<script type="text/javascript">
+$(function(){
+function publish_time_change() {
+var tm = $('input[name=publish_time__time').val();
+ tm = tm.replace('@ ', '');
+tm = tm.replace('时', ':');
+tm = tm.replace('分', ':');
+ tm = tm = tm + '00';
+var dt = $('input[name=publish_time__date]').val();
+dt = dt.replace('年', '-');
+dt = dt.replace('月', '-');
+ dt = dt.replace('日', '');
+var datetime = dt + ' ' + tm;
+$('input[name=publish_time]').val( datetime );
+}
+$('input[name=publish_time__date]').on("change", function( e ){
+ publish_time_change();
+
+});
+
+ $('input[name=publish_time__time').on("change", function( e ){
+
+publish_time_change();
+});
+});
+
+ </script>
+</div><!-- END 单行时间日期: 发布时间 (publish_time) -->
 
 
-	<!-- 单行时间日期: 发布时间 (publish_time) 开始  -->
-	<div class="form-group   ">
-		<label class="col-xs-2 control-label" for="publish_time__date">发布时间</label>
-		<div class="col-xs-4">
-			<input 
-				 name="publish_time__date" id="publish_time__date"
-				 class="js-datepicker form-control  input-lg" type="text" 
-				 data-date-format="yyyy年mm月dd日" 
-				 placeholder="请填写发布时间 "
-				 value="<?=T::v('<%=publish_time | toDate%>', $rs )?>"  />
-
-			<div class="help-block"></div>
-		</div>
-		<div class="col-xs-4">
-			<input 
-				name="publish_time__time" id="publish_time__time"
-				class="js-masked-time form-control  input-lg"  type="text" 
-				placeholder="请输入时间"
-				value="<?=T::v('<%=publish_time | toTime%>', $rs )?>" /> 
-		</div>
-		<input name="publish_time" id="publish_time" type="hidden" value="<?=T::v('<%=publish_time | toDateTime%>', $rs )?>" />
-
-		<script type="text/javascript">
-		$(function(){
-
-			function publish_time_change() {
-				var tm = $('input[name=publish_time__time').val();
-					tm = tm.replace('@ ', '');
-					tm = tm.replace('时', ':');
-					tm = tm.replace('分', ':');
-					tm = tm = tm + '00';
-
-				var dt = $('input[name=publish_time__date]').val();
-					dt = dt.replace('年', '-');
-					dt = dt.replace('月', '-');
-					dt = dt.replace('日', '');
-
-				var datetime = dt + ' ' + tm;
-				$('input[name=publish_time]').val( datetime );
-			}
-
-			$('input[name=publish_time__date]').on("change", function( e ){
-				publish_time_change();
-			});
-			$('input[name=publish_time__time').on("change", function( e ){
-				publish_time_change();
-			});
-		});
-		</script>
-
-	</div><!-- END 单行时间日期: 发布时间 (publish_time) -->
-
-
-
-
- 
-	<!-- 下拉选择: 活动状态 (status) 开始  -->
-	<div class="form-group   ">
+	<!-- 单选框: 活动状态 (status) 开始  -->
+	<div class="form-group    ">
 		<label class="col-xs-2 control-label" for="status">活动状态</label>
 		<div class="col-xs-8">
-			<select class="js-select2 form-control input-lg" style="width: 100%;"
-					id="status" name="status"  
-					data-placeholder="请填写活动介绍" >
-				<option></option>
-				<?php $rs["status"] = is_string($rs["status"]) ? [$rs["status"]] : $rs["status"] ; if (empty($rs["status"])) { $rs["status"] = ["draft"]; } ?>
-<option value="draft" <?=in_array("draft", $rs["status"]) ? "selected" : ""?> > 草稿</option>
-<option value="open" <?=in_array("open", $rs["status"]) ? "selected" : ""?> > 报名中</option>
-<option value="close" <?=in_array("close", $rs["status"]) ? "selected" : ""?> > 报名截止</option>
-<option value="off" <?=in_array("off", $rs["status"]) ? "selected" : ""?> > 活动关闭</option>
-			</select>
+			<?php if (is_null($rs["status"])) { $rs["status"] = "draft"; } ?>
+<label class="css-input  css-radio css-radio-lg css-radio-primary push-10-r"><input   type="radio" name="status" data-uncheck-value="draft" value="draft" <?=("draft" == $rs["status"]) ? "checked" : ""?> > <span></span> 草稿</label>
+<label class="css-input  css-radio css-radio-lg css-radio-primary push-10-r"><input   type="radio" name="status" data-uncheck-value="open" value="open" <?=("open" == $rs["status"]) ? "checked" : ""?> > <span></span> 报名中</label>
+<label class="css-input  css-radio css-radio-lg css-radio-primary push-10-r"><input   type="radio" name="status" data-uncheck-value="close" value="close" <?=("close" == $rs["status"]) ? "checked" : ""?> > <span></span> 报名截止</label>
+<label class="css-input  css-radio css-radio-lg css-radio-primary push-10-r"><input   type="radio" name="status" data-uncheck-value="off" value="off" <?=("off" == $rs["status"]) ? "checked" : ""?> > <span></span> 活动关闭</label>
 			<div class="help-block"></div>
 		</div>
-	</div><!-- END 下拉选择: 活动状态 (status) -->
+	</div><!-- END 单选框: 活动状态 (status) 开始  -->
 
 				<!--  提交按钮 -->
 				<div class="block block-quickpanel sidebar-mini">
@@ -975,7 +1166,7 @@ use \Xpmse\T;
 									type="button"
 									class="btn btn-lg btn-danger btn-minw ajax-confirm fn-action fn-saved-only fn-remove"
 									confirm-title="请确认删除活动 "
-						            confirm-content="您确定删除活动 <strong><?=$rs['name=name']?>(<?=$rs['event_id']?> )</strong>"
+						            confirm-content="您确定删除活动 <strong><?=$rs['name=title']?>(<?=$rs['event_id']?> )</strong>"
 						            confirm-dismiss = "取消"
 						            confirm-submit= "确定"
 						            confirm-action="<?=App::NR('event','remove')?>"

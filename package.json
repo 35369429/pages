@@ -1,7 +1,7 @@
 {
 	"org": "xpmsns",
 	"name": "pages",
-	"version": "1.6.3",
+	"version": "1.6.4",
 	"cname": "简墨头条",
 	"image": {
 		"color":"/static/icons/app-color.svg",
@@ -41,16 +41,30 @@
 		"permission": "boss,admin,manager,user",
 		"order":9999
 	},{
-		"slug":"xpmsns/pages/event/index",
+		"slug":"xpmsns/pages/event",
 		"name":"活动",
 		"icon":{
 			"default":"/static/icons/event.svg"
 		},
 		"icontype": "img",
 		"linktype":"i",
-		"link":"{event,index}",
 		"permission": "boss,admin,manager,user",
-		"order":9999
+        "order":9999,
+        "submenu":[
+            {
+				"slug":"xpmsns/pages/event/index",
+				"name":"活动管理",
+				"link":"{event,index}",
+				"permission": "boss,admin,manager,user",
+				"order":9999
+			},{
+				"slug":"xpmsns/pages/userevent/index",
+				"name":"报名管理",
+				"link":"{userevent,index}",
+				"permission": "boss,admin,manager,user",
+				"order":9999
+			}
+		]
 	},{
 		"slug":"xpmsns/pages/goods/index",
 		"name":"商品",

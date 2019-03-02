@@ -76,6 +76,12 @@ use \Xpmse\T;
 										创建时间倒序
 									<?php elseif ( $query['order'] == 'orderby_updated_at_desc') :?>
 										更新时间倒序
+									<?php elseif ( $query['order'] == 'orderby_publish_time_desc') :?>
+										发布时间倒序
+									<?php elseif ( $query['order'] == 'orderby_begin_desc') :?>
+										开始时间倒序
+									<?php elseif ( $query['order'] == 'orderby_end_desc') :?>
+										结束时间倒序
 									<?php else:?>
 										排序方式
 									<?php endif;?>
@@ -92,6 +98,21 @@ use \Xpmse\T;
 									<li>
 										<a href="javascript:search('order','orderby_updated_at_desc')">
 										   更新时间倒序
+										</a>
+									</li>
+									<li>
+										<a href="javascript:search('order','orderby_publish_time_desc')">
+										   发布时间倒序
+										</a>
+									</li>
+									<li>
+										<a href="javascript:search('order','orderby_begin_desc')">
+										   开始时间倒序
+										</a>
+									</li>
+									<li>
+										<a href="javascript:search('order','orderby_end_desc')">
+										   结束时间倒序
 										</a>
 									</li>
 									<li>
@@ -142,6 +163,36 @@ use \Xpmse\T;
 								</ul>
 							</div> <!-- END 活动状态过滤 -->
 
+							<!-- 活动类型过滤 -->
+							<div class="btn-group pull-right push-20-l" role="group">  
+								<button class="btn btn-default btn-xs dropdown-toggle" type="button" data-toggle="dropdown" >
+									<i class="glyphicon glyphicon-list-alt"></i> 
+									<?=($query['type'] == 'offline') ? '线下' : '' ?>
+									<?=($query['type'] == 'online') ? '线上' : '' ?>
+									<?=(empty($query['type'])) ? '活动类型' : '' ?>
+									<span class="caret"></span> 
+								</button>
+
+								<ul class="dropdown-menu dropdown-menu-right"  style="min-width: 87px;">
+									<li class="dropdown-header">活动类型</li>
+									<li>
+										<a href="javascript:search('type','')">
+										   全部
+										</a>
+									</li>
+									<li >
+										<a href="javascript:search('type','offline')">
+										   线下
+										</a>
+									</li>
+									<li >
+										<a href="javascript:search('type','online')">
+										   线上
+										</a>
+									</li>
+								</ul>
+							</div> <!-- END 活动类型过滤 -->
+
 
 						</div><!-- END col-xs-7 -->
 
@@ -153,15 +204,16 @@ use \Xpmse\T;
 						<thead>
 							<tr>
 								<th class="font-w300"> 活动ID </th>
-								<th class="font-w300"> 活动别名 </th>
-								<th class="font-w300"> 活动主题 </th>
+								<th class="font-w300"> 别名 </th>
+								<th class="font-w300"> 主题 </th>
 								<th class="font-w300"> 栏目 </th>
 								<th class="font-w300"> 封面 </th>
-								<th class="font-w300"> 活动海报 </th>
+								<th class="font-w300"> 海报 </th>
 								<th class="font-w300"> 发布时间 </th>
 								<th class="font-w300"> 开始时间 </th>
 								<th class="font-w300"> 结束时间 </th>
-								<th class="font-w300"> 活动状态 </th>
+								<th class="font-w300"> 类型 </th>
+								<th class="font-w300"> 状态 </th>
 							</tr>
 						</thead>
 
@@ -176,7 +228,7 @@ use \Xpmse\T;
 									<?php $v=null; $v=T::s("{{slug}}", $rs ); echo empty($v) ? T::s("", $rs ) : $v; ?>
 								</td>
 								<td class="font-w300">
-									<?php $v=null; $v=T::s("{{name}}", $rs ); echo empty($v) ? T::s("", $rs ) : $v; ?>
+									<?php $v=null; $v=T::s("{{title}}", $rs ); echo empty($v) ? T::s("", $rs ) : $v; ?>
 								</td>
 								<td class="font-w300">
 									<?php $rs["_map_category"]= &$response["category"]; $v=null; $v=T::s("{% for idx in categories %} {{_map_category[idx].name}} {% endfor %}", $rs ); echo empty($v) ? T::s("", $rs ) : $v; ?>
@@ -209,6 +261,9 @@ use \Xpmse\T;
 									<?php $v=null; $v=T::s("{{end|toDate('Y年m月d日')}}  @{{end|toTime('h时i分')}}", $rs ); echo empty($v) ? T::s("", $rs ) : $v; ?>
 								</td>
 								<td class="font-w300">
+									<span class="text-<?=$rs['_type']['style']?>"><?=$rs['_type']['name'] ? $rs['_type']['name']  : $rs['type'] ?></span>
+								</td>
+								<td class="font-w300">
 									<span class="text-<?=$rs['_status']['style']?>"><?=$rs['_status']['name'] ? $rs['_status']['name']  : $rs['status'] ?></span>
 								</td>
 							</tr>
@@ -217,7 +272,7 @@ use \Xpmse\T;
 						</tbody>
 
 						<tfoot>
-							<tr><td colspan="10"> <nav class="pull-right">
+							<tr><td colspan="11"> <nav class="pull-right">
 
 								<ul class="pagination">
 									<?php if ($response['prev'] !== false): ?>
