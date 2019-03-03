@@ -231,12 +231,14 @@ class Category extends Api {
 	 */
 	protected function get( $query=[] ) {
 
-		// 验证数值ß
-		if ( !preg_match("/^([0-9]+)/", $query['categoryId']) ) {
-			throw new Excp(" categoryId 参数错误", 400, ['query'=>$query]);
-		}
+        
+        $slug = $query["slug"];
+        $category_id = !empty($query["categoryId"]) ? $query["categoryId"] : $query["category_id"];
 
-		$category_id = $query['categoryId'];
+        if ( empty($slug) && empty( $category_id) ) {
+            throw new Excp(" 请指定查询参数", 402, ['query'=>$query]);
+        }
+
 		$select = empty($query['select']) ? '*' : $query['select'];
 		$select = is_array($select) ? $select : explode(',', $select);
 
@@ -249,8 +251,12 @@ class Category extends Api {
 			}
 		}
 		
-		$cate = new \Xpmsns\pages\Model\Category;
-		$rs = $cate->getLine("WHERE category_id=:category_id LIMIT 1", $select, ["category_id"=>$category_id]);
+        $cate = new \Xpmsns\pages\Model\Category;
+        if( !empty( $slug) ) {
+            $rs = $cate->getLine("WHERE slug=:slug LIMIT 1", $select, ["slug"=>$slug]);
+        } else {
+            $rs = $cate->getLine("WHERE category_id=:category_id LIMIT 1", $select, ["category_id"=>$category_id]);
+        }
 		if ( empty($rs) ) {
 			throw new Excp("分类不存在", 404,  ['query'=>$query]);
 		}
