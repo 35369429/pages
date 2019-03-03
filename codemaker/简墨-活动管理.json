@@ -70,11 +70,25 @@
                 {
                     "name": "categories",
                     "cname": "栏目",
-                    "type": "text",
-                    "length": "",
+                    "type": "string",
+                    "length": "256",
                     "default": "",
                     "unique": "",
-                    "index": "",
+                    "index": "1",
+                    "nullable": "",
+                    "json": "1",
+                    "auto": "",
+                    "file": "",
+                    "private": ""
+                },
+                {
+                    "name": "series",
+                    "cname": "系列",
+                    "type": "string",
+                    "length": "256",
+                    "default": "",
+                    "unique": "",
+                    "index": "1",
                     "nullable": "",
                     "json": "1",
                     "auto": "",
@@ -168,6 +182,20 @@
                 {
                     "name": "end",
                     "cname": "结束时间",
+                    "type": "timestamp",
+                    "length": "",
+                    "default": "",
+                    "unique": "",
+                    "index": "1",
+                    "nullable": "",
+                    "json": "",
+                    "auto": "",
+                    "file": "",
+                    "private": ""
+                },
+                {
+                    "name": "deadline",
+                    "cname": "报名截止时间",
                     "type": "timestamp",
                     "length": "",
                     "default": "",
@@ -418,6 +446,20 @@
                     "private": ""
                 },
                 {
+                    "name": "report",
+                    "cname": "活动总结",
+                    "type": "longText",
+                    "length": "",
+                    "default": "",
+                    "unique": "",
+                    "index": "",
+                    "nullable": "",
+                    "json": "",
+                    "auto": "",
+                    "file": "",
+                    "private": ""
+                },
+                {
                     "name": "desktop",
                     "cname": "桌面代码",
                     "type": "longText",
@@ -602,10 +644,21 @@
                     "model": "\\Xpmsns\\Pages\\Model\\Category",
                     "table": "category",
                     "prefix": "xpmsns_pages_",
-                    "field": "category_id",
+                    "field": "slug",
                     "on": "in",
                     "name": "categories",
                     "alias": "category"
+                },
+                {
+                    "cname": "类型",
+                    "type": "inWhere",
+                    "model": "\\Xpmsns\\Pages\\Model\\Series",
+                    "table": "series",
+                    "prefix": "xpmsns_pages_",
+                    "field": "slug",
+                    "on": "in",
+                    "name": "series",
+                    "alias": "series"
                 }
             ]
         },
@@ -704,16 +757,51 @@
                         "model": "\\Xpmsns\\Pages\\Model\\Category",
                         "fields": [
                             "category_id",
+                            "slug",
                             "name"
                         ],
-                        "option": "category_id",
+                        "option": "slug",
                         "selectedInline": "",
-                        "style": "{{name}} ({{category_id}})",
+                        "style": "{{name}} (ID:{{category_id}} 别名:{{slug}})",
                         "default": "",
                         "multiple": "1",
                         "api": "",
                         "cancel": "",
-                        "cancelable": ""
+                        "cancelable": "1"
+                    },
+                    "validator": [
+                        {
+                            "method": "",
+                            "value": "",
+                            "message": ""
+                        }
+                    ]
+                },
+                {
+                    "cname": "系列",
+                    "name": "series",
+                    "type": "select-remote",
+                    "placeholder": "请选择活动系列",
+                    "helper": "",
+                    "exp": "",
+                    "readonly": "",
+                    "attr": {
+                        "table": "series",
+                        "prefix": "xpmsns_pages_",
+                        "model": "\\Xpmsns\\Pages\\Model\\Series",
+                        "fields": [
+                            "series_id",
+                            "name",
+                            "slug"
+                        ],
+                        "option": "slug",
+                        "selectedInline": "",
+                        "style": "{{name}} (ID:{{series_id}}, 别名:{{slug}})",
+                        "default": "",
+                        "multiple": "1",
+                        "api": "",
+                        "cancel": "",
+                        "cancelable": "1"
                     },
                     "validator": [
                         {
@@ -812,6 +900,25 @@
                 {
                     "cname": "开始时间",
                     "name": "begin",
+                    "type": "datetime-input",
+                    "placeholder": "请选择日期时间",
+                    "helper": "",
+                    "exp": "",
+                    "readonly": "",
+                    "attr": {
+                        "default": ""
+                    },
+                    "validator": [
+                        {
+                            "method": "",
+                            "value": "",
+                            "message": ""
+                        }
+                    ]
+                },
+                {
+                    "cname": "报名截止时间",
+                    "name": "deadline",
                     "type": "datetime-input",
                     "placeholder": "请选择日期时间",
                     "helper": "",
@@ -1218,6 +1325,29 @@
                     ]
                 },
                 {
+                    "cname": "活动总结",
+                    "name": "report",
+                    "type": "summernote",
+                    "placeholder": "请填写活动总结",
+                    "helper": "",
+                    "exp": "",
+                    "readonly": "",
+                    "attr": {
+                        "default": "",
+                        "height": "",
+                        "maxHeight": "",
+                        "api": "",
+                        "minHeight": ""
+                    },
+                    "validator": [
+                        {
+                            "method": "",
+                            "value": "",
+                            "message": ""
+                        }
+                    ]
+                },
+                {
                     "cname": "发布时间",
                     "name": "publish_time",
                     "type": "datetime-input",
@@ -1245,7 +1375,7 @@
                     "exp": "",
                     "readonly": "",
                     "attr": {
-                        "option": "草稿=draft,报名中=open,报名截止=close,活动关闭=off",
+                        "option": "草稿=draft,筹备中=preparing,报名中=open,报名截止=close,活动关闭=off",
                         "default": "draft"
                     },
                     "validator": [
@@ -1289,6 +1419,8 @@
                 "",
                 "",
                 "",
+                "",
+                "",
                 ""
             ]
         },
@@ -1303,7 +1435,10 @@
                 "name=area",
                 "name=prov",
                 "name=city",
-                "name=town"
+                "name=town",
+                "model=%5CXpmsns%5CPages%5CModel%5CCategory&name=slug&table=category&prefix=xpmsns_pages_&alias=category&type=inWhere",
+                "model=%5CXpmsns%5CPages%5CModel%5CCategory&name=name&table=category&prefix=xpmsns_pages_&alias=category&type=inWhere",
+                "model=%5CXpmsns%5CPages%5CModel%5CSeries&name=slug&table=series&prefix=xpmsns_pages_&alias=series&type=inWhere"
             ],
             "jscode": [
                 ""
@@ -1404,6 +1539,22 @@
                     "cname": "",
                     "param": "",
                     "default": ""
+                },
+                {
+                    "or": "0",
+                    "field": "name=categories",
+                    "type": "like-multiple",
+                    "cname": "",
+                    "param": "",
+                    "default": ""
+                },
+                {
+                    "or": "0",
+                    "field": "name=series",
+                    "type": "like-multiple",
+                    "cname": "",
+                    "param": "",
+                    "default": ""
                 }
             ],
             "orderby": [
@@ -1436,13 +1587,19 @@
                     "type": "desc",
                     "cname": "",
                     "param": ""
+                },
+                {
+                    "field": "name=deadline",
+                    "type": "desc",
+                    "cname": "",
+                    "param": ""
                 }
             ],
             "statusby": [
                 {
                     "name": "name=status",
                     "cname": "活动状态",
-                    "status": "草稿=draft|danger,报名中=open|success,报名截止=close|default,活动关闭=off|default"
+                    "status": "草稿=draft|danger,筹备中=preparing|warning,报名中=open|success,报名截止=close|default,活动关闭=off|default"
                 },
                 {
                     "name": "name=type",
@@ -1477,26 +1634,10 @@
                 },
                 {
                     "fields": [
-                        "model=%5CXpmsns%5CPages%5CModel%5CCategory&name=name&table=category&prefix=xpmsns_pages_&alias=category&type=inWhere"
-                    ],
-                    "cname": "栏目",
-                    "filter": "",
-                    "default": ""
-                },
-                {
-                    "fields": [
                         "name=cover"
                     ],
                     "cname": "",
                     "filter": "",
-                    "default": ""
-                },
-                {
-                    "fields": [
-                        "name=publish_time"
-                    ],
-                    "cname": "",
-                    "filter": "{{publish_time|toDate('Y年m月d日')}} ",
                     "default": ""
                 },
                 {
@@ -1551,6 +1692,7 @@
                 "name=title",
                 "name=link",
                 "name=categories",
+                "name=series",
                 "name=type",
                 "name=tags",
                 "name=summary",
@@ -1582,7 +1724,13 @@
                 "name=comment_cnt",
                 "name=status",
                 "name=created_at",
-                "name=updated_at"
+                "name=updated_at",
+                "model=%5CXpmsns%5CPages%5CModel%5CCategory&name=category_id&table=category&prefix=xpmsns_pages_&alias=category&type=inWhere",
+                "model=%5CXpmsns%5CPages%5CModel%5CCategory&name=slug&table=category&prefix=xpmsns_pages_&alias=category&type=inWhere",
+                "model=%5CXpmsns%5CPages%5CModel%5CCategory&name=name&table=category&prefix=xpmsns_pages_&alias=category&type=inWhere",
+                "model=%5CXpmsns%5CPages%5CModel%5CSeries&name=series_id&table=series&prefix=xpmsns_pages_&alias=series&type=inWhere",
+                "model=%5CXpmsns%5CPages%5CModel%5CSeries&name=name&table=series&prefix=xpmsns_pages_&alias=series&type=inWhere",
+                "model=%5CXpmsns%5CPages%5CModel%5CSeries&name=slug&table=series&prefix=xpmsns_pages_&alias=series&type=inWhere"
             ],
             "createfields": [
                 "name=event_id",
@@ -1602,6 +1750,7 @@
                 "name=title",
                 "name=link",
                 "name=categories",
+                "name=series",
                 "name=type",
                 "name=tags",
                 "name=summary",
@@ -1630,7 +1779,13 @@
                 "name=dislike_cnt",
                 "name=comment_cnt",
                 "name=created_at",
-                "name=updated_at"
+                "name=updated_at",
+                "model=%5CXpmsns%5CPages%5CModel%5CCategory&name=category_id&table=category&prefix=xpmsns_pages_&alias=category&type=inWhere",
+                "model=%5CXpmsns%5CPages%5CModel%5CCategory&name=slug&table=category&prefix=xpmsns_pages_&alias=category&type=inWhere",
+                "model=%5CXpmsns%5CPages%5CModel%5CCategory&name=name&table=category&prefix=xpmsns_pages_&alias=category&type=inWhere",
+                "model=%5CXpmsns%5CPages%5CModel%5CSeries&name=series_id&table=series&prefix=xpmsns_pages_&alias=series&type=inWhere",
+                "model=%5CXpmsns%5CPages%5CModel%5CSeries&name=name&table=series&prefix=xpmsns_pages_&alias=series&type=inWhere",
+                "model=%5CXpmsns%5CPages%5CModel%5CSeries&name=slug&table=series&prefix=xpmsns_pages_&alias=series&type=inWhere"
             ],
             "getauth": [
                 "",

@@ -93,13 +93,13 @@ use \Xpmse\T;
 			<select class="js-select2 form-control input-lg   "  style="width: 100%;" 
 					id="categories" name="categories" 
 					data-language="zh-CN"
-					data-param-cancelable="0"
+					data-param-cancelable="1"
 					data-param-cancel="取消选择"
 					data-param-model="\Xpmsns\Pages\Model\Category"
 					data-param-table="category"
-					data-param-fields="category_id,name"
-					data-param-style="{{name}} ({{category_id}})"
-					data-param-option="category_id"
+					data-param-fields="category_id,slug,name"
+					data-param-style="{{name}} (ID:{{category_id}} 别名:{{slug}})"
+					data-param-option="slug"
 					data-param-default=""
 					data-ajax-url="/_a/mina/helper/select2?method=get"
 					data-preload-url="/_a/mina/helper/select2?method=get&preload=<?=T::v('<%=categories | join(\',\')%>', $rs )?>"
@@ -108,7 +108,60 @@ use \Xpmse\T;
 			</select>
 			<div class="help-block"></div>
 		</div>
-			</div><!-- END 下拉选择(动态数据): 栏目 (categories) -->
+		 
+		<script type="text/javascript">
+		$(function(){
+			// 取消选择
+			$('select[name=categories]').on("select2:select", function( e ){
+				var data = e.params.data || {};
+				id = data.id || '';
+				if ( '__cancel' ==  data.id ) {
+					$(this).select2("val", "");
+				}
+			});
+		});
+        </script>
+        	</div><!-- END 下拉选择(动态数据): 栏目 (categories) -->
+
+
+
+ 
+	<!-- 下拉选择(动态数据): 系列 (series) 开始  -->
+	<div class="form-group   ">
+		<label class="col-xs-2 control-label" for="series">系列</label>
+		<div class="col-xs-8"> 
+			<select class="js-select2 form-control input-lg   "  style="width: 100%;" 
+					id="series" name="series" 
+					data-language="zh-CN"
+					data-param-cancelable="1"
+					data-param-cancel="取消选择"
+					data-param-model="\Xpmsns\Pages\Model\Series"
+					data-param-table="series"
+					data-param-fields="series_id,name,slug"
+					data-param-style="{{name}} (ID:{{series_id}}, 别名:{{slug}})"
+					data-param-option="slug"
+					data-param-default=""
+					data-ajax-url="/_a/mina/helper/select2?method=get"
+					data-preload-url="/_a/mina/helper/select2?method=get&preload=<?=T::v('<%=series | join(\',\')%>', $rs )?>"
+					data-placeholder="请选择活动系列"  multiple data-select2-multiple=1  >
+				<option></option>
+			</select>
+			<div class="help-block"></div>
+		</div>
+		 
+		<script type="text/javascript">
+		$(function(){
+			// 取消选择
+			$('select[name=series]').on("select2:select", function( e ){
+				var data = e.params.data || {};
+				id = data.id || '';
+				if ( '__cancel' ==  data.id ) {
+					$(this).select2("val", "");
+				}
+			});
+		});
+        </script>
+        	</div><!-- END 下拉选择(动态数据): 系列 (series) -->
 
 
  <!-- 单行标签文本: 标签 (tags) 开始  -->
@@ -295,6 +348,59 @@ begin_change();
 
  </script>
 </div><!-- END 单行时间日期: 开始时间 (begin) -->
+
+
+
+<!-- 单行时间日期: 报名截止时间 (deadline) 开始  -->
+<div class="form-group   ">
+<label class="col-xs-2 control-label" for="deadline__date">报名截止时间</label>
+<div class="col-xs-4">
+<input 
+ name="deadline__date" id="deadline__date"
+
+class="js-datepicker form-control  input-lg" type="text" 
+data-date-format="yyyy年mm月dd日" 
+placeholder="请选择日期时间 "
+ value="<?=T::v('<%=deadline | toDate%>', $rs )?>"  />
+
+<div class="help-block"></div>
+</div>
+ <div class="col-xs-4">
+<input 
+name="deadline__time" id="deadline__time"
+class="js-masked-time form-control  input-lg"  type="text" 
+ placeholder="请输入时间"
+value="<?=T::v('<%=deadline | toTime%>', $rs )?>" /> 
+ </div>
+<input name="deadline" id="deadline" type="hidden" value="<?=T::v('<%=deadline | toDateTime%>', $rs )?>" />
+<script type="text/javascript">
+$(function(){
+function deadline_change() {
+var tm = $('input[name=deadline__time').val();
+ tm = tm.replace('@ ', '');
+tm = tm.replace('时', ':');
+tm = tm.replace('分', ':');
+ tm = tm = tm + '00';
+var dt = $('input[name=deadline__date]').val();
+dt = dt.replace('年', '-');
+dt = dt.replace('月', '-');
+ dt = dt.replace('日', '');
+var datetime = dt + ' ' + tm;
+$('input[name=deadline]').val( datetime );
+}
+$('input[name=deadline__date]').on("change", function( e ){
+ deadline_change();
+
+});
+
+ $('input[name=deadline__time').on("change", function( e ){
+
+deadline_change();
+});
+});
+
+ </script>
+</div><!-- END 单行时间日期: 报名截止时间 (deadline) -->
 
 
 
@@ -1084,6 +1190,49 @@ end_change();
 
 
 
+
+	<!-- 富文本(summernote): 活动总结 (report) 开始  -->
+	<div class="form-group     ">
+		<label class="col-xs-2 control-label" for="report">活动总结</label>
+		<div class="col-xs-8">
+			<textarea class="js-summernote" name="report" id="report" placeholder="请填写活动总结" ><?=T::v('<%=report | e(\'html\')%>', $rs )?></textarea>
+			<div class="help-block"></div>
+		</div>
+	</div><!-- END 富文本(summernote): 活动总结 (report) -->
+	<script type="text/javascript">
+		// Init full text editor
+		$('.js-summernote[name=report]').summernote({
+			lang: 'zh-CN',
+			height: 300,
+			minHeight: null,
+			maxHeight: null,
+			callbacks: {
+    			onImageUpload: function(files) {
+    				var that = this;
+    				for(var i = files.length - 1; i >= 0; i--) {
+    					var file = files[i];
+    					var form_data = new FormData();
+						form_data.append('file', file);
+						$.ajax({
+							data: form_data,
+							dataType:'json',
+							type: "POST",
+							url: '/_a/mina/uploader/upload?type=image',
+							cache: false,
+							contentType: false,
+							processData: false,
+							success: function( rs ) {
+							    $(that).summernote('editor.insertImage', rs['url']);
+							}
+						});
+    				}
+    			}
+    		}
+		});
+	</script>
+
+
+
 <!-- 单行时间日期: 发布时间 (publish_time) 开始  -->
 <div class="form-group   ">
 <label class="col-xs-2 control-label" for="publish_time__date">发布时间</label>
@@ -1142,6 +1291,7 @@ publish_time_change();
 		<div class="col-xs-8">
 			<?php if (is_null($rs["status"])) { $rs["status"] = "draft"; } ?>
 <label class="css-input  css-radio css-radio-lg css-radio-primary push-10-r"><input   type="radio" name="status" data-uncheck-value="draft" value="draft" <?=("draft" == $rs["status"]) ? "checked" : ""?> > <span></span> 草稿</label>
+<label class="css-input  css-radio css-radio-lg css-radio-primary push-10-r"><input   type="radio" name="status" data-uncheck-value="preparing" value="preparing" <?=("preparing" == $rs["status"]) ? "checked" : ""?> > <span></span> 筹备中</label>
 <label class="css-input  css-radio css-radio-lg css-radio-primary push-10-r"><input   type="radio" name="status" data-uncheck-value="open" value="open" <?=("open" == $rs["status"]) ? "checked" : ""?> > <span></span> 报名中</label>
 <label class="css-input  css-radio css-radio-lg css-radio-primary push-10-r"><input   type="radio" name="status" data-uncheck-value="close" value="close" <?=("close" == $rs["status"]) ? "checked" : ""?> > <span></span> 报名截止</label>
 <label class="css-input  css-radio css-radio-lg css-radio-primary push-10-r"><input   type="radio" name="status" data-uncheck-value="off" value="off" <?=("off" == $rs["status"]) ? "checked" : ""?> > <span></span> 活动关闭</label>

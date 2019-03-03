@@ -82,6 +82,8 @@ use \Xpmse\T;
 										开始时间倒序
 									<?php elseif ( $query['order'] == 'orderby_end_desc') :?>
 										结束时间倒序
+									<?php elseif ( $query['order'] == 'orderby_deadline_desc') :?>
+										报名截止时间倒序
 									<?php else:?>
 										排序方式
 									<?php endif;?>
@@ -116,6 +118,11 @@ use \Xpmse\T;
 										</a>
 									</li>
 									<li>
+										<a href="javascript:search('order','orderby_deadline_desc')">
+										   报名截止时间倒序
+										</a>
+									</li>
+									<li>
 										<a href="javascript:search('order','')"> 默认排序 </a>
 									</li>
 								</ul>
@@ -126,6 +133,7 @@ use \Xpmse\T;
 								<button class="btn btn-default btn-xs dropdown-toggle" type="button" data-toggle="dropdown" >
 									<i class="glyphicon glyphicon-list-alt"></i> 
 									<?=($query['status'] == 'draft') ? '草稿' : '' ?>
+									<?=($query['status'] == 'preparing') ? '筹备中' : '' ?>
 									<?=($query['status'] == 'open') ? '报名中' : '' ?>
 									<?=($query['status'] == 'close') ? '报名截止' : '' ?>
 									<?=($query['status'] == 'off') ? '活动关闭' : '' ?>
@@ -143,6 +151,11 @@ use \Xpmse\T;
 									<li >
 										<a href="javascript:search('status','draft')">
 										   草稿
+										</a>
+									</li>
+									<li >
+										<a href="javascript:search('status','preparing')">
+										   筹备中
 										</a>
 									</li>
 									<li >
@@ -206,9 +219,7 @@ use \Xpmse\T;
 								<th class="font-w300"> 活动ID </th>
 								<th class="font-w300"> 别名 </th>
 								<th class="font-w300"> 主题 </th>
-								<th class="font-w300"> 栏目 </th>
 								<th class="font-w300"> 封面 </th>
-								<th class="font-w300"> 发布时间 </th>
 								<th class="font-w300"> 开始时间 </th>
 								<th class="font-w300"> 结束时间 </th>
 								<th class="font-w300"> 类型 </th>
@@ -230,17 +241,11 @@ use \Xpmse\T;
 									<?php $v=null; $v=T::s("{{title}}", $rs ); echo empty($v) ? T::s("", $rs ) : $v; ?>
 								</td>
 								<td class="font-w300">
-									<?php $rs["_map_category"]= &$response["category"]; $v=null; $v=T::s("{% for idx in categories %} {{_map_category[idx].name}} {% endfor %}", $rs ); echo empty($v) ? T::s("", $rs ) : $v; ?>
-								</td>
-								<td class="font-w300">
 									<div style="line-height: 84px;display: inline-block; max-width:260px;word-wrap:break-word;" > 
 										<?php if ( !empty($rs["cover"]['url']) ) : ?>
 										<img src="<?=$rs["cover"]['url']?>" height="64" style="max-width:260px;"/> 
 										<?php endif;?>
 									</div>
-								</td>
-								<td class="font-w300">
-									<?php $v=null; $v=T::s("{{publish_time|toDate('Y年m月d日')}}", $rs ); echo empty($v) ? T::s("", $rs ) : $v; ?>
 								</td>
 								<td class="font-w300">
 									<?php $v=null; $v=T::s("{{begin|toDate('Y年m月d日')}}", $rs ); echo empty($v) ? T::s("", $rs ) : $v; ?>
@@ -260,7 +265,7 @@ use \Xpmse\T;
 						</tbody>
 
 						<tfoot>
-							<tr><td colspan="10"> <nav class="pull-right">
+							<tr><td colspan="8"> <nav class="pull-right">
 
 								<ul class="pagination">
 									<?php if ($response['prev'] !== false): ?>

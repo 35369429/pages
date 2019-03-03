@@ -4,11 +4,11 @@
  * 活动数据模型
  *
  * 程序作者: XpmSE机器人
- * 最后修改: 2019-03-02 22:26:59
+ * 最后修改: 2019-03-03 18:53:00
  * 程序母版: /data/stor/private/templates/xpmsns/model/code/model/Name.php
  */
 namespace Xpmsns\Pages\Model;
-                                                     
+                                                        
 use \Xpmse\Excp;
 use \Xpmse\Model;
 use \Xpmse\Utils;
@@ -81,7 +81,9 @@ class Event extends Model {
 		// 外部链接
 		$this->putColumn( 'link', $this->type("string", ["length"=>200, "null"=>true]));
 		// 栏目
-		$this->putColumn( 'categories', $this->type("text", ["json"=>true, "null"=>true]));
+		$this->putColumn( 'categories', $this->type("string", ["length"=>256, "index"=>true, "json"=>true, "null"=>true]));
+		// 系列
+		$this->putColumn( 'series', $this->type("string", ["length"=>256, "index"=>true, "json"=>true, "null"=>true]));
 		// 类型
 		$this->putColumn( 'type', $this->type("string", ["length"=>32, "index"=>true, "null"=>true]));
 		// 标签
@@ -96,6 +98,8 @@ class Event extends Model {
 		$this->putColumn( 'begin', $this->type("timestamp", ["index"=>true, "null"=>true]));
 		// 结束时间
 		$this->putColumn( 'end', $this->type("timestamp", ["index"=>true, "null"=>true]));
+		// 报名截止时间
+		$this->putColumn( 'deadline', $this->type("timestamp", ["index"=>true, "null"=>true]));
 		// 名额
 		$this->putColumn( 'quota', $this->type("integer", ["length"=>1, "index"=>true, "null"=>true]));
 		// 流程设计
@@ -130,6 +134,8 @@ class Event extends Model {
 		$this->putColumn( 'speakers', $this->type("text", ["json"=>true, "null"=>true]));
 		// 活动介绍
 		$this->putColumn( 'content', $this->type("longText", ["null"=>true]));
+		// 活动总结
+		$this->putColumn( 'report', $this->type("longText", ["null"=>true]));
 		// 桌面代码
 		$this->putColumn( 'desktop', $this->type("longText", ["null"=>true]));
 		// 手机代码
@@ -215,6 +221,11 @@ class Event extends Model {
 		  			"name" => "草稿",
 		  			"style" => "danger"
 		  		],
+		  		"preparing" => [
+		  			"value" => "preparing",
+		  			"name" => "筹备中",
+		  			"style" => "warning"
+		  		],
 		  		"open" => [
 		  			"value" => "open",
 		  			"name" => "报名中",
@@ -270,7 +281,9 @@ class Event extends Model {
 	 *          	  $rs["title"],  // 主题 
 	 *          	  $rs["link"],  // 外部链接 
 	 *          	  $rs["categories"],  // 栏目 
-	 *                $rs["_map_category"][$categories[n]]["category_id"], // category.category_id
+	 *                $rs["_map_category"][$categories[n]]["slug"], // category.slug
+	 *          	  $rs["series"],  // 系列 
+	 *                $rs["_map_series"][$series[n]]["slug"], // series.slug
 	 *          	  $rs["type"],  // 类型 
 	 *          	  $rs["tags"],  // 标签 
 	 *          	  $rs["summary"],  // 简介 
@@ -278,6 +291,7 @@ class Event extends Model {
 	 *          	  $rs["images"],  // 海报 
 	 *          	  $rs["begin"],  // 开始时间 
 	 *          	  $rs["end"],  // 结束时间 
+	 *          	  $rs["deadline"],  // 报名截止时间 
 	 *          	  $rs["quota"],  // 名额 
 	 *          	  $rs["process_setting"],  // 流程设计 
 	 *          	  $rs["process"],  // 当前进程 
@@ -295,6 +309,7 @@ class Event extends Model {
 	 *          	  $rs["medias"],  // 合作媒体 
 	 *          	  $rs["speakers"],  // 嘉宾 
 	 *          	  $rs["content"],  // 活动介绍 
+	 *          	  $rs["report"],  // 活动总结 
 	 *          	  $rs["desktop"],  // 桌面代码 
 	 *          	  $rs["mobile"],  // 手机代码 
 	 *          	  $rs["wxapp"],  // 小程序代码 
@@ -311,7 +326,7 @@ class Event extends Model {
 	 *          	  $rs["updated_at"],  // 更新时间 
 	 *                $rs["_map_category"][$categories[n]]["created_at"], // category.created_at
 	 *                $rs["_map_category"][$categories[n]]["updated_at"], // category.updated_at
-	 *                $rs["_map_category"][$categories[n]]["slug"], // category.slug
+	 *                $rs["_map_category"][$categories[n]]["category_id"], // category.category_id
 	 *                $rs["_map_category"][$categories[n]]["project"], // category.project
 	 *                $rs["_map_category"][$categories[n]]["page"], // category.page
 	 *                $rs["_map_category"][$categories[n]]["wechat"], // category.wechat
@@ -330,6 +345,15 @@ class Event extends Model {
 	 *                $rs["_map_category"][$categories[n]]["highlight"], // category.highlight
 	 *                $rs["_map_category"][$categories[n]]["isfootnav"], // category.isfootnav
 	 *                $rs["_map_category"][$categories[n]]["isblank"], // category.isblank
+	 *                $rs["_map_series"][$series[n]]["created_at"], // series.created_at
+	 *                $rs["_map_series"][$series[n]]["updated_at"], // series.updated_at
+	 *                $rs["_map_series"][$series[n]]["series_id"], // series.series_id
+	 *                $rs["_map_series"][$series[n]]["name"], // series.name
+	 *                $rs["_map_series"][$series[n]]["category_id"], // series.category_id
+	 *                $rs["_map_series"][$series[n]]["summary"], // series.summary
+	 *                $rs["_map_series"][$series[n]]["orderby"], // series.orderby
+	 *                $rs["_map_series"][$series[n]]["param"], // series.param
+	 *                $rs["_map_series"][$series[n]]["status"], // series.status
 	 */
 	public function getByEventId( $event_id, $select=['*']) {
 		
@@ -344,7 +368,7 @@ class Event extends Model {
 
 		// 创建查询构造器
 		$qb = Utils::getTab("xpmsns_pages_event as event", "{none}")->query();
- 		$qb->where('event.event_id', '=', $event_id );
+  		$qb->where('event.event_id', '=', $event_id );
 		$qb->limit( 1 );
 		$qb->select($select);
 		$rows = $qb->get()->toArray();
@@ -355,14 +379,22 @@ class Event extends Model {
 		$rs = current( $rows );
 		$this->format($rs);
 
- 		$category_ids = []; // 读取 inWhere category 数据
-		$category_ids = array_merge($category_ids, is_array($rs["categories"]) ? $rs["categories"] : [$rs["categories"]]);
+ 		$slugs = []; // 读取 inWhere category 数据
+		$slugs = array_merge($slugs, is_array($rs["categories"]) ? $rs["categories"] : [$rs["categories"]]);
+ 		$slugs = []; // 读取 inWhere series 数据
+		$slugs = array_merge($slugs, is_array($rs["series"]) ? $rs["series"] : [$rs["series"]]);
 
  		// 读取 inWhere category 数据
-		if ( !empty($inwhereSelect["category"]) && method_exists("\\Xpmsns\\Pages\\Model\\Category", 'getInByCategoryId') ) {
-			$category_ids = array_unique($category_ids);
+		if ( !empty($inwhereSelect["category"]) && method_exists("\\Xpmsns\\Pages\\Model\\Category", 'getInBySlug') ) {
+			$slugs = array_unique($slugs);
 			$selectFields = $inwhereSelect["category"];
-			$rs["_map_category"] = (new \Xpmsns\Pages\Model\Category)->getInByCategoryId($category_ids, $selectFields);
+			$rs["_map_category"] = (new \Xpmsns\Pages\Model\Category)->getInBySlug($slugs, $selectFields);
+		}
+ 		// 读取 inWhere series 数据
+		if ( !empty($inwhereSelect["series"]) && method_exists("\\Xpmsns\\Pages\\Model\\Series", 'getInBySlug') ) {
+			$slugs = array_unique($slugs);
+			$selectFields = $inwhereSelect["series"];
+			$rs["_map_series"] = (new \Xpmsns\Pages\Model\Series)->getInBySlug($slugs, $selectFields);
 		}
 
 		return $rs;
@@ -377,7 +409,7 @@ class Event extends Model {
 	 * @param array   $select       选取字段，默认选取所有
 	 * @return array 活动记录MAP {"event_id1":{"key":"value",...}...}
 	 */
-	public function getInByEventId($event_ids, $select=["event.event_id","event.slug","event.title","category.name","event.cover","event.publish_time","event.begin","event.end","event.type","event.status"], $order=["event.created_at"=>"desc"] ) {
+	public function getInByEventId($event_ids, $select=["event.event_id","event.slug","event.title","event.cover","event.begin","event.end","event.type","event.status"], $order=["event.created_at"=>"desc"] ) {
 		
 		if ( is_string($select) ) {
 			$select = explode(',', $select);
@@ -389,7 +421,7 @@ class Event extends Model {
 
 		// 创建查询构造器
 		$qb = Utils::getTab("xpmsns_pages_event as event", "{none}")->query();
- 		$qb->whereIn('event.event_id', $event_ids);
+  		$qb->whereIn('event.event_id', $event_ids);
 		
 		// 排序
 		foreach ($order as $field => $order ) {
@@ -400,20 +432,29 @@ class Event extends Model {
 
 		$map = [];
 
- 		$category_ids = []; // 读取 inWhere category 数据
+ 		$slugs = []; // 读取 inWhere category 数据
+ 		$slugs = []; // 读取 inWhere series 数据
 		foreach ($data as & $rs ) {
 			$this->format($rs);
 			$map[$rs['event_id']] = $rs;
 			
  			// for inWhere category
-			$category_ids = array_merge($category_ids, is_array($rs["categories"]) ? $rs["categories"] : [$rs["categories"]]);
+			$slugs = array_merge($slugs, is_array($rs["categories"]) ? $rs["categories"] : [$rs["categories"]]);
+ 			// for inWhere series
+			$slugs = array_merge($slugs, is_array($rs["series"]) ? $rs["series"] : [$rs["series"]]);
 		}
 
  		// 读取 inWhere category 数据
-		if ( !empty($inwhereSelect["category"]) && method_exists("\\Xpmsns\\Pages\\Model\\Category", 'getInByCategoryId') ) {
-			$category_ids = array_unique($category_ids);
+		if ( !empty($inwhereSelect["category"]) && method_exists("\\Xpmsns\\Pages\\Model\\Category", 'getInBySlug') ) {
+			$slugs = array_unique($slugs);
 			$selectFields = $inwhereSelect["category"];
-			$map["_map_category"] = (new \Xpmsns\Pages\Model\Category)->getInByCategoryId($category_ids, $selectFields);
+			$map["_map_category"] = (new \Xpmsns\Pages\Model\Category)->getInBySlug($slugs, $selectFields);
+		}
+ 		// 读取 inWhere series 数据
+		if ( !empty($inwhereSelect["series"]) && method_exists("\\Xpmsns\\Pages\\Model\\Series", 'getInBySlug') ) {
+			$slugs = array_unique($slugs);
+			$selectFields = $inwhereSelect["series"];
+			$map["_map_series"] = (new \Xpmsns\Pages\Model\Series)->getInBySlug($slugs, $selectFields);
 		}
 
 
@@ -449,7 +490,9 @@ class Event extends Model {
 	 *          	  $rs["title"],  // 主题 
 	 *          	  $rs["link"],  // 外部链接 
 	 *          	  $rs["categories"],  // 栏目 
-	 *                $rs["_map_category"][$categories[n]]["category_id"], // category.category_id
+	 *                $rs["_map_category"][$categories[n]]["slug"], // category.slug
+	 *          	  $rs["series"],  // 系列 
+	 *                $rs["_map_series"][$series[n]]["slug"], // series.slug
 	 *          	  $rs["type"],  // 类型 
 	 *          	  $rs["tags"],  // 标签 
 	 *          	  $rs["summary"],  // 简介 
@@ -457,6 +500,7 @@ class Event extends Model {
 	 *          	  $rs["images"],  // 海报 
 	 *          	  $rs["begin"],  // 开始时间 
 	 *          	  $rs["end"],  // 结束时间 
+	 *          	  $rs["deadline"],  // 报名截止时间 
 	 *          	  $rs["quota"],  // 名额 
 	 *          	  $rs["process_setting"],  // 流程设计 
 	 *          	  $rs["process"],  // 当前进程 
@@ -474,6 +518,7 @@ class Event extends Model {
 	 *          	  $rs["medias"],  // 合作媒体 
 	 *          	  $rs["speakers"],  // 嘉宾 
 	 *          	  $rs["content"],  // 活动介绍 
+	 *          	  $rs["report"],  // 活动总结 
 	 *          	  $rs["desktop"],  // 桌面代码 
 	 *          	  $rs["mobile"],  // 手机代码 
 	 *          	  $rs["wxapp"],  // 小程序代码 
@@ -490,7 +535,7 @@ class Event extends Model {
 	 *          	  $rs["updated_at"],  // 更新时间 
 	 *                $rs["_map_category"][$categories[n]]["created_at"], // category.created_at
 	 *                $rs["_map_category"][$categories[n]]["updated_at"], // category.updated_at
-	 *                $rs["_map_category"][$categories[n]]["slug"], // category.slug
+	 *                $rs["_map_category"][$categories[n]]["category_id"], // category.category_id
 	 *                $rs["_map_category"][$categories[n]]["project"], // category.project
 	 *                $rs["_map_category"][$categories[n]]["page"], // category.page
 	 *                $rs["_map_category"][$categories[n]]["wechat"], // category.wechat
@@ -509,6 +554,15 @@ class Event extends Model {
 	 *                $rs["_map_category"][$categories[n]]["highlight"], // category.highlight
 	 *                $rs["_map_category"][$categories[n]]["isfootnav"], // category.isfootnav
 	 *                $rs["_map_category"][$categories[n]]["isblank"], // category.isblank
+	 *                $rs["_map_series"][$series[n]]["created_at"], // series.created_at
+	 *                $rs["_map_series"][$series[n]]["updated_at"], // series.updated_at
+	 *                $rs["_map_series"][$series[n]]["series_id"], // series.series_id
+	 *                $rs["_map_series"][$series[n]]["name"], // series.name
+	 *                $rs["_map_series"][$series[n]]["category_id"], // series.category_id
+	 *                $rs["_map_series"][$series[n]]["summary"], // series.summary
+	 *                $rs["_map_series"][$series[n]]["orderby"], // series.orderby
+	 *                $rs["_map_series"][$series[n]]["param"], // series.param
+	 *                $rs["_map_series"][$series[n]]["status"], // series.status
 	 */
 	public function getBySlug( $slug, $select=['*']) {
 		
@@ -523,7 +577,7 @@ class Event extends Model {
 
 		// 创建查询构造器
 		$qb = Utils::getTab("xpmsns_pages_event as event", "{none}")->query();
- 		$qb->where('event.slug', '=', $slug );
+  		$qb->where('event.slug', '=', $slug );
 		$qb->limit( 1 );
 		$qb->select($select);
 		$rows = $qb->get()->toArray();
@@ -534,14 +588,22 @@ class Event extends Model {
 		$rs = current( $rows );
 		$this->format($rs);
 
- 		$category_ids = []; // 读取 inWhere category 数据
-		$category_ids = array_merge($category_ids, is_array($rs["categories"]) ? $rs["categories"] : [$rs["categories"]]);
+ 		$slugs = []; // 读取 inWhere category 数据
+		$slugs = array_merge($slugs, is_array($rs["categories"]) ? $rs["categories"] : [$rs["categories"]]);
+ 		$slugs = []; // 读取 inWhere series 数据
+		$slugs = array_merge($slugs, is_array($rs["series"]) ? $rs["series"] : [$rs["series"]]);
 
  		// 读取 inWhere category 数据
-		if ( !empty($inwhereSelect["category"]) && method_exists("\\Xpmsns\\Pages\\Model\\Category", 'getInByCategoryId') ) {
-			$category_ids = array_unique($category_ids);
+		if ( !empty($inwhereSelect["category"]) && method_exists("\\Xpmsns\\Pages\\Model\\Category", 'getInBySlug') ) {
+			$slugs = array_unique($slugs);
 			$selectFields = $inwhereSelect["category"];
-			$rs["_map_category"] = (new \Xpmsns\Pages\Model\Category)->getInByCategoryId($category_ids, $selectFields);
+			$rs["_map_category"] = (new \Xpmsns\Pages\Model\Category)->getInBySlug($slugs, $selectFields);
+		}
+ 		// 读取 inWhere series 数据
+		if ( !empty($inwhereSelect["series"]) && method_exists("\\Xpmsns\\Pages\\Model\\Series", 'getInBySlug') ) {
+			$slugs = array_unique($slugs);
+			$selectFields = $inwhereSelect["series"];
+			$rs["_map_series"] = (new \Xpmsns\Pages\Model\Series)->getInBySlug($slugs, $selectFields);
 		}
 
 		return $rs;
@@ -556,7 +618,7 @@ class Event extends Model {
 	 * @param array   $select       选取字段，默认选取所有
 	 * @return array 活动记录MAP {"slug1":{"key":"value",...}...}
 	 */
-	public function getInBySlug($slugs, $select=["event.event_id","event.slug","event.title","category.name","event.cover","event.publish_time","event.begin","event.end","event.type","event.status"], $order=["event.created_at"=>"desc"] ) {
+	public function getInBySlug($slugs, $select=["event.event_id","event.slug","event.title","event.cover","event.begin","event.end","event.type","event.status"], $order=["event.created_at"=>"desc"] ) {
 		
 		if ( is_string($select) ) {
 			$select = explode(',', $select);
@@ -568,7 +630,7 @@ class Event extends Model {
 
 		// 创建查询构造器
 		$qb = Utils::getTab("xpmsns_pages_event as event", "{none}")->query();
- 		$qb->whereIn('event.slug', $slugs);
+  		$qb->whereIn('event.slug', $slugs);
 		
 		// 排序
 		foreach ($order as $field => $order ) {
@@ -579,20 +641,29 @@ class Event extends Model {
 
 		$map = [];
 
- 		$category_ids = []; // 读取 inWhere category 数据
+ 		$slugs = []; // 读取 inWhere category 数据
+ 		$slugs = []; // 读取 inWhere series 数据
 		foreach ($data as & $rs ) {
 			$this->format($rs);
 			$map[$rs['slug']] = $rs;
 			
  			// for inWhere category
-			$category_ids = array_merge($category_ids, is_array($rs["categories"]) ? $rs["categories"] : [$rs["categories"]]);
+			$slugs = array_merge($slugs, is_array($rs["categories"]) ? $rs["categories"] : [$rs["categories"]]);
+ 			// for inWhere series
+			$slugs = array_merge($slugs, is_array($rs["series"]) ? $rs["series"] : [$rs["series"]]);
 		}
 
  		// 读取 inWhere category 数据
-		if ( !empty($inwhereSelect["category"]) && method_exists("\\Xpmsns\\Pages\\Model\\Category", 'getInByCategoryId') ) {
-			$category_ids = array_unique($category_ids);
+		if ( !empty($inwhereSelect["category"]) && method_exists("\\Xpmsns\\Pages\\Model\\Category", 'getInBySlug') ) {
+			$slugs = array_unique($slugs);
 			$selectFields = $inwhereSelect["category"];
-			$map["_map_category"] = (new \Xpmsns\Pages\Model\Category)->getInByCategoryId($category_ids, $selectFields);
+			$map["_map_category"] = (new \Xpmsns\Pages\Model\Category)->getInBySlug($slugs, $selectFields);
+		}
+ 		// 读取 inWhere series 数据
+		if ( !empty($inwhereSelect["series"]) && method_exists("\\Xpmsns\\Pages\\Model\\Series", 'getInBySlug') ) {
+			$slugs = array_unique($slugs);
+			$selectFields = $inwhereSelect["series"];
+			$map["_map_series"] = (new \Xpmsns\Pages\Model\Series)->getInBySlug($slugs, $selectFields);
 		}
 
 
@@ -972,7 +1043,7 @@ class Event extends Model {
 	 * @param array   $order   排序方式 ["field"=>"asc", "field2"=>"desc"...]
 	 * @return array 活动记录数组 [{"key":"value",...}...]
 	 */
-	public function top( $limit=100, $select=["event.event_id","event.slug","event.title","category.name","event.cover","event.publish_time","event.begin","event.end","event.type","event.status"], $order=["event.created_at"=>"desc"] ) {
+	public function top( $limit=100, $select=["event.event_id","event.slug","event.title","event.cover","event.begin","event.end","event.type","event.status"], $order=["event.created_at"=>"desc"] ) {
 
 		if ( is_string($select) ) {
 			$select = explode(',', $select);
@@ -984,7 +1055,7 @@ class Event extends Model {
 
 		// 创建查询构造器
 		$qb = Utils::getTab("xpmsns_pages_event as event", "{none}")->query();
- 
+  
 
 		foreach ($order as $field => $order ) {
 			$qb->orderBy( $field, $order );
@@ -994,19 +1065,28 @@ class Event extends Model {
 		$data = $qb->get()->toArray();
 
 
- 		$category_ids = []; // 读取 inWhere category 数据
+ 		$slugs = []; // 读取 inWhere category 数据
+ 		$slugs = []; // 读取 inWhere series 数据
 		foreach ($data as & $rs ) {
 			$this->format($rs);
 			
  			// for inWhere category
-			$category_ids = array_merge($category_ids, is_array($rs["categories"]) ? $rs["categories"] : [$rs["categories"]]);
+			$slugs = array_merge($slugs, is_array($rs["categories"]) ? $rs["categories"] : [$rs["categories"]]);
+ 			// for inWhere series
+			$slugs = array_merge($slugs, is_array($rs["series"]) ? $rs["series"] : [$rs["series"]]);
 		}
 
  		// 读取 inWhere category 数据
-		if ( !empty($inwhereSelect["category"]) && method_exists("\\Xpmsns\\Pages\\Model\\Category", 'getInByCategoryId') ) {
-			$category_ids = array_unique($category_ids);
+		if ( !empty($inwhereSelect["category"]) && method_exists("\\Xpmsns\\Pages\\Model\\Category", 'getInBySlug') ) {
+			$slugs = array_unique($slugs);
 			$selectFields = $inwhereSelect["category"];
-			$data["_map_category"] = (new \Xpmsns\Pages\Model\Category)->getInByCategoryId($category_ids, $selectFields);
+			$data["_map_category"] = (new \Xpmsns\Pages\Model\Category)->getInBySlug($slugs, $selectFields);
+		}
+ 		// 读取 inWhere series 数据
+		if ( !empty($inwhereSelect["series"]) && method_exists("\\Xpmsns\\Pages\\Model\\Series", 'getInBySlug') ) {
+			$slugs = array_unique($slugs);
+			$selectFields = $inwhereSelect["series"];
+			$data["_map_series"] = (new \Xpmsns\Pages\Model\Series)->getInBySlug($slugs, $selectFields);
 		}
 
 		return $data;
@@ -1017,7 +1097,7 @@ class Event extends Model {
 	/**
 	 * 按条件检索活动记录
 	 * @param  array  $query
-	 *         	      $query['select'] 选取字段，默认选择 ["event.event_id","event.slug","event.title","category.name","event.cover","event.publish_time","event.begin","event.end","event.type","event.status"]
+	 *         	      $query['select'] 选取字段，默认选择 ["event.event_id","event.slug","event.title","event.cover","event.begin","event.end","event.type","event.status"]
 	 *         	      $query['page'] 页码，默认为 1
 	 *         	      $query['perpage'] 每页显示记录数，默认为 20
 	 *			      $query["keywords"] 按关键词查询
@@ -1033,11 +1113,14 @@ class Event extends Model {
 	 *			      $query["price"] 按费用查询 ( < )
 	 *			      $query["status"] 按状态查询 ( = )
 	 *			      $query["type"] 按类型查询 ( = )
+	 *			      $query["categories"] 按栏目查询 ( LIKE-MULTIPLE )
+	 *			      $query["series"] 按系列查询 ( LIKE-MULTIPLE )
 	 *			      $query["orderby_created_at_desc"]  按name=created_at DESC 排序
 	 *			      $query["orderby_updated_at_desc"]  按name=updated_at DESC 排序
 	 *			      $query["orderby_publish_time_desc"]  按name=publish_time DESC 排序
 	 *			      $query["orderby_begin_desc"]  按name=begin DESC 排序
 	 *			      $query["orderby_end_desc"]  按name=end DESC 排序
+	 *			      $query["orderby_deadline_desc"]  按name=deadline DESC 排序
 	 *           
 	 * @return array 活动记录集 {"total":100, "page":1, "perpage":20, data:[{"key":"val"}...], "from":1, "to":1, "prev":false, "next":1, "curr":10, "last":20}
 	 *               	["event_id"],  // 活动ID 
@@ -1045,7 +1128,9 @@ class Event extends Model {
 	 *               	["title"],  // 主题 
 	 *               	["link"],  // 外部链接 
 	 *               	["categories"],  // 栏目 
-	 *               	["category"][$categories[n]]["category_id"], // category.category_id
+	 *               	["category"][$categories[n]]["slug"], // category.slug
+	 *               	["series"],  // 系列 
+	 *               	["series"][$series[n]]["slug"], // series.slug
 	 *               	["type"],  // 类型 
 	 *               	["tags"],  // 标签 
 	 *               	["summary"],  // 简介 
@@ -1053,6 +1138,7 @@ class Event extends Model {
 	 *               	["images"],  // 海报 
 	 *               	["begin"],  // 开始时间 
 	 *               	["end"],  // 结束时间 
+	 *               	["deadline"],  // 报名截止时间 
 	 *               	["quota"],  // 名额 
 	 *               	["process_setting"],  // 流程设计 
 	 *               	["process"],  // 当前进程 
@@ -1070,6 +1156,7 @@ class Event extends Model {
 	 *               	["medias"],  // 合作媒体 
 	 *               	["speakers"],  // 嘉宾 
 	 *               	["content"],  // 活动介绍 
+	 *               	["report"],  // 活动总结 
 	 *               	["desktop"],  // 桌面代码 
 	 *               	["mobile"],  // 手机代码 
 	 *               	["wxapp"],  // 小程序代码 
@@ -1086,7 +1173,7 @@ class Event extends Model {
 	 *               	["updated_at"],  // 更新时间 
 	 *               	["category"][$categories[n]]["created_at"], // category.created_at
 	 *               	["category"][$categories[n]]["updated_at"], // category.updated_at
-	 *               	["category"][$categories[n]]["slug"], // category.slug
+	 *               	["category"][$categories[n]]["category_id"], // category.category_id
 	 *               	["category"][$categories[n]]["project"], // category.project
 	 *               	["category"][$categories[n]]["page"], // category.page
 	 *               	["category"][$categories[n]]["wechat"], // category.wechat
@@ -1105,10 +1192,19 @@ class Event extends Model {
 	 *               	["category"][$categories[n]]["highlight"], // category.highlight
 	 *               	["category"][$categories[n]]["isfootnav"], // category.isfootnav
 	 *               	["category"][$categories[n]]["isblank"], // category.isblank
+	 *               	["series"][$series[n]]["created_at"], // series.created_at
+	 *               	["series"][$series[n]]["updated_at"], // series.updated_at
+	 *               	["series"][$series[n]]["series_id"], // series.series_id
+	 *               	["series"][$series[n]]["name"], // series.name
+	 *               	["series"][$series[n]]["category_id"], // series.category_id
+	 *               	["series"][$series[n]]["summary"], // series.summary
+	 *               	["series"][$series[n]]["orderby"], // series.orderby
+	 *               	["series"][$series[n]]["param"], // series.param
+	 *               	["series"][$series[n]]["status"], // series.status
 	 */
 	public function search( $query = [] ) {
 
-		$select = empty($query['select']) ? ["event.event_id","event.slug","event.title","category.name","event.cover","event.publish_time","event.begin","event.end","event.type","event.status"] : $query['select'];
+		$select = empty($query['select']) ? ["event.event_id","event.slug","event.title","event.cover","event.begin","event.end","event.type","event.status"] : $query['select'];
 		if ( is_string($select) ) {
 			$select = explode(',', $select);
 		}
@@ -1119,7 +1215,7 @@ class Event extends Model {
 
 		// 创建查询构造器
 		$qb = Utils::getTab("xpmsns_pages_event as event", "{none}")->query();
- 
+  
 		// 按关键词查找
 		if ( array_key_exists("keywords", $query) && !empty($query["keywords"]) ) {
 			$qb->where(function ( $qb ) use($query) {
@@ -1196,6 +1292,36 @@ class Event extends Model {
 			$qb->where("event.type", '=', "{$query['type']}" );
 		}
 		  
+		// 按栏目查询 (LIKE-MULTIPLE)  
+		if ( array_key_exists("categories", $query) &&!empty($query['categories']) ) {
+            $query['categories'] = explode(',', $query['categories']);
+            $qb->where(function ( $qb ) use($query) {
+                foreach( $query['categories'] as $idx=>$val )  {
+                    $val = trim($val);
+                    if ( $idx == 0 ) {
+                        $qb->where("event.categories", 'like', "%{$val}%" );
+                    } else {
+                        $qb->orWhere("event.categories", 'like', "%{$val}%");
+                    }
+                }
+            });
+		}
+		  
+		// 按系列查询 (LIKE-MULTIPLE)  
+		if ( array_key_exists("series", $query) &&!empty($query['series']) ) {
+            $query['series'] = explode(',', $query['series']);
+            $qb->where(function ( $qb ) use($query) {
+                foreach( $query['series'] as $idx=>$val )  {
+                    $val = trim($val);
+                    if ( $idx == 0 ) {
+                        $qb->where("event.series", 'like', "%{$val}%" );
+                    } else {
+                        $qb->orWhere("event.series", 'like', "%{$val}%");
+                    }
+                }
+            });
+		}
+		  
 
 		// 按name=created_at DESC 排序
 		if ( array_key_exists("orderby_created_at_desc", $query) &&!empty($query['orderby_created_at_desc']) ) {
@@ -1222,6 +1348,11 @@ class Event extends Model {
 			$qb->orderBy("event.end", "desc");
 		}
 
+		// 按name=deadline DESC 排序
+		if ( array_key_exists("orderby_deadline_desc", $query) &&!empty($query['orderby_deadline_desc']) ) {
+			$qb->orderBy("event.deadline", "desc");
+		}
+
 
 		// 页码
 		$page = array_key_exists('page', $query) ?  intval( $query['page']) : 1;
@@ -1230,19 +1361,28 @@ class Event extends Model {
 		// 读取数据并分页
 		$events = $qb->select( $select )->pgArray($perpage, ['event._id'], 'page', $page);
 
- 		$category_ids = []; // 读取 inWhere category 数据
+ 		$categories_slugs = []; // 读取 inWhere category 数据
+ 		$series_slugs = []; // 读取 inWhere series 数据
 		foreach ($events['data'] as & $rs ) {
 			$this->format($rs);
 			
  			// for inWhere category
-			$category_ids = array_merge($category_ids, is_array($rs["categories"]) ? $rs["categories"] : [$rs["categories"]]);
+			$categories_slugs = array_merge($categories_slugs, is_array($rs["categories"]) ? $rs["categories"] : [$rs["categories"]]);
+ 			// for inWhere series
+			$series_slugs = array_merge($series_slugs, is_array($rs["series"]) ? $rs["series"] : [$rs["series"]]);
 		}
 
  		// 读取 inWhere category 数据
-		if ( !empty($inwhereSelect["category"]) && method_exists("\\Xpmsns\\Pages\\Model\\Category", 'getInByCategoryId') ) {
-			$category_ids = array_unique($category_ids);
+		if ( !empty($inwhereSelect["category"]) && method_exists("\\Xpmsns\\Pages\\Model\\Category", 'getInBySlug') ) {
+			$categories_slugs = array_unique($categories_slugs);
 			$selectFields = $inwhereSelect["category"];
-			$events["category"] = (new \Xpmsns\Pages\Model\Category)->getInByCategoryId($category_ids, $selectFields);
+			$events["category"] = (new \Xpmsns\Pages\Model\Category)->getInBySlug($categories_slugs, $selectFields);
+		}
+ 		// 读取 inWhere series 数据
+		if ( !empty($inwhereSelect["series"]) && method_exists("\\Xpmsns\\Pages\\Model\\Series", 'getInBySlug') ) {
+			$series_slugs = array_unique($series_slugs);
+			$selectFields = $inwhereSelect["series"];
+			$events["series"] = (new \Xpmsns\Pages\Model\Series)->getInBySlug($series_slugs, $selectFields);
 		}
 	
 		// for Debug
@@ -1275,10 +1415,22 @@ class Event extends Model {
 				$arr = explode( ".", $fd );
 				$arr[1]  = !empty($arr[1]) ? $arr[1] : "*";
 				$inwhereSelect["category"][] = trim($arr[1]);
-				$inwhereSelect["category"][] = "category_id";
+				$inwhereSelect["category"][] = "slug";
 				if ( trim($fd) != "*" ) {
 					unset($select[$idx]);
 					array_push($linkSelect, "event.categories");
+				}
+			}
+			
+			// 连接类型 (series as series )
+			if ( strpos( $fd, "series." ) === 0 || strpos("series.", $fd ) === 0  || trim($fd) == "*" ) {
+				$arr = explode( ".", $fd );
+				$arr[1]  = !empty($arr[1]) ? $arr[1] : "*";
+				$inwhereSelect["series"][] = trim($arr[1]);
+				$inwhereSelect["series"][] = "slug";
+				if ( trim($fd) != "*" ) {
+					unset($select[$idx]);
+					array_push($linkSelect, "event.series");
 				}
 			}
 		}
@@ -1305,6 +1457,7 @@ class Event extends Model {
 			"title",  // 主题
 			"link",  // 外部链接
 			"categories",  // 栏目
+			"series",  // 系列
 			"type",  // 类型
 			"tags",  // 标签
 			"summary",  // 简介
@@ -1312,6 +1465,7 @@ class Event extends Model {
 			"images",  // 海报
 			"begin",  // 开始时间
 			"end",  // 结束时间
+			"deadline",  // 报名截止时间
 			"quota",  // 名额
 			"process_setting",  // 流程设计
 			"process",  // 当前进程
@@ -1329,6 +1483,7 @@ class Event extends Model {
 			"medias",  // 合作媒体
 			"speakers",  // 嘉宾
 			"content",  // 活动介绍
+			"report",  // 活动总结
 			"desktop",  // 桌面代码
 			"mobile",  // 手机代码
 			"wxapp",  // 小程序代码

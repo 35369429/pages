@@ -95,6 +95,21 @@ class Category extends Model {
 			$map[$rs['category_id']] = $rs;
 		}
 		return $map;
+    }
+    
+
+    function getInBySlug( $slugs, $select = ['*'] ) {
+
+		$qb = $this->query();
+		$qb->whereIn("slug", $slugs);
+		$qb->select($select);
+		$rows = $qb->get()->toArray();
+		$map = [];
+		foreach ($rows as & $rs ) {
+			$this->format($rs);
+			$map[$rs['slug']] = $rs;
+		}
+		return $map;
 	}
 
 	/**

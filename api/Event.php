@@ -4,11 +4,11 @@
  * 活动数据接口 
  *
  * 程序作者: XpmSE机器人
- * 最后修改: 2019-03-02 22:26:57
+ * 最后修改: 2019-03-03 18:52:59
  * 程序母版: /data/stor/private/templates/xpmsns/model/code/api/Name.php
  */
 namespace Xpmsns\Pages\Api;
-                                                     
+                                                        
 
 use \Xpmse\Loader\App;
 use \Xpmse\Excp;
@@ -32,12 +32,12 @@ class Event extends Api {
 	/**
 	 * 查询一条活动记录
 	 * @param  array $query GET 参数
-	 *               $query['select']  读取字段, 默认 ["event.event_id","event.slug","event.title","event.link","event.categories","event.type","event.tags","event.summary","event.cover","event.images","event.begin","event.end","event.process_setting","event.process","event.area","event.prov","event.city","event.town","event.location","event.price","event.bonus","event.prize","event.hosts","event.organizers","event.sponsors","event.medias","event.speakers","event.content","event.publish_time","event.view_cnt","event.like_cnt","event.agree_cnt","event.dislike_cnt","event.comment_cnt","event.status","event.created_at","event.updated_at"]
+	 *               $query['select']  读取字段, 默认 ["event.event_id","event.slug","event.title","event.link","event.categories","event.series","event.type","event.tags","event.summary","event.cover","event.images","event.begin","event.end","event.process_setting","event.process","event.area","event.prov","event.city","event.town","event.location","event.price","event.bonus","event.prize","event.hosts","event.organizers","event.sponsors","event.medias","event.speakers","event.content","event.publish_time","event.view_cnt","event.like_cnt","event.agree_cnt","event.dislike_cnt","event.comment_cnt","event.status","event.created_at","event.updated_at","category.category_id","category.slug","category.name","series.series_id","series.name","series.slug"]
 	 * 				 $query['event_id']  按查询 (多条用 "," 分割)
 	 * 				 $query['slug']  按查询 (多条用 "," 分割)
      *
 	 * @param  array $data  POST 参数
-	 *               $data['select']  返回字段, 默认 ["event.event_id","event.slug","event.title","event.link","event.categories","event.type","event.tags","event.summary","event.cover","event.images","event.begin","event.end","event.process_setting","event.process","event.area","event.prov","event.city","event.town","event.location","event.price","event.bonus","event.prize","event.hosts","event.organizers","event.sponsors","event.medias","event.speakers","event.content","event.publish_time","event.view_cnt","event.like_cnt","event.agree_cnt","event.dislike_cnt","event.comment_cnt","event.status","event.created_at","event.updated_at"]
+	 *               $data['select']  返回字段, 默认 ["event.event_id","event.slug","event.title","event.link","event.categories","event.series","event.type","event.tags","event.summary","event.cover","event.images","event.begin","event.end","event.process_setting","event.process","event.area","event.prov","event.city","event.town","event.location","event.price","event.bonus","event.prize","event.hosts","event.organizers","event.sponsors","event.medias","event.speakers","event.content","event.publish_time","event.view_cnt","event.like_cnt","event.agree_cnt","event.dislike_cnt","event.comment_cnt","event.status","event.created_at","event.updated_at","category.category_id","category.slug","category.name","series.series_id","series.name","series.slug"]
 	 * 				 $data['event_id']  按查询 (多条用 "," 分割)
 	 * 				 $data['slug']  按查询 (多条用 "," 分割)
 	 *
@@ -47,7 +47,9 @@ class Event extends Api {
 	 *               	["title"],  // 主题 
 	 *               	["link"],  // 外部链接 
 	 *               	["categories"],  // 栏目 
-	*               	["_map_category"][$categories[n]]["category_id"], // category.category_id
+	*               	["_map_category"][$categories[n]]["slug"], // category.slug
+	 *               	["series"],  // 系列 
+	*               	["_map_series"][$series[n]]["slug"], // series.slug
 	 *               	["type"],  // 类型 
 	 *               	["tags"],  // 标签 
 	 *               	["summary"],  // 简介 
@@ -55,6 +57,7 @@ class Event extends Api {
 	 *               	["images"],  // 海报 
 	 *               	["begin"],  // 开始时间 
 	 *               	["end"],  // 结束时间 
+	 *               	["deadline"],  // 报名截止时间 
 	 *               	["quota"],  // 名额 
 	 *               	["process_setting"],  // 流程设计 
 	 *               	["process"],  // 当前进程 
@@ -72,6 +75,7 @@ class Event extends Api {
 	 *               	["medias"],  // 合作媒体 
 	 *               	["speakers"],  // 嘉宾 
 	 *               	["content"],  // 活动介绍 
+	 *               	["report"],  // 活动总结 
 	 *               	["desktop"],  // 桌面代码 
 	 *               	["mobile"],  // 手机代码 
 	 *               	["wxapp"],  // 小程序代码 
@@ -88,7 +92,7 @@ class Event extends Api {
 	 *               	["updated_at"],  // 更新时间 
 	*               	["_map_category"][$categories[n]]["created_at"], // category.created_at
 	*               	["_map_category"][$categories[n]]["updated_at"], // category.updated_at
-	*               	["_map_category"][$categories[n]]["slug"], // category.slug
+	*               	["_map_category"][$categories[n]]["category_id"], // category.category_id
 	*               	["_map_category"][$categories[n]]["project"], // category.project
 	*               	["_map_category"][$categories[n]]["page"], // category.page
 	*               	["_map_category"][$categories[n]]["wechat"], // category.wechat
@@ -107,6 +111,15 @@ class Event extends Api {
 	*               	["_map_category"][$categories[n]]["highlight"], // category.highlight
 	*               	["_map_category"][$categories[n]]["isfootnav"], // category.isfootnav
 	*               	["_map_category"][$categories[n]]["isblank"], // category.isblank
+	*               	["_map_series"][$series[n]]["created_at"], // series.created_at
+	*               	["_map_series"][$series[n]]["updated_at"], // series.updated_at
+	*               	["_map_series"][$series[n]]["series_id"], // series.series_id
+	*               	["_map_series"][$series[n]]["name"], // series.name
+	*               	["_map_series"][$series[n]]["category_id"], // series.category_id
+	*               	["_map_series"][$series[n]]["summary"], // series.summary
+	*               	["_map_series"][$series[n]]["orderby"], // series.orderby
+	*               	["_map_series"][$series[n]]["param"], // series.param
+	*               	["_map_series"][$series[n]]["status"], // series.status
 	*/
 	protected function get( $query, $data ) {
 
@@ -115,7 +128,7 @@ class Event extends Api {
 		$data = array_merge( $query, $data );
 
 		// 读取字段
-		$select = empty($data['select']) ? ["event.event_id","event.slug","event.title","event.link","event.categories","event.type","event.tags","event.summary","event.cover","event.images","event.begin","event.end","event.process_setting","event.process","event.area","event.prov","event.city","event.town","event.location","event.price","event.bonus","event.prize","event.hosts","event.organizers","event.sponsors","event.medias","event.speakers","event.content","event.publish_time","event.view_cnt","event.like_cnt","event.agree_cnt","event.dislike_cnt","event.comment_cnt","event.status","event.created_at","event.updated_at"] : $data['select'];
+		$select = empty($data['select']) ? ["event.event_id","event.slug","event.title","event.link","event.categories","event.series","event.type","event.tags","event.summary","event.cover","event.images","event.begin","event.end","event.process_setting","event.process","event.area","event.prov","event.city","event.town","event.location","event.price","event.bonus","event.prize","event.hosts","event.organizers","event.sponsors","event.medias","event.speakers","event.content","event.publish_time","event.view_cnt","event.like_cnt","event.agree_cnt","event.dislike_cnt","event.comment_cnt","event.status","event.created_at","event.updated_at","category.category_id","category.slug","category.name","series.series_id","series.name","series.slug"] : $data['select'];
 		if ( is_string($select) ) {
 			$select = explode(',', $select);
 		}
@@ -158,7 +171,7 @@ class Event extends Api {
 	/**
 	 * 根据条件检索活动记录
 	 * @param  array $query GET 参数
-	 *         	      $query['select'] 选取字段，默认选择 ["event.event_id","event.slug","event.title","event.link","event.categories","event.type","event.tags","event.summary","event.cover","event.images","event.begin","event.end","event.process_setting","event.process","event.area","event.prov","event.city","event.town","event.location","event.price","event.bonus","event.prize","event.hosts","event.organizers","event.sponsors","event.medias","event.speakers","event.publish_time","event.view_cnt","event.like_cnt","event.dislike_cnt","event.comment_cnt","event.created_at","event.updated_at"]
+	 *         	      $query['select'] 选取字段，默认选择 ["event.event_id","event.slug","event.title","event.link","event.categories","event.series","event.type","event.tags","event.summary","event.cover","event.images","event.begin","event.end","event.process_setting","event.process","event.area","event.prov","event.city","event.town","event.location","event.price","event.bonus","event.prize","event.hosts","event.organizers","event.sponsors","event.medias","event.speakers","event.publish_time","event.view_cnt","event.like_cnt","event.dislike_cnt","event.comment_cnt","event.created_at","event.updated_at","category.category_id","category.slug","category.name","series.series_id","series.name","series.slug"]
 	 *         	      $query['page'] 页码，默认为 1
 	 *         	      $query['perpage'] 每页显示记录数，默认为 20
 	 *			      $query["keywords"] 按关键词查询
@@ -174,14 +187,17 @@ class Event extends Api {
 	 *			      $query["price"] 按费用查询 ( AND < )
 	 *			      $query["status"] 按状态查询 ( AND = )
 	 *			      $query["type"] 按类型查询 ( AND = )
+	 *			      $query["categories"] 按栏目查询 ( AND LIKE-MULTIPLE )
+	 *			      $query["series"] 按系列查询 ( AND LIKE-MULTIPLE )
 	 *			      $query["orderby_created_at_desc"]  按 DESC 排序
 	 *			      $query["orderby_updated_at_desc"]  按 DESC 排序
 	 *			      $query["orderby_publish_time_desc"]  按发布时间 DESC 排序
 	 *			      $query["orderby_begin_desc"]  按开始时间 DESC 排序
 	 *			      $query["orderby_end_desc"]  按结束时间 DESC 排序
+	 *			      $query["orderby_deadline_desc"]  按报名截止时间 DESC 排序
      *
 	 * @param  array $data  POST 参数
-	 *         	      $data['select'] 选取字段，默认选择 ["name=event_id","name=slug","name=title","name=link","name=categories","name=type","name=tags","name=summary","name=cover","name=images","name=begin","name=end","name=process_setting","name=process","name=area","name=prov","name=city","name=town","name=location","name=price","name=bonus","name=prize","name=hosts","name=organizers","name=sponsors","name=medias","name=speakers","name=publish_time","name=view_cnt","name=like_cnt","name=dislike_cnt","name=comment_cnt","name=created_at","name=updated_at"]
+	 *         	      $data['select'] 选取字段，默认选择 ["name=event_id","name=slug","name=title","name=link","name=categories","name=series","name=type","name=tags","name=summary","name=cover","name=images","name=begin","name=end","name=process_setting","name=process","name=area","name=prov","name=city","name=town","name=location","name=price","name=bonus","name=prize","name=hosts","name=organizers","name=sponsors","name=medias","name=speakers","name=publish_time","name=view_cnt","name=like_cnt","name=dislike_cnt","name=comment_cnt","name=created_at","name=updated_at","model=%5CXpmsns%5CPages%5CModel%5CCategory&name=category_id&table=category&prefix=xpmsns_pages_&alias=category&type=inWhere","model=%5CXpmsns%5CPages%5CModel%5CCategory&name=slug&table=category&prefix=xpmsns_pages_&alias=category&type=inWhere","model=%5CXpmsns%5CPages%5CModel%5CCategory&name=name&table=category&prefix=xpmsns_pages_&alias=category&type=inWhere","model=%5CXpmsns%5CPages%5CModel%5CSeries&name=series_id&table=series&prefix=xpmsns_pages_&alias=series&type=inWhere","model=%5CXpmsns%5CPages%5CModel%5CSeries&name=name&table=series&prefix=xpmsns_pages_&alias=series&type=inWhere","model=%5CXpmsns%5CPages%5CModel%5CSeries&name=slug&table=series&prefix=xpmsns_pages_&alias=series&type=inWhere"]
 	 *         	      $data['page'] 页码，默认为 1
 	 *         	      $data['perpage'] 每页显示记录数，默认为 20
 	 *			      $data["keywords"] 按关键词查询
@@ -197,11 +213,14 @@ class Event extends Api {
 	 *			      $data["price"] 按费用查询 ( AND < )
 	 *			      $data["status"] 按状态查询 ( AND = )
 	 *			      $data["type"] 按类型查询 ( AND = )
+	 *			      $data["categories"] 按栏目查询 ( AND LIKE-MULTIPLE )
+	 *			      $data["series"] 按系列查询 ( AND LIKE-MULTIPLE )
 	 *			      $data["orderby_created_at_desc"]  按 DESC 排序
 	 *			      $data["orderby_updated_at_desc"]  按 DESC 排序
 	 *			      $data["orderby_publish_time_desc"]  按发布时间 DESC 排序
 	 *			      $data["orderby_begin_desc"]  按开始时间 DESC 排序
 	 *			      $data["orderby_end_desc"]  按结束时间 DESC 排序
+	 *			      $data["orderby_deadline_desc"]  按报名截止时间 DESC 排序
 	 *
 	 * @return array 活动记录集 {"total":100, "page":1, "perpage":20, data:[{"key":"val"}...], "from":1, "to":1, "prev":false, "next":1, "curr":10, "last":20}
 	 *               data:[{"key":"val"}...] 字段
@@ -210,7 +229,9 @@ class Event extends Api {
 	 *               	["title"],  // 主题 
 	 *               	["link"],  // 外部链接 
 	 *               	["categories"],  // 栏目 
-	*               	["category"][$categories[n]]["category_id"], // category.category_id
+	*               	["category"][$categories[n]]["slug"], // category.slug
+	 *               	["series"],  // 系列 
+	*               	["series"][$series[n]]["slug"], // series.slug
 	 *               	["type"],  // 类型 
 	 *               	["tags"],  // 标签 
 	 *               	["summary"],  // 简介 
@@ -218,6 +239,7 @@ class Event extends Api {
 	 *               	["images"],  // 海报 
 	 *               	["begin"],  // 开始时间 
 	 *               	["end"],  // 结束时间 
+	 *               	["deadline"],  // 报名截止时间 
 	 *               	["quota"],  // 名额 
 	 *               	["process_setting"],  // 流程设计 
 	 *               	["process"],  // 当前进程 
@@ -235,6 +257,7 @@ class Event extends Api {
 	 *               	["medias"],  // 合作媒体 
 	 *               	["speakers"],  // 嘉宾 
 	 *               	["content"],  // 活动介绍 
+	 *               	["report"],  // 活动总结 
 	 *               	["desktop"],  // 桌面代码 
 	 *               	["mobile"],  // 手机代码 
 	 *               	["wxapp"],  // 小程序代码 
@@ -251,7 +274,7 @@ class Event extends Api {
 	 *               	["updated_at"],  // 更新时间 
 	*               	["category"][$categories[n]]["created_at"], // category.created_at
 	*               	["category"][$categories[n]]["updated_at"], // category.updated_at
-	*               	["category"][$categories[n]]["slug"], // category.slug
+	*               	["category"][$categories[n]]["category_id"], // category.category_id
 	*               	["category"][$categories[n]]["project"], // category.project
 	*               	["category"][$categories[n]]["page"], // category.page
 	*               	["category"][$categories[n]]["wechat"], // category.wechat
@@ -270,6 +293,15 @@ class Event extends Api {
 	*               	["category"][$categories[n]]["highlight"], // category.highlight
 	*               	["category"][$categories[n]]["isfootnav"], // category.isfootnav
 	*               	["category"][$categories[n]]["isblank"], // category.isblank
+	*               	["series"][$series[n]]["created_at"], // series.created_at
+	*               	["series"][$series[n]]["updated_at"], // series.updated_at
+	*               	["series"][$series[n]]["series_id"], // series.series_id
+	*               	["series"][$series[n]]["name"], // series.name
+	*               	["series"][$series[n]]["category_id"], // series.category_id
+	*               	["series"][$series[n]]["summary"], // series.summary
+	*               	["series"][$series[n]]["orderby"], // series.orderby
+	*               	["series"][$series[n]]["param"], // series.param
+	*               	["series"][$series[n]]["status"], // series.status
 	 */
 	protected function search( $query, $data ) {
 
@@ -278,7 +310,7 @@ class Event extends Api {
 		$data = array_merge( $query, $data );
 
 		// 读取字段
-		$select = empty($data['select']) ? ["event.event_id","event.slug","event.title","event.link","event.categories","event.type","event.tags","event.summary","event.cover","event.images","event.begin","event.end","event.process_setting","event.process","event.area","event.prov","event.city","event.town","event.location","event.price","event.bonus","event.prize","event.hosts","event.organizers","event.sponsors","event.medias","event.speakers","event.publish_time","event.view_cnt","event.like_cnt","event.dislike_cnt","event.comment_cnt","event.created_at","event.updated_at"] : $data['select'];
+		$select = empty($data['select']) ? ["event.event_id","event.slug","event.title","event.link","event.categories","event.series","event.type","event.tags","event.summary","event.cover","event.images","event.begin","event.end","event.process_setting","event.process","event.area","event.prov","event.city","event.town","event.location","event.price","event.bonus","event.prize","event.hosts","event.organizers","event.sponsors","event.medias","event.speakers","event.publish_time","event.view_cnt","event.like_cnt","event.dislike_cnt","event.comment_cnt","event.created_at","event.updated_at","category.category_id","category.slug","category.name","series.series_id","series.name","series.slug"] : $data['select'];
 		if ( is_string($select) ) {
 			$select = explode(',', $select);
 		}
