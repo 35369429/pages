@@ -243,7 +243,7 @@ class Category extends Api {
 		$select = is_array($select) ? $select : explode(',', $select);
 
 		// 验证 Select 参数
-		$allowFields = ["*","category_id","project","page","name","fullname","parent_id","priority","hidden","isnav","isfootnav", "isblank","highlight","param","status"];
+		$allowFields = ["*","category_id","slug","project","page","name","fullname","parent_id","priority","hidden","isnav","isfootnav", "isblank","highlight","param","status"];
 
 		foreach ($select as $idx => $field) {
 			if ( !in_array($field, $allowFields)){
