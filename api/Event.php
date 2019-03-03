@@ -30,6 +30,30 @@ class Event extends Api {
 
     // @KEEP BEGIN
 
+     /**
+     * 已报名用户
+     * @method POST /_api/xpmsns/pages/event/getEnteredUsers
+     */
+    function getEnteredUsers($query, $data ) {
+
+        $event_id = $query["event_id"];
+        if ( empty($event_id) ) {
+            throw new Excp("请提供报名的活动ID", 402, ["query"=>$query, "data"=>$data]);
+        }
+
+        if ( empty($query["select"]) ) {
+            $query["select"]  = [
+                "user.nickname","user.name","user.company","user.headimgurl", "user.user_id",
+                "userevent.signin_at", "userevent.status"
+            ];
+        }
+
+        unset($query["event_id"]);
+        $evt = new \Xpmsns\Pages\Model\Event;
+        return $evt->getEnteredUsers( $event_id, $query);
+    }
+
+
     /**
      * 活动报名
      * @method POST /_api/xpmsns/pages/event/entry

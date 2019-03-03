@@ -196,6 +196,30 @@ class Event extends Model {
 
     }
 
+
+    /**
+     * 读取活动已报名用户
+     * @param string $event_id 活动ID
+     * @param array $query 更多查询条件
+     */
+    function getEnteredUsers( $event_id, $query=[] ){
+
+        $user = new \Xpmsns\User\Model\User;
+        $user_event = new UserEvent();
+        $query = array_merge( $query, ["event_id" => $event_id]);
+        $response =  $user_event->search($query);
+
+        // 处理用户信息
+        foreach( $response["data"] as & $rs ){
+            if ( is_string($rs["user_headimgurl"]) ) {
+                $rs["user_headimgurl"] = json_decode($rs["user_headimgurl"], true);
+            }
+            $this->__fileFields( $rs, ["user_headimgurl"] );
+        }
+
+        return $response;
+    }
+
     // @KEEP END
 
 
