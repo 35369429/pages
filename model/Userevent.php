@@ -53,6 +53,46 @@ class Userevent extends Model {
 	 * 自定义函数 
 	 */
 
+    // @KEEP BEGIN
+
+
+    /**
+     * 重载SaveBy
+     */
+    public function saveBy( $uniqueKey,  $data,  $keys=null , $select=["*"]) {
+        if ( !empty($data["user_id"]) &&  !empty($data["event_id"]) ) {
+            $data["event_user_id"] = "DB::RAW(CONCAT(`event_id`,'_', `user_id`))";           
+        }
+        return parent::saveBy( $uniqueKey,  $data,  $keys , $select );
+    }
+
+
+	/**
+	 * 重载Remove
+	 * @return [type] [description]
+	 */
+	function remove( $data_key, $uni_key="_id", $mark_only=true ){ 
+		
+		if ( $mark_only === true ) {
+
+			$time = date('Y-m-d H:i:s');
+			$_id = $this->getVar("_id", "WHERE {$uni_key}=? LIMIT 1", [$data_key]);
+			$row = $this->update( $_id, [
+				"deleted_at"=>$time, 
+				"event_user_id"=>"DB::RAW(CONCAT('_','".time() . rand(10000,99999). "_', `event_user_id`))"
+			]);
+
+			if ( $row['deleted_at'] == $time ) {	
+				return true;
+			}
+			return false;
+		}
+
+		return parent::remove($data_key, $uni_key, $mark_only);
+    }
+    
+    // @KEEP END
+
 
 	/**
 	 * 创建数据表
@@ -552,7 +592,14 @@ class Userevent extends Model {
 	function create( $data ) {
 		if ( empty($data["userevent_id"]) ) { 
 			$data["userevent_id"] = $this->genId();
-		}
+        }
+        
+        // @KEEP BEGIN
+        if ( !empty($data["user_id"]) &&  !empty($data["event_id"]) ) {
+            $data["event_user_id"] = "DB::RAW(CONCAT(`event_id`,'_', `user_id`))";
+        }
+        // @KEEP END
+
 		return parent::create( $data );
 	}
 

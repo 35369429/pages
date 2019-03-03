@@ -4,7 +4,7 @@
  * 活动数据模型
  *
  * 程序作者: XpmSE机器人
- * 最后修改: 2019-03-03 19:08:17
+ * 最后修改: 2019-03-03 21:11:53
  * 程序母版: /data/stor/private/templates/xpmsns/model/code/model/Name.php
  */
 namespace Xpmsns\Pages\Model;
@@ -64,6 +64,139 @@ class Event extends Model {
 	/**
 	 * 自定义函数 
 	 */
+
+    // @KEEP BEGIN
+
+    /**
+     * 关联活动报名信息
+     * @param array &$articles 文章信息
+     * @param string $user_id 用户ID 
+     * @return null
+     */
+    function withEnter( & $events, $user_id, $select=["userevent.event_user_id", "userevent.userevent_id","userevent.signin_at","userevent.status"]) {
+
+        $event_ids = array_column( $events, "event_id");
+        if ( empty( $event_ids) ) {
+            return;
+        }
+
+
+        // 读取活动报名信息
+        $user_event = new UserEvent();
+        $event_user_ids = array_map(function($event_id) use( $user_id ){ return "{$event_id}_{$user_id}"; }, $event_ids);
+        $user_events = $user_event->getInByEventUserId($event_user_ids, $select);
+        foreach($events as & $event ) {
+            $event_user_id = "{$event["event_id"]}_{$user_id}";
+            $event["enter"] = $user_events[$event_user_id];
+            
+            if ( in_array($event["enter"]["status"], ["signin", "paid", "checkin"]) ) {
+                $event["entered"] = true;
+            }else {
+                $event["entered"] = false;
+            }
+
+            if (is_null($event["enter"]) ){
+                $article["enter"] = [];
+            }
+        }
+    }
+    
+    
+
+    /**
+     * 活动报名
+     * @param string $event_id 活动ID
+     * @param string $user_id 用户ID
+     * @return [event_id, user_cnt, quota, deadline]
+     */
+    function enter($event_id, $user_id ) {
+
+        // 校验数据
+        $event = $this->getByEventId($event_id, "event_id,user_cnt,quota,deadline");
+
+        // 校验 deadline
+        $deadline = strtotime( $event["deadline"] );
+        if ( $deadline - time() <= 0 ) {
+            throw new Excp("活动报名已截止", 403, ["deadline"=>$event["deadline"], "event_id"=>$event_id]);
+        }
+
+        $user_event = new UserEvent();
+
+        // 校验名额是否有限
+        $quota = intval( $event["quota"] ) ;
+        if ( $quota > 0 ) {
+            $user_cnt = $user_event->query()
+                              ->where("event_id", "=", $event_id)
+                              ->where("status", "<>", "cancel")
+                              ->count("event_id");
+            
+            // 校验名额
+            if ( $user_cnt >= $quota ) {
+                throw new Excp("活动参加名额已满", 403, ["quota"=>$event["quota"], "event_id"=>$event_id]);
+            }
+
+            $event["user_cnt"] = $user_cnt;
+        }
+
+
+        // 报名
+        try {
+            $respone = $user_event->create([
+                "event_id" => $event_id,
+                "user_id" => $user_id,
+                "status" =>  "signin",
+                "signin_at" => date('Y-m-d H:i:s')
+            ]);
+        }catch( Excp $e ) {
+            if ( $e->getCode() == 1062 ) {
+                throw new Excp("请勿重复报名", 1062, ["user_id"=>$user_id, "event_id"=>$event_id]);
+            }
+            throw $e;
+        }
+
+        // 更新统计数据
+        $user_cnt = $user_event->query()
+            ->where("event_id", "=", $event_id)
+            ->where("status", "<>", "cancel")
+            ->count("event_id");
+
+        return $this->saveByEventId([
+            "event_id" => $event_id,
+            "user_cnt" => $user_cnt,
+        ], "event_id,user_cnt,quota,deadline");
+
+    }
+
+
+
+    /**
+     * 取消活动报名
+     * @param string $event_id 活动ID
+     * @param string $user_id 用户ID
+     * @return [event_id, user_cnt, quota, deadline]
+     */
+    function cancelEnter($event_id, $user_id ) {
+
+        $user_event = new UserEvent();
+        $respone = $user_event->remove("{$event_id}_{$user_id}", "event_user_id");
+        if ( $respone === false ) {
+            throw new Excp("取消报名失败", 500, ["user_id"=>$user_id, "event_id"=>$event_id]);
+        }
+
+        // 更新统计数据
+        $user_cnt = $user_event->query()
+            ->where("event_id", "=", $event_id)
+            ->where("status", "<>", "cancel")
+            ->count("event_id");
+
+        return $this->saveByEventId([
+            "event_id" => $event_id,
+            "user_cnt" => $user_cnt,
+        ], "event_id,user_cnt,quota,deadline");
+
+    }
+
+    // @KEEP END
 
 
 	/**
