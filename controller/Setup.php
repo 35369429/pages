@@ -83,7 +83,8 @@ class SetupController extends \Xpmse\Loader\Controller {
 		$categories = [
 			["slug"=>"default", "name"=>"资讯", "fullname"=>"资讯", "isnav"=>1 ],
 			["slug"=>"video", "name"=>"视频", "fullname"=>"视频", "isnav"=>1, "link"=>"DB::RAW(CONCAT('/video/list/',`category_id`, '.html'))"],
-			["slug"=>"album", "name"=>"图片", "fullname"=>"图片", "isnav"=>1, "link"=>"DB::RAW(CONCAT('/album/list/',`category_id`, '.html'))"]
+            ["slug"=>"album", "name"=>"图片", "fullname"=>"图片", "isnav"=>1, "link"=>"DB::RAW(CONCAT('/album/list/',`category_id`, '.html'))"],
+            ["slug"=>"event", "name"=>"活动", "fullname"=>"活动", "isnav"=>1, "link"=>"/event/index.html"]
 		];
 
 		$cate = new \Xpmsns\Pages\Model\Category;
