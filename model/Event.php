@@ -4,7 +4,7 @@
  * 活动数据模型
  *
  * 程序作者: XpmSE机器人
- * 最后修改: 2019-03-03 18:53:00
+ * 最后修改: 2019-03-03 19:08:17
  * 程序母版: /data/stor/private/templates/xpmsns/model/code/model/Name.php
  */
 namespace Xpmsns\Pages\Model;
@@ -1376,13 +1376,15 @@ class Event extends Model {
 		if ( !empty($inwhereSelect["category"]) && method_exists("\\Xpmsns\\Pages\\Model\\Category", 'getInBySlug') ) {
 			$categories_slugs = array_unique($categories_slugs);
 			$selectFields = $inwhereSelect["category"];
-			$events["category"] = (new \Xpmsns\Pages\Model\Category)->getInBySlug($categories_slugs, $selectFields);
+            $events["category"] = (new \Xpmsns\Pages\Model\Category)->getInBySlug($categories_slugs, $selectFields);
+            $events["category_data"] = array_values($events["category"]);
 		}
  		// 读取 inWhere series 数据
 		if ( !empty($inwhereSelect["series"]) && method_exists("\\Xpmsns\\Pages\\Model\\Series", 'getInBySlug') ) {
 			$series_slugs = array_unique($series_slugs);
 			$selectFields = $inwhereSelect["series"];
-			$events["series"] = (new \Xpmsns\Pages\Model\Series)->getInBySlug($series_slugs, $selectFields);
+            $events["series"] = (new \Xpmsns\Pages\Model\Series)->getInBySlug($series_slugs, $selectFields);
+            $events["series_data"] = array_values($events["series"]);
 		}
 	
 		// for Debug
