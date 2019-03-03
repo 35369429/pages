@@ -79,6 +79,7 @@ class Event extends Api {
      */
     protected function get( $query, $data ) {
 
+        // 读取用户信息
         $user = \Xpmsns\User\Model\User::info();
         $user_id = $user["user_id"];
 
@@ -133,7 +134,14 @@ class Event extends Api {
 	}
 
 
+    /**
+     * 检索数据
+     */
     protected function search( $query, $data ) {
+
+        // 读取用户信息
+        $user = \Xpmsns\User\Model\User::info();
+        $user_id = $user["user_id"];
 
 		// 支持POST和GET查询
 		$data = array_merge( $query, $data );
@@ -146,7 +154,11 @@ class Event extends Api {
 		$data['select'] = $select;
 
 		$inst = new \Xpmsns\Pages\Model\Event;
-		return $inst->search( $data );
+        $response = $inst->search( $data );
+        if ( !empty($user_id) && $response["total"] > 0 ) {
+            $inst->withEnter( $response["data"], $user_id );
+        }
+        return $response;
     }
     
     // @KEEP END
