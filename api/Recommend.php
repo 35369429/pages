@@ -105,6 +105,21 @@ class Recommend extends Api {
             $queryContent = array_merge( $data, $rs );
             $queryContent["user"] = $user;
             $responses["{$slug}"] = $reco->contents( $queryContent );
+
+            // 复制推荐字段
+            $responses["{$slug}"]["recommend_id"] = $rs["recommend_id"];
+            $responses["{$slug}"]["status"] = $rs["status"];
+            $responses["{$slug}"]["title"] = $rs["title"];
+            $responses["{$slug}"]["summary"] = $rs["summary"];
+            $responses["{$slug}"]["icon"] = $rs["icon"];
+            $responses["{$slug}"]["slug"] = $rs["slug"];
+            $responses["{$slug}"]["type"] = $rs["type"];
+            $responses["{$slug}"]["ctype"] = $rs["ctype"];
+            $responses["{$slug}"]["thumb_only"] = $rs["thumb_only"];
+            $responses["{$slug}"]["video_only"] = $rs["video_only"];
+            $responses["{$slug}"]["period"] = $rs["period"];
+            $responses["{$slug}"]["ttl"] = $rs["ttl"];
+            
         }
 
         // 只有一条数据， 直接返回 (兼容旧的API格式)

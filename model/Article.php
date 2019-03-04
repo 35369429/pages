@@ -905,6 +905,7 @@ class Article extends Model {
 	 */
 	function search( $query = [] ) {
 
+        
         // $qb = $this->query();
         $qb =  Utils::getTab("xpmsns_pages_article as article", "{none}")->query();
 
@@ -1225,7 +1226,7 @@ class Article extends Model {
 		$page = array_key_exists('page', $query) ?  intval( $query['page']) : 1;
 		$perpage = array_key_exists('perpage', $query) ?  intval( $query['perpage']) : 20;
 
-
+        
 		// 查询文章列表
         $response = $qb ->select($select)
                         ->distinct()

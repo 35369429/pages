@@ -82,7 +82,6 @@ class Recommend extends Model {
 
         switch( $query["ctype"] ) {
             case "article":
-            
                 return $this->articles( $query );
                 break;
             
@@ -382,9 +381,9 @@ class Recommend extends Model {
             ];
         }
 
-
+        
         // 动态查询
-        $response =  $art->search( $query );
+        $response = $art->search( $query );
 
         // 关联用户收藏数据
         if ( !empty($user["user_id"]) && $query["withfavorite"] == 1 ) {
