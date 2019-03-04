@@ -495,6 +495,9 @@ class Article extends Api {
 		$select = empty($query['select']) ? '*' : $query['select'];
 		$select = is_array($select) ? $select : explode(',', $select);
 
+        
+        
+
 		// 验证 Select 参数
 		$getTag = false; $getCategory = false;
 		$allowFields = ["*","article_id","cover","title","author","origin","origin_url","summary","seo_title","seo_keywords","seo_summary","publish_time","update_time","create_time","sync","content","ap_content","draft","ap_draft","history","stick","status","category", "tag"];
@@ -517,7 +520,12 @@ class Article extends Api {
 				$getTag = true;
 				unset( $select[$idx] );
 			}
-		}
+        }
+        
+        // content 类型
+        $content_type = empty($query["content_type"]) ? "desktop" : $query["content_type"];
+        unset( $secret["content"]);
+        array_push($select, "{$content_type} as content");
 
 		$art = new \Xpmsns\pages\Model\Article;
 		$rs = $art->getLine("WHERE article_id=:article_id LIMIT 1", $select, ["article_id"=>$article_id]);
