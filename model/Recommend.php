@@ -409,6 +409,64 @@ class Recommend extends Model {
      * @return array 符合条件的 Albums
      */
     function albums( $query ) {
+
+        $user = $query["user"];
+        unset( $query["user"] );
+        $album = new Album();
+
+        // 静态查询
+        if ( $query["type"]  == "static" ) {
+            if ( !empty($query["select"]) ) {
+                $map = $album->getInByAlbumId( $query["album_ids"], $query["select"]);
+            } else {
+                $map = $album->getInByAlbumId( $query["album_ids"] );
+            }
+            $rows = [];
+            if( is_array( $map ) ) {
+                $rows = array_values( $map );
+            }
+
+            // 关联用户收藏数据
+            if ( !empty($user["user_id"]) && $query["withfavorite"] == 1 ) {
+                // $album->withFavorite( $rows, $user["user_id"]);
+            }
+    
+            // 关联用户赞赏数据
+            if ( !empty($user["user_id"]) && $query["withagree"] == 1 ) {
+                // $album->withAgree( $rows, $user["user_id"]);
+            }
+
+            // 关联用户关系
+            if ( !empty($user["user_id"]) && $query["withrelation"] == 1 ) {
+                // \Xpmsns\User\Model\User::withRelation( $rows, $user["user_id"] );
+            }
+            
+            return [
+                "total"=>count($rows),
+                "data"=>$rows
+            ];
+        }
+
+        
+        // 动态查询
+        $response = $album->search( $query );
+
+        // 关联用户收藏数据
+        if ( !empty($user["user_id"]) && $query["withfavorite"] == 1 ) {
+            // $album->withFavorite( $response["data"], $user["user_id"]);
+        }
+ 
+        // 关联用户赞赏数据
+        if ( !empty($user["user_id"]) && $query["withagree"] == 1 ) {
+            // $album->withAgree( $response["data"], $user["user_id"]);
+        }
+
+        // 关联用户关系
+        if ( !empty($user["user_id"]) && $query["withrelation"] == 1  && !empty($response["data"]) ) {
+            // \Xpmsns\User\Model\User::withRelation( $response["data"], $user["user_id"] );
+        }
+
+        return $response;
     }
 
     /**
