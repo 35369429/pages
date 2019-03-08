@@ -1289,7 +1289,28 @@ class Article extends Model {
 	 * + getInByArticleId 方法
 	 * @return [type] [description]
 	 */
-	function getInByArticleId( $article_ids, $select='article.article_id,article.title', $order=["article.created_at"=>"asc"] ) {
+	function getInByArticleId( $article_ids, $select=null, $order=["article.created_at"=>"asc"] ) {
+
+        // 默认读取数据项
+        if( $select == null) {
+            $select = [
+                "article.article_id", "article.title", "article.summary", 
+                "article.origin", "article.origin_url", "article.author", 
+                "article.seo_title","article.seo_keywords","article.seo_summary",
+                "article.cover", "article.images", "article.thumbs", "article.thumbs", "article.videos",
+                "article.stick", "article.priority",
+                "article.view_cnt", "article.like_cnt", "article.dislike_cnt", "article.comment_cnt",
+                "article.create_time","article.publish_time","article.update_time","article.status",
+                "article.user_id", 
+                "user.nickname as user_nickname", "user.name as user_name", "user.mobile as user_mobile", "user.headimgurl as user_headimgurl",
+        
+                "article.specials",
+                "special.special_id", "special.name as special_name", "special.path as special_path", "special.logo as special_logo",
+    
+                "article.series"
+            ];
+
+        }
 
 		$article_ids = is_array($article_ids) ? $article_ids  : [];
 
@@ -1300,18 +1321,24 @@ class Article extends Model {
 		// 增加表单查询索引字段
         array_push($select, "article.article_id");
         $select = array_filter(array_map('trim', $select));
+
 		// 创建查询构造器
 		$qb = Utils::getTab("xpmsns_pages_article as article", "{none}")->query();
-		$qb->whereIn('article_id', $article_ids);
+        $qb->whereIn('article_id', $article_ids)
+           ->leftJoin("xpmsns_user_user as user", "article.user_id", "=", "user.user_id")
+           ->leftJoin("xpmsns_pages_special as special", "article.user_id", "=", "special.user_id")
+        ;
+
   		
 		// 排序
 		foreach ($order as $field => $order ) {
 			$qb->orderBy( $field, $order );
-		}
+        }
+        
 		$qb->select( $select );
 		$data = $qb->get()->toArray(); 
 
-
+     
 		// 分类
 		$qbc = Utils::getTab('xpmsns_pages_article_category as ac', "{none}")->query();
         $qbc->leftJoin('xpmsns_pages_category as c' , 'ac.category_id', '=', 'c.category_id');
