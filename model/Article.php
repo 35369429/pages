@@ -1289,7 +1289,7 @@ class Article extends Model {
 	 * + getInByArticleId 方法
 	 * @return [type] [description]
 	 */
-	function getInByArticleId( $article_ids, $select=null, $order=["article.created_at"=>"asc"] ) {
+	function getInByArticleId( $article_ids, $select=null, $order=[] ) {
 
         // 默认读取数据项
         if( $select == null) {
