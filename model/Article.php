@@ -1292,7 +1292,7 @@ class Article extends Model {
 	function getInByArticleId( $article_ids, $select=null, $order=[] ) {
 
         // 默认读取数据项
-        if( $select == null) {
+        if( $select == null ) {
             $select = [
                 "article.article_id", "article.title", "article.summary", 
                 "article.origin", "article.origin_url", "article.author", 
@@ -1309,8 +1309,18 @@ class Article extends Model {
     
                 "article.series"
             ];
-
         }
+
+        if ( is_string($select) ){
+            $select = explode( ",", $select ); 
+        }
+
+        foreach( $select as & $field ) {
+            if ( strpos($field, ".") === false ) {
+                $field = "article.{$field}";
+            }
+        }
+
 
 		$article_ids = is_array($article_ids) ? $article_ids  : [];
 
@@ -1328,14 +1338,18 @@ class Article extends Model {
            ->leftJoin("xpmsns_user_user as user", "article.user_id", "=", "user.user_id")
            ->leftJoin("xpmsns_pages_special as special", "article.user_id", "=", "special.user_id")
         ;
-
-  		
-		// 排序
-		foreach ($order as $field => $order ) {
-			$qb->orderBy( $field, $order );
-        }
         
-		$qb->select( $select );
+        // 排序
+        if ( empty($order) ) {
+            $ids_ordered = implode(',', $article_ids);
+            $qb->orderByRaw("FIELD(article_id, $ids_ordered)");
+        } else {
+            foreach ($order as $field => $des ) {
+                $qb->orderBy( $field, $order );
+            }
+        }
+
+        $qb->select( $select );
 		$data = $qb->get()->toArray(); 
 
      
@@ -1379,7 +1393,8 @@ class Article extends Model {
             $rs['category_last'] = last($rs['category']);
             $rs['tag_last'] = last($rs['tag']);
 			$map[$rs['article_id']] = $rs;
-		}
+        }
+
 		return $map;
 	}
 
