@@ -184,6 +184,28 @@ class Event extends Api {
         }
         return $response;
     }
+
+
+    /**
+     * 读取已报名活动
+     */
+    protected function userEvents( $query, $data ) {
+
+        // 读取用户信息
+        $user = \Xpmsns\User\Model\User::info();
+        $user_id = $user["user_id"];
+
+        if ( empty($user_id) ){
+            throw new Excp("用户尚未登录", 404, ["query"=>$query]);
+        }
+
+        // 支持POST和GET查询
+		$data = array_merge( $query, $data );
+
+        $inst = new \Xpmsns\Pages\Model\Event;
+        $response = $inst->getUserEvents( $user_id, $data );
+        return $response;
+    }
     
     // @KEEP END
 

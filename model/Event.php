@@ -96,7 +96,7 @@ class Event extends Model {
             }
 
             if (is_null($event["enter"]) ){
-                $article["enter"] = [];
+                $event["enter"] = [];
             }
         }
     }
@@ -219,6 +219,141 @@ class Event extends Model {
 
         return $response;
     }
+
+
+    /**
+     * 查询用已报名的活动列表
+     * 
+     */
+    function getUserEvents( $user_id, $query=[] ) {
+        
+        $user_event = new UserEvent();
+        $query["user_id"] = $user_id;
+
+        $select = empty($query['select']) ? ["event.event_id","event.slug","event.title","event.cover","event.begin","event.end","event.type","event.status"] : $query['select'];
+		if ( is_string($select) ) {
+			$select = explode(',', $select);
+		}
+
+		// 增加表单查询索引字段
+		array_push($select, "event.event_id");
+		$inwhereSelect = $this->formatSelect( $select ); // 过滤 inWhere 查询字段
+
+		// 创建查询构造器
+        $qb = Utils::getTab("xpmsns_pages_event as event", "{none}")->query();
+        $qb->leftJoin("xpmsns_pages_userevent as userevent", "userevent.event_id", "event.event_id");
+        $qb->where("userevent.user_id","=", $user_id);
+
+        // 按栏目查询 (LIKE-MULTIPLE)  
+		if ( array_key_exists("categories", $query) &&!empty($query['categories']) ) {
+            $query['categories'] = explode(',', $query['categories']);
+            $qb->where(function ( $qb ) use($query) {
+                foreach( $query['categories'] as $idx=>$val )  {
+                    $val = trim($val);
+                    if ( $idx == 0 ) {
+                        $qb->where("event.categories", 'like', "%{$val}%" );
+                    } else {
+                        $qb->orWhere("event.categories", 'like', "%{$val}%");
+                    }
+                }
+            });
+		}
+		  
+		// 按系列查询 (LIKE-MULTIPLE)  
+		if ( array_key_exists("series", $query) &&!empty($query['series']) ) {
+            $query['series'] = explode(',', $query['series']);
+            $qb->where(function ( $qb ) use($query) {
+                foreach( $query['series'] as $idx=>$val )  {
+                    $val = trim($val);
+                    if ( $idx == 0 ) {
+                        $qb->where("event.series", 'like', "%{$val}%" );
+                    } else {
+                        $qb->orWhere("event.series", 'like', "%{$val}%");
+                    }
+                }
+            });
+        }
+        
+        // 按name=created_at DESC 排序
+		if ( array_key_exists("orderby_created_at_desc", $query) &&!empty($query['orderby_created_at_desc']) ) {
+			$qb->orderBy("event.created_at", "desc");
+		}
+
+		// 按name=updated_at DESC 排序
+		if ( array_key_exists("orderby_updated_at_desc", $query) &&!empty($query['orderby_updated_at_desc']) ) {
+			$qb->orderBy("event.updated_at", "desc");
+		}
+
+		// 按name=publish_time DESC 排序
+		if ( array_key_exists("orderby_publish_time_desc", $query) &&!empty($query['orderby_publish_time_desc']) ) {
+			$qb->orderBy("event.publish_time", "desc");
+		}
+
+		// 按name=begin DESC 排序
+		if ( array_key_exists("orderby_begin_desc", $query) &&!empty($query['orderby_begin_desc']) ) {
+			$qb->orderBy("event.begin", "desc");
+		}
+
+		// 按name=end DESC 排序
+		if ( array_key_exists("orderby_end_desc", $query) &&!empty($query['orderby_end_desc']) ) {
+			$qb->orderBy("event.end", "desc");
+		}
+
+		// 按name=deadline DESC 排序
+		if ( array_key_exists("orderby_deadline_desc", $query) &&!empty($query['orderby_deadline_desc']) ) {
+			$qb->orderBy("event.deadline", "desc");
+		}
+
+
+		// 页码
+		$page = array_key_exists('page', $query) ?  intval( $query['page']) : 1;
+		$perpage = array_key_exists('perpage', $query) ?  intval( $query['perpage']) : 20;
+
+		// 读取数据并分页
+		$events = $qb->select( $select )->pgArray($perpage, ['event._id'], 'page', $page);
+
+ 		$categories_slugs = []; // 读取 inWhere category 数据
+ 		$series_slugs = []; // 读取 inWhere series 数据
+		foreach ($events['data'] as & $rs ) {
+			$this->format($rs);
+			
+ 			// for inWhere category
+			$categories_slugs = array_merge($categories_slugs, is_array($rs["categories"]) ? $rs["categories"] : [$rs["categories"]]);
+ 			// for inWhere series
+            $series_slugs = array_merge($series_slugs, is_array($rs["series"]) ? $rs["series"] : [$rs["series"]]);
+            
+            // 关联报名条件
+            $rs["enter"] = [];
+            $rs["entered"] = true;
+		}
+
+ 		// 读取 inWhere category 数据
+		if ( !empty($inwhereSelect["category"]) && method_exists("\\Xpmsns\\Pages\\Model\\Category", 'getInBySlug') ) {
+			$categories_slugs = array_unique($categories_slugs);
+			$selectFields = $inwhereSelect["category"];
+            $events["category"] = (new \Xpmsns\Pages\Model\Category)->getInBySlug($categories_slugs, $selectFields);
+            $events["category_data"] = array_values($events["category"]);
+		}
+ 		// 读取 inWhere series 数据
+		if ( !empty($inwhereSelect["series"]) && method_exists("\\Xpmsns\\Pages\\Model\\Series", 'getInBySlug') ) {
+			$series_slugs = array_unique($series_slugs);
+			$selectFields = $inwhereSelect["series"];
+            $events["series"] = (new \Xpmsns\Pages\Model\Series)->getInBySlug($series_slugs, $selectFields);
+            $events["series_data"] = array_values($events["series"]);
+		}
+	
+		// for Debug
+		if ($_GET['debug'] == 1) { 
+			$events['_sql'] = $qb->getSql();
+			$events['query'] = $query;
+        }
+        
+       
+
+		return $events;
+  
+    }
+
 
     // @KEEP END
 
