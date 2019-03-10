@@ -4,11 +4,11 @@
  * 活动数据模型
  *
  * 程序作者: XpmSE机器人
- * 最后修改: 2019-03-03 21:11:53
+ * 最后修改: 2019-03-11 00:49:35
  * 程序母版: /data/stor/private/templates/xpmsns/model/code/model/Name.php
  */
 namespace Xpmsns\Pages\Model;
-                                                        
+                                                          
 use \Xpmse\Excp;
 use \Xpmse\Model;
 use \Xpmse\Utils;
@@ -450,6 +450,10 @@ class Event extends Model {
 		$this->putColumn( 'dislike_cnt', $this->type("bigInteger", ["length"=>1, "index"=>true, "null"=>true]));
 		// 评论量
 		$this->putColumn( 'comment_cnt', $this->type("bigInteger", ["length"=>1, "index"=>true, "null"=>true]));
+		// 管理链接
+		$this->putColumn( 'admin_link', $this->type("string", ["length"=>200, "null"=>true]));
+		// 管理链接名称
+		$this->putColumn( 'admin_name', $this->type("string", ["length"=>200, "null"=>true]));
 		// 状态
 		$this->putColumn( 'status', $this->type("string", ["length"=>200, "index"=>true, "default"=>"open", "null"=>true]));
 
@@ -613,6 +617,8 @@ class Event extends Model {
 	 *          	  $rs["agree_cnt"],  // 同意量 
 	 *          	  $rs["dislike_cnt"],  // 讨厌量 
 	 *          	  $rs["comment_cnt"],  // 评论量 
+	 *          	  $rs["admin_link"],  // 管理链接 
+	 *          	  $rs["admin_name"],  // 管理链接名称 
 	 *          	  $rs["status"],  // 状态 
 	 *          	  $rs["created_at"],  // 创建时间 
 	 *          	  $rs["updated_at"],  // 更新时间 
@@ -822,6 +828,8 @@ class Event extends Model {
 	 *          	  $rs["agree_cnt"],  // 同意量 
 	 *          	  $rs["dislike_cnt"],  // 讨厌量 
 	 *          	  $rs["comment_cnt"],  // 评论量 
+	 *          	  $rs["admin_link"],  // 管理链接 
+	 *          	  $rs["admin_name"],  // 管理链接名称 
 	 *          	  $rs["status"],  // 状态 
 	 *          	  $rs["created_at"],  // 创建时间 
 	 *          	  $rs["updated_at"],  // 更新时间 
@@ -1460,6 +1468,8 @@ class Event extends Model {
 	 *               	["agree_cnt"],  // 同意量 
 	 *               	["dislike_cnt"],  // 讨厌量 
 	 *               	["comment_cnt"],  // 评论量 
+	 *               	["admin_link"],  // 管理链接 
+	 *               	["admin_name"],  // 管理链接名称 
 	 *               	["status"],  // 状态 
 	 *               	["created_at"],  // 创建时间 
 	 *               	["updated_at"],  // 更新时间 
@@ -1789,6 +1799,8 @@ class Event extends Model {
 			"agree_cnt",  // 同意量
 			"dislike_cnt",  // 讨厌量
 			"comment_cnt",  // 评论量
+			"admin_link",  // 管理链接
+			"admin_name",  // 管理链接名称
 			"status",  // 状态
 			"created_at",  // 创建时间
 			"updated_at",  // 更新时间

@@ -1299,6 +1299,32 @@ publish_time_change();
 		</div>
 	</div><!-- END 单选框: 活动状态 (status) 开始  -->
 
+	<!-- 单行文本: 管理链接 (admin_link) 开始  -->
+	<div class="form-group   ">
+		<label class="col-xs-2 control-label" for="admin_link">管理链接</label>
+		<div class="col-xs-8">
+			<input class="form-control input-lg "  
+				type="text" 
+				id="admin_link" name="admin_link" 
+				placeholder="请填写活动管理链接"  
+				value="<?=T::v('<%=admin_link | e(\'html\')%>', $rs )?>" /> 
+			<div class="help-block"></div>
+		</div>
+	</div><!-- END 单行文本: 管理链接 (admin_link) -->
+
+	<!-- 单行文本: 管理名称 (admin_name) 开始  -->
+	<div class="form-group   ">
+		<label class="col-xs-2 control-label" for="admin_name">管理名称</label>
+		<div class="col-xs-8">
+			<input class="form-control input-lg "  
+				type="text" 
+				id="admin_name" name="admin_name" 
+				placeholder="请填写活动管理名称"  
+				value="<?=T::v('<%=admin_name | e(\'html\')%>', $rs )?>" /> 
+			<div class="help-block"></div>
+		</div>
+	</div><!-- END 单行文本: 管理名称 (admin_name) -->
+
 				<!--  提交按钮 -->
 				<div class="block block-quickpanel sidebar-mini">
 					<div class="block-quickpanel-content" >
