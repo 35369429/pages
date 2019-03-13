@@ -155,6 +155,47 @@ class Article extends Model {
 
 
     /**
+     * 读取专栏文章
+     */
+    function withSpecial( & $article, $special_id, $exclude=[] ) {
+       
+        // exclude_article_ids
+        $query = [
+            "special_id"=>$special_id, 
+            "order" => "publish_time desc",
+            "perpage"=>5
+        ];
+
+        if ( !empty($exclude) ) {
+            $query["exclude_article_ids"] = $exclude;
+        }
+
+        $response = $this->search($query);
+        $article["special_articles"] = $response["data"];
+
+    }
+
+    /**
+     * 读取用户文章
+     */
+    function withUser( & $article, $user_id, $exclude=[] ) {
+       
+        $query = [
+            "user_id"=>$user_id, 
+            "order" => "publish_time desc",
+            "perpage"=>5
+        ];
+
+        if ( !empty($exclude) ) {
+            $query["exclude_article_ids"] = $exclude;
+        }
+
+        $response = $this->search($query);
+        $article["user_articles"] = $response["data"];
+    }
+
+
+    /**
      * 关联某人赞同数据
      * @param array &$rows 回答数据
      * @param string $user_id 用户ID 
@@ -2167,7 +2208,7 @@ class Article extends Model {
 			$draft['links'] = $this->links( $article_id ); // 生成链接地址
 		}
 
-		$draft['status'] = ARTICLE_PUBLISHED; // 文章ID 更新为已发布
+        $draft['status'] = ARTICLE_PUBLISHED; // 文章ID 更新为已发布
 		return $this->updateBy('article_id', $draft );
 	}
 

@@ -500,7 +500,7 @@ class Article extends Api {
 
 		// 验证 Select 参数
 		$getTag = false; $getCategory = false;
-		$allowFields = ["*","article_id","cover","title","author","origin","origin_url","summary","seo_title","seo_keywords","seo_summary","publish_time","update_time","create_time","sync","content","ap_content","draft","ap_draft","history","stick","status","category", "tag"];
+		$allowFields = ["*","article_id","user_id","specials","cover","title","author","origin","origin_url","summary","seo_title","seo_keywords","seo_summary","publish_time","update_time","create_time","sync","content","ap_content","draft","ap_draft","history","stick","status","category", "tag"];
 
 		foreach ($select as $idx => $field) {
 			if ( !in_array($field, $allowFields)){
@@ -533,7 +533,7 @@ class Article extends Api {
 			throw new Excp("文章不存在", 404,  ['query'=>$query]);
 		}
 
-		$art->format($rs);
+        $art->format($rs);
 
 		if( $getCategory) {
 			$rs['category'] = $art->getCategories($article_id,"category.category_id","name","fullname","project","page","parent_id","priority","hidden","param" );
@@ -559,7 +559,21 @@ class Article extends Api {
                     "time"=>time()
                 ]);
             } catch(Excp $e) { $e->log(); }
-        }        
+        }
+        
+        // 读取专栏信息
+        $rs['special'] = [];
+        if( !empty($rs["user_id"]) ) {
+            $spe = new \Xpmsns\Pages\Model\Special();
+            $rs['special'] = $spe->getByUserId($rs["user_id"], ["special_id", "name", "path", "summary", "status", "logo"]);
+            
+            if ( !empty($rs["special"]) && $rs['special']["status"] == "on" ) {
+                $art->withSpecial( $rs,$rs['special']["special_id"], [$article_id] );
+            } else {
+                $art->withUser( $rs,$rs["user_id"], [$article_id] );
+            }
+        }
+
 		return $rs;
     }
     
