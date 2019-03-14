@@ -1382,11 +1382,16 @@ class Article extends Model {
         
         // 排序
         if ( empty($order) ) {
-            $ids_ordered = implode(',', $article_ids);
-            $qb->orderByRaw("FIELD(article_id, $ids_ordered)");
+            if (!empty($article_ids) ) {
+                $ids_ordered = implode(',', $article_ids);
+                $qb->orderByRaw("FIELD(article_id, $ids_ordered)");
+            }
         } else {
             foreach ($order as $field => $des ) {
-                $qb->orderBy( $field, $order );
+                if ( empty($des) ){
+                    $des = "asc";
+                }
+                $qb->orderBy( $field, $des );
             }
         }
 
