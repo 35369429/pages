@@ -4,17 +4,19 @@
  * 站点配置数据模型
  *
  * 程序作者: XpmSE机器人
- * 最后修改: 2019-01-04 02:42:44
+ * 最后修改: 2019-03-19 12:48:07
  * 程序母版: /data/stor/private/templates/xpmsns/model/code/model/Name.php
  */
 namespace Xpmsns\Pages\Model;
-                                                    
+                                                     
 use \Xpmse\Excp;
 use \Xpmse\Model;
 use \Xpmse\Utils;
 use \Xpmse\Conf;
 use \Xpmse\Media;
+use \Mina\Cache\Redis as Cache;
 use \Xpmse\Loader\App as App;
+use \Xpmse\Job;
 
 
 class Siteconf extends Model {
@@ -32,17 +34,31 @@ class Siteconf extends Model {
 	 */
 	protected $mediaPrivate = null;
 
+    /**
+     * 数据缓存对象
+     */
+    protected $cache = null;
+
 	/**
-	 * 站点配置数据模型
+	 * 站点配置数据模型【3】
 	 * @param array $param 配置参数
 	 *              $param['prefix']  数据表前缀，默认为 xpmsns_pages_
 	 */
 	function __construct( $param=[] ) {
 
 		parent::__construct(array_merge(['prefix'=>'xpmsns_pages_'],$param));
-		$this->table('site'); // 数据表名称 xpmsns_pages_site
+        $this->table('site'); // 数据表名称 xpmsns_pages_site
+         // + Redis缓存
+        $this->cache = new Cache([
+            "prefix" => "xpmsns_pages_site:",
+            "host" => Conf::G("mem/redis/host"),
+            "port" => Conf::G("mem/redis/port"),
+            "passwd"=> Conf::G("mem/redis/password")
+        ]);
+
 		$this->media = new Media(['host'=>Utils::getHome()]);  // 公有媒体文件实例
 
+       
 	}
 
 	/**
@@ -124,6 +140,8 @@ class Siteconf extends Model {
 		$this->putColumn( 'status', $this->type("string", ["length"=>50, "index"=>true, "default"=>"online", "null"=>true]));
 		// 操作者
 		$this->putColumn( 'user', $this->type("string", ["length"=>128, "index"=>true, "null"=>true]));
+		// 自定义参数
+		$this->putColumn( 'params', $this->type("string", ["length"=>128, "json"=>true, "null"=>true]));
 		// 头部脚本
 		$this->putColumn( 'header', $this->type("text", ["null"=>true]));
 		// 网站尾部
@@ -139,73 +157,66 @@ class Siteconf extends Model {
 	 * @return
 	 */
 	public function format( & $rs ) {
-
+     
+		$fileFields = []; 
 		// 格式化: 网站图标
 		// 返回值: {"url":"访问地址...", "path":"文件路径...", "origin":"原始文件访问地址..." }
 		if ( array_key_exists('icon', $rs ) ) {
-			$rs["icon"] = empty($rs["icon"]) ? [] : $this->media->get( $rs["icon"] );
+            array_push($fileFields, 'icon');
 		}
-
 		// 格式化: 浅色图标
 		// 返回值: {"url":"访问地址...", "path":"文件路径...", "origin":"原始文件访问地址..." }
 		if ( array_key_exists('icon_light', $rs ) ) {
-			$rs["icon_light"] = empty($rs["icon_light"]) ? [] : $this->media->get( $rs["icon_light"] );
+            array_push($fileFields, 'icon_light');
 		}
-
 		// 格式化: 深色图标
 		// 返回值: {"url":"访问地址...", "path":"文件路径...", "origin":"原始文件访问地址..." }
 		if ( array_key_exists('icon_dark', $rs ) ) {
-			$rs["icon_dark"] = empty($rs["icon_dark"]) ? [] : $this->media->get( $rs["icon_dark"] );
+            array_push($fileFields, 'icon_dark');
 		}
-
 		// 格式化: 网站LOGO
 		// 返回值: {"url":"访问地址...", "path":"文件路径...", "origin":"原始文件访问地址..." }
 		if ( array_key_exists('site_logo', $rs ) ) {
-			$rs["site_logo"] = empty($rs["site_logo"]) ? [] : $this->media->get( $rs["site_logo"] );
+            array_push($fileFields, 'site_logo');
 		}
-
 		// 格式化: 浅色LOGO
 		// 返回值: {"url":"访问地址...", "path":"文件路径...", "origin":"原始文件访问地址..." }
 		if ( array_key_exists('site_logo_light', $rs ) ) {
-			$rs["site_logo_light"] = empty($rs["site_logo_light"]) ? [] : $this->media->get( $rs["site_logo_light"] );
+            array_push($fileFields, 'site_logo_light');
 		}
-
 		// 格式化: 深色LOGO
 		// 返回值: {"url":"访问地址...", "path":"文件路径...", "origin":"原始文件访问地址..." }
 		if ( array_key_exists('site_logo_dark', $rs ) ) {
-			$rs["site_logo_dark"] = empty($rs["site_logo_dark"]) ? [] : $this->media->get( $rs["site_logo_dark"] );
+            array_push($fileFields, 'site_logo_dark');
 		}
-
 		// 格式化: 小程序二维码
 		// 返回值: {"url":"访问地址...", "path":"文件路径...", "origin":"原始文件访问地址..." }
 		if ( array_key_exists('qr_wxapp', $rs ) ) {
-			$rs["qr_wxapp"] = empty($rs["qr_wxapp"]) ? [] : $this->media->get( $rs["qr_wxapp"] );
+            array_push($fileFields, 'qr_wxapp');
 		}
-
 		// 格式化: 订阅号二维码
 		// 返回值: {"url":"访问地址...", "path":"文件路径...", "origin":"原始文件访问地址..." }
 		if ( array_key_exists('qr_wxpub', $rs ) ) {
-			$rs["qr_wxpub"] = empty($rs["qr_wxpub"]) ? [] : $this->media->get( $rs["qr_wxpub"] );
+            array_push($fileFields, 'qr_wxpub');
 		}
-
 		// 格式化: 服务号二维码
 		// 返回值: {"url":"访问地址...", "path":"文件路径...", "origin":"原始文件访问地址..." }
 		if ( array_key_exists('qr_wxse', $rs ) ) {
-			$rs["qr_wxse"] = empty($rs["qr_wxse"]) ? [] : $this->media->get( $rs["qr_wxse"] );
+            array_push($fileFields, 'qr_wxse');
 		}
-
 		// 格式化: 安卓应用二维码
 		// 返回值: {"url":"访问地址...", "path":"文件路径...", "origin":"原始文件访问地址..." }
 		if ( array_key_exists('qr_android', $rs ) ) {
-			$rs["qr_android"] = empty($rs["qr_android"]) ? [] : $this->media->get( $rs["qr_android"] );
+            array_push($fileFields, 'qr_android');
 		}
-
 		// 格式化: 苹果应用二维码
 		// 返回值: {"url":"访问地址...", "path":"文件路径...", "origin":"原始文件访问地址..." }
 		if ( array_key_exists('qr_ios', $rs ) ) {
-			$rs["qr_ios"] = empty($rs["qr_ios"]) ? [] : $this->media->get( $rs["qr_ios"] );
+            array_push($fileFields, 'qr_ios');
 		}
 
+        // 处理图片和文件字段 
+        $this->__fileFields( $rs, $fileFields );
 
 		// 格式化: 状态
 		// 返回值: "_status_types" 所有状态表述, "_status_name" 状态名称,  "_status" 当前状态表述, "status" 当前状态数值
@@ -271,6 +282,7 @@ class Siteconf extends Model {
 	 *          	  $rs["qr_ios"],  // 苹果应用二维码 
 	 *          	  $rs["status"],  // 状态 
 	 *          	  $rs["user"],  // 操作者 
+	 *          	  $rs["params"],  // 自定义参数 
 	 *          	  $rs["header"],  // 头部脚本 
 	 *          	  $rs["footer"],  // 网站尾部 
 	 *          	  $rs["created_at"],  // 创建时间 
@@ -290,7 +302,7 @@ class Siteconf extends Model {
 		// 创建查询构造器
 		$qb = $this->query();
 		// $qb = Utils::getTab("xpmsns_pages_site as site", "{none}")->query();
-		$qb->where('site_id', '=', $site_id );
+		$qb->where('site.site_id', '=', $site_id );
 		$qb->limit( 1 );
 		$qb->select($select);
 		$rows = $qb->get()->toArray();
@@ -406,6 +418,7 @@ class Siteconf extends Model {
 	 *          	  $rs["qr_ios"],  // 苹果应用二维码 
 	 *          	  $rs["status"],  // 状态 
 	 *          	  $rs["user"],  // 操作者 
+	 *          	  $rs["params"],  // 自定义参数 
 	 *          	  $rs["header"],  // 头部脚本 
 	 *          	  $rs["footer"],  // 网站尾部 
 	 *          	  $rs["created_at"],  // 创建时间 
@@ -425,7 +438,7 @@ class Siteconf extends Model {
 		// 创建查询构造器
 		$qb = $this->query();
 		// $qb = Utils::getTab("xpmsns_pages_site as site", "{none}")->query();
-		$qb->where('site_slug', '=', $site_slug );
+		$qb->where('site.site_slug', '=', $site_slug );
 		$qb->limit( 1 );
 		$qb->select($select);
 		$rows = $qb->get()->toArray();
@@ -959,6 +972,7 @@ class Siteconf extends Model {
 	 *               	["qr_ios"],  // 苹果应用二维码 
 	 *               	["status"],  // 状态 
 	 *               	["user"],  // 操作者 
+	 *               	["params"],  // 自定义参数 
 	 *               	["header"],  // 头部脚本 
 	 *               	["footer"],  // 网站尾部 
 	 *               	["created_at"],  // 创建时间 
@@ -1116,6 +1130,7 @@ class Siteconf extends Model {
 			"qr_ios",  // 苹果应用二维码
 			"status",  // 状态
 			"user",  // 操作者
+			"params",  // 自定义参数
 			"header",  // 头部脚本
 			"footer",  // 网站尾部
 			"created_at",  // 创建时间

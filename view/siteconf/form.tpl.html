@@ -641,6 +641,57 @@ use \Xpmse\T;
 	</div><!-- END 文本域: 尾部注入脚本 (footer) -->
 
 
+
+
+    <!-- JSON编辑器(json-editor): 自定义参数 (params) 开始  -->
+	<style type="text/css">
+		.CodeMirror {
+			border: 1px solid #e6e6e6;
+		}
+	</style>
+	<div class="json-editor draggable-item" data-name="params" >
+
+		<div class="form-group">
+			<label class="col-xs-2 control-label">自定义参数</label>
+			<div class="col-xs-8">
+                
+                                <textarea class="form-control input-lg " name="params"  type="text"  rows="6" 
+                    
+                    placeholder="填写自定义参数"><?=T::v('<%=params | json_encode(constant(\'JSON_PRETTY_PRINT\') b-or constant(\'JSON_UNESCAPED_UNICODE\') )%>', $rs )?></textarea>
+                <input type="hidden" name="__json_cols" value="params" />
+                			</div>
+			<div class="col-xs-2 push-10-t"></div>
+		</div>
+
+		<!-- helper -->
+		<div class="form-group helper"> 
+			<label class="col-xs-2 control-label" for="schedule"></label>
+			<div class="col-xs-9">
+				<div class="help-block">用于定制页面的相关变量</div>
+			</div>
+		</div><!-- end helper -->
+	</div>
+    <!-- END 代码编辑器(json-editor): 自定义参数 (params)  -->
+
+    <script type="text/javascript">
+    
+        // 载入代码编辑器
+		if ( typeof CodeMirror != 'undefined' ) {
+			
+			var txt_id = (new Date).getTime() + Math.floor(Math.random()*1000000+1);
+			$('textarea[name="params"]').attr('id', txt_id );
+			CodeMirror.fromTextArea(document.getElementById(txt_id), {
+				lineNumbers: true,
+				mode: "text/javascript",
+                readOnly: false,
+				viewportMargin: Infinity
+			}).on('change', function( cm ){ // 更新 txt 数据
+				document.getElementById(txt_id).value = cm.getValue();
+			});
+		}
+	</script>
+
+
 	<!-- 单选框: 状态 (status) 开始  -->
 	<div class="form-group    ">
 		<label class="col-xs-2 control-label" for="status">状态<span class="text-danger">*</span></label>

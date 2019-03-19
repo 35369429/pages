@@ -4,11 +4,11 @@
  * 站点配置数据接口 
  *
  * 程序作者: XpmSE机器人
- * 最后修改: 2019-01-04 02:42:44
+ * 最后修改: 2019-03-19 12:48:05
  * 程序母版: /data/stor/private/templates/xpmsns/model/code/api/Name.php
  */
 namespace Xpmsns\Pages\Api;
-                                                    
+                                                     
 
 use \Xpmse\Loader\App;
 use \Xpmse\Excp;
@@ -32,12 +32,12 @@ class Siteconf extends Api {
 	/**
 	 * 查询一条站点配置记录
 	 * @param  array $query GET 参数
-	 *               $query['select']  读取字段, 默认 ["site.site_id","site.site_slug","site.position","site.site_name","site.site_slogen","site.icon_light","site.icon_dark","site.site_intro","site.site_homepage","site.site_downloadpage","site.site_logo","site.site_logo_light","site.site_logo_dark","site.site_no","site.company","site.address","site.tel","site.qr_wxapp","site.qr_wxpub","site.qr_wxse","site.qr_android","site.qr_ios","site.status","site.header","site.footer","site.created_at","site.updated_at"]
+	 *               $query['select']  读取字段, 默认 ["site.site_id","site.site_slug","site.position","site.site_name","site.site_slogen","site.icon","site.icon_light","site.icon_dark","site.site_intro","site.site_homepage","site.site_downloadpage","site.site_logo","site.site_logo_light","site.site_logo_dark","site.site_no","site.company","site.address","site.tel","site.qr_wxapp","site.qr_wxpub","site.qr_wxse","site.qr_android","site.qr_ios","site.status","site.params","site.header","site.footer","site.created_at","site.updated_at"]
 	 * 				 $query['site_id']  按查询 (多条用 "," 分割)
 	 * 				 $query['site_slug']  按查询 (多条用 "," 分割)
      *
 	 * @param  array $data  POST 参数
-	 *               $data['select']  返回字段, 默认 ["site.site_id","site.site_slug","site.position","site.site_name","site.site_slogen","site.icon_light","site.icon_dark","site.site_intro","site.site_homepage","site.site_downloadpage","site.site_logo","site.site_logo_light","site.site_logo_dark","site.site_no","site.company","site.address","site.tel","site.qr_wxapp","site.qr_wxpub","site.qr_wxse","site.qr_android","site.qr_ios","site.status","site.header","site.footer","site.created_at","site.updated_at"]
+	 *               $data['select']  返回字段, 默认 ["site.site_id","site.site_slug","site.position","site.site_name","site.site_slogen","site.icon","site.icon_light","site.icon_dark","site.site_intro","site.site_homepage","site.site_downloadpage","site.site_logo","site.site_logo_light","site.site_logo_dark","site.site_no","site.company","site.address","site.tel","site.qr_wxapp","site.qr_wxpub","site.qr_wxse","site.qr_android","site.qr_ios","site.status","site.params","site.header","site.footer","site.created_at","site.updated_at"]
 	 * 				 $data['site_id']  按查询 (多条用 "," 分割)
 	 * 				 $data['site_slug']  按查询 (多条用 "," 分割)
 	 *
@@ -76,6 +76,7 @@ class Siteconf extends Api {
 	 *               	["qr_ios"],  // 苹果应用二维码 
 	 *               	["status"],  // 状态 
 	 *               	["user"],  // 操作者 
+	 *               	["params"],  // 自定义参数 
 	 *               	["header"],  // 头部脚本 
 	 *               	["footer"],  // 网站尾部 
 	 *               	["created_at"],  // 创建时间 
@@ -88,7 +89,7 @@ class Siteconf extends Api {
 		$data = array_merge( $query, $data );
 
 		// 读取字段
-		$select = empty($data['select']) ? ["site.site_id","site.site_slug","site.position","site.site_name","site.site_slogen","site.icon_light","site.icon_dark","site.site_intro","site.site_homepage","site.site_downloadpage","site.site_logo","site.site_logo_light","site.site_logo_dark","site.site_no","site.company","site.address","site.tel","site.qr_wxapp","site.qr_wxpub","site.qr_wxse","site.qr_android","site.qr_ios","site.status","site.header","site.footer","site.created_at","site.updated_at"] : $data['select'];
+		$select = empty($data['select']) ? ["site.site_id","site.site_slug","site.position","site.site_name","site.site_slogen","site.icon","site.icon_light","site.icon_dark","site.site_intro","site.site_homepage","site.site_downloadpage","site.site_logo","site.site_logo_light","site.site_logo_dark","site.site_no","site.company","site.address","site.tel","site.qr_wxapp","site.qr_wxpub","site.qr_wxse","site.qr_android","site.qr_ios","site.status","site.params","site.header","site.footer","site.created_at","site.updated_at"] : $data['select'];
 		if ( is_string($select) ) {
 			$select = explode(',', $select);
 		}
@@ -160,15 +161,13 @@ class Siteconf extends Api {
 	 *               $data['qr_ios'] 苹果应用二维码
 	 *               $data['status'] 状态
 	 *               $data['user'] 操作者
+	 *               $data['params'] 自定义参数
 	 *               $data['header'] 头部脚本
 	 *               $data['footer'] 网站尾部
 	 *
 	 * @return array 新增的站点配置记录  @see get()
 	 */
 	protected function create( $query, $data ) {
-
-		// secret校验，一般用于小程序 & 移动应用
-		$this->authSecret($query['_secret']);  
 
 		if (empty($data['site_id'])) {
 			throw new Excp("缺少必填字段配制ID (site_id)", 402, ['query'=>$query, 'data'=>$data]);
@@ -224,6 +223,7 @@ class Siteconf extends Api {
 	 *               $data['qr_ios'] 苹果应用二维码
 	 *               $data['status'] 状态
 	 *               $data['user'] 操作者
+	 *               $data['params'] 自定义参数
 	 *               $data['header'] 头部脚本
 	 *               $data['footer'] 网站尾部
 	 *
@@ -232,8 +232,6 @@ class Siteconf extends Api {
 	 */
 	protected function update( $query, $data ) {
 
-		// secret校验，一般用于小程序 & 移动应用
-		$this->authSecret($query['_secret']);  
 
 		// 按配制ID
 		if ( !empty($query["site_id"]) ) {
@@ -266,8 +264,6 @@ class Siteconf extends Api {
 	 */
 	protected function delete( $query, $data ) {
 
-		// secret校验，一般用于小程序 & 移动应用
-		$this->authSecret($query['_secret']);  
 
 		// 按配制ID
 		if ( !empty($query["site_id"]) ) {
@@ -296,7 +292,7 @@ class Siteconf extends Api {
 	/**
 	 * 根据条件检索站点配置记录
 	 * @param  array $query GET 参数
-	 *         	      $query['select'] 选取字段，默认选择 ["site.site_id","site.site_slug","site.position","site.site_name","site.site_slogen","site.icon_light","site.icon_dark","site.site_intro","site.site_homepage","site.site_downloadpage","site.site_logo","site.site_logo_light","site.site_logo_dark","site.site_no","site.company","site.address","site.tel","site.qr_wxapp","site.qr_wxpub","site.qr_wxse","site.qr_android","site.qr_ios","site.status","site.header","site.footer","site.created_at","site.updated_at"]
+	 *         	      $query['select'] 选取字段，默认选择 ["site.site_id","site.site_slug","site.position","site.site_name","site.site_slogen","site.icon","site.icon_light","site.icon_dark","site.site_intro","site.site_homepage","site.site_downloadpage","site.site_logo","site.site_logo_light","site.site_logo_dark","site.site_no","site.company","site.address","site.tel","site.qr_wxapp","site.qr_wxpub","site.qr_wxse","site.qr_android","site.qr_ios","site.status","site.params","site.header","site.footer","site.created_at","site.updated_at"]
 	 *         	      $query['page'] 页码，默认为 1
 	 *         	      $query['perpage'] 每页显示记录数，默认为 20
 	 *			      $query["keyword"] 按关键词查询
@@ -309,7 +305,7 @@ class Siteconf extends Api {
 	 *			      $query["orderby_created_at_desc"]  按 DESC 排序
      *
 	 * @param  array $data  POST 参数
-	 *         	      $data['select'] 选取字段，默认选择 ["name=site_id","name=site_slug","name=position","name=site_name","name=site_slogen","name=icon_light","name=icon_dark","name=site_intro","name=site_homepage","name=site_downloadpage","name=site_logo","name=site_logo_light","name=site_logo_dark","name=site_no","name=company","name=address","name=tel","name=qr_wxapp","name=qr_wxpub","name=qr_wxse","name=qr_android","name=qr_ios","name=status","name=header","name=footer","name=created_at","name=updated_at"]
+	 *         	      $data['select'] 选取字段，默认选择 ["name=site_id","name=site_slug","name=position","name=site_name","name=site_slogen","name=icon","name=icon_light","name=icon_dark","name=site_intro","name=site_homepage","name=site_downloadpage","name=site_logo","name=site_logo_light","name=site_logo_dark","name=site_no","name=company","name=address","name=tel","name=qr_wxapp","name=qr_wxpub","name=qr_wxse","name=qr_android","name=qr_ios","name=status","name=params","name=header","name=footer","name=created_at","name=updated_at"]
 	 *         	      $data['page'] 页码，默认为 1
 	 *         	      $data['perpage'] 每页显示记录数，默认为 20
 	 *			      $data["keyword"] 按关键词查询
@@ -357,6 +353,7 @@ class Siteconf extends Api {
 	 *               	["qr_ios"],  // 苹果应用二维码 
 	 *               	["status"],  // 状态 
 	 *               	["user"],  // 操作者 
+	 *               	["params"],  // 自定义参数 
 	 *               	["header"],  // 头部脚本 
 	 *               	["footer"],  // 网站尾部 
 	 *               	["created_at"],  // 创建时间 
@@ -369,7 +366,7 @@ class Siteconf extends Api {
 		$data = array_merge( $query, $data );
 
 		// 读取字段
-		$select = empty($data['select']) ? ["site.site_id","site.site_slug","site.position","site.site_name","site.site_slogen","site.icon_light","site.icon_dark","site.site_intro","site.site_homepage","site.site_downloadpage","site.site_logo","site.site_logo_light","site.site_logo_dark","site.site_no","site.company","site.address","site.tel","site.qr_wxapp","site.qr_wxpub","site.qr_wxse","site.qr_android","site.qr_ios","site.status","site.header","site.footer","site.created_at","site.updated_at"] : $data['select'];
+		$select = empty($data['select']) ? ["site.site_id","site.site_slug","site.position","site.site_name","site.site_slogen","site.icon","site.icon_light","site.icon_dark","site.site_intro","site.site_homepage","site.site_downloadpage","site.site_logo","site.site_logo_light","site.site_logo_dark","site.site_no","site.company","site.address","site.tel","site.qr_wxapp","site.qr_wxpub","site.qr_wxse","site.qr_android","site.qr_ios","site.status","site.params","site.header","site.footer","site.created_at","site.updated_at"] : $data['select'];
 		if ( is_string($select) ) {
 			$select = explode(',', $select);
 		}
@@ -387,8 +384,6 @@ class Siteconf extends Api {
 	 * @return array 文件信息 {"url":"访问地址...", "path":"文件路径...", "origin":"原始文件访问地址..." }
 	 */
 	protected function upload( $query, $data, $files ) {
-		// secret校验，一般用于小程序 & 移动应用
-		$this->authSecret($query['_secret']);  
 
 		$fname = $files['docs']['tmp_name'];
 		if ( $query['private'] ) {
