@@ -4,7 +4,7 @@
  * 站点配置数据模型
  *
  * 程序作者: XpmSE机器人
- * 最后修改: 2019-03-19 12:48:07
+ * 最后修改: 2019-03-19 15:31:07
  * 程序母版: /data/stor/private/templates/xpmsns/model/code/model/Name.php
  */
 namespace Xpmsns\Pages\Model;
@@ -141,7 +141,7 @@ class Siteconf extends Model {
 		// 操作者
 		$this->putColumn( 'user', $this->type("string", ["length"=>128, "index"=>true, "null"=>true]));
 		// 自定义参数
-		$this->putColumn( 'params', $this->type("string", ["length"=>128, "json"=>true, "null"=>true]));
+		$this->putColumn( 'params', $this->type("text", ["json"=>true, "null"=>true]));
 		// 头部脚本
 		$this->putColumn( 'header', $this->type("text", ["null"=>true]));
 		// 网站尾部
