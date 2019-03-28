@@ -1,12 +1,9 @@
-                                                                                                                                                                                                                                                             
-      	  	  	  	  	  	    	  	  	  	  	  	         
-      	  	  	  	  	  	    	  	  	  	  	  	          
 <?php 
 use \Xpmse\Loader\App; 
 use \Xpmse\Utils;
+use \Xpmse\T;
 ?>
 <style type="text/css">
-
 	.form {
 		padding-top: 60px;
 		padding-bottom: 60px;
@@ -15,7 +12,7 @@ use \Xpmse\Utils;
 
 
 <!-- Page Content -->
-<div class="content "> 
+<div class="content"> 
 	<div class="block block-bordered " >
 		<div class="block-header remove-margin" >
 
@@ -28,181 +25,176 @@ use \Xpmse\Utils;
 			
 		</div> <!-- END block-header -->
 
-		<div class="block-content form" >
+		<div class="block-content form adv-content js-draggable-items" >
 
 			<form class="form-horizontal adv-form form-lg" action= '<?=App::NR("adv", "save");?>' >
 
 				<!-- 隐藏域 -->
 				<input type="hidden" name="adv_id" value="<?=$rs['adv_id']?>" >
 	
-				 
-				<!-- 位置名称  -->
-				<!-- 标准输入框 -->
-
-	<!-- 位置名称 (position_name) 开始  -->
-	<div class="form-group ">
-		<label class="col-xs-2 control-label" for="position_name">位置名称 <span class="text-danger">*</span></label>
+	<!-- 单行文本: 位置名称 (position_name) 开始  -->
+	<div class="form-group   ">
+		<label class="col-xs-2 control-label" for="position_name">位置名称<span class="text-danger">*</span></label>
 		<div class="col-xs-8">
-			<input class="form-control input-lg"  
+			<input class="form-control input-lg "  
 				type="text" 
 				id="position_name" name="position_name" 
 				placeholder="广告位置名称, 如: 首页右侧栏位"  
-				value="<?=$rs['position_name']?>" /> 
+				value="<?=T::v('<%=position_name | e(\'html\')%>', $rs )?>" /> 
 			<div class="help-block"></div>
 		</div>
-	</div><!-- 结束 位置名称 (position_name) -->
+	</div><!-- END 单行文本: 位置名称 (position_name) -->
 
-				<!-- END 位置名称  -->
-				 
-				<!-- 位置编号  -->
-				<!-- 标准输入框 -->
-
-	<!-- 位置编号 (position_no) 开始  -->
-	<div class="form-group ">
-		<label class="col-xs-2 control-label" for="position_no">位置编号 <span class="text-danger">*</span></label>
+	<!-- 单行文本: 位置编号 (position_no) 开始  -->
+	<div class="form-group   ">
+		<label class="col-xs-2 control-label" for="position_no">位置编号<span class="text-danger">*</span></label>
 		<div class="col-xs-8">
-			<input class="form-control input-lg"  
+			<input class="form-control input-lg "  
 				type="text" 
 				id="position_no" name="position_no" 
 				placeholder="广告位置编号, 如: A-M-001"  
-				value="<?=$rs['position_no']?>" /> 
+				value="<?=T::v('<%=position_no | e(\'html\')%>', $rs )?>" /> 
 			<div class="help-block">用户前端呈现检索条件</div>
 		</div>
-	</div><!-- 结束 位置编号 (position_no) -->
+	</div><!-- END 单行文本: 位置编号 (position_no) -->
 
-				<!-- END 位置编号  -->
-				 
-				<!-- 优先级排序  -->
-				<!-- 标准输入框 -->
 
-	<!-- 优先级排序 (priority) 开始  -->
-	<div class="form-group ">
+
+ 
+	<!-- 下拉选择(动态数据): 所属栏目 (categories) 开始  -->
+	<div class="form-group   ">
+		<label class="col-xs-2 control-label" for="categories">所属栏目<span class="text-danger">*</span></label>
+		<div class="col-xs-8"> 
+			<select class="js-select2 form-control input-lg selected-inline  "  style="width: 100%;" 
+					id="categories" name="categories" 
+					data-language="zh-CN"
+					data-param-cancelable="0"
+					data-param-cancel="取消选择"
+					data-param-model="\Xpmsns\Pages\Model\Category"
+					data-param-table="category"
+					data-param-fields="slug,name"
+					data-param-style="{{name}}(别名: {{slug}})"
+					data-param-option="slug"
+					data-param-default=""
+					data-ajax-url="/_a/mina/helper/select2?method=get"
+					data-preload-url="/_a/mina/helper/select2?method=get&preload=<?=T::v('<%=categories | join(\',\')%>', $rs )?>"
+					data-placeholder="选择所属栏目"  multiple data-select2-multiple=1  >
+				<option></option>
+			</select>
+			<div class="help-block">用户前端呈现检索条件</div>
+		</div>
+			</div><!-- END 下拉选择(动态数据): 所属栏目 (categories) -->
+
+	<!-- 单行文本: 优先级排序 (priority) 开始  -->
+	<div class="form-group   ">
 		<label class="col-xs-2 control-label" for="priority">优先级排序</label>
 		<div class="col-xs-8">
-			<input class="form-control input-lg"  
+			<input class="form-control input-lg "  
 				type="text" 
 				id="priority" name="priority" 
 				placeholder="广告呈现排序"  
-				value="<?=$rs['priority']?>" /> 
+				value="<?=T::v('<%=priority | e(\'html\')%>', $rs )?>" /> 
 			<div class="help-block">数字越小排越靠前</div>
 		</div>
-	</div><!-- 结束 优先级排序 (priority) -->
+	</div><!-- END 单行文本: 优先级排序 (priority) -->
 
-				<!-- END 优先级排序  -->
-				 
-				<!-- 广告名称  -->
-				<!-- 标准输入框 -->
-
-	<!-- 广告名称 (name) 开始  -->
-	<div class="form-group ">
-		<label class="col-xs-2 control-label" for="name">广告名称 <span class="text-danger">*</span></label>
+	<!-- 单行文本: 广告名称 (name) 开始  -->
+	<div class="form-group   ">
+		<label class="col-xs-2 control-label" for="name">广告名称<span class="text-danger">*</span></label>
 		<div class="col-xs-8">
-			<input class="form-control input-lg"  
+			<input class="form-control input-lg "  
 				type="text" 
 				id="name" name="name" 
 				placeholder="请填写广告名称"  
-				value="<?=$rs['name']?>" /> 
+				value="<?=T::v('<%=name | e(\'html\')%>', $rs )?>" /> 
 			<div class="help-block"></div>
 		</div>
-	</div><!-- 结束 广告名称 (name) -->
+	</div><!-- END 单行文本: 广告名称 (name) -->
 
-				<!-- END 广告名称  -->
-				 
-				<!-- 广告别名  -->
-				<!-- 标准输入框 -->
-
-	<!-- 广告别名 (adv_slug) 开始  -->
-	<div class="form-group ">
-		<label class="col-xs-2 control-label" for="adv_slug">广告别名 <span class="text-danger">*</span></label>
+	<!-- 单行文本: 广告别名 (adv_slug) 开始  -->
+	<div class="form-group   ">
+		<label class="col-xs-2 control-label" for="adv_slug">广告别名<span class="text-danger">*</span></label>
 		<div class="col-xs-8">
-			<input class="form-control input-lg"  
+			<input class="form-control input-lg "  
 				type="text" 
 				id="adv_slug" name="adv_slug" 
 				placeholder="请填写广告唯一别名"  
-				value="<?=$rs['adv_slug']?>" /> 
+				value="<?=T::v('<%=adv_slug | e(\'html\')%>', $rs )?>" /> 
 			<div class="help-block"></div>
 		</div>
-	</div><!-- 结束 广告别名 (adv_slug) -->
+	</div><!-- END 单行文本: 广告别名 (adv_slug) -->
 
-				<!-- END 广告别名  -->
-				 
-				<!-- 链接  -->
-				<!-- 标准输入框 -->
-
-	<!-- 链接 (link) 开始  -->
-	<div class="form-group ">
-		<label class="col-xs-2 control-label" for="link">链接 <span class="text-danger">*</span></label>
+	<!-- 单行文本: 链接 (link) 开始  -->
+	<div class="form-group   ">
+		<label class="col-xs-2 control-label" for="link">链接<span class="text-danger">*</span></label>
 		<div class="col-xs-8">
-			<input class="form-control input-lg"  
+			<input class="form-control input-lg "  
 				type="text" 
 				id="link" name="link" 
 				placeholder="请填写广告链接"  
-				value="<?=$rs['link']?>" /> 
+				value="<?=T::v('<%=link | e(\'html\')%>', $rs )?>" /> 
 			<div class="help-block"></div>
 		</div>
-	</div><!-- 结束 链接 (link) -->
+	</div><!-- END 单行文本: 链接 (link) -->
 
-				<!-- END 链接  -->
-				 
-				<!-- 尺寸  -->
-				<!-- 标准输入框 -->
-
-	<!-- 尺寸 (size) 开始  -->
-	<div class="form-group ">
-		<label class="col-xs-2 control-label" for="size">尺寸 <span class="text-danger">*</span></label>
+	<!-- 单行文本: 尺寸 (size) 开始  -->
+	<div class="form-group   ">
+		<label class="col-xs-2 control-label" for="size">尺寸<span class="text-danger">*</span></label>
 		<div class="col-xs-8">
-			<input class="form-control input-lg"  
+			<input class="form-control input-lg "  
 				type="text" 
 				id="size" name="size" 
 				placeholder="填写广告广告尺寸, 例如 400X400"  
-				value="<?=$rs['size']?>" /> 
+				value="<?=T::v('<%=size | e(\'html\')%>', $rs )?>" /> 
 			<div class="help-block">广告尺寸格式为宽度X高度, 例如: 300X150</div>
 		</div>
-	</div><!-- 结束 尺寸 (size) -->
-
-				<!-- END 尺寸  -->
-				 
-				<!-- 广告图  -->
-				<!-- 标准组图上传组件 -->
+	</div><!-- END 单行文本: 尺寸 (size) -->
 
 
-<!-- 标准组图上传组件 -->
 
-	<?php if(count($rs['images']) < 1): ?><?php $steps = 1 -  count($rs['images']); for( $i=0; $i<$steps; $i++){ $rs['images'][] = [];} ?><?php endif ?><?php foreach ( $rs['images'] as $img ): ?>	
-	<!-- 广告图 (images) 开始  -->
-	<div class="xpmse-images" name="images">
-		<div class="form-group " >
-			<label class="col-xs-2 control-label" for="images">广告图</label>
-			<div class="col-xs-8">
-		   		<div name="images" class="file-uploader rounded rounded-4 push-10-t"
-					data-api='/_a/mina/uploader/upload?type=image'
-					data-title='上传图片'
-					data-previews=""
-					data-width="200"
-					data-height=""
-					data-icon="fa fa-image" 
-					data-placeholder="上传图片" 
-					data-allow-types=".jpg,.png,.gif"
-					data-maxsize="20"
-					data-progress="yes"
-					data-cropable="yes"
-					data-draggable="yes"
-					data-src="<?=$img['url']?>"
-					data-path="<?=$img['path']?>"
-					data-multiple="1"
-					></div>
-				<div class="help-block"></div>
-			</div>
-			<div class="col-xs-2 push-10-t">
-				<a href="javascript:void(0);" data-action="add"    class="text-success push-20-r"> <i class="fa fa-plus font-s20"></i> </a> 
-				<a href="javascript:void(0);" data-action="remove" class="text-danger"> <i class="fa fa-minus font-s20"></i> </a> 
-			</div>
-		</div> 
-	</div><!-- xpmse-images 结束 广告图 (images) -->
-	<?php endforeach; ?> 
+
+	<!-- 多图上传: 广告图 (images) 开始  -->
+	<div class="xpmse-images-panel">
+		<?php if(@count($rs['images']) < 1): ?><?php $steps = 1 -  @count($rs['images']); for( $i=0; $i<$steps; $i++){ $rs['images'][] = [];} ?><?php endif ?><?php if( is_array($rs['images']) && utils::array_depth($rs['images']) != 2): ?><?php foreach($rs['images'] as $idx=>$it ){ $rs['images'][$idx] = ['img'=>$it]; }?><?php endif ?><?php foreach ( $rs['images'] as $__key=>$img ): ?> 
+		<div class="xpmse-images  " name="images">
+			<div class="form-group " >
+				<label class="col-xs-2 control-label" for="images">广告图</label>
+				<div class="col-xs-8">
+			   		<div name="images" class="file-uploader rounded rounded-4"
+						data-api='/_a/mina/uploader/upload?type=image'
+						data-title=''
+						data-previews=""
+						data-width="200"
+						data-height=""
+						data-icon="fa fa-image" 
+						data-placeholder="上传图片" 
+						data-allow-types=".jpg,.png,.gif"
+						data-maxsize="20"
+						data-progress="yes"
+						data-cropable="yes"
+						data-draggable="yes"
+						data-src="<?=T::v('<%=url%>', $img )?>"
+						data-path="<?=T::v('<%=path%>', $img )?>"
+						data-multiple="1"
+						></div>
+					<div class="help-block"></div>
+				</div>
+				<div class="col-xs-1 push-10-t">
+					<a href="javascript:void(0);" data-action="add"    class="text-success push-20-r"> <i class="fa fa-plus font-s20"></i> </a> 
+					<a href="javascript:void(0);" data-action="remove" class="text-danger"> <i class="fa fa-minus font-s20"></i> </a> 
+				</div>
+			</div> 
+		</div>
+		<?php endforeach; ?> 
+	</div>
 
 	<script type="text/javascript">
 		$('.xpmse-images[name="images"]').Multipliable({
+			initialized: function(elm, idx) {
+				$(elm).parent('.xpmse-images-panel') .find('.control-label').each( function(i, el ){
+					if (i >0) { $(el).html('');}
+				});
+			},
 			added: function( elm ) {
 				App.initHelper('file-uploader', {handler: $(elm).find('.file-uploader')} );
 			},
@@ -210,6 +202,7 @@ use \Xpmse\Utils;
 			html: function( elm ){ 
 				var html = $(elm).clone();
 				var resp = $(html);
+				resp.find('.control-label').html('');
 				resp.find('.file-uploader').html('');
 				resp.find('.file-uploader').attr('data-src', '');
 				resp.find('.file-uploader').attr('data-path', '');
@@ -217,189 +210,186 @@ use \Xpmse\Utils;
 				return resp;
 			}
 		});
-	</script>
-
-				<!-- END 广告图  -->
-				 
-				<!-- 文案  -->
-				<!-- 标准组图上传组件 -->
+	</script><!-- END 多图上传: 广告图 (images) -->
 
 
 
-
-
-<!-- 标准输入框组件 -->
-
-	<!-- 文案 (intro) 开始  -->
-	<div class="form-group ">
+	<!-- 文本域: 文案 (intro) 开始  -->
+	<div class="form-group   ">
 		<label class="col-xs-2 control-label" for="intro">文案</label>
 		<div class="col-xs-8">
-			<textarea class="form-control input-lg"  
+			<textarea class="form-control input-lg "   
 				type="text" 
 				id="intro" name="intro" rows="3"
-				placeholder="请填写广告文案"><?=$rs['intro']?></textarea> 
+				placeholder="请填写广告文案"><?=T::v('<%=intro  | e(\'html\')%>', $rs )?></textarea> 
 			<div class="help-block"></div>
 		</div>
-	</div><!-- 结束 文案 (intro) -->
+	</div><!-- END 文本域: 文案 (intro) -->
 
-				<!-- END 文案  -->
-				 
-				<!-- 关键词  -->
-				<!-- 标准输入框 -->
-
-	<!-- 关键词 (keyword) 开始  -->
-	<div class="form-group ">
+	<!-- 单行文本: 关键词 (keyword) 开始  -->
+	<div class="form-group   ">
 		<label class="col-xs-2 control-label" for="keyword">关键词</label>
 		<div class="col-xs-8">
-			<input class="form-control input-lg"  
+			<input class="form-control input-lg "  
 				type="text" 
 				id="keyword" name="keyword" 
 				placeholder=""  
-				value="<?=$rs['keyword']?>" /> 
+				value="<?=T::v('<%=keyword | e(\'html\')%>', $rs )?>" /> 
 			<div class="help-block">请填写关键词，用于智能匹配。</div>
 		</div>
-	</div><!-- 结束 关键词 (keyword) -->
+	</div><!-- END 单行文本: 关键词 (keyword) -->
 
-				<!-- END 关键词  -->
-				 
-				<!-- 点击量  -->
-				<!-- 标准输入框 -->
-
-	<!-- 点击量 (pageview) 开始  -->
-	<div class="form-group ">
+	<!-- 单行文本: 点击量 (pageview) 开始  -->
+	<div class="form-group   ">
 		<label class="col-xs-2 control-label" for="pageview">点击量</label>
 		<div class="col-xs-8">
-			<input class="form-control input-lg"  
+			<input class="form-control input-lg disabled"  disabled
 				type="text" 
 				id="pageview" name="pageview" 
 				placeholder="广告点击次数"  
-				value="<?=$rs['pageview']?>" /> 
+				value="<?=T::v('<%=pageview | e(\'html\')%>', $rs )?>" /> 
 			<div class="help-block"></div>
 		</div>
-	</div><!-- 结束 点击量 (pageview) -->
+	</div><!-- END 单行文本: 点击量 (pageview) -->
 
-				<!-- END 点击量  -->
-				 
-				<!-- 单价  -->
-				<!-- 标准输入框 -->
-
-	<!-- 单价 (price) 开始  -->
-	<div class="form-group ">
+	<!-- 单行文本: 单价 (price) 开始  -->
+	<div class="form-group   ">
 		<label class="col-xs-2 control-label" for="price">单价</label>
 		<div class="col-xs-8">
-			<input class="form-control input-lg"  
+			<input class="form-control input-lg "  
 				type="text" 
 				id="price" name="price" 
 				placeholder="广告单价"  
-				value="<?=$rs['price']?>" /> 
+				value="<?=T::v('<%=price | e(\'html\')%>', $rs )?>" /> 
 			<div class="help-block">单位: 分</div>
 		</div>
-	</div><!-- 结束 单价 (price) -->
-
-				<!-- END 单价  -->
-				 
-				<!-- 状态  -->
-				<!-- END 标准选择框 -->
+	</div><!-- END 单行文本: 单价 (price) -->
 
 
-<!-- 标准下拉选择组件 -->
  
-	<!-- 状态 (status) 开始  -->
-	<div class="form-group ">
-		<label class="col-xs-2 control-label" for="status">状态 <span class="text-danger">*</span></label>
+	<!-- 下拉选择: 状态 (status) 开始  -->
+	<div class="form-group   ">
+		<label class="col-xs-2 control-label" for="status">状态<span class="text-danger">*</span></label>
 		<div class="col-xs-8">
-			<select class="js-select2 form-control input-lg" id="status" name="status" style="width: 100%;" data-placeholder="请选择广告状态">
+			<select class="js-select2 form-control input-lg    "    style="width: 100%;" 
+                    id="status" name="status"  
+                    data-language="zh-CN"
+					data-param-cancelable="0"
+					data-param-cancel="取消选择"
+					data-placeholder="请选择广告状态" >
 				<option></option>
-				<?php $rs["status"] = is_string($rs["status"]) ? [$rs["status"]] : $rs["status"] ; ?>
-<option value="online" <?=("online" == "online" && empty($rs["status"]) || in_array("online", $rs["status"]) ) ? "selected" : ""?> > 上线</option>
-
-<option value="offline" <?=("online" == "offline" && empty($rs["status"]) || in_array("offline", $rs["status"]) ) ? "selected" : ""?> >  下线</option>
-
+				<?php $rs["status"] = is_string($rs["status"]) ? [$rs["status"]] : $rs["status"] ; if (empty($rs["status"])) { $rs["status"] = ["online"]; } ?>
+<option value="online" <?=in_array("online", $rs["status"]) ? "selected" : ""?> > 上线</option>
+<option value="offline" <?=in_array("offline", $rs["status"]) ? "selected" : ""?> >  下线</option>
 			</select>
 			<div class="help-block"></div>
 		</div>
-	</div><!-- 结束 状态 (status) -->
-
-				<!-- END 状态  -->
-				 
-				<!-- 是否付款  -->
-				<!-- END 标准选择框 -->
+	</div><!-- END 下拉选择: 状态 (status) -->
 
 
-<!-- 标准下拉选择组件 -->
  
-	<!-- 是否付款 (paystatus) 开始  -->
-	<div class="form-group ">
-		<label class="col-xs-2 control-label" for="paystatus">是否付款 <span class="text-danger">*</span></label>
+	<!-- 下拉选择: 是否付款 (paystatus) 开始  -->
+	<div class="form-group   ">
+		<label class="col-xs-2 control-label" for="paystatus">是否付款<span class="text-danger">*</span></label>
 		<div class="col-xs-8">
-			<select class="js-select2 form-control input-lg" id="paystatus" name="paystatus" style="width: 100%;" data-placeholder="请选择支付状态">
+			<select class="js-select2 form-control input-lg    "    style="width: 100%;" 
+                    id="paystatus" name="paystatus"  
+                    data-language="zh-CN"
+					data-param-cancelable="0"
+					data-param-cancel="取消选择"
+					data-placeholder="请选择支付状态" >
 				<option></option>
-				<?php $rs["paystatus"] = is_string($rs["paystatus"]) ? [$rs["paystatus"]] : $rs["paystatus"] ; ?>
-<option value="unpayed" <?=("unpayed" == "unpayed" && empty($rs["paystatus"]) || in_array("unpayed", $rs["paystatus"]) ) ? "selected" : ""?> > 待付款</option>
-
-<option value="payed" <?=("unpayed" == "payed" && empty($rs["paystatus"]) || in_array("payed", $rs["paystatus"]) ) ? "selected" : ""?> >  已付款</option>
-
+				<?php $rs["paystatus"] = is_string($rs["paystatus"]) ? [$rs["paystatus"]] : $rs["paystatus"] ; if (empty($rs["paystatus"])) { $rs["paystatus"] = ["unpayed"]; } ?>
+<option value="unpayed" <?=in_array("unpayed", $rs["paystatus"]) ? "selected" : ""?> > 待付款</option>
+<option value="payed" <?=in_array("payed", $rs["paystatus"]) ? "selected" : ""?> >  已付款</option>
 			</select>
 			<div class="help-block"></div>
 		</div>
-	</div><!-- 结束 是否付款 (paystatus) -->
+	</div><!-- END 下拉选择: 是否付款 (paystatus) -->
 
-				<!-- END 是否付款  -->
-								
-				<!-- 保存数据 -->
-				<div class="form-group">
-					<label class="col-xs-2 control-label" for="url"></label>
-					<div class="col-xs-9">
-						<button class="btn btn-lg btn-primary btn-minw fn-action fn-save push-20-r" type="submit">保存</button>
-						<button 
-							data-param-id="<?=$rs['adv_id']?>"
-							class="btn btn-lg btn-primary btn-minw fn-action fn-saved-only fn-duplicate push-50-r" type="button">复制</button>
+				<!--  提交按钮 -->
+				<div class="block block-quickpanel sidebar-mini">
+					<div class="block-quickpanel-content" >
+						<div class="form-group">
 
-						<button 
-							confirm-title="请确认删除广告 "
-				            confirm-content="您确定删除广告 <strong><?=$rs['name']?>(<?=$rs['adv_id']?> )</strong>"
-				            confirm-dismiss = "取消"
-				            confirm-submit= "确定"
-				            data-param-adv_id="<?=$rs['adv_id']?>" 
-				            confirm-action="<?=App::NR('adv','remove')?>"
-				            event-before="
-								function( btn, modal ) {
-									$('button', modal)
-										.addClass('disabled')
-										.attr('disabled', 'disabled');
-								}
-							"
+							<!-- 功能组 -->
+							<div class="col-xs-2 push-20-t text-left">
+								<a href="<?=App::R('adv', 'index')?>"
+									class="btn btn-lg btn-primary font-w300 btn-minw push-20-l user-action fn-back" >
+									<i class="fa fa-angle-double-left push-5-r"></i> 广告列表 
+								</a>
+							</div>
+							<div class="col-xs-8 push-20-t text-center">
+								<button  
+									type="submit" 
+									class="btn btn-lg btn-primary font-w300 btn-minw  push-20-r fn-action fn-save  ">
+										<i class="fa fa-save push-5-r"></i> 保存
+								</button>
 
-							event-done="
-								function( data, btn, modal) {
-									$('button', modal)
-										.removeClass('disabled')
-										.removeAttr('disabled');
-								}
-							"
-					        event-success="
-								function(btn, modal) {
-									success('广告删除成功');
-									setTimeout(function(){
-										window.location = '<?=App::R('adv','index')?>';
-									}, 1000);
-								}
-							"
+								<button  
+									type="button" 
+									data-param-id="<?=$rs['adv_id']?>"
+									class="btn btn-lg btn-primary font-w300 btn-minw  push-50-r fn-action fn-saved-only fn-duplicate  ">
+										<i class="fa fa-files-o push-5-r"></i> 复制
+								</button>
 
-							event-error="
-								function( data, btn, modal) {
-									failure( '广告删除失败 ('+ data['message'] + ')');
-									return true;
-								}
-							"
+								<button 
+									type="button"
+									class="btn btn-lg btn-danger btn-minw ajax-confirm fn-action fn-saved-only fn-remove"
+									confirm-title="请确认删除广告 "
+						            confirm-content="您确定删除广告 <strong><?=$rs['name=adv_id']?>(<?=$rs['adv_id']?> )</strong>"
+						            confirm-dismiss = "取消"
+						            confirm-submit= "确定"
+						            confirm-action="<?=App::NR('adv','remove')?>"
+						            event-before="
+										function( btn, modal ) {
+											$('button', modal)
+												.addClass('disabled')
+												.attr('disabled', 'disabled');
+										}
+									"
+									event-done="
+										function( data, btn, modal) {
+											$('button', modal)
+												.removeClass('disabled')
+												.removeAttr('disabled');
+										}
+									"
+							        event-success="
+										function(btn, modal) {
+											success('广告删除成功');
+											setTimeout(function(){
+												window.location = '<?=App::R('adv','index')?>';
+											}, 1000);
+										}
+									"
+									event-error="
+										function( data, btn, modal) {
+											failure( '广告删除失败 ('+ data['message'] + ')');
+											return true;
+										}
+									"
 
-						class="btn btn-lg btn-danger btn-minw ajax-confirm fn-action fn-saved-only fn-remove" type="button">删除</button>
+									data-param-adv_id="<?=$rs['adv_id']?>" 
+	
+									 >
+										<i class="fa fa-minus-circle push-5-r"></i> 删除
+								</button>
+
+							</div>
+						</div>
+						<div class="bg-primary text-white text-center bottom-line"></div>	
 					</div>
-				</div><!-- END 保存数据 -->
+				</div> <!-- END 提交按钮 -->
+
 			</form>
-		</div>
-	</div>
-</div>
+		</div> <!-- END block-content form -->
+	</div> <!-- END block block-bordered -->
+</div><!-- END content -->
+
+
+
+
 
 <script type="text/javascript">
 function pending( message ) {
@@ -498,8 +488,11 @@ function save( form, validation ) {
 
 
 $(function(){
+
+	// 设定高度
+	$('.adv-content').css('minHeight', $(document).outerHeight() );
 	
-	App.initHelpers(['datepicker','select2', 'masked-inputs','tags-inputs',  'ajax-confirm', 'slimscroll', 'file-uploader', 'image-crop']);
+	App.initHelpers(['datepicker','select2', 'js-draggable-items', 'masked-inputs','tags-inputs',  'ajax-confirm', 'slimscroll', 'file-uploader', 'image-crop']);
 
 	// 表单验证
 	$('.adv-form').validate({
@@ -542,6 +535,10 @@ $(function(){
 	if ( $('input[name="adv_id"]').val() == '' || $('input[name="adv_id"]').val() == undefined ) {
 		$('.fn-saved-only').addClass('hidden');
 	}
+
+// 自定义代码
+
+
 })
 	
 </script>

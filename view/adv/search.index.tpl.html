@@ -1,9 +1,7 @@
-                                                                           	                              	                              	                                                                                                                            
-      	  	  	  	  	  	    	  	  	  	  	  	         
-      	  	  	  	  	  	    	  	  	  	  	  	          
 <?php 
 use \Xpmse\Loader\App; 
 use \Xpmse\Utils;
+use \Xpmse\T;
 ?>
 <div class="content">
 
@@ -67,134 +65,78 @@ use \Xpmse\Utils;
 							<a class="btn btn-default btn-xs pull-right  push-20-l hidden" type="button">
 								<i class="glyphicon glyphicon-list-alt"></i> 批量修改 
 							</a> <!-- END 批量管理链接 -->
-			
+							
 							<!-- 结果集排序 -->
 							<div class="btn-group pull-right push-20-l" role="group">  
 								<button class="btn btn-default btn-xs dropdown-toggle" 
 										type="button" data-toggle="dropdown" > 
 									<i class="glyphicon glyphicon-list-alt"></i>
 									<!-- 当前排序 -->
-									 
-										<?php if ( $query['order'] == 'order_pri') :?>
-											优先级
-																			 
-										<?php elseif ( $query['order'] == 'orderby_expired_desc') :?>
-											有效期倒序
-																			 
-										<?php elseif ( $query['order'] == 'orderby_expired_asc') :?>
-											有效期
-										 
-										<?php else:?>
-										 	排序方式
-										<?php endif;?> 
-																												<!-- 当前排序 -->
+									<?php if ( $query['order'] == 'order_pri') :?>
+										优先级
+									<?php elseif ( $query['order'] == 'orderby_pageview_desc') :?>
+										点击量倒序
+									<?php elseif ( $query['order'] == 'orderby_created_at_asc') :?>
+										创建时间
+									<?php else:?>
+										排序方式
+									<?php endif;?>
+									<!-- 当前排序 -->
 									<span class="caret"></span> 
 								</button>
 								<ul class="dropdown-menu dropdown-menu-right" style="min-width: 87px;">
 									<li class="dropdown-header"> 排序方式</li>
-									 
 									<li>
 										<a href="javascript:search('order','order_pri')">
 										   优先级
 										</a>
 									</li>
-									 
 									<li>
-										<a href="javascript:search('order','orderby_expired_desc')">
-										   有效期倒序
+										<a href="javascript:search('order','orderby_pageview_desc')">
+										   点击量倒序
 										</a>
 									</li>
-									 
 									<li>
-										<a href="javascript:search('order','orderby_expired_asc')">
-										   有效期
+										<a href="javascript:search('order','orderby_created_at_asc')">
+										   创建时间
 										</a>
 									</li>
-									
+									<li>
+										<a href="javascript:search('order','')"> 默认排序 </a>
+									</li>
 								</ul>
 							</div> <!-- END 结果集排序 -->
 						
-							 
-							<!-- 支付状态过滤 -->
-							<div class="btn-group pull-right push-20-l" role="group">  
-								<button class="btn btn-default btn-xs dropdown-toggle" 
-										type="button" data-toggle="dropdown" >
-									<i class="glyphicon glyphicon-list-alt"></i> 
-									 
-									<?=($query['paystatus'] == 'payed') ? '已付款' : '' ?>
-									 
-									<?=($query['paystatus'] == 'unpayed') ? '待付款' : '' ?>
-									 
-									<?=(empty($query['paystatus'])) ? '支付状态' : '' ?>
-
-									<span class="caret"></span> 
-								</button>
-
-								<ul class="dropdown-menu dropdown-menu-right"  style="min-width: 87px;">
-									<li class="dropdown-header">支付状态 </li>
-									<li>
-										<a href="javascript:search('paystatus','')">
-										   全部
-										</a>
-									</li>
-
-									 
-									<li >
-										<a href="javascript:search('paystatus','payed')">
-										   已付款
-										</a>
-									</li>
-									 
-									<li >
-										<a href="javascript:search('paystatus','unpayed')">
-										   待付款
-										</a>
-									</li>
-									 
-								</ul>
-								
-							</div> <!-- END 支付状态过滤 -->
-							 
 							<!-- 激活状态过滤 -->
 							<div class="btn-group pull-right push-20-l" role="group">  
-								<button class="btn btn-default btn-xs dropdown-toggle" 
-										type="button" data-toggle="dropdown" >
+								<button class="btn btn-default btn-xs dropdown-toggle" type="button" data-toggle="dropdown" >
 									<i class="glyphicon glyphicon-list-alt"></i> 
-									 
 									<?=($query['status'] == 'online') ? '上线' : '' ?>
-									 
 									<?=($query['status'] == 'offline') ? '下线' : '' ?>
-									 
 									<?=(empty($query['status'])) ? '激活状态' : '' ?>
-
 									<span class="caret"></span> 
 								</button>
 
 								<ul class="dropdown-menu dropdown-menu-right"  style="min-width: 87px;">
-									<li class="dropdown-header">激活状态 </li>
+									<li class="dropdown-header">激活状态</li>
 									<li>
 										<a href="javascript:search('status','')">
 										   全部
 										</a>
 									</li>
-
-									 
 									<li >
 										<a href="javascript:search('status','online')">
 										   上线
 										</a>
 									</li>
-									 
 									<li >
 										<a href="javascript:search('status','offline')">
 										   下线
 										</a>
 									</li>
-									 
 								</ul>
-								
 							</div> <!-- END 激活状态过滤 -->
-							  
+
 
 						</div><!-- END col-xs-7 -->
 
@@ -205,21 +147,12 @@ use \Xpmse\Utils;
 					<table class="js-table-checkable table table-hover remove-margin">
 						<thead>
 							<tr>
-								 
-								<th class="font-w300"> 位置编号 </th>
-								 
-								<th class="font-w300"> 位置名称 </th>
-								 
-								<th class="font-w300"> 优先级 </th>
-								 
+								<th class="font-w300"> 广告ID </th>
+								<th class="font-w300"> 广告别名 </th>
+								<th class="font-w300"> 所属栏目 </th>
 								<th class="font-w300"> 名称 </th>
-								 
-								<th class="font-w300"> 广告图片(多图) </th>
-								 
-								<th class="font-w300"> 支付状态 </th>
-								 
+								<th class="font-w300"> 位置名称 </th>
 								<th class="font-w300"> 状态 </th>
-								 
 							</tr>
 						</thead>
 
@@ -227,63 +160,31 @@ use \Xpmse\Utils;
 							<?php foreach ($response['data'] as $rs) :?>
 							<tr data-toggle="block-group" 
 								onclick="window.location='<?=App::R('adv', 'detail', ['adv_id'=>$rs['adv_id']])?>'" >
-								 
-								<td class="font-w300">  
-									 
-										<?=$rs["position_no"]?> 
-									 
+								<td class="font-w300">
+									<?php $v=null; $v=T::s("{{adv_id}}", $rs ); echo empty($v) ? T::s("", $rs ) : $v; ?>
 								</td>
-								 
-								<td class="font-w300">  
-									 
-										<?=$rs["position_name"]?> 
-									 
+								<td class="font-w300">
+									<?php $v=null; $v=T::s("{{adv_slug}}", $rs ); echo empty($v) ? T::s("", $rs ) : $v; ?>
 								</td>
-								 
-								<td class="font-w300">  
-									 
-										<?=$rs["priority"]?> 
-									 
+								<td class="font-w300">
+									<?php $rs["_map_category"]= &$response["category"]; $v=null; $v=T::s("{% for idx in categories %} {{_map_category[idx].name}} {% endfor %}", $rs ); echo empty($v) ? T::s("", $rs ) : $v; ?>
 								</td>
-								 
-								<td class="font-w300">  
-									 
-										<?=$rs["name"]?> 
-									 
+								<td class="font-w300">
+									<?php $v=null; $v=T::s("{{name}}", $rs ); echo empty($v) ? T::s("", $rs ) : $v; ?>
 								</td>
-								 
-								<td class="font-w300">  
-									  
-										<div style="line-height: 84px;display: inline-block; max-width:260px;word-wrap:break-word;" > 
-										<?php foreach( $rs["images"] as $idx=>$img ): 
-											if (!empty($img['url'])) : ?>
-											<img src="<?=$img['url']?>" height="64" style="max-width:260px;" class="push-5-r" /> 
-										<?php 
-											endif; 
-											if ($idx > 1) { break;}
-											endforeach ; ?>
-										</div>
-									 
+								<td class="font-w300">
+									<?php $v=null; $v=T::s("{{position_name}}", $rs ); echo empty($v) ? T::s("", $rs ) : $v; ?>
 								</td>
-								 
-								<td class="font-w300">  
-									  
-										<span class="text-<?=$rs["_paystatus"]["style"]?>"><?=$rs["_paystatus"]["name"]?></span>
-									 
+								<td class="font-w300">
+									<span class="text-<?=$rs['_status']['style']?>"><?=$rs['_status']['name'] ? $rs['_status']['name']  : $rs['status'] ?></span>
 								</td>
-								 
-								<td class="font-w300">  
-									  
-										<span class="text-<?=$rs["_status"]["style"]?>"><?=$rs["_status"]["name"]?></span>
-									 
-								</td>
-								 
 							</tr>
 							<?php endforeach;?>
+
 						</tbody>
 
 						<tfoot>
-							<tr><td colspan="7"> <nav class="pull-right">
+							<tr><td colspan="6"> <nav class="pull-right">
 
 								<ul class="pagination">
 									<?php if ($response['prev'] !== false): ?>
@@ -364,6 +265,9 @@ $(function() {
 		var url = '<?=App::R("category", "edit",["category_id"=>""])?>' + id;
 		window.location = url;
 	});
+
+// 加载自定义代码
+
 
 });
 
