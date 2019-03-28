@@ -4,7 +4,7 @@
  * 广告数据接口 
  *
  * 程序作者: XpmSE机器人
- * 最后修改: 2019-03-28 18:26:24
+ * 最后修改: 2019-03-28 20:14:35
  * 程序母版: /data/stor/private/templates/xpmsns/model/code/api/Name.php
  */
 namespace Xpmsns\Pages\Api;
@@ -144,11 +144,12 @@ class Adv extends Api {
 	 *			      $query["adv_id"] 按广告ID查询 ( AND = )
 	 *			      $query["pnos"] 按广告别名查询 ( AND IN )
 	 *			      $query["slug"] 按名称查询 ( AND = )
-	 *			      $query["adv_ids"] 按位置名称查询 ( AND IN )
+	 *			      $query["adv_ids"] 按广告ID查询 ( AND IN )
 	 *			      $query["expired"] 按有效期查询 ( AND LIKE )
 	 *			      $query["priority"] 按优先级查询 ( AND = )
 	 *			      $query["status"] 按状态查询 ( AND = )
 	 *			      $query["categories"] 按所属栏目查询 ( AND LIKE-MULTIPLE )
+	 *			      $query["position_no"] 按位置编号查询 ( AND IN )
 	 *			      $query["order_pri"]  按优先级 ASC 排序
 	 *			      $query["orderby_pageview_desc"]  按点击量 DESC 排序
 	 *			      $query["orderby_created_at_asc"]  按 ASC 排序
@@ -161,11 +162,12 @@ class Adv extends Api {
 	 *			      $data["adv_id"] 按广告ID查询 ( AND = )
 	 *			      $data["pnos"] 按广告别名查询 ( AND IN )
 	 *			      $data["slug"] 按名称查询 ( AND = )
-	 *			      $data["adv_ids"] 按位置名称查询 ( AND IN )
+	 *			      $data["adv_ids"] 按广告ID查询 ( AND IN )
 	 *			      $data["expired"] 按有效期查询 ( AND LIKE )
 	 *			      $data["priority"] 按优先级查询 ( AND = )
 	 *			      $data["status"] 按状态查询 ( AND = )
 	 *			      $data["categories"] 按所属栏目查询 ( AND LIKE-MULTIPLE )
+	 *			      $data["position_no"] 按位置编号查询 ( AND IN )
 	 *			      $data["order_pri"]  按优先级 ASC 排序
 	 *			      $data["orderby_pageview_desc"]  按点击量 DESC 排序
 	 *			      $data["orderby_created_at_asc"]  按 ASC 排序

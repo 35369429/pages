@@ -4,7 +4,7 @@
  * 广告数据模型
  *
  * 程序作者: XpmSE机器人
- * 最后修改: 2019-03-28 18:26:26
+ * 最后修改: 2019-03-28 20:14:36
  * 程序母版: /data/stor/private/templates/xpmsns/model/code/model/Name.php
  */
 namespace Xpmsns\Pages\Model;
@@ -693,11 +693,12 @@ class Adv extends Model {
 	 *			      $query["adv_id"] 按广告ID查询 ( = )
 	 *			      $query["pnos"] 按广告别名查询 ( IN )
 	 *			      $query["slug"] 按名称查询 ( = )
-	 *			      $query["adv_ids"] 按位置名称查询 ( IN )
+	 *			      $query["adv_ids"] 按广告ID查询 ( IN )
 	 *			      $query["expired"] 按有效期查询 ( LIKE )
 	 *			      $query["priority"] 按优先级查询 ( = )
 	 *			      $query["status"] 按状态查询 ( = )
 	 *			      $query["categories"] 按所属栏目查询 ( LIKE-MULTIPLE )
+	 *			      $query["position_no"] 按位置编号查询 ( IN )
 	 *			      $query["order_pri"]  按name=priority ASC 排序
 	 *			      $query["orderby_pageview_desc"]  按name=pageview DESC 排序
 	 *			      $query["orderby_created_at_asc"]  按name=created_at ASC 排序
@@ -792,12 +793,12 @@ class Adv extends Model {
 			$qb->where("adv.name", '=', "{$query['slug']}" );
 		}
 		  
-		// 按位置名称查询 (IN)  
+		// 按广告ID查询 (IN)  
 		if ( array_key_exists("adv_ids", $query) &&!empty($query['adv_ids']) ) {
 			if ( is_string($query['adv_ids']) ) {
 				$query['adv_ids'] = explode(',', $query['adv_ids']);
 			}
-			$qb->whereIn("adv.position_name",  $query['adv_ids'] );
+			$qb->whereIn("adv.adv_id",  $query['adv_ids'] );
 		}
 		  
 		// 按有效期查询 (LIKE)  
@@ -828,6 +829,14 @@ class Adv extends Model {
                     }
                 }
             });
+		}
+		  
+		// 按位置编号查询 (IN)  
+		if ( array_key_exists("position_no", $query) &&!empty($query['position_no']) ) {
+			if ( is_string($query['position_no']) ) {
+				$query['position_no'] = explode(',', $query['position_no']);
+			}
+			$qb->whereIn("adv.position_no",  $query['position_no'] );
 		}
 		  
 
