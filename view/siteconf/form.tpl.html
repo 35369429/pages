@@ -643,6 +643,185 @@ use \Xpmse\T;
 
 
 
+	<!-- 多图片组上传: 自定义图片 (images) 开始  -->
+	<div class="xpmse-image-groups-content    draggable-column">
+		
+		<?php if(@count($rs['images']) < 1): ?><?php $steps = 1 -  @count($rs['images']); for( $i=0; $i<$steps; $i++){ $rs['images'][] = [];} ?><?php endif ?><?php if( is_array($rs['images']) && utils::array_depth($rs['images']) != 2): ?><?php foreach($rs['images'] as $idx=>$it ){ $rs['images'][$idx] = ['img'=>$it]; }?><?php endif ?><?php foreach ( $rs['images'] as $__key=>$img ): ?> 
+		<div class="xpmse-image-groups draggable-item" data-nested="images" data-multiple="1">
+			<div class="form-group " >
+				<label class="col-xs-2 control-label draggable-handler" for="images">自定义图片</label>
+				<div class="col-xs-4" style="width:212px" >
+			   		<div name="images" class="file-uploader rounded rounded-4"
+						data-api='/_a/mina/uploader/upload?type=image'
+						data-title=''
+						data-previews=""
+						data-width="192"
+						data-height="192"
+						data-icon="fa fa-image" 
+						data-placeholder="填写自定义参数" 
+						data-allow-types="image/png,image/jpg,image/jpeg,image/gif"
+						data-maxsize="20"
+						data-progress="yes"
+						data-cropable="yes"
+						data-draggable="yes"
+						data-src="<?=T::v('<%=url%>', $img )?>"
+						data-path="<?=T::v('<%=path%>', $img )?>"
+						data-nested-value="1"
+						></div>
+					<div class="help-block">用于定制页面所需的图片</div>
+				</div>
+				<div class="col-xs-4">
+					<div class="col-xs-12">
+						<input 
+							class="form-control input-lg"  
+							type="text" 
+							data-name="title" 
+							placeholder="请输入标题"
+							value="<?=T::v('<%=title | e(\'html\')%>', $img )?>" /> 
+					</div>
+					<div class="col-xs-12 push-10-t">
+						<input 
+							class="form-control input-lg"  
+							type="text" 
+							data-name="link" 
+							placeholder="请输入链接地址"
+							value="<?=T::v('<%=link | e(\'html\')%>', $img )?>" />
+					</div>
+					<div class="col-xs-12 push-10-t">
+						<textarea class="form-control input-lg"  
+							data-name="summary" rows="4"
+							placeholder="请输入图片介绍"><?=T::v('<%=summary | e(\'html\')%>', $img )?></textarea> 
+					</div>
+				</div>
+				<div class="col-xs-1 push-10-t">
+					<a href="javascript:void(0);" data-action="add"    class="text-success push-20-r"> <i class="fa fa-plus font-s20"></i> </a> 
+					<a href="javascript:void(0);" data-action="remove" class="text-danger"> <i class="fa fa-minus font-s20"></i> </a> 
+				</div>
+			</div> 
+		</div>
+		<?php endforeach; ?> 
+
+		<script type="text/javascript">
+			$('.xpmse-image-groups[data-nested="images"]').Multipliable({
+				initialized: function(elm, idx) {
+					$(elm).parent('.xpmse-image-groups-content') .find('.control-label').each( function(i, el ){
+						if (i >0) { $(el).html('');}
+					});
+				},
+				added: function( elm ) {
+					App.initHelper('file-uploader', {handler: $(elm).find('.file-uploader')} );
+				},
+				removed: function(){},
+				html: function( elm ){ 
+					var html = $(elm).clone();
+					var resp = $(html);
+					resp.find('.control-label').html('');
+					resp.find('.file-uploader').html('');
+					resp.find('.file-uploader').attr('data-src', '');
+					resp.find('.file-uploader').attr('data-path', '');
+					resp.find('input[type=hidden]').remove();
+					resp.find('input').val('');
+					resp.find('textarea').val('');
+					return resp;
+				}
+			});
+		</script>
+	</div><!-- END 多图片组上传: 自定义图片 (images) -->
+
+
+
+	<!-- JSON文本数组: 自定义属性 (attrs) <?=T::v('<%=attrs%>', $rs )?> 开始   minLength(1) -->
+	<div class="xpmse-json-input-panel"  >
+		<?php if(@count($rs['attrs']) < 1): ?><?php $steps = 1 -  @count($rs['attrs']); for( $i=0; $i<$steps; $i++){ $rs['attrs'][] = [];} ?><?php endif ?><?php if( is_array($rs['attrs']) && utils::array_depth($rs['attrs']) != 2): ?><?php foreach($rs['attrs'] as $idx=>$it ){ $rs['attrs'][$idx] = ['val'=>$it]; }?><?php endif ?><?php foreach ( $rs['attrs'] as $__key=>$val ): ?>		<div class="xpmse-json-input  "  name="attrs__origin"   data-nested="attrs__origin" data-multiple="1" >
+			<div class="form-group " >
+				<label class="col-xs-2 control-label" for="attrs">自定义属性 </label>
+				<div class="col-xs-2">
+					<input class="form-control input-lg"  
+						type="text" 
+						data-name="key" 
+						placeholder="请输入键名"
+						value="<?=key($val)?>" /> 
+					<div class="help-block">用于定制页面所需的文案</div>
+				</div>
+				<div class="col-xs-6">
+					<input class="form-control input-lg "   
+						type="text" 
+						data-name="value"
+						placeholder="请输入数值"
+						value="<?=current($val)?>" /> 
+					<div class="help-block">用于定制页面所需的文案</div>
+				</div>
+				<div class="col-xs-2 push-10-t">
+					<a href="javascript:void(0);" data-action="add"    class="text-success push-20-r"> <i class="fa fa-plus font-s20"></i> </a> 
+					<a href="javascript:void(0);" data-action="remove" class="text-danger"> <i class="fa fa-minus font-s20"></i> </a> 
+				</div>
+			</div> 
+		</div>
+		<?php endforeach; ?> 
+		<input type="hidden" name="attrs" value="" />
+	</div>
+	<script type="text/javascript">
+
+		function _attrs() {
+			result = []; map = {}
+			$(".form-group", '[name="attrs__origin"]').each(function(idx,elm){
+				key = "";
+				val = "";
+				$('input', elm).each(function(idx,input){
+					if ( $(input).attr('data-name') == "key" ){
+						key = $(input).val();
+					} else if ($(input).attr('data-name') == "value" ){
+						val = $(input).val();
+					}
+				})
+
+				if ( key != "" ) {
+					map[key] = val;
+				}
+			})
+
+			for ( var key in map ) {
+				var obj = {};
+				obj[key] = map[key];
+				result.push(obj);
+			}
+
+			console.log( "result" , "=", result , map);
+			$('input[name="attrs"]').val( "json://" + JSON.stringify(result) );
+		}
+
+
+		// Init
+		_attrs();
+
+		$('.xpmse-json-input[name="attrs__origin"]').Multipliable({
+			initialized: function(elm, idx) {
+				$(elm).parent('.xpmse-json-input-panel') .find('.control-label').each( function(i, el ){
+					if (i >0) { $(el).html('');}
+				});
+
+				$('input',elm).change(function(event) {
+					_attrs();
+				});
+			},
+			added: function( elm ) {
+				 _attrs();
+			},
+			removed: function(){
+				 _attrs();
+			},
+			html: function( elm ){ 
+				var html = $(elm).clone();
+				var resp = $(html);
+					resp.find('.control-label').html('');
+				return resp;
+			}
+		});
+	</script><!-- END JSON文本: 自定义属性 (attrs) -->
+
+
+
+
     <!-- JSON编辑器(json-editor): 自定义参数 (params) 开始  -->
 	<style type="text/css">
 		.CodeMirror {

@@ -4,11 +4,11 @@
  * 站点配置数据模型
  *
  * 程序作者: XpmSE机器人
- * 最后修改: 2019-03-19 15:31:07
+ * 最后修改: 2019-03-28 20:36:49
  * 程序母版: /data/stor/private/templates/xpmsns/model/code/model/Name.php
  */
 namespace Xpmsns\Pages\Model;
-                                                     
+                                                        
 use \Xpmse\Excp;
 use \Xpmse\Model;
 use \Xpmse\Utils;
@@ -140,6 +140,10 @@ class Siteconf extends Model {
 		$this->putColumn( 'status', $this->type("string", ["length"=>50, "index"=>true, "default"=>"online", "null"=>true]));
 		// 操作者
 		$this->putColumn( 'user', $this->type("string", ["length"=>128, "index"=>true, "null"=>true]));
+		// 自定义图片
+		$this->putColumn( 'images', $this->type("text", ["json"=>true, "null"=>true]));
+		// 自定义属性
+		$this->putColumn( 'attrs', $this->type("text", ["json"=>true, "null"=>true]));
 		// 自定义参数
 		$this->putColumn( 'params', $this->type("text", ["json"=>true, "null"=>true]));
 		// 头部脚本
@@ -214,6 +218,11 @@ class Siteconf extends Model {
 		if ( array_key_exists('qr_ios', $rs ) ) {
             array_push($fileFields, 'qr_ios');
 		}
+		// 格式化: 自定义图片
+		// 返回值: [{"url":"访问地址...", "path":"文件路径...", "origin":"原始文件访问地址..." }]
+		if ( array_key_exists('images', $rs ) ) {
+            array_push($fileFields, 'images');
+		}
 
         // 处理图片和文件字段 
         $this->__fileFields( $rs, $fileFields );
@@ -282,6 +291,8 @@ class Siteconf extends Model {
 	 *          	  $rs["qr_ios"],  // 苹果应用二维码 
 	 *          	  $rs["status"],  // 状态 
 	 *          	  $rs["user"],  // 操作者 
+	 *          	  $rs["images"],  // 自定义图片 
+	 *          	  $rs["attrs"],  // 自定义属性 
 	 *          	  $rs["params"],  // 自定义参数 
 	 *          	  $rs["header"],  // 头部脚本 
 	 *          	  $rs["footer"],  // 网站尾部 
@@ -418,6 +429,8 @@ class Siteconf extends Model {
 	 *          	  $rs["qr_ios"],  // 苹果应用二维码 
 	 *          	  $rs["status"],  // 状态 
 	 *          	  $rs["user"],  // 操作者 
+	 *          	  $rs["images"],  // 自定义图片 
+	 *          	  $rs["attrs"],  // 自定义属性 
 	 *          	  $rs["params"],  // 自定义参数 
 	 *          	  $rs["header"],  // 头部脚本 
 	 *          	  $rs["footer"],  // 网站尾部 
@@ -693,6 +706,31 @@ class Siteconf extends Model {
 	}
 
 	/**
+	 * 根据配制ID上传自定义图片。
+	 * @param string $site_id 配制ID
+	 * @param string $file_path 文件路径
+	 * @param mix $index 如果是数组，替换当前 index
+	 * @return array 已上传文件信息 {"url":"访问地址...", "path":"文件路径...", "origin":"原始文件访问地址..." }
+	 */
+	public function uploadImagesBySiteId($site_id, $file_path, $index=null, $upload_only=false ) {
+
+		$rs = $this->getBy('site_id', $site_id, ["images"]);
+		$paths = empty($rs["images"]) ? [] : $rs["images"];
+		$fs = $this->media->uploadFile( $file_path );
+		if ( $index === null ) {
+			array_push($paths, $fs['path']);
+		} else {
+			$paths[$index] = $fs['path'];
+		}
+
+		if ( $upload_only !== true ) {
+			$this->updateBy('site_id', ["site_id"=>$site_id, "images"=>$paths] );
+		}
+
+		return $fs;
+	}
+
+	/**
 	 * 根据配制别名上传网站图标。
 	 * @param string $site_slug 配制别名
 	 * @param string $file_path 文件路径
@@ -868,6 +906,31 @@ class Siteconf extends Model {
 		return $fs;
 	}
 
+	/**
+	 * 根据配制别名上传自定义图片。
+	 * @param string $site_slug 配制别名
+	 * @param string $file_path 文件路径
+	 * @param mix $index 如果是数组，替换当前 index
+	 * @return array 已上传文件信息 {"url":"访问地址...", "path":"文件路径...", "origin":"原始文件访问地址..." }
+	 */
+	public function uploadImagesBySiteSlug($site_slug, $file_path, $index=null, $upload_only=false ) {
+
+		$rs = $this->getBy('site_slug', $site_slug, ["images"]);
+		$paths = empty($rs["images"]) ? [] : $rs["images"];
+		$fs = $this->media->uploadFile( $file_path );
+		if ( $index === null ) {
+			array_push($paths, $fs['path']);
+		} else {
+			$paths[$index] = $fs['path'];
+		}
+
+		if ( $upload_only !== true ) {
+			$this->updateBy('site_slug', ["site_slug"=>$site_slug, "images"=>$paths] );
+		}
+
+		return $fs;
+	}
+
 
 	/**
 	 * 添加站点配置记录
@@ -972,6 +1035,8 @@ class Siteconf extends Model {
 	 *               	["qr_ios"],  // 苹果应用二维码 
 	 *               	["status"],  // 状态 
 	 *               	["user"],  // 操作者 
+	 *               	["images"],  // 自定义图片 
+	 *               	["attrs"],  // 自定义属性 
 	 *               	["params"],  // 自定义参数 
 	 *               	["header"],  // 头部脚本 
 	 *               	["footer"],  // 网站尾部 
@@ -1130,6 +1195,8 @@ class Siteconf extends Model {
 			"qr_ios",  // 苹果应用二维码
 			"status",  // 状态
 			"user",  // 操作者
+			"images",  // 自定义图片
+			"attrs",  // 自定义属性
 			"params",  // 自定义参数
 			"header",  // 头部脚本
 			"footer",  // 网站尾部

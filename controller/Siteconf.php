@@ -4,7 +4,7 @@
  * 站点配置控制器
  *
  * 程序作者: XpmSE机器人
- * 最后修改: 2019-03-19 15:31:07
+ * 最后修改: 2019-03-28 20:36:48
  * 程序母版: /data/stor/private/templates/xpmsns/model/code/controller/Name.php
  */
 
@@ -237,6 +237,20 @@ class SiteconfController extends \Xpmse\Loader\Controller {
 		if ( is_array($rs['qr_ios']) &&  !empty($rs['qr_ios']['local'])) {
 			$rs['qr_ios'] = $inst->uploadQriosBySiteId( $site_id, $rs['qr_ios']['local'], true);
 		}
+		if ( is_array($rs['images'])) {
+
+			$resp = [];
+			foreach ($rs['images'] as $idx=>$fs ) {
+
+				if ( empty($fs['local']) ) {
+					continue;
+				}
+				$resp[] = $inst->uploadImagesBySiteId( $site_id, $fs['local'], $idx, true);
+			}
+
+			$rs['images'] = $resp;
+		}
+
 
 		$data = [
 			'action_name' =>  $action_name,
