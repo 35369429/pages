@@ -4,7 +4,7 @@
  * 商品数据接口 
  *
  * 程序作者: XpmSE机器人
- * 最后修改: 2019-01-08 16:41:29
+ * 最后修改: 2019-04-09 02:48:43
  * 程序母版: /data/stor/private/templates/xpmsns/model/code/api/Name.php
  */
 namespace Xpmsns\Pages\Api;
@@ -169,6 +169,28 @@ class Goods extends Api {
 	*               	["_map_recommend"][$recommend_ids[n]]["status"], // recommend.status
 	*               	["_map_recommend"][$recommend_ids[n]]["bigdata_engine"], // recommend.bigdata_engine
 	*               	["_map_recommend"][$recommend_ids[n]]["series"], // recommend.series
+	*               	["_map_recommend"][$recommend_ids[n]]["questions"], // recommend.questions
+	*               	["_map_recommend"][$recommend_ids[n]]["answers"], // recommend.answers
+	*               	["_map_recommend"][$recommend_ids[n]]["goods"], // recommend.goods
+	*               	["_map_recommend"][$recommend_ids[n]]["topics"], // recommend.topics
+	*               	["_map_recommend"][$recommend_ids[n]]["article_select"], // recommend.article_select
+	*               	["_map_recommend"][$recommend_ids[n]]["article_status"], // recommend.article_status
+	*               	["_map_recommend"][$recommend_ids[n]]["event_select"], // recommend.event_select
+	*               	["_map_recommend"][$recommend_ids[n]]["event_status"], // recommend.event_status
+	*               	["_map_recommend"][$recommend_ids[n]]["exclude_events"], // recommend.exclude_events
+	*               	["_map_recommend"][$recommend_ids[n]]["album_select"], // recommend.album_select
+	*               	["_map_recommend"][$recommend_ids[n]]["album_status"], // recommend.album_status
+	*               	["_map_recommend"][$recommend_ids[n]]["exclude_albums"], // recommend.exclude_albums
+	*               	["_map_recommend"][$recommend_ids[n]]["question_select"], // recommend.question_select
+	*               	["_map_recommend"][$recommend_ids[n]]["question_status"], // recommend.question_status
+	*               	["_map_recommend"][$recommend_ids[n]]["exclude_questions"], // recommend.exclude_questions
+	*               	["_map_recommend"][$recommend_ids[n]]["answer_select"], // recommend.answer_select
+	*               	["_map_recommend"][$recommend_ids[n]]["answer_status"], // recommend.answer_status
+	*               	["_map_recommend"][$recommend_ids[n]]["exclude_answers"], // recommend.exclude_answers
+	*               	["_map_recommend"][$recommend_ids[n]]["goods_select"], // recommend.goods_select
+	*               	["_map_recommend"][$recommend_ids[n]]["goods_status"], // recommend.goods_status
+	*               	["_map_recommend"][$recommend_ids[n]]["exclude_goods"], // recommend.exclude_goods
+	*               	["_map_recommend"][$recommend_ids[n]]["ttl"], // recommend.ttl
 	*/
 	protected function get( $query, $data ) {
 
@@ -245,7 +267,6 @@ class Goods extends Api {
 	 * @return array 新增的商品记录  @see get()
 	 */
 	protected function create( $query, $data ) {
-
 		if ( !empty($query['_secret']) ) { 
 			// secret校验，一般用于小程序 & 移动应用
 			$this->authSecret($query['_secret']);
@@ -467,6 +488,28 @@ class Goods extends Api {
 	*               	["recommend"][$recommend_ids[n]]["status"], // recommend.status
 	*               	["recommend"][$recommend_ids[n]]["bigdata_engine"], // recommend.bigdata_engine
 	*               	["recommend"][$recommend_ids[n]]["series"], // recommend.series
+	*               	["recommend"][$recommend_ids[n]]["questions"], // recommend.questions
+	*               	["recommend"][$recommend_ids[n]]["answers"], // recommend.answers
+	*               	["recommend"][$recommend_ids[n]]["goods"], // recommend.goods
+	*               	["recommend"][$recommend_ids[n]]["topics"], // recommend.topics
+	*               	["recommend"][$recommend_ids[n]]["article_select"], // recommend.article_select
+	*               	["recommend"][$recommend_ids[n]]["article_status"], // recommend.article_status
+	*               	["recommend"][$recommend_ids[n]]["event_select"], // recommend.event_select
+	*               	["recommend"][$recommend_ids[n]]["event_status"], // recommend.event_status
+	*               	["recommend"][$recommend_ids[n]]["exclude_events"], // recommend.exclude_events
+	*               	["recommend"][$recommend_ids[n]]["album_select"], // recommend.album_select
+	*               	["recommend"][$recommend_ids[n]]["album_status"], // recommend.album_status
+	*               	["recommend"][$recommend_ids[n]]["exclude_albums"], // recommend.exclude_albums
+	*               	["recommend"][$recommend_ids[n]]["question_select"], // recommend.question_select
+	*               	["recommend"][$recommend_ids[n]]["question_status"], // recommend.question_status
+	*               	["recommend"][$recommend_ids[n]]["exclude_questions"], // recommend.exclude_questions
+	*               	["recommend"][$recommend_ids[n]]["answer_select"], // recommend.answer_select
+	*               	["recommend"][$recommend_ids[n]]["answer_status"], // recommend.answer_status
+	*               	["recommend"][$recommend_ids[n]]["exclude_answers"], // recommend.exclude_answers
+	*               	["recommend"][$recommend_ids[n]]["goods_select"], // recommend.goods_select
+	*               	["recommend"][$recommend_ids[n]]["goods_status"], // recommend.goods_status
+	*               	["recommend"][$recommend_ids[n]]["exclude_goods"], // recommend.exclude_goods
+	*               	["recommend"][$recommend_ids[n]]["ttl"], // recommend.ttl
 	 */
 	protected function search( $query, $data ) {
 

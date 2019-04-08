@@ -4,7 +4,7 @@
  * 商品数据模型
  *
  * 程序作者: XpmSE机器人
- * 最后修改: 2019-01-08 16:41:30
+ * 最后修改: 2019-04-09 02:48:46
  * 程序母版: /data/stor/private/templates/xpmsns/model/code/model/Name.php
  */
 namespace Xpmsns\Pages\Model;
@@ -14,7 +14,9 @@ use \Xpmse\Model;
 use \Xpmse\Utils;
 use \Xpmse\Conf;
 use \Xpmse\Media;
+use \Mina\Cache\Redis as Cache;
 use \Xpmse\Loader\App as App;
+use \Xpmse\Job;
 
 
 class Goods extends Model {
@@ -374,70 +376,26 @@ class Goods extends Model {
 	 * @return
 	 */
 	public function format( & $rs ) {
-
+     
+		$fileFields = []; 
 		// 格式化: 主图
 		// 返回值: [{"url":"访问地址...", "path":"文件路径...", "origin":"原始文件访问地址..." }]
 		if ( array_key_exists('cover', $rs ) ) {
-			$is_string = is_string($rs["cover"]);
-			$rs["cover"] = $is_string ? [$rs["cover"]] : $rs["cover"];
-			$rs["cover"] = !is_array($rs["cover"]) ? [] : $rs["cover"];
-			foreach ($rs["cover"] as & $file ) {
-				if ( is_array($file) && !empty($file['path']) ) {
-					$fs = $this->media->get( $file['path'] );
-					$file = array_merge( $file, $fs );
-				} else if ( is_string($file) ) {
-					$file =empty($file) ? [] : $this->media->get( $file );
-				} else {
-					$file = [];
-				}
-			}
-			if ($is_string) {
-				$rs["cover"] = current($rs["cover"]);
-			}
+            array_push($fileFields, 'cover');
 		}
-
 		// 格式化: 图片
 		// 返回值: [{"url":"访问地址...", "path":"文件路径...", "origin":"原始文件访问地址..." }]
 		if ( array_key_exists('images', $rs ) ) {
-			$is_string = is_string($rs["images"]);
-			$rs["images"] = $is_string ? [$rs["images"]] : $rs["images"];
-			$rs["images"] = !is_array($rs["images"]) ? [] : $rs["images"];
-			foreach ($rs["images"] as & $file ) {
-				if ( is_array($file) && !empty($file['path']) ) {
-					$fs = $this->media->get( $file['path'] );
-					$file = array_merge( $file, $fs );
-				} else if ( is_string($file) ) {
-					$file =empty($file) ? [] : $this->media->get( $file );
-				} else {
-					$file = [];
-				}
-			}
-			if ($is_string) {
-				$rs["images"] = current($rs["images"]);
-			}
+            array_push($fileFields, 'images');
 		}
-
 		// 格式化: 视频
 		// 返回值: [{"url":"访问地址...", "path":"文件路径...", "origin":"原始文件访问地址..." }]
 		if ( array_key_exists('videos', $rs ) ) {
-			$is_string = is_string($rs["videos"]);
-			$rs["videos"] = $is_string ? [$rs["videos"]] : $rs["videos"];
-			$rs["videos"] = !is_array($rs["videos"]) ? [] : $rs["videos"];
-			foreach ($rs["videos"] as & $file ) {
-				if ( is_array($file) && !empty($file['path']) ) {
-					$fs = $this->media->get( $file['path'] );
-					$file = array_merge( $file, $fs );
-				} else if ( is_string($file) ) {
-					$file =empty($file) ? [] : $this->media->get( $file );
-				} else {
-					$file = [];
-				}
-			}
-			if ($is_string) {
-				$rs["videos"] = current($rs["videos"]);
-			}
+            array_push($fileFields, 'videos');
 		}
 
+        // 处理图片和文件字段 
+        $this->__fileFields( $rs, $fileFields );
 
 		// 格式化: 状态
 		// 返回值: "_status_types" 所有状态表述, "_status_name" 状态名称,  "_status" 当前状态表述, "status" 当前状态数值
@@ -549,6 +507,28 @@ class Goods extends Model {
 	 *                $rs["_map_recommend"][$recommend_ids[n]]["status"], // recommend.status
 	 *                $rs["_map_recommend"][$recommend_ids[n]]["bigdata_engine"], // recommend.bigdata_engine
 	 *                $rs["_map_recommend"][$recommend_ids[n]]["series"], // recommend.series
+	 *                $rs["_map_recommend"][$recommend_ids[n]]["questions"], // recommend.questions
+	 *                $rs["_map_recommend"][$recommend_ids[n]]["answers"], // recommend.answers
+	 *                $rs["_map_recommend"][$recommend_ids[n]]["goods"], // recommend.goods
+	 *                $rs["_map_recommend"][$recommend_ids[n]]["topics"], // recommend.topics
+	 *                $rs["_map_recommend"][$recommend_ids[n]]["article_select"], // recommend.article_select
+	 *                $rs["_map_recommend"][$recommend_ids[n]]["article_status"], // recommend.article_status
+	 *                $rs["_map_recommend"][$recommend_ids[n]]["event_select"], // recommend.event_select
+	 *                $rs["_map_recommend"][$recommend_ids[n]]["event_status"], // recommend.event_status
+	 *                $rs["_map_recommend"][$recommend_ids[n]]["exclude_events"], // recommend.exclude_events
+	 *                $rs["_map_recommend"][$recommend_ids[n]]["album_select"], // recommend.album_select
+	 *                $rs["_map_recommend"][$recommend_ids[n]]["album_status"], // recommend.album_status
+	 *                $rs["_map_recommend"][$recommend_ids[n]]["exclude_albums"], // recommend.exclude_albums
+	 *                $rs["_map_recommend"][$recommend_ids[n]]["question_select"], // recommend.question_select
+	 *                $rs["_map_recommend"][$recommend_ids[n]]["question_status"], // recommend.question_status
+	 *                $rs["_map_recommend"][$recommend_ids[n]]["exclude_questions"], // recommend.exclude_questions
+	 *                $rs["_map_recommend"][$recommend_ids[n]]["answer_select"], // recommend.answer_select
+	 *                $rs["_map_recommend"][$recommend_ids[n]]["answer_status"], // recommend.answer_status
+	 *                $rs["_map_recommend"][$recommend_ids[n]]["exclude_answers"], // recommend.exclude_answers
+	 *                $rs["_map_recommend"][$recommend_ids[n]]["goods_select"], // recommend.goods_select
+	 *                $rs["_map_recommend"][$recommend_ids[n]]["goods_status"], // recommend.goods_status
+	 *                $rs["_map_recommend"][$recommend_ids[n]]["exclude_goods"], // recommend.exclude_goods
+	 *                $rs["_map_recommend"][$recommend_ids[n]]["ttl"], // recommend.ttl
 	 */
 	public function getByGoodsId( $goods_id, $select=['*']) {
 		
@@ -563,7 +543,7 @@ class Goods extends Model {
 
 		// 创建查询构造器
 		$qb = Utils::getTab("xpmsns_pages_goods as goods", "{none}")->query();
-  		$qb->where('goods_id', '=', $goods_id );
+  		$qb->where('goods.goods_id', '=', $goods_id );
 		$qb->limit( 1 );
 		$qb->select($select);
 		$rows = $qb->get()->toArray();
@@ -760,6 +740,28 @@ class Goods extends Model {
 	 *                $rs["_map_recommend"][$recommend_ids[n]]["status"], // recommend.status
 	 *                $rs["_map_recommend"][$recommend_ids[n]]["bigdata_engine"], // recommend.bigdata_engine
 	 *                $rs["_map_recommend"][$recommend_ids[n]]["series"], // recommend.series
+	 *                $rs["_map_recommend"][$recommend_ids[n]]["questions"], // recommend.questions
+	 *                $rs["_map_recommend"][$recommend_ids[n]]["answers"], // recommend.answers
+	 *                $rs["_map_recommend"][$recommend_ids[n]]["goods"], // recommend.goods
+	 *                $rs["_map_recommend"][$recommend_ids[n]]["topics"], // recommend.topics
+	 *                $rs["_map_recommend"][$recommend_ids[n]]["article_select"], // recommend.article_select
+	 *                $rs["_map_recommend"][$recommend_ids[n]]["article_status"], // recommend.article_status
+	 *                $rs["_map_recommend"][$recommend_ids[n]]["event_select"], // recommend.event_select
+	 *                $rs["_map_recommend"][$recommend_ids[n]]["event_status"], // recommend.event_status
+	 *                $rs["_map_recommend"][$recommend_ids[n]]["exclude_events"], // recommend.exclude_events
+	 *                $rs["_map_recommend"][$recommend_ids[n]]["album_select"], // recommend.album_select
+	 *                $rs["_map_recommend"][$recommend_ids[n]]["album_status"], // recommend.album_status
+	 *                $rs["_map_recommend"][$recommend_ids[n]]["exclude_albums"], // recommend.exclude_albums
+	 *                $rs["_map_recommend"][$recommend_ids[n]]["question_select"], // recommend.question_select
+	 *                $rs["_map_recommend"][$recommend_ids[n]]["question_status"], // recommend.question_status
+	 *                $rs["_map_recommend"][$recommend_ids[n]]["exclude_questions"], // recommend.exclude_questions
+	 *                $rs["_map_recommend"][$recommend_ids[n]]["answer_select"], // recommend.answer_select
+	 *                $rs["_map_recommend"][$recommend_ids[n]]["answer_status"], // recommend.answer_status
+	 *                $rs["_map_recommend"][$recommend_ids[n]]["exclude_answers"], // recommend.exclude_answers
+	 *                $rs["_map_recommend"][$recommend_ids[n]]["goods_select"], // recommend.goods_select
+	 *                $rs["_map_recommend"][$recommend_ids[n]]["goods_status"], // recommend.goods_status
+	 *                $rs["_map_recommend"][$recommend_ids[n]]["exclude_goods"], // recommend.exclude_goods
+	 *                $rs["_map_recommend"][$recommend_ids[n]]["ttl"], // recommend.ttl
 	 */
 	public function getBySlug( $slug, $select=['*']) {
 		
@@ -774,7 +776,7 @@ class Goods extends Model {
 
 		// 创建查询构造器
 		$qb = Utils::getTab("xpmsns_pages_goods as goods", "{none}")->query();
-  		$qb->where('slug', '=', $slug );
+  		$qb->where('goods.slug', '=', $slug );
 		$qb->limit( 1 );
 		$qb->select($select);
 		$rows = $qb->get()->toArray();
@@ -1208,6 +1210,28 @@ class Goods extends Model {
 	 *               	["recommend"][$recommend_ids[n]]["status"], // recommend.status
 	 *               	["recommend"][$recommend_ids[n]]["bigdata_engine"], // recommend.bigdata_engine
 	 *               	["recommend"][$recommend_ids[n]]["series"], // recommend.series
+	 *               	["recommend"][$recommend_ids[n]]["questions"], // recommend.questions
+	 *               	["recommend"][$recommend_ids[n]]["answers"], // recommend.answers
+	 *               	["recommend"][$recommend_ids[n]]["goods"], // recommend.goods
+	 *               	["recommend"][$recommend_ids[n]]["topics"], // recommend.topics
+	 *               	["recommend"][$recommend_ids[n]]["article_select"], // recommend.article_select
+	 *               	["recommend"][$recommend_ids[n]]["article_status"], // recommend.article_status
+	 *               	["recommend"][$recommend_ids[n]]["event_select"], // recommend.event_select
+	 *               	["recommend"][$recommend_ids[n]]["event_status"], // recommend.event_status
+	 *               	["recommend"][$recommend_ids[n]]["exclude_events"], // recommend.exclude_events
+	 *               	["recommend"][$recommend_ids[n]]["album_select"], // recommend.album_select
+	 *               	["recommend"][$recommend_ids[n]]["album_status"], // recommend.album_status
+	 *               	["recommend"][$recommend_ids[n]]["exclude_albums"], // recommend.exclude_albums
+	 *               	["recommend"][$recommend_ids[n]]["question_select"], // recommend.question_select
+	 *               	["recommend"][$recommend_ids[n]]["question_status"], // recommend.question_status
+	 *               	["recommend"][$recommend_ids[n]]["exclude_questions"], // recommend.exclude_questions
+	 *               	["recommend"][$recommend_ids[n]]["answer_select"], // recommend.answer_select
+	 *               	["recommend"][$recommend_ids[n]]["answer_status"], // recommend.answer_status
+	 *               	["recommend"][$recommend_ids[n]]["exclude_answers"], // recommend.exclude_answers
+	 *               	["recommend"][$recommend_ids[n]]["goods_select"], // recommend.goods_select
+	 *               	["recommend"][$recommend_ids[n]]["goods_status"], // recommend.goods_status
+	 *               	["recommend"][$recommend_ids[n]]["exclude_goods"], // recommend.exclude_goods
+	 *               	["recommend"][$recommend_ids[n]]["ttl"], // recommend.ttl
 	 */
 	public function search( $query = [] ) {
 
@@ -1295,28 +1319,30 @@ class Goods extends Model {
 		// 读取数据并分页
 		$goodss = $qb->select( $select )->pgArray($perpage, ['goods._id'], 'page', $page);
 
- 		$category_ids = []; // 读取 inWhere category 数据
- 		$recommend_ids = []; // 读取 inWhere recommend 数据
+ 		$category_ids_category_ids = []; // 读取 inWhere category 数据
+ 		$recommend_ids_recommend_ids = []; // 读取 inWhere recommend 数据
 		foreach ($goodss['data'] as & $rs ) {
 			$this->format($rs);
 			
  			// for inWhere category
-			$category_ids = array_merge($category_ids, is_array($rs["category_ids"]) ? $rs["category_ids"] : [$rs["category_ids"]]);
+			$category_ids_category_ids = array_merge($category_ids_category_ids, is_array($rs["category_ids"]) ? $rs["category_ids"] : [$rs["category_ids"]]);
  			// for inWhere recommend
-			$recommend_ids = array_merge($recommend_ids, is_array($rs["recommend_ids"]) ? $rs["recommend_ids"] : [$rs["recommend_ids"]]);
+			$recommend_ids_recommend_ids = array_merge($recommend_ids_recommend_ids, is_array($rs["recommend_ids"]) ? $rs["recommend_ids"] : [$rs["recommend_ids"]]);
 		}
 
  		// 读取 inWhere category 数据
 		if ( !empty($inwhereSelect["category"]) && method_exists("\\Xpmsns\\Pages\\Model\\Category", 'getInByCategoryId') ) {
-			$category_ids = array_unique($category_ids);
+			$category_ids_category_ids = array_unique($category_ids_category_ids);
 			$selectFields = $inwhereSelect["category"];
-			$goodss["category"] = (new \Xpmsns\Pages\Model\Category)->getInByCategoryId($category_ids, $selectFields);
+            $goodss["category"] = (new \Xpmsns\Pages\Model\Category)->getInByCategoryId($category_ids_category_ids, $selectFields);
+            $goodss["category_data"] = array_values($goodss["category"]);
 		}
  		// 读取 inWhere recommend 数据
 		if ( !empty($inwhereSelect["recommend"]) && method_exists("\\Xpmsns\\Pages\\Model\\Recommend", 'getInByRecommendId') ) {
-			$recommend_ids = array_unique($recommend_ids);
+			$recommend_ids_recommend_ids = array_unique($recommend_ids_recommend_ids);
 			$selectFields = $inwhereSelect["recommend"];
-			$goodss["recommend"] = (new \Xpmsns\Pages\Model\Recommend)->getInByRecommendId($recommend_ids, $selectFields);
+            $goodss["recommend"] = (new \Xpmsns\Pages\Model\Recommend)->getInByRecommendId($recommend_ids_recommend_ids, $selectFields);
+            $goodss["recommend_data"] = array_values($goodss["recommend"]);
 		}
 	
 		// for Debug
