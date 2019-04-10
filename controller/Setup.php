@@ -29,7 +29,8 @@ class SetupController extends \Xpmse\Loader\Controller {
             '\\Xpmsns\\Pages\\Model\\Order',
             '\\Xpmsns\\Pages\\Model\\Shipping',
             '\\Xpmsns\\Pages\\Model\\Topic',
-		];
+        ];
+        set_time_limit(0);
 	}
 
 
