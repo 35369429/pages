@@ -400,6 +400,9 @@ class Article extends Model {
             'money_view' => ["integer", ["length"=>1, "index"=>true, "null"=>true]],  // 访问金额
             'specials' => ['string', ['json'=>true, 'length'=>400, 'index'=>true]], // 所属专栏
 
+            // + 样式呈现 ( default / col-2  )
+            "style"=> ['string', ["length"=>32, "index"=>true, "default"=>"default" ]], // 呈现样式
+
 		];
 
 		$struct_draft_only = [
