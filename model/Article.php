@@ -1005,6 +1005,8 @@ class Article extends Model {
 
             "article.series",
 
+            "article.style",
+
             "category",
             "tag",
         ];
