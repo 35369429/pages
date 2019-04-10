@@ -146,7 +146,8 @@ use \Xpmse\T;
 	<div class="form-group    ">
 		<label class="col-xs-2 control-label" for="orderby">排序方式<span class="text-danger">*</span></label>
 		<div class="col-xs-8">
-			<?php if (is_null($rs["orderby"])) { $rs["orderby"] = "publish_time"; } ?>
+			<?php if (is_null($rs["orderby"])) { $rs["orderby"] = "default"; } ?>
+<label class="css-input  css-radio css-radio-lg css-radio-primary push-10-r"><input   type="radio" name="orderby" data-uncheck-value="default" value="default" <?=("default" == $rs["orderby"]) ? "checked" : ""?> > <span></span> 默认排序</label>
 <label class="css-input  css-radio css-radio-lg css-radio-primary push-10-r"><input   type="radio" name="orderby" data-uncheck-value="publish_time" value="publish_time" <?=("publish_time" == $rs["orderby"]) ? "checked" : ""?> > <span></span> 最新发布</label>
 <label class="css-input  css-radio css-radio-lg css-radio-primary push-10-r"><input   type="radio" name="orderby" data-uncheck-value="publish_time_asc" value="publish_time_asc" <?=("publish_time_asc" == $rs["orderby"]) ? "checked" : ""?> > <span></span> 发布顺序</label>
 <label class="css-input  css-radio css-radio-lg css-radio-primary push-10-r"><input   type="radio" name="orderby" data-uncheck-value="view_cnt" value="view_cnt" <?=("view_cnt" == $rs["orderby"]) ? "checked" : ""?> > <span></span>  最多浏览</label>

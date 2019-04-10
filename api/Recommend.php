@@ -4,7 +4,7 @@
  * 推荐数据接口 
  *
  * 程序作者: XpmSE机器人
- * 最后修改: 2019-02-15 13:00:06
+ * 最后修改: 2019-04-10 16:31:10
  * 程序母版: /data/stor/private/templates/xpmsns/model/code/api/Name.php
  */
 namespace Xpmsns\Pages\Api;
@@ -259,6 +259,12 @@ class Recommend extends Api {
 	*               	["_map_article"][$articles[n]]["history"], // article.history
 	*               	["_map_article"][$articles[n]]["policies_comment"], // article.policies_comment
 	*               	["_map_article"][$articles[n]]["policies_reward"], // article.policies_reward
+	*               	["_map_article"][$articles[n]]["attachments"], // article.attachments
+	*               	["_map_article"][$articles[n]]["desktop"], // article.desktop
+	*               	["_map_article"][$articles[n]]["mobile"], // article.mobile
+	*               	["_map_article"][$articles[n]]["app"], // article.app
+	*               	["_map_article"][$articles[n]]["wxapp"], // article.wxapp
+	*               	["_map_article"][$articles[n]]["style"], // article.style
 	*               	["_map_article"][$exclude_articles[n]]["created_at"], // article.created_at
 	*               	["_map_article"][$exclude_articles[n]]["updated_at"], // article.updated_at
 	*               	["_map_article"][$exclude_articles[n]]["outer_id"], // article.outer_id
@@ -306,6 +312,12 @@ class Recommend extends Api {
 	*               	["_map_article"][$exclude_articles[n]]["history"], // article.history
 	*               	["_map_article"][$exclude_articles[n]]["policies_comment"], // article.policies_comment
 	*               	["_map_article"][$exclude_articles[n]]["policies_reward"], // article.policies_reward
+	*               	["_map_article"][$exclude_articles[n]]["attachments"], // article.attachments
+	*               	["_map_article"][$exclude_articles[n]]["desktop"], // article.desktop
+	*               	["_map_article"][$exclude_articles[n]]["mobile"], // article.mobile
+	*               	["_map_article"][$exclude_articles[n]]["app"], // article.app
+	*               	["_map_article"][$exclude_articles[n]]["wxapp"], // article.wxapp
+	*               	["_map_article"][$exclude_articles[n]]["style"], // article.style
 	*               	["_map_event"][$events[n]]["created_at"], // event.created_at
 	*               	["_map_event"][$events[n]]["updated_at"], // event.updated_at
 	*               	["_map_event"][$events[n]]["slug"], // event.slug
@@ -337,6 +349,23 @@ class Recommend extends Api {
 	*               	["_map_event"][$events[n]]["dislike_cnt"], // event.dislike_cnt
 	*               	["_map_event"][$events[n]]["comment_cnt"], // event.comment_cnt
 	*               	["_map_event"][$events[n]]["status"], // event.status
+	*               	["_map_event"][$events[n]]["title"], // event.title
+	*               	["_map_event"][$events[n]]["process_setting"], // event.process_setting
+	*               	["_map_event"][$events[n]]["process"], // event.process
+	*               	["_map_event"][$events[n]]["bonus"], // event.bonus
+	*               	["_map_event"][$events[n]]["prize"], // event.prize
+	*               	["_map_event"][$events[n]]["desktop"], // event.desktop
+	*               	["_map_event"][$events[n]]["mobile"], // event.mobile
+	*               	["_map_event"][$events[n]]["wxapp"], // event.wxapp
+	*               	["_map_event"][$events[n]]["app"], // event.app
+	*               	["_map_event"][$events[n]]["agree_cnt"], // event.agree_cnt
+	*               	["_map_event"][$events[n]]["quota"], // event.quota
+	*               	["_map_event"][$events[n]]["user_cnt"], // event.user_cnt
+	*               	["_map_event"][$events[n]]["series"], // event.series
+	*               	["_map_event"][$events[n]]["deadline"], // event.deadline
+	*               	["_map_event"][$events[n]]["report"], // event.report
+	*               	["_map_event"][$events[n]]["admin_link"], // event.admin_link
+	*               	["_map_event"][$events[n]]["admin_name"], // event.admin_name
 	*               	["_map_event"][$exclude_events[n]]["created_at"], // event.created_at
 	*               	["_map_event"][$exclude_events[n]]["updated_at"], // event.updated_at
 	*               	["_map_event"][$exclude_events[n]]["slug"], // event.slug
@@ -368,6 +397,23 @@ class Recommend extends Api {
 	*               	["_map_event"][$exclude_events[n]]["dislike_cnt"], // event.dislike_cnt
 	*               	["_map_event"][$exclude_events[n]]["comment_cnt"], // event.comment_cnt
 	*               	["_map_event"][$exclude_events[n]]["status"], // event.status
+	*               	["_map_event"][$exclude_events[n]]["title"], // event.title
+	*               	["_map_event"][$exclude_events[n]]["process_setting"], // event.process_setting
+	*               	["_map_event"][$exclude_events[n]]["process"], // event.process
+	*               	["_map_event"][$exclude_events[n]]["bonus"], // event.bonus
+	*               	["_map_event"][$exclude_events[n]]["prize"], // event.prize
+	*               	["_map_event"][$exclude_events[n]]["desktop"], // event.desktop
+	*               	["_map_event"][$exclude_events[n]]["mobile"], // event.mobile
+	*               	["_map_event"][$exclude_events[n]]["wxapp"], // event.wxapp
+	*               	["_map_event"][$exclude_events[n]]["app"], // event.app
+	*               	["_map_event"][$exclude_events[n]]["agree_cnt"], // event.agree_cnt
+	*               	["_map_event"][$exclude_events[n]]["quota"], // event.quota
+	*               	["_map_event"][$exclude_events[n]]["user_cnt"], // event.user_cnt
+	*               	["_map_event"][$exclude_events[n]]["series"], // event.series
+	*               	["_map_event"][$exclude_events[n]]["deadline"], // event.deadline
+	*               	["_map_event"][$exclude_events[n]]["report"], // event.report
+	*               	["_map_event"][$exclude_events[n]]["admin_link"], // event.admin_link
+	*               	["_map_event"][$exclude_events[n]]["admin_name"], // event.admin_name
 	*               	["_map_album"][$albums[n]]["created_at"], // album.created_at
 	*               	["_map_album"][$albums[n]]["updated_at"], // album.updated_at
 	*               	["_map_album"][$albums[n]]["slug"], // album.slug
@@ -523,6 +569,7 @@ class Recommend extends Api {
 	*               	["_map_goods"][$goods[n]]["pay_duration"], // goods.pay_duration
 	*               	["_map_goods"][$goods[n]]["status"], // goods.status
 	*               	["_map_goods"][$goods[n]]["events"], // goods.events
+	*               	["_map_goods"][$goods[n]]["priority"], // goods.priority
 	*               	["_map_goods"][$exclude_goods[n]]["created_at"], // goods.created_at
 	*               	["_map_goods"][$exclude_goods[n]]["updated_at"], // goods.updated_at
 	*               	["_map_goods"][$exclude_goods[n]]["instance"], // goods.instance
@@ -550,6 +597,7 @@ class Recommend extends Api {
 	*               	["_map_goods"][$exclude_goods[n]]["pay_duration"], // goods.pay_duration
 	*               	["_map_goods"][$exclude_goods[n]]["status"], // goods.status
 	*               	["_map_goods"][$exclude_goods[n]]["events"], // goods.events
+	*               	["_map_goods"][$exclude_goods[n]]["priority"], // goods.priority
 	*               	["_map_series"][$series[n]]["created_at"], // series.created_at
 	*               	["_map_series"][$series[n]]["updated_at"], // series.updated_at
 	*               	["_map_series"][$series[n]]["name"], // series.name
@@ -793,6 +841,12 @@ class Recommend extends Api {
 	*               	["article"][$articles[n]]["history"], // article.history
 	*               	["article"][$articles[n]]["policies_comment"], // article.policies_comment
 	*               	["article"][$articles[n]]["policies_reward"], // article.policies_reward
+	*               	["article"][$articles[n]]["attachments"], // article.attachments
+	*               	["article"][$articles[n]]["desktop"], // article.desktop
+	*               	["article"][$articles[n]]["mobile"], // article.mobile
+	*               	["article"][$articles[n]]["app"], // article.app
+	*               	["article"][$articles[n]]["wxapp"], // article.wxapp
+	*               	["article"][$articles[n]]["style"], // article.style
 	*               	["article"][$exclude_articles[n]]["created_at"], // article.created_at
 	*               	["article"][$exclude_articles[n]]["updated_at"], // article.updated_at
 	*               	["article"][$exclude_articles[n]]["outer_id"], // article.outer_id
@@ -840,6 +894,12 @@ class Recommend extends Api {
 	*               	["article"][$exclude_articles[n]]["history"], // article.history
 	*               	["article"][$exclude_articles[n]]["policies_comment"], // article.policies_comment
 	*               	["article"][$exclude_articles[n]]["policies_reward"], // article.policies_reward
+	*               	["article"][$exclude_articles[n]]["attachments"], // article.attachments
+	*               	["article"][$exclude_articles[n]]["desktop"], // article.desktop
+	*               	["article"][$exclude_articles[n]]["mobile"], // article.mobile
+	*               	["article"][$exclude_articles[n]]["app"], // article.app
+	*               	["article"][$exclude_articles[n]]["wxapp"], // article.wxapp
+	*               	["article"][$exclude_articles[n]]["style"], // article.style
 	*               	["event"][$events[n]]["created_at"], // event.created_at
 	*               	["event"][$events[n]]["updated_at"], // event.updated_at
 	*               	["event"][$events[n]]["slug"], // event.slug
@@ -871,6 +931,23 @@ class Recommend extends Api {
 	*               	["event"][$events[n]]["dislike_cnt"], // event.dislike_cnt
 	*               	["event"][$events[n]]["comment_cnt"], // event.comment_cnt
 	*               	["event"][$events[n]]["status"], // event.status
+	*               	["event"][$events[n]]["title"], // event.title
+	*               	["event"][$events[n]]["process_setting"], // event.process_setting
+	*               	["event"][$events[n]]["process"], // event.process
+	*               	["event"][$events[n]]["bonus"], // event.bonus
+	*               	["event"][$events[n]]["prize"], // event.prize
+	*               	["event"][$events[n]]["desktop"], // event.desktop
+	*               	["event"][$events[n]]["mobile"], // event.mobile
+	*               	["event"][$events[n]]["wxapp"], // event.wxapp
+	*               	["event"][$events[n]]["app"], // event.app
+	*               	["event"][$events[n]]["agree_cnt"], // event.agree_cnt
+	*               	["event"][$events[n]]["quota"], // event.quota
+	*               	["event"][$events[n]]["user_cnt"], // event.user_cnt
+	*               	["event"][$events[n]]["series"], // event.series
+	*               	["event"][$events[n]]["deadline"], // event.deadline
+	*               	["event"][$events[n]]["report"], // event.report
+	*               	["event"][$events[n]]["admin_link"], // event.admin_link
+	*               	["event"][$events[n]]["admin_name"], // event.admin_name
 	*               	["event"][$exclude_events[n]]["created_at"], // event.created_at
 	*               	["event"][$exclude_events[n]]["updated_at"], // event.updated_at
 	*               	["event"][$exclude_events[n]]["slug"], // event.slug
@@ -902,6 +979,23 @@ class Recommend extends Api {
 	*               	["event"][$exclude_events[n]]["dislike_cnt"], // event.dislike_cnt
 	*               	["event"][$exclude_events[n]]["comment_cnt"], // event.comment_cnt
 	*               	["event"][$exclude_events[n]]["status"], // event.status
+	*               	["event"][$exclude_events[n]]["title"], // event.title
+	*               	["event"][$exclude_events[n]]["process_setting"], // event.process_setting
+	*               	["event"][$exclude_events[n]]["process"], // event.process
+	*               	["event"][$exclude_events[n]]["bonus"], // event.bonus
+	*               	["event"][$exclude_events[n]]["prize"], // event.prize
+	*               	["event"][$exclude_events[n]]["desktop"], // event.desktop
+	*               	["event"][$exclude_events[n]]["mobile"], // event.mobile
+	*               	["event"][$exclude_events[n]]["wxapp"], // event.wxapp
+	*               	["event"][$exclude_events[n]]["app"], // event.app
+	*               	["event"][$exclude_events[n]]["agree_cnt"], // event.agree_cnt
+	*               	["event"][$exclude_events[n]]["quota"], // event.quota
+	*               	["event"][$exclude_events[n]]["user_cnt"], // event.user_cnt
+	*               	["event"][$exclude_events[n]]["series"], // event.series
+	*               	["event"][$exclude_events[n]]["deadline"], // event.deadline
+	*               	["event"][$exclude_events[n]]["report"], // event.report
+	*               	["event"][$exclude_events[n]]["admin_link"], // event.admin_link
+	*               	["event"][$exclude_events[n]]["admin_name"], // event.admin_name
 	*               	["album"][$albums[n]]["created_at"], // album.created_at
 	*               	["album"][$albums[n]]["updated_at"], // album.updated_at
 	*               	["album"][$albums[n]]["slug"], // album.slug
@@ -1057,6 +1151,7 @@ class Recommend extends Api {
 	*               	["goods"][$goods[n]]["pay_duration"], // goods.pay_duration
 	*               	["goods"][$goods[n]]["status"], // goods.status
 	*               	["goods"][$goods[n]]["events"], // goods.events
+	*               	["goods"][$goods[n]]["priority"], // goods.priority
 	*               	["goods"][$exclude_goods[n]]["created_at"], // goods.created_at
 	*               	["goods"][$exclude_goods[n]]["updated_at"], // goods.updated_at
 	*               	["goods"][$exclude_goods[n]]["instance"], // goods.instance
@@ -1084,6 +1179,7 @@ class Recommend extends Api {
 	*               	["goods"][$exclude_goods[n]]["pay_duration"], // goods.pay_duration
 	*               	["goods"][$exclude_goods[n]]["status"], // goods.status
 	*               	["goods"][$exclude_goods[n]]["events"], // goods.events
+	*               	["goods"][$exclude_goods[n]]["priority"], // goods.priority
 	*               	["series"][$series[n]]["created_at"], // series.created_at
 	*               	["series"][$series[n]]["updated_at"], // series.updated_at
 	*               	["series"][$series[n]]["name"], // series.name
