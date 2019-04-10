@@ -819,6 +819,19 @@ closed_at_change();
 		</div>
 	</div><!-- END 文本域: 事件 (events) -->
 
+	<!-- 单行文本: 手动排序 (priority) 开始  -->
+	<div class="form-group   ">
+		<label class="col-xs-2 control-label" for="priority">手动排序</label>
+		<div class="col-xs-8">
+			<input class="form-control input-lg "  
+				type="text" 
+				id="priority" name="priority" 
+				placeholder="填写手动排序数值"  
+				value="<?=T::v('<%=priority | e(\'html\')%>', $rs )?>" /> 
+			<div class="help-block">数值越小排序越靠前</div>
+		</div>
+	</div><!-- END 单行文本: 手动排序 (priority) -->
+
 				<!--  提交按钮 -->
 				<div class="block block-quickpanel sidebar-mini">
 					<div class="block-quickpanel-content" >

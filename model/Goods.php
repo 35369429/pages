@@ -4,11 +4,11 @@
  * 商品数据模型
  *
  * 程序作者: XpmSE机器人
- * 最后修改: 2019-04-09 02:48:46
+ * 最后修改: 2019-04-10 15:53:15
  * 程序母版: /data/stor/private/templates/xpmsns/model/code/model/Name.php
  */
 namespace Xpmsns\Pages\Model;
-                                  
+                                   
 use \Xpmse\Excp;
 use \Xpmse\Model;
 use \Xpmse\Utils;
@@ -365,6 +365,8 @@ class Goods extends Model {
 		$this->putColumn( 'status', $this->type("string", ["length"=>32, "index"=>true, "default"=>"online", "null"=>false]));
 		// 事件
 		$this->putColumn( 'events', $this->type("text", ["json"=>true, "null"=>true]));
+		// 手动排序
+		$this->putColumn( 'priority', $this->type("integer", ["length"=>1, "index"=>true, "default"=>"99999", "null"=>true]));
 
 		return $this;
 	}
@@ -455,6 +457,7 @@ class Goods extends Model {
 	 *          	  $rs["pay_duration"],  // 付款期限 
 	 *          	  $rs["status"],  // 状态 
 	 *          	  $rs["events"],  // 事件 
+	 *          	  $rs["priority"],  // 手动排序 
 	 *          	  $rs["created_at"],  // 创建时间 
 	 *          	  $rs["updated_at"],  // 更新时间 
 	 *                $rs["_map_category"][$category_ids[n]]["created_at"], // category.created_at
@@ -688,6 +691,7 @@ class Goods extends Model {
 	 *          	  $rs["pay_duration"],  // 付款期限 
 	 *          	  $rs["status"],  // 状态 
 	 *          	  $rs["events"],  // 事件 
+	 *          	  $rs["priority"],  // 手动排序 
 	 *          	  $rs["created_at"],  // 创建时间 
 	 *          	  $rs["updated_at"],  // 更新时间 
 	 *                $rs["_map_category"][$category_ids[n]]["created_at"], // category.created_at
@@ -1126,8 +1130,10 @@ class Goods extends Model {
 	 *			      $query["name"] 按名称查询 ( LIKE )
 	 *			      $query["sale_way"] 按销售方式查询 ( = )
 	 *			      $query["status"] 按状态查询 ( = )
+	 *			      $query["priority"] 按排序查询 ( = )
 	 *			      $query["orderby_created_at_asc"]  按创建时间 ASC 排序
 	 *			      $query["orderby_updated_at_desc"]  按创建时间倒序 DESC 排序
+	 *			      $query["orderby_priority_asc"]  按手动排序 ASC 排序
 	 *           
 	 * @return array 商品记录集 {"total":100, "page":1, "perpage":20, data:[{"key":"val"}...], "from":1, "to":1, "prev":false, "next":1, "curr":10, "last":20}
 	 *               	["goods_id"],  // 商品ID 
@@ -1158,6 +1164,7 @@ class Goods extends Model {
 	 *               	["pay_duration"],  // 付款期限 
 	 *               	["status"],  // 状态 
 	 *               	["events"],  // 事件 
+	 *               	["priority"],  // 手动排序 
 	 *               	["created_at"],  // 创建时间 
 	 *               	["updated_at"],  // 更新时间 
 	 *               	["category"][$category_ids[n]]["created_at"], // category.created_at
@@ -1300,6 +1307,11 @@ class Goods extends Model {
 			$qb->where("goods.status", '=', "{$query['status']}" );
 		}
 		  
+		// 按排序查询 (=)  
+		if ( array_key_exists("priority", $query) &&!empty($query['priority']) ) {
+			$qb->where("goods.priority", '=', "{$query['priority']}" );
+		}
+		  
 
 		// 按创建时间 ASC 排序
 		if ( array_key_exists("orderby_created_at_asc", $query) &&!empty($query['orderby_created_at_asc']) ) {
@@ -1309,6 +1321,11 @@ class Goods extends Model {
 		// 按创建时间倒序 DESC 排序
 		if ( array_key_exists("orderby_updated_at_desc", $query) &&!empty($query['orderby_updated_at_desc']) ) {
 			$qb->orderBy("goods.updated_at", "desc");
+		}
+
+		// 按手动排序 ASC 排序
+		if ( array_key_exists("orderby_priority_asc", $query) &&!empty($query['orderby_priority_asc']) ) {
+			$qb->orderBy("goods.priority", "asc");
 		}
 
 
@@ -1438,6 +1455,7 @@ class Goods extends Model {
 			"pay_duration",  // 付款期限
 			"status",  // 状态
 			"events",  // 事件
+			"priority",  // 手动排序
 			"created_at",  // 创建时间
 			"updated_at",  // 更新时间
 		];

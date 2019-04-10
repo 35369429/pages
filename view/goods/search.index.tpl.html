@@ -76,6 +76,8 @@ use \Xpmse\T;
 										创建时间
 									<?php elseif ( $query['order'] == 'orderby_updated_at_desc') :?>
 										创建时间倒序
+									<?php elseif ( $query['order'] == 'orderby_priority_asc') :?>
+										手动排序
 									<?php else:?>
 										排序方式
 									<?php endif;?>
@@ -92,6 +94,11 @@ use \Xpmse\T;
 									<li>
 										<a href="javascript:search('order','orderby_updated_at_desc')">
 										   创建时间倒序
+										</a>
+									</li>
+									<li>
+										<a href="javascript:search('order','orderby_priority_asc')">
+										   手动排序
 										</a>
 									</li>
 									<li>

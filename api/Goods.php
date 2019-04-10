@@ -4,11 +4,11 @@
  * 商品数据接口 
  *
  * 程序作者: XpmSE机器人
- * 最后修改: 2019-04-09 02:48:43
+ * 最后修改: 2019-04-10 15:53:10
  * 程序母版: /data/stor/private/templates/xpmsns/model/code/api/Name.php
  */
 namespace Xpmsns\Pages\Api;
-                                  
+                                   
 
 use \Xpmse\Loader\App;
 use \Xpmse\Excp;
@@ -117,6 +117,7 @@ class Goods extends Api {
 	 *               	["pay_duration"],  // 付款期限 
 	 *               	["status"],  // 状态 
 	 *               	["events"],  // 事件 
+	 *               	["priority"],  // 手动排序 
 	 *               	["created_at"],  // 创建时间 
 	 *               	["updated_at"],  // 更新时间 
 	*               	["_map_category"][$category_ids[n]]["created_at"], // category.created_at
@@ -199,7 +200,7 @@ class Goods extends Api {
 		$data = array_merge( $query, $data );
 
 		// 读取字段
-		$select = empty($data['select']) ? ["goods.goods_id","goods.instance","goods.name","goods.slug","goods.tags","goods.summary","goods.cover","goods.images","goods.videos","goods.params","goods.content","goods.content_faq","goods.content_serv","goods.sku_cnt","goods.sku_sum","goods.shipped_sum","goods.available_sum","goods.lower_price","goods.sale_way","goods.opened_at","goods.closed_at","goods.pay_duration","goods.status","goods.created_at","goods.updated_at","c.category_id","c.name","r.recommend_id"] : $data['select'];
+		$select = empty($data['select']) ? ["goods.goods_id","goods.instance","goods.name","goods.slug","goods.tags","goods.summary","goods.cover","goods.images","goods.videos","goods.params","goods.content","goods.content_faq","goods.content_serv","goods.sku_cnt","goods.sku_sum","goods.shipped_sum","goods.available_sum","goods.lower_price","goods.sale_way","goods.opened_at","goods.closed_at","goods.pay_duration","goods.status","goods.priority","goods.created_at","goods.updated_at","c.category_id","c.name","r.recommend_id"] : $data['select'];
 		if ( is_string($select) ) {
 			$select = explode(',', $select);
 		}
@@ -233,149 +234,16 @@ class Goods extends Api {
 		throw new Excp("未知查询条件", 404, ['query'=>$query, 'data'=>$data]);
 	}
 
-	/**
-	 * 添加一条商品记录
-	 * @param  array $query GET 参数
-	 * @param  array $data  POST 参数新增的字段记录 
-	 *               $data['goods_id'] 商品ID
-	 *               $data['instance'] 所属机构
-	 *               $data['name'] 名称
-	 *               $data['slug'] 别名
-	 *               $data['tags'] 标签
-	 *               $data['category_ids'] 类目
-	 *               $data['recommend_ids'] 推荐
-	 *               $data['summary'] 简介
-	 *               $data['cover'] 主图
-	 *               $data['images'] 图片
-	 *               $data['videos'] 视频
-	 *               $data['params'] 参数表
-	 *               $data['content'] 产品详情
-	 *               $data['content_faq'] 常见问题
-	 *               $data['content_serv'] 售后服务
-	 *               $data['sku_cnt'] SKU数量
-	 *               $data['sku_sum'] 单品总数
-	 *               $data['shipped_sum'] 货运装箱总数
-	 *               $data['available_sum'] 可售总数
-	 *               $data['lower_price'] 最低单价
-	 *               $data['sale_way'] 销售方式
-	 *               $data['opened_at'] 开售时间
-	 *               $data['closed_at'] 结束时间
-	 *               $data['pay_duration'] 付款期限
-	 *               $data['status'] 状态
-	 *               $data['events'] 事件
-	 *
-	 * @return array 新增的商品记录  @see get()
-	 */
-	protected function create( $query, $data ) {
-		if ( !empty($query['_secret']) ) { 
-			// secret校验，一般用于小程序 & 移动应用
-			$this->authSecret($query['_secret']);
-		} else {
-			// 签名校验，一般用于后台程序调用
-			$this->auth($query); 
-		}
 
 
-		$inst = new \Xpmsns\Pages\Model\Goods;
-		$rs = $inst->create( $data );
-		return $inst->getByGoodsId($rs["goods_id"]);
-	}
 
 
-	/**
-	 * 更新一条商品记录
-	 * @param  array $query GET 参数
-	 * 				 $query['name=goods_id']  按更新
-     *
-	 * @param  array $data  POST 参数 更新字段记录 
-	 *               $data['goods_id'] 商品ID
-	 *               $data['instance'] 所属机构
-	 *               $data['name'] 名称
-	 *               $data['slug'] 别名
-	 *               $data['tags'] 标签
-	 *               $data['category_ids'] 类目
-	 *               $data['recommend_ids'] 推荐
-	 *               $data['summary'] 简介
-	 *               $data['cover'] 主图
-	 *               $data['images'] 图片
-	 *               $data['videos'] 视频
-	 *               $data['params'] 参数表
-	 *               $data['content'] 产品详情
-	 *               $data['content_faq'] 常见问题
-	 *               $data['content_serv'] 售后服务
-	 *               $data['sku_cnt'] SKU数量
-	 *               $data['sku_sum'] 单品总数
-	 *               $data['shipped_sum'] 货运装箱总数
-	 *               $data['available_sum'] 可售总数
-	 *               $data['lower_price'] 最低单价
-	 *               $data['sale_way'] 销售方式
-	 *               $data['opened_at'] 开售时间
-	 *               $data['closed_at'] 结束时间
-	 *               $data['pay_duration'] 付款期限
-	 *               $data['status'] 状态
-	 *               $data['events'] 事件
-	 *
-	 * @return array 更新的商品记录 @see get()
-	 * 
-	 */
-	protected function update( $query, $data ) {
-
-		if ( !empty($query['_secret']) ) { 
-			// secret校验，一般用于小程序 & 移动应用
-			$this->authSecret($query['_secret']);
-		} else {
-			// 签名校验，一般用于后台程序调用
-			$this->auth($query); 
-		}
-
-		// 按商品ID
-		if ( !empty($query["goods_id"]) ) {
-			$data = array_merge( $data, ["goods_id"=>$query["goods_id"]] );
-			$inst = new \Xpmsns\Pages\Model\Goods;
-			$rs = $inst->updateBy("goods_id",$data);
-			return $inst->getByGoodsId($rs["goods_id"]);
-		}
-
-		throw new Excp("未知查询条件", 404, ['query'=>$query, 'data'=>$data]);
-	}
-
-
-	/**
-	 * 删除一条商品记录
-	 * @param  array $query GET 参数
-	 * 				 $query['goods_id']  按商品ID 删除
-     *
-	 * @param  array $data  POST 参数
-	 * @return bool 成功返回 ["code"=>0, "message"=>"删除成功"]
-	 */
-	protected function delete( $query, $data ) {
-
-		if ( !empty($query['_secret']) ) { 
-			// secret校验，一般用于小程序 & 移动应用
-			$this->authSecret($query['_secret']);
-		} else {
-			// 签名校验，一般用于后台程序调用
-			$this->auth($query); 
-		}
-
-		// 按商品ID
-		if ( !empty($query["goods_id"]) ) {
-			$inst = new \Xpmsns\Pages\Model\Goods;
-			$resp = $inst->remove($query['goods_id'], "goods_id");
-			if ( $resp ) {
-				return ["code"=>0, "message"=>"删除成功"];
-			}
-			throw new Excp("删除失败", 500, ['query'=>$query, 'data'=>$data, 'response'=>$resp]);
-		}
-
-		throw new Excp("未知查询条件", 404, ['query'=>$query, 'data'=>$data]);
-	}
 
 
 	/**
 	 * 根据条件检索商品记录
 	 * @param  array $query GET 参数
-	 *         	      $query['select'] 选取字段，默认选择 ["goods.goods_id","goods.instance","goods.name","goods.slug","goods.tags","goods.summary","goods.cover","goods.params","goods.sku_cnt","goods.sku_sum","goods.shipped_sum","goods.available_sum","goods.lower_price","goods.status","goods.created_at","goods.updated_at","c.category_id","c.name"]
+	 *         	      $query['select'] 选取字段，默认选择 ["goods.goods_id","goods.instance","goods.name","goods.slug","goods.tags","goods.summary","goods.cover","goods.params","goods.sku_cnt","goods.sku_sum","goods.shipped_sum","goods.available_sum","goods.lower_price","goods.status","goods.priority","goods.created_at","goods.updated_at","c.category_id","c.name"]
 	 *         	      $query['page'] 页码，默认为 1
 	 *         	      $query['perpage'] 每页显示记录数，默认为 20
 	 *			      $query["keyword"] 按关键词查询
@@ -387,11 +255,13 @@ class Goods extends Api {
 	 *			      $query["name"] 按名称查询 ( AND LIKE )
 	 *			      $query["sale_way"] 按销售方式查询 ( AND = )
 	 *			      $query["status"] 按状态查询 ( AND = )
+	 *			      $query["priority"] 按手动排序查询 ( AND = )
 	 *			      $query["orderby_created_at_asc"]  按创建时间 ASC 排序
 	 *			      $query["orderby_updated_at_desc"]  按创建时间倒序 DESC 排序
+	 *			      $query["orderby_priority_asc"]  按手动排序 ASC 排序
      *
 	 * @param  array $data  POST 参数
-	 *         	      $data['select'] 选取字段，默认选择 ["name=goods_id","name=instance","name=name","name=slug","name=tags","name=summary","name=cover","name=params","name=sku_cnt","name=sku_sum","name=shipped_sum","name=available_sum","name=lower_price","name=status","name=created_at","name=updated_at","model=%5CXpmsns%5CPages%5CModel%5CCategory&name=category_id&table=category&prefix=xpmsns_pages_&alias=c&type=inWhere","model=%5CXpmsns%5CPages%5CModel%5CCategory&name=name&table=category&prefix=xpmsns_pages_&alias=c&type=inWhere"]
+	 *         	      $data['select'] 选取字段，默认选择 ["name=goods_id","name=instance","name=name","name=slug","name=tags","name=summary","name=cover","name=params","name=sku_cnt","name=sku_sum","name=shipped_sum","name=available_sum","name=lower_price","name=status","name=priority","name=created_at","name=updated_at","model=%5CXpmsns%5CPages%5CModel%5CCategory&name=category_id&table=category&prefix=xpmsns_pages_&alias=c&type=inWhere","model=%5CXpmsns%5CPages%5CModel%5CCategory&name=name&table=category&prefix=xpmsns_pages_&alias=c&type=inWhere"]
 	 *         	      $data['page'] 页码，默认为 1
 	 *         	      $data['perpage'] 每页显示记录数，默认为 20
 	 *			      $data["keyword"] 按关键词查询
@@ -403,8 +273,10 @@ class Goods extends Api {
 	 *			      $data["name"] 按名称查询 ( AND LIKE )
 	 *			      $data["sale_way"] 按销售方式查询 ( AND = )
 	 *			      $data["status"] 按状态查询 ( AND = )
+	 *			      $data["priority"] 按手动排序查询 ( AND = )
 	 *			      $data["orderby_created_at_asc"]  按创建时间 ASC 排序
 	 *			      $data["orderby_updated_at_desc"]  按创建时间倒序 DESC 排序
+	 *			      $data["orderby_priority_asc"]  按手动排序 ASC 排序
 	 *
 	 * @return array 商品记录集 {"total":100, "page":1, "perpage":20, data:[{"key":"val"}...], "from":1, "to":1, "prev":false, "next":1, "curr":10, "last":20}
 	 *               data:[{"key":"val"}...] 字段
@@ -436,6 +308,7 @@ class Goods extends Api {
 	 *               	["pay_duration"],  // 付款期限 
 	 *               	["status"],  // 状态 
 	 *               	["events"],  // 事件 
+	 *               	["priority"],  // 手动排序 
 	 *               	["created_at"],  // 创建时间 
 	 *               	["updated_at"],  // 更新时间 
 	*               	["category"][$category_ids[n]]["created_at"], // category.created_at
@@ -518,7 +391,7 @@ class Goods extends Api {
 		$data = array_merge( $query, $data );
 
 		// 读取字段
-		$select = empty($data['select']) ? ["goods.goods_id","goods.instance","goods.name","goods.slug","goods.tags","goods.summary","goods.cover","goods.params","goods.sku_cnt","goods.sku_sum","goods.shipped_sum","goods.available_sum","goods.lower_price","goods.status","goods.created_at","goods.updated_at","c.category_id","c.name"] : $data['select'];
+		$select = empty($data['select']) ? ["goods.goods_id","goods.instance","goods.name","goods.slug","goods.tags","goods.summary","goods.cover","goods.params","goods.sku_cnt","goods.sku_sum","goods.shipped_sum","goods.available_sum","goods.lower_price","goods.status","goods.priority","goods.created_at","goods.updated_at","c.category_id","c.name"] : $data['select'];
 		if ( is_string($select) ) {
 			$select = explode(',', $select);
 		}
