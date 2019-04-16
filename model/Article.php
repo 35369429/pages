@@ -1175,8 +1175,16 @@ class Article extends Model {
         }
 
 		// 按分类ID查找
-		if ( array_key_exists('category_ids', $query)  && !empty($query['category_ids']) ) {
+		if ( array_key_exists('category_ids', $query)  && !empty($query['category_ids']) && empty($query['subcategory_ids']) ) {
 			$cids = is_string($query['category_ids']) ? explode(',', $query['category_ids']) : $query['category_ids'];
+			if ( !empty($cids) ) {
+				$qb->whereIn('ac.category_id', $cids );
+			}
+        }
+        
+        // 按二级分类ID查找
+		if ( array_key_exists('subcategory_ids', $query)  && !empty($query['subcategory_ids']) ) {
+			$cids = is_string($query['category_ids']) ? explode(',', $query['subcategory_ids']) : $query['subcategory_ids'];
 			if ( !empty($cids) ) {
 				$qb->whereIn('ac.category_id', $cids );
 			}
