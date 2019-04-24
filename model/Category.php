@@ -45,7 +45,10 @@ class Category extends Model {
 				 ->putColumn( 'parent_id', $this->type('string', ["index"=>1] )) // 父类 ID 
 				 ->putColumn( 'priority', $this->type('integer', ['index'=>1, 'default'=>"0"]) ) // 优先级排序
 				 ->putColumn( 'hidden', $this->type('boolean', ['index'=>1, 'default'=>"0"]) )   // 是否隐藏
-				 ->putColumn( 'isnav', $this->type('boolean', ['index'=>1, 'default'=>"1"]) )   // 是否是导航
+                 ->putColumn( 'isnav', $this->type('boolean', ['index'=>1, 'default'=>"1"]) )   // 是否是PC导航
+                 ->putColumn( 'ismobnav', $this->type('boolean', ['index'=>1, 'default'=>"1"]) )   // 是否是手机H5导航
+                 ->putColumn( 'iswxappnav', $this->type('boolean', ['index'=>1, 'default'=>"1"]) )   // 是否是小程序导航
+                 ->putColumn( 'isappnav', $this->type('boolean', ['index'=>1, 'default'=>"1"]) )   // 是否是手机应用导航
 				 ->putColumn( 'isfootnav', $this->type('boolean', ['index'=>1, 'default'=>"0"]) )   // 是否是尾部导航
 				 ->putColumn( 'isblank', $this->type('boolean', ['index'=>1, 'default'=>"0"]) )    // 是否新开链接
 				 ->putColumn( 'highlight', $this->type('boolean', ['index'=>1, 'default'=>"0"]) )   // 是否高亮显示
@@ -69,7 +72,10 @@ class Category extends Model {
 			"link",  // 排序方式
 			"parent_id",  // 参数
 			"root_id", 
-			"isnav",  
+            "isnav",  
+            "ismobnav",  
+            "iswxappnav",  
+            "isappnav",  
 			"isfootnav", 
 			"isblank", 
 			"highlight", 
@@ -293,6 +299,21 @@ class Category extends Model {
 		// 是否为导航
 		if ( array_key_exists('isnav', $query) &&  $query['isnav'] == "1" ){
 			$qb->where("isnav", "=", "1");
+		}
+
+		// 是否为手机H5导航
+		if ( array_key_exists('ismobnav', $query) &&  $query['ismobnav'] == "1" ){
+			$qb->where("ismobnav", "=", "1");
+		}
+        
+        // 是否为手机APP导航
+		if ( array_key_exists('isappnav', $query) &&  $query['isappnav'] == "1" ){
+			$qb->where("isappnav", "=", "1");
+        }
+        
+        // 是否为小程序导航
+		if ( array_key_exists('iswxappnav', $query) &&  $query['iswxappnav'] == "1" ){
+			$qb->where("iswxappnav", "=", "1");
 		}
 
 		// 是否为尾部导航

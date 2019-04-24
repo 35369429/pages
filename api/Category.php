@@ -80,7 +80,7 @@ class Category extends Api {
 		$select = is_array($select) ? $select : explode(',', $select);
 
 		// 验证 Select 参数
-		$allowFields = ["*","category_id","project","page","name","fullname","parent_id","priority","hidden","param","status", "isnav", "isfootnav", "isblank", "highlight","link", "slug"];
+		$allowFields = ["*","category_id","project","page","name","fullname","parent_id","priority","hidden","param","status", "isnav","ismobnav","isappnav","iswxappnav", "isfootnav", "isblank", "highlight","link", "slug"];
 
 
 		if ( !empty($query['slug']) ) {
@@ -144,7 +144,10 @@ class Category extends Api {
 		$this->qb( $qb, 'fullname', 'fullname', $query, ["and", "or", "in"] );
 		$this->qb( $qb, 'parent_id', 'parentId', $query, ["and", "or", "in"] );
 		$this->qb( $qb, 'hidden', 'hidden', $query );
-		$this->qb( $qb, 'isnav', 'isnav', $query );
+        $this->qb( $qb, 'isnav', 'isnav', $query );
+        $this->qb( $qb, 'ismobnav', 'ismobnav', $query );
+        $this->qb( $qb, 'isappnav', 'isappnav', $query );
+        $this->qb( $qb, 'iswxappnav', 'iswxappnav', $query );
 		$this->qb( $qb, 'highlight', 'highlight', $query );
 		$this->qb( $qb, 'isblank', 'isblank', $query );
 		$this->qb( $qb, 'isfootnav', 'isfootnav', $query );
