@@ -289,6 +289,73 @@ class Order extends Model {
         ];
     }
 
+
+    /**
+     * 导出订单
+     * @param $from 开始时间
+     * @param $end 结束时间
+     * @return string $csvfile
+     */
+    public function export( $begin=null, $end = null ) {
+
+        $prefix = str_replace("xpmsns_pages_", "", $this->getPrefix() );
+        $fields = [
+            "订单ID",
+            "商品ID",
+            "商品名称",
+            "用户昵称",
+            "用户手机",
+            "用户资料地址",
+            "订单收货地址",
+            "用户扩展资料",
+            "订单创建时间",
+            "订单更新时间"
+        ];
+
+        $sql = "SELECT `order`.`order_id`,`goods`.`goods_id`, `goods`.`name` as goods_name, `user`.`nickname`,  `user`.`mobile`,   `user`.`address` as user_address, `order`.`address` as order_adress, `user`.`extra`, `order`.`created_at`,`order`.`updated_at`
+                FROM `{$prefix}xpmsns_pages_order` as `order`
+                LEFT JOIN `{$prefix}xpmsns_user_user` as `user` on `user`.`user_id` = `order`.`user_id`
+                LEFT JOIN `{$prefix}xpmsns_pages_goods` as `goods` on `order`.`goods_ids` like Concat('%',`goods`.`goods_id`,'%')
+                WHERE `order`.`status`='pay_complete'";
+
+        if ( !empty($begin)) {
+            $begin = date("Y-m-d H:i:s", strtotime($begin));
+            $sql = "{$sql} AND `order`.`created_at` > '{$begin}' ";
+        }
+
+        if ( !empty($end)) {
+            $end = date("Y-m-d H:i:s", strtotime($end));
+            $sql = "{$sql} AND `order`.`created_at` < '{$end}' ";
+        }
+
+        $sql = "{$sql} ORDER BY `order`.`created_at` desc";
+
+        $csvfile = sys_get_temp_dir()  . "/order/csv/" . time() . ".csv";
+        $csvpath = dirname($csvfile);
+        @mkdir( $csvpath , 0777, true);
+
+        $hd = \fopen( $csvfile, "w" );
+        fputs($hd, $bom =( chr(0xEF) . chr(0xBB) . chr(0xBF) ));
+        fputcsv( $hd, $fields );
+        $rows = $this->runSql($sql, true);
+        foreach($rows as $row ){
+            $row["order_id"] = strval($row["order_id"]);
+            if ( $_GET["debug"]) {
+                print_r( $row );
+            }
+            fputcsv($hd, $row);
+        }
+
+        fclose( $hd );
+
+        if ( $_GET["debug"]) {
+            echo $sql;
+        }
+
+        return $csvfile;
+
+    }
+
     // @KEEP END
 
 	/**

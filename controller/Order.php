@@ -16,7 +16,29 @@ class OrderController extends \Xpmse\Loader\Controller {
 
 
 	function __construct() {
-	}
+    }
+    
+    // @KEEP BEGIN
+    function export(){
+        $inst = new \Xpmsns\Pages\Model\Order;
+
+        $begin = $_GET["begin"] ? $_GET["begin"] :null;
+        $end = $_GET["end"] ? $_GET["end"] :null;
+
+        $file = $inst->export( $begin, $end );
+        
+        if ( $_GET["debug"] == 1 ) {
+            print_r( $file );
+            exit;
+        }
+        $name = basename($file);
+		header("Content-type: application/vnd.ms-excel");
+		header("Content-Disposition: attachment; filename=\"{$name}\"");
+		echo file_get_contents($file);
+		exit;
+    }
+
+    // @KEEP END
 
 	/**
 	 * 订单列表检索
