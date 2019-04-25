@@ -183,20 +183,25 @@ class Goods extends Model {
         
         // 计算呈现界面
         if ( isset( $goods["content"]) ) {
-            $render = new \Mina\Delta\Render();
-            $render->loadByHTML($goods["content"]);
+            // $render = new \Mina\Delta\Render();
+            $render = new \Xpmse\Content();
+            $render->loadContent($goods["content"]);
 			$goods['ap_content'] = $render->wxapp(); // 生成小程序正文
         }
 
         if ( isset( $goods["content_serv"]) ) {
-            $render = new \Mina\Delta\Render();
-            $render->loadByHTML($goods["content_serv"]);
+            // $render = new \Mina\Delta\Render();
+            // $render->loadByHTML($goods["content_serv"]);
+            $render = new \Xpmse\Content();
+            $render->loadContent($goods["content_serv"]);
 			$goods['ap_content_serv'] = $render->wxapp(); // 生成小程序正文
         }
 
         if ( isset( $goods["content_faq"]) ) {
-            $render = new \Mina\Delta\Render();
-            $render->loadByHTML($goods["content_faq"]);
+            // $render = new \Mina\Delta\Render();
+            // $render->loadByHTML($goods["content_faq"]);
+            $render = new \Xpmse\Content();
+            $render->loadContent($goods["content_faq"]);
 			$goods['ap_content_faq'] = $render->wxapp(); // 生成小程序正文
         }
 
