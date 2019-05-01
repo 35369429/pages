@@ -53,7 +53,11 @@ class Category extends Model {
 				 ->putColumn( 'isblank', $this->type('boolean', ['index'=>1, 'default'=>"0"]) )    // 是否新开链接
 				 ->putColumn( 'highlight', $this->type('boolean', ['index'=>1, 'default'=>"0"]) )   // 是否高亮显示
 				 ->putColumn( 'param', $this->type('string',     ['length'=>128, 'index'=>1]) )  // 自定义参数
-				 ->putColumn( 'status', $this->type('string', ['length'=>10,'index'=>1, 'default'=>'on']) )  // 类型状态 on/off
+                 ->putColumn( 'status', $this->type('string', ['length'=>10,'index'=>1, 'default'=>'on']) )  // 类型状态 on/off
+                 
+                // 对接外部数据
+                ->putColumn( 'outer_id', $this->type('string',  ['length'=>128, 'unique'=>true, "null"=>true]) )  // 外部账号ID
+                ->putColumn( 'origin', $this->type('string',  ['length'=>128, "null"=>true]) )   // 外部来源ID
 		;
 	}
 

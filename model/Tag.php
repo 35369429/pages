@@ -156,6 +156,10 @@ class Tag extends Model {
 		// 提问数
 		$this->putColumn( 'question_cnt', $this->type("integer", ["length"=>1, "index"=>true, "null"=>true]));
 
+        // 对接外部数据
+        $this->putColumn( 'outer_id', $this->type('string',  ['length'=>128, 'unique'=>true, "null"=>true]) );  // 外部账号ID
+        $this->putColumn( 'origin', $this->type('string',  ['length'=>128, "null"=>true]) );   // 外部来源ID
+
 		return $this;
 	}
 
