@@ -77,6 +77,114 @@ class Event extends Api {
 
 
     /**
+	 * 创建一个新用户并报名
+	 * @param  array  $query [description]
+	 * @param  [type] $data  [description]
+	 * @return [type]		[description]
+	 */
+	protected function signup( $query=[], $data=[] ) {
+
+        $event_id = $data["event_id"];
+        if ( empty($event_id) ) {
+            throw new Excp("请提供报名的活动ID", 402, ["query"=>$query, "data"=>$data]);
+        }
+
+		// return ["message"=>"注册成功", "code"=>0 ]; // 快速测试
+		
+		$this->authVcode();
+
+		$opt =  new \Xpmse\Option("xpmsns/user");
+		$options = $opt->getAll();
+		$map = $options['map'];		
+
+		// 校验手机号码
+		if ( empty($data['mobile']) ) {
+			throw new Excp("手机号码格式不正确", 402, ['data'=>$data, 'errorlist'=>[['mobile'=>'手机号码格式不正确']]]);
+		}
+
+		$data['mobile_nation'] = !empty($data['nation']) ? $data['nation'] : '86';
+
+        $u = new \Xpmsns\User\Model\User();
+        $mobile = $data["mobile"];
+        $nation  = !empty($data['nation']) ? $data['nation'] : '86';
+        $password = $data['password'];
+
+		// 校验短信验证码
+		if( $map['user/sms/on'] == 1) {
+            $data['mobile_verified'] = true;
+            $smscode = $data['smscode'];
+			if ( $u->verifySMSCode($mobile, $smscode, $nation) === false) {
+				throw new Excp("短信验证码不正确", 402, ['data'=>$data, 'errorlist'=>[['smscode'=>'短信验证码不正确']]]);
+			}
+		}
+
+		// 检查密码
+		if ( isset($data['repassword']) ) { 
+			if ( $data['password'] != $data['repassword'] ) {
+				throw new Excp("两次输入的密码不一致", 402, ['data'=>$data, 'errorlist'=>[['repassword'=>'两次输入的密码不一致']]]);
+			}
+		}
+		if ( empty($data['password']) ) {
+			throw new Excp("请输入登录密码", 402, ['data'=>$data, 'errorlist'=>[['password'=>'请输入登录密码']]]);
+		}
+
+		// Group
+		$g = new \Xpmsns\User\Model\Group();
+		if ( isset( $data['group_slug']) ) { 	
+			$slug = $data['group_slug'];
+			$rs = $g->getBySlug($slug);
+			$data['group_id'] = $rs['group_id'];
+		}  
+
+		if ( empty($data['group_id']) ) {
+			$slug = $map['user/default/group'];
+			$rs = $g->getBySlug($slug);
+			$data['group_id'] = $rs['group_id'];
+        }
+
+        
+        // 邀请注册
+        $inviter = $u->getInviter();
+        if ( !empty($inviter) ) {
+            $data["inviter"] = $inviter["user_id"];
+        }
+
+		// 数据入库
+		try {
+			$resp = $u->create($data);
+		} catch(Excp $e ){
+			if ( $e->getCode() == '1062') {
+                
+                // Autologin
+                $u->login($mobile, $password, $nation);
+                $resp = $u->getUserInfo();
+				// throw new Excp("手机号 +{$data['mobile_nation']} {$data['mobile']} 已被注册", 402, ['data'=>$data, 'errorlist'=>[['mobile'=>'手机号码已被注册']]]);
+			} else {
+                throw $e;
+            }
+        }
+        
+        if ( !empty($resp) ) {
+            try {  // 触发用户注册行为
+                $resp["inviter"] = $inviter;
+                \Xpmsns\User\Model\Behavior::trigger("xpmsns/user/user/signup", $resp);
+            }catch(Excp $e) { $e->log(); }
+        }
+
+        $user_id = $resp["user_id"];
+
+        // 自动登录
+        $u->loginSetSession($user_id);
+
+        // 活动报名
+        $evt = new \Xpmsns\Pages\Model\Event;
+        $evt->enter( $event_id, $user_id );
+
+		return ["message"=>"注册成功", "code"=>0 ];
+	}
+
+
+    /**
      * 取消活动报名
      * @method POST /_api/xpmsns/pages/event/entry
      */
