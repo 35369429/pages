@@ -4,7 +4,7 @@
  * 活动数据模型
  *
  * 程序作者: XpmSE机器人
- * 最后修改: 2019-03-11 00:49:35
+ * 最后修改: 2019-05-10 11:02:54
  * 程序母版: /data/stor/private/templates/xpmsns/model/code/model/Name.php
  */
 namespace Xpmsns\Pages\Model;
@@ -643,6 +643,11 @@ class Event extends Model {
 	 *                $rs["_map_category"][$categories[n]]["highlight"], // category.highlight
 	 *                $rs["_map_category"][$categories[n]]["isfootnav"], // category.isfootnav
 	 *                $rs["_map_category"][$categories[n]]["isblank"], // category.isblank
+	 *                $rs["_map_category"][$categories[n]]["ismobnav"], // category.ismobnav
+	 *                $rs["_map_category"][$categories[n]]["iswxappnav"], // category.iswxappnav
+	 *                $rs["_map_category"][$categories[n]]["isappnav"], // category.isappnav
+	 *                $rs["_map_category"][$categories[n]]["outer_id"], // category.outer_id
+	 *                $rs["_map_category"][$categories[n]]["origin"], // category.origin
 	 *                $rs["_map_series"][$series[n]]["created_at"], // series.created_at
 	 *                $rs["_map_series"][$series[n]]["updated_at"], // series.updated_at
 	 *                $rs["_map_series"][$series[n]]["series_id"], // series.series_id
@@ -707,7 +712,7 @@ class Event extends Model {
 	 * @param array   $select       选取字段，默认选取所有
 	 * @return array 活动记录MAP {"event_id1":{"key":"value",...}...}
 	 */
-	public function getInByEventId($event_ids, $select=["event.event_id","event.slug","event.title","event.cover","event.begin","event.end","event.type","event.status"], $order=["event.created_at"=>"desc"] ) {
+	public function getInByEventId($event_ids, $select=["event.event_id","event.slug","event.title","event.cover","event.begin","event.end","event.type","event.status","event.event_id"], $order=["event.created_at"=>"desc"] ) {
 		
 		if ( is_string($select) ) {
 			$select = explode(',', $select);
@@ -854,6 +859,11 @@ class Event extends Model {
 	 *                $rs["_map_category"][$categories[n]]["highlight"], // category.highlight
 	 *                $rs["_map_category"][$categories[n]]["isfootnav"], // category.isfootnav
 	 *                $rs["_map_category"][$categories[n]]["isblank"], // category.isblank
+	 *                $rs["_map_category"][$categories[n]]["ismobnav"], // category.ismobnav
+	 *                $rs["_map_category"][$categories[n]]["iswxappnav"], // category.iswxappnav
+	 *                $rs["_map_category"][$categories[n]]["isappnav"], // category.isappnav
+	 *                $rs["_map_category"][$categories[n]]["outer_id"], // category.outer_id
+	 *                $rs["_map_category"][$categories[n]]["origin"], // category.origin
 	 *                $rs["_map_series"][$series[n]]["created_at"], // series.created_at
 	 *                $rs["_map_series"][$series[n]]["updated_at"], // series.updated_at
 	 *                $rs["_map_series"][$series[n]]["series_id"], // series.series_id
@@ -918,7 +928,7 @@ class Event extends Model {
 	 * @param array   $select       选取字段，默认选取所有
 	 * @return array 活动记录MAP {"slug1":{"key":"value",...}...}
 	 */
-	public function getInBySlug($slugs, $select=["event.event_id","event.slug","event.title","event.cover","event.begin","event.end","event.type","event.status"], $order=["event.created_at"=>"desc"] ) {
+	public function getInBySlug($slugs, $select=["event.event_id","event.slug","event.title","event.cover","event.begin","event.end","event.type","event.status","event.event_id"], $order=["event.created_at"=>"desc"] ) {
 		
 		if ( is_string($select) ) {
 			$select = explode(',', $select);
@@ -1343,7 +1353,7 @@ class Event extends Model {
 	 * @param array   $order   排序方式 ["field"=>"asc", "field2"=>"desc"...]
 	 * @return array 活动记录数组 [{"key":"value",...}...]
 	 */
-	public function top( $limit=100, $select=["event.event_id","event.slug","event.title","event.cover","event.begin","event.end","event.type","event.status"], $order=["event.created_at"=>"desc"] ) {
+	public function top( $limit=100, $select=["event.event_id","event.slug","event.title","event.cover","event.begin","event.end","event.type","event.status","event.event_id"], $order=["event.created_at"=>"desc"] ) {
 
 		if ( is_string($select) ) {
 			$select = explode(',', $select);
@@ -1397,7 +1407,7 @@ class Event extends Model {
 	/**
 	 * 按条件检索活动记录
 	 * @param  array  $query
-	 *         	      $query['select'] 选取字段，默认选择 ["event.event_id","event.slug","event.title","event.cover","event.begin","event.end","event.type","event.status"]
+	 *         	      $query['select'] 选取字段，默认选择 ["event.event_id","event.slug","event.title","event.cover","event.begin","event.end","event.type","event.status","event.event_id"]
 	 *         	      $query['page'] 页码，默认为 1
 	 *         	      $query['perpage'] 每页显示记录数，默认为 20
 	 *			      $query["keywords"] 按关键词查询
@@ -1494,6 +1504,11 @@ class Event extends Model {
 	 *               	["category"][$categories[n]]["highlight"], // category.highlight
 	 *               	["category"][$categories[n]]["isfootnav"], // category.isfootnav
 	 *               	["category"][$categories[n]]["isblank"], // category.isblank
+	 *               	["category"][$categories[n]]["ismobnav"], // category.ismobnav
+	 *               	["category"][$categories[n]]["iswxappnav"], // category.iswxappnav
+	 *               	["category"][$categories[n]]["isappnav"], // category.isappnav
+	 *               	["category"][$categories[n]]["outer_id"], // category.outer_id
+	 *               	["category"][$categories[n]]["origin"], // category.origin
 	 *               	["series"][$series[n]]["created_at"], // series.created_at
 	 *               	["series"][$series[n]]["updated_at"], // series.updated_at
 	 *               	["series"][$series[n]]["series_id"], // series.series_id
@@ -1506,7 +1521,7 @@ class Event extends Model {
 	 */
 	public function search( $query = [] ) {
 
-		$select = empty($query['select']) ? ["event.event_id","event.slug","event.title","event.cover","event.begin","event.end","event.type","event.status"] : $query['select'];
+		$select = empty($query['select']) ? ["event.event_id","event.slug","event.title","event.cover","event.begin","event.end","event.type","event.status","event.event_id"] : $query['select'];
 		if ( is_string($select) ) {
 			$select = explode(',', $select);
 		}

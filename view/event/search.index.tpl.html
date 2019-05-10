@@ -224,6 +224,7 @@ use \Xpmse\T;
 								<th class="font-w300"> 结束时间 </th>
 								<th class="font-w300"> 类型 </th>
 								<th class="font-w300"> 状态 </th>
+								<th class="font-w300"> 报名链接 </th>
 							</tr>
 						</thead>
 
@@ -259,13 +260,16 @@ use \Xpmse\T;
 								<td class="font-w300">
 									<span class="text-<?=$rs['_status']['style']?>"><?=$rs['_status']['name'] ? $rs['_status']['name']  : $rs['status'] ?></span>
 								</td>
+								<td class="font-w300">
+									<?php $v=null; $v=T::s("<a href=\"/event/signup/{{event_id}}.html\"  onclick=\"event.stopPropagation()\"  target=\"_blank\">报名链接</a>", $rs ); echo empty($v) ? T::s("", $rs ) : $v; ?>
+								</td>
 							</tr>
 							<?php endforeach;?>
 
 						</tbody>
 
 						<tfoot>
-							<tr><td colspan="8"> <nav class="pull-right">
+							<tr><td colspan="9"> <nav class="pull-right">
 
 								<ul class="pagination">
 									<?php if ($response['prev'] !== false): ?>
