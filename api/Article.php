@@ -574,6 +574,10 @@ class Article extends Api {
             }
         }
 
+        // 读取前一篇后一篇
+        $rs["prev"] = $art->getPrev($article_id);
+        $rs["next"] = $art->getNext($article_id);
+        
 		return $rs;
     }
     

@@ -93,6 +93,53 @@ class Article extends Model {
         ]);
 
     }
+
+    /**
+     * 读取上一篇文章ID
+     * @param string $article_id 文章ID
+     * @param string $category_id 文章类目ID
+     * @return 上一篇文章 article_id
+     */
+    function getPrev( $article_id, $category_id=null ) {
+        
+        $rows = $this->query()
+                     ->where("article_id", "<", $article_id )
+                     ->orderBY("article_id", "desc")
+                     ->select(["article_id"])
+                     ->limit(1)
+                     ->get()
+                     ->toArray()
+                    ;
+        if ( empty($rows) ) {
+            return null;
+        }
+
+        return current($rows)["article_id"];
+    }
+
+
+    /**
+     * 读取下一篇文章ID
+     * @param string $article_id 文章ID
+     * @param string $category_id 文章类目ID
+     * @return 下一篇文章 article_id
+     */
+    function getNext( $article_id, $category_id=null ) {
+        
+        $rows = $this->query()
+                     ->where("article_id", ">", $article_id )
+                     ->orderBY("article_id", "asc")
+                     ->select(["article_id"])
+                     ->limit(1)
+                     ->get()
+                     ->toArray()
+                    ;
+        if ( empty($rows) ) {
+            return null;
+        }
+
+        return current($rows)["article_id"];
+    }
     
 
     /**
