@@ -1658,6 +1658,11 @@ class Event extends Model {
 		// 按name=begin DESC 排序
 		if ( array_key_exists("orderby_begin_desc", $query) &&!empty($query['orderby_begin_desc']) ) {
 			$qb->orderBy("event.begin", "desc");
+        }
+        
+        // 按name=begin DESC 排序
+		if ( array_key_exists("orderby_begin_asc", $query) &&!empty($query['orderby_begin_asc']) ) {
+			$qb->orderBy("event.begin", "asc");
 		}
 
 		// 按name=end DESC 排序
