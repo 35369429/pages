@@ -161,6 +161,16 @@ class Article extends Api {
 			$data["priority"] = 99999;
         }
 
+        try {
+            $resp =  $art->save( $data );
+        } catch( Excp $e ) {
+            return [
+                "message" => $e->getMessage(),
+                "trace" => $e->getTrace(),
+                "code" => 500
+            ];
+        }
+
         return $art->save( $data );
     }
 
