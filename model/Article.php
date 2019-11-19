@@ -2758,7 +2758,9 @@ class Article extends Model {
 			$data['update_time'] = date('Y-m-d H:i:s');
 		}
 		
-
+        if ( isset($data["_id"])) {
+            unset($data["_id"]);
+        }
 		$rs = parent::updateBy( $uni_key, $data );
 
 		if ( !empty($data['category']) ) {
