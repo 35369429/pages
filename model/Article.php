@@ -2259,9 +2259,10 @@ class Article extends Model {
 	 */
 	function published( $article_id ) {
 		
-		$draft = $this->article_draft->getLine("WHERE article_id=?", ['*'], [$article_id]);
+        $draft = $this->article_draft->getLine("WHERE article_id=?", ['*'], [$article_id]);
+        unset( $draft["_id"]);
 
-		if ( !empty($draft) ) {
+		if ( !empty($draft) ) {    
 			$draft['draft_status'] = DRAFT_APPLIED;
 			$draft['links'] = $this->links( $article_id ); // 生成链接地址
 			$this->autoFill($draft);
