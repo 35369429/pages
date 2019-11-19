@@ -171,7 +171,7 @@ class Article extends Api {
             ];
         }
 
-        return $art->save( $data );
+        return $resp;
     }
 
 
