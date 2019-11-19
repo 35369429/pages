@@ -2260,16 +2260,17 @@ class Article extends Model {
 	function published( $article_id ) {
 		
         $draft = $this->article_draft->getLine("WHERE article_id=?", ['*'], [$article_id]);
-        unset( $draft["_id"]);
 
 		if ( !empty($draft) ) {    
 			$draft['draft_status'] = DRAFT_APPLIED;
 			$draft['links'] = $this->links( $article_id ); // 生成链接地址
-			$this->autoFill($draft);
+            $this->autoFill($draft);
+            unset( $draft["_id"]);
 			$draft = $this->article_draft->updateBy('article_id', $draft);
 		
 		} else {  // 更新文章状态 （ 这个逻辑应该优化 )
-			$draft = $this->getLine("WHERE article_id=?", ['*'], [$article_id]);
+            $draft = $this->getLine("WHERE article_id=?", ['*'], [$article_id]);
+            unset( $draft["_id"]);
 			$this->autoFill($draft);
 			$draft['links'] = $this->links( $article_id ); // 生成链接地址
 		}
